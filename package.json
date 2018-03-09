@@ -34,6 +34,7 @@
     "@types/node": "~6.0.60",
     "bootstrap": "^4.0.0",
     "codelyzer": "^4.0.1",
+    "d3": "^4.13.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~2.0.0",

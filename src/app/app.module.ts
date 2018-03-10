@@ -1,14 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ChartModule } from './charts/chat.module';
 import { AppComponent } from './app.component';
+import { PioneerCodeAngularChartModule } from './pcac/pcac.module';
 
 @NgModule({
   declarations: [
   ],
   imports: [
     BrowserModule,
-    ChartModule
+    PioneerCodeAngularChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]

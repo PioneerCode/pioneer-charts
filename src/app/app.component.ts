@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { ITableConfig, ITableLabel } from './charts/table/table.model';
-import { IData } from './charts/data.model';
+import { ITableConfig } from './pcac/table/table.model';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pcac-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -11,6 +10,9 @@ export class AppComponent {
   title = 'Pioneer Code Angular Charts';
 
   tableConfig = {
+    headerConfig: {
+      title: 'I Am A Table'
+    },
     data: [
       {
         data: [

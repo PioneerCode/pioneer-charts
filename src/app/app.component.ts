@@ -12,21 +12,86 @@ export class AppComponent {
 
   tableConfig = {
     data: [
-
-    ] as IData[],
-    labels: [
       {
-        text: 'Hi'
+        data: [
+          {
+            value: 'Snack'
+          },
+          {
+            value: 'Taste'
+          },
+          {
+            value: 'Calories'
+          },
+          {
+            value: 'Score'
+          }
+        ]
       },
       {
-        text: 'I Am'
+        data: [
+          {
+            value: 'Chocolate Chip'
+          },
+          {
+            value: 'Tastey'
+          },
+          {
+            value: '120'
+          },
+          {
+            value: '8/10'
+          }
+        ]
       },
       {
-        text: 'A Pretty'
+        data: [
+          {
+            value: 'Chips'
+          },
+          {
+            value: 'Gross'
+          },
+          {
+            value: '200'
+          },
+          {
+            value: '7/10'
+          }
+        ]
       },
       {
-        text: 'Table'
+        data: [
+          {
+            value: 'Brownie'
+          },
+          {
+            value: 'Yummy'
+          },
+          {
+            value: '70'
+          },
+          {
+            value: '5/10'
+          }
+        ]
+      },
+      {
+        data: [
+          {
+            value: 'Peanuts'
+          },
+          {
+            value: 'Ick'
+          },
+          {
+            value: '160'
+          },
+          {
+            value: '4.5/10'
+          }
+        ]
       }
-    ] as ITableLabel[]
+    ]
   } as ITableConfig;
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ITableConfig } from './charts/table/table.model';
+import { ITableConfig, ITableLabel } from './charts/table/table.model';
+import { IData } from './charts/data.model';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,22 @@ export class AppComponent {
   title = 'Pioneer Code Angular Charts';
 
   tableConfig = {
+    data: [
 
+    ] as IData[],
+    labels: [
+      {
+        text: 'Hi'
+      },
+      {
+        text: 'I Am'
+      },
+      {
+        text: 'A Pretty'
+      },
+      {
+        text: 'Table'
+      }
+    ] as ITableLabel[]
   } as ITableConfig;
 }

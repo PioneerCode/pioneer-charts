@@ -3,16 +3,21 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { TableComponent } from './table/table.component';
 import { LineAreaChartComponent } from './line-area-chart/line-area-chart.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { HeaderComponent } from './header/header.component';
+import { PcacBarChartModule } from './bar-chart/bart-chat.module';
+import { PcacLineAreaChartModule } from './line-area-chart/line-area-chart.module';
+import { PcacTableModule } from './table/table.module';
 
-// TODO: Why do we need to add AppComponent to this module?
 @NgModule({
-  imports: [BrowserModule],
-  declarations: [
-    BarChartComponent,
-    TableComponent,
-    LineAreaChartComponent,
-    HeaderComponent
+  imports: [
+    BrowserModule,
+    PcacBarChartModule,
+    PcacLineAreaChartModule,
+    PcacTableModule
+  ],
+  exports: [
+    PcacBarChartModule,
+    PcacLineAreaChartModule,
+    PcacTableModule
   ]
 })
 export class PioneerCodeAngularChartModule { }

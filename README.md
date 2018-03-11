@@ -1,4 +1,4 @@
-# Pioneer Angular Charts
+# Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-angular-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-angular-charts)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
 

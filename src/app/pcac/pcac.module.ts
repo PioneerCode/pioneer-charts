@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { AppComponent } from '../app.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { TableComponent } from './table/table.component';
 import { LineAreaChartComponent } from './line-area-chart/line-area-chart.component';
@@ -10,7 +9,6 @@ import { HeaderComponent } from './header/header.component';
 @NgModule({
   imports: [BrowserModule],
   declarations: [
-    AppComponent,
     BarChartComponent,
     TableComponent,
     LineAreaChartComponent,

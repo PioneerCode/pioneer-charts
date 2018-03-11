@@ -10,4 +10,12 @@ export class PcacRepository {
   getTable() {
     return this.http.get<ITableConfig>('./assets/mock/table.json');
   }
+
+  getBarChart() {
+    return this.http.get<ITableConfig>('./assets/mock/bar-chart.json');
+  }
+
+  getLineAreaChart() {
+    return this.http.get<ITableConfig>('./assets/mock/line-area-chart.json');
+  }
 }

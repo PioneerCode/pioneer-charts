@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
     this.repository.getBarChart()
       .subscribe(data => this.barChartConfig = data);
 
-    this.repository.getBarChart()
+    this.repository.getLineAreaChart()
       .subscribe(data => this.lineAreaChartConfig = data);
   }
 }

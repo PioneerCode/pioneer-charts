@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { ILineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
 
@@ -10,7 +10,7 @@ import { LineAreaChartBuilder } from './line-area-chart.builder';
     LineAreaChartBuilder
   ]
 })
-export class LineAreaChartComponent implements OnInit {
+export class LineAreaChartComponent implements OnChanges {
   @Input() config: ILineAreaChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
@@ -18,15 +18,18 @@ export class LineAreaChartComponent implements OnInit {
     private chartBuilder: LineAreaChartBuilder,
   ) { }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.config && this.config.data) {
+      this.buildChart();
+    }
   }
 
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
-  @HostListener('window:resize')
-  resize(): void {
-    this.buildChart();
-  }
+  // @HostListener('window:resize')
+  // resize(): void {
+  //   this.buildChart();
+  // }
 }

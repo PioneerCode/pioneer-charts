@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
 import { IBarChartConfig } from './bar-chart.model';
 import { BarChartBuilder } from './bar-chart.builder';
 
@@ -10,7 +10,7 @@ import { BarChartBuilder } from './bar-chart.builder';
     BarChartBuilder
   ]
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnChanges {
   @Input() config: IBarChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
@@ -18,15 +18,18 @@ export class BarChartComponent implements OnInit {
     private chartBuilder: BarChartBuilder,
   ) { }
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.config && this.config.data) {
+      this.buildChart();
+    }
   }
 
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
-  @HostListener('window:resize')
-  resize(): void {
-    this.buildChart();
-  }
+  // @HostListener('window:resize')
+  // resize(): void {
+  //   this.buildChart();
+  // }
 }

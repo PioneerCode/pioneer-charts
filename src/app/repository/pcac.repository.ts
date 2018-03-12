@@ -17,7 +17,11 @@ export class PcacRepository {
     return this.http.get<IBarChartConfig>('./assets/mock/bar-chart.json');
   }
 
-  getLineAreaChart() {
-    return this.http.get<ILineAreaChartConfig>('./assets/mock/line-area-chart.json');
+  getLineChart() {
+    return this.http.get<ILineAreaChartConfig>('./assets/mock/line-chart.json');
+  }
+
+  getAreaChart() {
+    return this.http.get<ILineAreaChartConfig>('./assets/mock/area-chart.json');
   }
 }

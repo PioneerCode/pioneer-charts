@@ -1,0 +1,33 @@
+{
+  "domainMax": 1000,
+  "isArea": true,
+  "headerConfig": {
+    "title": "Line Area Chart"
+  },
+  "data": [
+    {
+      "data": [
+        {
+          "key": "Chocolate Chip",
+          "value": 300
+        },
+        {
+          "key": "Chips",
+          "value": 123
+        },
+        {
+          "key": "Brownie",
+          "value": 898
+        },
+        {
+          "key": "Peanuts",
+          "value": 787
+        },
+        {
+          "key": "Candy",
+          "value": 600
+        }
+      ]
+    }
+  ]
+}

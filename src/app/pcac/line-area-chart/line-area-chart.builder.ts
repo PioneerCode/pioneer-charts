@@ -3,6 +3,7 @@ import { ILineAreaChartConfig } from './line-area-chart.model';
 import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
+import { axisBottom, axisLeft } from 'd3-axis';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
@@ -13,6 +14,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
   private width = 400;
   private height = 400;
   private margin = { top: 16, right: 16, bottom: 20, left: 40 };
+  private axisTicks = 5;
   private svg: selection<baseType, {}, HTMLElement, any>;
   private line: line<[number, number]>;
   private area: area<[number, number]>;
@@ -24,7 +26,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     this.setup(chartElm);
     this.buildScales(config);
-    this.drawChart(chartElm);
+    this.drawChart(chartElm, config);
   }
 
   private setup(chartElm: ElementRef): void {
@@ -60,11 +62,31 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       });
   }
 
-  private drawChart(chartElm: ElementRef): void {
+  private drawChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
+    this.prepSvg(chartElm);
+    this.drawAxis(config);
+  }
+
+  private prepSvg(chartElm: ElementRef): void {
     this.svg = select(chartElm.nativeElement)
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom)
       .append('g')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+  }
+
+  private drawAxis(config: ILineAreaChartConfig): void {
+    this.svg.append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', 'translate(0,' + this.height + ')')
+      .call(axisBottom(this.xScale)
+        .tickFormat((d: any, i: number) => {
+          return d + 1;
+        }).ticks(this.axisTicks)
+      );
+
+    this.svg.append('g')
+      .attr('class', 'y-axis')
+      .call(axisLeft(this.yScale).ticks(this.axisTicks));
   }
 }

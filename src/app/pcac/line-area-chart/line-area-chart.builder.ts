@@ -64,7 +64,8 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
 
   private drawChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     this.prepSvg(chartElm);
-    this.drawAxis(config);
+    this.drawAxis();
+    this.drawGrid();
   }
 
   private prepSvg(chartElm: ElementRef): void {
@@ -75,7 +76,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
   }
 
-  private drawAxis(config: ILineAreaChartConfig): void {
+  private drawAxis(): void {
     this.svg.append('g')
       .attr('class', 'x-axis')
       .attr('transform', 'translate(0,' + this.height + ')')
@@ -88,5 +89,20 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
     this.svg.append('g')
       .attr('class', 'y-axis')
       .call(axisLeft(this.yScale).ticks(this.axisTicks));
+  }
+
+  private drawGrid(): void {
+    this.svg.append('g')
+      .attr('class', 'rules')
+      .selectAll('g.rule')
+      .data(this.yScale.ticks(this.axisTicks))
+      .enter().append('svg:g')
+      .attr('class', 'rule')
+      .append('svg:line')
+      .attr('y1', (d: number) => this.yScale(d))
+      .attr('y2', (d: number) => this.yScale(d))
+      .attr('x1', 0)
+      .attr('x2', this.width)
+      .attr('class', (d: number, i: number) => (i === 0 ? 'last' : 'other'));
   }
 }

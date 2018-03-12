@@ -5,4 +5,5 @@ export interface ILineAreaChartConfig {
   headerConfig: IHeaderConfig;
   data: IData[];
   domainMax: number;
+  isArea: boolean;
 }

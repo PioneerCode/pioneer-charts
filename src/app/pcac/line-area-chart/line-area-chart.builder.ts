@@ -4,6 +4,7 @@ import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
+import { IData } from '../data.model';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
@@ -11,6 +12,7 @@ export interface ILineAreaChartBuilder {
 
 @Injectable()
 export class LineAreaChartBuilder implements ILineAreaChartBuilder {
+
   private width = 400;
   private height = 400;
   private margin = { top: 16, right: 16, bottom: 20, left: 40 };
@@ -66,6 +68,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
     this.prepSvg(chartElm);
     this.drawAxis();
     this.drawGrid();
+    this.drawData(config);
   }
 
   private prepSvg(chartElm: ElementRef): void {
@@ -104,5 +107,39 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       .attr('x1', 0)
       .attr('x2', this.width)
       .attr('class', (d: number, i: number) => (i === 0 ? 'last' : 'other'));
+  }
+
+  private drawData(config: ILineAreaChartConfig): void {
+    for (let i = 0; i < config.data.length; i++) {
+      if (config.isArea) {
+        this.drawArea(config.data[i].data);
+      }
+      this.drawLine(config.data[i].data);
+    }
+  }
+
+  private drawLine(lineData: IData[]): void {
+    this.svg.append('g')
+      .attr('class', 'lines')
+      .append('path')
+      .datum(lineData)
+      .attr('class', 'line')
+      .attr('d', this.line)
+      .attr('stroke', (d: any) => {
+        return 'steelblue';
+      });
+  }
+
+  private drawArea(lineData: IData[]) {
+    this.svg.append('g')
+      .attr('class', 'areas')
+      .append('path')
+      .datum(lineData)
+      .attr('class', 'area')
+      .style('opacity', 0.5)
+      .style('fill', (d: any) => {
+        return 'steelblue';
+      })
+      .attr('d', this.area);
   }
 }

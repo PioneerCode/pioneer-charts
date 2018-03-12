@@ -13,8 +13,8 @@ export class AppComponent implements OnInit {
   title = 'Pioneer Code Angular Charts';
   tableConfig: ITableConfig;
   barChartConfig: IBarChartConfig;
-  lineAreaChartConfig: ILineAreaChartConfig;
-
+  lineChartConfig: ILineAreaChartConfig;
+  areaChartConfig: ILineAreaChartConfig;
   constructor(private repository: PcacRepository) { }
 
   ngOnInit() {
@@ -25,6 +25,6 @@ export class AppComponent implements OnInit {
       .subscribe(data => this.barChartConfig = data);
 
     this.repository.getLineAreaChart()
-      .subscribe(data => this.lineAreaChartConfig = data);
+      .subscribe(data => this.lineChartConfig = data);
   }
 }

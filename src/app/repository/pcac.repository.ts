@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITableConfig } from '../pcac/table/table.model';
+import { IBarChartConfig } from '../pcac/bar-chart/bar-chart.model';
+import { ILineAreaChartConfig } from '../pcac/line-area-chart/line-area-chart.model';
 
 @Injectable()
 export class PcacRepository {
@@ -12,10 +14,10 @@ export class PcacRepository {
   }
 
   getBarChart() {
-    return this.http.get<ITableConfig>('./assets/mock/bar-chart.json');
+    return this.http.get<IBarChartConfig>('./assets/mock/bar-chart.json');
   }
 
   getLineAreaChart() {
-    return this.http.get<ITableConfig>('./assets/mock/line-area-chart.json');
+    return this.http.get<ILineAreaChartConfig>('./assets/mock/line-area-chart.json');
   }
 }

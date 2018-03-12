@@ -22,7 +22,7 @@ export class BarChartComponent implements OnInit {
   }
 
   buildChart(): void {
-    this.chartBuilder.buildChart();
+    this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
   @HostListener('window:resize')

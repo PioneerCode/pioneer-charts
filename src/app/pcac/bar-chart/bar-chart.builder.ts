@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
+import { IBarChartConfig } from './bar-chart.model';
 
 export interface IBarChartBuilder {
-  buildChart(): void;
+  buildChart(chartElm: ElementRef, config: IBarChartConfig): void;
 }
 
 @Injectable()
@@ -9,6 +10,7 @@ export class BarChartBuilder {
 
   constructor() { }
 
-  buildChart(): void {
+  buildChart(chartElm: ElementRef, config: IBarChartConfig): void {
+
   }
 }

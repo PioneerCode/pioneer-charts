@@ -11,11 +11,10 @@
     "url": "https://github.com/PioneerCode/pioneer-angular-charts"
   },
   "scripts": {
-    "clear-lib": "rimraf ../../dist",
-    "ngc-build": "ngc -p ./tsconfig.json",
-    "prepublish": "npm run clear-lib && npm run ngc-build",
-    "rollup": "rollup -c",
-    "package": "npm run prepublish && rollup -c"
+    "build": "node build.js",
+    "clean": "rimraf ../../dist",
+    "aot-build": "ngc -p ./tsconfig.json",
+    "rollup": "rollup -c"
   },
   "keywords": [
     "pioneer code",
@@ -37,15 +36,20 @@
     "rxjs": "^5.5.6"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^5.2.8",
-    "@angular/core": "^5.2.0",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
+    "@angular/compiler-cli": "^5.2.8",
+    "@angular/core": "^5.2.0",
     "@angular/platform-browser": "^5.2.0",
-    "rxjs": "^5.5.6",
+    "chalk": "^2.3.2",
+    "codelyzer": "^4.2.1",
     "d3": "^4.13.0",
+    "gulp": "^3.9.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.56.5",
+    "rxjs": "^5.5.6",
+    "shelljs": "^0.8.1",
+    "tslint": "^5.9.1",
     "typescript": "~2.5.3",
     "uglify-js": "^3.3.14"
   }

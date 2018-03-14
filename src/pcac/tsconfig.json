@@ -1,9 +1,49 @@
-// TypeScript config file that matches all source files in the project. This file is read by 
+// {
+//   "compilerOptions": {
+//     "rootDir": ".",
+//     "baseUrl": ".",
+//     "paths": {
+//       "@angular/*": [
+//         "node_modules/@angular/*"
+//       ],
+//       "@pioneer-code/pioneer-code-angular-charts*": [
+//         "./*"
+//       ]
+//     },
+//     "outDir": "dist",
+//     "declaration": true,
+//     "strict": true,
+//     "moduleResolution": "node",
+//     "module": "es2015",
+//     "target": "es2015",
+//     "lib": [
+//       "es2015",
+//       "dom"
+//     ],
+//     "skipLibCheck": true,
+//     "types": [],
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true,
+//     "sourceMap": true,
+//     "inlineSources": true
+//   },
+//   "files": [
+//     "index.ts"
+//   ],
+//   "angularCompilerOptions": {
+//     "skipTemplateCodegen": true,
+//     "annotateForClosureCompiler": true,
+//     "strictMetadataEmit": true,
+//     "flatModuleOutFile": "angular-library-starter.js",
+//     "flatModuleId": "angular-library-starter"
+//   }
+// }
+// TypeScript config file that matches all source files in the project. This file is read by
 // IDEs and TSLint. For IDEs it ensures that `experimentalDecorator` warnings are not showing up.
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/packages/all",
+    "outDir": "dist",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -36,5 +76,13 @@
   ],
   "files": [
     "index.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true,
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": true, // Workaround for Angular #22210
+    // "flatModuleOutFile": true,
+    // "flatModuleId": "@pioneer-code/pioneer-code-angular-charts",
+    "fullTemplateTypeCheck": true
+  }
 }

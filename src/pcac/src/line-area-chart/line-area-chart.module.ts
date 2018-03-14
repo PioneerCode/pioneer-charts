@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BarChartComponent } from './bar-chart.component';
+import { LineAreaChartComponent } from './line-area-chart.component';
 import { PcacHeaderModule } from '../header/header.module';
 
 @NgModule({
@@ -7,11 +7,10 @@ import { PcacHeaderModule } from '../header/header.module';
     PcacHeaderModule
   ],
   exports: [
-    PcacHeaderModule,
-    BarChartComponent
+    LineAreaChartComponent
   ],
   declarations: [
-    BarChartComponent
+    LineAreaChartComponent
   ]
 })
-export class PcacBarChartModule { }
+export class PcacLineAreaChartModule { }

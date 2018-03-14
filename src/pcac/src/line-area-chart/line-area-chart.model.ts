@@ -1,5 +1,5 @@
-import { IHeaderConfig } from '../header/header.model';
-import {  IChart } from '../chart.model';
+import { IChart } from "chart.model";
+import { IHeaderConfig } from "src/header/header.model";
 
 export interface ILineAreaChartConfig extends IChart  {
   headerConfig: IHeaderConfig;

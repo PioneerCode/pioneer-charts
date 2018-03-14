@@ -1,0 +1,29 @@
+{
+  "name": "@pioneer-code/pioneer-code-angular-charts",
+  "version": "0.1.0",
+  "description": "Pioneer Code Angular Charts",
+  "main": "./bundles/pioneer-code-angular-charts.umd.js",
+  "module": "./esm5/pioneer-code-angular-charts.es5.js",
+  "es2015": "./esm2015/pioneer-code-angular-charts.js",
+  "typings": "./pioneer-code-angular-charts.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PioneerCode/pioneer-angular-charts"
+  },
+  "keywords": [
+    "pioneer code",
+    "data visualization",
+    "charts",
+    "d3",
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PioneerCode/pioneer-angular-charts/issues"
+  },
+  "homepage": "https://github.com/PioneerCode/pioneer-angular-charts2#readme",
+  "dependencies": {
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0"
+  }
+}

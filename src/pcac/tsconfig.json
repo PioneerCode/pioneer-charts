@@ -1,88 +1,42 @@
-// {
-//   "compilerOptions": {
-//     "rootDir": ".",
-//     "baseUrl": ".",
-//     "paths": {
-//       "@angular/*": [
-//         "node_modules/@angular/*"
-//       ],
-//       "@pioneer-code/pioneer-code-angular-charts*": [
-//         "./*"
-//       ]
-//     },
-//     "outDir": "dist",
-//     "declaration": true,
-//     "strict": true,
-//     "moduleResolution": "node",
-//     "module": "es2015",
-//     "target": "es2015",
-//     "lib": [
-//       "es2015",
-//       "dom"
-//     ],
-//     "skipLibCheck": true,
-//     "types": [],
-//     "experimentalDecorators": true,
-//     "emitDecoratorMetadata": true,
-//     "sourceMap": true,
-//     "inlineSources": true
-//   },
-//   "files": [
-//     "index.ts"
-//   ],
-//   "angularCompilerOptions": {
-//     "skipTemplateCodegen": true,
-//     "annotateForClosureCompiler": true,
-//     "strictMetadataEmit": true,
-//     "flatModuleOutFile": "angular-library-starter.js",
-//     "flatModuleId": "angular-library-starter"
-//   }
-// }
-// TypeScript config file that matches all source files in the project. This file is read by
-// IDEs and TSLint. For IDEs it ensures that `experimentalDecorator` warnings are not showing up.
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "dist",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "stripInternal": false,
     "experimentalDecorators": true,
-    "target": "es5",
-    // "module": "es2015",
-    // "noUnusedParameters": true,
-    // "strictNullChecks": true,
-    // "skipLibCheck": true,
-    "rootDir": "..",
-    "baseUrl": ".",
-    "lib": [
-      "es2017",
-      "dom"
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "newLine": "lf",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "outDir": "../../dist/packages/pcac",
+    "rootDir": ".",
+    "rootDirs": [
+      ".",
+      "../../dist/packages/pcac"
     ],
+    "sourceMap": true,
+    "inlineSources": true,
+    "target": "es2015",
+    "lib": ["es2015", "dom"],
+    "skipLibCheck": true,
+    "types": [],
+    "baseUrl": ".",
     "paths": {
       "@pioneer-code/pioneer-code-angular-charts*": [
-        "./*"
+        "./src/*"
       ]
     }
   },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    // IDEs should not type-check the different node_modules directories of the different packages.
-    // This would cause the IDEs to be slower and also linters would check the node_modules.
-    "node_modules/"
-  ],
   "files": [
-    "index.ts"
+    "src/public-api.ts"
   ],
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
     "annotateForClosureCompiler": true,
-    "strictMetadataEmit": true, // Workaround for Angular #22210
-    // "flatModuleOutFile": true,
-    // "flatModuleId": "@pioneer-code/pioneer-code-angular-charts",
+    "strictMetadataEmit": false, // Workaround for Angular #22210
+    "flatModuleOutFile": "index.js",
+    "flatModuleId": "@pioneer-code/pioneer-code-angular-charts",
+    "skipTemplateCodegen": true,
     "fullTemplateTypeCheck": true
   }
 }

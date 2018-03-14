@@ -1,2 +1,1 @@
-export { HeaderComponent } from './header.component';
-export { PcacHeaderModule } from './header.module';
+export * from './public-api';

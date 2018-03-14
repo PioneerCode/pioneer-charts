@@ -11,7 +11,7 @@
     "url": "https://github.com/PioneerCode/pioneer-angular-charts"
   },
   "scripts": {
-    "clear-lib": "rimraf dist",
+    "clear-lib": "rimraf ../../dist",
     "ngc-build": "ngc -p ./tsconfig.json",
     "prepublish": "npm run clear-lib && npm run ngc-build",
     "rollup": "rollup -c",

@@ -1,4 +1,11 @@
 language: node_js
+dist: trusty
+sudo: false
+
+node_js:
+  # Use the explicit NodeJS LTS version 8.9.4 to avoid any automatic upgrade of the version.
+  # This ensures that all Travis jobs run consistently and don't have different Node versions.
+  - '8.9.4'
 
 branches:
    only:
@@ -9,3 +16,7 @@ before_script:
 
 script:
    - ng build --prod --aot
+
+cache:
+  directories:
+    - ./node_modules/

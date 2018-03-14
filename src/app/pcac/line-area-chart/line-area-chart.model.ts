@@ -1,9 +1,8 @@
 import { IHeaderConfig } from '../header/header.model';
-import { IData } from '../data.model';
+import {  IChart } from '../chart.model';
 
-export interface ILineAreaChartConfig {
+export interface ILineAreaChartConfig extends IChart  {
   headerConfig: IHeaderConfig;
-  data: IData[];
   domainMax: number;
   isArea: boolean;
 }

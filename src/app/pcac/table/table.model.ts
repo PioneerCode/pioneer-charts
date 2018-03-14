@@ -1,7 +1,6 @@
-import { IData } from '../data.model';
+import { IChart } from '../chart.model';
 import { IHeaderConfig } from '../header/header.model';
 
-export interface ITableConfig {
+export interface ITableConfig extends IChart {
   headerConfig: IHeaderConfig;
-  data: IData[];
 }

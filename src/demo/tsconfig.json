@@ -14,6 +14,10 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+     "paths": {
+      "@pioneer-code/pioneer-code-angular-charts*": ["../pcac/*"],
+      "@pioneer-code/pioneer-code-angular-charts": ["../pcac/index.ts"],
+    }
   }
 }

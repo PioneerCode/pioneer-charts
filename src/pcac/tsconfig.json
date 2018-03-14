@@ -1,9 +1,25 @@
-// Configuration for IDEs only.
+// TypeScript config file that matches all source files in the project. This file is read by 
+// IDEs and TSLint. For IDEs it ensures that `experimentalDecorator` warnings are not showing up.
 {
-  "extends": "../../tsconfig.json",
+  "compileOnSave": false,
   "compilerOptions": {
+    "outDir": "./dist/packages/all",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    // "module": "es2015",
+    // "noUnusedParameters": true,
+    // "strictNullChecks": true,
+    // "skipLibCheck": true,
     "rootDir": "..",
     "baseUrl": ".",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "paths": {
       "@pioneer-code/pioneer-code-angular-charts*": [
         "./*"
@@ -12,5 +28,13 @@
   },
   "include": [
     "./**/*.ts"
+  ],
+  "exclude": [
+    // IDEs should not type-check the different node_modules directories of the different packages.
+    // This would cause the IDEs to be slower and also linters would check the node_modules.
+    "node_modules/"
+  ],
+  "files": [
+    "index.ts"
   ]
 }

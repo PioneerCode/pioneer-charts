@@ -18,14 +18,14 @@ export class BarChartComponent implements OnChanges {
     private chartBuilder: BarChartBuilder,
   ) { }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.config && this.config.data) {
       this.buildChart();
     }
   }
 
   buildChart(): void {
-    this.chartBuilder.buildChart(this.chartElm, this.config);
+    this.chartBuilder.buildChart(this.chartElm);
   }
 
   // @HostListener('window:resize')

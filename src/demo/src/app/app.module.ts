@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pcac.repository';
-import { PcacTableModule } from  '@pioneer-code/pioneer-code-angular-charts'
+import { PcacTableModule } from '@pioneer-code/pioneer-code-angular-charts';
 
 @NgModule({
   declarations: [

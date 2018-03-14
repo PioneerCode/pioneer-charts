@@ -14,9 +14,6 @@
       "es5",
       "es2015",
       "dom"
-    ],
-    "types": [
-      "jasmine"
     ]
   },
   "include": [

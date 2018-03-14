@@ -15,9 +15,9 @@ export class BarChartBuilder {
 
   constructor() { }
 
-  buildChart(chartElm: ElementRef, config: IBarChartConfig): void {
+  buildChart(chartElm: ElementRef): void {
     this.setup(chartElm);
-    this.buildScales(config);
+    this.buildScales();
     this.drawChart(chartElm);
   }
 
@@ -27,7 +27,7 @@ export class BarChartBuilder {
     this.height = chartElm.nativeElement.parentNode.clientHeight - this.margin.top - this.margin.bottom;
   }
 
-  private buildScales(config: IBarChartConfig) {
+  private buildScales() {
 
   }
 

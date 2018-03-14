@@ -29,7 +29,7 @@
     "url": "https://github.com/PioneerCode/pioneer-angular-charts/issues"
   },
   "homepage": "https://github.com/PioneerCode/pioneer-angular-charts2#readme",
-  "dependencies": {
+  "peerDependencies": {
     "@angular/core": "^5.2.0",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
@@ -38,6 +38,11 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^5.2.8",
+    "@angular/core": "^5.2.0",
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "rxjs": "^5.5.6",
     "d3": "^4.13.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.56.5",

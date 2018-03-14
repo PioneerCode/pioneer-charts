@@ -1,4 +1,12 @@
+/**
+ * Base configuration for all charts.
+ *    INewChart extends IChart
+ */
 export interface IChart {
+  /**
+   * Height in px
+   */
+  height: number;
   data: IData[];
 }
 

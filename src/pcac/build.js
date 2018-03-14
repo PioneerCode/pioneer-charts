@@ -2,6 +2,9 @@
 
 const shell = require('shelljs');
 const chalk = require('chalk');
+const inlineResourcesForDirectory = require('./tools/inline-resources');
+
+const DIST_DIR = '../../dist/packages/pcac'
 
 shell.echo(`Start building...`);
 
@@ -26,6 +29,15 @@ if (shell.exec(`npm run aot-build`).code !== 0) {
 }
 shell.echo(chalk.green(`AoT compilation completed`));
 
+/* Copy static file */
+
+
+/* Inline template */
+shell.echo(`Start inlining templates in ${DIST_DIR}  folder`);
+inlineResourcesForDirectory(DIST_DIR);
+shell.echo(`Inlining templates in ${DIST_DIR} folder completed`);
+
+
 /* AoT compilation */
 shell.echo(`Rollup`);
 if (shell.exec(`npm run rollup`).code !== 0) {
@@ -33,3 +45,4 @@ if (shell.exec(`npm run rollup`).code !== 0) {
     shell.exit(1);
 }
 shell.echo(chalk.green(`Rollup completed`));
+

@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/PioneerCode/pioneer-angular-charts2#readme",
   "dependencies": {
+    "@angular/core": "^5.2.0",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0"
   }

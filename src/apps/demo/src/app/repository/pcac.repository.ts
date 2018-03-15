@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITableConfig } from '../../pcac/table';
-import { IBarChartConfig } from '../../pcac/bar-chart';
-import { ILineAreaChartConfig } from '../../pcac/line-area-chart';
+import { ITableConfig, IBarChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
 
 
 @Injectable()

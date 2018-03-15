@@ -1,0 +1,18 @@
+{
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
+  "name": "@pioneer-code/pioneer-code-angular-charts",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "@angular/common": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "d3": "^4.13.0"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public-api.ts"
+    },
+    "dest": "../../dist/bundles/@pioneer-code/pioneer-code-angular-charts"
+  }
+}

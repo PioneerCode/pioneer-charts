@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'imports';
 @import 'variables';
-@import 'pcac/pcac';
+@import '../../../libs/pcac/pcac';
 
 body {
   background: gray("200");

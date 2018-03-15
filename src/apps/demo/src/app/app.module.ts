@@ -3,11 +3,12 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pcac.repository';
-import { PcacLineAreaChartModule } from '../pcac/line-area-chart';
-import { PcacHeaderModule } from '../pcac/header';
-import { PcacTableModule } from '../pcac/table';
-import { PcacBarChartModule } from '../pcac/bar-chart';
-// import { PcacBarChartModule } from '@pioneer-code/pioneer-code-angular-charts';
+import {
+  PcacHeaderModule,
+  PcacTableModule,
+  PcacBarChartModule,
+  PcacLineAreaChartModule
+} from '@pioneer-code/pioneer-code-angular-charts';
 
 @NgModule({
   declarations: [

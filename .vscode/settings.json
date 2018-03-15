@@ -9,6 +9,7 @@
         "codelyzer",
         "jasminewd",
         "noopener",
+        "packagr",
         "pioneercode",
         "polyfills"
     ]

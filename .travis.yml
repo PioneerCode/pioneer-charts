@@ -12,10 +12,11 @@ branches:
       - master
 
 before_script:
-   - npm install -g @angular/cli
+  - cd src
+  - npm install -g @angular/cli
 
 script:
-   - npm run build:prod
+  - npm run build:prod
 
 cache:
   directories:

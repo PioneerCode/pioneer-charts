@@ -15,9 +15,10 @@
       "es2017",
       "dom"
     ],
+    "baseUrl": ".",
     "paths": {
       "@pioneer-code/pioneer-code-angular-charts": [
-        "libs/pcac/"
+        "libs/pcac"
       ]
     }
   }

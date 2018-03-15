@@ -13,6 +13,6 @@
     "lib": {
       "entryFile": "public-api.ts"
     },
-    "dest": "../../pioneer-code-angular-charts"
+    "dest": "../../dist/bundles/@pioneer-code/pioneer-code-angular-charts"
   }
 }

@@ -9,5 +9,13 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  "paths": {
+    "@pioneer-code/pioneer-code-angular-charts/*": [
+      "./pcac/*"
+    ],
+    "@pioneer-code/pioneer-code-angular-charts": [
+      "./pcac/public-api.ts"
+    ]
+  }
 }

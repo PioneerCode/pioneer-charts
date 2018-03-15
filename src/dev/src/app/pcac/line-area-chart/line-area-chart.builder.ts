@@ -4,7 +4,7 @@ import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { IData } from 'chart.model';
+import { IData } from '../chart.model';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;

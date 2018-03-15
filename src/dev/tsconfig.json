@@ -17,10 +17,10 @@
     ],
     "paths": {
       "@pioneer-code/pioneer-code-angular-charts*": [
-        "../../dist/bundles/*"
+        "./src/app/pcac/*"
       ],
       "@pioneer-code/pioneer-code-angular-charts": [
-        "../../dist/bundles"
+        "./src/app/pcac/"
       ]
     }
   }

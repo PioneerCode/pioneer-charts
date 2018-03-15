@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pcac.repository';
-import { PcacTableModule } from '@pioneer-code/pioneer-code-angular-charts';
+import { PcacTableModule } from './pcac/table';
+import { PcacHeaderModule } from './pcac/header';
+import { PcacBarChartModule } from './pcac/bar-chart';
+import { PcacLineAreaChartModule } from './pcac/line-area-chart';
 
 @NgModule({
   declarations: [
@@ -12,7 +15,10 @@ import { PcacTableModule } from '@pioneer-code/pioneer-code-angular-charts';
   imports: [
     BrowserModule,
     HttpClientModule,
-    PcacTableModule
+    PcacHeaderModule,
+    PcacTableModule,
+    PcacBarChartModule,
+    PcacLineAreaChartModule
   ],
   providers: [
     PcacRepository

@@ -16,11 +16,11 @@
       "dom"
     ],
     "paths": {
-      "@pioneer-code/pioneer-code-angular-charts*": [
-        "./src/app/pcac/*"
+      "@pioneer-code/pioneer-code-angular-charts/*": [
+        "../pcac/*"
       ],
       "@pioneer-code/pioneer-code-angular-charts": [
-        "./src/app/pcac/"
+        "../pcac/public-api.ts"
       ]
     }
   }

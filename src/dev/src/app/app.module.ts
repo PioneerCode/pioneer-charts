@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pcac.repository';
-import { PcacTableModule } from './pcac/table';
-import { PcacHeaderModule } from './pcac/header';
-import { PcacBarChartModule } from './pcac/bar-chart';
-import { PcacLineAreaChartModule } from './pcac/line-area-chart';
+import { PcacLineAreaChartModule } from '../pcac/line-area-chart';
+import { PcacHeaderModule } from '../pcac/header';
+import { PcacTableModule } from '../pcac/table';
+import { PcacBarChartModule } from '../pcac/bar-chart';
 
 @NgModule({
   declarations: [

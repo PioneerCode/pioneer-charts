@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ITableConfig } from './pcac/table/table.model';
 import { PcacRepository } from './repository/pcac.repository';
-import { ILineAreaChartConfig } from './pcac/line-area-chart/line-area-chart.model';
-import { IBarChartConfig } from './pcac/bar-chart/bar-chart.model';
+import { ITableConfig } from '../pcac/table';
+import { IBarChartConfig } from '../pcac/bar-chart';
+import { ILineAreaChartConfig } from '../pcac/line-area-chart';
 
 @Component({
   selector: 'pcac-root',

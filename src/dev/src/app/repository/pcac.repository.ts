@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITableConfig } from '../pcac/table/table.model';
-import { IBarChartConfig } from '../pcac/bar-chart/bar-chart.model';
-import { ILineAreaChartConfig } from '../pcac/line-area-chart/line-area-chart.model';
+import { ITableConfig } from '../../pcac/table';
+import { IBarChartConfig } from '../../pcac/bar-chart';
+import { ILineAreaChartConfig } from '../../pcac/line-area-chart';
+
 
 @Injectable()
 export class PcacRepository {

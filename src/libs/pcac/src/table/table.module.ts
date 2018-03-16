@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { TableComponent } from './table.component';
+import { PcacTableComponent } from './table.component';
 
 @NgModule({
   imports: [
     BrowserModule
   ],
   exports: [
-    TableComponent
+    PcacTableComponent
   ],
   declarations: [
-    TableComponent
+    PcacTableComponent
   ]
 })
 export class PcacTableModule { }

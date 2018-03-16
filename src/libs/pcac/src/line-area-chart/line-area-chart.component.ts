@@ -10,7 +10,7 @@ import { LineAreaChartBuilder } from './line-area-chart.builder';
     LineAreaChartBuilder
   ]
 })
-export class LineAreaChartComponent implements OnChanges {
+export class PcacLineAreaChartComponent implements OnChanges {
   @Input() config: ILineAreaChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 

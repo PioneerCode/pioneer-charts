@@ -6,11 +6,6 @@ import { ITableConfig } from './table.model';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class PcacTableComponent {
   @Input() config: ITableConfig;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 }

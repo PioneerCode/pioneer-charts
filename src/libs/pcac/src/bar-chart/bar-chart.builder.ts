@@ -1,9 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { IBarChartConfig } from './bar-chart.model';
+import { IPcacBarChartConfig } from './bar-chart.model';
 import { select, selection, baseType } from 'd3-selection';
 
 export interface IBarChartBuilder {
-  buildChart(chartElm: ElementRef, config: IBarChartConfig): void;
+  buildChart(chartElm: ElementRef, config: IPcacBarChartConfig): void;
 }
 
 @Injectable()

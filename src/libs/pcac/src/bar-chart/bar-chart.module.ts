@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
-import { BarChartComponent } from './bar-chart.component';
-import { PcacHeaderModule } from '../header/header.module';
+import { PcacBarChartComponent } from './bar-chart.component';
 
 @NgModule({
-  imports: [
-    PcacHeaderModule
-  ],
   exports: [
-    BarChartComponent
+    PcacBarChartComponent
   ],
   declarations: [
-    BarChartComponent
+    PcacBarChartComponent
   ]
 })
 export class PcacBarChartModule { }

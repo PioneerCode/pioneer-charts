@@ -1,6 +1,5 @@
-import { IHeaderConfig } from '../header';
-import { IChart } from '../chart.model';
+import { IPcacChartConfig, IHeaderConfig } from '@pioneer-code/pioneer-code-angular-charts';
 
-export interface IBarChartConfig extends IChart {
+export interface IPcacBarChartConfig extends IPcacChartConfig {
   headerConfig: IHeaderConfig;
 }

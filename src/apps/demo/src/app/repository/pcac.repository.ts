@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITableConfig, IBarChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
+import { ITableConfig, IPcacBarChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
 
 
 @Injectable()
@@ -13,7 +13,7 @@ export class PcacRepository {
   }
 
   getBarChart() {
-    return this.http.get<IBarChartConfig>('./assets/mock/bar-chart.json');
+    return this.http.get<IPcacBarChartConfig>('./assets/mock/bar-chart.json');
   }
 
   getLineChart() {

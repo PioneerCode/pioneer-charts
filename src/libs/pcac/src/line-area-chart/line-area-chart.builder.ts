@@ -4,8 +4,7 @@ import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { IData } from '../chart.model';
-
+import { IPcacData } from '@pioneer-code/pioneer-code-angular-charts';
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
 }
@@ -118,7 +117,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
     }
   }
 
-  private drawLine(lineData: IData[]): void {
+  private drawLine(lineData: IPcacData[]): void {
     this.svg.append('g')
       .attr('class', 'lines')
       .append('path')
@@ -130,7 +129,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       });
   }
 
-  private drawArea(lineData: IData[]) {
+  private drawArea(lineData: IPcacData[]) {
     this.svg.append('g')
       .attr('class', 'areas')
       .append('path')

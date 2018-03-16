@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
-import { IBarChartConfig } from './bar-chart.model';
+import { IPcacBarChartConfig } from './bar-chart.model';
 import { BarChartBuilder } from './bar-chart.builder';
 
 @Component({
@@ -10,8 +10,8 @@ import { BarChartBuilder } from './bar-chart.builder';
     BarChartBuilder
   ]
 })
-export class BarChartComponent implements OnChanges {
-  @Input() config: IBarChartConfig;
+export class PcacBarChartComponent implements OnChanges {
+  @Input() config: IPcacBarChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
   constructor(

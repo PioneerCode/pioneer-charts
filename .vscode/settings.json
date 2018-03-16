@@ -3,6 +3,7 @@
         "Codegen",
         "Injectable",
         "Inlines",
+        "Paca",
         "Pcac",
         "Tastey",
         "Truthy",

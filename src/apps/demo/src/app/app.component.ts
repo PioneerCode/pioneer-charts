@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PcacRepository } from './repository/pcac.repository';
 import {
   ITableConfig,
-  IBarChartConfig,
-  ILineAreaChartConfig
+  ILineAreaChartConfig,
+  IPcacBarChartConfig
 } from '@pioneer-code/pioneer-code-angular-charts';
 
 @Component({
@@ -14,7 +14,7 @@ import {
 export class AppComponent implements OnInit {
   title = 'Pioneer Code Angular Charts';
   tableConfig: ITableConfig;
-  barChartConfig: IBarChartConfig;
+  barChartConfig: IPcacBarChartConfig;
   lineChartConfig: ILineAreaChartConfig;
   areaChartConfig: ILineAreaChartConfig;
   constructor(private repository: PcacRepository) { }

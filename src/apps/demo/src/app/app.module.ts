@@ -9,10 +9,20 @@ import {
   PcacBarChartModule,
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-code-angular-charts';
+import { HomeComponent } from './pages/home/home.component';
+import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
+import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
+import { HeaderComponent } from './pages/header/header.component';
+import { TableComponent } from './pages/table/table.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    LineAreaChartComponent,
+    BarChartComponent,
+    HeaderComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,

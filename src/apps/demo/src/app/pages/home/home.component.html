@@ -1,3 +1,28 @@
-<p>
-  home works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm">
+      <div class="pcac-chart-container">
+        <pcac-header [config]="barChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-chart [config]="barChartConfig"></pcac-bar-chart>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="pcac-chart-container">
+        <pcac-header [config]="barChartConfig?.headerConfig"></pcac-header>
+        <pcac-table [config]="tableConfig"></pcac-table>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="pcac-chart-container">
+        <pcac-header [config]="lineChartConfig?.headerConfig"></pcac-header>
+        <pcac-line-area-chart [config]="lineChartConfig"></pcac-line-area-chart>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="pcac-chart-container">
+        <pcac-header [config]="areaChartConfig?.headerConfig"></pcac-header>
+        <pcac-line-area-chart [config]="areaChartConfig"></pcac-line-area-chart>
+      </div>
+    </div>
+  </div>
+</div>

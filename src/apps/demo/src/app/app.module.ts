@@ -14,6 +14,11 @@ import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.
 import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  { path: '**', component: HomeComponent }
+];
 
 @NgModule({
   declarations: [
@@ -25,6 +30,9 @@ import { TableComponent } from './pages/table/table.component';
     TableComponent
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes
+    ),
     BrowserModule,
     HttpClientModule,
     PcacHeaderModule,

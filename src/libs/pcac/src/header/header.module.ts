@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { HeaderComponent } from './header.component';
+import { PcacHeaderComponent } from './header.component';
 
 @NgModule({
   exports: [
-    HeaderComponent
+    PcacHeaderComponent
   ],
   declarations: [
-    HeaderComponent
+    PcacHeaderComponent
   ]
 })
 export class PcacHeaderModule { }

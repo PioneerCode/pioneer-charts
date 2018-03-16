@@ -30,6 +30,6 @@ export class AppComponent implements OnInit {
       .subscribe(data => this.lineChartConfig = data);
 
     this.repository.getAreaChart()
-    .subscribe(data => this.areaChartConfig = data);
+      .subscribe(data => this.areaChartConfig = data);
   }
 }

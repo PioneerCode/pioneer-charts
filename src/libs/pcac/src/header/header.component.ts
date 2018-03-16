@@ -6,12 +6,6 @@ import { IHeaderConfig } from './header.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class PcacHeaderComponent {
   @Input() config: IHeaderConfig;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

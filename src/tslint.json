@@ -121,7 +121,8 @@
       true,
       "attribute",
       [
-        "pcac"
+        "pcac",
+        "pc"
       ],
       "camelCase"
     ],
@@ -129,7 +130,8 @@
       true,
       "element",
       [
-        "pcac"
+        "pcac",
+        "pc"
       ],
       "kebab-case"
     ],

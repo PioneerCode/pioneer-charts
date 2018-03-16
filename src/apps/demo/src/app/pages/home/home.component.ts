@@ -3,7 +3,7 @@ import { PcacRepository } from '../../repository/pcac.repository';
 import { ITableConfig, IPcacBarChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
 
 @Component({
-  selector: 'pcac-home',
+  selector: 'pc-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

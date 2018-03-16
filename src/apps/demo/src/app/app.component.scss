@@ -1,2 +1,26 @@
 @import "../imports";
+@import "../variables";
+header {
+    background: color("white");
+    .pc-header-brand {
+        padding: 1rem 1rem 1rem 2rem;
+        color: color("white");
+        background: theme-color("primary");
+    }
+    .pc-header-content {
+        padding: 1rem 1rem 0;
+        a {
+            padding: 1px 0 0;
+            div {
+                padding-right: 1rem;
+            }
+        }
+    }
+}
 
+nav {}
+
+main {
+    padding: 2rem 1rem;
+    background: gray("200");
+}

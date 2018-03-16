@@ -4,7 +4,7 @@ header {
     background: color("white");
     .pc-header-brand {
         padding: 1rem 1rem 1rem 2rem;
-        color: color("white");
+        color: theme-color-level("primary", -12);
         background: theme-color("primary");
     }
     .pc-header-content {
@@ -18,9 +18,23 @@ header {
     }
 }
 
-nav {}
+nav {
+    background: theme-color-level("primary", -2);
+    .list-group-item {
+        border-radius: 0;
+        background: transparent;
+        border: none;
+        color: theme-color-level("primary", -10);
+    }
+    .list-group-item.active {
+        background: theme-color("primary");
+        border-left: 5px  solid theme-color-level("primary", -10);
+    }
+}
 
 main {
-    padding: 2rem 1rem;
     background: gray("200");
+    .pc-main-content {
+        padding: 2rem 1rem;
+    }
 }

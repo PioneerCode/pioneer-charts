@@ -39,9 +39,7 @@ const appRoutes: Routes = [
     GetStartedComponent
   ],
   imports: [
-    RouterModule.forRoot(
-      appRoutes
-    ),
+    RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
     PcacHeaderModule,

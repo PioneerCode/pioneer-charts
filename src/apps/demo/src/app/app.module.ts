@@ -16,6 +16,7 @@ import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
 import { RouterModule, Routes } from '@angular/router';
 import { PcacService } from './services/pcac.service';
+import { GetStartedComponent } from './pages/get-started/get-started.component';
 
 const appRoutes: Routes = [
   { path: '**', component: HomeComponent }
@@ -28,7 +29,8 @@ const appRoutes: Routes = [
     LineAreaChartComponent,
     BarChartComponent,
     HeaderComponent,
-    TableComponent
+    TableComponent,
+    GetStartedComponent
   ],
   imports: [
     RouterModule.forRoot(

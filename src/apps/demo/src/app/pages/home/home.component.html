@@ -2,28 +2,28 @@
   <div class="row pc-row">
     <div class="col-sm">
       <div class="pcac-chart-container">
-        <pcac-header [config]="barChartConfig?.headerConfig"></pcac-header>
-        <pcac-bar-chart [config]="barChartConfig"></pcac-bar-chart>
+        <pcac-header [config]="pcacService.barChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-chart [config]="pcacService.barChartConfig"></pcac-bar-chart>
       </div>
     </div>
     <div class="col-sm">
       <div class="pcac-chart-container">
-        <pcac-header [config]="barChartConfig?.headerConfig"></pcac-header>
-        <pcac-table [config]="tableConfig"></pcac-table>
+        <pcac-header [config]="pcacService.tableConfig?.headerConfig"></pcac-header>
+        <pcac-table [config]="pcacService.tableConfig"></pcac-table>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm">
       <div class="pcac-chart-container">
-        <pcac-header [config]="lineChartConfig?.headerConfig"></pcac-header>
-        <pcac-line-area-chart [config]="lineChartConfig"></pcac-line-area-chart>
+        <pcac-header [config]="pcacService.lineChartConfig?.headerConfig"></pcac-header>
+        <pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>
       </div>
     </div>
     <div class="col-sm">
       <div class="pcac-chart-container">
-        <pcac-header [config]="areaChartConfig?.headerConfig"></pcac-header>
-        <pcac-line-area-chart [config]="areaChartConfig"></pcac-line-area-chart>
+        <pcac-header [config]="pcacService.areaChartConfig?.headerConfig"></pcac-header>
+        <pcac-line-area-chart [config]="pcacService.areaChartConfig"></pcac-line-area-chart>
       </div>
     </div>
   </div>

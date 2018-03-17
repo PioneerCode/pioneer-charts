@@ -15,6 +15,7 @@ import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
 import { RouterModule, Routes } from '@angular/router';
+import { PcacService } from './services/pcac.service';
 
 const appRoutes: Routes = [
   { path: '**', component: HomeComponent }
@@ -41,7 +42,8 @@ const appRoutes: Routes = [
     PcacLineAreaChartModule
   ],
   providers: [
-    PcacRepository
+    PcacRepository,
+    PcacService
   ],
   bootstrap: [
     AppComponent

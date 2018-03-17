@@ -19,6 +19,12 @@ import { PcacService } from './services/pcac.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
 
 const appRoutes: Routes = [
+  { path: 'get-started', component: GetStartedComponent },
+  { path: 'bar-chart', component: BarChartComponent },
+  { path: 'line-area-chart', component: LineAreaChartComponent },
+  { path: 'table', component: TableComponent },
+  { path: 'header', component: HeaderComponent },
+  { path: 'home', component: HomeComponent },
   { path: '**', component: HomeComponent }
 ];
 

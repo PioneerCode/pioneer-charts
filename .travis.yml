@@ -22,3 +22,12 @@ script:
 cache:
   directories:
     - ./node_modules/
+
+deploy:
+  local-dir: 'dist/apps/demo'
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure
+  keep-history: true
+  on:
+    branch: master

@@ -113,33 +113,33 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
   private drawData(config: ILineAreaChartConfig): void {
     for (let i = 0; i < config.data.length; i++) {
       if (config.isArea) {
-        this.drawArea(config.data[i].data);
+        this.drawArea(config.data[i].data, i);
       }
-      this.drawLine(config.data[i].data);
+      this.drawLine(config.data[i].data, i);
     }
   }
 
-  private drawLine(lineData: IPcacData[]): void {
+  private drawLine(lineData: IPcacData[], index: number): void {
     this.svg.append('g')
       .attr('class', 'lines')
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
       .attr('d', this.line)
-      .attr('stroke', (d: any, i: number) => {
-        return this.colors[i];
+      .attr('stroke', (d: IPcacData) => {
+        return this.colors[index];
       });
   }
 
-  private drawArea(lineData: IPcacData[]) {
+  private drawArea(lineData: IPcacData[], index: number) {
     this.svg.append('g')
       .attr('class', 'areas')
       .append('path')
       .datum(lineData)
       .attr('class', 'area')
       .style('opacity', 0.5)
-      .style('fill', (d: any) => {
-        return 'steelblue';
+      .style('fill', (d:  IPcacData) => {
+        return this.colors[index];
       })
       .attr('d', this.area);
   }

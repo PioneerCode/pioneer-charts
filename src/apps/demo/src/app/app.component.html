@@ -31,25 +31,31 @@
   <nav class="col-12 col-md-3 col-xl-2">
     <div class="list-group">
       <a routerLink="/home" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'home'}" (click)="currentRoute = 'home'">
+        <i class="fa fa-home"></i>
         Home
       </a>
       <a routerLink="/get-started" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'get-started'}"
         (click)="currentRoute = 'get-started'">
+        <i class="fa fa-play"></i>
         Get Started
       </a>
       <a routerLink="/bar-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'bar-chart'}"
         (click)="currentRoute = 'bar-chart'">
+        <i class="fa fa-bar-chart"></i>
         Bar Chart
       </a>
       <a routerLink="/line-area-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'line-area-chart'}"
         (click)="currentRoute = 'line-area-chart'">
+        <i class="fa fa-line-chart"></i>
         Line Area Chart
       </a>
       <a routerLink="/table" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'table'}" (click)="currentRoute = 'table'">
+        <i class="fa fa-table"></i>
         Table
       </a>
       <a routerLink="/header" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'header'}"
         (click)="currentRoute = 'header'">
+        <i class="fa fa-header"></i>
         Header
       </a>
     </div>

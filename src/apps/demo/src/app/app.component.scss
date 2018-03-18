@@ -20,6 +20,9 @@ header {
 
 nav {
     background: theme-color-level("primary", -0.5);
+    i {
+      width: 2rem;
+    }
     .list-group-item {
         border-radius: 0;
         background: transparent;
@@ -29,6 +32,9 @@ nav {
     .list-group-item.active {
         background: theme-color("primary");
         border-left: 5px solid theme-color("primary-light");
+        i {
+          color: theme-color("primary-light");
+        }
     }
 }
 

@@ -21,9 +21,7 @@
       "styles": [
         "styles.scss"
       ],
-      "scripts": [
-        "scripts/syntaxhighlighter.js"
-      ],
+      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

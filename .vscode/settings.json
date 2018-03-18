@@ -12,6 +12,7 @@
         "noopener",
         "packagr",
         "pioneercode",
-        "polyfills"
+        "polyfills",
+        "syntaxhighlighter"
     ]
 }

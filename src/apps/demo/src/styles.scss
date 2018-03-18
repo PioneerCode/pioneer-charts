@@ -2,8 +2,9 @@
 $fa-font-path: "./assets/fonts" !default;
 @import 'imports';
 @import 'variables';
+@import 'syntax';
 @import '../../../libs/pcac/pcac';
-@import "../../../node_modules/font-awesome/scss/font-awesome.scss";
+@import '../../../node_modules/font-awesome/scss/font-awesome.scss';
 
 .pcac-chart-container {
     padding: 1rem;

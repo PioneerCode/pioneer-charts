@@ -1,4 +1,5 @@
-import { IPcacChartConfig, IHeaderConfig } from '@pioneer-code/pioneer-code-angular-charts';
+import { IPcacChartConfig } from '../core';
+import { IHeaderConfig } from '../header';
 
 export interface ILineAreaChartConfig extends IPcacChartConfig  {
   headerConfig: IHeaderConfig;

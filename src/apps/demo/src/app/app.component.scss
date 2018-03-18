@@ -40,12 +40,23 @@ main {
 }
 
 footer {
-  padding: 3rem 0 0;
-  color: color("white");
-  text-align: center;
-  color: theme-color-level("primary", -10);
-  .meta {
-    margin-top: 3rem;
-    border-top: 1px solid theme-color-level("primary", 2);
-  }
+    .meta-top {
+        padding: 3rem;
+        color: color("white");
+        text-align: center;
+        color: theme-color-level("primary", -8);
+        a {
+            color: theme-color-level("primary", -8);
+            &:hover {
+                transition: color 0.25s;
+                color: theme-color("primary");
+            }
+        }
+        ul {
+            margin-top: 2rem;
+        }
+    }
+    .meta-bottom {
+        border-top: 1px solid theme-color-level("primary", 2);
+    }
 }

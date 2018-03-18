@@ -11,8 +11,13 @@ header {
         padding: 1rem 1rem 0;
         a {
             padding: 1px 0 0;
+            color: $body-bg;
             div {
                 padding-right: 1rem;
+            }
+            &:hover {
+                transition: all 0.25s;
+                color: theme-color("primary-light");
             }
         }
     }
@@ -55,7 +60,7 @@ footer {
             color: theme-color-level("primary", -8);
             &:hover {
                 transition: color 0.25s;
-                color: theme-color("primary");
+                color: color("white");
             }
         }
         ul {

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class PcacColorService {
-  private primary: 'a3a1fb';
-  private success: '5ee2a0';
-  private danger: 'ff6565';
-  private warning: 'fec163';
-  private orange: 'ffa177';
-  private blue: '55d8fe';
+  private primary: '#43425d';
+  private success: '#5ee2a0';
+  private danger: '#ff6565';
+  private warning: '#fec163';
+  private orange: '#ffa177';
+  private blue: '#55d8fe';
   private scale = [
     this.primary,
     this.success,

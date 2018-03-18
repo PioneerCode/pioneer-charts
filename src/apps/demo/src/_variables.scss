@@ -1,4 +1,3 @@
-// $theme-colors: ( "primary": #205468, "parcBlue": #205468, "parcOrange": #FF6600, "dark": #333333);
-// $body-bg: theme-color(dark);
-// $nav-bg: gray("300");
-
+$theme-colors: ( "primary": #43425d, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
+$body-bg: theme-color-level("primary", 8);
+//a3a1fb

@@ -1,11 +1,16 @@
 @import "../../apps/demo/src/imports";
-
-
 .line {
-  fill: none;
-  stroke-width: 2;
+    fill: none;
+    stroke-width: 2;
 }
 
 .rule line {
-  stroke: gray("200");
+    stroke: gray("200");
+}
+
+.pcac-line-area-chart {
+    .dot {
+        fill: color("white");
+        stroke-width: 2px;
+    }
 }

@@ -53,7 +53,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       })
       .y((d: any) => {
         return this.yScale(d.value);
-      });
+      })
 
     this.area = area()
       .x((d, i) => {
@@ -69,7 +69,8 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
     this.prepSvg(chartElm);
     this.drawAxis();
     this.drawGrid();
-    this.drawData(config);
+    this.drawLineArea(config);
+    this.drawDots(config);
   }
 
   private prepSvg(chartElm: ElementRef): void {
@@ -110,7 +111,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       .attr('class', (d: number, i: number) => (i === 0 ? 'last' : 'other'));
   }
 
-  private drawData(config: ILineAreaChartConfig): void {
+  private drawLineArea(config: ILineAreaChartConfig): void {
     for (let i = 0; i < config.data.length; i++) {
       if (config.isArea) {
         this.drawArea(config.data[i].data, i);
@@ -138,9 +139,30 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       .datum(lineData)
       .attr('class', 'area')
       .style('opacity', 0.5)
-      .style('fill', (d:  IPcacData) => {
+      .style('fill', (d: IPcacData) => {
         return this.colors[index];
       })
       .attr('d', this.area);
+  }
+
+  private drawDots(config: ILineAreaChartConfig): void {
+    for (let index = 0; index < config.data.length; index++) {
+      this.svg.append('g')
+        .attr('class', 'dots')
+        .selectAll('.dot')
+        .data(config.data[index].data)
+        .enter().append('circle')
+        .attr('class', 'dot')
+        .attr('stroke', (d: IPcacData) => {
+          return this.colors[index];
+        })
+        .attr('cx', (d: IPcacData, i: number) => {
+          return this.xScale(i);
+        })
+        .attr('cy', (d: IPcacData) => {
+          return this.yScale(d.value as number);
+        })
+        .attr('r', 4);
+    }
   }
 }

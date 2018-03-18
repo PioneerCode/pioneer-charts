@@ -4,8 +4,15 @@
     stroke-width: 2;
 }
 
-.rule line {
+.pcac-grid-rule line {
     stroke: gray("200");
+}
+
+.pcac-x-axis,
+.pcac-y-axis {
+    path, line {
+        stroke: none;
+    }
 }
 
 .pcac-line-area-chart {

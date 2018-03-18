@@ -3,6 +3,10 @@
  *    INewChart extends IChart
  */
 export interface IPcacChartConfig {
+  /**
+   * Height in pixels
+   */
+  height: number;
   data: IPcacData[];
 }
 

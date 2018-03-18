@@ -34,7 +34,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
   private setup(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     select(chartElm.nativeElement).select('g').remove();
     this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
-    this.height = chartElm.nativeElement.parentNode.clientHeight - this.margin.top - this.margin.bottom;
+    this.height = config.height;
     this.colors = this.colorService.getColorScale(config.data.length);
   }
 
@@ -83,7 +83,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
 
   private drawAxis(): void {
     this.svg.append('g')
-      .attr('class', 'x-axis')
+      .attr('class', 'pcac-x-axis')
       .attr('transform', 'translate(0,' + this.height + ')')
       .call(axisBottom(this.xScale)
         .tickFormat((d: any, i: number) => {
@@ -92,17 +92,17 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       );
 
     this.svg.append('g')
-      .attr('class', 'y-axis')
+      .attr('class', 'pcac-y-axis')
       .call(axisLeft(this.yScale).ticks(this.axisTicks));
   }
 
   private drawGrid(): void {
     this.svg.append('g')
-      .attr('class', 'rules')
+      .attr('class', 'pcac-grid')
       .selectAll('g.rule')
       .data(this.yScale.ticks(this.axisTicks))
       .enter().append('svg:g')
-      .attr('class', 'rule')
+      .attr('class', 'pcac-grid-rule')
       .append('svg:line')
       .attr('y1', (d: number) => this.yScale(d))
       .attr('y2', (d: number) => this.yScale(d))

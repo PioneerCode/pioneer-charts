@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pcac.repository';
 import {
+  PcacCoreModule,
   PcacHeaderModule,
   PcacTableModule,
   PcacBarChartModule,
@@ -44,6 +45,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
+    PcacCoreModule,
     PcacHeaderModule,
     PcacTableModule,
     PcacBarChartModule,

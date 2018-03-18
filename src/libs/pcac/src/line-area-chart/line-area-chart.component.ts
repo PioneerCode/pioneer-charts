@@ -15,7 +15,7 @@ export class PcacLineAreaChartComponent implements OnChanges {
   @ViewChild('chart') chartElm: ElementRef;
 
   constructor(
-    private chartBuilder: LineAreaChartBuilder,
+    private chartBuilder: LineAreaChartBuilder
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {

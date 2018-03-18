@@ -5,13 +5,13 @@ import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { IPcacData } from '../core';
+import { PcacColorService } from '../core/color.service';
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
 }
 
 @Injectable()
 export class LineAreaChartBuilder implements ILineAreaChartBuilder {
-
   private width = 400;
   private height = 400;
   private margin = { top: 16, right: 16, bottom: 20, left: 40 };
@@ -21,19 +21,21 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
   private area: area<[number, number]>;
   private xScale: scaleLinear<number, number>;
   private yScale: scaleLinear<number, number>;
+  private colors = [] as string[];
 
-  constructor() { }
+  constructor(private colorService: PcacColorService) { }
 
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
-    this.setup(chartElm);
+    this.setup(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }
 
-  private setup(chartElm: ElementRef): void {
+  private setup(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     select(chartElm.nativeElement).select('g').remove();
     this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
     this.height = chartElm.nativeElement.parentNode.clientHeight - this.margin.top - this.margin.bottom;
+    this.colors = this.colorService.getColorScale(config.data.length);
   }
 
   private buildScales(config: ILineAreaChartConfig): void {
@@ -124,8 +126,8 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       .datum(lineData)
       .attr('class', 'line')
       .attr('d', this.line)
-      .attr('stroke', (d: any) => {
-        return 'steelblue';
+      .attr('stroke', (d: any, i: number) => {
+        return this.colors[i];
       });
   }
 

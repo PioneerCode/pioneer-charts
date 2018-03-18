@@ -21,7 +21,7 @@ header {
 nav {
     background: theme-color-level("primary", -0.5);
     i {
-      width: 2rem;
+        width: 2rem;
     }
     .list-group-item {
         border-radius: 0;
@@ -33,7 +33,7 @@ nav {
         background: theme-color("primary");
         border-left: 5px solid theme-color("primary-light");
         i {
-          color: theme-color("primary-light");
+            color: theme-color("primary-light");
         }
     }
 }
@@ -41,7 +41,7 @@ nav {
 main {
     background: gray("200");
     .pc-main-content {
-        padding: 2rem 1rem;
+        padding: 2rem 2rem;
     }
 }
 

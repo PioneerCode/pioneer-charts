@@ -30,18 +30,28 @@
 <div class="row flex-xl-nowrap no-gutters">
   <nav class="col-12 col-md-3 col-xl-2">
     <div class="list-group">
-      <a routerLink="/home" class="list-group-item list-group-item-action">
+      <a routerLink="/home" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'home'}" (click)="currentRoute = 'home'">
         Home
       </a>
-      <a routerLink="/get-started" class="list-group-item list-group-item-action">
+      <a routerLink="/get-started" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'get-started'}"
+        (click)="currentRoute = 'get-started'">
         Get Started
       </a>
-      <a routerLink="/bar-chart" class="list-group-item list-group-item-action">
+      <a routerLink="/bar-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'bar-chart'}"
+        (click)="currentRoute = 'bar-chart'">
         Bar Chart
       </a>
-      <a routerLink="/line-area-chart" class="list-group-item list-group-item-action active">Line Area Chart</a>
-      <a routerLink="/table" class="list-group-item list-group-item-action">Table</a>
-      <a routerLink="/header" class="list-group-item list-group-item-action">Header</a>
+      <a routerLink="/line-area-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'line-area-chart'}"
+        (click)="currentRoute = 'line-area-chart'">
+        Line Area Chart
+      </a>
+      <a routerLink="/table" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'table'}" (click)="currentRoute = 'table'">
+        Table
+      </a>
+      <a routerLink="/header" class="list-group-item list-group-item-action" [ngClass]="{'active': currentRoute === 'header'}"
+        (click)="currentRoute = 'header'">
+        Header
+      </a>
     </div>
   </nav>
   <main class="col-12 col-md-9 col-xl-10">

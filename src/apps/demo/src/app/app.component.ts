@@ -14,7 +14,7 @@ import { PcacService } from './services/pcac.service';
 })
 export class AppComponent implements OnInit {
   title = 'Pioneer Code Angular Charts';
-
+  currentRoute = 'home';
   constructor(private pcacService: PcacService) { }
 
   ngOnInit() {

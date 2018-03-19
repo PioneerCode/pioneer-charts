@@ -68,6 +68,11 @@ footer {
         }
     }
     .meta-bottom {
+        font-size: 12px;
+        color: theme-color-level("primary", -8);
         border-top: 1px solid theme-color-level("primary", 2);
+        p {
+            margin: 8px 0 10px;
+        }
     }
 }

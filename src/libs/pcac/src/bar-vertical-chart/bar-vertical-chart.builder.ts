@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { select, selection, baseType } from 'd3-selection';
-import { PcacColorService } from '../core';
+import { PcacColorService, IPcacData } from '../core';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
@@ -20,7 +20,7 @@ export class BarVerticalChartBuilder extends PcacChart {
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.setup(chartElm, config);
     this.buildScales(config);
-    this.drawChart(chartElm);
+    this.drawChart(chartElm, config);
   }
 
   private buildScales(config: IPcacBarVerticalChartConfig) {
@@ -48,7 +48,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     //   .padding(0.1);
   }
 
-  private drawChart(chartElm: ElementRef): void {
+  private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.prepSvg(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
@@ -64,5 +64,36 @@ export class BarVerticalChartBuilder extends PcacChart {
       xScale: this.xScale,
       yScale: this.yScale
     });
+
+    this.addBars(config);
   }
+
+  private addBars(config: IPcacBarVerticalChartConfig) {
+    this.svg.append('g')
+      .attr('class', 'pc-bars')
+      .selectAll('g')
+      .data(config.data)
+      .enter().append('g')
+      .attr('class', 'pc-bar-group')
+      .attr('transform', (d) => 'translate(' + this.xScale(d.key) + ',0)')
+      .selectAll('rect')
+      .data((d: IPcacData) => {
+        return d.data;
+      })
+      .enter().append('rect')
+      .attr('x', (d: IPcacData) => {
+        return this.xScale(d.key);
+      })
+      .style('fill', (d: IPcacData, i: number) => {
+        return this.colors[i];
+      })
+      .attr('width', this.xScale.bandwidth())
+      .attr('y', (d: IPcacData) => {
+        return this.yScale(d.value);
+      })
+      .attr('height', (d: IPcacData) => {
+        return this.height - this.yScale(d.value);
+      });
+  }
+
 }

@@ -21,7 +21,7 @@
     "type": "git",
     "url": "https://github.com/PioneerCode/pioneer-angular-charts"
   },
-  "version": "0.0.0",
+  "version": "0.0.8",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -31,7 +31,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:lib": "ng-packagr -p libs/pcac/package.json",
-    "build:prod": "npm run build:lib && npm run build"
+    "build:prod": "npm run build:lib && npm run build ",
+    "build:version": " npm version patch &&  npm run build:version:environment && cd libs/pcac/ && npm version patch",
+    "build:version:environment": "replace '0.0.0-PLACEHOLDER' '$npm_package_version' apps/demo/src/environments/environment.ts"
   },
   "private": false,
   "dependencies": {
@@ -68,6 +70,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-packagr": "^2.0.0-rc.13",
     "protractor": "~5.1.2",
+    "replace": "^0.3.0",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"

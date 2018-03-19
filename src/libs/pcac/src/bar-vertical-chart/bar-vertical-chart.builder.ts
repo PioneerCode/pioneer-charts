@@ -12,7 +12,7 @@ export interface IBarVerticalChartBuilder {
 @Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
   private numberOfTicks = 5;
-  private xGroups: scaleBand<string>;
+  private xScale: scaleBand<string>;
   private xSingleGroup: scaleBand<string>;
   private xBars: scaleBand<string>;
   private yScale: scaleLinear<number, number>;
@@ -32,7 +32,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .domain([config.domainMax, 0])
       .range([0, config.height]);
 
-    this.xGroups = scaleBand()
+    this.xScale = scaleBand()
       .domain(config.data.map((d) => d.key))
       .range([0, this.width])
       .padding(0.1);
@@ -54,7 +54,14 @@ export class BarVerticalChartBuilder extends PcacChart {
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
       height: this.height,
-      xScale: this.xGroups,
+      xScale: this.xScale,
+      yScale: this.yScale
+    });
+    this.gridBuilder.drawGrid({
+      svg: this.svg,
+      numberOfTicks: this.numberOfTicks,
+      width: this.width,
+      xScale: this.xScale,
       yScale: this.yScale
     });
   }

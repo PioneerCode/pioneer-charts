@@ -1,21 +1,25 @@
 import { axisBottom, axisLeft } from 'd3-axis';
 import { selection, baseType } from 'd3-selection';
 import { PcacAxisBuilder } from './axis.builder';
+import { PcacGridBuilder } from './grid.builder';
 import { IPcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
 
 @Injectable()
-export class PcacChart extends PcacAxisBuilder {
+export class PcacChart  {
   margin = { top: 16, right: 16, bottom: 20, left: 40 };
   svg: selection<baseType, {}, HTMLElement, any>;
   width = 400;
   height = 400;
   colors = [] as string[];
 
-  constructor(private colorService: PcacColorService) {
-    super();
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    private colorService: PcacColorService
+  ) {
   }
 
   setup(chartElm: ElementRef, config: IPcacChartConfig): void {

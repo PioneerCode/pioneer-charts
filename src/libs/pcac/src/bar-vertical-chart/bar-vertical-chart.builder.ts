@@ -50,7 +50,7 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef): void {
     this.prepSvg(chartElm);
-    this.drawAxis({
+    this.axisBuilder.drawAxis({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
       height: this.height,

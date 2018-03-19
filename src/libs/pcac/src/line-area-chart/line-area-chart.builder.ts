@@ -54,31 +54,22 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
 
   private drawChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     this.prepSvg(chartElm);
-    this.drawAxis({
+    this.axisBuilder.drawAxis({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
-    this.drawGrid();
+    this.gridBuilder.drawGrid({
+      svg: this.svg,
+      numberOfTicks: this.numberOfTicks,
+      width: this.width,
+      xScale: this.xScale,
+      yScale: this.yScale
+    });
     this.drawLineArea(config);
     this.drawDots(config);
-  }
-
-  private drawGrid(): void {
-    this.svg.append('g')
-      .attr('class', 'pcac-grid')
-      .selectAll('g.rule')
-      .data(this.yScale.ticks(this.numberOfTicks))
-      .enter().append('svg:g')
-      .attr('class', 'pcac-grid-rule')
-      .append('svg:line')
-      .attr('y1', (d: number) => this.yScale(d))
-      .attr('y2', (d: number) => this.yScale(d))
-      .attr('x1', 0)
-      .attr('x2', this.width)
-      .attr('class', (d: number, i: number) => (i === 0 ? 'last' : 'other'));
   }
 
   private drawLineArea(config: ILineAreaChartConfig): void {

@@ -75,25 +75,27 @@ export class BarVerticalChartBuilder extends PcacChart {
       .data(config.data)
       .enter().append('g')
       .attr('class', 'pc-bar-group')
-      .attr('transform', (d) => 'translate(' + this.xScale(d.key) + ',0)')
+      .attr('transform', (d: IPcacData, i: number) => {
+        return 'translate(' + this.xScale(d.key) + ',0)';
+      })
       .selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
       })
       .enter().append('rect')
+      .attr('class', 'pc-bar')
       .attr('x', (d: IPcacData) => {
         return this.xScale(d.key);
       })
-      .style('fill', (d: IPcacData, i: number) => {
+      .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colors[i];
       })
       .attr('width', this.xScale.bandwidth())
       .attr('y', (d: IPcacData) => {
         return this.yScale(d.value);
       })
-      .attr('height', (d: IPcacData) => {
+      .attr('height', (d: IPcacData, ) => {
         return this.height - this.yScale(d.value);
       });
   }
-
 }

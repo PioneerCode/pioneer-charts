@@ -53,7 +53,7 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
       })
       .y((d: any) => {
         return this.yScale(d.value);
-      })
+      });
 
     this.area = area()
       .x((d, i) => {

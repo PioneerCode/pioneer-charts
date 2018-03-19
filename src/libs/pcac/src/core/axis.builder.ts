@@ -14,11 +14,7 @@ export class PcacAxisBuilder {
     config.svg.append('g')
       .attr('class', 'pcac-x-axis')
       .attr('transform', 'translate(0,' + config.height + ')')
-      .call(axisBottom(config.xScale)
-        .tickFormat((d: any, i: number) => {
-          return d + 1;
-        }).ticks(config.numberOfTicks)
-      );
+      .call(axisBottom(config.xScale).ticks(config.numberOfTicks));
 
     config.svg.append('g')
       .attr('class', 'pcac-y-axis')

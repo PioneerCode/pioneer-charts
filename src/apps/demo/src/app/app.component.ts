@@ -6,6 +6,7 @@ import {
   IPcacBarChartConfig
 } from '@pioneer-code/pioneer-code-angular-charts';
 import { PcacService } from './services/pcac.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'pcac-root',
@@ -15,6 +16,8 @@ import { PcacService } from './services/pcac.service';
 export class AppComponent implements OnInit {
   title = 'Pioneer Code Angular Charts';
   currentRoute = 'home';
+  version = environment.version;
+
   constructor(private pcacService: PcacService) { }
 
   ngOnInit() {

@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PcacRepository } from './repository/pcac.repository';
-import {
-  ITableConfig,
-  ILineAreaChartConfig,
-  IPcacBarChartConfig
-} from '@pioneer-code/pioneer-code-angular-charts';
 import { PcacService } from './services/pcac.service';
 import { environment } from '../environments/environment';
 

@@ -1,21 +1,21 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
-import { IPcacBarChartConfig } from './bar-chart.model';
-import { BarChartBuilder } from './bar-chart.builder';
+import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 
 @Component({
-  selector: 'pcac-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.scss'],
+  selector: 'pcac-bar-vertical-chart',
+  templateUrl: './bar-vertical-chart.component.html',
+  styleUrls: ['./bar-vertical-chart.component.scss'],
   providers: [
-    BarChartBuilder
+    BarVerticalChartBuilder
   ]
 })
 export class PcacBarChartComponent implements OnChanges {
-  @Input() config: IPcacBarChartConfig;
+  @Input() config: IPcacBarVerticalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
   constructor(
-    private chartBuilder: BarChartBuilder,
+    private chartBuilder: BarVerticalChartBuilder,
   ) { }
 
   ngOnChanges() {

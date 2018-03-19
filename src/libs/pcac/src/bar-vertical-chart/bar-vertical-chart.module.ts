@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { PcacBarChartComponent } from './bar-chart.component';
+import { PcacBarChartComponent } from './bar-vertical-chart.component';
 
 @NgModule({
   exports: [

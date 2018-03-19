@@ -31,7 +31,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:lib": "ng-packagr -p libs/pcac/package.json",
-    "build:prod": "npm run build:lib && npm run build ",
+    "build:prod": "npm run build:lib && npm run build",
     "build:version": " npm version patch &&  npm run build:version:environment && cd libs/pcac/ && npm version patch",
     "build:version:environment": "replace '0.0.0-PLACEHOLDER' '$npm_package_version' apps/demo/src/environments/environment.ts"
   },

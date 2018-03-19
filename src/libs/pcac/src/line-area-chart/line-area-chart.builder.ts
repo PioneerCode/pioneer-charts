@@ -6,36 +6,24 @@ import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { IPcacData } from '../core';
 import { PcacColorService } from '../core/color.service';
+import { PcacChart } from '../core/chart';
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
 }
 
 @Injectable()
-export class LineAreaChartBuilder implements ILineAreaChartBuilder {
-  private width = 400;
-  private height = 400;
-  private margin = { top: 16, right: 16, bottom: 20, left: 40 };
+export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
+
   private axisTicks = 5;
-  private svg: selection<baseType, {}, HTMLElement, any>;
   private line: line<[number, number]>;
   private area: area<[number, number]>;
   private xScale: scaleLinear<number, number>;
   private yScale: scaleLinear<number, number>;
-  private colors = [] as string[];
-
-  constructor(private colorService: PcacColorService) { }
 
   buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     this.setup(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
-  }
-
-  private setup(chartElm: ElementRef, config: ILineAreaChartConfig): void {
-    select(chartElm.nativeElement).select('g').remove();
-    this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
-    this.height = config.height;
-    this.colors = this.colorService.getColorScale(config.data.length);
   }
 
   private buildScales(config: ILineAreaChartConfig): void {
@@ -67,33 +55,16 @@ export class LineAreaChartBuilder implements ILineAreaChartBuilder {
 
   private drawChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
     this.prepSvg(chartElm);
-    this.drawAxis();
+    this.drawAxis({
+      svg: this.svg,
+      numberOfTicks: this.axisTicks,
+      height: this.height,
+      xScale: this.xScale,
+      yScale: this.yScale
+    });
     this.drawGrid();
     this.drawLineArea(config);
     this.drawDots(config);
-  }
-
-  private prepSvg(chartElm: ElementRef): void {
-    this.svg = select(chartElm.nativeElement)
-      .attr('width', this.width + this.margin.left + this.margin.right)
-      .attr('height', this.height + this.margin.top + this.margin.bottom)
-      .append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
-  }
-
-  private drawAxis(): void {
-    this.svg.append('g')
-      .attr('class', 'pcac-x-axis')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(axisBottom(this.xScale)
-        .tickFormat((d: any, i: number) => {
-          return d + 1;
-        }).ticks(this.axisTicks)
-      );
-
-    this.svg.append('g')
-      .attr('class', 'pcac-y-axis')
-      .call(axisLeft(this.yScale).ticks(this.axisTicks));
   }
 
   private drawGrid(): void {

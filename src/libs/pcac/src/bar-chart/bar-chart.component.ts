@@ -25,7 +25,7 @@ export class PcacBarChartComponent implements OnChanges {
   }
 
   buildChart(): void {
-    this.chartBuilder.buildChart(this.chartElm);
+    this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
   // @HostListener('window:resize')

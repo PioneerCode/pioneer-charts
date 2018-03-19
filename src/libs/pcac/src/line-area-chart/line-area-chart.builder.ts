@@ -13,8 +13,7 @@ export interface ILineAreaChartBuilder {
 
 @Injectable()
 export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
-
-  private axisTicks = 5;
+  private numberOfTicks = 5;
   private line: line<[number, number]>;
   private area: area<[number, number]>;
   private xScale: scaleLinear<number, number>;
@@ -57,7 +56,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
     this.prepSvg(chartElm);
     this.drawAxis({
       svg: this.svg,
-      numberOfTicks: this.axisTicks,
+      numberOfTicks: this.numberOfTicks,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
@@ -71,7 +70,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
     this.svg.append('g')
       .attr('class', 'pcac-grid')
       .selectAll('g.rule')
-      .data(this.yScale.ticks(this.axisTicks))
+      .data(this.yScale.ticks(this.numberOfTicks))
       .enter().append('svg:g')
       .attr('class', 'pcac-grid-rule')
       .append('svg:line')

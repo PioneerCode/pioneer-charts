@@ -1,5 +1,5 @@
-
-<pc-page-header [title]="'Home'"></pc-page-header>
+<pc-page-header [title]="'Home'">
+</pc-page-header>
 <div class="container-fluid">
   <div class="row pc-row">
     <div class="col-sm">
@@ -11,11 +11,11 @@
     <div class="col-sm">
       <div class="pcac-chart-container">
         <pcac-header [config]="pcacService.tableConfig?.headerConfig"></pcac-header>
-        <pcac-table [config]="pcacService.tableConfig"></pcac-table>
+        <pcac-bar-horizontal-chart [config]="pcacService.barChartConfig"></pcac-bar-horizontal-chart>
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row pc-row">
     <div class="col-sm">
       <div class="pcac-chart-container">
         <pcac-header [config]="pcacService.lineChartConfig?.headerConfig"></pcac-header>
@@ -26,6 +26,14 @@
       <div class="pcac-chart-container">
         <pcac-header [config]="pcacService.areaChartConfig?.headerConfig"></pcac-header>
         <pcac-line-area-chart [config]="pcacService.areaChartConfig"></pcac-line-area-chart>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <div class="pcac-chart-container">
+        <pcac-header [config]="pcacService.tableConfig?.headerConfig"></pcac-header>
+        <pcac-table [config]="pcacService.tableConfig"></pcac-table>
       </div>
     </div>
   </div>

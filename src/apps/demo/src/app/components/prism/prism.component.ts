@@ -3,7 +3,6 @@ import {
   AfterViewInit,
   Input,
   ElementRef,
-  ViewChild,
   Renderer2
 } from '@angular/core';
 
@@ -29,6 +28,6 @@ export class PrismComponent implements AfterViewInit {
     this._renderer.appendChild(this.nativeElement, this.preNode);
     this._renderer.appendChild(this.preNode, this.codeNode);
     this.codeNode.textContent = this.code;
-    Prism.highlightElement(this.codeNode,  Prism.languages[this.language]);
+    Prism.highlightElement(this.codeNode, Prism.languages[this.language]);
   }
 }

@@ -9,8 +9,6 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 export class BarHorizontalChartBuilder extends PcacChart {
   private numberOfTicks = 5;
   private xScale: scaleBand<string>;
-  private xSingleGroup: scaleBand<string>;
-  private xBars: scaleBand<string>;
   private yScale: scaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
@@ -24,24 +22,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
       return d.value;
     });
 
-    this.yScale = scaleLinear()
-      .domain([config.domainMax, 0])
-      .range([0, config.height]);
+    this.xScale = scaleLinear()
+    .domain([0, config.domainMax])
+    .range([0, this.width]);
 
-    this.xScale = scaleBand()
+    this.yScale = scaleBand()
       .domain(config.data.map((d) => d.key))
-      .range([0, this.width])
+      .range([this.height, 0])
       .padding(0.1);
-
-    // this.xSingleGroup = scaleBand()
-    //   .domain(barMap)
-    //   .rangeRound([0, this.xGroups.bandwidth()])
-    //   .padding(0.1);
-
-    // this.xBars = scaleBand()
-    //   .domain(barMap)
-    //   .rangeRound([0, this.xGroups.bandwidth()])
-    //   .padding(0.1);
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
@@ -53,14 +41,13 @@ export class BarHorizontalChartBuilder extends PcacChart {
       xScale: this.xScale,
       yScale: this.yScale
     });
-    this.gridBuilder.drawGrid({
+    this.gridBuilder.drawVerticalGrid({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
-      width: this.width,
+      height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
-
     this.addBars(config);
   }
 

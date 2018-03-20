@@ -61,7 +61,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       xScale: this.xScale,
       yScale: this.yScale
     });
-    this.gridBuilder.drawGrid({
+    this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
       width: this.width,

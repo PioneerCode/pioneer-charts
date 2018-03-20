@@ -13,8 +13,6 @@ export interface IBarVerticalChartBuilder {
 export class BarVerticalChartBuilder extends PcacChart {
   private numberOfTicks = 5;
   private xScale: scaleBand<string>;
-  private xSingleGroup: scaleBand<string>;
-  private xBars: scaleBand<string>;
   private yScale: scaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
@@ -24,10 +22,6 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private buildScales(config: IPcacBarVerticalChartConfig) {
-    const barMap = config.data[0].data.map((d) => {
-      return d.value;
-    });
-
     this.yScale = scaleLinear()
       .domain([config.domainMax, 0])
       .range([0, config.height]);
@@ -36,16 +30,6 @@ export class BarVerticalChartBuilder extends PcacChart {
       .domain(config.data.map((d) => d.key))
       .range([0, this.width])
       .padding(0.1);
-
-    // this.xSingleGroup = scaleBand()
-    //   .domain(barMap)
-    //   .rangeRound([0, this.xGroups.bandwidth()])
-    //   .padding(0.1);
-
-    // this.xBars = scaleBand()
-    //   .domain(barMap)
-    //   .rangeRound([0, this.xGroups.bandwidth()])
-    //   .padding(0.1);
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
@@ -57,14 +41,13 @@ export class BarVerticalChartBuilder extends PcacChart {
       xScale: this.xScale,
       yScale: this.yScale
     });
-    this.gridBuilder.drawGrid({
+    this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,
       width: this.width,
       xScale: this.xScale,
       yScale: this.yScale
     });
-
     this.addBars(config);
   }
 

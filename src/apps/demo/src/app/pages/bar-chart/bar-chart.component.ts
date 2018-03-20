@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { PcacService } from '../../services/pcac.service';
 
 @Component({
@@ -7,5 +7,7 @@ import { PcacService } from '../../services/pcac.service';
   styleUrls: ['./bar-chart.component.scss']
 })
 export class BarChartComponent {
+  verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig"></pcac-bar-vertical-chart>`;
+  horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig"></pcac-bar-horizontal-chart>`;
   constructor(public pcacService: PcacService) { }
 }

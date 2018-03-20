@@ -20,6 +20,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PcacService } from './services/pcac.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { PrismComponent } from './components/prism/prism.component';
 
 const appRoutes: Routes = [
   { path: 'get-started', component: GetStartedComponent },
@@ -40,7 +41,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     TableComponent,
     GetStartedComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    PrismComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

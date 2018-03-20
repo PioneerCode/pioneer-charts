@@ -13,6 +13,7 @@
         "packagr",
         "pioneercode",
         "polyfills",
+        "prismjs",
         "syntaxhighlighter"
     ]
 }

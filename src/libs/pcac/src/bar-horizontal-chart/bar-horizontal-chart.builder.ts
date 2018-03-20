@@ -23,8 +23,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
     });
 
     this.xScale = scaleLinear()
-    .domain([0, config.domainMax])
-    .range([0, this.width]);
+      .domain([0, config.domainMax])
+      .range([0, this.width]);
 
     this.yScale = scaleBand()
       .domain(config.data.map((d) => d.key))
@@ -53,32 +53,28 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private addBars(config: IPcacBarHorizontalChartConfig) {
     this.svg.append('g')
-      .attr('class', 'pc-bars')
+      .attr('class', 'bar-groups')
       .selectAll('g')
       .data(config.data)
       .enter().append('g')
-      .attr('class', 'pc-bar-group')
-      .attr('transform', (d: IPcacData, i: number) => {
-        return 'translate(' + this.xScale(d.key) + ',0)';
-      })
+      .attr('class', 'bars')
+      .attr('transform', (d) => 'translate(0,' + this.yScale(d.key) + ')')
       .selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
       })
       .enter().append('rect')
-      .attr('class', 'pc-bar')
-      .attr('x', (d: IPcacData) => {
-        return this.xScale(d.key);
+      .attr('class', 'bar')
+      .attr('x', 0)
+      .attr('y', (d: IPcacData) => {
+        return this.yScale(d.key);
       })
-      .style('fill', (d: IPcacData, i: number, n: any) => {
+      .attr('height', this.yScale.bandwidth())
+      .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })
-      .attr('width', this.xScale.bandwidth())
-      .attr('y', (d: IPcacData) => {
-        return this.yScale(d.value);
-      })
-      .attr('height', (d: IPcacData, ) => {
-        return this.height - this.yScale(d.value);
+      .attr('width', (d: IPcacData) => {
+        return this.xScale(d.value);
       });
   }
 }

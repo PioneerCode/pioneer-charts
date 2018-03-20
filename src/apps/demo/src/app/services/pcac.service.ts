@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITableConfig, IPcacBarVerticalChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
+import {
+  ITableConfig,
+  IPcacBarVerticalChartConfig,
+  ILineAreaChartConfig,
+  IPcacBarHorizontalChartConfig
+} from '@pioneer-code/pioneer-code-angular-charts';
 import { PcacRepository } from '../repository/pcac.repository';
 
 
 @Injectable()
 export class PcacService {
   tableConfig: ITableConfig;
-  barChartConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartConfig: IPcacBarVerticalChartConfig;
+  barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: ILineAreaChartConfig;
   areaChartConfig: ILineAreaChartConfig;
 
@@ -17,8 +23,11 @@ export class PcacService {
     this.repository.getTable()
       .subscribe(data => this.tableConfig = data);
 
-    this.repository.getBarChart()
-      .subscribe(data => this.barChartConfig = data);
+    this.repository.getBarVerticalChart()
+      .subscribe(data => this.barVerticalChartConfig = data);
+
+    this.repository.getBarHorizontalChart()
+      .subscribe(data => this.barHorizontalChartConfig = data);
 
     this.repository.getLineChart()
       .subscribe(data => this.lineChartConfig = data);

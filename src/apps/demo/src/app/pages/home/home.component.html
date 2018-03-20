@@ -3,27 +3,27 @@
 <div class="container-fluid">
   <div class="row pc-row">
     <div class="col-sm">
-      <div class="pcac-chart-container">
-        <pcac-header [config]="pcacService.barChartConfig?.headerConfig"></pcac-header>
-        <pcac-bar-vertical-chart [config]="pcacService.barChartConfig"></pcac-bar-vertical-chart>
+      <div class="pc-chart-container">
+        <pcac-header [config]="pcacService.barVerticalChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-vertical-chart [config]="pcacService.barVerticalChartConfig"></pcac-bar-vertical-chart>
       </div>
     </div>
     <div class="col-sm">
-      <div class="pcac-chart-container">
-        <pcac-header [config]="pcacService.barChartConfig?.headerConfig"></pcac-header>
-        <pcac-bar-horizontal-chart [config]="pcacService.barChartConfig"></pcac-bar-horizontal-chart>
+      <div class="pc-chart-container">
+        <pcac-header [config]="pcacService.barHorizontalChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-horizontal-chart [config]="pcacService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
       </div>
     </div>
   </div>
   <div class="row pc-row">
     <div class="col-sm">
-      <div class="pcac-chart-container">
+      <div class="pc-chart-container">
         <pcac-header [config]="pcacService.lineChartConfig?.headerConfig"></pcac-header>
         <pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>
       </div>
     </div>
     <div class="col-sm">
-      <div class="pcac-chart-container">
+      <div class="pc-chart-container">
         <pcac-header [config]="pcacService.areaChartConfig?.headerConfig"></pcac-header>
         <pcac-line-area-chart [config]="pcacService.areaChartConfig"></pcac-line-area-chart>
       </div>
@@ -31,7 +31,7 @@
   </div>
   <div class="row">
     <div class="col-sm">
-      <div class="pcac-chart-container">
+      <div class="pc-chart-container">
         <pcac-header [config]="pcacService.tableConfig?.headerConfig"></pcac-header>
         <pcac-table [config]="pcacService.tableConfig"></pcac-table>
       </div>

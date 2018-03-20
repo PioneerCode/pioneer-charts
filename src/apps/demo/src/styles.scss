@@ -5,7 +5,7 @@ $fa-font-path: "./assets/fonts" !default;
 @import '../../../libs/pcac/pcac';
 @import '../../../node_modules/font-awesome/scss/font-awesome.scss';
 
-.pcac-chart-container {
+.pc-chart-container {
     padding: 1rem;
     background: color("white");
     box-shadow: 10px 0px 2rem -12px rgba(90, 87, 87, 0.75);

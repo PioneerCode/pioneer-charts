@@ -12,8 +12,12 @@ export class PcacRepository {
     return this.http.get<ITableConfig>('./assets/mock/table.json');
   }
 
-  getBarChart() {
-    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-chart.json');
+  getBarHorizontalChart() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-vertical-chart.json');
+  }
+
+  getBarVerticalChart() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-chart.json');
   }
 
   getLineChart() {

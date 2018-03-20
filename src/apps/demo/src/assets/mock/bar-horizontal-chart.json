@@ -2,7 +2,7 @@
   "domainMax": 1000,
   "height": 204,
   "headerConfig": {
-    "title": "Bar Chart"
+    "title": "Bar Horizontal Chart"
   },
   "data": [
     {

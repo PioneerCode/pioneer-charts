@@ -8,7 +8,8 @@ import {
   PcacHeaderModule,
   PcacTableModule,
   PcacBarChartModule,
-  PcacLineAreaChartModule
+  PcacLineAreaChartModule,
+  PcacBarHorizontalChartModule
 } from '@pioneer-code/pioneer-code-angular-charts';
 import { HomeComponent } from './pages/home/home.component';
 import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
@@ -49,7 +50,8 @@ const appRoutes: Routes = [
     PcacHeaderModule,
     PcacTableModule,
     PcacBarChartModule,
-    PcacLineAreaChartModule
+    PcacLineAreaChartModule,
+    PcacBarHorizontalChartModule
   ],
   providers: [
     PcacRepository,

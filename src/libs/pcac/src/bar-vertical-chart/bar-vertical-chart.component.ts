@@ -10,7 +10,7 @@ import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
     BarVerticalChartBuilder
   ]
 })
-export class PcacBarChartComponent implements OnChanges {
+export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config: IPcacBarVerticalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 

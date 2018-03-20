@@ -1,1 +1,29 @@
 <pc-page-header [title]="'Bar Chart'"></pc-page-header>
+<div class="container-fluid">
+  <div class="row pc-row">
+    <div class="col-sm">
+      <div class="pc-chart-container">
+        <pcac-header [config]="pcacService.barVerticalChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-vertical-chart [config]="pcacService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="pc-chart-container">
+        <pcac-header [config]="pcacService.barHorizontalChartConfig?.headerConfig"></pcac-header>
+        <pcac-bar-horizontal-chart [config]="pcacService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row pc-row">
+    <div class="col-sm">
+      <h3>Markup</h3>
+      <h4>Horizontal</h4>
+      <pre>&lt;pcac-bar-vertical-chart [config]=&quot;barVerticalChartConfig&quot;&gt;&lt;/pcac-bar-vertical-chart&gt;</pre>
+      <h4>Vertical</h4>
+      <pre>&lt;pcac-bar-horizontal-chart [config]=&quot;barVerticalChartConfig&quot;&gt;&lt;/pcac-bar-horizontal-chart&gt;</pre>
+      <h3>API</h3>
+    </div>
+  </div>
+</div>

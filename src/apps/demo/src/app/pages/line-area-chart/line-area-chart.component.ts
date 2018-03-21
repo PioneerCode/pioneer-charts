@@ -8,10 +8,12 @@ import { IPcacData } from '@pioneer-code/pioneer-code-angular-charts';
   styleUrls: ['./line-area-chart.component.scss']
 })
 export class LineAreaChartComponent {
+  markupCode = `<pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>`;
+  importCode = `import {PcacLineAreaChartModule} from '@pioneer-code/pioneer-code-angular-charts';`;
   constructor(public pcacService: PcacService) { }
 
   getConfig() {
-    let rows = [
+    const rows = [
       {
         'data': [
           {
@@ -33,9 +35,8 @@ export class LineAreaChartComponent {
         ]
       }
     ] as IPcacData[];
-    rows = rows.concat(this.pcacService.sharedConfig || []);
     return {
-      'data': rows
+      'data': rows.concat(this.pcacService.sharedConfig || [])
     };
   }
 }

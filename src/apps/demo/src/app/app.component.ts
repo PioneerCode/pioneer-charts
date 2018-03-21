@@ -9,10 +9,8 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Pioneer Code Angular Charts';
-  version = environment.version;
 
-  constructor(private pcacService: PcacService) { }
+  constructor(public pcacService: PcacService) { }
 
   ngOnInit() {
     this.pcacService.getData();

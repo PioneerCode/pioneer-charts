@@ -7,5 +7,5 @@ import { PcacService } from '../../services/pcac.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-  constructor(private pcacService: PcacService) { }
+  constructor(public pcacService: PcacService) { }
 }

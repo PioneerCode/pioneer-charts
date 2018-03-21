@@ -21,6 +21,9 @@ import { PcacService } from './services/pcac.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
+import { ChartNavComponent } from './components/chart-nav/chart-nav.component';
+import { NavComponent } from './components/nav/nav.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 const appRoutes: Routes = [
   { path: 'get-started', component: GetStartedComponent },
@@ -42,7 +45,10 @@ const appRoutes: Routes = [
     TableComponent,
     GetStartedComponent,
     PageHeaderComponent,
-    PrismComponent
+    PrismComponent,
+    ChartNavComponent,
+    NavComponent,
+    FooterComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

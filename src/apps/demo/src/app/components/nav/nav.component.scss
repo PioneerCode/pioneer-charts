@@ -1,0 +1,24 @@
+@import "../../../imports";
+@import "../../../variables";
+
+header {
+  background: color("white");
+  .pc-header-brand {
+      padding: 1rem 1rem 1rem 2rem;
+      color: theme-color-level("primary", -12);
+      background: theme-color("primary");
+  }
+  .pc-header-content {
+      padding: 0.5rem 1rem;
+      a {
+          color: $body-bg;
+          div {
+              padding-right: 1rem;
+          }
+          &:hover {
+              transition: all 0.25s;
+              color: theme-color("primary-light");
+          }
+      }
+  }
+}

@@ -33,6 +33,7 @@ const appRoutes: Routes = [
   { path: 'table', component: TableComponent },
   { path: 'header', component: HeaderComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'demo', component: DemoComponent },
   { path: '**', component: HomeComponent }
 ];
 

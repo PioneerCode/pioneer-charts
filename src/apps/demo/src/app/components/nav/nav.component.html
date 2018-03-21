@@ -15,6 +15,9 @@
       <a class="nav-link" routerLink="/charts" [ngClass]="{'active': currentRoute === 'charts'}" (click)="currentRoute = 'charts'">
         Chart
       </a>
+      <a class="nav-link" routerLink="/demo" [ngClass]="{'active': currentRoute === 'demo'}" (click)="currentRoute = 'demo'">
+        Demo
+      </a>
     </div>
     <div class=" navbar-nav my-2 my-lg-0">
       <a class="nav-link clearfix" href="https://github.com/PioneerCode/pioneer-angular-charts">
@@ -24,44 +27,3 @@
     </div>
   </div>
 </nav>
-<!-- <header>
-  <div class="row flex-xl-nowrap no-gutters">
-    <div class="col-12 col-md-3 col-xl-2">
-      <div class="pc-header-brand">
-        <b>PIONEER CHARTS</b>
-      </div>
-    </div>
-    <div class="col-12 col-md-9 col-xl-10">
-      <div class="pc-header-content">
-        <ul class="nav float-left">
-          <li class="nav-item">
-            <a routerLink="/home" class="nav-link" [ngClass]="{'active': currentRoute === 'home'}" (click)="currentRoute = 'home'">
-              <i class="fa fa-home"></i>
-              Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/get-started" [ngClass]="{'active': currentRoute === 'get-started'}" (click)="currentRoute = 'get-started'">
-              <i class="fa fa-play"></i>
-              Get Started
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="fa fa-eye"></i>
-              Charts
-            </a>
-          </li>
-        </ul>
-        <ul class="nav float-right">
-          <li class="nav-item">
-            <a class="nav-link clearfix" href="https://github.com/PioneerCode/pioneer-angular-charts">
-              <i class="fa fa-github"></i>
-              GitHub
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</header> -->

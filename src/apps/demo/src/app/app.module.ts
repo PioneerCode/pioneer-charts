@@ -24,6 +24,7 @@ import { PrismComponent } from './components/prism/prism.component';
 import { ChartNavComponent } from './components/chart-nav/chart-nav.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { DemoComponent } from './pages/demo/demo.component';
 
 const appRoutes: Routes = [
   { path: 'get-started', component: GetStartedComponent },
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
     PrismComponent,
     ChartNavComponent,
     NavComponent,
-    FooterComponent
+    FooterComponent,
+    DemoComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

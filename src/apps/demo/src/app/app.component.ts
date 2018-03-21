@@ -4,7 +4,7 @@ import { PcacService } from './services/pcac.service';
 import { environment } from '../environments/environment';
 
 @Component({
-  selector: 'pcac-root',
+  selector: 'pc-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

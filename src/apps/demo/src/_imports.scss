@@ -5,8 +5,9 @@
 
 // Overrides
 $theme-colors: ( "primary": #43425d, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
-$body-bg: $gray-200;
 $black: theme-color-level("primary", 8);
+$body-bg: $black;
+
 // Optional
 @import "node_modules/bootstrap/scss/root";
 //@import "node_modules/bootstrap/scss/print";

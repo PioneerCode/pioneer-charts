@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITableConfig, IPcacBarVerticalChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
+import { ITableConfig, IPcacBarVerticalChartConfig, ILineAreaChartConfig, IPcacData } from '@pioneer-code/pioneer-code-angular-charts';
 
 
 @Injectable()
@@ -26,5 +26,9 @@ export class PcacRepository {
 
   getAreaChart() {
     return this.http.get<ILineAreaChartConfig>('./assets/mock/area-chart.json');
+  }
+
+  getShareConfig() {
+    return this.http.get<IPcacData[]>('./assets/mock/shared-config.json');
   }
 }

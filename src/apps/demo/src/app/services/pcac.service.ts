@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
+  IPcacData,
   ITableConfig,
   IPcacBarVerticalChartConfig,
   ILineAreaChartConfig,
@@ -16,6 +17,7 @@ export class PcacService {
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: ILineAreaChartConfig;
   areaChartConfig: ILineAreaChartConfig;
+  sharedConfig: IPcacData[];
 
   constructor(private repository: PcacRepository) { }
 
@@ -34,5 +36,8 @@ export class PcacService {
 
     this.repository.getAreaChart()
       .subscribe(data => this.areaChartConfig = data);
+
+    this.repository.getShareConfig()
+      .subscribe(data => this.sharedConfig = data);
   }
 }

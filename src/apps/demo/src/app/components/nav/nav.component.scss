@@ -1,11 +1,9 @@
 @import "../../../imports";
 nav {
-    // background: color("white");
      background: theme-color("primary");
     .pc-header-brand {
         padding: 1rem 1rem 1rem 2rem;
         color: theme-color-level("primary", -12);
-        // background: theme-color("primary");
     }
     .pc-header-content {
         padding: 0.5rem 1rem;

@@ -10,7 +10,6 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
   title = 'Pioneer Code Angular Charts';
-  currentRoute = 'home';
   version = environment.version;
 
   constructor(private pcacService: PcacService) { }

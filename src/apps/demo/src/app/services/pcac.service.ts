@@ -18,7 +18,7 @@ export class PcacService {
   lineChartConfig: ILineAreaChartConfig;
   areaChartConfig: ILineAreaChartConfig;
   sharedConfig: IPcacData[];
-  currentMainRoute: string;
+  currentMainRoute = 'home';
 
   constructor(private repository: PcacRepository) { }
 

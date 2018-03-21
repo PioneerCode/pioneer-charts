@@ -9,7 +9,7 @@ import { IPcacData } from '@pioneer-code/pioneer-code-angular-charts';
 })
 export class LineAreaChartComponent {
   markupCode = `<pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>`;
-  importCode = `import {PcacLineAreaChartModule} from '@pioneer-code/pioneer-code-angular-charts';`;
+  importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-code-angular-charts';`;
   constructor(public pcacService: PcacService) { }
 
   getConfig() {

@@ -1,5 +1,13 @@
 # Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-angular-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-angular-charts)
 
+## Quick start
+
+To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/getting-started) page for information on setup, configuration and examples, and more.
+
+```bash
+npm install @pioneer-code/pioneer-charts
+```
+
 ## Bugs and feature requests
 
 Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-angular-charts/issues/new).

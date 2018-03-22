@@ -1,5 +1,4 @@
 {
-  "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "@pioneer-code/pioneer-charts",
   "version": "0.0.8",
   "license": "MIT",
@@ -8,12 +7,5 @@
     "@angular/common": "^5.2.0",
     "@angular/core": "^5.2.0",
     "d3": "^4.13.0"
-  },
-  "ngPackage": {
-    "lib": {
-      "entryFile": "public-api.ts",
-      "licensePath": "LICENSE"
-    },
-    "dest": "../../dist/bundles/@pioneer-code/pioneer-charts"
   }
 }

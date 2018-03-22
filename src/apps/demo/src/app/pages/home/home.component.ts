@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcacRepository } from '../../repository/pcac.repository';
-import { ITableConfig, IPcacBarVerticalChartConfig, ILineAreaChartConfig } from '@pioneer-code/pioneer-code-angular-charts';
-import { PcacService } from '../../services/pcac.service';
+import { PcacService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-home',

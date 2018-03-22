@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PcacRepository } from './repository/pcac.repository';
+import { PcacRepository } from './repository/pc.repository';
 import {
   PcacCoreModule,
   PcacHeaderModule,
@@ -17,7 +17,7 @@ import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
 import { RouterModule, Routes } from '@angular/router';
-import { PcacService } from './services/pcac.service';
+import { PcacService } from './services/pc.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';

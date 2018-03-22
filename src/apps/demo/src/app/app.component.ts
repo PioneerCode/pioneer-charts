@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcacRepository } from './repository/pcac.repository';
-import { PcacService } from './services/pcac.service';
+import { PcacService } from './services/pc.service';
 import { environment } from '../environments/environment';
 
 @Component({

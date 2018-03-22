@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcacService } from '../../services/pcac.service';
+import { PcacService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-nav',

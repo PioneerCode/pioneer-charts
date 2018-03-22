@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { PcacService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-footer',
@@ -8,4 +9,5 @@ import { environment } from '../../../environments/environment';
 })
 export class FooterComponent  {
   version = environment.version;
+  constructor(public pcacService: PcacService) { }
 }

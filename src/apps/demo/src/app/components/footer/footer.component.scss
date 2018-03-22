@@ -2,19 +2,29 @@
 footer {
     background: $black;
     .meta-top {
-        padding: 3rem;
-        color: color("white");
+        padding: 2rem 0 3rem;
         text-align: center;
         color: theme-color-level("primary", -8);
-        a {
-            color: theme-color-level("primary", -8);
-            &:hover {
-                transition: color 0.25s;
+        h5 {
+            color: color("white");
+            a {
                 color: color("white");
             }
         }
-        ul {
-            margin-top: 2rem;
+        .pages a,
+        .social a {
+            color: theme-color-level("primary", -8);
+            cursor: pointer;
+            &:hover {
+                color: color("white");
+                transition: color 0.25s;
+            }
+        }
+        .pages {
+            font-size: 14px;
+        }
+        .social {
+            margin: 1rem 0 0;
         }
     }
     .meta-bottom {
@@ -25,7 +35,6 @@ footer {
             color: theme-color-level("primary", -8);
             &:hover {
                 transition: color 0.25s;
-                color: color("white");
             }
             font-weight: bold;
         }

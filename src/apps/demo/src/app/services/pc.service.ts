@@ -7,7 +7,7 @@ import {
   ILineAreaChartConfig,
   IPcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-code-angular-charts';
-import { PcacRepository } from '../repository/pcac.repository';
+import { PcacRepository } from '../repository/pc.repository';
 
 
 @Injectable()

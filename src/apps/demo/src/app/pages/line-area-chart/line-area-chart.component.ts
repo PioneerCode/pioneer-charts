@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcacService } from '../../services/pcac.service';
+import { PcacService } from '../../services/pc.service';
 import { IPcacData } from '@pioneer-code/pioneer-code-angular-charts';
 
 @Component({

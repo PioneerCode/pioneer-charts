@@ -1,9 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { select, selection, baseType } from 'd3-selection';
-import { PcacColorService, IPcacData } from '../core';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { IPcacData } from '../core/chart.model';
 
 export interface IBarVerticalChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void;

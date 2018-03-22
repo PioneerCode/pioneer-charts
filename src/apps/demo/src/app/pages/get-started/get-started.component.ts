@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./get-started.component.scss']
 })
 export class GetStartedComponent {
-  npmInstallCode = `npm install --save @pioneer-code/pioneer-code-angular-chart`;
-  yarnInstallCode = `yarn add @pioneer-code/pioneer-code-angular-chart`;
+  npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
+  yarnInstallCode = `yarn add @pioneer-code/pioneer-charts`;
 
 }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-  IPcacData,
   IPcacTableConfig,
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
   IPcacBarHorizontalChartConfig
-} from '@pioneer-code/pioneer-code-angular-charts';
+} from '@pioneer-code/pioneer-charts';
+import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 import { PcacRepository } from '../repository/pc.repository';
 
 

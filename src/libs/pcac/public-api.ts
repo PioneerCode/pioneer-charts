@@ -1,7 +1,7 @@
-export * from './src/core';
-export * from './src/header';
-export * from './src/table';
-export * from './src/bar-vertical-chart';
-export * from './src/bar-horizontal-chart';
-export * from './src/line-area-chart';
+export * from './core';
+export * from './header';
+export * from './table';
+export * from './bar-vertical-chart';
+export * from './bar-horizontal-chart';
+export * from './line-area-chart';
 

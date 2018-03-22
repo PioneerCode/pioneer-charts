@@ -18,8 +18,11 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@pioneer-code/pioneer-code-angular-charts": [
+      "@pioneer-code/pioneer-charts": [
         "libs/pcac"
+      ],
+      "@pioneer-code/pioneer-charts/core": [
+        "libs/pcac/core/public-api"
       ]
     }
   }

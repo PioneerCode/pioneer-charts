@@ -4,9 +4,9 @@ import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { IPcacData } from '../core';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
+import { IPcacData } from '../core/chart.model';
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
 }

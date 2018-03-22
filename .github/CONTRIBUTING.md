@@ -25,11 +25,11 @@ restrictions:
 
 Our bug tracker utilizes several labels to help organize and identify issues. Here's what they represent and how we use them:
 
-- `css` - Issues stemming from our compiled CSS or source Less/Sass files.
+- `css` - Issues stemming from our compiled CSS or source Sass files.
 - `docs` - Issues for improving or updating our documentation.
 - `feature` - Issues asking for a new feature to be added, or an existing one to be extended or modified. New features require a minor version bump (e.g., `v3.0.0` to `v3.1.0`).
 - `help wanted` - Issues we need or would love help from the community to resolve.
-- `js` - Issues stemming from our compiled or source JavaScript files.
+- `js` - Issues stemming from our compiled TS or source JavaScript files.
 - `meta` - Issues with the project itself or our GitHub repository.
 - `bar-chart` - Issues dealing with both vertical and horizontal bar charts modules.
 - `table` - Issues dealing with the table module.

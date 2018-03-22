@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
-import { ILineAreaChartConfig } from './line-area-chart.model';
+import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
 
 @Component({
@@ -11,7 +11,7 @@ import { LineAreaChartBuilder } from './line-area-chart.builder';
   ]
 })
 export class PcacLineAreaChartComponent implements OnChanges {
-  @Input() config: ILineAreaChartConfig;
+  @Input() config: IPcacLineAreaChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
   constructor(

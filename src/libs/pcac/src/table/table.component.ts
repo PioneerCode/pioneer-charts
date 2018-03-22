@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ITableConfig } from './table.model';
+import { IPcacTableConfig } from './table.model';
 
 @Component({
   selector: 'pcac-table',
@@ -7,5 +7,5 @@ import { ITableConfig } from './table.model';
   styleUrls: ['./table.component.scss']
 })
 export class PcacTableComponent {
-  @Input() config: ITableConfig;
+  @Input() config: IPcacTableConfig;
 }

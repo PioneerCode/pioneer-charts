@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   IPcacData,
-  ITableConfig,
+  IPcacTableConfig,
   IPcacBarVerticalChartConfig,
-  ILineAreaChartConfig,
+  IPcacLineAreaChartConfig,
   IPcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-code-angular-charts';
 import { PcacRepository } from '../repository/pc.repository';
@@ -12,11 +12,11 @@ import { PcacRepository } from '../repository/pc.repository';
 
 @Injectable()
 export class PcacService {
-  tableConfig: ITableConfig;
+  tableConfig: IPcacTableConfig;
   barVerticalChartConfig: IPcacBarVerticalChartConfig;
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
-  lineChartConfig: ILineAreaChartConfig;
-  areaChartConfig: ILineAreaChartConfig;
+  lineChartConfig: IPcacLineAreaChartConfig;
+  areaChartConfig: IPcacLineAreaChartConfig;
   sharedConfig: IPcacData[];
   currentMainRoute = 'home';
   currentChartRoute = 'bar-chart';

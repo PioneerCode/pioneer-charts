@@ -1,5 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { ILineAreaChartConfig } from './line-area-chart.model';
+import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { select, selection, baseType } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
@@ -8,7 +8,7 @@ import { IPcacData } from '../core';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
 export interface ILineAreaChartBuilder {
-  buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void;
+  buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
 }
 
 @Injectable()
@@ -19,13 +19,13 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private xScale: scaleLinear<number, number>;
   private yScale: scaleLinear<number, number>;
 
-  buildChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
+  buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.setup(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }
 
-  private buildScales(config: ILineAreaChartConfig): void {
+  private buildScales(config: IPcacLineAreaChartConfig): void {
     this.xScale = scaleLinear()
       .domain([0, config.data[0].data.length - 1])
       .range([0, this.width]);
@@ -52,7 +52,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       });
   }
 
-  private drawChart(chartElm: ElementRef, config: ILineAreaChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.prepSvg(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
@@ -72,7 +72,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
     this.drawDots(config);
   }
 
-  private drawLineArea(config: ILineAreaChartConfig): void {
+  private drawLineArea(config: IPcacLineAreaChartConfig): void {
     for (let i = 0; i < config.data.length; i++) {
       if (config.isArea) {
         this.drawArea(config.data[i].data, i);
@@ -106,7 +106,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .attr('d', this.area);
   }
 
-  private drawDots(config: ILineAreaChartConfig): void {
+  private drawDots(config: IPcacLineAreaChartConfig): void {
     for (let index = 0; index < config.data.length; index++) {
       this.svg.append('g')
         .attr('class', 'dots')

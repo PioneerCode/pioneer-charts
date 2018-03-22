@@ -1,6 +1,6 @@
 import { IPcacChartConfig } from '../core';
 import { IHeaderConfig } from '../header';
 
-export interface ITableConfig extends IPcacChartConfig {
+export interface IPcacTableConfig extends IPcacChartConfig {
   headerConfig: IHeaderConfig;
 }

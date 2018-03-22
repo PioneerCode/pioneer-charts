@@ -1,27 +1,32 @@
 # Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-angular-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-angular-charts)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+## Bugs and feature requests
 
-## Development server
+Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-angular-charts/issues/new).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Documentation
 
-## Code scaffolding
+Bootstrap's documentation, included in this repo in the root directory, is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Contributing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Please read through our [contributing guidelines](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
 
-## Running unit tests
+Editor preferences are available in the [editor config](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org/>.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Creators
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+**Chad Ramos**
 
-## Further help
+- [Twitter](https://github.com/chad-ramos)
+- [GitHub](https://twitter.com/chad_ramos)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+**Your Name Here**
+
+Now excepting PRs!
+
+## Copyright and license
+
+Code and documentation copyright 2018 the [Pioneer Charts Authors](https://github.com/PioneerCode/pioneer-angular-charts/graphs/contributors) and [Pioneer Code](https://pioneercode.com) Code and Docs released under the [MIT License](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/LICENSE). 

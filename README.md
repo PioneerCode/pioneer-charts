@@ -2,7 +2,7 @@
 
 ## Quick start
 
-To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/getting-started) page for information on setup, configuration and examples, and more.
+To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/get-started) page for information on setup, configuration and examples, and more.
 
 ```bash
 npm install @pioneer-code/pioneer-charts
@@ -14,7 +14,7 @@ Have a bug or a feature request? Please first read the [issue guidelines](https:
 
 ## Documentation
 
-Bootstrap's documentation, included in this repo in the root directory, is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
+Pioneer Chart's documentation, included in this repo in the root directory, is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
 
 
 ## Contributing

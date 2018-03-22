@@ -24,12 +24,14 @@ Please read through our [contributing guidelines](https://github.com/PioneerCode
 Editor preferences are available in the [editor config](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org/>.
 
 
-## Creators
+## Creator
 
 **Chad Ramos**
 
 - [Twitter](https://github.com/chad-ramos)
 - [GitHub](https://twitter.com/chad_ramos)
+
+## Contributors
 
 **Your Name Here**
 

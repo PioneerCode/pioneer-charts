@@ -6,13 +6,13 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <a class="nav-link" routerLink="/home" [ngClass]="{'active': pcacService.currentMainRoute === 'home'}" (click)="pcacService.currentMainRoute = 'home'">
+      <a class="nav-link" routerLink="/" [ngClass]="{'active': pcacService.currentMainRoute === 'home'}" (click)="pcacService.currentMainRoute = 'home'">
         Home
       </a>
-      <a class="nav-link" routerLink="/get-started" [ngClass]="{'active': pcacService.currentMainRoute === 'get-started'}" (click)="pcacService.currentMainRoute = 'get-started'">
+      <a class="nav-link" routerLink="/guides/get-started" [ngClass]="{'active': pcacService.currentMainRoute === 'get-started'}" (click)="pcacService.currentMainRoute = 'get-started'">
         Get Started
       </a>
-      <a class="nav-link" routerLink="/bar-chart" [ngClass]="{'active': pcacService.currentMainRoute === 'charts'}" (click)="pcacService.currentMainRoute = 'charts'">
+      <a class="nav-link" routerLink="/components/charts/bar-chart" [ngClass]="{'active': pcacService.currentMainRoute === 'charts'}" (click)="pcacService.currentMainRoute = 'charts'">
         Chart
       </a>
       <a class="nav-link" routerLink="/demo" [ngClass]="{'active': pcacService.currentMainRoute === 'demo'}" (click)="pcacService.currentMainRoute = 'demo'">

@@ -1,4 +1,8 @@
 @import "../../../imports";
+.pc-main-content {
+    background: gray("200");
+    padding: 2rem 2rem;
+}
 
 nav {
     background: theme-color-level("primary", -0.5);

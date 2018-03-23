@@ -1,17 +1,5 @@
 <pc-nav></pc-nav>
-<section class="pc-nav-content">
-  <div class="row flex-xl-nowrap no-gutters" *ngIf="pcacService.currentMainRoute ==='charts'">
-    <div class="col-12 col-md-3 col-xl-2">
-      <pc-chart-nav></pc-chart-nav>
-    </div>
-    <main class="col-12 col-md-9 col-xl-10">
-      <section class="pc-main-content">
-        <router-outlet></router-outlet>
-      </section>
-    </main>
-  </div>
-  <main *ngIf="pcacService.currentMainRoute !=='charts'">
+<section class="pc-main-content">
     <router-outlet></router-outlet>
-  </main>
 </section>
 <pc-footer></pc-footer>

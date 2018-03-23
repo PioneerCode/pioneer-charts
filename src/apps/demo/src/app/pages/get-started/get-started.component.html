@@ -1,14 +1,29 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-      <pc-page-header [title]="'Get Started'"></pc-page-header>
-      <h3 id="step-1-install-pioneer-charts">Step 1: Install Pioneer Charts</h3>
-      <h5 id="npm">NPM</h5>
-      <pc-prism language="bash" [code]="npmInstallCode"></pc-prism>
-      <pre></pre>
-      <h5 id="yarn">Yarn</h5>
-      <pc-prism language="bash" [code]="yarnInstallCode"></pc-prism>
-      <h3 id="step-2-import-modules">Step 2: Import Component Modules</h3>
+<section class="pc-page-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <pc-page-header [title]="'Get Started'"></pc-page-header>
+        <p>Lorem ipsum dolor amet coloring book ramps +1 butcher small batch cloud bread palo santo roof party twee affogato
+          vegan ethical. Mixtape mumblecore trust fund, schlitz sustainable echo park messenger bag. Kitsch disrupt forage
+          irony poutine dreamcatcher gochujang VHS bitters keytar banh mi echo park. Next level waistcoat keytar brooklyn,
+          meggings kale chips ramps.</p>
+        <h3 id="step-1-install-pioneer-charts">Step 1: Install Pioneer Charts</h3>
+        <h5 id="npm">NPM</h5>
+        <pc-prism language="bash" [code]="npmInstallCode"></pc-prism>
+        <pre></pre>
+        <h5 id="yarn">Yarn</h5>
+        <pc-prism language="bash" [code]="yarnInstallCode"></pc-prism>
+        <h3 id="step-2-import-modules">Step 2: Import Component Modules</h3>
+        <p>Import all modules you plan on using in your project directly in your AppModule.</p>
+        <pc-prism language="typescript" [code]="appModuleCode"></pc-prism>
+        <p>Or, better yet, if you are using a collection of modules why not create your own special module thats sole responsibility
+          is to import Pioneer Chart modules!</p>
+        <pc-prism language="typescript" [code]="specialModuleCode"></pc-prism>
+        <p>Now you can import your new module directly into your AppModule.</p>
+        <pc-prism language="typescript" [code]="appSpecialModuleCode"></pc-prism>
+        <h3 id="step-3-import-styles">Step 3: Import Styles</h3>
+        <pc-prism language="typescript" [code]="importStylesCode"></pc-prism>
+      </div>
     </div>
   </div>
-</div>
+</section>

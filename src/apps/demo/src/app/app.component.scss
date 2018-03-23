@@ -1,12 +1,7 @@
 @import "../imports";
-.pc-nav-content {
+.pc-main-content {
     padding-top: 56px;
     background: theme-color-level("primary", -0.5);
 }
 
-main {
-    background: gray("200");
-    .pc-main-content {
-        padding: 2rem 2rem;
-    }
-}
+

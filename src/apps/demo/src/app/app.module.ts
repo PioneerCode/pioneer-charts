@@ -54,7 +54,7 @@ const appRoutes: Routes = [
     DemoComponent
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { enableTracing: true }),
     BrowserModule,
     HttpClientModule,
     PcacCoreModule,

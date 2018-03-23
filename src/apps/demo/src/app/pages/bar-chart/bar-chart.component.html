@@ -1,32 +1,34 @@
-<div class="container-fluid">
-  <pc-page-header [title]="'Bar Chart'"></pc-page-header>
-  <div class="row pc-row">
-    <div class="col-sm">
-      <div class="pc-chart-container">
-        <pcac-header [config]="pcacService.barVerticalChartConfig?.headerConfig"></pcac-header>
-        <pcac-bar-vertical-chart [config]="pcacService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+<pc-chart-nav>
+  <div class="container-fluid">
+    <pc-page-header [title]="'Bar Chart'"></pc-page-header>
+    <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="pcacService.barVerticalChartConfig?.headerConfig"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcacService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+        </div>
       </div>
-    </div>
-    <div class="col-sm">
-      <div class="pc-chart-container">
-        <pcac-header [config]="pcacService.barHorizontalChartConfig?.headerConfig"></pcac-header>
-        <pcac-bar-horizontal-chart [config]="pcacService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="pcacService.barHorizontalChartConfig?.headerConfig"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcacService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="container-fluid">
-  <div class="row pc-row">
-    <div class="col-sm">
-      <h3>Markup</h3>
-      <h6>Horizontal</h6>
-      <pc-prism language="markup" [code]="horizontalCode"></pc-prism>
-      <h6>Vertical</h6>
-      <pc-prism language="markup" [code]="verticalCode"></pc-prism>
-      <h3>API</h3>
-      <pc-prism language="typescript" [code]="importCode"></pc-prism>
-      <h6>Configuration</h6>
-      <pcac-table [config]="getConfig()" class="pc-table"></pcac-table>
+  <div class="container-fluid">
+    <div class="row pc-row">
+      <div class="col-sm">
+        <h3>Markup</h3>
+        <h6>Horizontal</h6>
+        <pc-prism language="markup" [code]="horizontalCode"></pc-prism>
+        <h6>Vertical</h6>
+        <pc-prism language="markup" [code]="verticalCode"></pc-prism>
+        <h3>API</h3>
+        <pc-prism language="typescript" [code]="importCode"></pc-prism>
+        <h6>Configuration</h6>
+        <pcac-table [config]="getConfig()" class="pc-table"></pcac-table>
+      </div>
     </div>
   </div>
-</div>
+</pc-chart-nav>

@@ -10,6 +10,12 @@ $fa-font-path: "./assets/fonts" !default;
     background: color("white");
     box-shadow: 10px 0px 2rem -12px rgba(90, 87, 87, 0.75);
 }
+
+.pc-page-content {
+  background: gray("200");
+  padding: 2rem 2rem;
+}
+
 .pc-table {
   background: color("white");
   display: block;

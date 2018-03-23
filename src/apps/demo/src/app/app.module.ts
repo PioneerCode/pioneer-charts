@@ -27,12 +27,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { DemoComponent } from './pages/demo/demo.component';
 
 const appRoutes: Routes = [
-  { path: 'get-started', component: GetStartedComponent },
-  { path: 'bar-chart', component: BarChartComponent },
-  { path: 'line-area-chart', component: LineAreaChartComponent },
-  { path: 'table', component: TableComponent },
-  { path: 'header', component: HeaderComponent },
-  { path: 'home', component: HomeComponent },
+  { path: 'guides/get-started', component: GetStartedComponent },
+  { path: 'components/charts/bar-chart', component: BarChartComponent },
+  { path: 'components/charts/line-area-chart', component: LineAreaChartComponent },
+  { path: 'components/charts/table', component: TableComponent },
+  { path: 'components/ui/header', component: HeaderComponent },
   { path: 'demo', component: DemoComponent },
   { path: '**', component: HomeComponent }
 ];
@@ -54,7 +53,7 @@ const appRoutes: Routes = [
     DemoComponent
   ],
   imports: [
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
     PcacCoreModule,

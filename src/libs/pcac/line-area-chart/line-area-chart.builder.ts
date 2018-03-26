@@ -53,7 +53,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
-    this.prepSvg(chartElm);
+    this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,

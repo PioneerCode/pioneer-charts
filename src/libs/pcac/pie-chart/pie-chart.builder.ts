@@ -1,6 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { arc, pie, DefaultArcObject } from 'd3-shape';
+import { select } from 'd3-selection';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
@@ -13,8 +14,8 @@ export interface IPieChartBuilder {
 @Injectable()
 export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private radius: number;
-  private arcShape: d3.Arc<any, DefaultArcObject>;   // TODO: Strongly type
-  private pieAngles: d3.Pie<any, any>;   // TODO: Strongly type
+  private arcShape;   // TODO: Strongly type
+  private pieAngles;   // TODO: Strongly type
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.setup(chartElm, config);
@@ -30,11 +31,19 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
     this.pieAngles = pie()
       .sort(null)
-      .value((d: any) => d.value);   // TODO: Strongly type
+      .value((d: any) => d.value);  // TODO: Strongly type
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
-    this.prepSvg(chartElm);
+    this.buildContainer(chartElm, true);
+    this.svg.selectAll('.pcac-arc')
+      .data(this.pieAngles(config.data))
+      .enter().append('g')
+      .attr('class', 'pcac-arc')
+      .append('path')
+      .attr('d', this.arcShape)
+      .style('fill', (d: any, i: number) => {    // TODO: Strongly type
+        return this.colors[i];
+      });
   }
-
 }

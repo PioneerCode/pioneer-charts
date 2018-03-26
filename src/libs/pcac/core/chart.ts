@@ -8,7 +8,7 @@ import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
 
 @Injectable()
-export class PcacChart  {
+export class PcacChart {
   margin = { top: 16, right: 16, bottom: 20, left: 40 };
   svg: d3.Selection<BaseType, {}, HTMLElement, any>;
   width = 400;
@@ -29,10 +29,17 @@ export class PcacChart  {
     this.colors = this.colorService.getColorScale(config.data.length);
   }
 
-  prepSvg(chartElm: ElementRef): void {
+  buildContainer(chartElm: ElementRef, center = false): void {
     this.svg = select(chartElm.nativeElement)
       .attr('width', this.width + this.margin.left + this.margin.right)
-      .attr('height', this.height + this.margin.top + this.margin.bottom)
+      .attr('height', this.height + this.margin.top + this.margin.bottom);
+    if (center) {
+      this.svg = this.svg
+        .append('g')
+        .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
+      return;
+    }
+    this.svg = this.svg
       .append('g')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
   }

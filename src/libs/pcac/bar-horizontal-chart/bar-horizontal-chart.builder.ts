@@ -33,7 +33,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.prepSvg(chartElm);
+    this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
       numberOfTicks: this.numberOfTicks,

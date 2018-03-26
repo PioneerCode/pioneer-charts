@@ -4,6 +4,7 @@ import {
   IPcacTableConfig,
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
+  IPcacPieChartConfig
 } from '@pioneer-code/pioneer-charts';
 import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 
@@ -30,6 +31,10 @@ export class PcacRepository {
 
   getAreaChart() {
     return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/area-chart.json');
+  }
+
+  getPieChartConfig() {
+    return this.http.get<IPcacPieChartConfig>('./assets/mock/pie-chart.json');
   }
 
   getShareConfig() {

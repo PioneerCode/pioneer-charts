@@ -16,7 +16,7 @@ export class BarVerticalChartBuilder extends PcacChart {
   private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
-    this.prepCanvas(chartElm, config);
+    this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

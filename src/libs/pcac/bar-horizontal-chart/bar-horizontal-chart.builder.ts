@@ -12,7 +12,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private yScale: d3.ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.prepCanvas(chartElm, config);
+    this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

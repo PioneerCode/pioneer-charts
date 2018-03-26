@@ -25,6 +25,7 @@ import { ChartNavComponent } from './components/chart-nav/chart-nav.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { DemoComponent } from './pages/demo/demo.component';
+import { PieChartComponent } from './pages/pie-chart/pie-chart.component';
 
 const appRoutes: Routes = [
   { path: 'guides/get-started', component: GetStartedComponent },
@@ -50,7 +51,8 @@ const appRoutes: Routes = [
     ChartNavComponent,
     NavComponent,
     FooterComponent,
-    DemoComponent
+    DemoComponent,
+    PieChartComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

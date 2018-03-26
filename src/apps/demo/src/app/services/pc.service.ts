@@ -12,7 +12,7 @@ import { PcacRepository } from '../repository/pc.repository';
 
 
 @Injectable()
-export class PcacService {
+export class PcService {
   tableConfig: IPcacTableConfig;
   barVerticalChartConfig: IPcacBarVerticalChartConfig;
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcacService } from '../../services/pc.service';
+import { PcService } from '../../services/pc.service';
 import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 import { PcacRepository } from '../../repository/pc.repository';
 import { IPcacBarHorizontalChartConfig } from 'libs/pcac/public-api';
@@ -15,7 +15,7 @@ export class BarChartComponent {
   importCode = `import { PcacBarVerticalChartModule, PcacBarHorizontalChartModule } from '@pioneer-code/pioneer-charts';`;
   config: IPcacBarHorizontalChartConfig;
 
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcacService: PcService) { }
 
   getConfig() {
     const rows = [

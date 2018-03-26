@@ -6,9 +6,10 @@ import { PcacRepository } from './repository/pc.repository';
 import {
   PcacHeaderModule,
   PcacTableModule,
-  PcacBarChartModule,
+  PcacBarVerticalChartModule,
+  PcacBarHorizontalChartModule,
   PcacLineAreaChartModule,
-  PcacBarHorizontalChartModule
+  PcacPieChartModule
 } from '@pioneer-code/pioneer-charts';
 import { PcacCoreModule } from '@pioneer-code/pioneer-charts/core';
 import { HomeComponent } from './pages/home/home.component';
@@ -17,7 +18,7 @@ import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
 import { RouterModule, Routes } from '@angular/router';
-import { PcacService } from './services/pc.service';
+import { PcService } from './services/pc.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
@@ -62,13 +63,14 @@ const appRoutes: Routes = [
     PcacCoreModule,
     PcacHeaderModule,
     PcacTableModule,
-    PcacBarChartModule,
-    PcacLineAreaChartModule,
-    PcacBarHorizontalChartModule
+    PcacPieChartModule,
+    PcacBarVerticalChartModule,
+    PcacBarHorizontalChartModule,
+    PcacLineAreaChartModule
   ],
   providers: [
     PcacRepository,
-    PcacService
+    PcService
   ],
   bootstrap: [
     AppComponent

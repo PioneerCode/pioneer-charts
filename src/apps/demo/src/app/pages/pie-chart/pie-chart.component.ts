@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PcService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-pie-chart',
@@ -6,8 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pie-chart.component.scss']
 })
 export class PieChartComponent implements OnInit {
-
-  constructor() { }
+  constructor(public pcService: PcService) { }
 
   ngOnInit() {
   }

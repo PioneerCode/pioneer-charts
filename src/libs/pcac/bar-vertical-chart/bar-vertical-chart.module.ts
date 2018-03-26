@@ -9,4 +9,4 @@ import { PcacBarVerticalChartComponent } from './bar-vertical-chart.component';
     PcacBarVerticalChartComponent
   ]
 })
-export class PcacBarChartModule { }
+export class PcacBarVerticalChartModule { }

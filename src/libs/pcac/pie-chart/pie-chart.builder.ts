@@ -26,30 +26,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   }
 
   private buildScales(config: IPcacPieChartConfig): void {
-    this.xScale = scaleLinear()
-      .domain([0, config.data[0].data.length - 1])
-      .range([0, this.width]);
 
-    this.yScale = scaleLinear()
-      .domain([0, config.domainMax])
-      .range([this.height, 0]);
-
-    this.line = line()
-      .x((d, i) => {
-        return this.xScale(i);
-      })
-      .y((d: any) => {
-        return this.yScale(d.value);
-      });
-
-    this.area = area()
-      .x((d, i) => {
-        return this.xScale(i);
-      })
-      .y0(this.height)
-      .y1((d: any) => {
-        return this.yScale(d.value);
-      });
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
@@ -68,62 +45,6 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       xScale: this.xScale,
       yScale: this.yScale
     });
-    this.drawLineArea(config);
-    this.drawDots(config);
   }
 
-  private drawLineArea(config: IPcacPieChartConfig): void {
-    for (let i = 0; i < config.data.length; i++) {
-      if (config.isArea) {
-        this.drawArea(config.data[i].data, i);
-      }
-      this.drawLine(config.data[i].data, i);
-    }
-  }
-
-  private drawLine(lineData: IPcacData[], index: number): void {
-    this.svg.append('g')
-      .attr('class', 'lines')
-      .append('path')
-      .datum(lineData)
-      .attr('class', 'line')
-      .attr('d', this.line)
-      .attr('stroke', (d: IPcacData) => {
-        return this.colors[index];
-      });
-  }
-
-  private drawArea(lineData: IPcacData[], index: number) {
-    this.svg.append('g')
-      .attr('class', 'areas')
-      .append('path')
-      .datum(lineData)
-      .attr('class', 'area')
-      .style('opacity', 0.5)
-      .style('fill', (d: IPcacData) => {
-        return this.colors[index];
-      })
-      .attr('d', this.area);
-  }
-
-  private drawDots(config: IPcacPieChartConfig): void {
-    for (let index = 0; index < config.data.length; index++) {
-      this.svg.append('g')
-        .attr('class', 'dots')
-        .selectAll('.dot')
-        .data(config.data[index].data)
-        .enter().append('circle')
-        .attr('class', 'dot')
-        .attr('stroke', (d: IPcacData) => {
-          return this.colors[index];
-        })
-        .attr('cx', (d: IPcacData, i: number) => {
-          return this.xScale(i);
-        })
-        .attr('cy', (d: IPcacData) => {
-          return this.yScale(d.value as number);
-        })
-        .attr('r', 4);
-    }
-  }
 }

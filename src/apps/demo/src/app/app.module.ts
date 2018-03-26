@@ -32,7 +32,7 @@ const appRoutes: Routes = [
   { path: 'components/charts/bar-chart', component: BarChartComponent },
   { path: 'components/charts/line-area-chart', component: LineAreaChartComponent },
   { path: 'components/charts/table', component: TableComponent },
-  { path: 'components/charts/pie-cahart', component: PieChartComponent},
+  { path: 'components/charts/pie-chart', component: PieChartComponent},
   { path: 'components/ui/header', component: HeaderComponent },
   { path: 'demo', component: DemoComponent },
   { path: '**', component: HomeComponent }

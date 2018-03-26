@@ -30,13 +30,15 @@ export class PcacChart {
   }
 
   buildContainer(chartElm: ElementRef, center = false): void {
+    const combinedHeight = this.height + this.margin.top + this.margin.bottom;
+    const combinedWidth = this.width + this.margin.left + this.margin.right;
     this.svg = select(chartElm.nativeElement)
-      .attr('width', this.width + this.margin.left + this.margin.right)
-      .attr('height', this.height + this.margin.top + this.margin.bottom);
+      .attr('width', combinedWidth)
+      .attr('height', combinedHeight);
     if (center) {
       this.svg = this.svg
         .append('g')
-        .attr('transform', 'translate(' + (this.width + this.margin.left + this.margin.right) / 2 + ',' + this.height / 2 + ')');
+        .attr('transform', 'translate(' + combinedWidth / 2 + ',' + combinedHeight / 2 + ')');
       return;
     }
     this.svg = this.svg

@@ -1,7 +1,7 @@
 ## PR Checklist
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.github/CONTRIBUTING.md
+- [ ] The commit message follows our guidelines: https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
 

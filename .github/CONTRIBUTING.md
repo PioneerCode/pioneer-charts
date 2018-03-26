@@ -12,7 +12,7 @@ patches and features.
 
 ## Using the issue tracker
 
-The [issue tracker](https://github.com/PioneerCode/pioneer-angular-charts/issues) is
+The [issue tracker](https://github.com/PioneerCode/pioneer-charts/issues) is
 the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests)
 and [submitting pull requests](#pull-requests), but please respect the following
 restrictions:
@@ -35,7 +35,7 @@ Our bug tracker utilizes several labels to help organize and identify issues. He
 - `table` - Issues dealing with the table module.
 - `line-area-chart` - Issues dealing with the line area chart module.
 
-For a complete look at our labels, see the [project labels page](https://github.com/PioneerCode/pioneer-angular-charts/labels).
+For a complete look at our labels, see the [project labels page](https://github.com/PioneerCode/pioneer-charts/labels).
 
 
 ## Bug reports
@@ -105,7 +105,7 @@ project (indentation, accurate comments, etc.) and any other requirements
 
 When contributing to Pioneer Chart's documentation, you should edit the
 documentation source files in
-[the "demo" app](https://github.com/PioneerCode/pioneer-angular-charts/tree/master/src/apps/demo/src).
+[the "demo" app](https://github.com/PioneerCode/pioneer-charts/tree/master/src/apps/demo/src).
 **Do not edit the `gh-pages` branch.** That branch is generated from the
 documentation source files and is managed separately by Pioneer Chart's Core Team.
 
@@ -117,11 +117,11 @@ included in the project:
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/PioneerCode/pioneer-angular-charts.git
+   git clone https://github.com/<your-username>/PioneerCode/pioneer-charts.git
    # Navigate to the newly cloned directory
-   cd pioneer-angular-charts
+   cd pioneer-charts
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream  https://github.com/PioneerCode/pioneer-angular-charts.git
+   git remote add upstream  https://github.com/PioneerCode/pioneer-charts.git
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:

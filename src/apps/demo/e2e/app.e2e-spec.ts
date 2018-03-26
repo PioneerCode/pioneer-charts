@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('pioneer-angular-charts App', () => {
+describe('pioneer-charts App', () => {
   let page: AppPage;
 
   beforeEach(() => {

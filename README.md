@@ -1,4 +1,4 @@
-# Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-angular-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-angular-charts)
+# Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-charts)
 
 ## Quick start
 
@@ -10,7 +10,7 @@ npm install @pioneer-code/pioneer-charts
 
 ## Bugs and feature requests
 
-Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.github/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-angular-charts/issues/new).
+Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-charts/issues/new).
 
 ## Documentation
 
@@ -19,9 +19,9 @@ Pioneer Chart's documentation, included in this repo in the root directory, is b
 
 ## Contributing
 
-Please read through our [contributing guidelines](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.github/CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
+Please read through our [contributing guidelines](https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
 
-Editor preferences are available in the [editor config](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org/>.
+Editor preferences are available in the [editor config](https://github.com/PioneerCode/pioneer-charts/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org/>.
 
 
 ## Creator
@@ -39,4 +39,4 @@ Now excepting PRs!
 
 ## Copyright and license
 
-Code and documentation copyright 2018 the [Pioneer Charts Authors](https://github.com/PioneerCode/pioneer-angular-charts/graphs/contributors) and [Pioneer Code](https://pioneercode.com) Code and Docs released under the [MIT License](https://github.com/PioneerCode/pioneer-angular-charts/blob/master/LICENSE). 
+Code and documentation copyright 2018 the [Pioneer Charts Authors](https://github.com/PioneerCode/pioneer-charts/graphs/contributors) and [Pioneer Code](https://pioneercode.com) Code and Docs released under the [MIT License](https://github.com/PioneerCode/pioneer-charts/blob/master/LICENSE). 

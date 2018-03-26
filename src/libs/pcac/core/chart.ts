@@ -36,7 +36,7 @@ export class PcacChart {
     if (center) {
       this.svg = this.svg
         .append('g')
-        .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')');
+        .attr('transform', 'translate(' + (this.width + this.margin.left + this.margin.right) / 2 + ',' + this.height / 2 + ')');
       return;
     }
     this.svg = this.svg

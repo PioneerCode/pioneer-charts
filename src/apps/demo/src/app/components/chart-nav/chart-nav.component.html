@@ -12,6 +12,11 @@
           <i class="fa fa-line-chart"></i>
           Line Area Chart
         </a>
+        <a routerLink="/components/charts/pie-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcacService.currentChartRoute === 'pie-chart'}"
+          (click)="pcacService.currentChartRoute = 'pie-chart'">
+          <i class="fa fa-pie-chart"></i>
+          Pie Chart
+        </a>
         <a routerLink="/components/charts/table" class="list-group-item list-group-item-action" [ngClass]="{'active': pcacService.currentChartRoute === 'table'}"
           (click)="pcacService.currentChartRoute = 'table'">
           <i class="fa fa-table"></i>

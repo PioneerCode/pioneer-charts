@@ -20,7 +20,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
-    this.setup(chartElm, config);
+    this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

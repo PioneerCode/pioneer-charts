@@ -18,7 +18,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private pieAngles;   // TODO: Strongly type
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
-    this.setup(chartElm, config);
+    this.initializeChartState(chartElm, config);
     this.radius = Math.min(this.width, this.height) / 2;
     this.buildShapes(config);
     this.drawChart(chartElm, config);

@@ -57,6 +57,7 @@
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "@ryancavanaugh/prismjs": "^1.4.3-alpha",
+    "@types/d3": "^5.0.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",

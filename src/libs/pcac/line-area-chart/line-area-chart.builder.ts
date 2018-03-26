@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
-import { select, selection, baseType } from 'd3-selection';
+import { select, selection } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
@@ -14,10 +14,10 @@ export interface ILineAreaChartBuilder {
 @Injectable()
 export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
   private numberOfTicks = 5;
-  private line: line<[number, number]>;
-  private area: area<[number, number]>;
-  private xScale: scaleLinear<number, number>;
-  private yScale: scaleLinear<number, number>;
+  private line: d3.Line<[number, number]>;
+  private area: d3.Area<[number, number]>;
+  private xScale: d3.ScaleLinear<number, number>;
+  private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.setup(chartElm, config);
@@ -87,8 +87,8 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
-      .attr('d', this.line)
-      .attr('stroke', (d: IPcacData) => {
+      .attr('d', this.line as any) // TODO: strongly type
+      .attr('stroke', () => {
         return this.colors[index];
       });
   }
@@ -100,10 +100,10 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .datum(lineData)
       .attr('class', 'area')
       .style('opacity', 0.5)
-      .style('fill', (d: IPcacData) => {
-        return this.colors[index];
+      .style('fill', () => {
+        return this.colors[index];  // TODO: strongly type
       })
-      .attr('d', this.area);
+      .attr('d', this.area as any);  // TODO: strongly type
   }
 
   private drawDots(config: IPcacLineAreaChartConfig): void {

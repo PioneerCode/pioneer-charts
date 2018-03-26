@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { select, selection, baseType } from 'd3-selection';
+import { select, selection } from 'd3-selection';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { IPcacData } from '../core/chart.model';
@@ -8,8 +8,8 @@ import { IPcacData } from '../core/chart.model';
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private numberOfTicks = 5;
-  private xScale: scaleBand<string>;
-  private yScale: scaleLinear<number, number>;
+  private xScale: d3.ScaleLinear<number, number>;
+  private yScale: d3.ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.setup(chartElm, config);
@@ -27,7 +27,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .range([0, this.width]);
 
     this.yScale = scaleBand()
-      .domain(config.data.map((d) => d.key))
+      .domain(config.data.map((d) => d.key as string))
       .range([this.height, 0])
       .padding(0.1);
   }
@@ -58,7 +58,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .data(config.data)
       .enter().append('g')
       .attr('class', 'bars')
-      .attr('transform', (d) => 'translate(0,' + this.yScale(d.key) + ')')
+      .attr('transform', (d) => 'translate(0,' + this.yScale(d.key as string) + ')')
       .selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
@@ -67,14 +67,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('class', 'bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
-        return this.yScale(d.key);
+        return this.yScale(d.key as string);
       })
       .attr('height', this.yScale.bandwidth())
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })
       .attr('width', (d: IPcacData) => {
-        return this.xScale(d.value);
+        return this.xScale(d.value as number);
       });
   }
 }

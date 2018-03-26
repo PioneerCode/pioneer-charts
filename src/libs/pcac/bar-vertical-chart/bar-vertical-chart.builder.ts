@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { select, selection, baseType } from 'd3-selection';
+import { select, selection, } from 'd3-selection';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { IPcacData } from '../core/chart.model';
@@ -12,8 +12,8 @@ export interface IBarVerticalChartBuilder {
 @Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
   private numberOfTicks = 5;
-  private xScale: scaleBand<string>;
-  private yScale: scaleLinear<number, number>;
+  private xScale: d3.ScaleBand<string>;
+  private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.setup(chartElm, config);
@@ -27,7 +27,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .range([0, config.height]);
 
     this.xScale = scaleBand()
-      .domain(config.data.map((d) => d.key))
+      .domain(config.data.map((d) => d.key as string))
       .range([0, this.width])
       .padding(0.1);
   }
@@ -59,7 +59,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .enter().append('g')
       .attr('class', 'pc-bar-group')
       .attr('transform', (d: IPcacData, i: number) => {
-        return 'translate(' + this.xScale(d.key) + ',0)';
+        return 'translate(' + this.xScale(d.key as string) + ',0)';
       })
       .selectAll('rect')
       .data((d: IPcacData) => {
@@ -68,17 +68,17 @@ export class BarVerticalChartBuilder extends PcacChart {
       .enter().append('rect')
       .attr('class', 'pc-bar')
       .attr('x', (d: IPcacData) => {
-        return this.xScale(d.key);
+        return this.xScale(d.key as string);
       })
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colors[i];
       })
       .attr('width', this.xScale.bandwidth())
       .attr('y', (d: IPcacData) => {
-        return this.yScale(d.value);
+        return this.yScale(d.value as number);
       })
       .attr('height', (d: IPcacData, ) => {
-        return this.height - this.yScale(d.value);
+        return this.height - this.yScale(d.value as number);
       });
   }
 }

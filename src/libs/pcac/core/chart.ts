@@ -1,5 +1,5 @@
 import { axisBottom, axisLeft } from 'd3-axis';
-import { selection, baseType } from 'd3-selection';
+import { selection, BaseType } from 'd3-selection';
 import { PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
 import { IPcacChartConfig } from './chart.model';
@@ -10,7 +10,7 @@ import { ElementRef, Injectable } from '@angular/core';
 @Injectable()
 export class PcacChart  {
   margin = { top: 16, right: 16, bottom: 20, left: 40 };
-  svg: selection<baseType, {}, HTMLElement, any>;
+  svg: d3.Selection<BaseType, {}, HTMLElement, any>;
   width = 400;
   height = 400;
   colors = [] as string[];

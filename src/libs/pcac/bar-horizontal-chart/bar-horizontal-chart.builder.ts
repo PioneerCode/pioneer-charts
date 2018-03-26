@@ -12,7 +12,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private yScale: d3.ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.setup(chartElm, config);
+    this.prepCanvas(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }
@@ -33,6 +33,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
+    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScale);
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,

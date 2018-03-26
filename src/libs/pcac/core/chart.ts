@@ -6,6 +6,7 @@ import { IPcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
+import { IPcacData } from '.';
 
 @Injectable()
 export class PcacChart {
@@ -19,10 +20,14 @@ export class PcacChart {
     public axisBuilder: PcacAxisBuilder,
     public gridBuilder: PcacGridBuilder,
     private colorService: PcacColorService
-  ) {
-  }
+  ) { }
 
-  setup(chartElm: ElementRef, config: IPcacChartConfig): void {
+  /**
+   *
+   * @param chartElm Reference to SVG on dom
+   * @param config Chart specific configuration
+   */
+  prepCanvas(chartElm: ElementRef, config: IPcacChartConfig): void {
     select(chartElm.nativeElement).select('g').remove();
     this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
     this.height = config.height;
@@ -44,5 +49,20 @@ export class PcacChart {
     this.svg = this.svg
       .append('g')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+  }
+
+  setHorizontalMarginsBasedOnContent(chartElm: ElementRef, data: IPcacData[], yGroups: any): void {
+    const axisY = axisLeft(yGroups).ticks(5);
+    let max = 0;
+    select(chartElm.nativeElement).append('g')
+      .call(axisY)
+      .each((d, i, n: any) => {
+        if (n[i].getBBox().width > max) {
+          max = n[i].getBBox().width;
+        }
+      })
+      .remove();
+    this.margin.left = max;
+    this.margin.bottom = this.margin.bottom;
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcacService } from '../../services/pc.service';
+import { PcService } from '../../services/pc.service';
 import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 
 @Component({
@@ -10,7 +10,7 @@ import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 export class LineAreaChartComponent {
   markupCode = `<pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>`;
   importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcacService: PcService) { }
 
   getConfig() {
     const rows = [

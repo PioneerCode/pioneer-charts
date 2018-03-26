@@ -4,19 +4,21 @@ import {
   IPcacTableConfig,
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
-  IPcacBarHorizontalChartConfig
+  IPcacBarHorizontalChartConfig,
+  IPcacPieChartConfig
 } from '@pioneer-code/pioneer-charts';
 import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 import { PcacRepository } from '../repository/pc.repository';
 
 
 @Injectable()
-export class PcacService {
+export class PcService {
   tableConfig: IPcacTableConfig;
   barVerticalChartConfig: IPcacBarVerticalChartConfig;
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: IPcacLineAreaChartConfig;
   areaChartConfig: IPcacLineAreaChartConfig;
+  pieChartConfig: IPcacPieChartConfig;
   sharedConfig: IPcacData[];
   currentMainRoute = 'home';
   currentChartRoute = 'bar-chart';
@@ -38,6 +40,9 @@ export class PcacService {
 
     this.repository.getAreaChart()
       .subscribe(data => this.areaChartConfig = data);
+
+      this.repository.getPieChartConfig()
+      .subscribe(data => this.pieChartConfig = data);
 
     this.repository.getShareConfig()
       .subscribe(data => this.sharedConfig = data);

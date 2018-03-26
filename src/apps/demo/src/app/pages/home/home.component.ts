@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcacService } from '../../services/pc.service';
+import { PcService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-home',
@@ -7,5 +7,5 @@ import { PcacService } from '../../services/pc.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcacService: PcService) { }
 }

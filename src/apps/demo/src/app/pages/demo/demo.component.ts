@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcacService } from '../../services/pc.service';
+import { PcService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-demo',
@@ -7,5 +7,5 @@ import { PcacService } from '../../services/pc.service';
   styleUrls: ['./demo.component.scss']
 })
 export class DemoComponent {
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcService: PcService) { }
 }

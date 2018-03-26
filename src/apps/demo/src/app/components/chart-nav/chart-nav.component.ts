@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcacService } from '../../services/pc.service';
+import { PcService } from '../../services/pc.service';
 
 @Component({
   selector: 'pc-chart-nav',
@@ -7,5 +7,5 @@ import { PcacService } from '../../services/pc.service';
   styleUrls: ['./chart-nav.component.scss']
 })
 export class ChartNavComponent {
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcacService: PcService) { }
 }

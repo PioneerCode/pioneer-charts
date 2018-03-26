@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcacService } from './services/pc.service';
+import { PcService } from './services/pc.service';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  constructor(public pcacService: PcacService) { }
+  constructor(public pcacService: PcService) { }
 
   ngOnInit() {
     this.pcacService.getData();

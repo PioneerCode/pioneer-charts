@@ -12,7 +12,8 @@
         "assets",
         "favicon.ico",
         "CNAME",
-        "404.html"
+        "404.html",
+        "assets/logo.svg"
       ],
       "index": "index.html",
       "main": "main.ts",

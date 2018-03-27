@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pc.repository';
+import { PcacCoreModule } from '@pioneer-code/pioneer-charts/core';
 import {
   PcacHeaderModule,
   PcacTableModule,
@@ -11,7 +12,6 @@ import {
   PcacLineAreaChartModule,
   PcacPieChartModule
 } from '@pioneer-code/pioneer-charts';
-import { PcacCoreModule } from '@pioneer-code/pioneer-charts/core';
 import { HomeComponent } from './pages/home/home.component';
 import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
 import { BarChartComponent } from './pages/bar-chart/bar-chart.component';

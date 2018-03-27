@@ -5,6 +5,39 @@
   },
   "apps": [
     {
+      "name": "demo-packaged",
+      "root": "apps/demo/src",
+      "outDir": "dist/apps/demo-packaged",
+      "assets": [
+        "assets",
+        "favicon.ico",
+        "CNAME",
+        "404.html"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.packaged.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "pc",
+      "styles": [
+        "styles.scss",
+        "../../../node_modules/prismjs/themes/prism.css"
+      ],
+      "scripts": [
+        "../../../node_modules/prismjs/prism.js",
+        "../../../node_modules/prismjs/components/prism-bash.js",
+        "../../../node_modules/prismjs/components/prism-typescript.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name": "demo",
       "root": "apps/demo/src",
       "outDir": "dist/apps/demo",
       "assets": [

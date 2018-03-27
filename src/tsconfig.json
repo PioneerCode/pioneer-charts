@@ -22,7 +22,7 @@
         "libs/pcac"
       ],
       "@pioneer-code/pioneer-charts/core": [
-        "libs/pcac/core/public-api"
+        "libs/pcac/core/public_api"
       ]
     }
   }

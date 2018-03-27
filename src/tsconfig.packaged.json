@@ -3,10 +3,10 @@
   "compilerOptions": {
     "paths": {
       "@pioneer-code/pioneer-charts": [
-        "src/dist/bundles/@pioneer-code/pioneer-charts/bundles/"
+        "dist/bundles/@pioneer-code/pioneer-charts/"
       ],
       "@pioneer-code/pioneer-charts/core": [
-        "src/dist/bundles/@pioneer-code/pioneer-charts/bundles/"
+        "dist/bundles/@pioneer-code/pioneer-charts/core"
       ]
     }
   }

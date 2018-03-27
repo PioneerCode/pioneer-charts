@@ -20,9 +20,6 @@
     "paths": {
       "@pioneer-code/pioneer-charts": [
         "libs/pcac"
-      ],
-      "@pioneer-code/pioneer-charts/core": [
-        "libs/pcac/core/public_api"
       ]
     }
   }

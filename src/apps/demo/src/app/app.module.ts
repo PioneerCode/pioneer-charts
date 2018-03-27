@@ -4,14 +4,14 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PcacRepository } from './repository/pc.repository';
 import { PcacCoreModule } from '@pioneer-code/pioneer-charts/core';
-// import {
-//   PcacHeaderModule,
-//   PcacTableModule,
-//   PcacBarVerticalChartModule,
-//   PcacBarHorizontalChartModule,
-//   PcacLineAreaChartModule,
-//   PcacPieChartModule
-// } from '@pioneer-code/pioneer-charts';
+import {
+  PcacHeaderModule,
+  PcacTableModule,
+  PcacBarVerticalChartModule,
+  PcacBarHorizontalChartModule,
+  PcacLineAreaChartModule,
+  PcacPieChartModule
+} from '@pioneer-code/pioneer-charts';
 import { HomeComponent } from './pages/home/home.component';
 import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
 import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
@@ -60,13 +60,13 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
-    // PcacCoreModule,
-    // PcacHeaderModule,
-    // PcacTableModule,
-    // PcacPieChartModule,
-    // PcacBarVerticalChartModule,
-    // PcacBarHorizontalChartModule,
-    // PcacLineAreaChartModule
+    PcacCoreModule,
+    PcacHeaderModule,
+    PcacTableModule,
+    PcacPieChartModule,
+    PcacBarVerticalChartModule,
+    PcacBarHorizontalChartModule,
+    PcacLineAreaChartModule
   ],
   providers: [
     PcacRepository,

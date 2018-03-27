@@ -27,7 +27,7 @@
     "404": "node ./build/404.js",
     "ng": "ng",
     "start": "ng serve --app=demo",
-    "start:pack": "ng build --prod --aot --app=demo-packaged && ng serve --app=demo-packaged",
+    "start:pack": "npm run build:lib && ng serve --app=demo-packaged",
     "build": "ng build --prod --aot --app=demo",
     "test": "ng test",
     "lint": "ng lint",

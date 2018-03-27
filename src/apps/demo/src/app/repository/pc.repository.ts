@@ -4,9 +4,9 @@ import {
   IPcacTableConfig,
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
-  IPcacPieChartConfig
+  IPcacPieChartConfig,
+  IPcacData
 } from '@pioneer-code/pioneer-charts';
-import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 
 @Injectable()
 export class PcacRepository {

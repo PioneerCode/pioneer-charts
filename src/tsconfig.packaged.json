@@ -4,9 +4,6 @@
     "paths": {
       "@pioneer-code/pioneer-charts": [
         "dist/bundles/@pioneer-code/pioneer-charts/"
-      ],
-      "@pioneer-code/pioneer-charts/core": [
-        "dist/bundles/@pioneer-code/pioneer-charts/core"
       ]
     }
   }

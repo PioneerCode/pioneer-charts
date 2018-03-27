@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PcService } from '../../services/pc.service';
-import { IPcacData } from '@pioneer-code/pioneer-charts/core';
+import { IPcacData } from '@pioneer-code/pioneer-charts';
 import { PcacRepository } from '../../repository/pc.repository';
 import { IPcacBarHorizontalChartConfig } from 'libs/pcac/public_api';
 

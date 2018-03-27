@@ -5,11 +5,10 @@ import {
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
   IPcacBarHorizontalChartConfig,
-  IPcacPieChartConfig
+  IPcacPieChartConfig,
+  IPcacData
 } from '@pioneer-code/pioneer-charts';
-import { IPcacData } from '@pioneer-code/pioneer-charts/core';
 import { PcacRepository } from '../repository/pc.repository';
-
 
 @Injectable()
 export class PcService {

@@ -14,7 +14,7 @@ Have a bug or a feature request? Please first read the [issue guidelines](https:
 
 ## Documentation
 
-Pioneer Chart's documentation, included in this repo in the root directory, is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
+Pioneer Chart's documentation, of whcih is [included in this repo](https://github.com/PioneerCode/pioneer-charts/tree/master/src/apps/demo/src), is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
 
 
 ## Contributing

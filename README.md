@@ -35,7 +35,7 @@ Editor preferences are available in the [editor config](https://github.com/Pione
 
 **Your Name Here**
 
-Now excepting PRs!
+Now excepting PRs! :smile:
 
 ## Copyright and license
 

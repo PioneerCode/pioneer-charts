@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PcacLineAreaChartComponent } from './line-area-chart.component';
+import { PcacCoreModule } from '../core';
 
 @NgModule({
   exports: [
@@ -7,6 +8,9 @@ import { PcacLineAreaChartComponent } from './line-area-chart.component';
   ],
   declarations: [
     PcacLineAreaChartComponent
+  ],
+  imports: [
+    PcacCoreModule
   ]
 })
 export class PcacLineAreaChartModule { }

@@ -1,23 +1,21 @@
-@import "../../apps/demo/src/imports";
-.line {
-    fill: none;
-    stroke-width: 2;
-}
+@import "core/theme/imports";
+
 
 .pcac-grid-rule line {
-    stroke: gray("200");
+    stroke: $gray-200;
 }
 
 .pcac-x-axis,
 .pcac-y-axis {
-    path, line {
+    path,
+    line {
         stroke: none;
     }
 }
 
 .pcac-line-area-chart {
     .dot {
-        fill: color("white");
+        fill: $white;
         stroke-width: 2px;
     }
 }

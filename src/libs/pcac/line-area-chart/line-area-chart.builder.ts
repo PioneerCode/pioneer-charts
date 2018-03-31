@@ -89,7 +89,8 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .attr('d', this.line as any) // TODO: strongly type
       .attr('stroke', () => {
         return this.colors[index];
-      });
+      })
+      .attr('fill', 'none');
   }
 
   private drawArea(lineData: IPcacData[], index: number) {

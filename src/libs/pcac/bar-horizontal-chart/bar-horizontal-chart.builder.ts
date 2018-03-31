@@ -7,7 +7,6 @@ import { IPcacData } from '../core/chart.model';
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
-  private numberOfTicks = 5;
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleBand<string>;
 

@@ -31,6 +31,10 @@ export class PcacColorService {
     return pallette;
   }
 
+  /**
+   * Set the scale that charts use to set colors of data[x] on the UI.
+   * @param colors A collection of hex values
+   */
   setScale(colors: string[]): void {
     this.scale = colors;
   }

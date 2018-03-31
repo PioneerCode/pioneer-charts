@@ -40,11 +40,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import {
   PcacCoreModule,
   PcacHeaderModule,
+  PcacPieChartModule,
   PcacTableModule,
   PcacBarVerticalChartModule,
   PcacBarHorizontalChartModule,
-  PcacLineAreaChartModule,
-  PcacPieChartModule
+  PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
 
 
@@ -66,6 +66,7 @@ const appRoutes: Routes = [
     LineAreaChartComponent,
     BarChartComponent,
     HeaderComponent,
+    PieChartComponent,
     TableComponent,
     GetStartedComponent,
     PageHeaderComponent,
@@ -73,8 +74,7 @@ const appRoutes: Routes = [
     ChartNavComponent,
     NavComponent,
     FooterComponent,
-    DemoComponent,
-    PieChartComponent
+    DemoComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

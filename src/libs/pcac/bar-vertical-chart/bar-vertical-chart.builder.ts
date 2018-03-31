@@ -11,7 +11,6 @@ export interface IBarVerticalChartBuilder {
 
 @Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
-  private numberOfTicks = 5;
   private xScale: d3.ScaleBand<string>;
   private yScale: d3.ScaleLinear<number, number>;
 
@@ -36,14 +35,14 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
     this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       width: this.width,
       xScale: this.xScale,
       yScale: this.yScale

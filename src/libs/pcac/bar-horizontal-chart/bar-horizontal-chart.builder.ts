@@ -37,14 +37,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
     this.gridBuilder.drawVerticalGrid({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale

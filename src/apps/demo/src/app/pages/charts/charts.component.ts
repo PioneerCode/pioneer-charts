@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { PcService } from '../../services/pc.service';
 
 @Component({
-  selector: 'pc-demo',
-  templateUrl: './demo.component.html',
-  styleUrls: ['./demo.component.scss']
+  selector: 'pc-charts',
+  templateUrl: './charts.component.html',
+  styleUrls: ['./charts.component.scss']
 })
-export class DemoComponent {
+export class ChartsComponent {
   constructor(public pcService: PcService) { }
 }

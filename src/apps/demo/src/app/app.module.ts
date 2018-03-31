@@ -22,7 +22,7 @@ import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
-import { DemoComponent } from './pages/demo/demo.component';
+import { ChartsComponent } from './pages/charts/charts.component';
 import { PieChartComponent } from './pages/pie-chart/pie-chart.component';
 
 /**
@@ -50,12 +50,12 @@ import {
 
 const appRoutes: Routes = [
   { path: 'guides/get-started', component: GetStartedComponent },
-  { path: 'components/charts/bar-chart', component: BarChartComponent },
-  { path: 'components/charts/line-area-chart', component: LineAreaChartComponent },
-  { path: 'components/charts/table', component: TableComponent },
-  { path: 'components/charts/pie-chart', component: PieChartComponent},
-  { path: 'components/ui/header', component: HeaderComponent },
-  { path: 'demo', component: DemoComponent },
+  { path: 'api/charts/bar-chart', component: BarChartComponent },
+  { path: 'api/charts/line-area-chart', component: LineAreaChartComponent },
+  { path: 'api/charts/table', component: TableComponent },
+  { path: 'api/charts/pie-chart', component: PieChartComponent},
+  { path: 'api/ui/header', component: HeaderComponent },
+  { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
 ];
 
@@ -74,7 +74,7 @@ const appRoutes: Routes = [
     ChartNavComponent,
     NavComponent,
     FooterComponent,
-    DemoComponent
+    ChartsComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

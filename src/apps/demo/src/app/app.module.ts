@@ -14,16 +14,24 @@ import { PcacRepository } from './repository/pc.repository';
 import { PcService } from './services/pc.service';
 
 /**
- * Demo Pages
+ * Pages
  */
 import { HomeComponent } from './pages/home/home.component';
-import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
-import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
-import { HeaderComponent } from './pages/header/header.component';
-import { TableComponent } from './pages/table/table.component';
-import { GetStartedComponent } from './pages/get-started/get-started.component';
 import { ChartsComponent } from './pages/charts/charts.component';
-import { PieChartComponent } from './pages/pie-chart/pie-chart.component';
+
+/**
+ * Doc Pages
+ */
+import { GetStartedComponent } from './pages/docs/get-started/get-started.component';
+
+/**
+ * Component Pages
+ */
+import { LineAreaChartComponent } from './pages/docs/components/charts/line-area-chart/line-area-chart.component';
+import { BarChartComponent } from './pages/docs/components/charts/bar-chart/bar-chart.component';
+import { TableComponent } from './pages/docs/components/charts/table/table.component';
+import { PieChartComponent } from './pages/docs/components/charts/pie-chart/pie-chart.component';
+import { HeaderComponent } from './pages/docs/components/ui/header/header.component';
 
 /**
  * Demo Components
@@ -50,11 +58,11 @@ import {
 
 const appRoutes: Routes = [
   { path: 'guides/get-started', component: GetStartedComponent },
-  { path: 'api/charts/bar-chart', component: BarChartComponent },
-  { path: 'api/charts/line-area-chart', component: LineAreaChartComponent },
-  { path: 'api/charts/table', component: TableComponent },
-  { path: 'api/charts/pie-chart', component: PieChartComponent},
-  { path: 'api/ui/header', component: HeaderComponent },
+  { path: 'components/charts/bar-chart', component: BarChartComponent },
+  { path: 'components/charts/line-area-chart', component: LineAreaChartComponent },
+  { path: 'components/charts/table', component: TableComponent },
+  { path: 'components/charts/pie-chart', component: PieChartComponent},
+  { path: 'components/ui/header', component: HeaderComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
 ];

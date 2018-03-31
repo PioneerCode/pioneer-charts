@@ -9,7 +9,8 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  constructor(public pcacService: PcService) { }
+  constructor(
+    public pcacService: PcService) { }
 
   ngOnInit() {
     this.pcacService.getData();

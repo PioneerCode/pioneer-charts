@@ -18,7 +18,6 @@ export class PcacColorService {
     this.blue
   ] as string[];
 
-
   /**
    * Get a scale of colors dynamically
    * @param numberOfNodes Number of items in dynamically build collection of colors
@@ -30,5 +29,37 @@ export class PcacColorService {
       pallette.push(this.scale[mark]);
     }
     return pallette;
+  }
+
+  /**
+   * Set the scale that charts use to set colors of data[x] on the UI.
+   * @param colors A collection of hex values
+   */
+  setScale(colors: string[]): void {
+    this.scale = colors;
+  }
+
+  setPrimary(color: string): void {
+    this.primary = color;
+  }
+
+  setPrimaryLight(color: string): void {
+    this.primaryLight = color;
+  }
+
+  setSuccess(color: string): void {
+    this.success = color;
+  }
+
+  setDanger(color: string): void {
+    this.danger = color;
+  }
+
+  setOrange(color: string): void {
+    this.orange = color;
+  }
+
+  setBlue(color: string): void {
+    this.blue = color;
   }
 }

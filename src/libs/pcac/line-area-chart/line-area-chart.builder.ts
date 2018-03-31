@@ -1,19 +1,18 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { select, selection } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { PcacColorService } from '../core/color.service';
+import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
+
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
 }
 
 @Injectable()
 export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
-  private numberOfTicks = 5;
   private line: d3.Line<[number, number]>;
   private area: d3.Area<[number, number]>;
   private xScale: d3.ScaleLinear<number, number>;
@@ -56,14 +55,14 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
     this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       width: this.width,
       xScale: this.xScale,
       yScale: this.yScale

@@ -7,7 +7,6 @@ import { IPcacData } from '../core/chart.model';
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
-  private numberOfTicks = 5;
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleBand<string>;
 
@@ -37,14 +36,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale
     });
     this.gridBuilder.drawVerticalGrid({
       svg: this.svg,
-      numberOfTicks: this.numberOfTicks,
+      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScale

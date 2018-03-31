@@ -11,5 +11,4 @@ export class PieChartComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

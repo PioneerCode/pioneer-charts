@@ -1,11 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { IPcacPieChartConfig } from './pie-chart.model';
 import { arc, pie, DefaultArcObject } from 'd3-shape';
 import { select } from 'd3-selection';
-import { PcacColorService } from '../core/color.service';
+import { IPcacPieChartConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
-
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;

@@ -1,32 +1,52 @@
+/**
+ * Angular
+ */
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { AppComponent } from './app.component';
+
+/**
+ * Demo deps
+ */
 import { PcacRepository } from './repository/pc.repository';
-import {
-  PcacCoreModule,
-  PcacHeaderModule,
-  PcacTableModule,
-  PcacBarVerticalChartModule,
-  PcacBarHorizontalChartModule,
-  PcacLineAreaChartModule,
-  PcacPieChartModule
-} from '@pioneer-code/pioneer-charts';
+import { PcService } from './services/pc.service';
+
+/**
+ * Demo Pages
+ */
 import { HomeComponent } from './pages/home/home.component';
 import { LineAreaChartComponent } from './pages/line-area-chart/line-area-chart.component';
 import { BarChartComponent } from './pages/bar-chart/bar-chart.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { TableComponent } from './pages/table/table.component';
-import { RouterModule, Routes } from '@angular/router';
-import { PcService } from './services/pc.service';
 import { GetStartedComponent } from './pages/get-started/get-started.component';
+import { DemoComponent } from './pages/demo/demo.component';
+import { PieChartComponent } from './pages/pie-chart/pie-chart.component';
+
+/**
+ * Demo Components
+ */
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
 import { ChartNavComponent } from './components/chart-nav/chart-nav.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { DemoComponent } from './pages/demo/demo.component';
-import { PieChartComponent } from './pages/pie-chart/pie-chart.component';
+
+/**
+ * Pioneer Charts
+ */
+import {
+  PcacCoreModule,
+  PcacHeaderModule,
+  PcacPieChartModule,
+  PcacTableModule,
+  PcacBarVerticalChartModule,
+  PcacBarHorizontalChartModule,
+  PcacLineAreaChartModule
+} from '@pioneer-code/pioneer-charts';
+
 
 const appRoutes: Routes = [
   { path: 'guides/get-started', component: GetStartedComponent },
@@ -46,6 +66,7 @@ const appRoutes: Routes = [
     LineAreaChartComponent,
     BarChartComponent,
     HeaderComponent,
+    PieChartComponent,
     TableComponent,
     GetStartedComponent,
     PageHeaderComponent,
@@ -53,8 +74,7 @@ const appRoutes: Routes = [
     ChartNavComponent,
     NavComponent,
     FooterComponent,
-    DemoComponent,
-    PieChartComponent
+    DemoComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcService } from '../../services/pc.service';
+import { PcService } from '../../../../../services/pc.service';
 
 @Component({
   selector: 'pc-pie-chart',

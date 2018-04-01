@@ -1,12 +1,13 @@
-<pc-chart-nav>
+<pc-doc-nav>
   <div class="container-fluid">
+    <pc-page-header [title]="'Pie Chart'"></pc-page-header>
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pc-page-header [title]="'Pie Chart'"></pc-page-header>
+          <pcac-header [config]="pcService.pieChartConfig?.headerConfig"></pcac-header>
           <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>
         </div>
       </div>
     </div>
   </div>
-</pc-chart-nav>
+</pc-doc-nav>

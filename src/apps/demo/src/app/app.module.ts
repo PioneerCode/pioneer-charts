@@ -38,7 +38,7 @@ import { HeaderComponent } from './pages/docs/components/ui/header/header.compon
  */
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
-import { ChartNavComponent } from './components/chart-nav/chart-nav.component';
+import { DocNavComponent } from './components/doc-nav/doc-nav.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -57,12 +57,12 @@ import {
 
 
 const appRoutes: Routes = [
-  { path: 'guides/get-started', component: GetStartedComponent },
-  { path: 'components/charts/bar-chart', component: BarChartComponent },
-  { path: 'components/charts/line-area-chart', component: LineAreaChartComponent },
-  { path: 'components/charts/table', component: TableComponent },
-  { path: 'components/charts/pie-chart', component: PieChartComponent},
-  { path: 'components/ui/header', component: HeaderComponent },
+  { path: 'docs/getting-started', component: GetStartedComponent },
+  { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
+  { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
+  { path: 'docs/components/charts/table', component: TableComponent },
+  { path: 'docs/components/charts/pie-chart', component: PieChartComponent},
+  { path: 'docs/components/ui/header', component: HeaderComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
 ];
@@ -79,7 +79,7 @@ const appRoutes: Routes = [
     GetStartedComponent,
     PageHeaderComponent,
     PrismComponent,
-    ChartNavComponent,
+    DocNavComponent,
     NavComponent,
     FooterComponent,
     ChartsComponent

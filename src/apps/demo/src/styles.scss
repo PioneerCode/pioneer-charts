@@ -14,7 +14,9 @@ $fa-font-path: "./assets/fonts" !default;
 .pc-chart-container {
     padding: 1rem;
     background: color("white");
-    box-shadow: 10px 0px 2rem -12px rgba(90, 87, 87, 0.75);
+    box-shadow: 0.25rem 0.25rem 1rem gray("200");
+    border: 1px solid gray("200");
+
 }
 
 .pc-page-content {

@@ -20,7 +20,7 @@ export class PcService {
   pieChartConfig: IPcacPieChartConfig;
   sharedConfig: IPcacData[];
   currentMainRoute = 'home';
-  currentChartRoute = 'bar-chart';
+  currentDocRoute = 'bar-chart';
 
   constructor(private repository: PcacRepository) { }
 

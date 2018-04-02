@@ -9,11 +9,11 @@ export interface IJumpNav {
 }
 
 @Component({
-  selector: 'pc-doc-nav',
-  templateUrl: './doc-nav.component.html',
-  styleUrls: ['./doc-nav.component.scss']
+  selector: 'pc-doc-layout',
+  templateUrl: './doc-layout.component.html',
+  styleUrls: ['./doc-layout.component.scss']
 })
-export class DocNavComponent {
+export class DocLayoutComponent {
   @Input() jumpNav: IJumpNav[];
   currentRoute: string[];
   constructor(

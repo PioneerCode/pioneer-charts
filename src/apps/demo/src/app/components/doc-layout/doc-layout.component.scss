@@ -1,16 +1,24 @@
 @import "../../../imports";
 .pc-doc-sidebar {
     padding-top: 2rem;
-    height: calc(50vh - 56px);
+    height: calc(100vh - 56px);
     position: sticky;
     top: 56px;
+    overflow-y: auto;
+}
+
+.pc-doc-content {
+  border-right: 1px gray("200") solid;
+  border-left: 1px gray("200") solid;
+  padding-top: 2rem;
 }
 
 .pc-doc-jump-nav {
     padding-top: 2rem;
-    height: calc(50vh - 56px);
+    height: calc(100vh - 56px);
     position: sticky;
     top: 56px;
+    overflow-y: auto;
     .nav-item {
         a {
             cursor: pointer;
@@ -28,11 +36,7 @@
     }
 }
 
-.pc-doc-content {
-    border-right: 1px gray("200") solid;
-    border-left: 1px gray("200") solid;
-    padding-top: 2rem;
-}
+
 
 .pc-group {
     padding-bottom: 0.5rem;

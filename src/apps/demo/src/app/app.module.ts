@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 /**
  * Demo deps
@@ -37,9 +36,9 @@ import { HeaderComponent } from './pages/docs/components/ui/header/header.compon
 /**
  * Demo Components
  */
+import { DocLayoutComponent } from './components/doc-layout/doc-layout.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
-import { DocNavComponent } from './components/doc-nav/doc-nav.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -80,7 +79,7 @@ const appRoutes: Routes = [
     GetStartedComponent,
     PageHeaderComponent,
     PrismComponent,
-    DocNavComponent,
+    DocLayoutComponent,
     NavComponent,
     FooterComponent,
     ChartsComponent
@@ -89,7 +88,6 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
-    ScrollToModule.forRoot(),
     PcacCoreModule,
     PcacHeaderModule,
     PcacTableModule,

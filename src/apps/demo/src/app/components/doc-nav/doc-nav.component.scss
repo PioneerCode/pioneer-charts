@@ -1,18 +1,33 @@
 @import "../../../imports";
-.pc-doc-container {
-    // background: gray("200");
-}
-
 .pc-doc-sidebar {
     border-right: 1px gray("200") solid;
+    padding-top: 2rem;
 }
 
 .pc-doc-jump-nav {
+    padding-top: 2rem;
     border-left: 1px gray("200") solid;
 }
 
-.pc-group {}
+.pc-doc-content {
+    padding-top: 2rem;
+}
+
+.pc-group {
+    padding-bottom: 0.5rem;
+    .nav-item {
+        a {
+            color: gray("600");
+            font-size: 14px;
+            &:hover {
+                color: theme-color("primary-light");
+            }
+        }
+    }
+}
 
 .pc-group-heading {
-    padding: 0.5rem 1rem;
+    display: block;
+    padding-bottom: 0.5rem;
+    font-weight: 400;
 }

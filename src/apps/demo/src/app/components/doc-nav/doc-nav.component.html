@@ -56,11 +56,11 @@
     <div class="d-none d-xl-block col-xl-2 pc-doc-jump-nav">
       <ul class="nav flex-column">
         <li class="nav-item" *ngFor="let jump of jumpNav">
-          <a [routerLink]="['somepath']" fragment="{{jump.value}}">{{jump.key}}</a>
+          <a (click)="onJumpClick(jump.value)">{{jump.key}}</a>
           <ng-container *ngIf="jump.jump">
             <ul class="nav flex-column">
               <li class="nav-item" *ngFor="let jumper of jump.jump">
-                <a [routerLink]="['somepath']" fragment="{{jumper.value}}">{{jumper.key}}</a>
+                <a (click)="onJumpClick(jumper.value)">{{jumper.key}}</a>
               </li>
             </ul>
           </ng-container>

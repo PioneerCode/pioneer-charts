@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PcService } from '../../services/pc.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface IJumpNav {
   key: string;
@@ -14,5 +15,17 @@ export interface IJumpNav {
 })
 export class DocNavComponent {
   @Input() jumpNav: IJumpNav[];
-  constructor(public pcService: PcService) { }
+  currentRoute: string[];
+  constructor(
+    private route: Router,
+    public pcService: PcService
+  ) {
+    this.route.events.subscribe((res) => {
+      this.currentRoute = [this.route.url];
+    });
+  }
+
+  onJumpClick(fragment: string): void {
+    document.querySelector('#' + fragment).scrollIntoView();
+  }
 }

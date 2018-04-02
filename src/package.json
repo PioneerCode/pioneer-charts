@@ -57,6 +57,7 @@
     "@angular/cli": "~1.7.3",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
+    "@nicky-lenaers/ngx-scroll-to": "^0.6.0",
     "@ryancavanaugh/prismjs": "^1.4.3-alpha",
     "@types/d3": "^5.0.0",
     "@types/jasmine": "~2.8.3",

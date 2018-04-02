@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 /**
  * Demo deps
@@ -88,6 +89,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
+    ScrollToModule.forRoot(),
     PcacCoreModule,
     PcacHeaderModule,
     PcacTableModule,

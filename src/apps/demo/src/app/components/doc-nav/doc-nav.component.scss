@@ -1,20 +1,19 @@
 @import "../../../imports";
 .pc-doc-sidebar {
-    border-right: 1px gray("200") solid;
     padding-top: 2rem;
-    height: calc(100vh - 56px);
+    height: calc(50vh - 56px);
     position: sticky;
     top: 56px;
 }
 
 .pc-doc-jump-nav {
     padding-top: 2rem;
-    border-left: 1px gray("200") solid;
-    height: calc(100vh - 56px);
+    height: calc(50vh - 56px);
     position: sticky;
     top: 56px;
     .nav-item {
         a {
+            cursor: pointer;
             color: gray("600");
             font-size: 14px;
             &:hover {
@@ -23,13 +22,15 @@
         }
     }
     ul {
-      ul {
-        padding-left: 1rem;
-      }
+        ul {
+            padding-left: 1rem;
+        }
     }
 }
 
 .pc-doc-content {
+    border-right: 1px gray("200") solid;
+    border-left: 1px gray("200") solid;
     padding-top: 2rem;
 }
 

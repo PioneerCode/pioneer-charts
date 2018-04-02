@@ -1,8 +1,27 @@
-<div class="row flex-xl-nowrap no-gutters">
-  <div class="col-12 col-md-3 col-xl-2">
-    <nav>
-      <div class="list-group">
-        <a routerLink="/api/charts/bar-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'bar-chart'}"
+<section class="container-fluid pc-doc-content">
+  <div class="row flex-xl-nowrap">
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+      <nav>
+        <div class="pc-group">
+          <a class="pc-group-heading">Getting Started</a>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- <div class="list-group">
+<a routerLink="/api/charts/bar-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'bar-chart'}"
           (click)="pcService.currentChartRoute = 'bar-chart'">
           <i class="fa fa-bar-chart"></i>
           Bar Chart
@@ -22,17 +41,17 @@
           <i class="fa fa-table"></i>
           Table
         </a>
-        <!-- <a routerLink="/api/ui/header" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'header'}"
+  <a routerLink="/api/ui/header" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'header'}"
           (click)="pcService.currentChartRoute = 'header'">
           <i class="fa fa-header"></i>
           Header
-        </a> -->
-      </div>
-    </nav>
-  </div>
-  <main class="col-12 col-md-9 col-xl-10">
-    <section class="pc-main-content">
+        </a>
+  </div>-->
+      </nav>
+    </div>
+    <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
       <ng-content></ng-content>
-    </section>
-  </main>
-</div>
+    </main>
+    <div class="d-none d-xl-block col-xl-2 bd-toc">5</div>
+  </div>
+</section>

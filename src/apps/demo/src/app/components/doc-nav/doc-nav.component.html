@@ -3,50 +3,50 @@
     <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
       <nav>
         <div class="pc-group">
+          <a class="pc-group-heading">Introduction</a>
+        </div>
+        <div class="pc-group">
           <a class="pc-group-heading">Getting Started</a>
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Active</a>
+              <a class="nav-link" href="#">Content</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+              <a class="nav-link" href="#">Theme</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
+              <a class="nav-link" href="#">IPCacData</a>
             </li>
           </ul>
         </div>
-
-        <!-- <div class="list-group">
-<a routerLink="/api/charts/bar-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'bar-chart'}"
-          (click)="pcService.currentChartRoute = 'bar-chart'">
-          <i class="fa fa-bar-chart"></i>
-          Bar Chart
-        </a>
-        <a routerLink="/api/charts/line-area-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'line-area-chart'}"
-          (click)="pcService.currentChartRoute = 'line-area-chart'">
-          <i class="fa fa-line-chart"></i>
-          Line Area Chart
-        </a>
-        <a routerLink="/api/charts/pie-chart" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'pie-chart'}"
-          (click)="pcService.currentChartRoute = 'pie-chart'">
-          <i class="fa fa-pie-chart"></i>
-          Pie Chart
-        </a>
-        <a routerLink="/api/charts/table" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'table'}"
-          (click)="pcService.currentChartRoute = 'table'">
-          <i class="fa fa-table"></i>
-          Table
-        </a>
-  <a routerLink="/api/ui/header" class="list-group-item list-group-item-action" [ngClass]="{'active': pcService.currentChartRoute === 'header'}"
-          (click)="pcService.currentChartRoute = 'header'">
-          <i class="fa fa-header"></i>
-          Header
-        </a>
-  </div>-->
+        <div class="pc-group">
+          <a class="pc-group-heading">Charts</a>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a routerLink="/docs/components/charts/bar-chart" class="nav-link" [ngClass]="{'active': pcService.currentChartRoute === 'bar-chart'}"
+                (click)="pcService.currentChartRoute = 'bar-chart'">
+                Bar Chart
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/docs/components/charts/line-area-chart" class="nav-link" [ngClass]="{'active': pcService.currentChartRoute === 'line-area-chart'}"
+                (click)="pcService.currentChartRoute = 'line-area-chart'">
+                Line Area Chart
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/docs/components/charts/pie-chart" class="nav-link" [ngClass]="{'active': pcService.currentChartRoute === 'pie-chart'}"
+                (click)="pcService.currentChartRoute = 'pie-chart'">
+                Pie Chart
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/docs/components/charts/table" class="nav-link" [ngClass]="{'active': pcService.currentChartRoute === 'table'}" (click)="pcService.currentChartRoute = 'table'">
+                Table
+              </a>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
     <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">

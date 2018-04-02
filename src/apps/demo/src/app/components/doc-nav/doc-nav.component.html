@@ -53,6 +53,19 @@
     <main class="col-12 col-md-9 col-xl-8 pc-doc-content">
       <ng-content></ng-content>
     </main>
-    <div class="d-none d-xl-block col-xl-2 pc-doc-jump-nav">5</div>
+    <div class="d-none d-xl-block col-xl-2 pc-doc-jump-nav">
+      <ul class="nav flex-column">
+        <li class="nav-item" *ngFor="let jump of jumpNav">
+          <a [routerLink]="['somepath']" fragment="{{jump.value}}">{{jump.key}}</a>
+          <ng-container *ngIf="jump.jump">
+            <ul class="nav flex-column">
+              <li class="nav-item" *ngFor="let jumper of jump.jump">
+                <a [routerLink]="['somepath']" fragment="{{jumper.value}}">{{jumper.key}}</a>
+              </li>
+            </ul>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>

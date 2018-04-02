@@ -13,6 +13,20 @@
     height: calc(100vh - 56px);
     position: sticky;
     top: 56px;
+    .nav-item {
+        a {
+            color: gray("600");
+            font-size: 14px;
+            &:hover {
+                color: theme-color("primary-light");
+            }
+        }
+    }
+    ul {
+      ul {
+        padding-left: 1rem;
+      }
+    }
 }
 
 .pc-doc-content {

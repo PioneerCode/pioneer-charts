@@ -1,4 +1,4 @@
-<pc-doc-nav>
+<pc-doc-nav [jumpNav]="jumpNav">
   <div class="container-fluid">
     <pc-page-header [title]="'Bar Chart'"></pc-page-header>
     <p class="lead">Configurable to display a collection of data, two-dimensional groups, and stacked two-dimensional groups.</p>
@@ -20,14 +20,14 @@
   <div class="container-fluid">
     <div class="row pc-row">
       <div class="col-sm">
-        <h3>Markup</h3>
-        <h6>Horizontal</h6>
+        <h3 id="markup">Markup</h3>
+        <h6 id="horizontal">Horizontal</h6>
         <pc-prism language="markup" [code]="horizontalCode"></pc-prism>
-        <h6>Vertical</h6>
+        <h6 id="vertical">Vertical</h6>
         <pc-prism language="markup" [code]="verticalCode"></pc-prism>
-        <h3>API</h3>
+        <h3 id="api">API</h3>
         <pc-prism language="typescript" [code]="importCode"></pc-prism>
-        <h6>Configuration</h6>
+        <h6 id="configuration">Configuration</h6>
         <pcac-table [config]="getConfig()" class="pc-table"></pcac-table>
       </div>
     </div>

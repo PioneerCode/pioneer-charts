@@ -1,25 +1,33 @@
 @import "../../../imports";
-.pc-main-content {
-    background: gray("200");
-    padding: 2rem 2rem;
+.pc-doc-sidebar {
+    border-right: 1px gray("200") solid;
+    padding-top: 2rem;
 }
 
-nav {
-    background: theme-color-level("primary", -0.5);
-    i {
-        width: 2rem;
-    }
-    .list-group-item {
-        border-radius: 0;
-        background: transparent;
-        border: none;
-        color: theme-color-level("primary", -10);
-    }
-    .list-group-item.active {
-        background: theme-color("primary");
-        border-left: 5px solid theme-color("primary-light");
-        i {
-            color: theme-color("primary-light");
+.pc-doc-jump-nav {
+    padding-top: 2rem;
+    border-left: 1px gray("200") solid;
+}
+
+.pc-doc-content {
+    padding-top: 2rem;
+}
+
+.pc-group {
+    padding-bottom: 0.5rem;
+    .nav-item {
+        a {
+            color: gray("600");
+            font-size: 14px;
+            &:hover {
+                color: theme-color("primary-light");
+            }
         }
     }
+}
+
+.pc-group-heading {
+    display: block;
+    padding-bottom: 0.5rem;
+    font-weight: 400;
 }

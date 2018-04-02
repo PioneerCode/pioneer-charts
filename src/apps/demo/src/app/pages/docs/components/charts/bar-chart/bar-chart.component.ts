@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
 import { IPcacData } from '@pioneer-code/pioneer-charts';
 import { IPcacBarHorizontalChartConfig } from 'libs/pcac/public_api';
-import { IJumpNav } from '../../../../../components/doc-layout/doc-layout.component';
+import { IJumpNav } from '../../../../layouts/doc/doc.component';
 
 @Component({
   selector: 'pc-bar-chart',

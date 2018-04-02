@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { PcService } from '../../services/pc.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PcService } from '../../../services/pc.service';
 
 export interface IJumpNav {
   key: string;
@@ -10,8 +10,8 @@ export interface IJumpNav {
 
 @Component({
   selector: 'pc-doc-layout',
-  templateUrl: './doc-layout.component.html',
-  styleUrls: ['./doc-layout.component.scss']
+  templateUrl: './doc.component.html',
+  styleUrls: ['./doc.component.scss']
 })
 export class DocLayoutComponent {
   @Input() jumpNav: IJumpNav[];

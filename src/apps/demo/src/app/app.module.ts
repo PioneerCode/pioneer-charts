@@ -20,6 +20,12 @@ import { HomeComponent } from './pages/home/home.component';
 import { ChartsComponent } from './pages/charts/charts.component';
 
 /**
+ * Layouts
+ */
+import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
+
+
+/**
  * Doc Pages
  */
 import { GetStartedComponent } from './pages/docs/get-started/get-started.component';
@@ -36,7 +42,6 @@ import { HeaderComponent } from './pages/docs/components/ui/header/header.compon
 /**
  * Demo Components
  */
-import { DocLayoutComponent } from './components/doc-layout/doc-layout.component';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
 import { PrismComponent } from './components/prism/prism.component';
 import { NavComponent } from './components/nav/nav.component';

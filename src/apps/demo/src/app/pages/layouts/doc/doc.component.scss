@@ -1,4 +1,4 @@
-@import "../../../imports";
+@import "../../../../imports";
 .pc-doc-sidebar {
     padding-top: 2rem;
     height: calc(100vh - 56px);
@@ -8,9 +8,8 @@
 }
 
 .pc-doc-content {
-  border-right: 1px gray("200") solid;
-  border-left: 1px gray("200") solid;
-  padding-top: 2rem;
+    border-left: 1px gray("200") solid;
+    padding-top: 2rem;
 }
 
 .pc-doc-jump-nav {
@@ -30,13 +29,14 @@
         }
     }
     ul {
+        border-left: 1px gray("200") solid;
+        padding-left: 0.5rem;
         ul {
+            border: none;
             padding-left: 1rem;
         }
     }
 }
-
-
 
 .pc-group {
     padding-bottom: 0.5rem;

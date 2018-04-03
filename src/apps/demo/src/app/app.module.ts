@@ -26,12 +26,12 @@ import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
 
 
 /**
- * Doc Pages
+ * Guide Pages
  */
-import { IntroductionComponent } from './pages/docs/get-started/introduction/introduction.component';
-import { ThemeComponent } from './pages/docs/get-started/theme/theme.component';
-import { ContentComponent } from './pages/docs/get-started/content/content.component';
-import { DataContractComponent } from './pages/docs/get-started/data-contract/data-contract.component';
+import { IntroductionComponent } from './pages/docs/guides/introduction/introduction.component';
+import { ThemeComponent } from './pages/docs/guides/theme/theme.component';
+import { ContentComponent } from './pages/docs/guides/content/content.component';
+import { DataContractComponent } from './pages/docs/guides/data-contract/data-contract.component';
 
 /**
  * Component Pages

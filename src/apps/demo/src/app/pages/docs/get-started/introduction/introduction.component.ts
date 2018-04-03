@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'pc-get-started',
-  templateUrl: './get-started.component.html',
-  styleUrls: ['./get-started.component.scss']
+  selector: 'pc-introduction',
+  templateUrl: './introduction.component.html',
+  styleUrls: ['./introduction.component.scss']
 })
-export class GetStartedComponent {
+export class IntroductionComponent {
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
   yarnInstallCode = `yarn add @pioneer-code/pioneer-charts`;
   appModuleCode = `import {PcacTableModule} from '@pioneer-code/pioneer-charts';

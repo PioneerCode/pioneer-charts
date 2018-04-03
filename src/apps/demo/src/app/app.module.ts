@@ -26,9 +26,12 @@ import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
 
 
 /**
- * Doc Pages
+ * Guide Pages
  */
-import { GetStartedComponent } from './pages/docs/get-started/get-started.component';
+import { IntroductionComponent } from './pages/docs/guides/introduction/introduction.component';
+import { ThemeComponent } from './pages/docs/guides/theme/theme.component';
+import { ContentComponent } from './pages/docs/guides/content/content.component';
+import { DataContractComponent } from './pages/docs/guides/data-contract/data-contract.component';
 
 /**
  * Component Pages
@@ -59,10 +62,13 @@ import {
   PcacBarHorizontalChartModule,
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
-
+import { PublicComponent } from './pages/layouts/public/public.component';
 
 const appRoutes: Routes = [
-  { path: 'docs/getting-started', component: GetStartedComponent },
+  { path: 'docs/guides/introduction', component: IntroductionComponent },
+  { path: 'docs/guides/data-contract', component: DataContractComponent },
+  { path: 'docs/guides/content', component: ContentComponent },
+  { path: 'docs/guides/theme', component: ThemeComponent },
   { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
   { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
   { path: 'docs/components/charts/table', component: TableComponent },
@@ -81,13 +87,17 @@ const appRoutes: Routes = [
     HeaderComponent,
     PieChartComponent,
     TableComponent,
-    GetStartedComponent,
     PageHeaderComponent,
     PrismComponent,
     DocLayoutComponent,
     NavComponent,
     FooterComponent,
-    ChartsComponent
+    ChartsComponent,
+    IntroductionComponent,
+    ThemeComponent,
+    ContentComponent,
+    DataContractComponent,
+    PublicComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

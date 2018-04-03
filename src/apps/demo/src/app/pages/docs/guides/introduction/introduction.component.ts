@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IJumpNav } from '../../../layouts/doc/doc.component';
 
 @Component({
   selector: 'pc-introduction',
@@ -6,6 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./introduction.component.scss']
 })
 export class IntroductionComponent {
+  jumpNav = [
+    {
+      key: 'Install',
+      value: 'step-1-install-pioneer-charts'
+    },
+    {
+      key: 'Import Modules',
+      value: 'step-2-import-modules'
+    },
+    {
+      key: 'Import Styles',
+      value: 'step-3-import-styles'
+    }
+  ] as IJumpNav[];
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
   yarnInstallCode = `yarn add @pioneer-code/pioneer-charts`;
   appModuleCode = `import {PcacTableModule} from '@pioneer-code/pioneer-charts';

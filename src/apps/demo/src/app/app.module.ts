@@ -62,6 +62,7 @@ import {
   PcacBarHorizontalChartModule,
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
+import { PublicComponent } from './pages/layouts/public/public.component';
 
 const appRoutes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
@@ -95,7 +96,8 @@ const appRoutes: Routes = [
     IntroductionComponent,
     ThemeComponent,
     ContentComponent,
-    DataContractComponent
+    DataContractComponent,
+    PublicComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

@@ -1,46 +1,48 @@
-<section class="pc-page-content">
-  <div class="container">
-    <div class="row pc-row">
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.barVerticalChartConfig?.headerConfig"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+<pc-public-layout>
+  <section class="pc-page-content">
+    <div class="container">
+      <div class="row pc-row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.barVerticalChartConfig?.headerConfig"></pcac-header>
+            <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.barHorizontalChartConfig?.headerConfig"></pcac-header>
+            <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+          </div>
         </div>
       </div>
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.barHorizontalChartConfig?.headerConfig"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+      <div class="row pc-row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.lineChartConfig?.headerConfig"></pcac-header>
+            <pcac-line-area-chart [config]="pcService.lineChartConfig"></pcac-line-area-chart>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.areaChartConfig?.headerConfig"></pcac-header>
+            <pcac-line-area-chart [config]="pcService.areaChartConfig"></pcac-line-area-chart>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.tableConfig?.headerConfig"></pcac-header>
+            <pcac-table [config]="pcService.tableConfig"></pcac-table>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="pcService.pieChartConfig?.headerConfig"></pcac-header>
+            <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>
+          </div>
         </div>
       </div>
     </div>
-    <div class="row pc-row">
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.lineChartConfig?.headerConfig"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.lineChartConfig"></pcac-line-area-chart>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.areaChartConfig?.headerConfig"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.areaChartConfig"></pcac-line-area-chart>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.tableConfig?.headerConfig"></pcac-header>
-          <pcac-table [config]="pcService.tableConfig"></pcac-table>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="pcService.pieChartConfig?.headerConfig"></pcac-header>
-          <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
+</pc-public-layout>

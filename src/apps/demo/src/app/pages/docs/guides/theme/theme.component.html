@@ -3,13 +3,32 @@
     <div class="row">
       <div class="col-sm">
         <pc-page-header [title]="'Theme'"></pc-page-header>
-        <p class="lead">Following is an overview of what is include in the Pioneer Charts download. Of which includes both precompiled and
-          source assets</p>
-        <h3 id="assets">Assets</h3>
-        <p>Adaptogen drinking vinegar tote bag butcher, pitchfork everyday carry put a bird on it slow-carb iceland bushwick.
-          Chartreuse umami four loko health goth direct trade. Mlkshk pabst drinking vinegar bitters iPhone kombucha. Flexitarian
-          8-bit banjo trust fund. Wolf tattooed dreamcatcher whatever.</p>
-        <h3 id="javascript">Javascript</h3>
+        <p class="lead">Customizing the appearance of Pioneer Charts is managed via overriding Sass variables and combining those overrides
+          in a set of service calls.</p>
+        <h3 id="default-theme">Default Theme</h3>
+        <p>A compiled version of the default theme is located at the following:</p>
+        <pre class="pc-prism">@pioneer-code/pioneer-charts/
+  |-  dist/styles
+  |   |-  pioneer-code-pioneer-charts.css
+  |   |-  pioneer-code-pioneer-charts.css.map
+  |   |-  pioneer-code-pioneer-charts.min.css
+  |   |-  pioneer-code-pioneer-charts.min.css.map</pre>
+        <h3 id="sass">Sass</h3>
+        <p>If you prefer adding the default theme to your project through a Sass build, you need to make reference to the root
+          Pioneer Chart Sass file in your project like so.</p>
+        <pc-prism language="typescript" [code]="importStylesCode"></pc-prism>
+        <h3 id="customize">Customize</h3>
+        <p>Styling for Pioneer Charts takes place at two different levels. The first being css and the second being through
+          code. The need to do align styling across css and javascript comes from the dynamic nature styles are applied through
+          <a href="https://d3js.org/" title="D3">D3</a>.
+        </p>
+        <h5 id="css">Css</h5>
+        <p>Much like before, you are going to want to import the Pioneer Chart Sass code into your code. The difference being
+          you will want to override Pioneer Chart variables at the same time.</p>
+        <pc-prism language="typescript" [code]="importStylesCodeOverride"></pc-prism>
+        <p>For a full reference of variables, you can look at the default theme import file locate at the following:</p>
+        <pre class="pc-prism">@pioneer-code/pioneer-charts/src/styles/core/theme/imports.scss</pre>
+        <h5 id="javascript">Javascript</h5>
       </div>
     </div>
   </div>

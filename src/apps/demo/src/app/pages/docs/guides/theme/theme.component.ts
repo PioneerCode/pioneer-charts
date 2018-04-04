@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./theme.component.scss']
 })
 export class ThemeComponent implements OnInit {
-
+  importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac.css";`;
   constructor() { }
 
   ngOnInit() {

@@ -37,7 +37,27 @@ $theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a
 
 // Pioneer Charts and its default variables
 @import "~@pioneer-code/pioneer-charts/pcac";`;
+  colorServiceExample = `...
+this.colors = this.colorService.getColorScale(config.data.length);
+...
 
+...
+.style('fill', (d: IPcacData, i: number) => {
+  return this.colors[i];
+})
+...`;
+  importColorService = `import { Component, OnInit } from '@angular/core';
+import { PcacColorService } from 'libs/pcac/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+  constructor(public colorService: PcacColorService) { }
+  ...
+}`;
   constructor() { }
 
   ngOnInit() {

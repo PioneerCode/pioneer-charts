@@ -22,14 +22,17 @@
           code. The need to do align styling across css and javascript comes from the dynamic nature styles are applied through
           <a href="https://d3js.org/" title="D3">D3</a>.
         </p>
-        <h5 id="css">Css</h5>
+        <h5 id="styles">Styles</h5>
         <p>Much like before, you are going to want to import the Pioneer Chart Sass code into your code. The difference being,
           you will now want to override Pioneer Chart variables at the same time.</p>
         <pc-prism language="typescript" [code]="importStylesCodeOverride"></pc-prism>
         <p>For a full reference of variables, you can look at the default theme import file locate at the following:</p>
         <pre class="pc-prism">./node_modules/@pioneer-code/pioneer-charts/src/styles/core/theme/imports.scss</pre>
-        <h5 id="javascript">Javascript</h5>
-        <p>TODO:</p>
+        <h5 id="color-service">Color Service</h5>
+        <p>In some cases, the charts that utilize d3 apply styles dynamically. For example, in a bar chart, a d3 iteration over
+          a collection of data that produces individual bars in the chart might require each bar to be a different color.
+          Meaning, in that piece of code that colors are being applied from the color service.</p>
+        <pc-prism language="typescript" [code]="importStylesCode"></pc-prism>
       </div>
     </div>
   </div>

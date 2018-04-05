@@ -8,6 +8,28 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
 })
 export class ThemeComponent implements OnInit {
   jumpNav = [
+    {
+      key: 'Default Theme',
+      value: 'default-theme'
+    },
+    {
+      key: 'Sass',
+      value: 'sass'
+    },
+    {
+      key: 'Customize',
+      value: 'customize',
+      jump: [
+        {
+          key: 'Styles',
+          value: 'styles'
+        },
+        {
+          key: 'Color Service',
+          value: 'color-service'
+        }
+      ]
+    },
   ] as IJumpNav[];
   importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac";`;
   importStylesCodeOverride = `// Your variable overrides

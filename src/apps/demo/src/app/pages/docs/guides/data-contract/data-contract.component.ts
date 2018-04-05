@@ -33,4 +33,7 @@ export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
   ...
 }`;
 
+  bindConfig = `<pcac-bar-vertical-chart [config]="config"></pcac-bar-vertical-chart>`;
+
+  typing = `const barVerticalChartConfig = { ... }  as IPcacBarVerticalChartConfig;`;
 }

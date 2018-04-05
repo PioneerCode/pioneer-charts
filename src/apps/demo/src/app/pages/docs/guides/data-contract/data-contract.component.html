@@ -24,6 +24,11 @@
           <b>IPcacChartConfig</b> to set a bases for configuration and provides additional chart specific configuration alongside
           of it. For example, in the case of a bar chart, the configure looks similar to the following.</p>
         <pc-prism language="typescript" [code]="barChartConfig"></pc-prism>
+        <h3 id="map">Binding Configuration</h3>
+        <p>When add a chart to your markup, you will typically bind your data and configuration on the <b>[config]</b> input of that chart.</p>
+        <pc-prism language="html" [code]="bindConfig"></pc-prism>
+        <p>To strongly type your config, you typically want to supply the specific charts config interface as the typing.</p>
+        <pc-prism language="typescript" [code]="typing"></pc-prism>
       </div>
     </div>
   </div>

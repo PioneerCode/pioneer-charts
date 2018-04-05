@@ -10,18 +10,16 @@
           and compliant markup that reacts to data in meaningful way. Pioneer Charts sets out to solve these problems in
           a simple and intuitive way through:</p>
         <ul>
-          <li>Interaction with charts through a common and powerful contract.</li>
+          <li>Interaction with charts through a common and powerful <a routerLink="/docs/guides/data-contract">contract</a>.</li>
           <li>Harnessing the power of
             <a href="https://d3js.org/" title="d3">d3</a> and the richness of SVG markup.</li>
-          <li>Building on top of Angular, a long-term supported and familiar framework.</li>
-          <li>Supplying a means to add styling overrides to an already beautiful default theme.</li>
+          <li>Building on top of <a href="https://angular.io" title="Angular">Angular</a>, a long-term supported and familiar framework.</li>
+          <li>Supplying a means to add styling overrides to an already beautiful default <a routerLink="/docs/guides/theme">thme</a>.</li>
         </ul>
-        <h3 id="step-1-install-pioneer-charts">Step 1: Install Pioneer Charts</h3>
-        <h5 id="npm">NPM</h5>
+        <h3 id="quick-start">Quick Start</h3>
+        <h5 id="step-1-install-pioneer-charts">Step 1: Install Pioneer Charts</h5>
         <pc-prism language="bash" [code]="npmInstallCode"></pc-prism>
-        <h5 id="yarn">Yarn</h5>
-        <pc-prism language="bash" [code]="yarnInstallCode"></pc-prism>
-        <h3 id="step-2-import-modules">Step 2: Import Component Modules</h3>
+        <h5 id="step-2-import-modules">Step 2: Import Component Modules</h5>
         <p>Import all modules you plan on using in your project directly in your AppModule.</p>
         <pc-prism language="typescript" [code]="appModuleCode"></pc-prism>
         <p>Or, better yet, if you are using a collection of modules why not create your own special module thats sole responsibility
@@ -29,7 +27,7 @@
         <pc-prism language="typescript" [code]="specialModuleCode"></pc-prism>
         <p>Now you can import your new module directly into your AppModule.</p>
         <pc-prism language="typescript" [code]="appSpecialModuleCode"></pc-prism>
-        <h3 id="step-3-import-styles">Step 3: Import Styles</h3>
+        <h5 id="step-3-import-styles">Step 3: Import Styles</h5>
         <pc-prism language="typescript" [code]="importStylesCode"></pc-prism>
       </div>
     </div>

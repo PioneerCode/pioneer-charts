@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IJumpNav } from '../../../layouts/doc/doc.component';
 
 @Component({
@@ -6,12 +6,34 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
   templateUrl: './data-contract.component.html',
   styleUrls: ['./data-contract.component.scss']
 })
-export class DataContractComponent implements OnInit {
+export class DataContractComponent {
   jumpNav = [
   ] as IJumpNav[];
-  constructor() { }
 
-  ngOnInit() {
-  }
+  data = `export interface IPcacData {
+  key: string | number;
+  value: string | number;
+  data: IPcacData[];
+}`;
 
+  baseConfig = `export interface IPcacChartConfig {
+  /**
+   * Height in pixels
+   */
+  height: number;
+  ...
+  data: IPcacData[];
+}`;
+
+  barChartConfig = `import { IPcacChartConfig } from '../core/chart.model';
+
+export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
+  domainMax: number;
+  numberOfTicks: number;
+  ...
+}`;
+
+  bindConfig = `<pcac-bar-vertical-chart [config]="config"></pcac-bar-vertical-chart>`;
+
+  typing = `const barVerticalChartConfig = { ... }  as IPcacBarVerticalChartConfig;`;
 }

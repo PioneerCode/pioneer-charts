@@ -9,16 +9,26 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
 export class IntroductionComponent {
   jumpNav = [
     {
-      key: 'Install',
-      value: 'step-1-install-pioneer-charts'
+      key: 'Introduction',
+      value: 'introduction'
     },
     {
-      key: 'Import Modules',
-      value: 'step-2-import-modules'
-    },
-    {
-      key: 'Import Styles',
-      value: 'step-3-import-styles'
+      key: 'Quick Start',
+      value: 'quick-start',
+      jump: [
+        {
+          key: 'Install',
+          value: 'step-1-install-pioneer-charts'
+        },
+        {
+          key: 'Import Modules',
+          value: 'step-2-import-modules'
+        },
+        {
+          key: 'Import Styles',
+          value: 'step-3-import-styles'
+        }
+      ]
     }
   ] as IJumpNav[];
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;

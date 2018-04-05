@@ -13,6 +13,8 @@ $fa-font-path: "./assets/fonts" !default;
 
 .pc-prism {
   margin: 0 0 1rem;
+  display: inline-block;
+  width: 100%;
   background: gray("100");
 }
 

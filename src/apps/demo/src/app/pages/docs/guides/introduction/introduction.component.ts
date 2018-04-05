@@ -9,6 +9,10 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
 export class IntroductionComponent {
   jumpNav = [
     {
+      key: 'Introduction',
+      value: 'introduction'
+    },
+    {
       key: 'Install',
       value: 'step-1-install-pioneer-charts'
     },

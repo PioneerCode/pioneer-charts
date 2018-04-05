@@ -30,7 +30,6 @@ import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
  */
 import { IntroductionComponent } from './pages/docs/guides/introduction/introduction.component';
 import { ThemeComponent } from './pages/docs/guides/theme/theme.component';
-import { ContentComponent } from './pages/docs/guides/content/content.component';
 import { DataContractComponent } from './pages/docs/guides/data-contract/data-contract.component';
 
 /**
@@ -67,7 +66,6 @@ import { PublicComponent } from './pages/layouts/public/public.component';
 const appRoutes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
   { path: 'docs/guides/data-contract', component: DataContractComponent },
-  { path: 'docs/guides/content', component: ContentComponent },
   { path: 'docs/guides/theme', component: ThemeComponent },
   { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
   { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
@@ -95,7 +93,6 @@ const appRoutes: Routes = [
     ChartsComponent,
     IntroductionComponent,
     ThemeComponent,
-    ContentComponent,
     DataContractComponent,
     PublicComponent
   ],

@@ -1,7 +1,7 @@
 {
   "name": "pioneer-charts",
-  "description": "Pioneer Code: Angular Charts.  A library of data visualization charts build on top of Angular and D3.",
-  "homepage": "https://github.com/PioneerCode/pioneer-charts",
+  "description": "Pioneer Charts, a library of data visualization charts build on top of Angular and D3.",
+  "homepage": "https://charts.pioneercode.com",
   "bugs": {
     "url": "https://github.com/PioneerCode/pioneer-charts/issues"
   },
@@ -12,6 +12,7 @@
   },
   "keywords": [
     "pioneer code",
+    "pioneer charts",
     "data visualization",
     "charts",
     "d3",
@@ -21,7 +22,7 @@
     "type": "git",
     "url": "https://github.com/PioneerCode/pioneer-charts"
   },
-  "version": "0.0.8",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "404": "node ./build/404.js",

@@ -58,6 +58,7 @@
     "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
+    "@pioneer-code/pioneer-charts": "^0.1.1",
     "@ryancavanaugh/prismjs": "^1.4.3-alpha",
     "@types/d3": "^5.0.0",
     "@types/jasmine": "~2.8.3",

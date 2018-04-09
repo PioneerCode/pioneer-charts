@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface IJumpNav {
   key: string;
@@ -12,11 +12,12 @@ export interface IJumpNav {
   templateUrl: './jump-nav.component.html',
   styleUrls: ['./jump-nav.component.scss']
 })
-export class JumpNavComponent {
+export class JumpNavComponent implements OnInit, AfterViewChecked {
   @Input() jumpNav: IJumpNav[];
   currentRoute: string[];
-
+  fragment: string;
   constructor(
+    private activeRoute: ActivatedRoute,
     private route: Router
   ) {
     this.route.events.subscribe((res) => {
@@ -27,7 +28,16 @@ export class JumpNavComponent {
     });
   }
 
-  onJumpClick(fragment: string): void {
-    document.querySelector('#' + fragment).scrollIntoView();
+  ngOnInit() {
+    this.activeRoute.fragment.subscribe(fragment => { this.fragment = fragment; });
+  }
+
+  ngAfterViewChecked(): void {
+    console.log(this.currentRoute);
+    console.log(this.fragment);
+    if (this.fragment) {
+      document.querySelector('#' + this.fragment).scrollIntoView();
+      window.scrollBy(0, -54);
+    }
   }
 }

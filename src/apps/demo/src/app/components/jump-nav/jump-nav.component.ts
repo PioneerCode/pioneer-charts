@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, AfterViewChecked, style } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 export enum JumpNavLevel {
@@ -45,14 +45,23 @@ export class JumpNavComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  getLevelClass(level: JumpNavLevel) {
-    switch (level) {
+  getLevelClass(jump: IJumpNav) {
+    const styles = [] as string[];
+    switch (jump.level) {
       case JumpNavLevel.h1:
-        return ['level-1', 'active'];
+        styles.push('level-1');
+        break;
       case JumpNavLevel.h2:
-        return 'level-2';
+        styles.push('level-2');
+        break;
       case JumpNavLevel.h3:
-        return 'level-3';
+        styles.push('level-3');
+        break;
     }
+
+    if (jump.value === this.fragment) {
+      styles.push('active');
+    }
+    return styles;
   }
 }

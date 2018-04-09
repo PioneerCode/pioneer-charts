@@ -21,6 +21,9 @@ export class JumpNavComponent {
   ) {
     this.route.events.subscribe((res) => {
       this.currentRoute = [this.route.url];
+      if (this.currentRoute[0].includes('#')) {
+        this.currentRoute[0] = this.currentRoute[0].substring(0, this.currentRoute[0].indexOf('#'));
+      }
     });
   }
 

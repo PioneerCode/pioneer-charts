@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IJumpNav } from '../../../../layouts/doc/doc.component';
+import { PcService } from '../../../../../services/pc.service';
 
 @Component({
   selector: 'pc-table',
@@ -6,8 +8,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
+  jumpNav = [
+    {
+      key: 'Markup',
+      value: 'markup'
+    },
+    {
+      key: 'API',
+      value: 'api',
+      jump: [
+        {
+          key: 'Configuration',
+          value: 'configuration',
+        }
+      ]
+    }
+  ] as IJumpNav[];
 
-  constructor() { }
+  constructor(public pcService: PcService) { }
 
   ngOnInit() {
   }

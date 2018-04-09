@@ -8,6 +8,18 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
 })
 export class DataContractComponent {
   jumpNav = [
+    {
+      key: 'IPcacData',
+      value: 'data'
+    },
+    {
+      key: 'IPcacChartConfig',
+      value: 'chart-config'
+    }, {
+      key: 'New Chart Config',
+      value: 'new-chart-config'
+    }
+
   ] as IJumpNav[];
 
   data = `export interface IPcacData {

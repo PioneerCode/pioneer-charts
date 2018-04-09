@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
+import { IJumpNav } from '../../../../layouts/doc/doc.component';
 
 @Component({
   selector: 'pc-pie-chart',
@@ -7,6 +8,22 @@ import { PcService } from '../../../../../services/pc.service';
   styleUrls: ['./pie-chart.component.scss']
 })
 export class PieChartComponent implements OnInit {
+  jumpNav = [
+    {
+      key: 'Markup',
+      value: 'markup',
+    },
+    {
+      key: 'API',
+      value: 'api',
+      jump: [
+        {
+          key: 'Configuration',
+          value: 'configuration',
+        }
+      ]
+    }
+  ] as IJumpNav[];
   constructor(public pcService: PcService) { }
 
   ngOnInit() {

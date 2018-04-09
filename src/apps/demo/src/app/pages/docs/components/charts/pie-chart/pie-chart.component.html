@@ -1,8 +1,9 @@
-<pc-doc-layout>
+<pc-doc-layout [jumpNav]="jumpNav">
   <div class="container-fluid">
     <pc-page-header [title]="'Pie Chart'"></pc-page-header>
+    <p class="lead">Configurable to display an area or line chart.</p>
     <div class="row pc-row">
-      <div class="col-sm">
+      <div class="col-6">
         <div class="pc-chart-container">
           <pcac-header [config]="pcService.pieChartConfig?.headerConfig"></pcac-header>
           <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>

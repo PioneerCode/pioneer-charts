@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IJumpNav } from '../../../../components/jump-nav/jump-nav.component';
+import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-data-contract',
@@ -9,17 +9,25 @@ import { IJumpNav } from '../../../../components/jump-nav/jump-nav.component';
 export class DataContractComponent {
   jumpNav = [
     {
+      key: 'Data Contract',
+      value: '',
+      level: JumpNavLevel.h1
+    },
+    {
       key: 'IPcacData',
-      value: 'data'
+      value: 'data',
+      level: JumpNavLevel.h2
     },
     {
       key: 'IPcacChartConfig',
-      value: 'chart-config'
-    }, {
+      value: 'chart-config',
+      level: JumpNavLevel.h2
+    },
+    {
       key: 'New Chart Config',
-      value: 'new-chart-config'
+      value: 'new-chart-config',
+      level: JumpNavLevel.h2
     }
-
   ] as IJumpNav[];
 
   data = `export interface IPcacData {

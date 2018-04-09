@@ -1,10 +1,16 @@
 import { Component, Input, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+export enum JumpNavLevel {
+  h1,
+  h2,
+  h3
+}
+
 export interface IJumpNav {
   key: string;
   value: string;
-  jump: IJumpNav[];
+  level: JumpNavLevel;
 }
 
 @Component({
@@ -33,11 +39,20 @@ export class JumpNavComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    console.log(this.currentRoute);
-    console.log(this.fragment);
     if (this.fragment) {
       document.querySelector('#' + this.fragment).scrollIntoView();
       window.scrollBy(0, -54);
+    }
+  }
+
+  getLevelClass(level: JumpNavLevel) {
+    switch (level) {
+      case JumpNavLevel.h1:
+        return ['level-1', 'active'];
+      case JumpNavLevel.h2:
+        return 'level-2';
+      case JumpNavLevel.h3:
+        return 'level-3';
     }
   }
 }

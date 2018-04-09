@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
-import { IJumpNav } from '../../../../../components/jump-nav/jump-nav.component';
+import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-pie-chart',
@@ -10,18 +10,24 @@ import { IJumpNav } from '../../../../../components/jump-nav/jump-nav.component'
 export class PieChartComponent implements OnInit {
   jumpNav = [
     {
+      key: 'Line Area Chart',
+      value: '',
+      level: JumpNavLevel.h1
+    },
+    {
       key: 'Markup',
       value: 'markup',
+      level: JumpNavLevel.h2
     },
     {
       key: 'API',
       value: 'api',
-      jump: [
-        {
-          key: 'Configuration',
-          value: 'configuration',
-        }
-      ]
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'Configuration',
+      value: 'configuration',
+      level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
   constructor(public pcService: PcService) { }

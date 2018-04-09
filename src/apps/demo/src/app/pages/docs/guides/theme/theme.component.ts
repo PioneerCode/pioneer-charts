@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IJumpNav } from '../../../../components/jump-nav/jump-nav.component';
+import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-theme',
@@ -9,27 +9,35 @@ import { IJumpNav } from '../../../../components/jump-nav/jump-nav.component';
 export class ThemeComponent implements OnInit {
   jumpNav = [
     {
+      key: 'Theme',
+      value: '',
+      level: JumpNavLevel.h1
+    },
+    {
       key: 'Default Theme',
-      value: 'default-theme'
+      value: 'default-theme',
+      level: JumpNavLevel.h2
     },
     {
       key: 'Sass',
-      value: 'sass'
+      value: 'sass',
+      level: JumpNavLevel.h2
     },
     {
       key: 'Customize',
       value: 'customize',
-      jump: [
-        {
-          key: 'Styles',
-          value: 'styles'
-        },
-        {
-          key: 'Color Service',
-          value: 'color-service'
-        }
-      ]
+      level: JumpNavLevel.h2
     },
+    {
+      key: 'Styles',
+      value: 'styles',
+      level: JumpNavLevel.h3
+    },
+    {
+      key: 'Color Service',
+      value: 'color-service',
+      level: JumpNavLevel.h3
+    }
   ] as IJumpNav[];
   importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac";`;
   importStylesCodeOverride = `// Your variable overrides

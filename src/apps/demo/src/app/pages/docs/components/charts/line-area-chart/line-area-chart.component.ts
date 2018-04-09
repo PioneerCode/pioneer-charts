@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
 import { IPcacData } from '@pioneer-code/pioneer-charts';
-import { IJumpNav } from '../../../../layouts/doc/doc.component';
+import { IJumpNav } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-line-area-chart',

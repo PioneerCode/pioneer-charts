@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IJumpNav } from '../../../layouts/doc/doc.component';
+import { IJumpNav } from '../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-data-contract',

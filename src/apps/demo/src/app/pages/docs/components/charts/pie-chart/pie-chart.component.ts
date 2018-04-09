@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
-import { IJumpNav } from '../../../../layouts/doc/doc.component';
+import { IJumpNav } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-pie-chart',

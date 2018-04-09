@@ -1,21 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
-$fa-font-path: "./assets/fonts" !default;
 
+$fa-font-path: "./assets/fonts" !default;
 @import 'imports';
 @import '../../../libs/pcac/pcac';
 @import '../../../node_modules/font-awesome/scss/font-awesome.scss';
-
 .logo-icon {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
 }
 
 .pc-prism {
-  margin: 0 0 1rem;
-  display: inline-block;
-  width: 100%;
-  background: gray("100");
+    margin: 0 0 1rem;
+    display: inline-block;
+    width: 100%;
+    background: gray("100") !important;
 }
 
 .pc-chart-container {
@@ -26,13 +25,14 @@ $fa-font-path: "./assets/fonts" !default;
 }
 
 .pc-page-content {
-  background: gray("200");
-  padding: 2rem 2rem;
+    background: gray("200");
+    padding: 2rem 2rem;
 }
 
 .pc-table {
-  display: block;
+    display: block;
 }
+
 .pc-row {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }

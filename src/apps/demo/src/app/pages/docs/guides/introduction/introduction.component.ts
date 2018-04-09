@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IJumpNav } from '../../../layouts/doc/doc.component';
+import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-introduction',
@@ -9,26 +9,34 @@ import { IJumpNav } from '../../../layouts/doc/doc.component';
 export class IntroductionComponent {
   jumpNav = [
     {
+      key: 'Getting Started',
+      value: '',
+      level: JumpNavLevel.h1
+    },
+    {
       key: 'Introduction',
-      value: 'introduction'
+      value: 'introduction',
+      level: JumpNavLevel.h2
     },
     {
       key: 'Quick Start',
       value: 'quick-start',
-      jump: [
-        {
-          key: 'Install',
-          value: 'step-1-install-pioneer-charts'
-        },
-        {
-          key: 'Import Modules',
-          value: 'step-2-import-modules'
-        },
-        {
-          key: 'Import Styles',
-          value: 'step-3-import-styles'
-        }
-      ]
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'Install',
+      value: 'step-1-install-pioneer-charts',
+      level: JumpNavLevel.h3
+    },
+    {
+      key: 'Import Modules',
+      value: 'step-2-import-modules',
+      level: JumpNavLevel.h3
+    },
+    {
+      key: 'Import Styles',
+      value: 'step-3-import-styles',
+      level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;

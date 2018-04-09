@@ -62,6 +62,7 @@ import {
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
 import { PublicComponent } from './pages/layouts/public/public.component';
+import { JumpNavComponent } from './components/jump-nav/jump-nav.component';
 
 const appRoutes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
@@ -94,7 +95,8 @@ const appRoutes: Routes = [
     IntroductionComponent,
     ThemeComponent,
     DataContractComponent,
-    PublicComponent
+    PublicComponent,
+    JumpNavComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

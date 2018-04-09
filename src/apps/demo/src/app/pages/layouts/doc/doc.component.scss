@@ -12,32 +12,6 @@
     padding-top: 2rem;
 }
 
-.pc-doc-jump-nav {
-    padding-top: 2rem;
-    height: calc(100vh - 56px);
-    position: sticky;
-    top: 56px;
-    overflow-y: auto;
-    .nav-item {
-        a {
-            cursor: pointer;
-            color: gray("600");
-            font-size: 14px;
-            &:hover {
-                color: theme-color("primary-light");
-            }
-        }
-    }
-    ul {
-        border-left: 1px gray("200") solid;
-        padding-left: 0.5rem;
-        ul {
-            border: none;
-            padding-left: 1rem;
-        }
-    }
-}
-
 .pc-group {
     padding-bottom: 0.5rem;
     .nav-item {

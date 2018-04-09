@@ -50,19 +50,8 @@
     <main class="col-12 col-md-9 col-xl-8 pc-doc-content">
       <ng-content></ng-content>
     </main>
-    <div class="d-none d-xl-block col-xl-2 pc-doc-jump-nav">
-      <ul class="nav flex-column">
-        <li class="nav-item" *ngFor="let jump of jumpNav">
-          <a (click)="onJumpClick(jump.value)">{{jump.key}}</a>
-          <ng-container *ngIf="jump.jump">
-            <ul class="nav flex-column">
-              <li class="nav-item" *ngFor="let jumper of jump.jump">
-                <a (click)="onJumpClick(jumper.value)">{{jumper.key}}</a>
-              </li>
-            </ul>
-          </ng-container>
-        </li>
-      </ul>
+    <div class="d-none d-xl-block col-xl-2">
+      <pc-jump-nav [jumpNav]="jumpNav"></pc-jump-nav>
     </div>
   </div>
 </section>

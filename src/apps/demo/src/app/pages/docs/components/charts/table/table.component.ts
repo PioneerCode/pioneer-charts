@@ -7,11 +7,11 @@ import { PcService } from '../../../../../services/pc.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent  {
   jumpNav = [
     {
       key: 'Table',
-      value: '',
+      value: null,
       level: JumpNavLevel.h1
     },
     {
@@ -30,10 +30,8 @@ export class TableComponent implements OnInit {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
+  markupCode = `<pcac-table [config]="config"></pcac-table>`;
+  importCode = `import { PcacTableModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }
-
-  ngOnInit() {
-  }
-
 }

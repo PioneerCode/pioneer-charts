@@ -7,11 +7,11 @@ import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent {
   jumpNav = [
     {
-      key: 'Line Area Chart',
-      value: '',
+      key: 'Pie Chart',
+      value: null,
       level: JumpNavLevel.h1
     },
     {
@@ -30,8 +30,8 @@ export class PieChartComponent implements OnInit {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
-  constructor(public pcService: PcService) { }
+  markupCode = `<pcac-pie-chart [config]="config"></pcac-pie-chart>`;
+  importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
 
-  ngOnInit() {
-  }
+  constructor(public pcService: PcService) { }
 }

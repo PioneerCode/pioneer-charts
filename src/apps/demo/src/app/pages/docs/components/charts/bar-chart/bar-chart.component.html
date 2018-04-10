@@ -27,8 +27,18 @@
         <pc-prism language="markup" [code]="verticalCode"></pc-prism>
         <h3 id="api">API</h3>
         <pc-prism language="typescript" [code]="importCode"></pc-prism>
-        <h6 id="configuration">Configuration</h6>
-        <pcac-table [config]="getConfig()" class="pc-table"></pcac-table>
+        <pc-base-config>
+          <tbody style="border-top: none;">
+            <tr>
+              <td>domainMax</td>
+              <td>Highest value in domain of data.</td>
+            </tr>
+            <tr>
+              <td>numberOfTicks</td>
+              <td>Number of ui intersects in the domain.</td>
+            </tr>
+          </tbody>
+        </pc-base-config>
       </div>
     </div>
   </div>

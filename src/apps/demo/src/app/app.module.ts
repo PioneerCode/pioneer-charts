@@ -23,7 +23,7 @@ import { ChartsComponent } from './pages/charts/charts.component';
  * Layouts
  */
 import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
-
+import { PublicComponent } from './pages/layouts/public/public.component';
 
 /**
  * Guide Pages
@@ -40,6 +40,8 @@ import { BarChartComponent } from './pages/docs/components/charts/bar-chart/bar-
 import { TableComponent } from './pages/docs/components/charts/table/table.component';
 import { PieChartComponent } from './pages/docs/components/charts/pie-chart/pie-chart.component';
 import { HeaderComponent } from './pages/docs/components/ui/header/header.component';
+import { BaseConfigComponent } from './components/base-config/base-config.component';
+import { JumpNavComponent } from './components/jump-nav/jump-nav.component';
 
 /**
  * Demo Components
@@ -61,8 +63,6 @@ import {
   PcacBarHorizontalChartModule,
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
-import { PublicComponent } from './pages/layouts/public/public.component';
-import { JumpNavComponent } from './components/jump-nav/jump-nav.component';
 
 const appRoutes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
@@ -84,6 +84,7 @@ const appRoutes: Routes = [
     LineAreaChartComponent,
     BarChartComponent,
     HeaderComponent,
+    BaseConfigComponent,
     PieChartComponent,
     TableComponent,
     PageHeaderComponent,

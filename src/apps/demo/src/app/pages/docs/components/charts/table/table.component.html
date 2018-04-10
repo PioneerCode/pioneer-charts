@@ -2,6 +2,7 @@
   <pc-page-header [title]="'Table'"></pc-page-header>
   <p class="lead">Configurable to display an area or line chart.</p>
   <div class="pc-chart-container">
+    <pcac-header [config]="{'title':'Table'}"></pcac-header>
     <pcac-table [config]="pcService.tableConfig"></pcac-table>
   </div>
 </pc-doc-layout>

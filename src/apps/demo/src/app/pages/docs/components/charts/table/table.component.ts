@@ -7,7 +7,7 @@ import { PcService } from '../../../../../services/pc.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent  {
   jumpNav = [
     {
       key: 'Table',
@@ -32,8 +32,4 @@ export class TableComponent implements OnInit {
   ] as IJumpNav[];
 
   constructor(public pcService: PcService) { }
-
-  ngOnInit() {
-  }
-
 }

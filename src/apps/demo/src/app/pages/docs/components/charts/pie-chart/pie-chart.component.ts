@@ -7,7 +7,7 @@ import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss']
 })
-export class PieChartComponent implements OnInit {
+export class PieChartComponent {
   jumpNav = [
     {
       key: 'Line Area Chart',
@@ -32,6 +32,4 @@ export class PieChartComponent implements OnInit {
   ] as IJumpNav[];
   constructor(public pcService: PcService) { }
 
-  ngOnInit() {
-  }
 }

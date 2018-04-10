@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
-import { IPcacData } from '@pioneer-code/pioneer-charts';
 import { IPcacBarHorizontalChartConfig } from 'libs/pcac/public_api';
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 
@@ -49,32 +48,4 @@ export class BarChartComponent {
   ] as IJumpNav[];
 
   constructor(public pcacService: PcService) { }
-
-  getConfig() {
-    const rows = [
-      {
-        'data': [
-          {
-            'value': 'Name'
-          },
-          {
-            'value': 'Description'
-          }
-        ]
-      },
-      {
-        'data': [
-          {
-            'value': 'domainMax'
-          },
-          {
-            'value': 'Max value in data-set domain.'
-          }
-        ]
-      }
-    ] as IPcacData[];
-    return {
-      'data': rows.concat(this.pcacService.sharedConfig || [])
-    };
-  }
 }

@@ -30,6 +30,8 @@ export class TableComponent  {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
+  markupCode = `<pcac-table [config]="config"></pcac-table>`;
+  importCode = `import { PcacTableModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }
 }

@@ -30,7 +30,7 @@ export class LineAreaChartComponent {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
-  markupCode = `<pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>`;
+  markupCode = `<pcac-line-area-chart [config]="config"></pcac-line-area-chart>`;
   importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
   constructor(public pcacService: PcService) { }
 }

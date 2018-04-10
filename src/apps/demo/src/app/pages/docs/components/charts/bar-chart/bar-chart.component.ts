@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PcService } from '../../../../../services/pc.service';
-import { IPcacBarHorizontalChartConfig } from 'libs/pcac/public_api';
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
@@ -12,7 +11,6 @@ export class BarChartComponent {
   verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig"></pcac-bar-vertical-chart>`;
   horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig"></pcac-bar-horizontal-chart>`;
   importCode = `import { PcacBarVerticalChartModule, PcacBarHorizontalChartModule } from '@pioneer-code/pioneer-charts';`;
-  config: IPcacBarHorizontalChartConfig;
   jumpNav = [
     {
       key: 'Bar Chart',

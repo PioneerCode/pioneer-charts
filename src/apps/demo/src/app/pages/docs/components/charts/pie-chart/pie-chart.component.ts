@@ -30,6 +30,8 @@ export class PieChartComponent {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
-  constructor(public pcService: PcService) { }
+  markupCode = `<pcac-pie-chart [config]="config"></pcac-pie-chart>`;
+  importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
 
+  constructor(public pcService: PcService) { }
 }

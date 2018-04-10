@@ -11,7 +11,7 @@ export class LineAreaChartComponent {
   jumpNav = [
     {
       key: 'Line Area Chart',
-      value: '',
+      value: null,
       level: JumpNavLevel.h1
     },
     {

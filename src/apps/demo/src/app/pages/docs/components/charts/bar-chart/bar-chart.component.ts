@@ -14,7 +14,7 @@ export class BarChartComponent {
   jumpNav = [
     {
       key: 'Bar Chart',
-      value: '',
+      value: null,
       level: JumpNavLevel.h1
     },
     {

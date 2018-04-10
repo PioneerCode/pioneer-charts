@@ -10,8 +10,8 @@ import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-
 export class PieChartComponent {
   jumpNav = [
     {
-      key: 'Line Area Chart',
-      value: '',
+      key: 'Pie Chart',
+      value: null,
       level: JumpNavLevel.h1
     },
     {

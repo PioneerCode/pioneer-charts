@@ -24,7 +24,22 @@
         <pc-prism language="markup" [code]="markupCode"></pc-prism>
         <h3>API</h3>
         <pc-prism language="javascript" [code]="importCode"></pc-prism>
-        <pc-base-config></pc-base-config>
+        <pc-base-config>
+          <tbody style="border-top: none;">
+            <tr>
+              <td>domainMax</td>
+              <td>Highest value in domain of data.</td>
+            </tr>
+            <tr>
+              <td>numberOfTicks</td>
+              <td>Number of ui intersects in the domain.</td>
+            </tr>
+            <tr>
+              <td>isArea</td>
+              <td>If false, ui will display a line chart. If true, ui will display an area chart.</td>
+            </tr>
+          </tbody>
+        </pc-base-config>
       </div>
     </div>
   </div>

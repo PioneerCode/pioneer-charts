@@ -1,0 +1,26 @@
+@import "../../../imports";
+
+@media (min-width: 768px) {
+    nav {
+        display: block !important;
+    }
+}
+
+.pc-group {
+    padding-bottom: 0.5rem;
+    .nav-item {
+        a {
+            color: gray("600");
+            font-size: 14px;
+            &:hover {
+                color: theme-color("primary-light");
+            }
+        }
+    }
+}
+
+.pc-group-heading {
+    display: block;
+    padding-bottom: 0.5rem;
+    font-weight: 400;
+}

@@ -9,5 +9,5 @@ import { PcService } from '../../services/pc.service';
 })
 export class FooterComponent  {
   version = environment.version;
-  constructor(public pcacService: PcService) { }
+  constructor(public pcService: PcService) { }
 }

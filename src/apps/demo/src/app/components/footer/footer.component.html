@@ -16,23 +16,18 @@
     </h5>
     <ul class="nav justify-content-center pages">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/home" [ngClass]="{'active': pcacService.currentMainRoute === 'home'}" (click)="pcacService.currentMainRoute = 'home'">
+        <a class="nav-link" routerLink="/" [ngClass]="{'active': pcService.currentMainRoute === 'home'}" (click)="pcService.currentMainRoute = 'home'">
           Home
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/get-started" [ngClass]="{'active': pcacService.currentMainRoute === 'get-started'}" (click)="pcacService.currentMainRoute = 'get-started'">
-          Get Started
+        <a class="nav-link" routerLink="/docs/guides/introduction" [ngClass]="{'active': pcService.currentMainRoute === 'api'}" (click)="pcService.currentMainRoute = 'api'">
+          Documentation
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/bar-chart" [ngClass]="{'active': pcacService.currentMainRoute === 'charts'}" (click)="pcacService.currentMainRoute = 'charts'">
-          Chart
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/demo" [ngClass]="{'active': pcacService.currentMainRoute === 'demo'}" (click)="pcacService.currentMainRoute = 'demo'">
-          Demo
+        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': pcService.currentMainRoute === 'charts'}" (click)="pcService.currentMainRoute = 'charts'">
+          Charts
         </a>
       </li>
     </ul>

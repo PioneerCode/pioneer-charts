@@ -1,4 +1,4 @@
-<nav class="collapse">
+<nav class="collapse" [style.display]="pcService.navDisplay" [ngClass]="{'mobile': pcService.navDisplay === 'block'}">
   <div class="pc-group">
     <a class="pc-group-heading">Getting Started</a>
     <ul class="nav flex-column">

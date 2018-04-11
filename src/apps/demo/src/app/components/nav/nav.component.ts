@@ -12,7 +12,7 @@ export class NavComponent {
 
   onHamburgerClick(): void {
     if (this.pcService.navDisplay === 'none') {
-      this.pcService.navDisplay = 'flex';
+      this.pcService.navDisplay = 'block';
       return;
     }
     this.pcService.navDisplay = 'none';

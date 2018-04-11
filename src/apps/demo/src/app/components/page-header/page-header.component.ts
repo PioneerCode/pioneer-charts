@@ -7,4 +7,5 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PageHeaderComponent {
   @Input() title: string;
+  @Input() anchor = '';
 }

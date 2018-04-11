@@ -35,12 +35,13 @@ export class JumpNavComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.activeRoute.fragment.subscribe(fragment => { this.fragment = fragment; });
+    this.activeRoute.fragment.subscribe(fragment => { this.fragment = fragment === null || fragment === '' ? undefined : fragment; });
   }
 
   ngAfterViewChecked(): void {
-    if (this.fragment) {
-      document.querySelector('#' + this.fragment).scrollIntoView();
+    const elm = document.querySelector('#' + this.fragment);
+    if (this.fragment && elm) {
+      elm.scrollIntoView();
       window.scrollBy(0, -54);
     }
   }
@@ -59,7 +60,7 @@ export class JumpNavComponent implements OnInit, AfterViewChecked {
         break;
     }
 
-    if (jump.value === this.fragment) {
+    if (jump.level === JumpNavLevel.h1 && !this.fragment || jump.value === this.fragment) {
       styles.push('active');
     }
     return styles;

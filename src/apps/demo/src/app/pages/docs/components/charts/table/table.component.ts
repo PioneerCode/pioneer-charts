@@ -11,7 +11,7 @@ export class TableComponent  {
   jumpNav = [
     {
       key: 'Table',
-      value: null,
+      value: 'table',
       level: JumpNavLevel.h1
     },
     {

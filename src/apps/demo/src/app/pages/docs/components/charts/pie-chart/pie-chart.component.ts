@@ -11,7 +11,7 @@ export class PieChartComponent {
   jumpNav = [
     {
       key: 'Pie Chart',
-      value: null,
+      value: 'pie-chart',
       level: JumpNavLevel.h1
     },
     {

@@ -10,7 +10,7 @@ export class IntroductionComponent {
   jumpNav = [
     {
       key: 'Getting Started',
-      value: '',
+      value: 'getting-started',
       level: JumpNavLevel.h1
     },
     {

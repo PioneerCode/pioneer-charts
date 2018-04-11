@@ -10,7 +10,7 @@ export class DataContractComponent {
   jumpNav = [
     {
       key: 'Data Contract',
-      value: '',
+      value: 'data-contract',
       level: JumpNavLevel.h1
     },
     {

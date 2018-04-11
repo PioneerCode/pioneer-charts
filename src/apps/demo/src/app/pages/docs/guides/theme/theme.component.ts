@@ -10,7 +10,7 @@ export class ThemeComponent implements OnInit {
   jumpNav = [
     {
       key: 'Theme',
-      value: '',
+      value: 'theme',
       level: JumpNavLevel.h1
     },
     {

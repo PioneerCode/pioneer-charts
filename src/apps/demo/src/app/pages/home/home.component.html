@@ -1,11 +1,14 @@
 <pc-public-layout>
   <header>
-    <h1>Pioneer Charts</h1>
-    <p>Making Data Visualizations in Angular beautiful & simple.</p>
-    <button type="button" class="btn btn-light" routerLink="/docs/guides/introduction" (click)="pcacService.currentMainRoute = 'get-started'">Get Started</button>
+    <h1 class="display-4">Pioneer Charts</h1>
+    <p class="lead">Data Visualizations in Angular, beautiful & simple.</p>
+    <button type="button" class="btn btn-outline-light" routerLink="/docs/guides/introduction" (click)="pcacService.currentMainRoute = 'get-started'">Get Started</button>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <polygon fill="white" points="0,100 100,0 100,100" />
+    </svg>
   </header>
   <section class="stories">
-    <div class="story">
+    <div class="story pc-border">
       <div class="container">
         <div class="row">
           <div class="col-sm">
@@ -18,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="story">
+    <div class="story pc-border">
       <div class="container">
         <div class="row">
           <div class="col-sm"></div>

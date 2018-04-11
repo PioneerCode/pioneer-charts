@@ -7,7 +7,7 @@
 // $theme-colors: ( "primary": #43425d, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
 // $black: theme-color-level("primary", 8);
 // $body-bg: $black;
-$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
+$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163, "light": color("white"));
 $black: theme-color-level("primary", 8);
 $body-bg: color("white");
 

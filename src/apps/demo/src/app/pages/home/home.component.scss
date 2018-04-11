@@ -1,18 +1,31 @@
 @import "../../../imports";
 header {
+    position: relative;
     background: theme-color("primary");
-    padding: 6rem 0;
+    padding: 6rem 0 11rem;
     text-align: center;
     color: theme-color-level("primary", -12);
     button {
         margin: 3rem 0 0;
     }
+    svg {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+    }
 }
 
 .stories {
-  background: color("white");
+    padding: 4rem 0;
+    background: color("white");
 }
 
 .story {
-  padding: 2rem 0;
+    padding: 4rem 0;
+}
+
+.story.pc-border {
+  border-bottom: 1px solid gray("200");
 }

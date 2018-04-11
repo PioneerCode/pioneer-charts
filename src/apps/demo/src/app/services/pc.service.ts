@@ -21,6 +21,7 @@ export class PcService {
   sharedConfig: IPcacData[];
   currentMainRoute = 'home';
   currentDocRoute = 'bar-chart';
+  navDisplay = 'none';
 
   constructor(private repository: PcacRepository) { }
 

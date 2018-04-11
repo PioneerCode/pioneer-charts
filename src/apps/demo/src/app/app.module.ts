@@ -50,6 +50,7 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
 import { PrismComponent } from './components/prism/prism.component';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { DocNavComponent } from './components/doc-nav/dov-nav.component';
 
 /**
  * Pioneer Charts
@@ -90,6 +91,7 @@ const appRoutes: Routes = [
     PageHeaderComponent,
     PrismComponent,
     DocLayoutComponent,
+    DocNavComponent,
     NavComponent,
     FooterComponent,
     ChartsComponent,

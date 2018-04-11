@@ -1,10 +1,15 @@
 @import "../../../../imports";
-.pc-doc-sidebar {
-    padding-top: 2rem;
-    height: calc(100vh - 56px);
-    position: sticky;
-    top: 56px;
-    overflow-y: auto;
+@media (min-width: 768px) {
+    .pc-doc-sidebar {
+        padding-top: 2rem;
+        height: calc(100vh - 56px);
+        position: sticky;
+        top: 56px;
+        overflow-y: auto;
+        nav {
+            display: block !important;
+        }
+    }
 }
 
 .pc-doc-content {

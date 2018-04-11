@@ -1,7 +1,14 @@
 @import "../../../imports";
+@media (min-width: 768px) {
+    .pc-header {
+        position: sticky;
+        top: 0;
+        z-index: 2000;
+    }
+}
 
-nav, header {
-     background: theme-color("primary");
+.pc-header {
+    background: theme-color("primary");
     .pc-header-brand {
         padding: 1rem 1rem 1rem 2rem;
         color: theme-color-level("primary", -12);

@@ -7,14 +7,14 @@ import { PcService } from '../../services/pc.service';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-  navDisplay = 'none';
-  constructor(public pcacService: PcService) { }
+
+  constructor(public pcService: PcService) { }
 
   onHamburgerClick(): void {
-    if (this.navDisplay === 'none') {
-      this.navDisplay = 'flex';
+    if (this.pcService.navDisplay === 'none') {
+      this.pcService.navDisplay = 'flex';
       return;
     }
-    this.navDisplay = 'none';
+    this.pcService.navDisplay = 'none';
   }
 }

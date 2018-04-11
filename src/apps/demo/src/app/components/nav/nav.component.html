@@ -1,4 +1,4 @@
-<header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+<header class="navbar navbar-expand navbar-dark flex-column flex-md-row pc-header">
   <a class="navbar-brand mr-0 mr-md-2" href="http://charts.pioneercode.com" title="Pioneer Charts">
     <div class="logo-icon">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 208.7 161.3"
@@ -14,22 +14,24 @@
   <div class="navbar-nav-scroll">
     <ul class="navbar-nav bd-navbar-nav flex-row">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/" [ngClass]="{'active': pcacService.currentMainRoute === 'home'}" (click)="pcacService.currentMainRoute = 'home'">
+        <a class="nav-link" routerLink="/" [ngClass]="{'active': pcService.currentMainRoute === 'home'}" (click)="pcService.currentMainRoute = 'home'">
           Home
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" href="/docs/4.1/getting-started/introduction/" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Docs');">Documentation</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/docs/components/charts/bar-chart" [ngClass]="{'active': pcacService.currentMainRoute === 'api'}"
-          (click)="pcacService.currentMainRoute = 'api'">
-          Docs
+        <a class="nav-link" routerLink="/docs/components/charts/bar-chart" [ngClass]="{'active': pcService.currentMainRoute === 'api'}"
+          (click)="pcService.currentMainRoute = 'api'">
+          Documentation
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': pcacService.currentMainRoute === 'charts'}" (click)="pcacService.currentMainRoute = 'charts'">
+        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': pcService.currentMainRoute === 'charts'}" (click)="pcService.currentMainRoute = 'charts'">
           Charts
+        </a>
+      </li>
+      <li class="nav-item d-md-none">
+        <a class="nav-link" (click)="onHamburgerClick()">
+          <i class="fa fa-bars"></i>
         </a>
       </li>
     </ul>

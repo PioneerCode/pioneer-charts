@@ -9,7 +9,6 @@
         />
       </svg>
     </div>
-    Pioneer Charts
   </a>
   <div class="navbar-nav-scroll">
     <ul class="navbar-nav bd-navbar-nav flex-row">
@@ -29,7 +28,7 @@
           Charts
         </a>
       </li>
-      <li class="nav-item d-md-none">
+      <li class="nav-item d-md-none" *ngIf="pcService.currentMainRoute === 'api'">
         <a class="nav-link" (click)="onHamburgerClick()">
           <i class="fa fa-bars"></i>
         </a>

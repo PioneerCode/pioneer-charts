@@ -19,7 +19,7 @@
       "main": "main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
-      "tsconfig": "tsconfig.packaged.json",
+      "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "pc",
       "styles": [
@@ -77,15 +77,15 @@
   },
   "lint": [
     {
-      "project": "apps/demo/src/tsconfig.app.json",
+      "project": "apps/docs/src/tsconfig.app.json",
       "exclude": "**/node_modules/**"
     },
     {
-      "project": "apps/demo/src/tsconfig.spec.json",
+      "project": "apps/docs/src/tsconfig.spec.json",
       "exclude": "**/node_modules/**"
     },
     {
-      "project": "apps/demo/e2e/tsconfig.e2e.json",
+      "project": "apps/docs/e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"
     },
     {

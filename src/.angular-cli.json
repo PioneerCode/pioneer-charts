@@ -5,9 +5,9 @@
   },
   "apps": [
     {
-      "name": "demo-packaged",
-      "root": "apps/demo/src",
-      "outDir": "dist/apps/demo-packaged",
+      "name": "dev",
+      "root": "apps/dev/src",
+      "outDir": "dist/apps/dev",
       "assets": [
         "assets",
         "favicon.ico",
@@ -38,9 +38,9 @@
       }
     },
     {
-      "name": "demo",
-      "root": "apps/demo/src",
-      "outDir": "dist/apps/demo",
+      "name": "docs",
+      "root": "apps/docs/src",
+      "outDir": "dist/apps/docs",
       "assets": [
         "assets",
         "favicon.ico",
@@ -86,6 +86,18 @@
     },
     {
       "project": "apps/demo/e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/dev/src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/dev/src/tsconfig.spec.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/dev/e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"
     }
   ],

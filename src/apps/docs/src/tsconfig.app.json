@@ -1,13 +1,14 @@
 {
   "extends": "../../../tsconfig.packaged.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/app/packaged",
+    "outDir": "../out-tsc/app",
     "module": "es2015"
   },
   "include": [
     "**/*.ts"
   ],
   "exclude": [
+    "test.ts",
     "**/*.spec.ts"
   ]
 }

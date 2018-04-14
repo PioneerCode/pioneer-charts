@@ -8,9 +8,6 @@ import { PcacCoreModule } from '../core';
   ],
   declarations: [
     PcacBarVerticalChartComponent
-  ],
-  imports: [
-    PcacCoreModule
   ]
 })
 export class PcacBarVerticalChartModule { }

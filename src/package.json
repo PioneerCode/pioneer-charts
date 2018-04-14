@@ -27,10 +27,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --app=dev",
-    "build:dev": "ng build  --app=dev",
+    "build:dev": "npm run build:lib && ng build --aot --app=dev",
     "start:docs": "ng serve --app=docs",
     "build:docs": "ng build --prod --app=docs",
-    "build:docs:prod": "npm run build:docs && npm run build:404 && npm run build:readme",
+    "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:404 && npm run build:readme",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

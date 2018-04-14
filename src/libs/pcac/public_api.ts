@@ -1,9 +1,9 @@
-export * from './core';
-export * from './header';
-export * from './table';
-export * from './bar-vertical-chart';
-export * from './bar-horizontal-chart';
-export * from './pie-chart';
-export * from './line-area-chart';
+export * from './core/index';
+export * from './header/index';
+export * from './table/index';
+export * from './bar-vertical-chart/index';
+export * from './bar-horizontal-chart/index';
+export * from './pie-chart/index';
+export * from './line-area-chart/index';
 
 

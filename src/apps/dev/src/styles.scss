@@ -4,18 +4,6 @@ $fa-font-path: "./assets/fonts" !default;
 @import 'imports';
 @import '../../../libs/pcac/pcac';
 @import '../../../node_modules/font-awesome/scss/font-awesome.scss';
-.logo-icon {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-}
-
-.pc-prism {
-    margin: 0 0 1rem;
-    display: inline-block;
-    width: 100%;
-    background: gray("100") !important;
-}
 
 .pc-chart-container {
     padding: 1rem;
@@ -29,10 +17,3 @@ $fa-font-path: "./assets/fonts" !default;
     padding: 2rem 2rem;
 }
 
-.pc-table {
-    display: block;
-}
-
-.pc-row {
-    margin-bottom: 2rem;
-}

@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@pioneer-code/pioneer-charts": [
-        "dist/bundles/@pioneer-code/pioneer-charts/"
+        "node_modules/@pioneer-code/pioneer-charts/"
       ]
     }
   }

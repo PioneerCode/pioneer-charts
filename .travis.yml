@@ -17,7 +17,7 @@ before_script:
   - npm install
 
 script:
-  - npm run build:prod
+  - npm run build:docs:prod
 
 cache:
   directories:

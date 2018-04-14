@@ -27,16 +27,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --app=dev",
-    "build": "ng build --prod --aot --app=dev",
+    "build:dev": "ng build --prod --aot --app=dev",
     "start:docs": "ng serve --app=docs",
     "build:docs": "ng build --prod --aot --app=docs",
+    "build:docs:prod": "npm run build:docs && npm run build:404 && npm run build:readme",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:404": "node ./build/404.js",
     "build:readme": "node ./build/readme.js",
-    "build:lib": "ng-packagr -p libs/pcac/package.json",
-    "build:prod": "npm run build:docs && npm run build:404 && npm run build:readme"
+    "build:lib": "ng-packagr -p libs/pcac/package.json"
   },
   "private": false,
   "dependencies": {

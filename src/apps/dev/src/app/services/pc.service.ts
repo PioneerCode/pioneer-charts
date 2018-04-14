@@ -8,7 +8,7 @@ import {
   IPcacPieChartConfig,
   IPcacData
 } from '@pioneer-code/pioneer-charts';
-import { PcacRepository } from '../repository/pc.repository';
+import { PcRepository } from '../repository/pc.repository';
 
 @Injectable()
 export class PcService {
@@ -23,7 +23,7 @@ export class PcService {
   currentDocRoute = 'bar-chart';
   navDisplay = 'none';
 
-  constructor(private repository: PcacRepository) { }
+  constructor(private repository: PcRepository) { }
 
   getData() {
     this.repository.getTable()

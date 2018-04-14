@@ -9,7 +9,7 @@ import {
 } from '@pioneer-code/pioneer-charts';
 
 @Injectable()
-export class PcacRepository {
+export class PcRepository {
 
   constructor(private http: HttpClient) { }
 

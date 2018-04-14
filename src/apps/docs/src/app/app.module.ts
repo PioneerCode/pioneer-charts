@@ -58,9 +58,9 @@ import { DocNavComponent } from './components/doc-nav/dov-nav.component';
 import {
   PcacCoreModule,
   PcacHeaderModule,
+  PcacBarVerticalChartModule,
   PcacPieChartModule,
   PcacTableModule,
-  PcacBarVerticalChartModule,
   PcacBarHorizontalChartModule,
   PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';

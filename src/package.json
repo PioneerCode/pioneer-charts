@@ -27,9 +27,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --app=dev",
-    "build:dev": "ng build --prod --aot --app=dev",
+    "build:dev": "ng build  --app=dev",
     "start:docs": "ng serve --app=docs",
-    "build:docs": "ng build --prod --aot --app=docs",
+    "build:docs": "ng build --prod --app=docs",
     "build:docs:prod": "npm run build:docs && npm run build:404 && npm run build:readme",
     "test": "ng test",
     "lint": "ng lint",

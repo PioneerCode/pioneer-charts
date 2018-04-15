@@ -1,12 +1,8 @@
 /**
  * Move sass assets to lib dist
  */
-const cpy = require('cpy');
+const copyfiles = require('copyfiles');
 
-cpy('./libs/pcac/**/*.scss', './dist/bundles/@pioneer-code/pioneer-charts/dist/scss/', {
-  parents: true
-}).then(() => {
+copyfiles(['./libs/pcac/**/*.scss', './dist/bundles/@pioneer-code/pioneer-charts/dist/scss'], { up: 2 }, function () {
   console.log('Sass moved.');
 });
-
-

@@ -5,7 +5,6 @@ import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 @Component({
   selector: 'pcac-bar-horizontal-chart',
   templateUrl: './bar-horizontal-chart.component.html',
-  styleUrls: ['./bar-horizontal-chart.component.scss'],
   providers: [
     BarHorizontalChartBuilder
   ]

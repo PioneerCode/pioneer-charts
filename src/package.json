@@ -67,6 +67,7 @@
     "@types/node": "~6.0.60",
     "bootstrap": "^4.0.0",
     "codelyzer": "^4.0.1",
+    "copyfiles": "^2.0.0",
     "cpy": "^6.0.0",
     "d3": "^4.13.0",
     "font-awesome": "^4.7.0",

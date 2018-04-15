@@ -5,7 +5,6 @@ import { PieChartBuilder } from './pie-chart.builder';
 @Component({
   selector: 'pcac-pie-chart',
   templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss'],
   providers: [
     PieChartBuilder
   ]

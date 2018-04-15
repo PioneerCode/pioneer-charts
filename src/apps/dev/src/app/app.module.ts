@@ -15,12 +15,12 @@ import { ChartsComponent } from './pages/charts/charts.component';
  */
 import {
   PcacCoreModule,
-  PcacHeaderModule
-  // PcacPieChartModule,
-  // PcacTableModule,
-  // PcacBarVerticalChartModule,
-  // PcacBarHorizontalChartModule,
-  // PcacLineAreaChartModule
+  PcacHeaderModule,
+  PcacPieChartModule,
+  PcacTableModule,
+  PcacBarVerticalChartModule,
+  PcacBarHorizontalChartModule,
+  PcacLineAreaChartModule
 } from '@pioneer-code/pioneer-charts';
 
 const appRoutes: Routes = [
@@ -37,12 +37,12 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpClientModule,
     PcacCoreModule,
-    PcacHeaderModule
-    // PcacTableModule,
-    // PcacPieChartModule,
-    // PcacBarVerticalChartModule,
-    // PcacBarHorizontalChartModule,
-    // PcacLineAreaChartModule
+    PcacHeaderModule,
+    PcacTableModule,
+    PcacPieChartModule,
+    PcacBarVerticalChartModule,
+    PcacBarHorizontalChartModule,
+    PcacLineAreaChartModule
   ],
   providers: [
     PcRepository,

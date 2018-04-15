@@ -5,7 +5,6 @@ import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 @Component({
   selector: 'pcac-bar-vertical-chart',
   templateUrl: './bar-vertical-chart.component.html',
-  styleUrls: ['./bar-vertical-chart.component.scss'],
   providers: [
     BarVerticalChartBuilder
   ]

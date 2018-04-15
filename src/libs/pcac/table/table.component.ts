@@ -7,11 +7,11 @@ import { IPcacTableConfig } from './table.model';
   styleUrls: ['./table.component.scss']
 })
 export class PcacTableComponent implements OnChanges {
-  @Input() config = { height: 242 } as IPcacTableConfig;
+  @Input() config = { height: 240 } as IPcacTableConfig;
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.config) {
-      this.config.height = this.config.height + 42;
+      this.config.height = this.config.height + 40;
     }
   }
 }

@@ -33,7 +33,7 @@
     "build:docs:404": "node ./build/404.js",
     "build:docs:readme": "node ./build/readme.js",
     "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:docs:404 && npm run build:docs:readme",
-    "build:lib": "ng-packagr -p libs/pcac/package.json",
+    "build:lib": "ng-packagr -p libs/pcac/package.json && npm run build:lib:sass",
     "build:lib:sass": "node ./build/sass.js",
     "test": "ng test",
     "lint": "ng lint",

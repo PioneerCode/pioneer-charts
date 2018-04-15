@@ -39,12 +39,12 @@ export class ThemeComponent implements OnInit {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
-  importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac";`;
+  importStylesCode = `@import "node_module/@pioneer-code/pioneer-charts/dist/scss/libs/pcac/pcac";`;
   importStylesCodeOverride = `// Your variable overrides
 $theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
 
 // Pioneer Charts and its default variables
-@import "~@pioneer-code/pioneer-charts/pcac";`;
+@import "node_module/@pioneer-code/pioneer-charts/dist/scss/libs/pcac/pcac";`;
   colorServiceExample = `...
 this.colors = this.colorService.getColorScale(config.data.length);
 ...

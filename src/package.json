@@ -36,7 +36,8 @@
     "e2e": "ng e2e",
     "build:404": "node ./build/404.js",
     "build:readme": "node ./build/readme.js",
-    "build:lib": "ng-packagr -p libs/pcac/package.json"
+    "build:lib": "ng-packagr -p libs/pcac/package.json",
+    "build:sass": "bide ./build/sass.js"
   },
   "private": false,
   "dependencies": {

@@ -1,4 +1,15 @@
 @import "core/theme/imports";
+// Charts
+@import "bar-horizontal-chart/bar-horizontal-chart.component";
+@import "bar-vertical-chart/bar-vertical-chart.component";
+@import "pie-chart/pie-chart.component";
+@import "line-area-chart/line-area-chart.component";
+@import "table/table.component";
+// UI
+@import "header/header.component";
+.pcac-font-family {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
 
 .pcac-grid-rule line {
     stroke: $gray-200;

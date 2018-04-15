@@ -3,8 +3,7 @@ import { IHeaderConfig } from './header.model';
 
 @Component({
   selector: 'pcac-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  templateUrl: './header.component.html'
 })
 export class PcacHeaderComponent {
   @Input() config: IHeaderConfig;

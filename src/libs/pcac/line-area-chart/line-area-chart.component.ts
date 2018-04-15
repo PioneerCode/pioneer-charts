@@ -5,7 +5,6 @@ import { LineAreaChartBuilder } from './line-area-chart.builder';
 @Component({
   selector: 'pcac-line-area-chart',
   templateUrl: './line-area-chart.component.html',
-  styleUrls: ['./line-area-chart.component.scss'],
   providers: [
     LineAreaChartBuilder
   ]

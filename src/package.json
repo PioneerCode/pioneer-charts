@@ -30,14 +30,14 @@
     "build:dev": "npm run build:lib && ng build --aot --app=dev",
     "start:docs": "ng serve --app=docs",
     "build:docs": "ng build --prod --app=docs",
-    "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:404 && npm run build:readme",
+    "build:docs:404": "node ./build/404.js",
+    "build:docs:readme": "node ./build/readme.js",
+    "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:docs:404 && npm run build:docs:readme",
+    "build:lib": "ng-packagr -p libs/pcac/package.json",
+    "build:lib:sass": "node ./build/sass.js",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "build:404": "node ./build/404.js",
-    "build:readme": "node ./build/readme.js",
-    "build:lib": "ng-packagr -p libs/pcac/package.json",
-    "build:sass": "bide ./build/sass.js"
+    "e2e": "ng e2e"
   },
   "private": false,
   "dependencies": {

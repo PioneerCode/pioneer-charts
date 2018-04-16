@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav
   templateUrl: './theme.component.html',
   styleUrls: ['./theme.component.scss']
 })
-export class ThemeComponent implements OnInit {
+export class ThemeComponent {
   jumpNav = [
     {
       key: 'Theme',
@@ -39,12 +39,12 @@ export class ThemeComponent implements OnInit {
       level: JumpNavLevel.h3
     }
   ] as IJumpNav[];
-  importStylesCode = `@import "node_module/@pioneer-code/pioneer-charts/dist/scss/pcac";`;
+  importStylesCode = `@import "node_module/@pioneer-code/pioneer-charts/scss/pcac";`;
   importStylesCodeOverride = `// Your variable overrides
 $theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
 
 // Pioneer Charts and its default variables
-@import "node_module/@pioneer-code/pioneer-charts/dist/scss/pcac";`;
+@import "node_module/@pioneer-code/pioneer-charts/scss/pcac";`;
   colorServiceExample = `...
 this.colors = this.colorService.getColorScale(config.data.length);
 ...
@@ -66,9 +66,4 @@ export class AppComponent implements OnInit {
   constructor(public colorService: PcacColorService) { }
   ...
 }`;
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

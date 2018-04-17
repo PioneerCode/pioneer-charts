@@ -2,9 +2,10 @@
 header {
     position: relative;
     background: theme-color("primary");
-    padding: 6rem 0 11rem;
+    padding: 6rem 0 6rem;
     text-align: center;
     color: theme-color-level("primary", -12);
+    margin: 0 0 4rem;
     button {
         margin: 3rem 0 0;
     }
@@ -17,24 +18,19 @@ header {
     }
 }
 
-.stories {
-    padding: 2rem 0 4rem;
-    background: color("white");
-}
-
-.story {
-    padding: 4rem 0;
-}
-
-.story.pc-border {
-    border-bottom: 1px solid gray("200");
+// .stories {
+//     padding: 2rem 0 4rem;
+//     background: color("white");
+// }
+h4 {
+    font-weight: 400;
+    margin-bottom: 1rem;
 }
 
 .bullets {
+    padding: 4rem 0 6rem;
     text-align: center;
-    .bullet {
-        padding: 0 1rem;
-    }
+    border-bottom: 1px solid gray("200");
     a {
         color: darken( theme-color("primary-light"), 10%);
         &:hover {
@@ -55,4 +51,32 @@ header {
     p {
         font-size: 14px;
     }
+}
+
+section.easy {
+    padding: 3rem 0 6rem;
+    h2 {
+        text-align: center;
+        margin: 1.5rem;
+    }
+    p.lead {
+        text-align: center;
+        margin: 0 0 6rem;
+    }
+}
+
+.bullet {
+    padding: 0 1rem;
+}
+
+.bullet-left {
+    padding: 0 1rem 0 0;
+}
+
+.bullet-right {
+    padding: 0 0 0 1rem;
+}
+
+.bullet-bottom {
+    padding: 0 0 6rem;
 }

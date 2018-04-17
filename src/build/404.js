@@ -1,9 +1,10 @@
 const cpy = require('cpy');
 const chalk = require('chalk');
 
-cpy('./dist/apps/demo/index.html', './dist/apps/demo/', {
+cpy('./dist/apps/docs/index.html', './dist/apps/docs/', {
   rename: basename => `404.html`
-}).then(() => {
+}).then((error, r) => {
+  console.log(error);
   console.log(chalk.cyan('Pioneer Charts: 404 copied!'));
 });
 

@@ -7,5 +7,5 @@ import { PcService } from '../../services/pc.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(public pcacService: PcService) { }
+  constructor(public pcService: PcService) { }
 }

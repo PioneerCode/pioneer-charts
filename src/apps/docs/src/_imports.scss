@@ -2,15 +2,13 @@
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
-
 // Overrides
 // $theme-colors: ( "primary": #43425d, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
 // $black: theme-color-level("primary", 8);
 // $body-bg: $black;
-$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163, "light": color("white"));
+$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163, "light": color("white"), "dark": $black);
 $black: theme-color-level("primary", 8);
 $body-bg: color("white");
-
 // Optional
 @import "node_modules/bootstrap/scss/root";
 //@import "node_modules/bootstrap/scss/print";
@@ -44,6 +42,3 @@ $body-bg: color("white");
 //@import "node_modules/bootstrap/scss/popover";
 //@import "node_modules/bootstrap/scss/carousel";
 @import "node_modules/bootstrap/scss/utilities";
-
-
-

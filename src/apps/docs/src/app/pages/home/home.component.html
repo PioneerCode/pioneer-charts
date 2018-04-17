@@ -70,6 +70,13 @@
         </div>
       </div>
     </div>
-
+    <div class="container">
+      <div class="row">
+        <div class="col-sm text-center">
+          <button type="button" class="btn btn-outline-dark" routerLink="/docs/guides/introduction" (click)="pcacService.currentMainRoute = 'get-started'">Get Started</button>
+          <button type="button" class="btn btn-outline-dark" routerLink="/charts" (click)="pcacService.currentMainRoute = 'charts'">View Charts</button>
+        </div>
+      </div>
+    </div>
   </section>
 </pc-public-layout>

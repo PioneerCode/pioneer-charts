@@ -11,7 +11,7 @@ export class PcacTableComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.config) {
-      this.config.height = this.config.height + 40;
+      this.config.height = this.config.height + 42;
     }
   }
 }

@@ -8,6 +8,8 @@ To get started, it is highly recommended that you [Read the Getting Started](htt
 npm install @pioneer-code/pioneer-charts
 ```
 
+[npm](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
+
 ## Bugs and feature requests
 
 Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-charts/issues/new).

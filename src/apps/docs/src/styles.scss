@@ -2,7 +2,7 @@
 
 $fa-font-path: "./assets/fonts" !default;
 @import 'imports';
-@import '../../../libs/pcac/pcac';
+@import "../../../node_modules/@pioneer-code/pioneer-charts/scss/pcac";
 @import '../../../node_modules/font-awesome/scss/font-awesome.scss';
 .logo-icon {
     width: 24px;

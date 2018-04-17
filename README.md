@@ -2,7 +2,7 @@
 
 ## Quick start
 
-To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/get-started) page for information on setup, configuration and examples, and more.
+To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/docs/guides/introduction) page for information on setup, configuration and examples, and more.
 
 ```bash
 npm install @pioneer-code/pioneer-charts

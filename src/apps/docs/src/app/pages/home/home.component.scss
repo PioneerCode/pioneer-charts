@@ -18,7 +18,6 @@ header {
     }
 }
 
-
 h4 {
     font-weight: 400;
     margin-bottom: 1rem;
@@ -28,13 +27,6 @@ h4 {
     padding: 4rem 0 6rem;
     text-align: center;
     border-bottom: 1px solid gray("200");
-    a {
-        color: darken( theme-color("primary-light"), 10%);
-        &:hover {
-            transition: color 0.25s;
-            color: theme-color("primary");
-        }
-    }
     i {
         margin: 0 0 1rem;
         font-size: 4rem;
@@ -77,3 +69,4 @@ section.easy {
 .bullet-bottom {
     padding: 0 0 6rem;
 }
+

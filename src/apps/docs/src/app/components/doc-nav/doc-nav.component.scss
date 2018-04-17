@@ -1,5 +1,4 @@
 @import "../../../imports";
-
 @media (min-width: 768px) {
     nav {
         display: block !important;
@@ -7,8 +6,8 @@
 }
 
 nav.mobile {
-  padding: 1rem 0 0;
-  border-bottom: 1px solid gray("200");
+    padding: 1rem 0 0;
+    border-bottom: 1px solid gray("200");
 }
 
 .pc-group {
@@ -28,4 +27,12 @@ nav.mobile {
     display: block;
     padding-bottom: 0.5rem;
     font-weight: 400;
+}
+
+a {
+    color: darken( theme-color("primary-light"), 10%);
+    &:hover {
+        transition: color 0.25s;
+        color: theme-color("primary");
+    }
 }

@@ -4,16 +4,33 @@ import { select, selection } from 'd3-selection';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { IPcacData } from '../core/chart.model';
+import { transition } from 'd3-transition';
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleBand<string>;
+  private startData: IPcacData[];
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
+    this.startData = JSON.parse(JSON.stringify(config.data));
+    for (let index = 0; index < this.startData.length; index++) {
+      this.setStartState(this.startData[index]);
+    }
+    console.log(this.startData);
+    console.log(config.data);
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
+  }
+
+  private setStartState(data: IPcacData): void {
+    if (data && data.data) {
+      for (let i = 0, l = data.data.length; i < l; ++i) {
+        data.data[i].value = 0;
+        this.setStartState(data.data[i]);
+      }
+    }
   }
 
   private buildScales(config: IPcacBarHorizontalChartConfig) {
@@ -53,18 +70,18 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private addBars(config: IPcacBarHorizontalChartConfig) {
     this.svg.append('g')
-      .attr('class', 'bar-groups')
+      .attr('class', 'pcac-bar-groups')
       .selectAll('g')
       .data(config.data)
       .enter().append('g')
-      .attr('class', 'bars')
+      .attr('class', 'pcac-bar-group')
       .attr('transform', (d) => 'translate(0,' + this.yScale(d.key as string) + ')')
       .selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
       })
       .enter().append('rect')
-      .attr('class', 'bar')
+      .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
         return this.yScale(d.key as string);
@@ -73,6 +90,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })
+      .attr('width', 0)
+      .transition(transition()
+        .duration(750))
       .attr('width', (d: IPcacData) => {
         return this.xScale(d.value as number);
       });

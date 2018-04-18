@@ -1,6 +1,3 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
 export class PcacColorService {
   private primary = '#43425d';
   private primaryLight = '#a3a1fb';

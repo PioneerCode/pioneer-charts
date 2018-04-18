@@ -5,12 +5,14 @@ import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { IPcacData } from '../core/chart.model';
 import { transition } from 'd3-transition';
+import { PcacTransitionService } from '../core/transition.service';
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleBand<string>;
   private startData: IPcacData[];
+
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.startData = JSON.parse(JSON.stringify(config.data));
@@ -92,7 +94,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', 0)
       .transition(transition()
-        .duration(750))
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('width', (d: IPcacData) => {
         return this.xScale(d.value as number);
       });

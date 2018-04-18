@@ -7,6 +7,7 @@ import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
 import { IPcacData } from '.';
+import { PcacTransitionService } from './transition.service';
 
 @Injectable()
 export class PcacChart {
@@ -19,7 +20,8 @@ export class PcacChart {
   constructor(
     public axisBuilder: PcacAxisBuilder,
     public gridBuilder: PcacGridBuilder,
-    private colorService: PcacColorService
+    private colorService: PcacColorService,
+    public transitionService: PcacTransitionService
   ) { }
 
   /**

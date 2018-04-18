@@ -3,6 +3,7 @@ import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { select, selection, } from 'd3-selection';
 import { PcacChart } from '../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
+import { transition } from 'd3-transition';
 import { IPcacData } from '../core/chart.model';
 
 export interface IBarVerticalChartBuilder {
@@ -73,6 +74,13 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.colors[i];
       })
       .attr('width', this.xScale.bandwidth())
+
+      .attr('y', () => {
+        return this.height;
+      })
+      .attr('height', 0)
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('y', (d: IPcacData) => {
         return this.yScale(d.value as number);
       })

@@ -11,16 +11,8 @@ import { PcacTransitionService } from '../core/transition.service';
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleBand<string>;
-  private startData: IPcacData[];
-
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.startData = JSON.parse(JSON.stringify(config.data));
-    for (let index = 0; index < this.startData.length; index++) {
-      this.setStartState(this.startData[index]);
-    }
-    console.log(this.startData);
-    console.log(config.data);
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);

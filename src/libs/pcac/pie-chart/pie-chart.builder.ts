@@ -4,6 +4,7 @@ import { select } from 'd3-selection';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
+import * as d3 from 'd3';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
@@ -39,9 +40,24 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .attr('d', this.arcShape)
       .style('fill', (d: any, i: number) => {    // TODO: Strongly type
         return this.colors[i];
+      })
+      .transition()
+      .ease(d3.easeSin)
+      .duration(750)
+      .attrTween('d', (b: any) => {
+        return this.tweenChart(b);
+      })
+      .transition()
+      .delay((d, i) => {
+        return i * 500;
       });
+  }
+
+  private tweenChart(b: any) {
+    b.innerRadius = 0;
+    const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, b);
+    return (t: any) => this.arcShape(i(t));
   }
 }

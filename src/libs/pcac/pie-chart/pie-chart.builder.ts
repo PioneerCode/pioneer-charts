@@ -45,7 +45,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       })
       .transition()
       .ease(d3.easeSin)
-      .duration(750)
+      .duration(this.transitionService.getTransitionDuration())
       .attrTween('d', (b: any) => {
         return this.tweenChart(b);
       })

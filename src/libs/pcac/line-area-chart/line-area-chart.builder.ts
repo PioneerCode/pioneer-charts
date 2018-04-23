@@ -18,7 +18,6 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private area: d3.Area<[number, number]>;
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
-  private startData = [] as any[]; // TODO: Strongly type
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.startData = d3.range(config.data[0].data.length).map((d) => {

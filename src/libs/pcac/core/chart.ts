@@ -16,6 +16,8 @@ export class PcacChart {
   width = 400;
   height = 400;
   colors = [] as string[];
+  startData = [] as any[]; // TODO: Strongly type
+  endData = [] as any[]; // TODO: Strongly type
 
   constructor(
     public axisBuilder: PcacAxisBuilder,

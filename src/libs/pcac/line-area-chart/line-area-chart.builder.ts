@@ -114,6 +114,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .style('fill', () => {
         return this.colors[index];  // TODO: strongly type
       })
+      .attr('d', this.line(this.startData))
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('d', this.area as any);  // TODO: strongly type
   }
 

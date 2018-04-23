@@ -6,7 +6,8 @@ import { axisBottom, axisLeft } from 'd3-axis';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
-
+import { transition } from 'd3-transition';
+import * as d3 from 'd3';
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
 }
@@ -17,8 +18,15 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private area: d3.Area<[number, number]>;
   private xScale: d3.ScaleLinear<number, number>;
   private yScale: d3.ScaleLinear<number, number>;
+  private startData = [] as any[]; // TODO: Strongly type
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
+    this.startData = d3.range(config.data[0].data.length).map((d) => {
+      return {
+        value: 0,
+        key: ''
+      };
+    });
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -86,6 +94,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
+      .attr('d', this.line(this.startData))
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('d', this.line as any) // TODO: strongly type
       .attr('stroke', () => {
         return this.colors[index];

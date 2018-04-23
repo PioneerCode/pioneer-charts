@@ -3,9 +3,11 @@ import { select, selection } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
+import { range } from 'd3-array';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
+import { transition } from 'd3-transition';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
@@ -19,6 +21,13 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
+    this.startData = range(config.data[0].data.length).map((d) => {
+      return {
+        value: 0,
+        key: ''
+      };
+    });
+    console.log(this.startData);
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -86,6 +95,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
+      .attr('d', this.line(this.startData))
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('d', this.line as any) // TODO: strongly type
       .attr('stroke', () => {
         return this.colors[index];
@@ -103,6 +115,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .style('fill', () => {
         return this.colors[index];  // TODO: strongly type
       })
+      .attr('d', this.line(this.startData))
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attr('d', this.area as any);  // TODO: strongly type
   }
 
@@ -120,6 +135,11 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         .attr('cx', (d: IPcacData, i: number) => {
           return this.xScale(i);
         })
+        .attr('cy', (d: IPcacData) => {
+          return this.yScale(0);
+        })
+        .transition(transition()
+          .duration(this.transitionService.getTransitionDuration()))
         .attr('cy', (d: IPcacData) => {
           return this.yScale(d.value as number);
         })

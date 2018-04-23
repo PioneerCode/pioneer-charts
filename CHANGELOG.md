@@ -5,6 +5,8 @@
 
 - OnInit load animations for Bar Chart (Horizontal & Vertical), Line Area Chart, and Pie Chart.
 
+For details on features included, visit the [v0.6](https://github.com/PioneerCode/pioneer-charts/milestone/8) milestone.
+
 
 <a name="5.0.0"></a>
 # [v0.5](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.5.0) (2018-04-17)

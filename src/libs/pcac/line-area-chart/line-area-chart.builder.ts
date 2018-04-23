@@ -3,11 +3,12 @@ import { select, selection } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
+import { range } from 'd3-array';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
 import { transition } from 'd3-transition';
-import * as d3 from 'd3';
+
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
 }
@@ -20,12 +21,13 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
-    this.startData = d3.range(config.data[0].data.length).map((d) => {
+    this.startData = range(config.data[0].data.length).map((d) => {
       return {
         value: 0,
         key: ''
       };
     });
+    console.log(this.startData);
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);

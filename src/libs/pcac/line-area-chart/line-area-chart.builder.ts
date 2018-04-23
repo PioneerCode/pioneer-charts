@@ -135,6 +135,11 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
           return this.xScale(i);
         })
         .attr('cy', (d: IPcacData) => {
+          return this.yScale(0);
+        })
+        .transition(transition()
+          .duration(this.transitionService.getTransitionDuration()))
+        .attr('cy', (d: IPcacData) => {
           return this.yScale(d.value as number);
         })
         .attr('r', 4);

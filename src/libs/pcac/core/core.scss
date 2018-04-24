@@ -1,0 +1,12 @@
+@import "theme/imports";
+.pcac-d3-tooltip {
+  position: absolute;
+  text-align: center;
+  font-size: 14px;
+  padding: 0.5rem;
+  pointer-events: none;
+  display: none;
+  background-color: $gray-800;
+  color: $white;
+  border-radius: 2px;
+}

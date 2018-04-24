@@ -8,6 +8,7 @@ import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
 import { IPcacData } from '.';
 import { PcacTransitionService } from './transition.service';
+import { PcacTooltipBuilder } from './tooltip.builder';
 
 @Injectable()
 export class PcacChart {
@@ -22,8 +23,9 @@ export class PcacChart {
   constructor(
     public axisBuilder: PcacAxisBuilder,
     public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
     private colorService: PcacColorService,
-    public transitionService: PcacTransitionService
   ) { }
 
   /**

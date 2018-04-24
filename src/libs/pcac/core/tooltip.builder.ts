@@ -13,7 +13,7 @@ export class PcacTooltipBuilder implements IPcacTooltipBuilder {
 
   tooltip = select('body').append('div').attr('class', 'pcac-d3-tooltip');
 
-  showBarTooltip(data: IPcacData, tickFormat: string): void {
+  showBarTooltip(data: IPcacData, tickFormat?: string): void {
     this.tooltip.style('left', event.pageX - 50 + 'px')
       .style('top', event.pageY - 70 + 'px')
       .style('display', 'inline-block')
@@ -25,8 +25,9 @@ export class PcacTooltipBuilder implements IPcacTooltipBuilder {
   }
 
   private getBarTipData(data: IPcacData, tickFormat: string): string {
+    console.log(data);
     let value = data.value.toString();
-    switch (tickFormat.toLocaleLowerCase()) {
+    switch (tickFormat) {
       case 'percentage':
         value = format('.0%')(data.value as number);
         break;

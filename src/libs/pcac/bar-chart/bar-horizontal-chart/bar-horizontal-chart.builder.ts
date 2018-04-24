@@ -86,7 +86,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', 0)
       .on('mousemove', (d: IPcacData) => {
-        this.tooltipBuilder.showBarTooltip(d, 'this.config.tickFormat');
+        this.tooltipBuilder.showBarTooltip(d);
       })
       .on('mouseout', () => {
         this.tooltipBuilder.hideTooltip();

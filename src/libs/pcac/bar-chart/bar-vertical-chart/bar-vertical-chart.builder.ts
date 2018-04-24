@@ -1,10 +1,10 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { select, selection, } from 'd3-selection';
-import { PcacChart } from '../core/chart';
+import { PcacChart } from '../../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { transition } from 'd3-transition';
-import { IPcacData } from '../core/chart.model';
+import { IPcacData } from '../../core/chart.model';
 
 export interface IBarVerticalChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void;

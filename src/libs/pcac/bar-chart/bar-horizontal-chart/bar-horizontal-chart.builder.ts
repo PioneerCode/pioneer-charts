@@ -1,11 +1,11 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { select, selection } from 'd3-selection';
-import { PcacChart } from '../core/chart';
+import { PcacChart } from '../../core/chart';
 import { scaleBand, scaleLinear } from 'd3-scale';
-import { IPcacData } from '../core/chart.model';
+import { IPcacData } from '../../core/chart.model';
 import { transition } from 'd3-transition';
-import { PcacTransitionService } from '../core/transition.service';
+import { PcacTransitionService } from '../../core/transition.service';
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {

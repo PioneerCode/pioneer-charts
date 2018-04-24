@@ -79,6 +79,12 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
+      .on('mousemove', (d: IPcacData) => {
+        this.tooltipBuilder.showBarTooltip(d);
+      })
+      .on('mouseout', () => {
+        this.tooltipBuilder.hideTooltip();
+      })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
       .attr('y', (d: IPcacData) => {

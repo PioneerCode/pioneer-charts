@@ -9,7 +9,7 @@
 // UI
 @import "header/header.component";
 .pcac-font-family {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: $font-family;
 }
 
 .pcac-grid-rule line {

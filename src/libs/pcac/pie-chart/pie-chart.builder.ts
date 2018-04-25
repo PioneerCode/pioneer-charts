@@ -62,13 +62,13 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .on('mousemove', function (d: any) {  // TODO: Strongly type
         self.tooltipBuilder.showBarTooltip(d);
         select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 2))
+          .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcOverShape);
       })
       .on('mouseout', function () {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 2))
+          .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcShape);
       })
       .transition(transition()
@@ -77,6 +77,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
         return this.tweenChart(b);
       });
   }
+
 
   private tweenChart(b: any) {  // TODO: Strongly type
     b.innerRadius = 0;

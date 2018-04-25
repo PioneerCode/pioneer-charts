@@ -8,6 +8,7 @@ import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
 import { transition } from 'd3-transition';
+import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
@@ -76,6 +77,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       yScale: this.yScale
     });
     this.drawLineArea(config);
+    this.drawEffects(config);
     this.drawDots(config);
   }
 
@@ -120,7 +122,23 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .attr('d', this.area as any);  // TODO: strongly type
   }
 
+  private drawEffects(config: IPcacLineAreaChartConfig) {
+    if (config.enableEffects) {
+      const effectsBuilder = new LineAreaChartEffectsBuilder();
+      effectsBuilder.buildEffects({
+        svg: this.svg,
+        height: this.height,
+        width: this.width,
+        data: config.data,
+        colors: this.colors,
+        x: this.xScale,
+        y: this.yScale
+      });
+    }
+  }
+
   private drawDots(config: IPcacLineAreaChartConfig): void {
+    const self = this;
     for (let index = 0; index < config.data.length; index++) {
       this.svg.append('g')
         .attr('class', 'dots')
@@ -136,6 +154,21 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         })
         .attr('cy', (d: IPcacData) => {
           return this.yScale(0);
+        })
+        .attr('fill', '#fff')
+        .on('mousemove', function (d: IPcacData) {
+          self.tooltipBuilder.showBarTooltip(d);
+          select(this).transition(transition()
+            .duration(self.transitionService.getTransitionDuration() / 3))
+            .attr('r', 6)
+            .attr('fill', self.colors[index]);
+        })
+        .on('mouseout', function () {
+          self.tooltipBuilder.hideTooltip();
+          select(this).transition(transition()
+            .duration(self.transitionService.getTransitionDuration() / 3))
+            .attr('r', 4)
+            .attr('fill', '#fff');
         })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))

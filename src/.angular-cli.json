@@ -13,7 +13,7 @@
         "favicon.ico",
         "CNAME",
         "404.html",
-        "assets/logo.svg"
+        "../../assets"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -41,7 +41,8 @@
         "assets",
         "favicon.ico",
         "CNAME",
-        "404.html"
+        "404.html",
+        "../../assets"
       ],
       "index": "index.html",
       "main": "main.ts",

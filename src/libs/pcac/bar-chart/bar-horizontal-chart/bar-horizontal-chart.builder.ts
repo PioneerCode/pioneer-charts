@@ -1,10 +1,13 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { select, selection } from 'd3-selection';
-import { PcacChart } from '../../core/chart';
-import { scaleBand, scaleLinear } from 'd3-scale';
-import { IPcacData } from '../../core/chart.model';
+
 import { transition } from 'd3-transition';
+import { color } from 'd3-color';
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { select, selection } from 'd3-selection';
+
+import { PcacChart } from '../../core/chart';
+import { IPcacData } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
 
 @Injectable()
@@ -63,6 +66,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private addBars(config: IPcacBarHorizontalChartConfig) {
+    const self = this;
     this.svg.append('g')
       .attr('class', 'pcac-bar-groups')
       .selectAll('g')
@@ -85,11 +89,17 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return this.colors[i];
       })
       .attr('width', 0)
-      .on('mousemove', (d: IPcacData) => {
-        this.tooltipBuilder.showBarTooltip(d);
+      .on('mouseover', function (d: IPcacData, i: number) {
+        self.tooltipBuilder.showBarTooltip(d);
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 7.5))
+          .style('fill', color(self.colors[i]).darker(1).toString());
       })
-      .on('mouseout', () => {
-        this.tooltipBuilder.hideTooltip();
+      .on('mouseout', function (d: IPcacData, i: number) {
+        self.tooltipBuilder.hideTooltip();
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 5))
+          .style('fill', self.colors[i]);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))

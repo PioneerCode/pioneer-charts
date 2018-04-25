@@ -25,7 +25,6 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private arcShape: Arc<any, DefaultArcObject>;
   private arcOverShape: Arc<any, DefaultArcObject>;
   private pieAngles: Pie<any, number | {}>;
-  private radiusOffset = 10;
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -35,13 +34,15 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   }
 
   private buildShapes(config: IPcacPieChartConfig): void {
+    const radiusOffset = 10;
+
     this.arcShape = arc()
       .innerRadius(0)
-      .outerRadius(this.radius - this.radiusOffset);
+      .outerRadius(this.radius - radiusOffset);
 
     this.arcOverShape = arc()
       .innerRadius(0)
-      .outerRadius(this.radius - this.radiusOffset + this.radiusOffset);
+      .outerRadius(this.radius - radiusOffset + radiusOffset);
 
     this.pieAngles = pie()
       .sort(null)
@@ -59,7 +60,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .style('fill', (d: any, i: number) => {  // TODO: Strongly type
         return this.colors[i];
       })
-      .on('mousemove', function (d: any) {  // TODO: Strongly type
+      .on('mouseover', function (d: any) {  // TODO: Strongly type
         self.tooltipBuilder.showBarTooltip(d);
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))

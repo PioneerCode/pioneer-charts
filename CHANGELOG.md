@@ -1,14 +1,29 @@
-<a name="6.0.0"></a>
-# [v0.5](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.6.0) (2018-05-23)
+<a name="0.7.0"></a>
+# [v0.7](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.7.0) (2018-05-25)
+
+### Features
+
+- Add tooltips on value hovers. 
+  - Pie Chart
+  - Bar Chart (Horizontal and Vertical)
+  - Line Area Chart
+- Add continuous value UX effects to line-area-chart.
+- Add hover UI indicators on pie chart and bar chart.
+
+For details on features included, visit the [v0.7](https://github.com/PioneerCode/pioneer-charts/milestone/2?closed=1) milestone.
+
+
+<a name="0.6.0"></a>
+# [v0.6](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.6.0) (2018-05-23)
 
 ### Features
 
 - OnInit load animations for Bar Chart (Horizontal & Vertical), Line Area Chart, and Pie Chart.
 
-For details on features included, visit the [v0.6](https://github.com/PioneerCode/pioneer-charts/milestone/8) milestone.
+For details on features included, visit the [v0.6](https://github.com/PioneerCode/pioneer-charts/milestone/8?closed=1) milestone.
 
 
-<a name="5.0.0"></a>
+<a name="0.5.0"></a>
 # [v0.5](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.5.0) (2018-04-17)
 
 ### First Release Of Pioneer Charts!

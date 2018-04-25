@@ -1,10 +1,13 @@
 import { Injectable, ElementRef } from '@angular/core';
+
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { select, selection, } from 'd3-selection';
 import { PcacChart } from '../../core/chart';
-import { scaleBand, scaleLinear } from 'd3-scale';
-import { transition } from 'd3-transition';
 import { IPcacData } from '../../core/chart.model';
+
+import { select, selection, } from 'd3-selection';
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { color } from 'd3-color';
+import { transition } from 'd3-transition';
 
 export interface IBarVerticalChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void;
@@ -52,6 +55,7 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private addBars(config: IPcacBarVerticalChartConfig) {
+    const self = this;
     this.svg.append('g')
       .attr('class', 'pc-bars')
       .selectAll('g')
@@ -79,11 +83,17 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
-      .on('mousemove', (d: IPcacData) => {
-        this.tooltipBuilder.showBarTooltip(d);
+      .on('mouseover', function (d: IPcacData, i: number) {
+        self.tooltipBuilder.showBarTooltip(d);
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 5))
+          .style('fill', color(self.colors[i]).darker(1).toString());
       })
-      .on('mouseout', () => {
-        this.tooltipBuilder.hideTooltip();
+      .on('mouseout', function (d: IPcacData, i: number) {
+        self.tooltipBuilder.hideTooltip();
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 5))
+          .style('fill', self.colors[i]);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))

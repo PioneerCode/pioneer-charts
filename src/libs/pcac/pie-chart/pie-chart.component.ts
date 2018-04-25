@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 

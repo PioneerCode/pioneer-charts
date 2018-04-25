@@ -121,6 +121,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   }
 
   private drawDots(config: IPcacLineAreaChartConfig): void {
+    const self = this;
     for (let index = 0; index < config.data.length; index++) {
       this.svg.append('g')
         .attr('class', 'dots')
@@ -137,11 +138,17 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         .attr('cy', (d: IPcacData) => {
           return this.yScale(0);
         })
-        .on('mousemove', (d: IPcacData) => {
-          this.tooltipBuilder.showBarTooltip(d);
+        .on('mousemove', function (d: IPcacData) {
+          self.tooltipBuilder.showBarTooltip(d);
+          select(this).transition(transition()
+            .duration(self.transitionService.getTransitionDuration() / 3))
+            .attr('r', 6);
         })
-        .on('mouseout', () => {
-          this.tooltipBuilder.hideTooltip();
+        .on('mouseout', function () {
+          self.tooltipBuilder.hideTooltip();
+          select(this).transition(transition()
+            .duration(self.transitionService.getTransitionDuration() / 3))
+            .attr('r', 4);
         })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))

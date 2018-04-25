@@ -137,6 +137,12 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         .attr('cy', (d: IPcacData) => {
           return this.yScale(0);
         })
+        .on('mousemove', (d: IPcacData) => {
+          this.tooltipBuilder.showBarTooltip(d);
+        })
+        .on('mouseout', () => {
+          this.tooltipBuilder.hideTooltip();
+        })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))
         .attr('cy', (d: IPcacData) => {

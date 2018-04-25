@@ -1,11 +1,19 @@
 import { Injectable, ElementRef } from '@angular/core';
+
+/**
+ * D3
+ */
 import { arc, pie, DefaultArcObject, Arc, Pie } from 'd3-shape';
 import { select } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
+import { transition } from 'd3-transition';
+
+/**
+ * Lib
+ */
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
-import { transition } from 'd3-transition';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
@@ -17,6 +25,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private arcShape: Arc<any, DefaultArcObject>;
   private arcOverShape: Arc<any, DefaultArcObject>;
   private pieAngles: Pie<any, number | {}>;
+  private radiusOffset = 10;
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -28,11 +37,11 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private buildShapes(config: IPcacPieChartConfig): void {
     this.arcShape = arc()
       .innerRadius(0)
-      .outerRadius(this.radius - 10);
+      .outerRadius(this.radius - this.radiusOffset);
 
     this.arcOverShape = arc()
       .innerRadius(0)
-      .outerRadius(this.radius - 10 + 10);
+      .outerRadius(this.radius - this.radiusOffset + this.radiusOffset);
 
     this.pieAngles = pie()
       .sort(null)

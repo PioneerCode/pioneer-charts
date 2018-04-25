@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
 

@@ -1,14 +1,16 @@
 import { Injectable, ElementRef } from '@angular/core';
+
+import { IPcacLineAreaChartConfig } from './line-area-chart.model';
+import { PcacChart } from '../core/chart';
+import { IPcacData } from '../core/chart.model';
+import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
+
+import { transition } from 'd3-transition';
 import { select, selection } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { line, area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { range } from 'd3-array';
-import { IPcacLineAreaChartConfig } from './line-area-chart.model';
-import { PcacChart } from '../core/chart';
-import { IPcacData } from '../core/chart.model';
-import { transition } from 'd3-transition';
-import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;

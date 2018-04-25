@@ -18,6 +18,7 @@
         "polyfills",
         "prismjs",
         "ryancavanaugh",
-        "syntaxhighlighter"
+        "syntaxhighlighter",
+        "tooltips"
     ]
 }

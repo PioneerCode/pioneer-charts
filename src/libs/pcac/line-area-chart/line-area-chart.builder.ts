@@ -27,7 +27,6 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         key: ''
       };
     });
-    console.log(this.startData);
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);

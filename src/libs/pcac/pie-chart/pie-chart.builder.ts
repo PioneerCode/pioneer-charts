@@ -1,10 +1,19 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { arc, pie, DefaultArcObject } from 'd3-shape';
+
+/**
+ * D3
+ */
+import { arc, pie, DefaultArcObject, Arc, Pie } from 'd3-shape';
 import { select } from 'd3-selection';
+import { interpolate } from 'd3-interpolate';
+import { transition } from 'd3-transition';
+
+/**
+ * Lib
+ */
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
-import * as d3 from 'd3';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
@@ -13,8 +22,10 @@ export interface IPieChartBuilder {
 @Injectable()
 export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private radius: number;
-  private arcShape;   // TODO: Strongly type
-  private pieAngles;   // TODO: Strongly type
+  private arcShape: Arc<any, DefaultArcObject>;
+  private arcOverShape: Arc<any, DefaultArcObject>;
+  private pieAngles: Pie<any, number | {}>;
+  private radiusOffset = 10;
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -25,8 +36,12 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
   private buildShapes(config: IPcacPieChartConfig): void {
     this.arcShape = arc()
-      .outerRadius(this.radius - 10)
-      .innerRadius(0);
+      .innerRadius(0)
+      .outerRadius(this.radius - this.radiusOffset);
+
+    this.arcOverShape = arc()
+      .innerRadius(0)
+      .outerRadius(this.radius - this.radiusOffset + this.radiusOffset);
 
     this.pieAngles = pie()
       .sort(null)
@@ -35,29 +50,37 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
   private drawChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.buildContainer(chartElm, true);
+    const self = this;
     this.svg.selectAll('.pcac-arc')
       .data(this.pieAngles(config.data))
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .style('fill', (d: any, i: number) => {    // TODO: Strongly type
+      .style('fill', (d: any, i: number) => {  // TODO: Strongly type
         return this.colors[i];
       })
-      .transition()
-      .ease(d3.easeSin)
-      .duration(this.transitionService.getTransitionDuration())
-      .attrTween('d', (b: any) => {
-        return this.tweenChart(b);
+      .on('mousemove', function (d: any) {  // TODO: Strongly type
+        self.tooltipBuilder.showBarTooltip(d);
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 2))
+          .attr('d', self.arcOverShape);
       })
-      .transition()
-      .delay((d, i) => {
-        return i * 500;
+      .on('mouseout', function () {
+        self.tooltipBuilder.hideTooltip();
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 2))
+          .attr('d', self.arcShape);
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attrTween('d', (b: any) => {  // TODO: Strongly type
+        return this.tweenChart(b);
       });
   }
 
-  private tweenChart(b: any) {
+  private tweenChart(b: any) {  // TODO: Strongly type
     b.innerRadius = 0;
-    const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, b);
-    return (t: any) => this.arcShape(i(t));
+    const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
+    return (t: any) => this.arcShape(i(t));  // TODO: Strongly type
   }
 }

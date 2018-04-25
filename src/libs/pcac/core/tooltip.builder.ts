@@ -11,7 +11,7 @@ export interface IPcacTooltipBuilder {
 @Injectable()
 export class PcacTooltipBuilder implements IPcacTooltipBuilder {
 
-  tooltip = select('body').append('div').attr('class', 'pcac-d3-tooltip');
+  public tooltip = select('body').append('div').attr('class', 'pcac-d3-tooltip') as any; // TODO: Strongly type
 
   showBarTooltip(data: IPcacData, tickFormat?: string): void {
     this.tooltip.style('left', event.pageX - 50 + 'px')
@@ -25,7 +25,6 @@ export class PcacTooltipBuilder implements IPcacTooltipBuilder {
   }
 
   private getBarTipData(data: IPcacData, tickFormat: string): string {
-    console.log(data);
     let value = data.value.toString();
     switch (tickFormat) {
       case 'percentage':

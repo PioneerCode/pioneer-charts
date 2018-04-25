@@ -25,7 +25,6 @@ export class PcacTooltipBuilder implements IPcacTooltipBuilder {
   }
 
   private getBarTipData(data: IPcacData, tickFormat: string): string {
-    console.log(data);
     let value = data.value.toString();
     switch (tickFormat) {
       case 'percentage':

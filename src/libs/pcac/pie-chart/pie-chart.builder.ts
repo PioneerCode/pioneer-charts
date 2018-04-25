@@ -1,10 +1,11 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { arc, pie, DefaultArcObject } from 'd3-shape';
 import { select } from 'd3-selection';
+import { interpolate } from 'd3-interpolate';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
-import * as d3 from 'd3';
+import { transition } from 'd3-transition';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
@@ -40,16 +41,20 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .style('fill', (d: any, i: number) => {    // TODO: Strongly type
+      .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })
-      .transition()
-      .ease(d3.easeSin)
-      .duration(this.transitionService.getTransitionDuration())
+      .on('mousemove', (d: IPcacData) => {
+        this.tooltipBuilder.showBarTooltip(d);
+      })
+      .on('mouseout', () => {
+        this.tooltipBuilder.hideTooltip();
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
       .attrTween('d', (b: any) => {
         return this.tweenChart(b);
       })
-      .transition()
       .delay((d, i) => {
         return i * 500;
       });
@@ -57,7 +62,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
   private tweenChart(b: any) {
     b.innerRadius = 0;
-    const i = d3.interpolate({ startAngle: 0, endAngle: 0 }, b);
+    const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
     return (t: any) => this.arcShape(i(t));
   }
 }

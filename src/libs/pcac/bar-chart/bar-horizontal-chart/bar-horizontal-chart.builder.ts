@@ -89,10 +89,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return this.colors[i];
       })
       .attr('width', 0)
-      .on('mousemove', function (d: IPcacData, i: number) {
+      .on('mouseover', function (d: IPcacData, i: number) {
         self.tooltipBuilder.showBarTooltip(d);
         select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 10))
+          .duration(self.transitionService.getTransitionDuration() / 7.5))
           .style('fill', color(self.colors[i]).darker(1).toString());
       })
       .on('mouseout', function (d: IPcacData, i: number) {

@@ -158,7 +158,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
           return this.yScale(0);
         })
         .attr('fill', '#fff')
-        .on('mousemove', function (d: IPcacData) {
+        .on('mouseover', function (d: IPcacData) {
           self.tooltipBuilder.showBarTooltip(d);
           select(this).transition(transition()
             .duration(self.transitionService.getTransitionDuration() / 3))

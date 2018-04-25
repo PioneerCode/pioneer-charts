@@ -1,5 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { arc, pie, DefaultArcObject } from 'd3-shape';
+import { arc, pie, DefaultArcObject, Arc, Pie } from 'd3-shape';
 import { select } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
 import { IPcacPieChartConfig } from './pie-chart.model';
@@ -14,8 +14,9 @@ export interface IPieChartBuilder {
 @Injectable()
 export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private radius: number;
-  private arcShape;   // TODO: Strongly type
-  private pieAngles;   // TODO: Strongly type
+  private arcShape: Arc<any, DefaultArcObject>;
+  private arcOverShape: Arc<any, DefaultArcObject>;
+  private pieAngles: Pie<any, number | {}>;
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -26,8 +27,12 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
   private buildShapes(config: IPcacPieChartConfig): void {
     this.arcShape = arc()
-      .outerRadius(this.radius - 10)
-      .innerRadius(0);
+      .innerRadius(0)
+      .outerRadius(this.radius - 10);
+
+    this.arcOverShape = arc()
+      .innerRadius(0)
+      .outerRadius(this.radius - 10 + 10);
 
     this.pieAngles = pie()
       .sort(null)
@@ -36,33 +41,37 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
 
   private drawChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.buildContainer(chartElm, true);
+    const self = this;
     this.svg.selectAll('.pcac-arc')
       .data(this.pieAngles(config.data))
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .style('fill', (d: IPcacData, i: number) => {
+      .style('fill', (d: any, i: number) => {  // TODO: Strongly type
         return this.colors[i];
       })
-      .on('mousemove', (d: IPcacData) => {
-        this.tooltipBuilder.showBarTooltip(d);
+      .on('mousemove', function (d: any) {  // TODO: Strongly type
+        self.tooltipBuilder.showBarTooltip(d);
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 2))
+          .attr('d', self.arcOverShape);
       })
-      .on('mouseout', () => {
-        this.tooltipBuilder.hideTooltip();
+      .on('mouseout', function () {
+        self.tooltipBuilder.hideTooltip();
+        select(this).transition(transition()
+          .duration(self.transitionService.getTransitionDuration() / 2))
+          .attr('d', self.arcShape);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
-      .attrTween('d', (b: any) => {
+      .attrTween('d', (b: any) => {  // TODO: Strongly type
         return this.tweenChart(b);
-      })
-      .delay((d, i) => {
-        return i * 500;
       });
   }
 
-  private tweenChart(b: any) {
+  private tweenChart(b: any) {  // TODO: Strongly type
     b.innerRadius = 0;
     const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
-    return (t: any) => this.arcShape(i(t));
+    return (t: any) => this.arcShape(i(t));  // TODO: Strongly type
   }
 }

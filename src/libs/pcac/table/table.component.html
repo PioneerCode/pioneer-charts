@@ -2,13 +2,37 @@
   <table class="table">
     <thead>
       <tr>
-        <th *ngFor="let header of config?.data[0].data">{{header.value}}</th>
+        <th *ngFor="let header of config?.data[0].data">
+          <!-- <i [ngClass]="data.iconName"></i> -->
+          {{header.value}}
+        </th>
       </tr>
     </thead>
-    <tbody>
-      <tr *ngFor="let row of config?.data | slice:1">
+    <tbody #tableBody>
+      <tr *ngFor="let row of config?.data | slice:1" #rows>
         <td *ngFor="let cell of row.data">{{cell.value}}</td>
       </tr>
     </tbody>
   </table>
+  <div *ngIf="config?.enableSticky" class="header">
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let header of config?.data[0].data; let i = index" class="sortable" [style.width.px]="columnWidths[i]">
+            <!-- <i [ngClass]="data.iconName"></i> -->
+            {{header.value}}
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div *ngIf="config?.enableSticky" class="footer" #tableFooter>
+    <table>
+      <tfoot>
+        <tr>
+          <td *ngFor="let data of config?.data[config?.data.length - 1].data; let i = index" [style.width.px]="columnWidths[i]" class="sticky-resize">{{data.value}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </section>

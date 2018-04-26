@@ -2,14 +2,14 @@
   <table class="table">
     <thead>
       <tr>
-        <th *ngFor="let header of headers">
+        <th *ngFor="let header of headers" (click)="sortTable(i)">
           <i [ngClass]="header.icon"></i>
           {{header.value}}
         </th>
       </tr>
     </thead>
     <tbody #tableBody>
-      <tr *ngFor="let row of config?.data | slice:1" #rows>
+      <tr *ngFor="let row of rowData" #rows>
         <td *ngFor="let cell of row.data">{{cell.value}}</td>
       </tr>
     </tbody>

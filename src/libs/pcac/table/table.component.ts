@@ -8,16 +8,18 @@ import {
   ViewChild,
   ChangeDetectorRef,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  OnInit
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
+import { IPcacData } from 'dist/bundles/@pioneer-code/pioneer-charts/core';
 
 @Component({
   selector: 'pcac-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class PcacTableComponent implements OnChanges, AfterViewInit {
+export class PcacTableComponent implements OnChanges, AfterViewInit, OnInit {
   @Input() config = { height: 240 } as IPcacTableConfig;
   @ViewChild('tableBody') tableBody: ElementRef;
   @ViewChild('tableFooter') tableFooter: ElementRef;
@@ -27,8 +29,13 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   rowHeight: number;
   footerHeight: number;
   headers = [] as IPcacTableHeader[];
+  rowData = [] as IPcacData[];
 
   constructor(private changeDetector: ChangeDetectorRef) {
+
+  }
+
+  ngOnInit() {
 
   }
 
@@ -42,12 +49,20 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges) {
     if (this.config) {
       this.config.height = this.config.height + 36;
-      this.setHeaderIcons();
       this.calculateColumnWidths();
+      this.setHeaders();
+      this.setRows();
     }
   }
 
-  private setHeaderIcons(): void {
+  sortTable(columnIndex: number) {
+    const direction = this.headers[columnIndex].icon === PcacTableSortIconsEnum.SortAsc ?
+      PcacTableSortIconsEnum.SortDesc :
+      PcacTableSortIconsEnum.SortAsc;
+    // this.tableChartSortService.sort(this.config.data, index, direction);
+  }
+
+  private setHeaders(): void {
     for (let i = 0; i < this.config.data[0].data.length; i++) {
       this.headers.push({
         key: this.config.data[0].data[i].key,
@@ -55,6 +70,10 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
         icon: PcacTableSortIconsEnum.Sort
       } as IPcacTableHeader);
     }
+  }
+
+  private setRows(): void {
+    this.rowData = JSON.parse(JSON.stringify(this.config.data)).slice(1);
   }
 
   private calculateColumnWidths(): void {

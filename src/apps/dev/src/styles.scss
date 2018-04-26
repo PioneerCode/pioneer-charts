@@ -1,6 +1,7 @@
 @import 'imports';
 @import '../../../libs/pcac/pcac';
-
+$fa-font-path: "./assets/fonts" !default;
+@import '../../../node_modules/font-awesome/scss/font-awesome.scss';
 .pc-chart-container {
     padding: 1rem;
     background: color("white");

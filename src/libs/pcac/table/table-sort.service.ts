@@ -16,7 +16,6 @@ export class TableSortService implements ITableSortService {
 
   sort(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
     if (!data) { return; }
-    // this.clearStateExceptCurrent(data, columnIndex);
     this.sortData(data, columnIndex, direction);
     // this.setNewIcon(data, columnIndex, direction);
   }
@@ -53,18 +52,4 @@ export class TableSortService implements ITableSortService {
     // equal each other
     return 0;
   }
-
-  // private clearStateExceptCurrent(data: IPcacData[], columnIndex: number): void {
-  //   for (let i = 0; i < data.headers.length; i++) {
-  //     if (i !== columnIndex) {
-  //       data.headers[i].iconName = PcacTableSortIconsEnum.Sort;
-  //     }
-  //   }
-  // }
-
-  // private setNewIcon(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
-  //   data.headers[columnIndex].iconName = direction === PcacTableSortIconsEnum.SortAsc
-  //     ? PcacTableSortIconsEnum.SortAsc
-  //     : PcacTableSortIconsEnum.SortDesc;
-  // }
 }

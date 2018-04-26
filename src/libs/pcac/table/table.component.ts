@@ -22,7 +22,7 @@ import { TableSortService } from './table-sort.service';
     TableSortService
   ]
 })
-export class PcacTableComponent implements OnChanges, AfterViewInit{
+export class PcacTableComponent implements OnChanges, AfterViewInit {
   @Input() config = { height: 240 } as IPcacTableConfig;
   @ViewChild('tableBody') tableBody: ElementRef;
   @ViewChild('tableFooter') tableFooter: ElementRef;
@@ -61,7 +61,23 @@ export class PcacTableComponent implements OnChanges, AfterViewInit{
     const direction = this.headers[columnIndex].icon === PcacTableSortIconsEnum.SortAsc ?
       PcacTableSortIconsEnum.SortDesc :
       PcacTableSortIconsEnum.SortAsc;
+    this.clearStateExceptCurrent(columnIndex);
     this.sortService.sort(this.rowData, columnIndex, direction);
+    this.setNewIcon(columnIndex, direction);
+  }
+
+  private clearStateExceptCurrent(columnIndex: number): void {
+    for (let i = 0; i < this.headers.length; i++) {
+      if (i !== columnIndex) {
+        this.headers[i].icon = PcacTableSortIconsEnum.Sort;
+      }
+    }
+  }
+
+  private setNewIcon(columnIndex: number, direction: PcacTableSortIconsEnum): void {
+    this.headers[columnIndex].icon = direction === PcacTableSortIconsEnum.SortAsc
+      ? PcacTableSortIconsEnum.SortAsc
+      : PcacTableSortIconsEnum.SortDesc;
   }
 
   private setHeaders(): void {

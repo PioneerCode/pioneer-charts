@@ -2,8 +2,8 @@
   <table class="table">
     <thead>
       <tr>
-        <th *ngFor="let header of config?.data[0].data">
-          <!-- <i [ngClass]="data.iconName"></i> -->
+        <th *ngFor="let header of headers">
+          <i [ngClass]="header.icon"></i>
           {{header.value}}
         </th>
       </tr>
@@ -18,8 +18,8 @@
     <table>
       <thead>
         <tr>
-          <th *ngFor="let header of config?.data[0].data; let i = index" class="sortable" [style.width.px]="columnWidths[i]">
-            <!-- <i [ngClass]="data.iconName"></i> -->
+          <th *ngFor="let header of headers; let i = index" class="sortable" [style.width.px]="columnWidths[i]">
+           <i [ngClass]="header.icon"></i>
             {{header.value}}
           </th>
         </tr>

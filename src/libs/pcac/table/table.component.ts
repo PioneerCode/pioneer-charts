@@ -10,7 +10,7 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { IPcacTableConfig } from './table.model';
+import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
 
 @Component({
   selector: 'pcac-table',
@@ -26,6 +26,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   columnWidths = [] as number[];
   rowHeight: number;
   footerHeight: number;
+  headers = [] as IPcacTableHeader[];
 
   constructor(private changeDetector: ChangeDetectorRef) {
 
@@ -41,7 +42,18 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges) {
     if (this.config) {
       this.config.height = this.config.height + 36;
+      this.setHeaderIcons();
       this.calculateColumnWidths();
+    }
+  }
+
+  private setHeaderIcons(): void {
+    for (let i = 0; i < this.config.data[0].data.length; i++) {
+      this.headers.push({
+        key: this.config.data[0].data[i].key,
+        value: this.config.data[0].data[i].value,
+        icon: PcacTableSortIconsEnum.Sort
+      } as IPcacTableHeader);
     }
   }
 

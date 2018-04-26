@@ -22,14 +22,14 @@ pcac-table {
     table thead,
     table tbody,
     table tfoot {
-        background-color: #fefefe;
+        background-color: $white;
     }
     table caption {
         padding: 0.5rem 0.625rem 0.625rem;
         font-weight: bold;
     }
     table thead {
-        background: #f8f8f8;
+        background: $gray-100;
         color: map-get($theme-colors, "primary");
     }
     table tfoot {
@@ -47,6 +47,7 @@ pcac-table {
         padding: 0.5rem 0.625rem 0.625rem;
         font-weight: bold;
         text-align: left;
+
     }
     table tbody th,
     table tbody td {
@@ -63,6 +64,14 @@ pcac-table {
     .footer {
         position: absolute;
         bottom: 0;
+    }
+    table thead th {
+      cursor: pointer;
+      transition: background-color 0.25s;
+      &:hover {
+        transition: background-color 0.25s;
+        background-color: $gray-200;
+      }
     }
 }
 

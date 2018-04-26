@@ -40,7 +40,6 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   ) {
   }
 
-
   ngAfterViewInit() {
     // @ngFor rows finished
     this.rows.changes.subscribe(t => {
@@ -51,35 +50,33 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges) {
     if (this.config) {
       this.config.height = this.config.height + 36;
-      this.calculateColumnWidths();
+      if (this.config.enableSticky) {
+        this.calculateColumnWidths();
+      }
       this.setHeaders();
       this.setRows();
     }
   }
 
-  sortTable(columnIndex: number) {
-    const direction = this.headers[columnIndex].icon === PcacTableSortIconsEnum.SortAsc ?
-      PcacTableSortIconsEnum.SortDesc :
-      PcacTableSortIconsEnum.SortAsc;
-    this.clearStateExceptCurrent(columnIndex);
-    this.sortService.sort(this.rowData, columnIndex, direction);
-    this.setNewIcon(columnIndex, direction);
-  }
-
-  private clearStateExceptCurrent(columnIndex: number): void {
-    for (let i = 0; i < this.headers.length; i++) {
-      if (i !== columnIndex) {
-        this.headers[i].icon = PcacTableSortIconsEnum.Sort;
+  /**
+   * When dealing with sticky header/footer, we need to calc widths of absolute positioned
+   * table columns.
+   */
+  private calculateColumnWidths(): void {
+    if (this.tableBody.nativeElement.rows[0]) {
+      const cells = this.tableBody.nativeElement.rows[0].cells;
+      this.columnWidths = [] as number[];
+      for (let i = 0; i < cells.length; i++) {
+        this.columnWidths.push(cells[i].clientWidth);
       }
+      // https://stackoverflow.com/questions/44922384/angular4-change-detection-expressionchangedafterithasbeencheckederror
+      this.changeDetector.detectChanges();
     }
   }
 
-  private setNewIcon(columnIndex: number, direction: PcacTableSortIconsEnum): void {
-    this.headers[columnIndex].icon = direction === PcacTableSortIconsEnum.SortAsc
-      ? PcacTableSortIconsEnum.SortAsc
-      : PcacTableSortIconsEnum.SortDesc;
-  }
-
+  /**
+   * Set internal cache of headers to ease template manipulation and apply icon
+   */
   private setHeaders(): void {
     for (let i = 0; i < this.config.data[0].data.length; i++) {
       this.headers.push({
@@ -90,21 +87,30 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  /**
+   * Deep copy of rows to ease template manipulation and sorting
+   */
   private setRows(): void {
     this.rowData = JSON.parse(JSON.stringify(this.config.data)).slice(1);
   }
 
-  private calculateColumnWidths(): void {
-    // const el = this.tableBody.nativeElement;
-    if (this.tableBody.nativeElement.rows[0]) {
-      const cells = this.tableBody.nativeElement.rows[0].cells;
-      this.columnWidths = [] as number[];
-      for (let i = 0; i < cells.length; i++) {
-        this.columnWidths.push(cells[i].clientWidth);
+  /**
+   * On header click, sort column.
+   */
+  sortTable(columnIndex: number) {
+    const direction = this.headers[columnIndex].icon === PcacTableSortIconsEnum.SortAsc ?
+      PcacTableSortIconsEnum.SortDesc :
+      PcacTableSortIconsEnum.SortAsc;
+    this.clearStateExceptCurrent(columnIndex);
+    this.sortService.sort(this.rowData, columnIndex, direction);
+    this.headers[columnIndex].icon = direction;
+  }
+
+  private clearStateExceptCurrent(columnIndex: number): void {
+    for (let i = 0; i < this.headers.length; i++) {
+      if (i !== columnIndex) {
+        this.headers[i].icon = PcacTableSortIconsEnum.Sort;
       }
-      // https://stackoverflow.com/questions/44922384/angular4-change-detection-expressionchangedafterithasbeencheckederror
-      // this.footerHeight = this.tableFooter.nativeElement.clientHeight;
-      this.changeDetector.detectChanges();
     }
   }
 }

@@ -18,7 +18,7 @@
     <table>
       <thead>
         <tr>
-          <th *ngFor="let header of headers; let i = index" class="sortable" [style.width.px]="columnWidths[i]">
+          <th *ngFor="let header of headers; let i = index" class="sortable" [style.width.px]="columnWidths[i]" (click)="sortTable(i)">
            <i [ngClass]="header.icon"></i>
             {{header.value}}
           </th>

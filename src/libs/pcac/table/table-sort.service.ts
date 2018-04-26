@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PcacTableSortIconsEnum } from './table.model';
+import { IPcacData } from '../core/chart.model';
 
 /**
  * ASC/DESC data sorting
@@ -7,24 +8,24 @@ import { PcacTableSortIconsEnum } from './table.model';
   *  each array of data also has a kpi type so we can sort various ways
  */
 export interface ITableSortService {
-  sort(data: ITableData, columnIndex: number, direction: PcacTableSortIconsEnum): void;
+  sort(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void;
 }
 
 @Injectable()
 export class TableSortService implements ITableSortService {
 
-  sort(data: ITableData, columnIndex: number, direction: PcacTableSortIconsEnum): void {
+  sort(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
     if (!data) { return; }
-    this.clearStateExceptCurrent(data, columnIndex);
+    // this.clearStateExceptCurrent(data, columnIndex);
     this.sortData(data, columnIndex, direction);
-    this.setNewIcon(data, columnIndex, direction);
+    // this.setNewIcon(data, columnIndex, direction);
   }
 
-  private sortData(data: ITableData, columnIndex: number, direction: PcacTableSortIconsEnum): void {
-    data.rows.sort((a, b) => {
+  private sortData(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
+    data.sort((a, b) => {
       const comparison = (direction === PcacTableSortIconsEnum.SortAsc)
-        ? -this.orderByComparer(a[columnIndex].value, b[columnIndex].value)
-        : this.orderByComparer(a[columnIndex].value, b[columnIndex].value);
+        ? -this.orderByComparer(a.data[columnIndex].value, b.data[columnIndex].value)
+        : this.orderByComparer(a.data[columnIndex].value, b.data[columnIndex].value);
 
       if (comparison !== 0) {
         return comparison;
@@ -53,17 +54,17 @@ export class TableSortService implements ITableSortService {
     return 0;
   }
 
-  private clearStateExceptCurrent(data: ITableData, columnIndex: number): void {
-    for (let i = 0; i < data.headers.length; i++) {
-      if (i !== columnIndex) {
-        data.headers[i].iconName = PcacTableSortIconsEnum.Sort;
-      }
-    }
-  }
+  // private clearStateExceptCurrent(data: IPcacData[], columnIndex: number): void {
+  //   for (let i = 0; i < data.headers.length; i++) {
+  //     if (i !== columnIndex) {
+  //       data.headers[i].iconName = PcacTableSortIconsEnum.Sort;
+  //     }
+  //   }
+  // }
 
-  private setNewIcon(data: ITableData, columnIndex: number, direction: PcacTableSortIconsEnum): void {
-    data.headers[columnIndex].iconName = direction === PcacTableSortIconsEnum.SortAsc
-      ? PcacTableSortIconsEnum.SortAsc
-      : PcacTableSortIconsEnum.SortDesc;
-  }
+  // private setNewIcon(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
+  //   data.headers[columnIndex].iconName = direction === PcacTableSortIconsEnum.SortAsc
+  //     ? PcacTableSortIconsEnum.SortAsc
+  //     : PcacTableSortIconsEnum.SortDesc;
+  // }
 }

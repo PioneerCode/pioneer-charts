@@ -8,18 +8,21 @@ import {
   ViewChild,
   ChangeDetectorRef,
   QueryList,
-  ViewChildren,
-  OnInit
+  ViewChildren
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
 import { IPcacData } from 'dist/bundles/@pioneer-code/pioneer-charts/core';
+import { TableSortService } from './table-sort.service';
 
 @Component({
   selector: 'pcac-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  styleUrls: ['./table.component.scss'],
+  providers: [
+    TableSortService
+  ]
 })
-export class PcacTableComponent implements OnChanges, AfterViewInit, OnInit {
+export class PcacTableComponent implements OnChanges, AfterViewInit{
   @Input() config = { height: 240 } as IPcacTableConfig;
   @ViewChild('tableBody') tableBody: ElementRef;
   @ViewChild('tableFooter') tableFooter: ElementRef;
@@ -31,13 +34,12 @@ export class PcacTableComponent implements OnChanges, AfterViewInit, OnInit {
   headers = [] as IPcacTableHeader[];
   rowData = [] as IPcacData[];
 
-  constructor(private changeDetector: ChangeDetectorRef) {
-
+  constructor(
+    private sortService: TableSortService,
+    private changeDetector: ChangeDetectorRef
+  ) {
   }
 
-  ngOnInit() {
-
-  }
 
   ngAfterViewInit() {
     // @ngFor rows finished
@@ -59,7 +61,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit, OnInit {
     const direction = this.headers[columnIndex].icon === PcacTableSortIconsEnum.SortAsc ?
       PcacTableSortIconsEnum.SortDesc :
       PcacTableSortIconsEnum.SortAsc;
-    // this.tableChartSortService.sort(this.config.data, index, direction);
+    this.sortService.sort(this.rowData, columnIndex, direction);
   }
 
   private setHeaders(): void {

@@ -61,10 +61,12 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
         return this.colors[i];
       })
       .on('mouseover', function (d: any) {  // TODO: Strongly type
-        self.tooltipBuilder.showBarTooltip(d);
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcOverShape);
+      })
+      .on('mousemove', function (d: any) {  // TODO: Strongly type
+        self.tooltipBuilder.showBarTooltip(d);
       })
       .on('mouseout', function () {
         self.tooltipBuilder.hideTooltip();

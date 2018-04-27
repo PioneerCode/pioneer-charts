@@ -4,13 +4,14 @@
 ### Features
 
 - Add option to enable sticky footer/header on table.
-- Add ability to sort able by column 
+- Add ability to sort able by column.
 
 ### Fixes
 
 - Activate tooltip on mouse move instead of mouse over event.
   - pie-chart
   - bar-chart(s)
+- Change selected SVG display types to block in order to remove extra padding applied at base of SVG.
 
 For details on features included, visit the [v0.8](https://github.com/PioneerCode/pioneer-charts/milestone/2?closed=1) milestone.
 

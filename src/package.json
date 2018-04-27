@@ -28,7 +28,7 @@
     "ng": "ng",
     "start": "ng serve --app=dev",
     "build:dev": "npm run build:lib && ng build --aot --app=dev",
-    "start:docs": "ng serve --app=docs",
+    "start:docs": "ng serve --app=docs --port 4201",
     "build:docs": "ng build --prod --app=docs",
     "build:docs:404": "node ./build/404.js",
     "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:docs:404",

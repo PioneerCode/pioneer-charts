@@ -11,8 +11,8 @@ import {
   ViewChildren
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
-import { IPcacData } from 'dist/bundles/@pioneer-code/pioneer-charts/core';
 import { TableSortService } from './table-sort.service';
+import { IPcacData } from '../core/chart.model';
 
 @Component({
   selector: 'pcac-table',

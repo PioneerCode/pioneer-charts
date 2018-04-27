@@ -2,11 +2,6 @@ import { Injectable } from '@angular/core';
 import { PcacTableSortIconsEnum } from './table.model';
 import { IPcacData } from '../core/chart.model';
 
-/**
- * ASC/DESC data sorting
- * 3 sort states - UN-SORTED, ASC, and DESC for icons only
-  *  each array of data also has a kpi type so we can sort various ways
- */
 export interface ITableSortService {
   sort(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void;
 }
@@ -15,9 +10,9 @@ export interface ITableSortService {
 export class TableSortService implements ITableSortService {
 
   sort(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {
-    if (!data) { return; }
-    this.sortData(data, columnIndex, direction);
-    // this.setNewIcon(data, columnIndex, direction);
+    if (data) {
+      this.sortData(data, columnIndex, direction);
+    }
   }
 
   private sortData(data: IPcacData[], columnIndex: number, direction: PcacTableSortIconsEnum): void {

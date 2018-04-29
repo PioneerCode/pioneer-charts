@@ -9,8 +9,7 @@ import {
 
 @Component({
   selector: 'pc-prism',
-  template: ``,
-  styleUrls: ['./prism.component.scss']
+  template: ``
 })
 export class PrismComponent implements OnChanges {
   @Input() code: string;

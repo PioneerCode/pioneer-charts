@@ -33,7 +33,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   footerHeight: number;
   headers = [] as IPcacTableHeader[];
   rowData = [] as IPcacData[];
-
+  adjustedHeight = 200;
   constructor(
     private sortService: TableSortService,
     private changeDetector: ChangeDetectorRef
@@ -41,6 +41,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.initTableUi();
     // @ngFor rows finished
     this.rows.changes.subscribe(t => {
       if (this.config.enableSticky) {
@@ -50,8 +51,12 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.initTableUi();
+  }
+
+  private initTableUi() {
     if (this.config && this.config.data) {
-      this.config.height = this.config.height + 36;
+      this.adjustedHeight = this.config.height + 36;
       if (this.config.enableSticky) {
         this.calculateColumnWidths();
       }

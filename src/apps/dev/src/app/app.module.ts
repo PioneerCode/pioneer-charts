@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { PcRepository } from './repository/pc.repository';
 import { PcService } from './services/pc.service';
 import { ChartsComponent } from './pages/charts/charts.component';
+import { TestComponent } from './pages/test/test.component';
 
 /**
  * Pioneer Charts
@@ -24,13 +25,16 @@ import {
 } from '@pioneer-code/pioneer-charts';
 
 const appRoutes: Routes = [
-  { path: '**', component: ChartsComponent }
+  { path: '', redirectTo: 'charts', pathMatch: 'full'},
+  { path: 'charts', component: ChartsComponent },
+  { path: 'test', component: TestComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChartsComponent
+    ChartsComponent,
+    TestComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

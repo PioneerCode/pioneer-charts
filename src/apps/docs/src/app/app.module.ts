@@ -53,6 +53,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { DocNavComponent } from './components/doc-nav/dov-nav.component';
 
 /**
+ * Pipes
+ */
+import { StringifyPipe } from './pipes/stringify.pipe';
+
+/**
  * Pioneer Charts
  */
 import {
@@ -99,7 +104,8 @@ const appRoutes: Routes = [
     ThemeComponent,
     DataContractComponent,
     PublicComponent,
-    JumpNavComponent
+    JumpNavComponent,
+    StringifyPipe
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

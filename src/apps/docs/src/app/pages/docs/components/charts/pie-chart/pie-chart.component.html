@@ -19,6 +19,10 @@
         <h3>API</h3>
         <pc-prism language="javascript" [code]="importCode"></pc-prism>
         <pc-base-config></pc-base-config>
+        <h3 id="contract">Contract</h3>
+        <div class="pc-config-container">
+          <pc-prism language="json" [code]="pcService.pieChartConfig | stringify"></pc-prism>
+        </div>
       </div>
     </div>
   </div>

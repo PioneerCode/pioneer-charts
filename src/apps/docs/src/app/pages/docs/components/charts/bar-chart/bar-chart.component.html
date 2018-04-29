@@ -39,6 +39,21 @@
             </tr>
           </tbody>
         </pc-base-config>
+        <h3 id="contract">Contract</h3>
+        <div class="row">
+          <div class="col-sm">
+            <h5>Horizontal</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcacService.barHorizontalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
+          <div class="col-sm">
+            <h5>Vertical</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcacService.barVerticalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

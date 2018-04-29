@@ -44,6 +44,10 @@
             </tr>
           </tbody>
         </pc-base-config>
+        <h3 id="contract">Contract</h3>
+        <div class="pc-config-container">
+          <pc-prism language="json" [code]="pcacService.areaChartConfig | stringify"></pc-prism>
+        </div>
       </div>
     </div>
   </div>

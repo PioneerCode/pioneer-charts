@@ -43,7 +43,9 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   ngAfterViewInit() {
     // @ngFor rows finished
     this.rows.changes.subscribe(t => {
-      this.calculateColumnWidths();
+      if (this.config.enableSticky) {
+        this.calculateColumnWidths();
+      }
     });
   }
 

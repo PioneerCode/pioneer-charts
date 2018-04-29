@@ -55,7 +55,7 @@ this.colors = this.colorService.getColorScale(config.data.length);
 })
 ...`;
   importColorService = `import { Component, OnInit } from '@angular/core';
-import { PcacColorService } from 'libs/pcac/core';
+import { PcacColorService } from '@pioneer-code/pioneer-charts';;
 
 @Component({
   selector: 'app-root',
@@ -64,6 +64,6 @@ import { PcacColorService } from 'libs/pcac/core';
 })
 export class AppComponent implements OnInit {
   constructor(public colorService: PcacColorService) { }
-  ...
+  this.colorService.setScale([...]);
 }`;
 }

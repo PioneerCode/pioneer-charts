@@ -1,10 +1,13 @@
-<a name="0.8.0"></a>
-# [v0.8](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.0) (2018-05-27)
+<a name="0.8.2"></a>
+# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.1) (2018-05-29)
 
-### Features
+### Fixes
 
-- Add option to enable sticky footer/header on table.
-- Add ability to sortable by column.
+- Table
+  - Clear header cache on re-int of UI.
+  - Scoped margin style.
+  - Check for UI build when no data is present.
+  - Width calc on router switch.
 
 ### Fixes
 

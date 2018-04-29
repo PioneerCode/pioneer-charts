@@ -78,6 +78,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
    * Set internal cache of headers to ease template manipulation and apply icon
    */
   private setHeaders(): void {
+    this.headers = [] as IPcacTableHeader[];
     for (let i = 0; i < this.config.data[0].data.length; i++) {
       this.headers.push({
         key: this.config.data[0].data[i].key,

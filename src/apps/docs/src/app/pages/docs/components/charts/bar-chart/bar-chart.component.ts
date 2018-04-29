@@ -42,6 +42,11 @@ export class BarChartComponent {
       key: 'Configuration',
       value: 'configuration',
       level: JumpNavLevel.h3
+    },
+    {
+      key: 'Contract',
+      value: 'contract',
+      level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
 

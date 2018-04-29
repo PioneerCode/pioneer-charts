@@ -10,6 +10,14 @@ $fa-font-path: "./assets/fonts" !default;
     display: inline-block;
 }
 
+.pc-config-container {
+    max-height: 400px;
+    overflow-y: auto;
+    .pc-prism {
+        margin: 0;
+    }
+}
+
 .pc-prism {
     margin: 0 0 1rem;
     display: inline-block;

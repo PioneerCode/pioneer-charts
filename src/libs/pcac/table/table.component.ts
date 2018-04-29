@@ -48,7 +48,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.config) {
+    if (this.config && this.config.data) {
       this.config.height = this.config.height + 36;
       if (this.config.enableSticky) {
         this.calculateColumnWidths();

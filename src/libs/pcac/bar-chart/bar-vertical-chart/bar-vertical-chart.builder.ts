@@ -38,7 +38,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.xScaleGrouped = scaleBand()
       .padding(0.05)
       .rangeRound([0, this.xScaleStacked.bandwidth()])
-      .domain(config.data[0].data.map((d) => d.key as string);
+      .domain(config.data[0].data.map((d) => d.key as string));
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {

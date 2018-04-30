@@ -13,7 +13,7 @@ import { PcacTransitionService } from '../../core/transition.service';
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: d3.ScaleLinear<number, number>;
-  private yScale: d3.ScaleBand<string>;
+  private yScaleStacked: d3.ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -39,28 +39,28 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .domain([0, config.domainMax])
       .range([0, this.width]);
 
-    this.yScale = scaleBand()
+    this.yScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
       .range([this.height, 0])
       .padding(0.1);
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScale);
+    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked);
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
       numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
-      yScale: this.yScale
+      yScale: this.yScaleStacked
     });
     this.gridBuilder.drawVerticalGrid({
       svg: this.svg,
       numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
-      yScale: this.yScale
+      yScale: this.yScaleStacked
     });
     this.addBars(config);
   }
@@ -73,7 +73,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .data(config.data)
       .enter().append('g')
       .attr('class', 'pcac-bar-group')
-      .attr('transform', (d) => 'translate(0,' + this.yScale(d.key as string) + ')')
+      .attr('transform', (d) => 'translate(0,' + this.yScaleStacked(d.key as string) + ')')
       .selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
@@ -82,9 +82,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
-        return this.yScale(d.key as string);
+        return this.yScaleStacked(d.key as string);
       })
-      .attr('height', this.yScale.bandwidth())
+      .attr('height', this.yScaleStacked.bandwidth())
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })

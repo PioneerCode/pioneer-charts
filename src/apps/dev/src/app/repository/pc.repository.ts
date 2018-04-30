@@ -26,7 +26,19 @@ export class PcRepository {
   }
 
   getBarVerticalChartGroup() {
-    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-group-chart.json');
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-vertical-chart-group.json');
+  }
+
+  getBarHorizontalChartGroup() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-chart-group.json');
+  }
+
+  getBarVerticalChartStacked() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-vertical-chart-stacked.json');
+  }
+
+  getBarHorizontalChartStacked() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-chart-stacked.json');
   }
 
   getLineChart() {

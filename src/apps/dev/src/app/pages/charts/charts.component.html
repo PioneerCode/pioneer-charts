@@ -3,6 +3,20 @@
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Stacked'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barHorizontalChartStackedConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Bar Horizontal Chart'}"></pcac-header>
           <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
         </div>

@@ -14,6 +14,7 @@ import { PcacTransitionService } from '../../core/transition.service';
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: d3.ScaleLinear<number, number>;
   private yScaleStacked: d3.ScaleBand<string>;
+  private yScaleGrouped: d3.ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -43,6 +44,11 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .domain(config.data.map((d) => d.key as string))
       .range([this.height, 0])
       .padding(0.1);
+
+    this.yScaleGrouped = scaleBand()
+      .padding(0.05)
+      .rangeRound([0, this.yScaleStacked.bandwidth()])
+      .domain(config.data[0].data.map((d) => d.key as string));
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
@@ -82,9 +88,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
-        return this.yScaleStacked(d.key as string);
+        return config.isGroup ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
       })
-      .attr('height', this.yScaleStacked.bandwidth())
+      .attr('height', config.isGroup ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })

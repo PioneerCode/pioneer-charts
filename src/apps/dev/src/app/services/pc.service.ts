@@ -14,7 +14,11 @@ import { PcRepository } from '../repository/pc.repository';
 export class PcService {
   tableConfig: IPcacTableConfig;
   barVerticalChartConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartGroupConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartStackedConfig: IPcacBarVerticalChartConfig;
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig: IPcacBarVerticalChartConfig;
+  barHorizontalChartStackedConfig: IPcacBarVerticalChartConfig;
   lineChartConfig: IPcacLineAreaChartConfig;
   areaChartConfig: IPcacLineAreaChartConfig;
   pieChartConfig: IPcacPieChartConfig;
@@ -32,8 +36,20 @@ export class PcService {
     this.repository.getBarVerticalChart()
       .subscribe(data => this.barVerticalChartConfig = data);
 
+    this.repository.getBarVerticalChartGroup()
+      .subscribe(data => this.barVerticalChartGroupConfig = data);
+
+    this.repository.getBarVerticalChartStacked()
+      .subscribe(data => this.barVerticalChartStackedConfig = data);
+
     this.repository.getBarHorizontalChart()
       .subscribe(data => this.barHorizontalChartConfig = data);
+
+    this.repository.getBarHorizontalChartGroup()
+      .subscribe(data => this.barHorizontalChartGroupConfig = data);
+
+    this.repository.getBarHorizontalChartStacked()
+      .subscribe(data => this.barHorizontalChartStackedConfig = data);
 
     this.repository.getLineChart()
       .subscribe(data => this.lineChartConfig = data);
@@ -41,7 +57,7 @@ export class PcService {
     this.repository.getAreaChart()
       .subscribe(data => this.areaChartConfig = data);
 
-      this.repository.getPieChartConfig()
+    this.repository.getPieChartConfig()
       .subscribe(data => this.pieChartConfig = data);
 
     this.repository.getShareConfig()

@@ -1,0 +1,76 @@
+{
+  "domainMax": 1000,
+  "height": 200,
+  "data": [
+    {
+      "key": "Chips",
+      "data": [
+        {
+          "value": 400
+        },
+        {
+          "value": 125
+        },
+        {
+          "value": 687
+        }
+      ]
+    },
+    {
+      "key": "Brownie",
+      "data": [
+        {
+          "value": 234
+        },
+        {
+          "value": 55
+        },
+        {
+          "value": 327
+        }
+      ]
+    },
+    {
+      "key": "Gum",
+      "data": [
+        {
+          "value": 522
+        },
+        {
+          "value": 888
+        },
+        {
+          "value": 598
+        }
+      ]
+    },
+    {
+      "key": "Ice Cream",
+      "data": [
+        {
+          "value": 765
+        },
+        {
+          "value": 631
+        },
+        {
+          "value": 124
+        }
+      ]
+    },
+    {
+      "key": "Cake",
+      "data": [
+        {
+          "value": 100
+        },
+        {
+          "value": 198
+        },
+        {
+          "value": 54
+        }
+      ]
+    }
+  ]
+}

@@ -25,6 +25,10 @@ export class PcRepository {
     return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-chart.json');
   }
 
+  getBarVerticalChartGroup() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-horizontal-group-chart.json');
+  }
+
   getLineChart() {
     return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-chart.json');
   }

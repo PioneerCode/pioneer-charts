@@ -18,7 +18,12 @@
         <pc-prism language="markup" [code]="markupCode"></pc-prism>
         <h3>API</h3>
         <pc-prism language="javascript" [code]="importCode"></pc-prism>
-        <pc-base-config></pc-base-config>
+        <pc-base-config>
+          <tr>
+            <td>enableSticky</td>
+            <td>Enable sticky header and footer.</td>
+          </tr>
+        </pc-base-config>
         <h3 id="contract">Contract</h3>
         <div class="pc-config-container">
           <pc-prism language="json" [code]="pcService.tableConfig | stringify"></pc-prism>

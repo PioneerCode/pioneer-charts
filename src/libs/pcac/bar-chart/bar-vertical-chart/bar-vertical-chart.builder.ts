@@ -15,7 +15,8 @@ export interface IBarVerticalChartBuilder {
 
 @Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
-  private xScale: d3.ScaleBand<string>;
+  private xScaleStacked: d3.ScaleBand<string>;
+  private xScaleGrouped: d3.ScaleBand<string>;
   private yScale: d3.ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
@@ -26,13 +27,18 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private buildScales(config: IPcacBarVerticalChartConfig) {
     this.yScale = scaleLinear()
-      .domain([config.domainMax, 0])
-      .range([0, config.height]);
+      .rangeRound([0, config.height])
+      .domain([config.domainMax, 0]);
 
-    this.xScale = scaleBand()
+    this.xScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
-      .range([0, this.width])
+      .rangeRound([0, this.width])
       .padding(0.1);
+
+    this.xScaleGrouped = scaleBand()
+      .padding(0.05)
+      .rangeRound([0, this.xScaleStacked.bandwidth()])
+      .domain(config.data[0].data.map((d) => d.key as string);
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
@@ -41,14 +47,14 @@ export class BarVerticalChartBuilder extends PcacChart {
       svg: this.svg,
       numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
-      xScale: this.xScale,
+      xScale: this.xScaleStacked,
       yScale: this.yScale
     });
     this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
       numberOfTicks: config.numberOfTicks || 5,
       width: this.width,
-      xScale: this.xScale,
+      xScale: this.xScaleStacked,
       yScale: this.yScale
     });
     this.addBars(config);
@@ -63,7 +69,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .enter().append('g')
       .attr('class', 'pc-bar-group')
       .attr('transform', (d: IPcacData, i: number) => {
-        return 'translate(' + this.xScale(d.key as string) + ',0)';
+        return 'translate(' + this.xScaleStacked(d.key as string) + ',0)';
       })
       .selectAll('rect')
       .data((d: IPcacData) => {
@@ -72,13 +78,12 @@ export class BarVerticalChartBuilder extends PcacChart {
       .enter().append('rect')
       .attr('class', 'pc-bar')
       .attr('x', (d: IPcacData) => {
-        return this.xScale(d.key as string);
+        return config.isGroup ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
       })
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colors[i];
       })
-      .attr('width', this.xScale.bandwidth())
-
+      .attr('width', config.isGroup ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', () => {
         return this.height;
       })

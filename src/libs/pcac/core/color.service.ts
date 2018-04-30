@@ -14,6 +14,7 @@ export class PcacColorService {
     this.orange,
     this.blue
   ] as string[];
+  private alert = 'red';
 
   /**
    * Get a scale of colors dynamically
@@ -26,6 +27,10 @@ export class PcacColorService {
       pallette.push(this.scale[mark]);
     }
     return pallette;
+  }
+
+  getAlert(): string {
+    return this.alert;
   }
 
   /**
@@ -58,5 +63,9 @@ export class PcacColorService {
 
   setBlue(color: string): void {
     this.blue = color;
+  }
+
+  setAlert(): string {
+    return this.alert;
   }
 }

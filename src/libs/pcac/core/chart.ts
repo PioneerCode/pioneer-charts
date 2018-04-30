@@ -25,7 +25,7 @@ export class PcacChart {
     public gridBuilder: PcacGridBuilder,
     public transitionService: PcacTransitionService,
     public tooltipBuilder: PcacTooltipBuilder,
-    private colorService: PcacColorService,
+    public colorService: PcacColorService
   ) { }
 
   /**

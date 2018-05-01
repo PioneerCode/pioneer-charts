@@ -50,5 +50,5 @@ export class BarChartComponent {
     }
   ] as IJumpNav[];
 
-  constructor(public pcacService: PcService) { }
+  constructor(public pcService: PcService) { }
 }

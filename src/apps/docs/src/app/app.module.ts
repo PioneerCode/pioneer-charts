@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 /**
  * Demo deps
  */
-import { PcacRepository } from './repository/pc.repository';
+import { PcRepository } from './repository/pc.repository';
 import { PcService } from './services/pc.service';
 
 /**
@@ -120,7 +120,7 @@ const appRoutes: Routes = [
     PcacLineAreaChartModule
   ],
   providers: [
-    PcacRepository,
+    PcRepository,
     PcService
   ],
   bootstrap: [

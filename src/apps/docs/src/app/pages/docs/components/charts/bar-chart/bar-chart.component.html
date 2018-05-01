@@ -1,18 +1,45 @@
 <pc-doc-layout [jumpNav]="jumpNav">
   <div class="container-fluid">
     <pc-page-header [title]="'Bar Chart'" [anchor]="'bar-chart'"></pc-page-header>
-    <p class="lead">Configurable to display a collection of data, two-dimensional groups, and stacked two-dimensional groups.</p>
+    <p class="lead">Configurable to display a collection of data, two-dimensional groups, thresholds, and stacked two-dimensional groups.</p>
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Bar Vertical Chart'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcacService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+          <pcac-header [config]="{'title':'Vertical'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Bar Horizontal Chart'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcacService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
+          <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Chart'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Stacked'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig"></pcac-bar-horizontal-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>
     </div>
@@ -34,23 +61,55 @@
               <td>Highest value in domain of data.</td>
             </tr>
             <tr>
-              <td>numberOfTicks</td>
-              <td>Number of ui intersects in the domain.</td>
+              <td>isGroup</td>
+              <td>If set to true, 2-dimensional data sets will be displayed as group in n of the first dimension. If false, the
+                group will produced a stack bar set. It is recommend in the false state that your data is ordered highest
+                to lowest so a bar does not get covered on the UI due to a back to front stack order.</td>
+            </tr>
+            <tr>
+              <td>thresholds</td>
+              <td></td>
             </tr>
           </tbody>
         </pc-base-config>
         <h3 id="contract">Contract</h3>
+        <div class="row  pc-row">
+          <div class="col-sm">
+            <h5>Vertical</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
+          <div class="col-sm">
+            <h5>Vertical Stacked</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barVerticalChartStackedConfig | stringify"></pc-prism>
+            </div>
+          </div>
+          <div class="col-sm">
+            <h5>Vertical Grouped</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barVerticalChartGroupConfig | stringify"></pc-prism>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-sm">
             <h5>Horizontal</h5>
             <div class="pc-config-container">
-              <pc-prism language="json" [code]="pcacService.barHorizontalChartConfig | stringify"></pc-prism>
+              <pc-prism language="json" [code]="pcService.barHorizontalChartConfig | stringify"></pc-prism>
             </div>
           </div>
           <div class="col-sm">
-            <h5>Vertical</h5>
+            <h5>Horizontal Stacked</h5>
             <div class="pc-config-container">
-              <pc-prism language="json" [code]="pcacService.barVerticalChartConfig | stringify"></pc-prism>
+              <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
+          <div class="col-sm">
+            <h5>Horizontal Grouped</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism>
             </div>
           </div>
         </div>

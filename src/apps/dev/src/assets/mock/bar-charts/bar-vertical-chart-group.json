@@ -6,10 +6,23 @@
     {
       "data": [
         {
-          "value": 687
+          "value": 327
         },
         {
+          "value": 55
+        },
+        {
+          "value": 234
+        }
+      ]
+    },
+    {
+      "data": [
+        {
           "value": 400
+        },
+        {
+          "value": 687
         },
         {
           "value": 125
@@ -19,23 +32,23 @@
     {
       "data": [
         {
-          "value": 327
+          "value": 54
         },
         {
-          "value": 234
+          "value": 100
         },
         {
-          "value": 55
+          "value": 198
         }
       ]
     },
     {
       "data": [
         {
-          "value": 888
+          "value": 598
         },
         {
-          "value": 598
+          "value": 888
         },
         {
           "value": 522
@@ -48,23 +61,10 @@
           "value": 765
         },
         {
-          "value": 631
-        },
-        {
           "value": 124
-        }
-      ]
-    },
-    {
-      "data": [
-        {
-          "value": 198
         },
         {
-          "value": 100
-        },
-        {
-          "value": 54
+          "value": 631
         }
       ]
     }

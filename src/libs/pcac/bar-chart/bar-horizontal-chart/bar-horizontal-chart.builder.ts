@@ -4,14 +4,28 @@ import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, scaleLinear } from 'd3-scale';
-import { select, selection } from 'd3-selection';
+import { select, selection, Selection, EnterElement } from 'd3-selection';
 
 import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
+import { BaseType } from 'd3-selection';
+
+type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
+type GroupType = Selection<Element |
+  EnterElement |
+  Document |
+  Window,
+  IPcacData,
+  Element |
+  EnterElement |
+  Document |
+  Window,
+  IPcacData>;
 
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
+
   private xScale: d3.ScaleLinear<number, number>;
   private yScaleStacked: d3.ScaleBand<string>;
   private yScaleGrouped: d3.ScaleBand<string>;
@@ -68,23 +82,49 @@ export class BarHorizontalChartBuilder extends PcacChart {
       xScale: this.xScale,
       yScale: this.yScaleStacked
     });
-    this.addBars(config);
+    this.addGroups(config);
   }
 
-  private addBars(config: IPcacBarHorizontalChartConfig) {
-    const self = this;
-    this.svg.append('g')
-      .attr('class', 'pcac-bar-groups')
+  private addGroups(config: IPcacBarHorizontalChartConfig) {
+    const groupsContainer = this.svg.append('g')
+      .attr('class', 'pcac-bars')
       .selectAll('g')
       .data(config.data)
       .enter().append('g')
       .attr('class', 'pcac-bar-group')
-      .attr('transform', (d) => 'translate(0,' + this.yScaleStacked(d.key as string) + ')')
-      .selectAll('rect')
+      .attr('transform', (d) => 'translate(0,' + this.yScaleStacked(d.key as string) + ')');
+
+    const group = groupsContainer.selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
-      })
-      .enter().append('rect')
+      });
+
+    this.drawBarsPerGroup(group, config);
+
+    // We have no thresholds to draw
+    if (!config.thresholds) {
+      return;
+    }
+
+    // Draw threshold across entire chart
+    if (config.thresholds.length === 1 && !config.thresholds[0].data) {
+      this.drawThresholdAcrossChart(config);
+    }
+
+    // Draw threshold across each group
+    if (config.thresholds.length > 1 && !config.thresholds[0].data) {
+      this.drawThresholdsPerGroup(group, config);
+    }
+
+    // Draw threshold across each bar in group
+    if (config.thresholds.length > 1 && config.thresholds[0].data) {
+      this.drawThresholdsPerBarInGroup(group, config);
+    }
+  }
+
+  private drawBarsPerGroup(groups: GroupType, config: IPcacBarHorizontalChartConfig) {
+    const self = this;
+    groups.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
@@ -113,6 +153,42 @@ export class BarHorizontalChartBuilder extends PcacChart {
         .duration(this.transitionService.getTransitionDuration()))
       .attr('width', (d: IPcacData) => {
         return this.xScale(d.value as number);
+      });
+  }
+
+  private drawThresholdAcrossChart(config: IPcacBarHorizontalChartConfig) {
+    this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
+      .attr('height', this.height)
+      .on('mousemove', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attr('x', (d: IPcacData, i: number) => {
+        return this.xScale(config.thresholds[i].value as number);
+      });
+  }
+
+  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+  }
+
+  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+  }
+
+  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarHorizontalChartConfig) {
+    return elm.attr('class', 'pcac-threshold')
+      .style('fill', (d: IPcacData, i: number, n: any) => {
+        return this.colorService.getAlert();
+      })
+      .style('stroke', (d: IPcacData, i: number, n: any) => {
+        return this.colorService.getAlert();
+      })
+      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+        return 2;
+      })
+      .attr('width', '2px')
+      .on('mouseout', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.hideTooltip();
       });
   }
 }

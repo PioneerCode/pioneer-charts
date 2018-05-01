@@ -2,6 +2,23 @@
   "domainMax": 1000,
   "height": 200,
   "isGroup": false,
+  "thresholds": [
+    {
+      "value": 555
+    },
+    {
+      "value": 600
+    },
+    {
+      "value": 777
+    },
+    {
+      "value": 234
+    },
+    {
+      "value": 444
+    }
+  ],
   "data": [
     {
       "key": "Chips",

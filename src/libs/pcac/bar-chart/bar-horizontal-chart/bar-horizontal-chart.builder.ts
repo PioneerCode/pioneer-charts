@@ -92,6 +92,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .data(config.data)
       .enter().append('g')
       .attr('class', 'pcac-bar-group')
+      .attr('data-group-id', (d: IPcacData, i: number) => {
+        return i;
+      })
       .attr('transform', (d) => 'translate(0,' + this.yScaleStacked(d.key as string) + ')');
 
     const group = groupsContainer.selectAll('rect')
@@ -171,7 +174,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawThresholdsPerGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
-      .attr('height', config.isGroup ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
+      .attr('height', this.yScaleStacked.bandwidth())
       .on('mousemove', (d: IPcacData, i: number) => {
         this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
       })
@@ -183,6 +186,19 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+    this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
+      .attr('height', this.yScaleGrouped.bandwidth())
+      .on('mousemove', (d: IPcacData, i: number, n: any) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[n[0].parentElement.dataset['groupId']].data[i]);
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attr('y', (d: IPcacData) => {
+        return this.yScaleGrouped(d.key as string);
+      })
+      .attr('x', (d: IPcacData, i: number, n: any) => {
+        return this.xScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
+      });
   }
 
   private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarHorizontalChartConfig) {

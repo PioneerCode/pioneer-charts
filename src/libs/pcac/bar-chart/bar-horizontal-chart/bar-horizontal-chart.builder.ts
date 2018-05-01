@@ -170,6 +170,16 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
+      .attr('height', config.isGroup ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
+      .on('mousemove', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attr('x', (d: IPcacData, i: number) => {
+        return this.xScale(config.thresholds[i].value as number);
+      });
   }
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {

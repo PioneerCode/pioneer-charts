@@ -1,7 +1,12 @@
 {
   "domainMax": 1000,
   "height": 200,
-  "isGroup": false,
+  "isGroup": true,
+  "thresholds": [
+    {
+      "value": 555
+    }
+  ],
   "data": [
     {
       "key": "Chips",

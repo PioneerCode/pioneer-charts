@@ -1,9 +1,20 @@
 {
   "domainMax": 1000,
   "height": 200,
-  "isGroup": true,
-  "threshold": [
-
+  "isGroup": false,
+  "thresholds": [
+    {
+      "value": 555
+    },
+    {
+      "value": 600
+    },
+    {
+      "value": 777
+    },
+    {
+      "value": 234
+    }
   ],
   "data": [
     {

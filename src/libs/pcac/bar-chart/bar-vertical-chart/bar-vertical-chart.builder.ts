@@ -4,12 +4,14 @@ import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 
-import { select, selection, Selection, EnterElement } from 'd3-selection';
+import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
+import { element } from 'protractor';
 
-type GroupedType = Selection<Element |
+type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
+type GroupType = Selection<Element |
   EnterElement |
   Document |
   Window,
@@ -72,7 +74,7 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private addGroups(config: IPcacBarVerticalChartConfig) {
-    const groups = this.svg.append('g')
+    const groupsContainer = this.svg.append('g')
       .attr('class', 'pc-bars')
       .selectAll('g')
       .data(config.data)
@@ -82,16 +84,34 @@ export class BarVerticalChartBuilder extends PcacChart {
         return 'translate(' + this.xScaleStacked(d.key as string) + ',0)';
       });
 
-    const group = groups.selectAll('rect')
+    const group = groupsContainer.selectAll('rect')
       .data((d: IPcacData) => {
         return d.data;
       });
 
     this.drawBarsPerGroup(group, config);
-    this.drawThresholdsPerGroup(group, config);
+
+    // We have no thresholds to draw
+    if (!config.thresholds) {
+      return;
+    }
+
+    // Draw threshold across entire chart
+    if (config.thresholds.length === 1 && !config.thresholds[0].data) {
+      this.drawThresholdAcrossChart(config);
+    }
+
+    // Draw threshold across each group
+    if (config.thresholds.length > 1 && !config.thresholds[0].data) {
+    }
+
+    // Draw threshold across each bar in group
+    if (config.thresholds.length > 1 && config.thresholds[0].data) {
+      this.drawThresholdsPerGroup(group, config);
+    }
   }
 
-  private drawBarsPerGroup(group: GroupedType, config: IPcacBarVerticalChartConfig) {
+  private drawBarsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pc-bar')
@@ -130,7 +150,29 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdsPerGroup(group: GroupedType, config: IPcacBarVerticalChartConfig) {
+  private drawThresholdAcrossChart(config: IPcacBarVerticalChartConfig) {
+    const rect = this.applyPreTransitionThresholdStyles(this.svg.select('.pc-bars').append('rect'));
+    rect.attr('width', this.width)
+      .attr('y', () => {
+        return this.height;
+      })
+      .on('mousemove', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[0]);
+      })
+      .on('mouseout', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.hideTooltip();
+      })
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attr('y', (d: IPcacData) => {
+        return this.yScale(config.thresholds[0].value as number);
+      })
+      .attr('height', (d: IPcacData) => {
+        return '2px';
+      });
+  }
+
+  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pcac-threshold')
@@ -172,6 +214,20 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .attr('height', (d: IPcacData) => {
         return '2px';
+      });
+  }
+
+  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any>) {
+    return elm.attr('class', 'pcac-threshold')
+      .attr('height', 0)
+      .style('fill', (d: IPcacData, i: number, n: any) => {
+        return this.colorService.getAlert();
+      })
+      .style('stroke', (d: IPcacData, i: number, n: any) => {
+        return this.colorService.getAlert();
+      })
+      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+        return 2;
       });
   }
 }

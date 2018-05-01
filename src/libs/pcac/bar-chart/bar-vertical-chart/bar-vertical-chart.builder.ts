@@ -80,12 +80,15 @@ export class BarVerticalChartBuilder extends PcacChart {
       .data(config.data)
       .enter().append('g')
       .attr('class', 'pc-bar-group')
+      .attr('data-group-id', (d: IPcacData, i: number) => {
+        return i;
+      })
       .attr('transform', (d: IPcacData, i: number) => {
         return 'translate(' + this.xScaleStacked(d.key as string) + ',0)';
       });
 
     const group = groupsContainer.selectAll('rect')
-      .data((d: IPcacData) => {
+      .data((d: IPcacData, i: number) => {
         return d.data;
       });
 
@@ -103,11 +106,12 @@ export class BarVerticalChartBuilder extends PcacChart {
 
     // Draw threshold across each group
     if (config.thresholds.length > 1 && !config.thresholds[0].data) {
+      this.drawThresholdsPerGroup(group, config);
     }
 
     // Draw threshold across each bar in group
     if (config.thresholds.length > 1 && config.thresholds[0].data) {
-      this.drawThresholdsPerGroup(group, config);
+      this.drawThresholdsPerBarInGroup(group, config);
     }
   }
 
@@ -151,21 +155,15 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdAcrossChart(config: IPcacBarVerticalChartConfig) {
-    const rect = this.applyPreTransitionThresholdStyles(this.svg.select('.pc-bars').append('rect'));
-    rect.attr('width', this.width)
-      .attr('y', () => {
-        return this.height;
-      })
+    this.applyPreTransitionThresholdStyles(this.svg.select('.pc-bars').append('rect'), config)
+      .attr('width', this.width)
       .on('mousemove', (d: IPcacData, i: number) => {
-        this.tooltipBuilder.showBarTooltip(config.thresholds[0]);
-      })
-      .on('mouseout', (d: IPcacData, i: number) => {
-        this.tooltipBuilder.hideTooltip();
+        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
-      .attr('y', (d: IPcacData) => {
-        return this.yScale(config.thresholds[0].value as number);
+      .attr('y', (d: IPcacData, i: number) => {
+        return this.yScale(config.thresholds[i].value as number);
       })
       .attr('height', (d: IPcacData) => {
         return '2px';
@@ -174,51 +172,46 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawThresholdsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
-    group.enter().append('rect')
-      .attr('class', 'pcac-threshold')
-      .attr('x', (d: IPcacData) => {
-        return config.isGroup ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
-      })
-      .style('fill', (d: IPcacData, i: number, n: any) => {
-        return this.colorService.getAlert();
-      })
-      .style('stroke', (d: IPcacData, i: number, n: any) => {
-        return this.colorService.getAlert();
-      })
-      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
-        return 2;
-      })
-      .attr('width', config.isGroup ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
-      .attr('y', () => {
-        return this.height;
-      })
-      .attr('height', 0)
-      .on('mouseover', function (d: IPcacData, i: number) {
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', color(self.colorService.getAlert()).darker(1).toString());
-      })
-      .on('mousemove', function (d: IPcacData, i: number) {
-        self.tooltipBuilder.showBarTooltip(d);
-      })
-      .on('mouseout', function (d: IPcacData, i: number) {
-        self.tooltipBuilder.hideTooltip();
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', self.colorService.getAlert());
+    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pc-bar-group').append('rect'), config)
+      .attr('width', this.xScaleStacked.bandwidth())
+      .on('mousemove', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
-      .attr('y', (d: IPcacData) => {
-        return this.yScale(d.value as number);
+      .attr('y', (d: IPcacData, i: number) => {
+        return this.yScale(config.thresholds[i].value as number);
       })
       .attr('height', (d: IPcacData) => {
         return '2px';
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any>) {
+  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
+    const self = this;
+    this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
+      .on('mousemove', (d: IPcacData, i: number, n: any) => {
+        this.tooltipBuilder.showBarTooltip(config.thresholds[n[0].parentElement.dataset['groupId']].data[i]);
+      })
+      .attr('width', this.xScaleGrouped.bandwidth())
+      .transition(transition()
+        .duration(this.transitionService.getTransitionDuration()))
+      .attr('y', (d: IPcacData, i: number, n: any) => {
+        return this.yScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
+      })
+      .attr('height', (d: IPcacData) => {
+        return '2px';
+      });
+  }
+
+  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarVerticalChartConfig) {
     return elm.attr('class', 'pcac-threshold')
+      .attr('x', (d: IPcacData) => {
+        return this.xScaleGrouped(d ? d.key as string : '');
+      })
+      .attr('y', () => {
+        return this.height;
+      })
       .attr('height', 0)
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colorService.getAlert();
@@ -228,6 +221,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .style('stroke-width', (d: IPcacData, i: number, n: any) => {
         return 2;
+      })
+      .on('mouseout', (d: IPcacData, i: number) => {
+        this.tooltipBuilder.hideTooltip();
       });
   }
 }

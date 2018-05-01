@@ -4,7 +4,69 @@
   "isGroup": true,
   "thresholds": [
     {
-      "value": 555
+      "data": [
+        {
+          "value": 687
+        },
+        {
+          "value": 400
+        },
+        {
+          "value": 125
+        }
+      ]
+    },
+    {
+      "data": [
+        {
+          "value": 327
+        },
+        {
+          "value": 234
+        },
+        {
+          "value": 55
+        }
+      ]
+    },
+    {
+      "data": [
+        {
+          "value": 888
+        },
+        {
+          "value": 598
+        },
+        {
+          "value": 522
+        }
+      ]
+    },
+    {
+      "data": [
+        {
+          "value": 765
+        },
+        {
+          "value": 631
+        },
+        {
+          "value": 124
+        }
+      ]
+    },
+    {
+      "data": [
+        {
+          "value": 198
+        },
+        {
+          "value": 100
+        },
+        {
+          "value": 54
+        }
+      ]
     }
   ],
   "data": [

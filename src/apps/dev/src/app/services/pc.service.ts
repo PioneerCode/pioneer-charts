@@ -2,22 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   IPcacTableConfig,
-  IPcacBarChartConfig,
   IPcacLineAreaChartConfig,
   IPcacPieChartConfig,
-  IPcacData
+  IPcacData,
+  IPcacBarVerticalChartConfig,
+  IPcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-charts';
 import { PcRepository } from '../repository/pc.repository';
 
 @Injectable()
 export class PcService {
   tableConfig: IPcacTableConfig;
-  barVerticalChartConfig: IPcacBarChartConfig;
-  barVerticalChartGroupConfig: IPcacBarChartConfig;
-  barVerticalChartStackedConfig: IPcacBarChartConfig;
-  barHorizontalChartConfig: IPcacBarChartConfig;
-  barHorizontalChartGroupConfig: IPcacBarChartConfig;
-  barHorizontalChartStackedConfig: IPcacBarChartConfig;
+  barVerticalChartConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartGroupConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartStackedConfig: IPcacBarVerticalChartConfig;
+  barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig: IPcacBarHorizontalChartConfig;
+  barHorizontalChartStackedConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: IPcacLineAreaChartConfig;
   areaChartConfig: IPcacLineAreaChartConfig;
   pieChartConfig: IPcacPieChartConfig;

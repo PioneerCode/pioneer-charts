@@ -1,6 +1,6 @@
 import { IPcacChartConfig, IPcacData } from '../../core/chart.model';
 
-export interface IPcacBarChartConfig extends IPcacChartConfig {
+export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
   domainMax: number;
   numberOfTicks: number;
   isStacked: boolean;

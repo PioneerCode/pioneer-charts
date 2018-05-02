@@ -37,7 +37,7 @@ export class PcacChart {
     select(chartElm.nativeElement).select('g').remove();
     this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
     this.height = config.height;
-    this.colors = this.colorService.getColorScale(config.data.length);
+    this.colors = this.colorService.getColorScale(Math.max(config.data.length, config.data[0].data ? config.data[0].data.length : 0));
   }
 
   /**

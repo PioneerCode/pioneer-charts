@@ -8,7 +8,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
-import { IPcacBarChartConfig } from './bar-chart.model';
+import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -23,7 +23,7 @@ type GroupType = Selection<Element |
   IPcacData>;
 
 export interface IBarVerticalChartBuilder {
-  buildChart(chartElm: ElementRef, config: IPcacBarChartConfig): void;
+  buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void;
 }
 
 @Injectable()
@@ -32,13 +32,13 @@ export class BarVerticalChartBuilder extends PcacChart {
   private xScaleGrouped: d3.ScaleBand<string>;
   private yScale: d3.ScaleLinear<number, number>;
 
-  buildChart(chartElm: ElementRef, config: IPcacBarChartConfig): void {
+  buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }
 
-  private buildScales(config: IPcacBarChartConfig) {
+  private buildScales(config: IPcacBarVerticalChartConfig) {
     this.yScale = scaleLinear()
       .rangeRound([0, config.height])
       .domain([config.domainMax, 0]);
@@ -54,7 +54,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .domain(config.data[0].data.map((d) => d.key as string));
   }
 
-  private drawChart(chartElm: ElementRef, config: IPcacBarChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
@@ -73,7 +73,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.addGroups(config);
   }
 
-  private addGroups(config: IPcacBarChartConfig) {
+  private addGroups(config: IPcacBarVerticalChartConfig) {
     const groupsContainer = this.svg.append('g')
       .attr('class', 'pcac-bars')
       .selectAll('g')
@@ -115,7 +115,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     }
   }
 
-  private drawBarsPerGroup(group: GroupType, config: IPcacBarChartConfig) {
+  private drawBarsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
@@ -154,7 +154,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdAcrossChart(config: IPcacBarChartConfig) {
+  private drawThresholdAcrossChart(config: IPcacBarVerticalChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('width', this.width)
       .on('mousemove', (d: IPcacData, i: number) => {
@@ -167,7 +167,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarChartConfig) {
+  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('width', this.xScaleStacked.bandwidth())
@@ -181,7 +181,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarChartConfig) {
+  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
     const self = this;
     this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
       .on('mousemove', (d: IPcacData, i: number, n: any) => {
@@ -195,7 +195,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarChartConfig) {
+  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarVerticalChartConfig) {
     return elm.attr('class', 'pcac-threshold')
       .attr('x', (d: IPcacData) => {
         return this.xScaleGrouped(d ? d.key as string : '');

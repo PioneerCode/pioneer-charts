@@ -21,7 +21,6 @@
   ],
   "data": [
     {
-      "key": "Chips",
       "data": [
         {
           "key": "Week 1",
@@ -34,74 +33,6 @@
         {
           "key": "Week 3",
           "value": 125
-        }
-      ]
-    },
-    {
-      "key": "Brownie",
-      "data": [
-        {
-          "key": "Week 1",
-          "value": 327
-        },
-        {
-          "key": "Week 2",
-          "value": 234
-        },
-        {
-          "key": "Week 3",
-          "value": 55
-        }
-      ]
-    },
-    {
-      "key": "Gum",
-      "data": [
-        {
-          "key": "Week 1",
-          "value": 888
-        },
-        {
-          "key": "Week 2",
-          "value": 598
-        },
-        {
-          "key": "Week 3",
-          "value": 522
-        }
-      ]
-    },
-    {
-      "key": "Ice Cream",
-      "data": [
-        {
-          "key": "Week 1",
-          "value": 765
-        },
-        {
-          "key": "Week 2",
-          "value": 631
-        },
-        {
-          "key": "Week 3",
-          "value": 124
-        }
-      ]
-    },
-    {
-      "key": "Cake",
-      "data": [
-        {
-          "key": "Week 1",
-          "value": 198
-        },
-        {
-          "key": "Week 2",
-          "value": 100
-        },
-        {
-          "key": "Week 3",
-          "value": 54
         }
       ]
     }

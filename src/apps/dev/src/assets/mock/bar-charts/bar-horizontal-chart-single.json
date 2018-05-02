@@ -1,0 +1,17 @@
+{
+  "domainMax": 1000,
+  "height": 200,
+  "isStacked": true,
+  "thresholds": [
+  ],
+  "data": [
+    {
+      "data": [
+        {
+          "key": "Week 1",
+          "value": 687
+        }
+      ]
+    }
+  ]
+}

@@ -14,3 +14,15 @@ $fa-font-path: "./assets/fonts" !default;
     padding: 2rem 2rem;
 }
 
+body {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.row {
+    margin: 0 0 1rem;
+}

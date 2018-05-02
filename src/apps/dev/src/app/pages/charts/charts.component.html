@@ -1,6 +1,12 @@
 <section class="charts-content">
-  <div class="container">
+  <div class="container-fluid">
     <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Vertical Single'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
@@ -9,16 +15,28 @@
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"></pcac-bar-horizontal-chart>
+          <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Vertical Bar'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
         </div>
       </div>
     </div>
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"></pcac-bar-vertical-chart>
+          <pcac-header [config]="{'title':'Horizontal Single'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig"></pcac-bar-horizontal-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>
       <div class="col-sm">
@@ -27,17 +45,9 @@
           <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>
-    </div>
-    <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Bar Horizontal Chart'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
-        </div>
-      </div>
-      <div class="col-sm">
-        <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Bar Vertical Chart'}"></pcac-header>
+          <pcac-header [config]="{'title':' Horizontal Bar'}"></pcac-header>
           <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>

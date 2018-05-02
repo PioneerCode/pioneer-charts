@@ -214,7 +214,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .style('stroke-width', (d: IPcacData, i: number, n: any) => {
         return 2;
       })
-      .attr('width', '2px')
+      .attr('width', '3px')
       .on('mouseout', (d: IPcacData, i: number) => {
         this.tooltipBuilder.hideTooltip();
       });

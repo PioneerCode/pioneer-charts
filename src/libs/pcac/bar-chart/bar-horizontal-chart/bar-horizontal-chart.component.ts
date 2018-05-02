@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
+import { IPcacBarChartConfig } from '../bar-chart.model';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -10,7 +10,7 @@ import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
   ]
 })
 export class PcacBarChartHorizontalComponent implements OnChanges {
-  @Input() config: IPcacBarHorizontalChartConfig;
+  @Input() config: IPcacBarChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
 
   constructor(

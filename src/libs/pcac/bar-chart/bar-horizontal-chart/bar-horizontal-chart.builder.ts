@@ -1,5 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
@@ -10,6 +9,7 @@ import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
 import { BaseType } from 'd3-selection';
+import { IPcacBarChartConfig } from '../bar-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -30,7 +30,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private yScaleStacked: d3.ScaleBand<string>;
   private yScaleGrouped: d3.ScaleBand<string>;
 
-  buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
+  buildChart(chartElm: ElementRef, config: IPcacBarChartConfig): void {
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -45,7 +45,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
   }
 
-  private buildScales(config: IPcacBarHorizontalChartConfig) {
+  private buildScales(config: IPcacBarChartConfig) {
     const barMap = config.data[0].data.map((d) => {
       return d.value;
     });
@@ -65,7 +65,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .domain(config.data[0].data.map((d) => d.key as string));
   }
 
-  private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: IPcacBarChartConfig): void {
     this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked);
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
@@ -85,7 +85,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.addGroups(config);
   }
 
-  private addGroups(config: IPcacBarHorizontalChartConfig) {
+  private addGroups(config: IPcacBarChartConfig) {
     const groupsContainer = this.svg.append('g')
       .attr('class', 'pcac-bars')
       .selectAll('g')
@@ -125,15 +125,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
   }
 
-  private drawBarsPerGroup(groups: GroupType, config: IPcacBarHorizontalChartConfig) {
+  private drawBarsPerGroup(groups: GroupType, config: IPcacBarChartConfig) {
     const self = this;
     groups.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
-        return config.isGroup ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
+        return !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
       })
-      .attr('height', config.isGroup ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
+      .attr('height', !config.isStacked ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })
@@ -159,7 +159,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdAcrossChart(config: IPcacBarHorizontalChartConfig) {
+  private drawThresholdAcrossChart(config: IPcacBarChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('height', this.height)
       .on('mousemove', (d: IPcacData, i: number) => {
@@ -172,7 +172,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+  private drawThresholdsPerGroup(group: GroupType, config: IPcacBarChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('height', this.yScaleStacked.bandwidth())
       .on('mousemove', (d: IPcacData, i: number) => {
@@ -185,7 +185,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
   }
 
-  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarHorizontalChartConfig) {
+  private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarChartConfig) {
     this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
       .attr('height', this.yScaleGrouped.bandwidth())
       .on('mousemove', (d: IPcacData, i: number, n: any) => {
@@ -201,7 +201,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarHorizontalChartConfig) {
+  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarChartConfig) {
     return elm.attr('class', 'pcac-threshold')
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colorService.getAlert();

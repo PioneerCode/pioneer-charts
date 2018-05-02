@@ -115,12 +115,12 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     // Draw threshold across each group
-    if (config.thresholds.length > 1 && !config.thresholds[0].data) {
+    if (config.thresholds.length > 1 && (!config.thresholds[0].data || config.isStacked)) {
       this.drawThresholdsPerGroup(group, config);
     }
 
     // Draw threshold across each bar in group
-    if (config.thresholds.length > 1 && config.thresholds[0].data) {
+    if (config.thresholds.length > 1 && config.thresholds[0].data && !config.isStacked) {
       this.drawThresholdsPerBarInGroup(group, config);
     }
   }
@@ -176,12 +176,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('height', this.yScaleStacked.bandwidth())
       .on('mousemove', (d: IPcacData, i: number) => {
-        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
+        this.tooltipBuilder.showBarTooltip(config.isStacked ?
+          config.thresholds[i].data[0] :
+          config.thresholds[i]);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
       .attr('x', (d: IPcacData, i: number) => {
-        return this.xScale(config.thresholds[i].value as number);
+        return this.xScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
   }
 

@@ -3,6 +3,9 @@
   "height": 200,
   "isStacked": true,
   "thresholds": [
+    {
+      "value": 500
+    }
   ],
   "data": [
     {

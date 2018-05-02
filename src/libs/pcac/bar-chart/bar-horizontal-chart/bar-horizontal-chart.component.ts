@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
+import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',

@@ -1,6 +1,5 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 
@@ -9,6 +8,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
+import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -120,12 +120,12 @@ export class BarVerticalChartBuilder extends PcacChart {
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', (d: IPcacData) => {
-        return config.isGroup ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
+        return !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
       })
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colors[i];
       })
-      .attr('width', config.isGroup ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
+      .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', () => {
         return this.height;
       })

@@ -22,7 +22,7 @@
     "type": "git",
     "url": "https://github.com/PioneerCode/pioneer-charts"
   },
-  "version": "0.8.1",
+  "version": "0.9.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -63,7 +63,7 @@
     "@angular/cli": "~1.7.4",
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
-    "@pioneer-code/pioneer-charts": "0.8.1",
+    "@pioneer-code/pioneer-charts": "0.9.0-rc.1",
     "@ryancavanaugh/prismjs": "^1.4.3-alpha",
     "@types/d3": "^5.0.0",
     "@types/jasmine": "~2.8.3",

@@ -1,5 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
@@ -10,6 +9,7 @@ import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
 import { BaseType } from 'd3-selection';
+import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -131,9 +131,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: IPcacData) => {
-        return config.isGroup ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
+        return !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
       })
-      .attr('height', config.isGroup ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
+      .attr('height', !config.isStacked ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
       .style('fill', (d: IPcacData, i: number) => {
         return this.colors[i];
       })

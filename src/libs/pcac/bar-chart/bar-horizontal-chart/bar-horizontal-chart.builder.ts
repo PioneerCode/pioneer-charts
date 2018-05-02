@@ -9,7 +9,7 @@ import { PcacChart } from '../../core/chart';
 import { IPcacData } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
 import { BaseType } from 'd3-selection';
-import { IPcacBarChartConfig } from '../bar-chart.model';
+import { IPcacBarChartConfig } from './bar-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

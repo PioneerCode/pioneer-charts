@@ -1,4 +1,4 @@
-import { IPcacChartConfig, IPcacData } from '../core/chart.model';
+import { IPcacChartConfig, IPcacData } from '../../core/chart.model';
 
 export interface IPcacBarChartConfig extends IPcacChartConfig {
   domainMax: number;

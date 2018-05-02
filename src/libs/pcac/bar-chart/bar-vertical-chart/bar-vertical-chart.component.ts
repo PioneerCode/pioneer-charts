@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
-import { IPcacBarChartConfig } from '../bar-chart.model';
+import { IPcacBarChartConfig } from './bar-chart.model';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',

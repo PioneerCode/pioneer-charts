@@ -8,7 +8,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
-import { IPcacBarChartConfig } from '../bar-chart.model';
+import { IPcacBarChartConfig } from './bar-chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

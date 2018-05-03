@@ -15,3 +15,10 @@ export interface IPcacData {
   value: string | number;
   data: IPcacData[];
 }
+
+export enum PcacTickFormatEnum {
+  None = 'none',
+  Percentage = 'percentage',
+  Minutes = 'minutes'
+}
+

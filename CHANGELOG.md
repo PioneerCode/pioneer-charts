@@ -1,4 +1,16 @@
-<a name="0.8.2"></a>
+<a name="0.9.0"></a>
+# [v0.9.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.9.0) (2018-05-29)
+
+### Features
+
+- Bar Chart
+  - Added stacked bar charts.
+  - Added grouped bar charts.
+  - Added thresholds that span the entire chart, groups, or individual bars.
+- Added ability to supply a tick-format through configuration.
+  - When set, formats axis' and to0ltips accordingly. 
+
+<a name="0.8.1"></a>
 # [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.1) (2018-05-29)
 
 ### Fixes

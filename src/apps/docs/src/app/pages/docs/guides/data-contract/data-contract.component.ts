@@ -27,6 +27,11 @@ export class DataContractComponent {
       key: 'New Chart Config',
       value: 'new-chart-config',
       level: JumpNavLevel.h2
+    },
+    {
+      key: 'Binding Configuration',
+      value: 'map',
+      level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
 

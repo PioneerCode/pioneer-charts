@@ -22,13 +22,15 @@ export class PcacAxisBuilder {
   private drawYAxis(config: IPcacAxisBuilderConfig) {
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
 
-    switch (config.yFormat.toLocaleLowerCase()) {
-      case PcacTickFormatEnum.Percentage:
-        yAxis.tickFormat(format('.0%'));
-        break;
-      case PcacTickFormatEnum.Minutes:
-        yAxis.tickFormat((d) => d + 'm');
-        break;
+    if (config.yFormat) {
+      switch (config.yFormat.toLocaleLowerCase()) {
+        case PcacTickFormatEnum.Percentage:
+          yAxis.tickFormat(format('.0%'));
+          break;
+        case PcacTickFormatEnum.Minutes:
+          yAxis.tickFormat((d) => d + 'm');
+          break;
+      }
     }
 
     config.svg.append('g')
@@ -39,13 +41,15 @@ export class PcacAxisBuilder {
   private drawXAxis(config: IPcacAxisBuilderConfig) {
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
 
-    switch (config.xFormat.toLocaleLowerCase()) {
-      case PcacTickFormatEnum.Percentage:
-        xAxis.tickFormat(format('.0%'));
-        break;
-      case PcacTickFormatEnum.Minutes:
-        xAxis.tickFormat((d) => d + 'm');
-        break;
+    if (config.xFormat) {
+      switch (config.xFormat.toLocaleLowerCase()) {
+        case PcacTickFormatEnum.Percentage:
+          xAxis.tickFormat(format('.0%'));
+          break;
+        case PcacTickFormatEnum.Minutes:
+          xAxis.tickFormat((d) => d + 'm');
+          break;
+      }
     }
 
     config.svg.append('g')

@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   IPcacTableConfig,
+  IPcacBarHorizontalChartConfig,
   IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
   IPcacPieChartConfig,
-  IPcacData,
-  IPcacBarHorizontalChartConfig
+  IPcacData
 } from '@pioneer-code/pioneer-charts';
 
 @Injectable()
@@ -18,8 +18,15 @@ export class PcRepository {
     return this.http.get<IPcacTableConfig>('./assets/mock/table.json');
   }
 
+  /**
+   * Bar Charts Horizontal
+   */
   getBarHorizontalChart() {
     return this.http.get<IPcacBarHorizontalChartConfig>('./assets/mock/bar-charts/bar-horizontal-chart.json');
+  }
+
+  getBarHorizontalChartSingle() {
+    return this.http.get<IPcacBarHorizontalChartConfig>('./assets/mock/bar-charts/bar-horizontal-chart-single.json');
   }
 
   getBarHorizontalChartGroup() {
@@ -30,8 +37,15 @@ export class PcRepository {
     return this.http.get<IPcacBarHorizontalChartConfig>('./assets/mock/bar-charts/bar-horizontal-chart-stacked.json');
   }
 
+  /**
+   * Bar Charts Vertical
+   */
   getBarVerticalChart() {
     return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-charts/bar-vertical-chart.json');
+  }
+
+  getBarVerticalChartSingle() {
+    return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-charts/bar-vertical-chart-single.json');
   }
 
   getBarVerticalChartGroup() {

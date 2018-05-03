@@ -16,6 +16,25 @@
       <td>height</td>
       <td>Height of chart component.</td>
     </tr>
+    <tr *ngIf="includeTickFormat">
+      <td>tickFormat</td>
+      <td>Set this value to change the formatting of the domain axis of your chart and the tooltip value formatting.
+        <ul>
+          <li>
+            <b>Percentage</b>
+            <ul>
+              <li>
+                All values will be shifted by 100, and a percentage symbol will be added to your domain access and value displayed in the
+                tooltip.
+              </li>
+              <li>
+                1.0 = 100%
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </td>
+    </tr>
   </tbody>
   <ng-content></ng-content>
 </table>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { PcService } from '../../services/pc.service';
 
@@ -8,4 +8,5 @@ import { PcService } from '../../services/pc.service';
   styleUrls: ['./base-config.component.scss']
 })
 export class BaseConfigComponent  {
+  @Input() includeTickFormat = false;
 }

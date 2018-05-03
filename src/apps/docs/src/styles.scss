@@ -41,6 +41,13 @@ $fa-font-path: "./assets/fonts" !default;
     display: block;
 }
 
+.pc-doc-section {
+    margin: 0 0 2rem;
+    table {
+        margin: 0;
+    }
+}
+
 .pc-row {
     margin-bottom: 2rem;
 }

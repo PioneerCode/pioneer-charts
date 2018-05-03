@@ -21,6 +21,9 @@
   - Check for UI build when no data is present.
   - Width calc on router switch.
 
+<a name="0.8.0"></a>
+# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.0) (2018-05-27)
+
 ### Fixes
 
 - Activate tooltip on mouse move instead of mouseover event.

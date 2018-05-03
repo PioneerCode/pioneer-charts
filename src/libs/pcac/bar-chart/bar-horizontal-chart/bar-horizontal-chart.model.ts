@@ -1,10 +1,9 @@
-import { IPcacChartConfig, IPcacData } from '../../core/chart.model';
-import { PcacAxisFormatEnum } from '../../core/axis.builder';
+import { IPcacChartConfig, IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
 export interface IPcacBarHorizontalChartConfig extends IPcacChartConfig {
   domainMax: number;
   numberOfTicks: number;
   isStacked: boolean;
   thresholds: IPcacData[];
-  tickFormat?: PcacAxisFormatEnum;
+  tickFormat?: PcacTickFormatEnum;
 }

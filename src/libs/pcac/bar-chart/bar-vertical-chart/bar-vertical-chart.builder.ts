@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 
 import { PcacChart } from '../../core/chart';
-import { IPcacData } from '../../core/chart.model';
+import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
 import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -9,7 +9,6 @@ import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { PcacAxisFormatEnum } from '../../core/axis.builder';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -63,8 +62,8 @@ export class BarVerticalChartBuilder extends PcacChart {
       height: this.height,
       xScale: this.xScaleStacked,
       yScale: this.yScale,
-      xFormat: PcacAxisFormatEnum.None,
-      yFormat: config.tickFormat || PcacAxisFormatEnum.None
+      xFormat: PcacTickFormatEnum.None,
+      yFormat: config.tickFormat || PcacTickFormatEnum.None
     });
     this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,
@@ -139,7 +138,7 @@ export class BarVerticalChartBuilder extends PcacChart {
           .style('fill', color(self.colors[i]).darker(1).toString());
       })
       .on('mousemove', function (d: IPcacData, i: number) {
-        self.tooltipBuilder.showBarTooltip(d);
+        self.tooltipBuilder.showBarTooltip(d, config.tickFormat || PcacTickFormatEnum.None);
       })
       .on('mouseout', function (d: IPcacData, i: number) {
         self.tooltipBuilder.hideTooltip();
@@ -161,7 +160,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('width', this.width)
       .on('mousemove', (d: IPcacData, i: number) => {
-        this.tooltipBuilder.showBarTooltip(config.thresholds[i]);
+        this.tooltipBuilder.showBarTooltip(config.thresholds[i], config.tickFormat || PcacTickFormatEnum.None);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
@@ -177,7 +176,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       .on('mousemove', (d: IPcacData, i: number) => {
         this.tooltipBuilder.showBarTooltip(config.isStacked ?
           config.thresholds[i].data[0] :
-          config.thresholds[i]);
+          config.thresholds[i],
+          config.tickFormat || PcacTickFormatEnum.None
+        );
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
@@ -190,7 +191,10 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this;
     this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
       .on('mousemove', (d: IPcacData, i: number, n: any) => {
-        this.tooltipBuilder.showBarTooltip(config.thresholds[n[0].parentElement.dataset['groupId']].data[i]);
+        this.tooltipBuilder.showBarTooltip(
+          config.thresholds[n[0].parentElement.dataset['groupId']].data[i],
+          config.tickFormat || PcacTickFormatEnum.None
+        );
       })
       .attr('width', this.xScaleGrouped.bandwidth())
       .transition(transition()

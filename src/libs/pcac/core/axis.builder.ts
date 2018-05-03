@@ -1,6 +1,7 @@
 import { axisBottom, axisLeft } from 'd3-axis';
 import { selection, BaseType } from 'd3-selection';
 import { format } from 'd3-format';
+import { PcacTickFormatEnum } from './chart.model';
 
 export interface IPcacAxisBuilderConfig {
   svg: d3.Selection<BaseType, {}, HTMLElement, any>;
@@ -8,14 +9,8 @@ export interface IPcacAxisBuilderConfig {
   xScale: any;
   yScale: any;
   numberOfTicks: number;
-  yFormat?: PcacAxisFormatEnum;
-  xFormat?: PcacAxisFormatEnum;
-}
-
-export enum PcacAxisFormatEnum {
-  None = 'none',
-  Percentage = 'percentage',
-  Minutes = 'minutes'
+  yFormat?: PcacTickFormatEnum;
+  xFormat?: PcacTickFormatEnum;
 }
 
 export class PcacAxisBuilder {
@@ -28,10 +23,10 @@ export class PcacAxisBuilder {
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
 
     switch (config.yFormat.toLocaleLowerCase()) {
-      case PcacAxisFormatEnum.Percentage:
+      case PcacTickFormatEnum.Percentage:
         yAxis.tickFormat(format('.0%'));
         break;
-      case PcacAxisFormatEnum.Minutes:
+      case PcacTickFormatEnum.Minutes:
         yAxis.tickFormat((d) => d + 'm');
         break;
     }
@@ -45,10 +40,10 @@ export class PcacAxisBuilder {
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
 
     switch (config.xFormat.toLocaleLowerCase()) {
-      case PcacAxisFormatEnum.Percentage:
+      case PcacTickFormatEnum.Percentage:
         xAxis.tickFormat(format('.0%'));
         break;
-      case PcacAxisFormatEnum.Minutes:
+      case PcacTickFormatEnum.Minutes:
         xAxis.tickFormat((d) => d + 'm');
         break;
     }

@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   IPcacTableConfig,
-  IPcacBarVerticalChartConfig,
   IPcacLineAreaChartConfig,
-  IPcacBarHorizontalChartConfig,
   IPcacPieChartConfig,
-  IPcacData
+  IPcacData,
+  IPcacBarVerticalChartConfig,
+  IPcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-charts';
 import { PcRepository } from '../repository/pc.repository';
 
@@ -14,11 +14,13 @@ import { PcRepository } from '../repository/pc.repository';
 export class PcService {
   tableConfig: IPcacTableConfig;
   barVerticalChartConfig: IPcacBarVerticalChartConfig;
+  barVerticalChartSingleConfig: IPcacBarVerticalChartConfig;
   barVerticalChartGroupConfig: IPcacBarVerticalChartConfig;
   barVerticalChartStackedConfig: IPcacBarVerticalChartConfig;
   barHorizontalChartConfig: IPcacBarHorizontalChartConfig;
-  barHorizontalChartGroupConfig: IPcacBarVerticalChartConfig;
-  barHorizontalChartStackedConfig: IPcacBarVerticalChartConfig;
+  barHorizontalChartSingleConfig: IPcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig: IPcacBarHorizontalChartConfig;
+  barHorizontalChartStackedConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: IPcacLineAreaChartConfig;
   areaChartConfig: IPcacLineAreaChartConfig;
   pieChartConfig: IPcacPieChartConfig;
@@ -30,26 +32,10 @@ export class PcService {
   constructor(private repository: PcRepository) { }
 
   getData() {
+    this.getBarCharts();
+
     this.repository.getTable()
       .subscribe(data => this.tableConfig = data);
-
-    this.repository.getBarVerticalChart()
-      .subscribe(data => this.barVerticalChartConfig = data);
-
-    this.repository.getBarVerticalChartGroup()
-      .subscribe(data => this.barVerticalChartGroupConfig = data);
-
-    this.repository.getBarVerticalChartStacked()
-      .subscribe(data => this.barVerticalChartStackedConfig = data);
-
-    this.repository.getBarHorizontalChart()
-      .subscribe(data => this.barHorizontalChartConfig = data);
-
-    this.repository.getBarHorizontalChartGroup()
-      .subscribe(data => this.barHorizontalChartGroupConfig = data);
-
-    this.repository.getBarHorizontalChartStacked()
-      .subscribe(data => this.barHorizontalChartStackedConfig = data);
 
     this.repository.getLineChart()
       .subscribe(data => this.lineChartConfig = data);
@@ -62,5 +48,32 @@ export class PcService {
 
     this.repository.getShareConfig()
       .subscribe(data => this.sharedConfig = data);
+  }
+
+  private getBarCharts() {
+    this.getBarChartsVertical();
+    this.getBarChartsHorizontal();
+  }
+
+  private getBarChartsHorizontal() {
+    this.repository.getBarHorizontalChart()
+      .subscribe(data => this.barHorizontalChartConfig = data);
+    this.repository.getBarHorizontalChartSingle()
+      .subscribe(data => this.barHorizontalChartSingleConfig = data);
+    this.repository.getBarHorizontalChartGroup()
+      .subscribe(data => this.barHorizontalChartGroupConfig = data);
+    this.repository.getBarHorizontalChartStacked()
+      .subscribe(data => this.barHorizontalChartStackedConfig = data);
+  }
+
+  private getBarChartsVertical() {
+    this.repository.getBarVerticalChart()
+      .subscribe(data => this.barVerticalChartConfig = data);
+    this.repository.getBarVerticalChartSingle()
+      .subscribe(data => this.barVerticalChartSingleConfig = data);
+    this.repository.getBarVerticalChartGroup()
+      .subscribe(data => this.barVerticalChartGroupConfig = data);
+    this.repository.getBarVerticalChartStacked()
+      .subscribe(data => this.barVerticalChartStackedConfig = data);
   }
 }

@@ -5,8 +5,14 @@
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Vertical'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+          <pcac-header [config]="{'title':'Vertical Single'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig"></pcac-bar-vertical-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"></pcac-bar-vertical-chart>
         </div>
       </div>
       <div class="col-sm">
@@ -17,17 +23,22 @@
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"></pcac-bar-vertical-chart>
+          <pcac-header [config]="{'title':'Vertical Bar'}"></pcac-header>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
         </div>
       </div>
     </div>
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Horizontal Chart'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
-
+          <pcac-header [config]="{'title':'Horizontal Single'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig"></pcac-bar-horizontal-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>
       <div class="col-sm">
@@ -38,8 +49,8 @@
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"></pcac-bar-horizontal-chart>
+          <pcac-header [config]="{'title':' Horizontal Bar'}"></pcac-header>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig"></pcac-bar-horizontal-chart>
         </div>
       </div>
     </div>
@@ -76,8 +87,8 @@
                     will get a threshold that spans the entire chart.</li>
                   <li>If there is more then one object "value" in the first dimension with no objects in each "data" variable,
                     you will get a threshold that spans the each group in the data set.</li>
-                  <li>If there is more then one object "value" in the first dimension with in each "data" variable,
-                    you will get a threshold that spans the each bar of each group in the data set.</li>
+                  <li>If there is more then one object "value" in the first dimension with in each "data" variable, you will
+                    get a threshold that spans the each bar of each group in the data set.</li>
                 </ul>
               </td>
             </tr>
@@ -85,6 +96,12 @@
         </pc-base-config>
         <h3 id="contract">Contract</h3>
         <div class="row  pc-row">
+          <div class="col-sm">
+            <h5>Vertical</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
           <div class="col-sm">
             <h5>Vertical</h5>
             <div class="pc-config-container">
@@ -105,6 +122,12 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-sm">
+            <h5>Horizontal</h5>
+            <div class="pc-config-container">
+              <pc-prism language="json" [code]="pcService.barHorizontalChartConfig | stringify"></pc-prism>
+            </div>
+          </div>
           <div class="col-sm">
             <h5>Horizontal</h5>
             <div class="pc-config-container">

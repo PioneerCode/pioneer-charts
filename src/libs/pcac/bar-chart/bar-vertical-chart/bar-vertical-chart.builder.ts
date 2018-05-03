@@ -9,6 +9,7 @@ import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { PcacAxisFormatEnum } from '../../core/axis.builder';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -61,7 +62,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScaleStacked,
-      yScale: this.yScale
+      yScale: this.yScale,
+      xFormat: PcacAxisFormatEnum.None,
+      yFormat: config.tickFormat || PcacAxisFormatEnum.None
     });
     this.gridBuilder.drawHorizontalGrid({
       svg: this.svg,

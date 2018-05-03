@@ -8,8 +8,14 @@ export interface IPcacAxisBuilderConfig {
   xScale: any;
   yScale: any;
   numberOfTicks: number;
-  yFormat?: string;
-  xFormat?: string;
+  yFormat?: PcacAxisFormatEnum;
+  xFormat?: PcacAxisFormatEnum;
+}
+
+export enum PcacAxisFormatEnum {
+  None = 'none',
+  Percentage = 'percentage',
+  Minutes = 'minutes'
 }
 
 export class PcacAxisBuilder {
@@ -19,16 +25,17 @@ export class PcacAxisBuilder {
   }
 
   private drawYAxis(config: IPcacAxisBuilderConfig) {
-
-        // switch (this.config.tickFormat.toLocaleLowerCase()) {
-    //   case 'percentage':
-    //     axisY.tickFormat(d3.format('.0%'));
-    //     break;
-    //   case 'minutes':
-    //     axisY.tickFormat((d) => d + 'm');
-    //     break;
-    // }
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
+
+    switch (config.yFormat.toLocaleLowerCase()) {
+      case PcacAxisFormatEnum.Percentage:
+        yAxis.tickFormat(format('.0%'));
+        break;
+      case PcacAxisFormatEnum.Minutes:
+        yAxis.tickFormat((d) => d + 'm');
+        break;
+    }
+
     config.svg.append('g')
       .attr('class', 'pcac-y-axis')
       .call(yAxis);
@@ -36,6 +43,16 @@ export class PcacAxisBuilder {
 
   private drawXAxis(config: IPcacAxisBuilderConfig) {
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
+
+    switch (config.xFormat.toLocaleLowerCase()) {
+      case PcacAxisFormatEnum.Percentage:
+        xAxis.tickFormat(format('.0%'));
+        break;
+      case PcacAxisFormatEnum.Minutes:
+        xAxis.tickFormat((d) => d + 'm');
+        break;
+    }
+
     config.svg.append('g')
       .attr('class', 'pcac-x-axis')
       .attr('transform', 'translate(0,' + config.height + ')')

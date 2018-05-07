@@ -1,44 +1,27 @@
-# Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-charts)
+# PioneerCharts
 
-## Quick start
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
 
-To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/docs/guides/introduction) page for information on setup, configuration and examples, and more.
+## Development server
 
-```bash
-npm install @pioneer-code/pioneer-charts
-```
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-[npm](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
+## Code scaffolding
 
-## Bugs and feature requests
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Have a bug or a feature request? Please first read the [issue guidelines](https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/PioneerCode/pioneer-charts/issues/new).
+## Build
 
-## Documentation
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-Pioneer Chart's documentation, of whcih is [included in this repo](https://github.com/PioneerCode/pioneer-charts/tree/master/src/apps/demo/src), is built with [Angular](https://angular.io/) and publicly hosted on GitHub Pages at <https://charts.pioneercode.com/>. The docs may also be run locally.
+## Running unit tests
 
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Contributing
+## Running end-to-end tests
 
-Please read through our [contributing guidelines](https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-Editor preferences are available in the [editor config](https://github.com/PioneerCode/pioneer-charts/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org/>.
+## Further help
 
-
-## Creator
-
-**Chad Ramos**
-
-- [Twitter](https://github.com/chad-ramos)
-- [GitHub](https://twitter.com/chad_ramos)
-
-## Contributors
-
-**Your Name Here**
-
-Now excepting PRs! :smile:
-
-## Copyright and license
-
-Code and documentation copyright 2018 the [Pioneer Charts Authors](https://github.com/PioneerCode/pioneer-charts/graphs/contributors) and [Pioneer Code](https://pioneercode.com) Code and Docs released under the [MIT License](https://github.com/PioneerCode/pioneer-charts/blob/master/LICENSE). 
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

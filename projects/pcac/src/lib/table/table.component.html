@@ -1,0 +1,38 @@
+<section class="pcac-table-container pcac-font-family" [style.height.px]="adjustedHeight">
+  <table class="pcac-table">
+    <thead>
+      <tr>
+        <th *ngFor="let header of headers" (click)="sortTable(i)">
+          <i [ngClass]="header.icon"></i>
+          {{header.value}}
+        </th>
+      </tr>
+    </thead>
+    <tbody #tableBody>
+      <tr *ngFor="let row of rowData" #rows>
+        <td *ngFor="let cell of row.data">{{cell.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="config?.enableSticky" class="header">
+    <table class="pcac-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers; let i = index" class="sortable" [style.width.px]="columnWidths[i]" (click)="sortTable(i)">
+           <i [ngClass]="header.icon"></i>
+            {{header.value}}
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div *ngIf="config?.enableSticky" class="footer" #tableFooter>
+    <table class="pcac-table">
+      <tfoot>
+        <tr>
+          <td *ngFor="let data of config?.data[config?.data.length - 1].data; let i = index" [style.width.px]="columnWidths[i]" class="sticky-resize">{{data.value}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</section>

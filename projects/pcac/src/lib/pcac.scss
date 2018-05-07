@@ -1,0 +1,26 @@
+@import "core/theme/imports";
+@import "core/core";
+// Charts
+@import "bar-chart/bar-horizontal-chart/bar-horizontal-chart.component";
+@import "bar-chart/bar-vertical-chart/bar-vertical-chart.component";
+@import "pie-chart/pie-chart.component";
+@import "line-area-chart/line-area-chart.component";
+@import "table/table.component";
+// UI
+@import "header/header.component";
+.pcac-font-family {
+    font-family: $font-family;
+}
+
+.pcac-grid-rule line {
+    stroke: $gray-200;
+}
+
+.pcac-x-axis,
+.pcac-y-axis {
+    path,
+    line {
+        stroke: none;
+    }
+}
+

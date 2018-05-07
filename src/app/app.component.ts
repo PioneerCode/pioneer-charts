@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PcService } from './services/pc.service';
+import { environment } from '../environments/environment';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pc-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'app';
+export class AppComponent implements OnInit {
+
+  constructor(
+    public pcacService: PcService) { }
+
+  ngOnInit() {
+    this.pcacService.getData();
+  }
 }

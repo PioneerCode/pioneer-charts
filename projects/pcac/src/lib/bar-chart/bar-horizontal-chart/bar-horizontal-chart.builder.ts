@@ -2,7 +2,7 @@ import { Injectable, ElementRef } from '@angular/core';
 
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, selection, Selection, EnterElement } from 'd3-selection';
 
 import { PcacChart } from '../../core/chart';
@@ -26,9 +26,9 @@ type GroupType = Selection<Element |
 @Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
 
-  private xScale: d3.ScaleLinear<number, number>;
-  private yScaleStacked: d3.ScaleBand<string>;
-  private yScaleGrouped: d3.ScaleBand<string>;
+  private xScale: ScaleLinear<number, number>;
+  private yScaleStacked: ScaleBand<string>;
+  private yScaleGrouped: ScaleBand<string>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.initializeChartState(chartElm, config);

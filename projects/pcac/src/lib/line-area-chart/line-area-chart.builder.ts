@@ -7,8 +7,8 @@ import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders'
 
 import { transition } from 'd3-transition';
 import { select, selection } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
-import { line, area } from 'd3-shape';
+import { scaleLinear, ScaleLinear } from 'd3-scale';
+import { line, Line, area, Area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { range } from 'd3-array';
 
@@ -18,10 +18,10 @@ export interface ILineAreaChartBuilder {
 
 @Injectable()
 export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
-  private line: d3.Line<[number, number]>;
-  private area: d3.Area<[number, number]>;
-  private xScale: d3.ScaleLinear<number, number>;
-  private yScale: d3.ScaleLinear<number, number>;
+  private line: Line<[number, number]>;
+  private area: Area<[number, number]>;
+  private xScale: ScaleLinear<number, number>;
+  private yScale: ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.startData = range(config.data[0].data.length).map((d) => {

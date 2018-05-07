@@ -1,4 +1,5 @@
-import { mouse, select } from 'd3-selection';
+import { mouse, select, Selection, BaseType } from 'd3-selection';
+import { ScaleLinear } from 'd3-scale';
 import { IPcacData } from '../core';
 
 export interface ILineAreaChartEffectsBuilderConfig {
@@ -6,9 +7,9 @@ export interface ILineAreaChartEffectsBuilderConfig {
   data: IPcacData[];
   width: number;
   height: number;
-  svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
-  x: d3.ScaleLinear<number, number>;
-  y: d3.ScaleLinear<number, number>;
+  svg: Selection<BaseType, {}, HTMLElement, any>;
+  x: ScaleLinear<number, number>;
+  y: ScaleLinear<number, number>;
 }
 
 export interface ILineAreaChartEffectsBuilder {
@@ -38,7 +39,7 @@ export class LineAreaChartEffectsBuilder implements ILineAreaChartEffectsBuilder
 
     const mousePerLine = collection.selectAll('.effect-group')
       .data(this.config.data.filter((elm) => {
-        return elm.data.length  > 0;
+        return elm.data.length > 0;
       }))
       .enter().append('g')
       .attr('class', 'effect-group');

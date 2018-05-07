@@ -4,7 +4,7 @@ import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
 import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
@@ -28,9 +28,9 @@ export interface IBarVerticalChartBuilder {
 
 @Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
-  private xScaleStacked: d3.ScaleBand<string>;
-  private xScaleGrouped: d3.ScaleBand<string>;
-  private yScale: d3.ScaleLinear<number, number>;
+  private xScaleStacked: ScaleBand<string>;
+  private xScaleGrouped: ScaleBand<string>;
+  private yScale: ScaleLinear<number, number>;
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.initializeChartState(chartElm, config);

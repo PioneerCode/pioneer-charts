@@ -1,8 +1,8 @@
 import { axisBottom, axisLeft } from 'd3-axis';
-import { selection, BaseType } from 'd3-selection';
+import { selection, BaseType, Selection } from 'd3-selection';
 
 export interface IPcacGridBuilderConfig {
-  svg: d3.Selection<BaseType, {}, HTMLElement, any>;
+  svg: Selection<BaseType, {}, HTMLElement, any>;
   /**
    * Required for horizontal grid
    */

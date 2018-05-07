@@ -23,7 +23,7 @@ cache:
     - ./node_modules/
 
 deploy:
-  local-dir: 'apps/docs'
+  local-dir: 'dist/pioneer-charts'
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure

@@ -2,7 +2,7 @@
   <table class="pcac-table">
     <thead>
       <tr>
-        <th *ngFor="let header of headers" (click)="sortTable(i)">
+        <th *ngFor="let header of headers; let i = index" (click)="sortTable(i)">
           <i [ngClass]="header.icon"></i>
           {{header.value}}
         </th>

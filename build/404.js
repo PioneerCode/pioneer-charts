@@ -1,7 +1,7 @@
 const cpy = require('cpy');
 const chalk = require('chalk');
 
-cpy('./dist/pioneer-charts/index.html', './dist/pioneer-charts/docs/', {
+cpy('./dist/pioneer-charts/index.html', './dist/pioneer-charts/', {
   rename: basename => `404.html`
 }).then((error, r) => {
   console.log(error);

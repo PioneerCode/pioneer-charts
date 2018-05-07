@@ -1,3 +1,10 @@
+<a name="0.109.0"></a>
+# [v0.10.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.10.0) (2018-06-07)
+
+### Features
+
+- Migrated to Angular 6.x 
+
 <a name="0.9.0"></a>
 # [v0.9.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.9.0) (2018-06-03)
 

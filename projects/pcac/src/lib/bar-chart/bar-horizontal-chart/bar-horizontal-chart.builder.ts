@@ -4,8 +4,8 @@ import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, selection, Selection, EnterElement } from 'd3-selection';
-
 import { BaseType } from 'd3-selection';
+
 import { Subject } from 'rxjs/internal/Subject';
 import { Observable } from 'rxjs/internal/Observable';
 
@@ -23,7 +23,6 @@ import {
   PcacTransitionService,
   PcacTickFormatEnum
 } from '../../core';
-
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

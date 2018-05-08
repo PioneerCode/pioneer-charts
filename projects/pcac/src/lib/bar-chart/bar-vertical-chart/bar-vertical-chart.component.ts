@@ -1,6 +1,16 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  ElementRef,
+  ViewChild,
+  HostListener,
+  OnChanges,
+  EventEmitter,
+  Output
+} from '@angular/core';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { IPcacData } from '../../core';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',
@@ -12,10 +22,16 @@ import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config: IPcacBarVerticalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
+  @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
 
   constructor(
-    private chartBuilder: BarVerticalChartBuilder,
-  ) { }
+    private chartBuilder: BarVerticalChartBuilder
+  ) {
+    this.chartBuilder.barClicked$.subscribe(
+      data => {
+        this.barClicked.emit(data);
+      });
+  }
 
   ngOnChanges() {
     if (this.config && this.config.data) {

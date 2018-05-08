@@ -21,6 +21,9 @@ import {
   PcacTickFormatEnum
 } from '../../core';
 
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
   EnterElement |
@@ -42,6 +45,8 @@ export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked: ScaleBand<string>;
   private xScaleGrouped: ScaleBand<string>;
   private yScale: ScaleLinear<number, number>;
+  private barClickedSource = new Subject<IPcacData>();
+  barClicked$ = this.barClickedSource.asObservable();
 
   constructor(
     public axisBuilder: PcacAxisBuilder,
@@ -172,6 +177,9 @@ export class BarVerticalChartBuilder extends PcacChart {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
           .style('fill', self.colors[i]);
+      })
+      .on('click', (d: IPcacData, i: number) => {
+        this.barClickedSource.next(d);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))

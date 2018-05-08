@@ -31,6 +31,10 @@ export class PcService {
 
   constructor(private repository: PcRepository) { }
 
+  onClicked(data: IPcacData) {
+    alert(`Key: ${data.key} - Value: ${data.value}`);
+  }
+
   getData() {
     this.getBarCharts();
 

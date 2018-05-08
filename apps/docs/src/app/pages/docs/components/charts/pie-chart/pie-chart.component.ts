@@ -40,7 +40,8 @@ export class PieChartComponent {
       level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
-  markupCode = `<pcac-pie-chart [config]="config"></pcac-pie-chart>`;
+  markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
+  onSliceClickCode = `(sliceClicked)="onClicked($event)`;
   importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }

@@ -7,6 +7,7 @@ import { arc, pie, DefaultArcObject, Arc, Pie, PieArcDatum } from 'd3-shape';
 import { select } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
 import { transition } from 'd3-transition';
+import { color } from 'd3-color';
 
 /**
  * Lib
@@ -88,19 +89,21 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .style('fill', (d: PieArcDatum<IPcacData>, i: number) => {
         return this.colors[i];
       })
-      .on('mouseover', function (d: PieArcDatum<IPcacData>) {
+      .on('mouseover', function (d: PieArcDatum<IPcacData>, i: number) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
-          .attr('d', self.arcOverShape);
+          .attr('d', self.arcOverShape)
+          .style('fill', color(self.colors[i]).darker(1).toString())
       })
       .on('mousemove', function (d: PieArcDatum<IPcacData>) {
         self.tooltipBuilder.showBarTooltip(d.data);
       })
-      .on('mouseout', function () {
+      .on('mouseout', function (d: PieArcDatum<IPcacData>, i: number) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
-          .attr('d', self.arcShape);
+          .attr('d', self.arcShape)
+          .style('fill', self.colors[i]);
       })
       .on('click', (d: PieArcDatum<IPcacData>, i: number) => {
         this.sliceClickedSource.next(d.data);

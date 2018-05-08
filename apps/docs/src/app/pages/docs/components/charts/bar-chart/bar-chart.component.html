@@ -112,6 +112,29 @@
       </div>
     </section>
     <section class="pc-doc-section">
+      <h3 id="events">Events</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <pc-prism language="typescript" [code]="onBarClickCode"></pc-prism>
+            </td>
+            <td>Emitted when and individual bar in the graph is clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">IPcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="pc-doc-section">
       <h3 id="contract">Contract</h3>
       <div class="row pc-row">
         <div class="col-3">

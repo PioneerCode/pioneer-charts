@@ -30,6 +30,11 @@ export class LineAreaChartComponent {
       level: JumpNavLevel.h3
     },
     {
+      key: 'Events',
+      value: 'events',
+      level: JumpNavLevel.h2
+    },
+    {
       key: 'Contract',
       value: 'contract',
       level: JumpNavLevel.h2

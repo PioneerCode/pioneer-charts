@@ -10,6 +10,9 @@ import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 import { PcacTransitionService } from '../../core/transition.service';
 import { BaseType } from 'd3-selection';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
+import { Subject } from 'rxjs/internal/Subject';
+import { Observable } from 'rxjs/internal/Observable';
+import { PcacAxisBuilder, PcacGridBuilder, PcacColorService, PcacTooltipBuilder } from '../../core';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -29,6 +32,24 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private xScale: ScaleLinear<number, number>;
   private yScaleStacked: ScaleBand<string>;
   private yScaleGrouped: ScaleBand<string>;
+  private barClickedSource = new Subject<IPcacData>();
+  barClicked$ = this.barClickedSource.asObservable();
+
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
+    public colorService: PcacColorService
+  ) {
+    super(
+      axisBuilder,
+      gridBuilder,
+      transitionService,
+      tooltipBuilder,
+      colorService
+    );
+  }
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -153,6 +174,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
           .style('fill', self.colors[i]);
+      })
+      .on('click', (d: IPcacData, i: number) => {
+        this.barClickedSource.next(d);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))

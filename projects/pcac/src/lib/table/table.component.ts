@@ -34,6 +34,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   headers = [] as IPcacTableHeader[];
   rowData = [] as IPcacData[];
   adjustedHeight = 200;
+
   constructor(
     private sortService: TableSortService,
     private changeDetector: ChangeDetectorRef

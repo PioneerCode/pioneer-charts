@@ -124,7 +124,7 @@
         <tbody>
           <tr>
             <td>
-              <pc-prism language="typescript" [code]="onBarClickCode"></pc-prism>
+              (barClicked)="pcService.onClicked($event)"
             </td>
             <td>Emitted when a bar in the graph is clicked.</td>
             <td>

@@ -11,7 +11,6 @@ export class BarChartComponent {
   verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-vertical-chart>`;
   horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>`;
   importCode = `import { PcacBarVerticalChartModule, PcacBarHorizontalChartModule } from '@pioneer-code/pioneer-charts';`;
-  onBarClickCode = `(barClicked)="pcService.onClicked($event)`;
   jumpNav = [
     {
       key: 'Bar Chart',

@@ -41,7 +41,6 @@ export class LineAreaChartComponent {
     }
   ] as IJumpNav[];
   markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
-  onDotClickCode = `(dotClicked)="onClicked($event)`;
   importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
   constructor(public pcService: PcService) { }
 }

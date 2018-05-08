@@ -13,15 +13,13 @@ import { color } from 'd3-color';
  * Lib
  */
 import { IPcacPieChartConfig } from './pie-chart.model';
-import {
-  PcacChart,
-  IPcacData,
-  PcacAxisBuilder,
-  PcacGridBuilder,
-  PcacColorService,
-  PcacTooltipBuilder,
-  PcacTransitionService
-} from '../core';
+import { PcacAxisBuilder } from '../core/axis.builder';
+import { PcacGridBuilder } from '../core/grid.builder';
+import { PcacTransitionService } from '../core/transition.service';
+import { PcacTooltipBuilder } from '../core/tooltip.builder';
+import { PcacColorService } from '../core/color.service';
+import { PcacChart } from '../core/chart';
+import { IPcacData } from '../core/chart.model';
 
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
@@ -93,7 +91,7 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcOverShape)
-          .style('fill', color(self.colors[i]).darker(1).toString())
+          .style('fill', color(self.colors[i]).darker(1).toString());
       })
       .on('mousemove', function (d: PieArcDatum<IPcacData>) {
         self.tooltipBuilder.showBarTooltip(d.data);

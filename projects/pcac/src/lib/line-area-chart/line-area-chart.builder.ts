@@ -15,15 +15,13 @@ import { Subject } from 'rxjs/internal/Subject';
  */
 import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
-import {
-  PcacChart,
-  IPcacData,
-  PcacAxisBuilder,
-  PcacGridBuilder,
-  PcacColorService,
-  PcacTooltipBuilder,
-  PcacTransitionService
-} from '../core';
+import { PcacAxisBuilder } from '../core/axis.builder';
+import { PcacGridBuilder } from '../core/grid.builder';
+import { PcacTransitionService } from '../core/transition.service';
+import { PcacTooltipBuilder } from '../core/tooltip.builder';
+import { PcacColorService } from '../core/color.service';
+import { PcacChart } from '../core/chart';
+import { IPcacData } from '../core/chart.model';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;

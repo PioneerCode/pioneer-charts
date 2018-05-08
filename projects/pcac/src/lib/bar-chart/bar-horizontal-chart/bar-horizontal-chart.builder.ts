@@ -13,16 +13,13 @@ import { Observable } from 'rxjs/internal/Observable';
  * Lib
  */
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import {
-  PcacChart,
-  IPcacData,
-  PcacAxisBuilder,
-  PcacGridBuilder,
-  PcacColorService,
-  PcacTooltipBuilder,
-  PcacTransitionService,
-  PcacTickFormatEnum
-} from '../../core';
+import { PcacAxisBuilder } from '../../core/axis.builder';
+import { PcacGridBuilder } from '../../core/grid.builder';
+import { PcacTransitionService } from '../../core/transition.service';
+import { PcacTooltipBuilder } from '../../core/tooltip.builder';
+import { PcacColorService } from '../../core/color.service';
+import { PcacChart } from '../../core/chart';
+import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

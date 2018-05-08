@@ -1,3 +1,10 @@
+<a name="0.11.1"></a>
+# [v0.11.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.1) (2018-06-08)
+
+### Fix
+
+- Import reference error in --prod builds
+
 <a name="0.11.0"></a>
 # [v0.11.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.0) (2018-06-08)
 

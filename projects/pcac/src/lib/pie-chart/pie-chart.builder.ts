@@ -3,7 +3,7 @@ import { Injectable, ElementRef } from '@angular/core';
 /**
  * D3
  */
-import { arc, pie, DefaultArcObject, Arc, Pie } from 'd3-shape';
+import { arc, pie, DefaultArcObject, Arc, Pie, PieArcDatum } from 'd3-shape';
 import { select } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
 import { transition } from 'd3-transition';
@@ -22,6 +22,9 @@ import {
   PcacTransitionService
 } from '../core';
 
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
 }
@@ -32,6 +35,8 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private arcShape: Arc<any, DefaultArcObject>;
   private arcOverShape: Arc<any, DefaultArcObject>;
   private pieAngles: Pie<any, number | {}>;
+  private sliceClickedSource = new Subject<IPcacData>();
+  sliceClicked$ = this.sliceClickedSource.asObservable();
 
   constructor(
     public axisBuilder: PcacAxisBuilder,
@@ -80,16 +85,16 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .style('fill', (d: any, i: number) => {  // TODO: Strongly type
+      .style('fill', (d: PieArcDatum<IPcacData>, i: number) => {
         return this.colors[i];
       })
-      .on('mouseover', function (d: any) {  // TODO: Strongly type
+      .on('mouseover', function (d: PieArcDatum<IPcacData>) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcOverShape);
       })
-      .on('mousemove', function (d: any) {  // TODO: Strongly type
-        self.tooltipBuilder.showBarTooltip(d);
+      .on('mousemove', function (d: PieArcDatum<IPcacData>) {
+        self.tooltipBuilder.showBarTooltip(d.data);
       })
       .on('mouseout', function () {
         self.tooltipBuilder.hideTooltip();
@@ -97,9 +102,12 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
           .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcShape);
       })
+      .on('click', (d: PieArcDatum<IPcacData>, i: number) => {
+        this.sliceClickedSource.next(d.data);
+      })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
-      .attrTween('d', (b: any) => {  // TODO: Strongly type
+      .attrTween('d', (b: PieArcDatum<IPcacData>) => {
         return this.tweenChart(b);
       });
   }

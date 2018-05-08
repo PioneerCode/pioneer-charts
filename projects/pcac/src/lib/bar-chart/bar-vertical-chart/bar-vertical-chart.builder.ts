@@ -18,8 +18,7 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
+import { Observable, Subject } from 'rxjs';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

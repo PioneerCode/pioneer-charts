@@ -1,3 +1,11 @@
+<a name="0.11.2"></a>
+# [v0.11.2](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.2) (2018-06-08)
+
+### Fix
+
+- Rxjs imports
+
+
 <a name="0.11.1"></a>
 # [v0.11.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.1) (2018-06-08)
 

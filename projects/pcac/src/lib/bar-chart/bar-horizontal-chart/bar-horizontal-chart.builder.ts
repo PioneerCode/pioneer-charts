@@ -6,8 +6,7 @@ import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, selection, Selection, EnterElement } from 'd3-selection';
 import { BaseType } from 'd3-selection';
 
-import { Subject } from 'rxjs/internal/Subject';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, Subject } from 'rxjs';
 
 /**
  * Lib

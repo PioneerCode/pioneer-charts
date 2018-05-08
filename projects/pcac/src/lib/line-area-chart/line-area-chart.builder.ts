@@ -7,8 +7,7 @@ import { line, Line, area, Area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { range } from 'd3-array';
 
-import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
+import { Observable, Subject } from 'rxjs';
 
 /**
  * Lib

@@ -21,8 +21,7 @@ import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
 
-import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
+import { Observable, Subject } from 'rxjs';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;

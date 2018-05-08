@@ -9,13 +9,13 @@
         <div class="col-sm">
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Line Chart'}"></pcac-header>
-            <pcac-line-area-chart [config]="pcacService.lineChartConfig"></pcac-line-area-chart>
+            <pcac-line-area-chart [config]="pcService.lineChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Area Chart'}"></pcac-header>
-            <pcac-line-area-chart [config]="pcacService.areaChartConfig"></pcac-line-area-chart>
+            <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
       </div>
@@ -57,11 +57,34 @@
       </div>
     </section>
     <section class="pc-doc-section">
+      <h3 id="events">Events</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (dotClicked)="onClicked($event)"
+            </td>
+            <td>Emitted when a dot on a line is clicked clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">IPcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="pc-doc-section">
       <div class="row">
         <div class="col-sm">
           <h3 id="contract">Contract</h3>
           <div class="pc-config-container">
-            <pc-prism language="json" [code]="pcacService.areaChartConfig | stringify"></pc-prism>
+            <pc-prism language="json" [code]="pcService.areaChartConfig | stringify"></pc-prism>
           </div>
         </div>
       </div>

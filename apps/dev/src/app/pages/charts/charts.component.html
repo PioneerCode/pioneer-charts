@@ -4,25 +4,25 @@
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Vertical Single'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig"></pcac-bar-vertical-chart>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"></pcac-bar-vertical-chart>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"></pcac-bar-vertical-chart>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Vertical Bar'}"></pcac-header>
-          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"></pcac-bar-vertical-chart>
+          <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
     </div>
@@ -30,25 +30,25 @@
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Horizontal Single'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Horizontal Stacked'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':' Horizontal Bar'}"></pcac-header>
-          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>
+          <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
     </div>
@@ -56,13 +56,13 @@
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Line Chart'}"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.lineChartConfig"></pcac-line-area-chart>
+          <pcac-line-area-chart [config]="pcService.lineChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Area Chart'}"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.areaChartConfig"></pcac-line-area-chart>
+          <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Pie Chart'}"></pcac-header>
-          <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>
+          <pcac-pie-chart [config]="pcService.pieChartConfig" (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
         </div>
       </div>
     </div>

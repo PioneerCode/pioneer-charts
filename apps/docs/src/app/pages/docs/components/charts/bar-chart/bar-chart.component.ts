@@ -8,8 +8,8 @@ import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-
   styleUrls: ['./bar-chart.component.scss']
 })
 export class BarChartComponent {
-  verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig"></pcac-bar-vertical-chart>`;
-  horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig"></pcac-bar-horizontal-chart>`;
+  verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-vertical-chart>`;
+  horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>`;
   importCode = `import { PcacBarVerticalChartModule, PcacBarHorizontalChartModule } from '@pioneer-code/pioneer-charts';`;
   jumpNav = [
     {
@@ -42,6 +42,11 @@ export class BarChartComponent {
       key: 'Configuration',
       value: 'configuration',
       level: JumpNavLevel.h3
+    },
+    {
+      key: 'Events',
+      value: 'events',
+      level: JumpNavLevel.h2
     },
     {
       key: 'Contract',

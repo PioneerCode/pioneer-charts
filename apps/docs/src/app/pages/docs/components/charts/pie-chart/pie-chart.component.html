@@ -9,7 +9,7 @@
         <div class="col-6">
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Pie Chart'}"></pcac-header>
-            <pcac-pie-chart [config]="pcService.pieChartConfig"></pcac-pie-chart>
+            <pcac-pie-chart [config]="pcService.pieChartConfig" (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
           </div>
         </div>
       </div>
@@ -30,6 +30,29 @@
           <pc-base-config></pc-base-config>
         </div>
       </div>
+    </section>
+    <section class="pc-doc-section">
+      <h3 id="events">Events</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (sliceClicked)="onClicked($event)"
+            </td>
+            <td>Emitted when a slice is clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">IPcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </section>
     <section class="pc-doc-section">
       <div class="row ">

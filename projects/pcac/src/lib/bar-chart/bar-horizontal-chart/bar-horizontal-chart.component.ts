@@ -6,12 +6,11 @@ import {
   HostListener,
   OnChanges,
   EventEmitter,
-  Output,
-  OnInit
+  Output
 } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { IPcacData } from '../../core/chart.model';
+import { IPcacData } from '../../core';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -20,7 +19,7 @@ import { IPcacData } from '../../core/chart.model';
     BarHorizontalChartBuilder
   ]
 })
-export class PcacBarChartHorizontalComponent implements OnChanges, OnInit {
+export class PcacBarChartHorizontalComponent implements OnChanges {
   @Input() config: IPcacBarHorizontalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
@@ -32,10 +31,6 @@ export class PcacBarChartHorizontalComponent implements OnChanges, OnInit {
       data => {
         this.barClicked.emit(data);
       });
-  }
-
-  ngOnInit() {
-
   }
 
   ngOnChanges() {

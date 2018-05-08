@@ -5,3 +5,4 @@ export * from './core.module';
 export * from './axis.builder';
 export * from './grid.builder';
 export * from './tooltip.builder';
+export * from './transition.service';

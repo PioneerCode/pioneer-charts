@@ -1,6 +1,7 @@
-import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
+import { IPcacData } from '../core';
 
 @Component({
   selector: 'pcac-pie-chart',
@@ -12,10 +13,16 @@ import { PieChartBuilder } from './pie-chart.builder';
 export class PcacPieChartComponent implements OnChanges {
   @Input() config: IPcacPieChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
+  @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
 
   constructor(
     private chartBuilder: PieChartBuilder
-  ) { }
+  ) {
+    this.chartBuilder.sliceClicked$.subscribe(
+      data => {
+        this.sliceClicked.emit(data);
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.config && this.config.data) {

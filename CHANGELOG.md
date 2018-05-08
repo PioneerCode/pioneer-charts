@@ -1,4 +1,14 @@
-<a name="0.109.0"></a>
+<a name="0.11.0"></a>
+# [v0.11.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.0) (2018-06-08)
+
+### Features
+
+- Add event emitters
+  - On bar click in bar charts.
+  - On dot click in line/area charts.
+  - On slice click in pie charts.
+
+<a name="0.10.0"></a>
 # [v0.10.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.10.0) (2018-06-07)
 
 ### Features

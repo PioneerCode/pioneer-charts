@@ -1,14 +1,28 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { PcacChart } from '../../core/chart';
-import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
-
 import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
+
+/**
+ * Lib
+ */
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import {
+  PcacChart,
+  IPcacData,
+  PcacAxisBuilder,
+  PcacGridBuilder,
+  PcacColorService,
+  PcacTooltipBuilder,
+  PcacTransitionService,
+  PcacTickFormatEnum
+} from '../../core';
+
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -31,6 +45,24 @@ export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked: ScaleBand<string>;
   private xScaleGrouped: ScaleBand<string>;
   private yScale: ScaleLinear<number, number>;
+  private barClickedSource = new Subject<IPcacData>();
+  barClicked$ = this.barClickedSource.asObservable();
+
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
+    public colorService: PcacColorService
+  ) {
+    super(
+      axisBuilder,
+      gridBuilder,
+      transitionService,
+      tooltipBuilder,
+      colorService
+    );
+  }
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.initializeChartState(chartElm, config);
@@ -145,6 +177,9 @@ export class BarVerticalChartBuilder extends PcacChart {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
           .style('fill', self.colors[i]);
+      })
+      .on('click', (d: IPcacData, i: number) => {
+        this.barClickedSource.next(d);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))

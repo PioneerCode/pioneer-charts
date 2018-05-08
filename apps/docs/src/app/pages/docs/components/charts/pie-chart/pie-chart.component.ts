@@ -30,12 +30,17 @@ export class PieChartComponent {
       level: JumpNavLevel.h3
     },
     {
+      key: 'Events',
+      value: 'events',
+      level: JumpNavLevel.h2
+    },
+    {
       key: 'Contract',
       value: 'contract',
       level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
-  markupCode = `<pcac-pie-chart [config]="config"></pcac-pie-chart>`;
+  markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
   importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }

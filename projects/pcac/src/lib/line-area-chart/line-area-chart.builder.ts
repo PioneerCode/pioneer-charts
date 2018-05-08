@@ -1,16 +1,29 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { IPcacLineAreaChartConfig } from './line-area-chart.model';
-import { PcacChart } from '../core/chart';
-import { IPcacData } from '../core/chart.model';
-import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
-
 import { transition } from 'd3-transition';
 import { select, selection } from 'd3-selection';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
 import { line, Line, area, Area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { range } from 'd3-array';
+
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+
+/**
+ * Lib
+ */
+import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
+import { IPcacLineAreaChartConfig } from './line-area-chart.model';
+import {
+  PcacChart,
+  IPcacData,
+  PcacAxisBuilder,
+  PcacGridBuilder,
+  PcacColorService,
+  PcacTooltipBuilder,
+  PcacTransitionService
+} from '../core';
 
 export interface ILineAreaChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
@@ -22,6 +35,24 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private area: Area<[number, number]>;
   private xScale: ScaleLinear<number, number>;
   private yScale: ScaleLinear<number, number>;
+  private dotClickedSource = new Subject<IPcacData>();
+  dotClicked$ = this.dotClickedSource.asObservable();
+
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
+    public colorService: PcacColorService
+  ) {
+    super(
+      axisBuilder,
+      gridBuilder,
+      transitionService,
+      tooltipBuilder,
+      colorService
+    );
+  }
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.startData = range(config.data[0].data.length).map((d) => {
@@ -171,6 +202,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
             .duration(self.transitionService.getTransitionDuration() / 3))
             .attr('r', 4)
             .attr('fill', '#fff');
+        })
+        .on('click', (d: IPcacData, i: number) => {
+          this.dotClickedSource.next(d);
         })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))

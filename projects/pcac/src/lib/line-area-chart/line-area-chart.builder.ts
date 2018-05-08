@@ -7,6 +7,9 @@ import { line, Line, area, Area } from 'd3-shape';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { range } from 'd3-array';
 
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+
 /**
  * Lib
  */
@@ -32,6 +35,8 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private area: Area<[number, number]>;
   private xScale: ScaleLinear<number, number>;
   private yScale: ScaleLinear<number, number>;
+  private dotClickedSource = new Subject<IPcacData>();
+  dotClicked$ = this.dotClickedSource.asObservable();
 
   constructor(
     public axisBuilder: PcacAxisBuilder,
@@ -197,6 +202,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
             .duration(self.transitionService.getTransitionDuration() / 3))
             .attr('r', 4)
             .attr('fill', '#fff');
+        })
+        .on('click', (d: IPcacData, i: number) => {
+          this.dotClickedSource.next(d);
         })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))

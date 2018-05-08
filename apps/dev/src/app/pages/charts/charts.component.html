@@ -56,13 +56,13 @@
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Line Chart'}"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.lineChartConfig"></pcac-line-area-chart>
+          <pcac-line-area-chart [config]="pcService.lineChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
         </div>
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Area Chart'}"></pcac-header>
-          <pcac-line-area-chart [config]="pcService.areaChartConfig"></pcac-line-area-chart>
+          <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
         </div>
       </div>
     </div>

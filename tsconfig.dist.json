@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "paths": {
+    "@pioneer-code/pioneer-charts": [
+      "dist/pcac"
+    ]
+  }
+}

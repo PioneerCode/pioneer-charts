@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "paths": {
+    "@pioneer-code/pioneer-charts": [
+      "node_modules/@pioneer-code/pioneer-charts/"
+    ]
+  }
+}

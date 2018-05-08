@@ -12,8 +12,15 @@ import { transition } from 'd3-transition';
  * Lib
  */
 import { IPcacPieChartConfig } from './pie-chart.model';
-import { PcacChart } from '../core/chart';
-import { IPcacData } from '../core/chart.model';
+import {
+  PcacChart,
+  IPcacData,
+  PcacAxisBuilder,
+  PcacGridBuilder,
+  PcacColorService,
+  PcacTooltipBuilder,
+  PcacTransitionService
+} from '../core';
 
 export interface IPieChartBuilder {
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void;
@@ -25,6 +32,22 @@ export class PieChartBuilder extends PcacChart implements IPieChartBuilder {
   private arcShape: Arc<any, DefaultArcObject>;
   private arcOverShape: Arc<any, DefaultArcObject>;
   private pieAngles: Pie<any, number | {}>;
+
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
+    public colorService: PcacColorService
+  ) {
+    super(
+      axisBuilder,
+      gridBuilder,
+      transitionService,
+      tooltipBuilder,
+      colorService
+    );
+  }
 
   buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);

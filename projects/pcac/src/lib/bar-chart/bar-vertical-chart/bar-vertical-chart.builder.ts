@@ -1,14 +1,25 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { PcacChart } from '../../core/chart';
-import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
-
 import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
 import { element } from 'protractor';
+
+/**
+ * Lib
+ */
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import {
+  PcacChart,
+  IPcacData,
+  PcacAxisBuilder,
+  PcacGridBuilder,
+  PcacColorService,
+  PcacTooltipBuilder,
+  PcacTransitionService,
+  PcacTickFormatEnum
+} from '../../core';
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
@@ -31,6 +42,22 @@ export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked: ScaleBand<string>;
   private xScaleGrouped: ScaleBand<string>;
   private yScale: ScaleLinear<number, number>;
+
+  constructor(
+    public axisBuilder: PcacAxisBuilder,
+    public gridBuilder: PcacGridBuilder,
+    public transitionService: PcacTransitionService,
+    public tooltipBuilder: PcacTooltipBuilder,
+    public colorService: PcacColorService
+  ) {
+    super(
+      axisBuilder,
+      gridBuilder,
+      transitionService,
+      tooltipBuilder,
+      colorService
+    );
+  }
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.initializeChartState(chartElm, config);

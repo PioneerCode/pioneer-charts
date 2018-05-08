@@ -5,14 +5,25 @@ import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, selection, Selection, EnterElement } from 'd3-selection';
 
-import { PcacChart } from '../../core/chart';
-import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
-import { PcacTransitionService } from '../../core/transition.service';
 import { BaseType } from 'd3-selection';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { Subject } from 'rxjs/internal/Subject';
 import { Observable } from 'rxjs/internal/Observable';
-import { PcacAxisBuilder, PcacGridBuilder, PcacColorService, PcacTooltipBuilder } from '../../core';
+
+/**
+ * Lib
+ */
+import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
+import {
+  PcacChart,
+  IPcacData,
+  PcacAxisBuilder,
+  PcacGridBuilder,
+  PcacColorService,
+  PcacTooltipBuilder,
+  PcacTransitionService,
+  PcacTickFormatEnum
+} from '../../core';
+
 
 type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |

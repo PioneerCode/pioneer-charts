@@ -118,7 +118,9 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       });
     }
     this.drawLineArea(config);
-    this.drawEffects(config);
+    if (config.enableEffects) {
+      this.drawEffects(config);
+    }
     this.drawDots(config);
   }
 

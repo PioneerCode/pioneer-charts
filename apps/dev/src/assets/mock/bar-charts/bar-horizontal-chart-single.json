@@ -4,7 +4,7 @@
   "isStacked": true,
   "tickFormat": "Percentage",
   "hideGrid": true,
-  "hideScale": false,
+  "hideAxis": true,
   "thresholds": [
     {
       "value": 0.75

@@ -7,5 +7,5 @@ export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
   thresholds: IPcacData[];
   tickFormat?: PcacTickFormatEnum;
   hideGrid?: boolean;
-  hideScale?: boolean;
+  hideAxis?: boolean;
 }

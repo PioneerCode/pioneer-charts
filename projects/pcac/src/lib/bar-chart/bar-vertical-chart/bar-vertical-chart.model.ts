@@ -6,4 +6,6 @@ export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
   isStacked: boolean;
   thresholds: IPcacData[];
   tickFormat?: PcacTickFormatEnum;
+  hideGrid?: boolean;
+  hideAxis?: boolean;
 }

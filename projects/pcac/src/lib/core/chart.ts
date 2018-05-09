@@ -12,7 +12,7 @@ import { PcacTooltipBuilder } from './tooltip.builder';
 
 @Injectable()
 export class PcacChart {
-  margin = { top: 16, right: 16, bottom: 20, left: 40 };
+  margin = { top: 8, right: 16, bottom: 20, left: 40 };
   svg: Selection<BaseType, {}, HTMLElement, any>;
   width = 400;
   height = 400;

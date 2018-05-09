@@ -3,7 +3,7 @@
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Vertical Single'}"></pcac-header>
+          <pcac-header [config]="{'title':'Vertical Single: Hide Axis'}"></pcac-header>
           <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
@@ -21,7 +21,7 @@
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Vertical Bar'}"></pcac-header>
+          <pcac-header [config]="{'title':'Vertical Bars'}"></pcac-header>
           <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
         </div>
       </div>
@@ -29,7 +29,7 @@
     <div class="row pc-row">
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':'Horizontal Single'}"></pcac-header>
+          <pcac-header [config]="{'title':'Horizontal Single: Hide Axis & Grid'}"></pcac-header>
           <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
@@ -47,7 +47,7 @@
       </div>
       <div class="col-sm">
         <div class="pc-chart-container">
-          <pcac-header [config]="{'title':' Horizontal Bar'}"></pcac-header>
+          <pcac-header [config]="{'title':' Horizontal Bars'}"></pcac-header>
           <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
         </div>
       </div>
@@ -63,6 +63,14 @@
         <div class="pc-chart-container">
           <pcac-header [config]="{'title':'Area Chart'}"></pcac-header>
           <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-header [config]="{'title':'Area Chart: Hide Axis & Grid'}"></pcac-header>
+          <pcac-line-area-chart [config]="pcService.areaChartHideConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
         </div>
       </div>
     </div>

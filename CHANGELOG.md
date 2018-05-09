@@ -1,3 +1,15 @@
+<a name="0.12.0"></a>
+# [v0.12.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.0) (2018-06-09)
+
+### Features
+
+- Bar Charts
+  - Hide Scales
+  - Hide Grids
+- Line Area Charts
+  - Hide Scales
+  - Hide Grids
+
 <a name="0.11.2"></a>
 # [v0.11.2](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.2) (2018-06-08)
 

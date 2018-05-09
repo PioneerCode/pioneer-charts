@@ -61,6 +61,13 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
+    if (config.hideAxis) {
+      config.height = config.height + this.margin.top + this.margin.bottom;
+      this.margin.top = 0;
+      this.margin.bottom = 0;
+      this.margin.left = 0;
+      this.margin.right = 0;
+    }
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -84,22 +91,26 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
-      height: this.height,
-      xScale: this.xScaleStacked,
-      yScale: this.yScale,
-      xFormat: PcacTickFormatEnum.None,
-      yFormat: config.tickFormat || PcacTickFormatEnum.None
-    });
-    this.gridBuilder.drawHorizontalGrid({
-      svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
-      width: this.width,
-      xScale: this.xScaleStacked,
-      yScale: this.yScale
-    });
+    if (!config.hideAxis) {
+      this.axisBuilder.drawAxis({
+        svg: this.svg,
+        numberOfTicks: config.numberOfTicks || 5,
+        height: this.height,
+        xScale: this.xScaleStacked,
+        yScale: this.yScale,
+        xFormat: PcacTickFormatEnum.None,
+        yFormat: config.tickFormat || PcacTickFormatEnum.None
+      });
+    }
+    if (!config.hideGrid) {
+      this.gridBuilder.drawHorizontalGrid({
+        svg: this.svg,
+        numberOfTicks: config.numberOfTicks || 5,
+        width: this.width,
+        xScale: this.xScaleStacked,
+        yScale: this.yScale
+      });
+    }
     this.addGroups(config);
   }
 

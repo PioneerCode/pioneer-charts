@@ -56,12 +56,19 @@ export class PcRepository {
     return this.http.get<IPcacBarVerticalChartConfig>('./assets/mock/bar-charts/bar-vertical-chart-stacked.json');
   }
 
+  /**
+   * Line Area Charts
+   */
   getLineChart() {
-    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-chart.json');
+    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-area-chart/line-chart.json');
   }
 
   getAreaChart() {
-    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/area-chart.json');
+    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-area-chart/area-chart.json');
+  }
+
+  getAreaHideChart() {
+    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-area-chart/area-chart-hide.json');
   }
 
   getPieChartConfig() {

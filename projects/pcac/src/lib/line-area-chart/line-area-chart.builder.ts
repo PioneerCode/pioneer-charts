@@ -58,6 +58,13 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         key: ''
       };
     });
+    if (config.hideAxis) {
+      config.height = config.height + 12;
+      this.margin.top = 8;
+      this.margin.bottom = 8;
+      this.margin.left = 8;
+      this.margin.right = 8;
+    }
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -92,22 +99,28 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
 
   private drawChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
-      height: this.height,
-      xScale: this.xScale,
-      yScale: this.yScale
-    });
-    this.gridBuilder.drawHorizontalGrid({
-      svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
-      width: this.width,
-      xScale: this.xScale,
-      yScale: this.yScale
-    });
+    if (!config.hideAxis) {
+      this.axisBuilder.drawAxis({
+        svg: this.svg,
+        numberOfTicks: config.numberOfTicks || 5,
+        height: this.height,
+        xScale: this.xScale,
+        yScale: this.yScale
+      });
+    }
+    if (!config.hideGrid) {
+      this.gridBuilder.drawHorizontalGrid({
+        svg: this.svg,
+        numberOfTicks: config.numberOfTicks || 5,
+        width: this.width,
+        xScale: this.xScale,
+        yScale: this.yScale
+      });
+    }
     this.drawLineArea(config);
-    this.drawEffects(config);
+    if (config.enableEffects) {
+      this.drawEffects(config);
+    }
     this.drawDots(config);
   }
 

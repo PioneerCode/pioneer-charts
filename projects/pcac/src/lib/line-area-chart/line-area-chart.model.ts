@@ -5,4 +5,6 @@ export interface IPcacLineAreaChartConfig extends IPcacChartConfig  {
   isArea: boolean;
   enableEffects: boolean;
   numberOfTicks: number;
+  hideGrid?: boolean;
+  hideAxis?: boolean;
 }

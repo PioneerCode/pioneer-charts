@@ -5,7 +5,7 @@
       <p class="lead">Configurable to display an area or line chart.</p>
     </section>
     <section class="pc-doc-section">
-      <div class="row">
+      <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Line Chart'}"></pcac-header>
@@ -16,6 +16,14 @@
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Area Chart'}"></pcac-header>
             <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="{'title':'Area Chart: Hide Axis & Grid'}"></pcac-header>
+            <pcac-line-area-chart [config]="pcService.areaChartHideConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
       </div>
@@ -33,7 +41,7 @@
         <div class="col-sm">
           <h3>API</h3>
           <pc-prism language="javascript" [code]="importCode"></pc-prism>
-          <pc-base-config>
+          <pc-base-config [includeHideAxisAndGrid]="true">
             <tbody style="border-top: none;">
               <tr>
                 <td>domainMax</td>

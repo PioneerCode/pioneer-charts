@@ -62,6 +62,9 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     if (config.hideAxis) {
+      config.height = config.height + this.margin.top + this.margin.bottom;
+      this.margin.top = 0;
+      this.margin.bottom = 0;
       this.margin.left = 0;
       this.margin.right = 0;
     }

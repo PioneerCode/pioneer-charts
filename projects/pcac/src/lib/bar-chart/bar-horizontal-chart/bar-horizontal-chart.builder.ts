@@ -62,6 +62,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       config.height = config.height + this.margin.top + this.margin.bottom;
       this.margin.top = 0;
       this.margin.bottom = 0;
+      this.margin.left = 0;
+      this.margin.right = 0;
     }
     this.initializeChartState(chartElm, config);
     this.buildScales(config);

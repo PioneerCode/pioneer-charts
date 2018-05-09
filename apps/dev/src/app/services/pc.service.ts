@@ -23,6 +23,7 @@ export class PcService {
   barHorizontalChartStackedConfig: IPcacBarHorizontalChartConfig;
   lineChartConfig: IPcacLineAreaChartConfig;
   areaChartConfig: IPcacLineAreaChartConfig;
+  areaChartHideConfig: IPcacLineAreaChartConfig;
   pieChartConfig: IPcacPieChartConfig;
   sharedConfig: IPcacData[];
   currentMainRoute = 'home';
@@ -37,21 +38,25 @@ export class PcService {
 
   getData() {
     this.getBarCharts();
+    this.getLineAreaCharts();
 
     this.repository.getTable()
       .subscribe(data => this.tableConfig = data);
-
-    this.repository.getLineChart()
-      .subscribe(data => this.lineChartConfig = data);
-
-    this.repository.getAreaChart()
-      .subscribe(data => this.areaChartConfig = data);
 
     this.repository.getPieChartConfig()
       .subscribe(data => this.pieChartConfig = data);
 
     this.repository.getShareConfig()
       .subscribe(data => this.sharedConfig = data);
+  }
+
+  private getLineAreaCharts() {
+    this.repository.getLineChart()
+      .subscribe(data => this.lineChartConfig = data);
+    this.repository.getAreaChart()
+      .subscribe(data => this.areaChartConfig = data);
+    this.repository.getAreaHideChart()
+      .subscribe(data => this.areaChartHideConfig = data);
   }
 
   private getBarCharts() {

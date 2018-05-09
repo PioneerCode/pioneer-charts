@@ -9,4 +9,5 @@ import { PcService } from '../../services/pc.service';
 })
 export class BaseConfigComponent  {
   @Input() includeTickFormat = false;
+  @Input() includeHideAxisAndGrid = false;
 }

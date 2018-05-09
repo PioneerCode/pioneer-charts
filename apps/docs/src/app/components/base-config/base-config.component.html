@@ -35,6 +35,14 @@
         </ul>
       </td>
     </tr>
+    <tr *ngIf="includeHideAxisAndGrid">
+      <td>hideAxis</td>
+      <td>If true, hide chart axis.</td>
+    </tr>
+    <tr *ngIf="includeHideAxisAndGrid">
+      <td>hideGrid</td>
+      <td>If true, hide chart grid.</td>
+    </tr>
   </tbody>
   <ng-content></ng-content>
 </table>

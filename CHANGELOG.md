@@ -1,3 +1,11 @@
+<a name="0.12.1"></a>
+# [v0.12.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.1) (2018-06-15)
+
+### Fix
+
+- Fix dynamic width/height calcs on bar-charts based on hideAxis being set to true and
+a group label being present. 
+
 <a name="0.12.0"></a>
 # [v0.12.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.0) (2018-06-09)
 

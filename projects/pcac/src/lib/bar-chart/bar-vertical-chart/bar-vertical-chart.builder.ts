@@ -62,15 +62,34 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     if (config.hideAxis) {
-      config.height = config.height + this.margin.top + this.margin.bottom;
-      this.margin.top = 0;
-      this.margin.bottom = 0;
-      this.margin.left = 0;
-      this.margin.right = 0;
+      this.adjustForHiddenAxis(config);
     }
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
+  }
+
+  private adjustForHiddenAxis(config: IPcacBarVerticalChartConfig) {
+    const hasGroupLabel = this.hasGroupLabel(config);
+
+    config.height = config.height + this.margin.top;
+    if (!hasGroupLabel) {
+      config.height = config.height + this.margin.bottom;
+    }
+    this.margin.top = 0;
+    this.margin.bottom = hasGroupLabel ? this.margin.bottom : 0;
+    this.margin.left = 0;
+    this.margin.right = 0;
+  }
+
+  private hasGroupLabel(config: IPcacBarVerticalChartConfig) {
+    let hasGroupLabel = false;
+    config.data.forEach(node => {
+      if (node.key) {
+        hasGroupLabel = true;
+      }
+    });
+    return hasGroupLabel;
   }
 
   private buildScales(config: IPcacBarVerticalChartConfig) {

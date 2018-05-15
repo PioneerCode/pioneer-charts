@@ -9,7 +9,7 @@
       <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Vertical Single'}"></pcac-header>
+            <pcac-header [config]="{'title':'Vertical: Hide Axis'}"></pcac-header>
             <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
           </div>
         </div>
@@ -29,7 +29,7 @@
       <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Horizontal Single'}"></pcac-header>
+            <pcac-header [config]="{'title':'Horizontal: Hide Axis & Grid'}"></pcac-header>
             <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
           </div>
         </div>

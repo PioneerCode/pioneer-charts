@@ -85,5 +85,6 @@ export class PcacChart {
       .remove();
     this.margin.left = max;
     this.margin.bottom = this.margin.bottom;
+    this.width = this.width - this.margin.left;
   }
 }

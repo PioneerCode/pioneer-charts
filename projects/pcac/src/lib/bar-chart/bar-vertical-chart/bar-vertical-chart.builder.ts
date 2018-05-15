@@ -91,17 +91,16 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
     this.buildContainer(chartElm);
-    if (!config.hideAxis) {
-      this.axisBuilder.drawAxis({
-        svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
-        height: this.height,
-        xScale: this.xScaleStacked,
-        yScale: this.yScale,
-        xFormat: PcacTickFormatEnum.None,
-        yFormat: config.tickFormat || PcacTickFormatEnum.None
-      });
-    }
+    this.axisBuilder.drawAxis({
+      svg: this.svg,
+      numberOfTicks: config.numberOfTicks || 5,
+      height: this.height,
+      xScale: this.xScaleStacked,
+      yScale: this.yScale,
+      xFormat: PcacTickFormatEnum.None,
+      yFormat: config.tickFormat || PcacTickFormatEnum.None,
+      hideYAxis: config.hideAxis
+    });
     if (!config.hideGrid) {
       this.gridBuilder.drawHorizontalGrid({
         svg: this.svg,

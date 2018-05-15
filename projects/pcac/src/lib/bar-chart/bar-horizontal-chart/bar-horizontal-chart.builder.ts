@@ -66,7 +66,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.margin.right = 0;
     }
     this.initializeChartState(chartElm, config);
-    this.buildScales(config);
+    this.buildScales(chartElm, config);
     this.drawChart(chartElm, config);
   }
 
@@ -79,14 +79,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
   }
 
-  private buildScales(config: IPcacBarHorizontalChartConfig) {
+  private buildScales(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig) {
     const barMap = config.data[0].data.map((d) => {
       return d.value;
     });
 
     this.xScale = scaleLinear()
-      .domain([0, config.domainMax])
-      .range([0, this.width]);
+      .domain([0, config.domainMax]);
+
 
     this.yScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
@@ -97,22 +97,24 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .padding(0.05)
       .rangeRound([0, this.yScaleStacked.bandwidth()])
       .domain(config.data[0].data.map((d) => d.key as string));
+
+    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked);
+
+    this.xScale.range([0, this.width]);
   }
 
   private drawChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
-    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked);
     this.buildContainer(chartElm);
-    if (!config.hideAxis) {
-      this.axisBuilder.drawAxis({
-        svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
-        height: this.height,
-        xScale: this.xScale,
-        yScale: this.yScaleStacked,
-        xFormat: config.tickFormat || PcacTickFormatEnum.None,
-        yFormat: PcacTickFormatEnum.None
-      });
-    }
+    this.axisBuilder.drawAxis({
+      svg: this.svg,
+      numberOfTicks: config.numberOfTicks || 5,
+      height: this.height,
+      xScale: this.xScale,
+      yScale: this.yScaleStacked,
+      xFormat: config.tickFormat || PcacTickFormatEnum.None,
+      yFormat: PcacTickFormatEnum.None,
+      hideXAxis: config.hideAxis
+    });
     if (!config.hideGrid) {
       this.gridBuilder.drawVerticalGrid({
         svg: this.svg,

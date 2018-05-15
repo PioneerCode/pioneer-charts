@@ -4,7 +4,7 @@
   "isStacked": true,
   "tickFormat": "Percentage",
   "hideGrid": false,
-  "hideAxis": true,
+  "hideAxis": false,
   "thresholds": [
     {
       "value": 0.75
@@ -12,6 +12,7 @@
   ],
   "data": [
     {
+      "key": "Chocolate Chips",
       "data": [
         {
           "key": "Week 1",

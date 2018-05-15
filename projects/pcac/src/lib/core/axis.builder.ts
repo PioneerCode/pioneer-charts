@@ -11,12 +11,18 @@ export interface IPcacAxisBuilderConfig {
   numberOfTicks: number;
   yFormat?: PcacTickFormatEnum;
   xFormat?: PcacTickFormatEnum;
+  hideYAxis?: boolean;
+  hideXAxis?: boolean;
 }
 
 export class PcacAxisBuilder {
   drawAxis(config: IPcacAxisBuilderConfig): void {
-    this.drawXAxis(config);
-    this.drawYAxis(config);
+    if (!config.hideXAxis) {
+      this.drawXAxis(config);
+    }
+    if (!config.hideYAxis) {
+      this.drawYAxis(config);
+    }
   }
 
   private drawYAxis(config: IPcacAxisBuilderConfig) {

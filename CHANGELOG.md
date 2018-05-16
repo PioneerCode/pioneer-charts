@@ -1,3 +1,11 @@
+
+<a name="0.13.1"></a>
+# [v0.13.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.1) (2018-06-16)
+
+### Fix
+
+- Responsive charts are now compatible with Angular 5.
+
 <a name="0.13.0"></a>
 # [v0.13.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.0) (2018-06-16)
 

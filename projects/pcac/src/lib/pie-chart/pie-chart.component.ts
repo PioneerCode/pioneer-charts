@@ -6,14 +6,12 @@ import {
   OnChanges,
   Output,
   EventEmitter,
-  OnDestroy,
-  AfterViewInit
+  HostListener
 } from '@angular/core';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { IPcacData } from '../core';
 import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pcac-pie-chart',
@@ -22,11 +20,12 @@ import { debounceTime } from 'rxjs/operators';
     PieChartBuilder
   ]
 })
-export class PcacPieChartComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class PcacPieChartComponent implements OnChanges {
   @Input() config: IPcacPieChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
-  private resizeEvent: Subscription;
+
+  private resizeWindowTimeout: NodeJS.Timer;
 
   constructor(
     private chartBuilder: PieChartBuilder
@@ -34,18 +33,6 @@ export class PcacPieChartComponent implements OnChanges, AfterViewInit, OnDestro
     this.chartBuilder.sliceClicked$.subscribe(data => {
       this.sliceClicked.emit(data);
     });
-  }
-
-  ngAfterViewInit() {
-    this.resizeEvent = fromEvent(window, 'resize').pipe(
-      debounceTime(100)
-    ).subscribe((event) => {
-      this.buildChart();
-    });
-  }
-
-  ngOnDestroy() {
-    this.resizeEvent.unsubscribe();
   }
 
   ngOnChanges() {
@@ -56,5 +43,19 @@ export class PcacPieChartComponent implements OnChanges, AfterViewInit, OnDestro
 
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
+  }
+
+  /**
+   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
+   */
+  @HostListener('window:resize')
+  onResize() {
+    const self = this;
+    clearTimeout(this.resizeWindowTimeout);
+    this.resizeWindowTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.buildChart();
+      }
+    }, 300);
   }
 }

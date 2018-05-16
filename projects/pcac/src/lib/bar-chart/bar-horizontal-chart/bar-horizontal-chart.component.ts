@@ -6,14 +6,12 @@ import {
   OnChanges,
   EventEmitter,
   Output,
-  AfterViewInit,
-  OnDestroy
+  HostListener
 } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
 import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -22,11 +20,12 @@ import { debounceTime } from 'rxjs/operators';
     BarHorizontalChartBuilder
   ]
 })
-export class PcacBarChartHorizontalComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class PcacBarChartHorizontalComponent implements OnChanges {
   @Input() config: IPcacBarHorizontalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
-  private resizeEvent: Subscription;
+
+  private resizeWindowTimeout: NodeJS.Timer;
 
   constructor(
     private chartBuilder: BarHorizontalChartBuilder,
@@ -34,18 +33,6 @@ export class PcacBarChartHorizontalComponent implements OnChanges, AfterViewInit
     this.chartBuilder.barClicked$.subscribe(data => {
       this.barClicked.emit(data);
     });
-  }
-
-  ngAfterViewInit() {
-    this.resizeEvent = fromEvent(window, 'resize').pipe(
-      debounceTime(100)
-    ).subscribe((event) => {
-      this.buildChart();
-    });
-  }
-
-  ngOnDestroy() {
-    this.resizeEvent.unsubscribe();
   }
 
   ngOnChanges() {
@@ -56,5 +43,19 @@ export class PcacBarChartHorizontalComponent implements OnChanges, AfterViewInit
 
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
+  }
+
+  /**
+   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
+   */
+  @HostListener('window:resize')
+  onResize() {
+    const self = this;
+    clearTimeout(this.resizeWindowTimeout);
+    this.resizeWindowTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.buildChart();
+      }
+    }, 300);
   }
 }

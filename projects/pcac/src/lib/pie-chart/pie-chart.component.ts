@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, Output, EventEmitter } from '@angular/core';
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { IPcacData } from '../core';
@@ -24,18 +24,14 @@ export class PcacPieChartComponent implements OnChanges {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.config && this.config.data) {
-      this.buildChart();
+      this.chartBuilder.buildChart(this.chartElm, this.config);
     }
   }
 
-  buildChart(): void {
+  @HostListener('window:resize')
+  resize(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
   }
-
-  // @HostListener('window:resize')
-  // resize(): void {
-  //   this.buildChart();
-  // }
 }

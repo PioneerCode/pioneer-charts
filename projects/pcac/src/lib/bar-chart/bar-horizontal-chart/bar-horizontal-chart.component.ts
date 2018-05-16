@@ -3,15 +3,16 @@ import {
   Input,
   ElementRef,
   ViewChild,
-  HostListener,
   OnChanges,
   EventEmitter,
-  Output
+  Output,
+  AfterViewInit,
+  OnDestroy
 } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -21,10 +22,11 @@ import { debounceTime } from 'rxjs/operators';
     BarHorizontalChartBuilder
   ]
 })
-export class PcacBarChartHorizontalComponent implements OnChanges {
+export class PcacBarChartHorizontalComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() config: IPcacBarHorizontalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
+  private resizeEvent: Subscription;
 
   constructor(
     private chartBuilder: BarHorizontalChartBuilder,
@@ -32,12 +34,19 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
     this.chartBuilder.barClicked$.subscribe(data => {
       this.barClicked.emit(data);
     });
+  }
 
-    fromEvent(window, 'resize').pipe(
+  ngAfterViewInit() {
+    this.resizeEvent = fromEvent(window, 'resize').pipe(
       debounceTime(100)
     ).subscribe((event) => {
+      console.log('hi');
       this.buildChart();
     });
+  }
+
+  ngOnDestroy() {
+    this.resizeEvent.unsubscribe();
   }
 
   ngOnChanges() {

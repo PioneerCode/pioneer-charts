@@ -184,7 +184,6 @@ export class BarVerticalChartBuilder extends PcacChart {
       .style('fill', (d: IPcacData, i: number, n: any) => {
         return this.colors[i];
       })
-      .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', () => {
         return this.height;
       })
@@ -208,6 +207,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
+      .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', (d: IPcacData) => {
         return this.yScale(d.value as number);
       })

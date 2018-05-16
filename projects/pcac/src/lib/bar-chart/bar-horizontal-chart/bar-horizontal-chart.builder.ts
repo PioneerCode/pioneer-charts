@@ -40,6 +40,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private yScaleGrouped: ScaleBand<string>;
   private barClickedSource = new Subject<IPcacData>();
   private config: IPcacBarHorizontalChartConfig;
+  private cachedMargins;
   barClicked$ = this.barClickedSource.asObservable();
 
   constructor(
@@ -60,7 +61,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));
-    if (config.hideAxis) {
+    if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
     this.initializeChartState(chartElm, this.config);
@@ -69,6 +70,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private adjustForHiddenAxis() {
+    if (!this.cachedMargins) {
+      this.cachedMargins = JSON.parse(JSON.stringify(this.margin));
+    }
+    this.margin = JSON.parse(JSON.stringify(this.cachedMargins));
     this.config.height = this.config.height + this.margin.top + this.margin.bottom;
     this.margin.top = 0;
     this.margin.bottom = 0;

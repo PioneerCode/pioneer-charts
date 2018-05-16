@@ -55,13 +55,13 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));
-    this.startData = range(config.data[0].data.length).map((d) => {
+    this.startData = range(this.config.data[0].data.length).map((d) => {
       return {
         value: 0,
         key: ''
       };
     });
-    if (config.hideAxis) {
+    if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
     this.initializeChartState(chartElm, this.config);

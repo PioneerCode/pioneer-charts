@@ -11,6 +11,7 @@ import {
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
+import { debounce } from '../../core/debounce.decartor';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -46,12 +47,8 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
   }
 
   @HostListener('window:resize')
+  @debounce()
   resize(): void {
-    const self = this;
-    this.resizeDebounceTimeout = setTimeout(() => {
-      if (self.config.data.length > 0) {
-        self.buildChart();
-      }
-    }, 200);
+    this.buildChart();
   }
 }

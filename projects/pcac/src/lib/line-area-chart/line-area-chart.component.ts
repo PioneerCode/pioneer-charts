@@ -40,7 +40,6 @@ export class PcacLineAreaChartComponent implements OnChanges, AfterViewInit, OnD
     this.resizeEvent = fromEvent(window, 'resize').pipe(
       debounceTime(100)
     ).subscribe((event) => {
-      console.log('hi');
       this.buildChart();
     });
   }

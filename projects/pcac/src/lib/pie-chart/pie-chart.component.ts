@@ -40,7 +40,6 @@ export class PcacPieChartComponent implements OnChanges, AfterViewInit, OnDestro
     this.resizeEvent = fromEvent(window, 'resize').pipe(
       debounceTime(100)
     ).subscribe((event) => {
-      console.log('hi');
       this.buildChart();
     });
   }

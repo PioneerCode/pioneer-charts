@@ -34,6 +34,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private yScale: ScaleLinear<number, number>;
   private dotClickedSource = new Subject<IPcacData>();
   private originalHeight: number;
+  private config: IPcacLineAreaChartConfig;
   dotClicked$ = this.dotClickedSource.asObservable();
 
   constructor(
@@ -53,28 +54,23 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   }
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
+    this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(config.data[0].data.length).map((d) => {
       return {
         value: 0,
         key: ''
       };
     });
-
     if (config.hideAxis) {
-      this.adjustForHiddenAxis(config);
+      this.adjustForHiddenAxis();
     }
-
-    this.initializeChartState(chartElm, config);
-    this.buildScales(config);
-    this.drawChart(chartElm, config);
+    this.initializeChartState(chartElm, this.config);
+    this.buildScales(this.config);
+    this.drawChart(chartElm, this.config);
   }
 
-  private adjustForHiddenAxis(config: IPcacLineAreaChartConfig) {
-    if (!this.originalHeight) {
-      // Cache original height for recalculation of hidden axis height.
-      this.originalHeight = config.height;
-    }
-    config.height = this.originalHeight + 12;
+  private adjustForHiddenAxis() {
+    this.config.height = this.config.height + 12;
     this.margin.top = 8;
     this.margin.bottom = 8;
     this.margin.left = 8;

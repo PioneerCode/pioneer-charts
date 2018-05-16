@@ -34,14 +34,12 @@ export class PcacBarVerticalChartComponent implements OnChanges, AfterViewInit, 
     this.chartBuilder.barClicked$.subscribe(data => {
       this.barClicked.emit(data);
     });
-
   }
 
   ngAfterViewInit() {
     this.resizeEvent = fromEvent(window, 'resize').pipe(
       debounceTime(100)
     ).subscribe((event) => {
-      console.log('hi');
       this.buildChart();
     });
   }

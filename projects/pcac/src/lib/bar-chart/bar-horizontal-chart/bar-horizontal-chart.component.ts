@@ -40,7 +40,6 @@ export class PcacBarChartHorizontalComponent implements OnChanges, AfterViewInit
     this.resizeEvent = fromEvent(window, 'resize').pipe(
       debounceTime(100)
     ).subscribe((event) => {
-      console.log('hi');
       this.buildChart();
     });
   }

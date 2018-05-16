@@ -44,8 +44,8 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
     this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
-  // @HostListener('window:resize')
-  // resize(): void {
-  //   this.buildChart();
-  // }
+  @HostListener('window:resize')
+  resize(): void {
+    this.buildChart();
+  }
 }

@@ -26,12 +26,15 @@ export class PcacPieChartComponent implements OnChanges {
 
   ngOnChanges() {
     if (this.config && this.config.data) {
-      this.chartBuilder.buildChart(this.chartElm, this.config);
+      this.buildChart();
     }
+  }
+  buildChart(): void {
+    this.chartBuilder.buildChart(this.chartElm, this.config);
   }
 
   @HostListener('window:resize')
   resize(): void {
-    this.chartBuilder.buildChart(this.chartElm, this.config);
+    this.buildChart();
   }
 }

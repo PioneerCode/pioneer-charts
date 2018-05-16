@@ -14,6 +14,7 @@ export class PcacPieChartComponent implements OnChanges {
   @Input() config: IPcacPieChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
+  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: PieChartBuilder
@@ -35,6 +36,11 @@ export class PcacPieChartComponent implements OnChanges {
 
   @HostListener('window:resize')
   resize(): void {
-    this.buildChart();
+    const self = this;
+    this.resizeDebounceTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.buildChart();
+      }
+    }, 200);
   }
 }

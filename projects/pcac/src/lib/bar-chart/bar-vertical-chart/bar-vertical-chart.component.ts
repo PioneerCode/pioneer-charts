@@ -23,6 +23,7 @@ export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config: IPcacBarVerticalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
+  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: BarVerticalChartBuilder
@@ -45,6 +46,11 @@ export class PcacBarVerticalChartComponent implements OnChanges {
 
   @HostListener('window:resize')
   resize(): void {
-    this.buildChart();
+    const self = this;
+    this.resizeDebounceTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.buildChart();
+      }
+    }, 200);
   }
 }

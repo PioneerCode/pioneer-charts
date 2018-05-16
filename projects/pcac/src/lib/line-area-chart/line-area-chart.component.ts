@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, EventEmitter, Output } from '@angular/core';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
 import { IPcacData } from '../core';
@@ -14,6 +14,7 @@ export class PcacLineAreaChartComponent implements OnChanges {
   @Input() config: IPcacLineAreaChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
+  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: LineAreaChartBuilder
@@ -24,7 +25,7 @@ export class PcacLineAreaChartComponent implements OnChanges {
       });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     if (this.config && this.config.data) {
       this.buildChart();
     }
@@ -36,6 +37,11 @@ export class PcacLineAreaChartComponent implements OnChanges {
 
   @HostListener('window:resize')
   resize(): void {
-    this.buildChart();
+    const self = this;
+    this.resizeDebounceTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.buildChart();
+      }
+    }, 200);
   }
 }

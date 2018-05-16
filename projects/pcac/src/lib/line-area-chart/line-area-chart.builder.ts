@@ -33,6 +33,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
   private xScale: ScaleLinear<number, number>;
   private yScale: ScaleLinear<number, number>;
   private dotClickedSource = new Subject<IPcacData>();
+  private originalHeight: number;
   dotClicked$ = this.dotClickedSource.asObservable();
 
   constructor(
@@ -58,16 +59,26 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
         key: ''
       };
     });
+
     if (config.hideAxis) {
-      config.height = config.height + 12;
-      this.margin.top = 8;
-      this.margin.bottom = 8;
-      this.margin.left = 8;
-      this.margin.right = 8;
+      this.adjustForHiddenAxis(config);
     }
+
     this.initializeChartState(chartElm, config);
     this.buildScales(config);
     this.drawChart(chartElm, config);
+  }
+
+  private adjustForHiddenAxis(config: IPcacLineAreaChartConfig) {
+    if (!this.originalHeight) {
+      // Cache original height for recalculation of hidden axis height.
+      this.originalHeight = config.height;
+    }
+    config.height = this.originalHeight + 12;
+    this.margin.top = 8;
+    this.margin.bottom = 8;
+    this.margin.left = 8;
+    this.margin.right = 8;
   }
 
   private buildScales(config: IPcacLineAreaChartConfig): void {

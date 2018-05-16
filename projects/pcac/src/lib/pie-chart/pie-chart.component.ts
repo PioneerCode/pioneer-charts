@@ -2,6 +2,8 @@ import { Component, Input, ViewChild, ElementRef, HostListener, OnChanges, Outpu
 import { IPcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { IPcacData } from '../core';
+import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pcac-pie-chart',
@@ -14,15 +16,18 @@ export class PcacPieChartComponent implements OnChanges {
   @Input() config: IPcacPieChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
-  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: PieChartBuilder
   ) {
-    this.chartBuilder.sliceClicked$.subscribe(
-      data => {
-        this.sliceClicked.emit(data);
-      });
+    this.chartBuilder.sliceClicked$.subscribe(data => {
+      this.sliceClicked.emit(data);
+    });
+    fromEvent(window, 'resize').pipe(
+      debounceTime(100)
+    ).subscribe((event) => {
+      this.buildChart();
+    });
   }
 
   ngOnChanges() {
@@ -32,15 +37,5 @@ export class PcacPieChartComponent implements OnChanges {
   }
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
-  }
-
-  @HostListener('window:resize')
-  resize(): void {
-    const self = this;
-    this.resizeDebounceTimeout = setTimeout(() => {
-      if (self.config.data.length > 0) {
-        self.buildChart();
-      }
-    }, 200);
   }
 }

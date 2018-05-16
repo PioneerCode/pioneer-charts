@@ -11,6 +11,8 @@ import {
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { IPcacData } from '../../core';
+import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',
@@ -23,15 +25,18 @@ export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config: IPcacBarVerticalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
-  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: BarVerticalChartBuilder
   ) {
-    this.chartBuilder.barClicked$.subscribe(
-      data => {
-        this.barClicked.emit(data);
-      });
+    this.chartBuilder.barClicked$.subscribe(data => {
+      this.barClicked.emit(data);
+    });
+    fromEvent(window, 'resize').pipe(
+      debounceTime(100)
+    ).subscribe((event) => {
+      this.buildChart();
+    });
   }
 
   ngOnChanges() {
@@ -42,15 +47,5 @@ export class PcacBarVerticalChartComponent implements OnChanges {
 
   buildChart(): void {
     this.chartBuilder.buildChart(this.chartElm, this.config);
-  }
-
-  @HostListener('window:resize')
-  resize(): void {
-    const self = this;
-    this.resizeDebounceTimeout = setTimeout(() => {
-      if (self.config.data.length > 0) {
-        self.buildChart();
-      }
-    }, 200);
   }
 }

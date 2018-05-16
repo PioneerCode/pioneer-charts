@@ -11,7 +11,8 @@ import {
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
-import { debounce } from '../../core/debounce.decartor';
+import { fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -24,15 +25,19 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
   @Input() config: IPcacBarHorizontalChartConfig;
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
-  private resizeDebounceTimeout: any;
 
   constructor(
     private chartBuilder: BarHorizontalChartBuilder,
   ) {
-    this.chartBuilder.barClicked$.subscribe(
-      data => {
-        this.barClicked.emit(data);
-      });
+    this.chartBuilder.barClicked$.subscribe(data => {
+      this.barClicked.emit(data);
+    });
+
+    fromEvent(window, 'resize').pipe(
+      debounceTime(100)
+    ).subscribe((event) => {
+      this.buildChart();
+    });
   }
 
   ngOnChanges() {
@@ -42,13 +47,6 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
   }
 
   buildChart(): void {
-
     this.chartBuilder.buildChart(this.chartElm, this.config);
-  }
-
-  @HostListener('window:resize')
-  @debounce()
-  resize(): void {
-    this.buildChart();
   }
 }

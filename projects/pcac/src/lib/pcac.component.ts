@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-pcac',
+  selector: 'pcac-root',
   template: `
     <p>
       pcac works!

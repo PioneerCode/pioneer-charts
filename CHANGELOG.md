@@ -1,3 +1,10 @@
+<a name="0.13.0"></a>
+# [v0.13.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.0) (2018-06-16)
+
+### Features
+
+- Pie Chart, Bar Chart and Line Area Chart are now responsive.
+
 <a name="0.12.1"></a>
 # [v0.12.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.1) (2018-06-15)
 

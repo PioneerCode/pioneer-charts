@@ -56,7 +56,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   private initTableUi() {
-    if (this.config && this.config.data) {
+    if (this.config && this.config.data && this.config.data.length > 0) {
       this.adjustedHeight = this.config.height + 36;
       if (this.config.enableSticky) {
         this.calculateColumnWidths();

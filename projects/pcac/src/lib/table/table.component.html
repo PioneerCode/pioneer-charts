@@ -26,7 +26,7 @@
       </thead>
     </table>
   </div>
-  <div *ngIf="config?.enableSticky" class="footer" #tableFooter>
+  <div *ngIf="config?.enableSticky && config?.data.length > 0" class="footer" #tableFooter>
     <table class="pcac-table">
       <tfoot>
         <tr>

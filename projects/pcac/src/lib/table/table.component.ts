@@ -8,7 +8,8 @@ import {
   ViewChild,
   ChangeDetectorRef,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  HostListener
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
 import { TableSortService } from './table-sort.service';
@@ -35,17 +36,18 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   rowData = [] as IPcacData[];
   adjustedHeight = 200;
 
+  private resizeWindowTimeout: NodeJS.Timer;
+
   constructor(
     private sortService: TableSortService,
     private changeDetector: ChangeDetectorRef
-  ) {
-  }
+  ) { }
 
   ngAfterViewInit() {
     this.initTableUi();
     // @ngFor rows finished
     this.rows.changes.subscribe(t => {
-      if (this.config.enableSticky) {
+      if (this.config.enableStickyHeader || this.config.enableStickyFooter) {
         this.calculateColumnWidths();
       }
     });
@@ -56,9 +58,9 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   private initTableUi() {
-    if (this.config && this.config.data) {
-      this.adjustedHeight = this.config.height + 36;
-      if (this.config.enableSticky) {
+    if (this.config && this.config.data && this.config.data.length > 0) {
+      this.adjustedHeight = this.config.height + 28;
+      if (this.config.enableStickyHeader || this.config.enableStickyFooter) {
         this.calculateColumnWidths();
       }
       this.setHeaders();
@@ -121,5 +123,17 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
         this.headers[i].icon = PcacTableSortIconsEnum.Sort;
       }
     }
+  }
+
+  /**
+ * Opting against fromEvent due to incompatibility with rxjs 5 => 6
+ */
+  @HostListener('window:resize')
+  onResize() {
+    const self = this;
+    clearTimeout(this.resizeWindowTimeout);
+    this.resizeWindowTimeout = setTimeout(() => {
+      self.initTableUi();
+    }, 300);
   }
 }

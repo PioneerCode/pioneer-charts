@@ -36,13 +36,13 @@ export class PcacPieChartComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.config && this.config.data) {
-      this.buildChart();
-    }
+    this.buildChart();
   }
 
   buildChart(): void {
-    this.chartBuilder.buildChart(this.chartElm, this.config);
+    if (this.config && this.config.data && this.config.data.length > 0) {
+      this.chartBuilder.buildChart(this.chartElm, this.config);
+    }
   }
 
   /**
@@ -53,9 +53,7 @@ export class PcacPieChartComponent implements OnChanges {
     const self = this;
     clearTimeout(this.resizeWindowTimeout);
     this.resizeWindowTimeout = setTimeout(() => {
-      if (self.config.data.length > 0) {
-        self.buildChart();
-      }
+      self.buildChart();
     }, 300);
   }
 }

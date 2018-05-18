@@ -8,7 +8,8 @@ import {
   ViewChild,
   ChangeDetectorRef,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  HostListener
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
 import { TableSortService } from './table-sort.service';
@@ -35,11 +36,12 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   rowData = [] as IPcacData[];
   adjustedHeight = 200;
 
+  private resizeWindowTimeout: NodeJS.Timer;
+
   constructor(
     private sortService: TableSortService,
     private changeDetector: ChangeDetectorRef
-  ) {
-  }
+  ) { }
 
   ngAfterViewInit() {
     this.initTableUi();
@@ -121,5 +123,19 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
         this.headers[i].icon = PcacTableSortIconsEnum.Sort;
       }
     }
+  }
+
+  /**
+ * Opting against fromEvent due to incompatibility with rxjs 5 => 6
+ */
+  @HostListener('window:resize')
+  onResize() {
+    const self = this;
+    clearTimeout(this.resizeWindowTimeout);
+    this.resizeWindowTimeout = setTimeout(() => {
+      if (self.config.data.length > 0) {
+        self.initTableUi();
+      }
+    }, 300);
   }
 }

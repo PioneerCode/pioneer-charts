@@ -45,7 +45,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
     this.initTableUi();
     // @ngFor rows finished
     this.rows.changes.subscribe(t => {
-      if (this.config.enableSticky) {
+      if (this.config.enableStickyHeader || this.config.enableStickyFooter) {
         this.calculateColumnWidths();
       }
     });
@@ -58,7 +58,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   private initTableUi() {
     if (this.config && this.config.data && this.config.data.length > 0) {
       this.adjustedHeight = this.config.height + 28;
-      if (this.config.enableSticky) {
+      if (this.config.enableStickyHeader || this.config.enableStickyFooter) {
         this.calculateColumnWidths();
       }
       this.setHeaders();

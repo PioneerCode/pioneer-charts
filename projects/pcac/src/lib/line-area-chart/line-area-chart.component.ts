@@ -37,7 +37,7 @@ export class PcacLineAreaChartComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.config && this.config.data) {
+    if (this.config && this.config.data && this.config.data.length > 0) {
       this.buildChart();
     }
   }

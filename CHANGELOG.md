@@ -1,4 +1,21 @@
 
+<a name="0.13.3"></a>
+# [v0.13.3](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.3) (2018-06-18)
+
+### Fix
+
+- Stop chart failure on empty data sets.
+  - bar-chart
+  - line-area-chart
+  - pie-chart
+  - table
+- Fix normalized height of table.
+- Responsive concerns in table.
+
+### Features
+
+- Add the ability to enable/disable sticky footer/header independently of each other. 
+
 <a name="0.13.1"></a>
 # [v0.13.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.1) (2018-06-16)
 

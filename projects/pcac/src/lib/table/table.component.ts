@@ -133,9 +133,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
     const self = this;
     clearTimeout(this.resizeWindowTimeout);
     this.resizeWindowTimeout = setTimeout(() => {
-      if (self.config.data.length > 0) {
-        self.initTableUi();
-      }
+      self.initTableUi();
     }, 300);
   }
 }

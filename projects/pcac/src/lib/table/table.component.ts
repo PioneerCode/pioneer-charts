@@ -36,7 +36,7 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   rowData = [] as IPcacData[];
   adjustedHeight = 200;
 
-  private resizeWindowTimeout: NodeJS.Timer;
+  private resizeWindowTimeout: any;
 
   constructor(
     private sortService: TableSortService,

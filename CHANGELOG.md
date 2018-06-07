@@ -1,6 +1,13 @@
 
+<a name="0.14.0"></a>
+# [v0.14.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.3) (2018-06-07)
+
+- Added
+  - Ability to override color options in bar-charts.
+  - Ability to spread colors across groups.
+
 <a name="0.13.3"></a>
-# [v0.13.3](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.3) (2018-06-18)
+# [v0.13.3](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.3) (2018-05-18)
 
 ### Fix
 
@@ -17,21 +24,21 @@
 - Add the ability to enable/disable sticky footer/header independently of each other. 
 
 <a name="0.13.1"></a>
-# [v0.13.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.1) (2018-06-16)
+# [v0.13.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.1) (2018-05-16)
 
 ### Fix
 
 - Responsive charts are now compatible with Angular 5.
 
 <a name="0.13.0"></a>
-# [v0.13.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.0) (2018-06-16)
+# [v0.13.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.0) (2018-05-16)
 
 ### Features
 
 - Pie Chart, Bar Chart and Line Area Chart are now responsive.
 
 <a name="0.12.1"></a>
-# [v0.12.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.1) (2018-06-15)
+# [v0.12.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.1) (2018-05-15)
 
 ### Fix
 
@@ -39,7 +46,7 @@
 a group label being present. 
 
 <a name="0.12.0"></a>
-# [v0.12.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.0) (2018-06-09)
+# [v0.12.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.12.0) (2018-05-09)
 
 ### Features
 
@@ -51,7 +58,7 @@ a group label being present.
   - Hide Grids
 
 <a name="0.11.2"></a>
-# [v0.11.2](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.2) (2018-06-08)
+# [v0.11.2](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.2) (2018-05-08)
 
 ### Fix
 
@@ -59,14 +66,14 @@ a group label being present.
 
 
 <a name="0.11.1"></a>
-# [v0.11.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.1) (2018-06-08)
+# [v0.11.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.1) (2018-05-08)
 
 ### Fix
 
 - Import reference error in --prod builds
 
 <a name="0.11.0"></a>
-# [v0.11.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.0) (2018-06-08)
+# [v0.11.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.11.0) (2018-05-08)
 
 ### Features
 
@@ -76,14 +83,14 @@ a group label being present.
   - On slice click in pie charts.
 
 <a name="0.10.0"></a>
-# [v0.10.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.10.0) (2018-06-07)
+# [v0.10.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.10.0) (2018-05-07)
 
 ### Features
 
 - Migrated to Angular 6.x 
 
 <a name="0.9.0"></a>
-# [v0.9.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.9.0) (2018-06-03)
+# [v0.9.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.9.0) (2018-05-03)
 
 ### Features
 
@@ -95,7 +102,7 @@ a group label being present.
   - When set, formats axis' and tooltips accordingly. 
 
 <a name="0.8.1"></a>
-# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.1) (2018-05-29)
+# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.1) (2018-04-29)
 
 ### Fixes
 
@@ -106,7 +113,7 @@ a group label being present.
   - Width calc on router switch.
 
 <a name="0.8.0"></a>
-# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.0) (2018-05-27)
+# [v0.8.1](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.8.0) (2018-04-27)
 
 ### Fixes
 
@@ -118,7 +125,7 @@ a group label being present.
 For details on features included, visit the [v0.8](https://github.com/PioneerCode/pioneer-charts/milestone/4?closed=1) milestone.
 
 <a name="0.7.0"></a>
-# [v0.7](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.7.0) (2018-05-25)
+# [v0.7](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.7.0) (2018-04-25)
 
 ### Features
 
@@ -133,7 +140,7 @@ For details on features included, visit the [v0.7](https://github.com/PioneerCod
 
 
 <a name="0.6.0"></a>
-# [v0.6](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.6.0) (2018-05-23)
+# [v0.6](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.6.0) (2018-04-23)
 
 ### Features
 

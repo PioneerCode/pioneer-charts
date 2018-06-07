@@ -17,7 +17,7 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 type GroupType = Selection<Element |
   EnterElement |

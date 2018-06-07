@@ -5,8 +5,7 @@ import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection, EnterElement } from 'd3-selection';
 import { BaseType } from 'd3-selection';
-
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 /**
  * Lib

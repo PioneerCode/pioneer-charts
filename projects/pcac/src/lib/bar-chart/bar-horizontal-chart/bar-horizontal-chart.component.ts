@@ -24,7 +24,7 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-  private resizeWindowTimeout: NodeJS.Timer;
+  private resizeWindowTimeout: any;
 
   constructor(
     private chartBuilder: BarHorizontalChartBuilder,

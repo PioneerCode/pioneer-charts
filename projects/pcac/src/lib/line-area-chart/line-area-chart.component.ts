@@ -25,8 +25,7 @@ export class PcacLineAreaChartComponent implements OnChanges {
   @ViewChild('chart') chartElm: ElementRef;
   @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-
-  private resizeWindowTimeout: NodeJS.Timer;
+  private resizeWindowTimeout: any;
 
   constructor(
     private chartBuilder: LineAreaChartBuilder

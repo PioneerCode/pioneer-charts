@@ -186,23 +186,39 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
       })
       .attr('height', !config.isStacked ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
-      .style('fill', (d: IPcacData, i: number) => {
+      .style('fill', (d: IPcacData, i: number, n: any) => {
+        if (config.spreadColorsPerGroup) {
+          const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+          return this.colors[groupIndex];
+        }
         return this.colors[i];
       })
       .attr('width', 0)
-      .on('mouseover', function (d: IPcacData, i: number) {
+      .on('mouseover', function (d: IPcacData, i: number, n: any) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 7.5))
-          .style('fill', color(self.colors[i]).darker(1).toString());
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return color(self.colors[groupIndex]).darker(1).toString();
+            }
+            return color(self.colors[i]).darker(1).toString();
+          });
       })
       .on('mousemove', function (d: IPcacData, i: number) {
         self.tooltipBuilder.showBarTooltip(d, config.tickFormat || PcacTickFormatEnum.None);
       })
-      .on('mouseout', function (d: IPcacData, i: number) {
+      .on('mouseout', function (d: IPcacData, i: number, n: any) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', self.colors[i]);
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return self.colors[groupIndex];
+            }
+            return self.colors[i];
+          });
       })
       .on('click', (d: IPcacData, i: number) => {
         this.barClickedSource.next(d);

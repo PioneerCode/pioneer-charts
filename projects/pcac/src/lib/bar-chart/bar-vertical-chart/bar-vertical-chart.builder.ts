@@ -176,29 +176,46 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
-      .attr('x', (d: IPcacData) => {
+      .attr('x', (d: IPcacData, i: number) => {
+
         return !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
       })
       .style('fill', (d: IPcacData, i: number, n: any) => {
+        if (config.spreadColorsPerGroup) {
+          const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+          return this.colors[groupIndex];
+        }
         return this.colors[i];
       })
       .attr('y', () => {
         return this.height;
       })
       .attr('height', 0)
-      .on('mouseover', function (d: IPcacData, i: number) {
+      .on('mouseover', function (d: IPcacData, i: number, n: any) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', color(self.colors[i]).darker(1).toString());
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return color(self.colors[groupIndex]).darker(1).toString();
+            }
+            return color(self.colors[i]).darker(1).toString();
+          });
       })
       .on('mousemove', function (d: IPcacData, i: number) {
         self.tooltipBuilder.showBarTooltip(d, config.tickFormat || PcacTickFormatEnum.None);
       })
-      .on('mouseout', function (d: IPcacData, i: number) {
+      .on('mouseout', function (d: IPcacData, i: number, n: any) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', self.colors[i]);
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return self.colors[groupIndex];
+            }
+            return self.colors[i];
+          });
       })
       .on('click', (d: IPcacData, i: number) => {
         this.barClickedSource.next(d);

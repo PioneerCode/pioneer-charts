@@ -1,10 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
+import { select, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
-import { element } from 'protractor';
 
 /**
  * Lib
@@ -18,9 +17,8 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
   EnterElement |
   Document |
@@ -230,7 +228,6 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
-    const self = this;
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('width', this.xScaleStacked.bandwidth())
       .on('mousemove', (d: IPcacData, i: number) => {
@@ -248,7 +245,6 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
-    const self = this;
     this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
       .on('mousemove', (d: IPcacData, i: number, n: any) => {
         this.tooltipBuilder.showBarTooltip(
@@ -273,19 +269,19 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
-      .style('fill', (d: IPcacData, i: number, n: any) => {
+      .style('fill', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke', (d: IPcacData, i: number, n: any) => {
+      .style('stroke', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+      .style('stroke-width', () => {
         return 2;
       })
-      .on('mouseout', (d: IPcacData, i: number) => {
+      .on('mouseout', () => {
         this.tooltipBuilder.hideTooltip();
       })
-      .attr('height', (d: IPcacData) => {
+      .attr('height', () => {
         return '3px';
       });
   }

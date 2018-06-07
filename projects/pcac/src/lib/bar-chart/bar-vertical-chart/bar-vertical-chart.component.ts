@@ -11,7 +11,6 @@ import {
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { IPcacData } from '../../core';
-import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',

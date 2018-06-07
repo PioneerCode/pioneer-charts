@@ -3,10 +3,10 @@ import { Injectable, ElementRef } from '@angular/core';
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
-import { select, selection, Selection, EnterElement } from 'd3-selection';
+import { select, Selection, EnterElement } from 'd3-selection';
 import { BaseType } from 'd3-selection';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 /**
  * Lib
@@ -20,7 +20,6 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
   EnterElement |
   Document |
@@ -91,7 +90,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private buildScales(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig) {
-    const barMap = config.data[0].data.map((d) => {
+    config.data[0].data.map((d) => {
       return d.value;
     });
 
@@ -266,17 +265,17 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarHorizontalChartConfig) {
     return elm.attr('class', 'pcac-threshold')
-      .style('fill', (d: IPcacData, i: number, n: any) => {
+      .style('fill', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke', (d: IPcacData, i: number, n: any) => {
+      .style('stroke', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+      .style('stroke-width', () => {
         return 2;
       })
       .attr('width', '3px')
-      .on('mouseout', (d: IPcacData, i: number) => {
+      .on('mouseout', () => {
         this.tooltipBuilder.hideTooltip();
       });
   }

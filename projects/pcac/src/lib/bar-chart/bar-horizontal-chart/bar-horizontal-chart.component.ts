@@ -11,7 +11,6 @@ import {
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
-import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',

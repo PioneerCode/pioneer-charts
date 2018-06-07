@@ -8,4 +8,10 @@ export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
   tickFormat?: PcacTickFormatEnum;
   hideGrid?: boolean;
   hideAxis?: boolean;
+  colorOverride?: IPcacBarVerticalChartColorOverrideConfig;
 }
+
+export interface IPcacBarVerticalChartColorOverrideConfig {
+  color: string[];
+}
+

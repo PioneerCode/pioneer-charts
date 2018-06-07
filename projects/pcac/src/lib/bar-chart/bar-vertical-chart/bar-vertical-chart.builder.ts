@@ -1,10 +1,9 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { select, selection, Selection, EnterElement, BaseType } from 'd3-selection';
+import { select, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
-import { element } from 'protractor';
 
 /**
  * Lib
@@ -18,9 +17,8 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
-type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
   EnterElement |
   Document |
@@ -61,10 +59,16 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors;
+    }
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
     this.initializeChartState(chartElm, config);
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors.reverse();
+    }
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }
@@ -178,29 +182,46 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
-      .attr('x', (d: IPcacData) => {
+      .attr('x', (d: IPcacData, i: number) => {
+
         return !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string);
       })
       .style('fill', (d: IPcacData, i: number, n: any) => {
+        if (config.spreadColorsPerGroup) {
+          const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+          return this.colors[groupIndex];
+        }
         return this.colors[i];
       })
       .attr('y', () => {
         return this.height;
       })
       .attr('height', 0)
-      .on('mouseover', function (d: IPcacData, i: number) {
+      .on('mouseover', function (d: IPcacData, i: number, n: any) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', color(self.colors[i]).darker(1).toString());
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return color(self.colors[groupIndex]).darker(1).toString();
+            }
+            return color(self.colors[i]).darker(1).toString();
+          });
       })
       .on('mousemove', function (d: IPcacData, i: number) {
         self.tooltipBuilder.showBarTooltip(d, config.tickFormat || PcacTickFormatEnum.None);
       })
-      .on('mouseout', function (d: IPcacData, i: number) {
+      .on('mouseout', function (d: IPcacData, i: number, n: any) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', self.colors[i]);
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return self.colors[groupIndex];
+            }
+            return self.colors[i];
+          });
       })
       .on('click', (d: IPcacData, i: number) => {
         this.barClickedSource.next(d);
@@ -230,7 +251,6 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
-    const self = this;
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('width', this.xScaleStacked.bandwidth())
       .on('mousemove', (d: IPcacData, i: number) => {
@@ -248,7 +268,6 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: IPcacBarVerticalChartConfig) {
-    const self = this;
     this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
       .on('mousemove', (d: IPcacData, i: number, n: any) => {
         this.tooltipBuilder.showBarTooltip(
@@ -273,19 +292,19 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
-      .style('fill', (d: IPcacData, i: number, n: any) => {
+      .style('fill', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke', (d: IPcacData, i: number, n: any) => {
+      .style('stroke', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+      .style('stroke-width', () => {
         return 2;
       })
-      .on('mouseout', (d: IPcacData, i: number) => {
+      .on('mouseout', () => {
         this.tooltipBuilder.hideTooltip();
       })
-      .attr('height', (d: IPcacData) => {
+      .attr('height', () => {
         return '3px';
       });
   }

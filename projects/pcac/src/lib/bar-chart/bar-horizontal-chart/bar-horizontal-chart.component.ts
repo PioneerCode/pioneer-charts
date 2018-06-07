@@ -11,7 +11,6 @@ import {
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { IPcacData } from '../../core';
-import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -25,7 +24,7 @@ export class PcacBarChartHorizontalComponent implements OnChanges {
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-  private resizeWindowTimeout: NodeJS.Timer;
+  private resizeWindowTimeout: any;
 
   constructor(
     private chartBuilder: BarHorizontalChartBuilder,

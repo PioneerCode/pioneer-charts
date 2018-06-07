@@ -9,19 +9,19 @@
       <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Vertical: Hide Axis'}"></pcac-header>
+            <pcac-header [config]="{'title':'Hide Axis'}"></pcac-header>
             <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Vertical Grouped'}"></pcac-header>
+            <pcac-header [config]="{'title':'Grouped'}"></pcac-header>
             <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Vertical Stacked'}"></pcac-header>
+            <pcac-header [config]="{'title':'Stacked'}"></pcac-header>
             <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
           </div>
         </div>
@@ -29,19 +29,19 @@
       <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Horizontal: Hide Axis & Grid'}"></pcac-header>
+            <pcac-header [config]="{'title':'Hide Axis & Grid'}"></pcac-header>
             <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Horizontal Grouped'}"></pcac-header>
+            <pcac-header [config]="{'title':'Grouped Color Override & Spread'}"></pcac-header>
             <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Horizontal Stacked'}"></pcac-header>
+            <pcac-header [config]="{'title':'Stacked'}"></pcac-header>
             <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
           </div>
         </div>
@@ -49,13 +49,13 @@
       <div class="row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':' Horizontal Bar'}"></pcac-header>
+            <pcac-header [config]="{'title':'Horizontal'}"></pcac-header>
             <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <pcac-header [config]="{'title':'Vertical Bar'}"></pcac-header>
+            <pcac-header [config]="{'title':'Vertical'}"></pcac-header>
             <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig" (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
           </div>
         </div>
@@ -106,6 +106,14 @@
                   </ul>
                 </td>
               </tr>
+              <tr>
+                <td>spreadColorsPerGroup</td>
+                <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
+              </tr>
+              <tr>
+                <td>colorOverride.colors</td>
+                <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each value of the collection.</td>
+              </tr>
             </tbody>
           </pc-base-config>
         </div>
@@ -138,25 +146,25 @@
       <h3 id="contract">Contract</h3>
       <div class="row pc-row">
         <div class="col-3">
-          <h5>Vertical Single</h5>
+          <h6>Vertical Single</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barVerticalChartSingleConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Vertical Grouped</h5>
+          <h6>Vertical Grouped</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barVerticalChartGroupConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Vertical Stacked</h5>
+          <h6>Vertical Stacked</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barVerticalChartStackedConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Vertical Multi</h5>
+          <h6>Vertical Multi</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism>
           </div>
@@ -164,25 +172,25 @@
       </div>
       <div class="row">
         <div class="col-3">
-          <h5>Horizontal Single</h5>
+          <h6>Horizontal Single</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barHorizontalChartSingleConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Horizontal Grouped</h5>
+          <h6>Horizontal Grouped</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barHorizontalChartGroupConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Horizontal Stacked</h5>
+          <h6>Horizontal Stacked</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barHorizontalChartStackedConfig | stringify"></pc-prism>
           </div>
         </div>
         <div class="col-3">
-          <h5>Horizontal Multi</h5>
+          <h6>Horizontal Multi</h6>
           <div class="pc-config-container">
             <pc-prism language="json" [code]="pcService.barHorizontalChartConfig | stringify"></pc-prism>
           </div>

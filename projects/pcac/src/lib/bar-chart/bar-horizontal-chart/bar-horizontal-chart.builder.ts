@@ -3,10 +3,9 @@ import { Injectable, ElementRef } from '@angular/core';
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
-import { select, selection, Selection, EnterElement } from 'd3-selection';
+import { select, Selection, EnterElement } from 'd3-selection';
 import { BaseType } from 'd3-selection';
-
-import { Observable, Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 /**
  * Lib
@@ -20,7 +19,6 @@ import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
 import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
 
-type GroupsContainerType = Selection<Element | EnterElement | Document | Window, IPcacData, Element | EnterElement | Document | Window, {}>;
 type GroupType = Selection<Element |
   EnterElement |
   Document |
@@ -65,6 +63,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.adjustForHiddenAxis();
     }
     this.initializeChartState(chartElm, this.config);
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors.reverse();
+    }
     this.buildScales(chartElm, this.config);
     this.drawChart(chartElm, this.config);
   }
@@ -91,7 +92,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private buildScales(chartElm: ElementRef, config: IPcacBarHorizontalChartConfig) {
-    const barMap = config.data[0].data.map((d) => {
+    config.data[0].data.map((d) => {
       return d.value;
     });
 
@@ -187,23 +188,39 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string);
       })
       .attr('height', !config.isStacked ? this.yScaleGrouped.bandwidth() : this.yScaleStacked.bandwidth())
-      .style('fill', (d: IPcacData, i: number) => {
+      .style('fill', (d: IPcacData, i: number, n: any) => {
+        if (config.spreadColorsPerGroup) {
+          const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+          return this.colors[groupIndex];
+        }
         return this.colors[i];
       })
       .attr('width', 0)
-      .on('mouseover', function (d: IPcacData, i: number) {
+      .on('mouseover', function (d: IPcacData, i: number, n: any) {
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 7.5))
-          .style('fill', color(self.colors[i]).darker(1).toString());
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return color(self.colors[groupIndex]).darker(1).toString();
+            }
+            return color(self.colors[i]).darker(1).toString();
+          });
       })
       .on('mousemove', function (d: IPcacData, i: number) {
         self.tooltipBuilder.showBarTooltip(d, config.tickFormat || PcacTickFormatEnum.None);
       })
-      .on('mouseout', function (d: IPcacData, i: number) {
+      .on('mouseout', function (d: IPcacData, i: number, n: any) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 5))
-          .style('fill', self.colors[i]);
+          .style('fill', () => {
+            if (config.spreadColorsPerGroup) {
+              const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
+              return self.colors[groupIndex];
+            }
+            return self.colors[i];
+          });
       })
       .on('click', (d: IPcacData, i: number) => {
         this.barClickedSource.next(d);
@@ -266,17 +283,17 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: IPcacBarHorizontalChartConfig) {
     return elm.attr('class', 'pcac-threshold')
-      .style('fill', (d: IPcacData, i: number, n: any) => {
+      .style('fill', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke', (d: IPcacData, i: number, n: any) => {
+      .style('stroke', () => {
         return this.colorService.getAlert();
       })
-      .style('stroke-width', (d: IPcacData, i: number, n: any) => {
+      .style('stroke-width', () => {
         return 2;
       })
       .attr('width', '3px')
-      .on('mouseout', (d: IPcacData, i: number) => {
+      .on('mouseout', () => {
         this.tooltipBuilder.hideTooltip();
       });
   }

@@ -11,7 +11,6 @@ import {
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { IPcacData } from '../../core';
-import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',
@@ -25,7 +24,7 @@ export class PcacBarVerticalChartComponent implements OnChanges {
   @ViewChild('chart') chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-  private resizeWindowTimeout: NodeJS.Timer;
+  private resizeWindowTimeout: any;
 
   constructor(
     private chartBuilder: BarVerticalChartBuilder

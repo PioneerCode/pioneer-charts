@@ -13,5 +13,5 @@ export interface IPcacBarHorizontalChartConfig extends IPcacChartConfig {
 }
 
 export interface IPcacBarHorizontalChartColorOverrideConfig {
-  color: string[];
+  colors: string[];
 }

@@ -64,6 +64,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.adjustForHiddenAxis();
     }
     this.initializeChartState(chartElm, this.config);
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors.reverse();
+    }
     this.buildScales(chartElm, this.config);
     this.drawChart(chartElm, this.config);
   }

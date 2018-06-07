@@ -59,10 +59,16 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   buildChart(chartElm: ElementRef, config: IPcacBarVerticalChartConfig): void {
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors;
+    }
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
     this.initializeChartState(chartElm, config);
+    if (config.colorOverride && config.colorOverride.colors) {
+      this.colors = config.colorOverride.colors.reverse();
+    }
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

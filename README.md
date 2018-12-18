@@ -1,5 +1,9 @@
 # Pioneer Angular Charts [![Build Status](https://travis-ci.org/PioneerCode/pioneer-charts.svg?branch=master)](https://travis-ci.org/PioneerCode/pioneer-charts)
 
+[![](https://img.shields.io/npm/dt/@pioneer-code/pioneer-charts.svg)](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
+[![](https://img.shields.io/npm/v/@pioneer-code/pioneer-charts.svg)](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
+
+
 ## Quick start
 
 To get started, it is highly recommended that you [Read the Getting Started](https://charts.pioneercode.com/docs/guides/introduction) page for information on setup, configuration and examples, and more.

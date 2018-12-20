@@ -1,8 +1,16 @@
 
-<a name="0.14.0"></a>
-# [v0.14.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.13.3) (2018-06-07)
+<a name="0.15.0"></a>
+# [v0.15.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.15.0) (2018-12-19)
 
-- Added
+### Fix
+
+- Adjusted dependency chain for package
+- Migrated to Angular 7.x
+
+<a name="0.14.0"></a>
+# [v0.14.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.14.0) (2018-06-07)
+
+### Added
   - Ability to override color options in bar-charts.
   - Ability to spread colors across groups.
 

@@ -43,6 +43,8 @@ Editor preferences are available in the [editor config](https://github.com/Pione
 
 Now accepting PRs! :smile:
 
+- [sophieball](https://github.com/PioneerCode/pioneer-charts/commits?author=sophieball)
+
 ## Copyright and license
 
 Code and documentation copyright 2018 the [Pioneer Charts Authors](https://github.com/PioneerCode/pioneer-charts/graphs/contributors) and [Pioneer Code](https://pioneercode.com) Code and Docs released under the [MIT License](https://github.com/PioneerCode/pioneer-charts/blob/master/LICENSE). 

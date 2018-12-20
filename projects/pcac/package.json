@@ -24,9 +24,11 @@
   },
   "version": "0.14.0",
   "license": "MIT",
+  "dependencies": {
+    "d3": "^5.7.0"
+  },
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
-    "d3": "^5.1.0"
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
   }
 }

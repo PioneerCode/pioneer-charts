@@ -4,28 +4,37 @@
     align-items: center;
     font-size: 13px;
     div {
-        padding: 0 1.5rem 0 0;
+        padding: 0 1.25rem 0 0;
         color: $gray-500;
     }
     .direction {
         font-weight: bold;
         font-size: 1.5rem;
     }
+    div.active {
+        color: $gray-700;
+        span {
+            border-right: 2px $gray-700 solid;
+        }
+        cursor: pointer;
+    }
     span {
         display: inline-block;
     }
-    .left-end, .left {
+    .left-end,
+    .left {
         span {
             padding: 0 0.25rem 0 0;
             border-left: 2px $gray-500 solid;
             height: 14px;
         }
     }
-    .right-end, .right {
-        color: $gray-600;
+    .right-end,
+    .right {
+        color: $gray-500;
         span {
             padding: 0 0 0 0.25rem;
-            border-right: 2px $gray-600 solid;
+            border-right: 2px $gray-500 solid;
             height: 14px;
         }
     }
@@ -33,5 +42,9 @@
         border-right: none;
         border-left: none;
         border-top: none;
+        cursor: pointer;
+        option {
+            color: $gray-700;
+        }
     }
 }

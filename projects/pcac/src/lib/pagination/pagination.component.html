@@ -2,12 +2,14 @@
   <div>
     Per Page:
     <select>
-      <option>5</option>
       <option>10</option>
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
     </select>
   </div>
   <div>
-    1-5 of 20
+    1-5 of {{totalItemsInCollection}}
   </div>
   <div class="direction left-end" (click)="onStartClicked()">
     <span></span>&lt;
@@ -15,10 +17,10 @@
   <div class="direction left" (click)="onLeftClicked(1)">
     &lt;
   </div>
-  <div class="direction right" (click)="onRightClicked(2)">
+  <div class="direction right active" (click)="onRightClicked(2)">
     &gt;
   </div>
-  <div class="direction right-end" (click)="onEndClicked()">
+  <div class="direction right-end active" (click)="onEndClicked()">
     &gt;<span></span>
   </div>
 </section>

@@ -13,9 +13,6 @@
     }
     div.active {
         color: $gray-700;
-        span {
-            border-right: 2px $gray-700 solid;
-        }
         cursor: pointer;
     }
     span {
@@ -29,6 +26,11 @@
             height: 14px;
         }
     }
+    .left-end.active {
+        span {
+            border-left: 2px $gray-700 solid;
+        }
+    }
     .right-end,
     .right {
         color: $gray-500;
@@ -36,6 +38,11 @@
             padding: 0 0 0 0.25rem;
             border-right: 2px $gray-500 solid;
             height: 14px;
+        }
+    }
+    .right-end.active {
+        span {
+            border-right: 2px $gray-700 solid;
         }
     }
     select {

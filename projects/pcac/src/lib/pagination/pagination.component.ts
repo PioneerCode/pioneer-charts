@@ -18,7 +18,7 @@ export class PaginationComponent {
   /**
    * How many items are in the entire collection
    */
-  @Input() totalItemsInCollection = 100;
+  @Input() totalItemsInCollection = 13;
 
   /**
    * Hide or show
@@ -31,11 +31,11 @@ export class PaginationComponent {
   @Output() endClicked = new EventEmitter<void>();
 
   get leftIsActive(): boolean {
-    return false;
+    return this.currentPageIndex !== 1;
   }
 
   get rightIsActive(): boolean {
-    return true;
+    return this.currentPageIndex !== Math.ceil(this.totalItemsInCollection / this.countPerPage);
   }
 
   get currentRangeText(): string {
@@ -47,6 +47,14 @@ export class PaginationComponent {
   }
 
   private getEndingRangeText(): number {
+    const totalPossiblePage = Math.ceil(this.totalItemsInCollection / this.countPerPage);
+
+    if (totalPossiblePage === this.currentPageIndex) {
+      const total = this.countPerPage * (this.currentPageIndex - 1);
+      const modulus = this.totalItemsInCollection % total;
+      return total + modulus;
+    }
+
     return this.countPerPage * this.currentPageIndex;
   }
 

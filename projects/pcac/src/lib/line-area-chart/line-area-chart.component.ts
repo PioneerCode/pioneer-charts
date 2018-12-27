@@ -8,10 +8,10 @@ import {
   Output,
   HostListener
 } from '@angular/core';
+
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
 import { IPcacData } from '../core';
-import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'pcac-line-area-chart',

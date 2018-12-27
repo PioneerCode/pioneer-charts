@@ -1,11 +1,28 @@
 @import "../core/theme/imports";
 .pcac-pager {
-    margin: 1rem 0;
-    ul.pagination .current {
-        padding: 0;
-        margin: 0;
-        a {
-            color: $white;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    div {
+        padding: 0 2rem 0 0;
+    }
+    .direction {
+        font-weight: bold;
+        font-size: 2rem;
+    }
+    span {
+        display: inline-block;
+    }
+    .left-end {
+        font-size: 2rem;
+        span {
+            padding: 0 0.25rem 0 0;
+        }
+    }
+    .right-end {
+        font-size: 2rem;
+        span {
+            padding: 0 0 0 0.25rem;
         }
     }
 }

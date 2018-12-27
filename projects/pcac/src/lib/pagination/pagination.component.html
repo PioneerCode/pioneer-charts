@@ -1,18 +1,20 @@
-<section class="pc-pager" *ngIf="show">
-  <ul class="pagination" role="navigation" aria-label="Pagination">
-    <li class="pagination-previous"
-        [ngClass]="{disabled : currentPageIndex === 1}"
-        (click)="onClick(currentPageIndex - 1)">
-      <a href="#" *ngIf="currentPageIndex !== 1" aria-label="Previous page page"></a>
-    </li>
-    <li *ngFor="let page of getPager().pages"
-        [ngClass]="{current: currentPageIndex === page}">
-      <a (click)="onClick(page)">{{page}}</a>
-    </li>
-    <li class="pagination-next"
-        [ngClass]="{disabled : currentPageIndex === getPager().totalPages}"
-        (click)="onClick(currentPageIndex + 1)">
-      <a href="#" *ngIf="currentPageIndex !== getPager().totalPages" aria-label="Next page"></a>
-    </li>
-  </ul>
+<section class="pcac-pager" *ngIf="show">
+  <div>
+    Per Page:
+  </div>
+  <div>
+    1-5 of 20
+  </div>
+  <div class="direction left-end">
+    <span>|</span>&lt;
+  </div>
+  <div class="direction left">
+    &lt;
+  </div>
+  <div class="direction right">
+    &gt;
+  </div>
+  <div class="direction right-end">
+    &gt;<span>|</span>
+  </div>
 </section>

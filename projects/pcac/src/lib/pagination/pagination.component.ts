@@ -14,13 +14,12 @@ export interface IPager {
 
 @Component({
   selector: 'pcac-pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnInit {
   @Input() currentPageIndex = 1;
-  @Input() countPerPage = 1;
-  @Input() totalItemsInCollection = 1;
+  @Input() countPerPage = 10;
+  @Input() totalItemsInCollection = 100;
   @Input() show = false;
 
   @Output() pageClicked = new EventEmitter<number>();

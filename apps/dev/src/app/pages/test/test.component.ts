@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PcService } from '../../services/pc.service';
+import { IPcacPaginationConfig } from 'projects/pcac/src/lib/pagination/pagination.model';
 
 @Component({
   selector: 'pc-test',
@@ -8,6 +9,14 @@ import { PcService } from '../../services/pc.service';
 })
 export class TestComponent {
   constructor(public pcService: PcService) { }
+
+  public config = {
+    currentPageIndex: 1,
+    countPerPage: 10,
+    totalItemsInCollection: 13,
+    show: true,
+  } as IPcacPaginationConfig;
+
   onStartClicked(): void {
     console.log('start');
   }

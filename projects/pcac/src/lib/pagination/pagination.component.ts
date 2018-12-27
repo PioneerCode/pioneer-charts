@@ -1,29 +1,17 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { IPcacPaginationConfig } from './pagination.model';
 
 @Component({
   selector: 'pcac-pagination',
   templateUrl: './pagination.component.html'
 })
 export class PaginationComponent {
-  /**
-   * What page are we currently on?
-   */
-  @Input() currentPageIndex = 1;
-
-  /**
-   * How many records do we who per page
-   */
-  @Input() countPerPage = 10;
-
-  /**
-   * How many items are in the entire collection
-   */
-  @Input() totalItemsInCollection = 13;
-
-  /**
-   * Hide or show
-   */
-  @Input() show = false;
+  @Input() config = {
+    currentPageIndex: 1,
+    countPerPage: 10,
+    totalItemsInCollection: 13,
+    show: false,
+  } as IPcacPaginationConfig;
 
   @Output() startClicked = new EventEmitter<void>();
   @Output() leftClicked = new EventEmitter<number>();
@@ -31,31 +19,31 @@ export class PaginationComponent {
   @Output() endClicked = new EventEmitter<void>();
 
   get leftIsActive(): boolean {
-    return this.currentPageIndex !== 1;
+    return this.config.currentPageIndex !== 1;
   }
 
   get rightIsActive(): boolean {
-    return this.currentPageIndex !== Math.ceil(this.totalItemsInCollection / this.countPerPage);
+    return this.config.currentPageIndex !== Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
   }
 
   get currentRangeText(): string {
-    return `${this.getStartingRangeText()}-${this.getEndingRangeText()} of ${this.totalItemsInCollection}`;
+    return `${this.getStartingRangeText()}-${this.getEndingRangeText()} of ${this.config.totalItemsInCollection}`;
   }
 
   private getStartingRangeText(): number {
-    return this.countPerPage * (this.currentPageIndex - 1) + 1;
+    return this.config.countPerPage * (this.config.currentPageIndex - 1) + 1;
   }
 
   private getEndingRangeText(): number {
-    const totalPossiblePage = Math.ceil(this.totalItemsInCollection / this.countPerPage);
+    const totalPossiblePage = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
 
-    if (totalPossiblePage === this.currentPageIndex) {
-      const total = this.countPerPage * (this.currentPageIndex - 1);
-      const modulus = this.totalItemsInCollection % total;
+    if (totalPossiblePage === this.config.currentPageIndex) {
+      const total = this.config.countPerPage * (this.config.currentPageIndex - 1);
+      const modulus = this.config.totalItemsInCollection % total;
       return total + modulus;
     }
 
-    return this.countPerPage * this.currentPageIndex;
+    return this.config.countPerPage * this.config.currentPageIndex;
   }
 
   private onStartClicked(): void {
@@ -64,15 +52,15 @@ export class PaginationComponent {
     }
   }
 
-  private onLeftClicked(selectedPage: number): void {
+  private onLeftClicked(): void {
     if (this.leftIsActive) {
-      this.leftClicked.emit(selectedPage);
+      this.leftClicked.emit(this.config.currentPageIndex - 1);
     }
   }
 
-  private onRightClicked(selectedPage: number): void {
+  private onRightClicked(): void {
     if (this.rightIsActive) {
-      this.rightClicked.emit(selectedPage);
+      this.rightClicked.emit(this.config.currentPageIndex + 1);
     }
   }
 

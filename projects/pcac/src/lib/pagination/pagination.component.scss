@@ -2,27 +2,36 @@
 .pcac-pager {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 13px;
     div {
-        padding: 0 2rem 0 0;
+        padding: 0 1.5rem 0 0;
+        color: $gray-500;
     }
     .direction {
         font-weight: bold;
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     span {
         display: inline-block;
     }
-    .left-end {
-        font-size: 2rem;
+    .left-end, .left {
         span {
             padding: 0 0.25rem 0 0;
+            border-left: 2px $gray-500 solid;
+            height: 14px;
         }
     }
-    .right-end {
-        font-size: 2rem;
+    .right-end, .right {
+        color: $gray-600;
         span {
             padding: 0 0 0 0.25rem;
+            border-right: 2px $gray-600 solid;
+            height: 14px;
         }
+    }
+    select {
+        border-right: none;
+        border-left: none;
+        border-top: none;
     }
 }

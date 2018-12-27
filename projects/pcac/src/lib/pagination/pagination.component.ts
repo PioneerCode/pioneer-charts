@@ -22,7 +22,10 @@ export class PaginationComponent implements OnInit {
   @Input() totalItemsInCollection = 100;
   @Input() show = false;
 
-  @Output() pageClicked = new EventEmitter<number>();
+  @Output() startClicked = new EventEmitter<void>();
+  @Output() leftClicked = new EventEmitter<number>();
+  @Output() rightClicked = new EventEmitter<number>();
+  @Output() endClicked = new EventEmitter<void>();
 
   pager = {} as IPager;
   constructor() { }
@@ -30,12 +33,21 @@ export class PaginationComponent implements OnInit {
   ngOnInit() {
     this.setPager(this.currentPageIndex, this.totalItemsInCollection);
   }
-  /**
-     * Omit an event when a page is clicked
-     */
-  onClick(selectedPage: number) {
-    this.pageClicked.emit(selectedPage);
-    this.setPager(selectedPage, this.totalItemsInCollection);
+
+  onStartClicked(): void {
+    this.startClicked.emit();
+  }
+
+  onLeftClicked(selectedPage: number): void {
+    this.leftClicked.emit(selectedPage);
+  }
+
+  onRightClicked(selectedPage: number): void {
+    this.rightClicked.emit(selectedPage);
+  }
+
+  onEndClicked(): void {
+    this.endClicked.emit();
   }
 
   getPager() {

@@ -8,4 +8,19 @@ import { PcService } from '../../services/pc.service';
 })
 export class TestComponent {
   constructor(public pcService: PcService) { }
+  onStartClicked(): void {
+    console.log('start');
+  }
+
+  onLeftClicked(selectedPage: number): void {
+    console.log('left');
+  }
+
+  onRightClicked(selectedPage: number): void {
+    console.log('right');
+  }
+
+  onEndClicked(): void {
+    console.log('end');
+  }
 }

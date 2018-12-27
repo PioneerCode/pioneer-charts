@@ -9,4 +9,5 @@
     </div>
   </div>
 </section>
-<pcac-pagination [show]="true"></pcac-pagination>
+<pcac-pagination (startClicked)="onStartClicked()" (leftClicked)="onLeftClicked(event)" (rightClicked)="onRightClicked(event)"
+  (endClicked)="onEndClicked()" [show]="true"></pcac-pagination>

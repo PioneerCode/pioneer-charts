@@ -1,20 +1,24 @@
 <section class="pcac-pager" *ngIf="show">
   <div>
     Per Page:
+    <select>
+      <option>5</option>
+      <option>10</option>
+    </select>
   </div>
   <div>
     1-5 of 20
   </div>
-  <div class="direction left-end">
-    <span>|</span>&lt;
+  <div class="direction left-end" (click)="onStartClicked()">
+    <span></span>&lt;
   </div>
-  <div class="direction left">
+  <div class="direction left" (click)="onLeftClicked(1)">
     &lt;
   </div>
-  <div class="direction right">
+  <div class="direction right" (click)="onRightClicked(2)">
     &gt;
   </div>
-  <div class="direction right-end">
-    &gt;<span>|</span>
+  <div class="direction right-end" (click)="onEndClicked()">
+    &gt;<span></span>
   </div>
 </section>

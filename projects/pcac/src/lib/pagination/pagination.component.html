@@ -9,18 +9,18 @@
     </select>
   </div>
   <div>
-    1-5 of {{totalItemsInCollection}}
+    {{currentRangeText}}
   </div>
-  <div class="direction left-end" (click)="onStartClicked()">
+  <div class="direction left-end" [ngClass]="{'active': leftIsActive}" (click)="onStartClicked()">
     <span></span>&lt;
   </div>
-  <div class="direction left" (click)="onLeftClicked(1)">
+  <div class="direction left" [ngClass]="{'active': leftIsActive}" (click)="onLeftClicked()">
     &lt;
   </div>
-  <div class="direction right active" (click)="onRightClicked(2)">
+  <div class="direction right" [ngClass]="{'active': rightIsActive}" (click)="onRightClicked()">
     &gt;
   </div>
-  <div class="direction right-end active" (click)="onEndClicked()">
+  <div class="direction right-end" [ngClass]="{'active': rightIsActive}" (click)="onEndClicked()">
     &gt;<span></span>
   </div>
 </section>

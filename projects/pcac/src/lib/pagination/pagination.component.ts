@@ -17,9 +17,25 @@ export interface IPager {
   templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnInit {
+  /**
+   * What page are we currently on?
+   * Index is 0 based
+   */
   @Input() currentPageIndex = 1;
+
+  /**
+   * How many records do we who per page
+   */
   @Input() countPerPage = 10;
+
+  /**
+   * How many items are in the entire collection
+   */
   @Input() totalItemsInCollection = 100;
+
+  /**
+   * Hide or show
+   */
   @Input() show = false;
 
   @Output() startClicked = new EventEmitter<void>();
@@ -34,19 +50,19 @@ export class PaginationComponent implements OnInit {
     this.setPager(this.currentPageIndex, this.totalItemsInCollection);
   }
 
-  onStartClicked(): void {
+  private onStartClicked(): void {
     this.startClicked.emit();
   }
 
-  onLeftClicked(selectedPage: number): void {
+  private onLeftClicked(selectedPage: number): void {
     this.leftClicked.emit(selectedPage);
   }
 
-  onRightClicked(selectedPage: number): void {
+  private onRightClicked(selectedPage: number): void {
     this.rightClicked.emit(selectedPage);
   }
 
-  onEndClicked(): void {
+  private onEndClicked(): void {
     this.endClicked.emit();
   }
 

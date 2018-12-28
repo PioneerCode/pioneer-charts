@@ -9,13 +9,13 @@ import { IPcacPaginationConfig } from 'projects/pcac/src/lib/pagination/paginati
 })
 export class TestComponent {
   constructor(public pcService: PcService) { }
-
-  public config = {
-    currentPageIndex: 1,
-    countPerPage: 10,
-    totalItemsInCollection: 13,
-    show: true,
-  } as IPcacPaginationConfig;
+  public config : IPcacPaginationConfig;
+  // public config = {
+  //   currentPageIndex: 1,
+  //   countPerPage: 10,
+  //   totalItemsInCollection: 13,
+  //   show: true,
+  // } as IPcacPaginationConfig;
 
   onStartClicked(): void {
     console.log('start');

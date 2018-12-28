@@ -16,7 +16,7 @@
     {{currentRangeText}}
   </div>
   <div class="direction left-end" [ngClass]="{'active': leftIsActive}" (click)="onStartClicked()">
-    <span></span>&lt;
+    &lt;&lt;
   </div>
   <div class="direction left" [ngClass]="{'active': leftIsActive}" (click)="onLeftClicked()">
     &lt;
@@ -25,6 +25,6 @@
     &gt;
   </div>
   <div class="direction right-end" [ngClass]="{'active': rightIsActive}" (click)="onEndClicked()">
-    &gt;<span></span>
+    &gt;&gt;
   </div>
 </section>

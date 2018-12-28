@@ -7,6 +7,8 @@
         "codelyzer",
         "copyfiles",
         "devkit",
+        "fontawesome",
+        "fortawesome",
         "jasminewd",
         "packagr",
         "pcac",
@@ -17,6 +19,7 @@
         "styleext",
         "tooltips",
         "tsickle",
-        "tslib"
+        "tslib",
+        "xmlns"
     ]
 }

@@ -9,7 +9,7 @@ export class PaginationComponent {
   @Input() config = {
     currentPageIndex: 1,
     countPerPage: 10,
-    totalItemsInCollection: 13,
+    totalItemsInCollection: 10,
     show: false,
   } as IPcacPaginationConfig;
 
@@ -36,6 +36,10 @@ export class PaginationComponent {
 
   private getEndingRangeText(): number {
     const totalPossiblePage = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
+
+    if (totalPossiblePage === 1) {
+      return this.config.totalItemsInCollection;
+    }
 
     if (totalPossiblePage === this.config.currentPageIndex) {
       const total = this.config.countPerPage * (this.config.currentPageIndex - 1);

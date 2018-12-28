@@ -13,7 +13,7 @@ export class TestComponent {
   public config = {
     currentPageIndex: 1,
     countPerPage: 10,
-    totalItemsInCollection: 13,
+    totalItemsInCollection: 3,
     show: true,
   } as IPcacPaginationConfig;
 

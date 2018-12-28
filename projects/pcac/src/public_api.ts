@@ -13,4 +13,4 @@ export * from './lib/bar-chart/bar-vertical-chart/index';
 export * from './lib/bar-chart/bar-horizontal-chart/index';
 export * from './lib/pie-chart/index';
 export * from './lib/line-area-chart/index';
-
+export * from './lib/pagination/index';

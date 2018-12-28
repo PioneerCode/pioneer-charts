@@ -46,25 +46,25 @@ export class PaginationComponent {
     return this.config.countPerPage * this.config.currentPageIndex;
   }
 
-  private onStartClicked(): void {
+  onStartClicked(): void {
     if (this.leftIsActive) {
       this.startClicked.emit();
     }
   }
 
-  private onLeftClicked(): void {
+  onLeftClicked(): void {
     if (this.leftIsActive) {
       this.leftClicked.emit(this.config.currentPageIndex - 1);
     }
   }
 
-  private onRightClicked(): void {
+  onRightClicked(): void {
     if (this.rightIsActive) {
       this.rightClicked.emit(this.config.currentPageIndex + 1);
     }
   }
 
-  private onEndClicked(): void {
+  onEndClicked(): void {
     if (this.rightIsActive) {
       this.endClicked.emit();
     }

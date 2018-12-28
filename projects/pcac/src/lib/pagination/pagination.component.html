@@ -1,14 +1,18 @@
 <section class="pcac-pager" *ngIf="config?.show">
-  <div>
-    Per Page:
-    <select>
-      <option>10</option>
-      <option>25</option>
-      <option>50</option>
-      <option>100</option>
-    </select>
+  <div class="per-page">
+    <div>
+      Per Page:
+    </div>
+    <div>
+      <select>
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+      </select>
+    </div>
   </div>
-  <div>
+  <div class="range-text">
     {{currentRangeText}}
   </div>
   <div class="direction left-end" [ngClass]="{'active': leftIsActive}" (click)="onStartClicked()">

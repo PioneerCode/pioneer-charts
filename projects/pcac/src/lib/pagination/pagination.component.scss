@@ -10,6 +10,12 @@
         align-items: center;
         padding: 0 1.25rem 0 0;
         color: $gray-500;
+        .svg-icon path {
+          fill: $gray-500;
+        }
+    }
+    .direction {
+      padding: 0 0.5rem 0 0;
     }
     .per-page {
         select {
@@ -26,7 +32,6 @@
             border-top: none;
             border-radius: 0;
             background-color: $white;
-            font-family: inherit;
             font-weight: 300;
             color: #212121;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%2861, 61, 61%29'></polygon></svg>");
@@ -46,7 +51,9 @@
         font-weight: bold;
         font-size: 1.5rem;
         &.active {
-            color: $gray-700;
+            .svg-icon path {
+              fill: $gray-700;
+            }
             cursor: pointer;
         }
         span {
@@ -79,5 +86,8 @@
         span {
             border-right: 2px $gray-700 solid;
         }
+    }
+    .pull-left {
+      margin: 0 0 0 -1rem;
     }
 }

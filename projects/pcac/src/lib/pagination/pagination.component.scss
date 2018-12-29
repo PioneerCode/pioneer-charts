@@ -10,7 +10,7 @@
         align-items: center;
         padding: 0 1.25rem 0 0;
         color: $gray-500;
-        .svg-icon path {
+        .pcac-icon path {
           fill: $gray-500;
         }
     }
@@ -51,7 +51,7 @@
         font-weight: bold;
         font-size: 1.5rem;
         &.active {
-            .svg-icon path {
+            .pcac-icon  path {
               fill: $gray-700;
             }
             cursor: pointer;

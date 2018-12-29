@@ -33,6 +33,10 @@ pcac-table {
     table.pcac-table thead {
         background: $gray-100;
         color: map-get($theme-colors, "primary");
+        i {
+            margin: 0 0 -2px 0;
+
+        }
     }
     table.pcac-table tfoot {
         background: map-get($theme-colors, "primary");

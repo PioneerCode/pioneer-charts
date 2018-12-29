@@ -25,18 +25,36 @@
     }
 }
 
-.svg-icon {
-    width: 1em;
-    height: 1em;
+/** icons **/
+
+.pcac-icon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: left center;
+    font-size: 1rem;
+    height: 1rem;
+    width: 1rem;
 }
 
-.svg-icon path,
-.svg-icon polygon,
-.svg-icon rect {
-    fill: #4691f6;
+.pcac-icon-sort {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'><path fill='currentColor' d='M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z'></path></svg>");
 }
 
-.svg-icon circle {
-    stroke: #4691f6;
+.pcac-icon-sort-asc {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'><path fill='currentColor' d='M279 224H41c-21.4 0-32.1-25.9-17-41L143 64c9.4-9.4 24.6-9.4 33.9 0l119 119c15.2 15.1 4.5 41-16.9 41z' class=''></path></svg>");
+}
+
+.pcac-icon-sort-desc {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'><path fill='currentColor' d='M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41z' class=''></path></svg>");
+}
+
+.pcac-icon path,
+.pcac-icon polygon,
+.pcac-icon rect {
+    fill: $gray-700;
+}
+
+.pcac-icon circle {
+    stroke: $gray-700;
     stroke-width: 1;
 }

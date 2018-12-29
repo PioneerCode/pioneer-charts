@@ -12,7 +12,7 @@ export interface IPcacTableHeader  {
 }
 
 export enum PcacTableSortIconsEnum {
-  Sort = 'fa fa-sort',
-  SortAsc = 'fa fa-sort-asc',
-  SortDesc = 'fa fa-sort-desc'
+  Sort = 'pcac-icon pcac-icon-sort',
+  SortAsc = 'pcac-icon pcac-icon-sort-asc',
+  SortDesc = 'pcac-icon pcac-icon-sort-desc'
 }

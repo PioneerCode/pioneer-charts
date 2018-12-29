@@ -35,7 +35,7 @@ pcac-table {
         color: map-get($theme-colors, "primary");
         i {
             margin: 0 0 -2px 0;
-
+            width: 10px;
         }
     }
     table.pcac-table tfoot {

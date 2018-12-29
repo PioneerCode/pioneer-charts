@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { PcacComponent } from './pcac.component';
-import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   imports: [
   ],
-  declarations: [PcacComponent, PaginationComponent],
+  declarations: [PcacComponent],
   exports: [PcacComponent]
 })
 export class PcacModule { }

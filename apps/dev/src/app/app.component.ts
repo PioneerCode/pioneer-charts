@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PcService } from './services/pc.service';
-import { environment } from '../environments/environment';
 
 @Component({
   selector: 'pc-root',

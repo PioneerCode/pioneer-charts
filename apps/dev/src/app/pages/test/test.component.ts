@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { PcService } from '../../services/pc.service';
-import { IPcacPaginationConfig } from 'projects/pcac/src/lib/pagination/pagination.model';
+import { IPcacPaginationConfig, PcacPaginationPageSizeEnum } from 'projects/pcac/src/lib/pagination/pagination.model';
 import { PcacDialogComponent } from 'projects/pcac/src/lib/dialog';
 
 @Component({
@@ -17,7 +17,7 @@ export class TestComponent {
 
   public config = {
     currentPageIndex: 1,
-    countPerPage: 10,
+    countPerPage: PcacPaginationPageSizeEnum.OneHundred,
     totalItemsInCollection: 13,
     show: true,
   } as IPcacPaginationConfig;

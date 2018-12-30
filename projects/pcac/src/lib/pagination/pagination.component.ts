@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { IPcacPaginationConfig } from './pagination.model';
+import { IPcacPaginationConfig, PcacPaginationPageSizeEnum } from './pagination.model';
 
 @Component({
   selector: 'pcac-pagination',
@@ -8,11 +8,12 @@ import { IPcacPaginationConfig } from './pagination.model';
 export class PaginationComponent {
   @Input() config = {
     currentPageIndex: 1,
-    countPerPage: 10,
+    countPerPage: PcacPaginationPageSizeEnum.Ten,
     totalItemsInCollection: 10,
     show: false,
   } as IPcacPaginationConfig;
 
+  @Output() perPageChanged = new EventEmitter<number>();
   @Output() startClicked = new EventEmitter<number>();
   @Output() leftClicked = new EventEmitter<number>();
   @Output() rightClicked = new EventEmitter<number>();
@@ -48,6 +49,11 @@ export class PaginationComponent {
     }
 
     return this.config.countPerPage * this.config.currentPageIndex;
+  }
+
+  onPerPageChanged(count: number): void {
+    this.config.countPerPage = count;
+    this.perPageChanged.emit(count);
   }
 
   onStartClicked(): void {

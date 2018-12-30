@@ -51,9 +51,9 @@ export class PaginationComponent {
     return this.config.countPerPage * this.config.currentPageIndex;
   }
 
-  onPerPageChanged(count: number): void {
-    this.config.countPerPage = count;
-    this.perPageChanged.emit(count);
+  onPerPageChanged(count: string): void {
+    this.config.countPerPage = parseInt(count, 10);
+    this.perPageChanged.emit(this.config.countPerPage);
   }
 
   onStartClicked(): void {

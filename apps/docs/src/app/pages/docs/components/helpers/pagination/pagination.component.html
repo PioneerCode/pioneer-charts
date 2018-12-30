@@ -2,15 +2,16 @@
   <div class="container-fluid">
     <section class="pc-doc-section">
       <pc-page-header [title]="'Pagination'" [anchor]="'pagination'"></pc-page-header>
-      <p class="lead">A Modal Dialog to accompany your deep dive needs.</p>
+      <p class="lead">Paginate component fro paged data.</p>
     </section>
     <section class="pc-doc-section">
       <div class="row">
         <div class="col-sm">
           <div class="pc-chart-container">
             <pcac-header [config]="{'title':'Pagination'}"></pcac-header>
-            <pcac-pagination (startClicked)="onStartClicked()" (leftClicked)="onLeftClicked(event)" (rightClicked)="onRightClicked(event)"
-              (endClicked)="onEndClicked()" [(config)]="config">
+            <pcac-pagination (perPageChanged)="onPerPageChanged($event)" (startClicked)="onStartClicked($event)"
+              (leftClicked)="onLeftClicked($event)" (rightClicked)="onRightClicked($event)" (endClicked)="onEndClicked($event)"
+              [(config)]="config">
             </pcac-pagination>
           </div>
         </div>
@@ -75,7 +76,7 @@
             </td>
             <td>Emitted the "start" icon is clicked.</td>
             <td>
-
+              Page Number
             </td>
           </tr>
           <tr>
@@ -102,6 +103,16 @@
             </td>
             <td>Emitted the "end" icon is clicked.</td>
             <td>
+              Page Number
+            </td>
+          </tr>
+          <tr>
+            <td>
+              perPageChanged
+            </td>
+            <td>Emitted when the "per page" value has changed.</td>
+            <td>
+              Per Page Number
             </td>
           </tr>
         </tbody>

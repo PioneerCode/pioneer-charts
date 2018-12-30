@@ -26,6 +26,10 @@ export class TestComponent {
     this.dialog.open();
   }
 
+  onPerPageChanged(perPage: number): void {
+    alert(perPage);
+  }
+
   onStartClicked(selectedPage: number): void {
     alert('Start Clicked: ' + selectedPage);
   }

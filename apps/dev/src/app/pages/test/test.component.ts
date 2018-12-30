@@ -26,19 +26,19 @@ export class TestComponent {
     this.dialog.open();
   }
 
-  onStartClicked(): void {
-    console.log('start');
+  onStartClicked(selectedPage: number): void {
+    alert('Start Clicked: ' + selectedPage);
   }
 
   onLeftClicked(selectedPage: number): void {
-    console.log('left');
+    alert('Left Clicked: ' + selectedPage);
   }
 
   onRightClicked(selectedPage: number): void {
-    console.log('right');
+    alert('Right Clicked: ' + selectedPage);
   }
 
-  onEndClicked(): void {
-    console.log('end');
+  onEndClicked(selectedPage: number): void {
+    alert('End Clicked: ' + selectedPage);
   }
 }

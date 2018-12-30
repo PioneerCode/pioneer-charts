@@ -13,10 +13,10 @@ export class PaginationComponent {
     show: false,
   } as IPcacPaginationConfig;
 
-  @Output() startClicked = new EventEmitter<void>();
+  @Output() startClicked = new EventEmitter<number>();
   @Output() leftClicked = new EventEmitter<number>();
   @Output() rightClicked = new EventEmitter<number>();
-  @Output() endClicked = new EventEmitter<void>();
+  @Output() endClicked = new EventEmitter<number>();
 
   get leftIsActive(): boolean {
     return this.config.currentPageIndex !== 1;
@@ -52,25 +52,29 @@ export class PaginationComponent {
 
   onStartClicked(): void {
     if (this.leftIsActive) {
-      this.startClicked.emit();
+      this.config.currentPageIndex = 1;
+      this.startClicked.emit(1);
     }
   }
 
   onLeftClicked(): void {
     if (this.leftIsActive) {
-      this.leftClicked.emit(this.config.currentPageIndex - 1);
+      this.config.currentPageIndex = this.config.currentPageIndex - 1;
+      this.leftClicked.emit(this.config.currentPageIndex);
     }
   }
 
   onRightClicked(): void {
     if (this.rightIsActive) {
-      this.rightClicked.emit(this.config.currentPageIndex + 1);
+      this.config.currentPageIndex = this.config.currentPageIndex + 1;
+      this.rightClicked.emit(this.config.currentPageIndex);
     }
   }
 
   onEndClicked(): void {
     if (this.rightIsActive) {
-      this.endClicked.emit();
+      this.config.currentPageIndex = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
+      this.endClicked.emit(this.config.currentPageIndex);
     }
   }
 }

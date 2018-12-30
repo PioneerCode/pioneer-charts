@@ -9,9 +9,11 @@
     </div>
   </div>
 </section>
-<pcac-pagination (startClicked)="onStartClicked()" (leftClicked)="onLeftClicked(event)" (rightClicked)="onRightClicked(event)"
-  (endClicked)="onEndClicked()" [(config)]="config"></pcac-pagination>
+<pcac-pagination (startClicked)="onStartClicked($event)" (leftClicked)="onLeftClicked($event)" (rightClicked)="onRightClicked($event)"
+  (endClicked)="onEndClicked($event)" [(config)]="config"></pcac-pagination>
 <button class="btn btn-primary" (click)="openDialog()"></button>
 <pcac-dialog>
   HI
 </pcac-dialog>
+
+{{config|json}}

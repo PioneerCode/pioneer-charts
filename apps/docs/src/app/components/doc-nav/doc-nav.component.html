@@ -40,7 +40,23 @@
           Table
         </a>
       </li>
-
+    </ul>
+  </div>
+  <div class="pc-group">
+    <a class="pc-group-heading">Helpers</a>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLink="/docs/components/helpers/pagination" class="nav-link" [ngClass]="{'active': pcService.currentDocRoute === 'pagination'}"
+          (click)="pcService.currentDocRoute = 'pagination'">
+          Pagination
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/docs/components/helpers/dialog" class="nav-link" [ngClass]="{'active': pcService.currentDocRoute === 'dialog'}"
+          (click)="pcService.currentDocRoute = 'dialog'">
+          Dialog
+        </a>
+      </li>
     </ul>
   </div>
   <div class="pc-group">

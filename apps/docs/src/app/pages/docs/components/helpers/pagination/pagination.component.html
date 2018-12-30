@@ -1,0 +1,121 @@
+<pc-doc-layout [jumpNav]="jumpNav">
+  <div class="container-fluid">
+    <section class="pc-doc-section">
+      <pc-page-header [title]="'Pagination'" [anchor]="'pagination'"></pc-page-header>
+      <p class="lead">A Modal Dialog to accompany your deep dive needs.</p>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <pcac-header [config]="{'title':'Pagination'}"></pcac-header>
+            <pcac-pagination (startClicked)="onStartClicked()" (leftClicked)="onLeftClicked(event)" (rightClicked)="onRightClicked(event)"
+              (endClicked)="onEndClicked()" [(config)]="config">
+            </pcac-pagination>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3>Markup</h3>
+          <pc-prism language="markup" [code]="markupCode"></pc-prism>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3>API</h3>
+          <pc-prism language="javascript" [code]="importCode"></pc-prism>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>currentPageIndex</td>
+                <td>Enable sticky header.</td>
+              </tr>
+              <tr>
+                <td>countPerPage</td>
+                <td>Enable sticky footer.</td>
+              </tr>
+              <tr>
+                <td>totalItemsInCollection</td>
+                <td>Enable sticky footer.</td>
+              </tr>
+              <tr>
+                <td>show</td>
+                <td>Enable sticky footer.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <h3 id="events">Events</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              startClicked
+            </td>
+            <td>Emitted the "start" icon is clicked.</td>
+            <td>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              onLeftClicked
+            </td>
+            <td>Emitted when the "left" icon is clicked.</td>
+            <td>
+              Page Number
+            </td>
+          </tr>
+          <tr>
+            <td>
+              onRightClicked
+            </td>
+            <td>Emitted when the "right" icon is clicked.</td>
+            <td>
+              Page Number
+            </td>
+          </tr>
+          <tr>
+            <td>
+              onEndClicked
+            </td>
+            <td>Emitted the "end" icon is clicked.</td>
+            <td>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3 id="contract">Contract</h3>
+          <div class="pc-config-container">
+            <pc-prism language="json" [code]="config | json"></pc-prism>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</pc-doc-layout>

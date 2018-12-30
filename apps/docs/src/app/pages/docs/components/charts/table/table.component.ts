@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 import { PcService } from '../../../../../services/pc.service';
 

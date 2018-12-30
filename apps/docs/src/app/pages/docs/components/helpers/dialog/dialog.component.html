@@ -1,0 +1,54 @@
+<pc-doc-layout [jumpNav]="jumpNav">
+  <div class="container-fluid">
+    <section class="pc-doc-section">
+      <pc-page-header [title]="'Dialog'" [anchor]="'dialog'"></pc-page-header>
+      <p class="lead">A Modal Dialog to accompany your deep dive needs.</p>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <div class="pc-chart-container">
+            <!-- <pcac-header [config]="{'title':'Pagination'}"></pcac-header>
+            <pcac-pagination></pcac-pagination> -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3>Markup</h3>
+          <pc-prism language="markup" [code]="markupCode"></pc-prism>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3>API</h3>
+          <pc-prism language="javascript" [code]="importCode"></pc-prism>
+          <pc-base-config>
+            <tr>
+              <td>enableStickyHeader</td>
+              <td>Enable sticky header.</td>
+            </tr>
+            <tr>
+              <td>enableStickyFooter</td>
+              <td>Enable sticky footer.</td>
+            </tr>
+          </pc-base-config>
+        </div>
+      </div>
+    </section>
+    <section class="pc-doc-section">
+      <div class="row">
+        <div class="col-sm">
+          <h3 id="contract">Contract</h3>
+          <div class="pc-config-container">
+            <pc-prism language="json" [code]="pcService.tableConfig | stringify"></pc-prism>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</pc-doc-layout>

@@ -43,6 +43,11 @@ import { HeaderComponent } from './pages/docs/components/ui/header/header.compon
 import { BaseConfigComponent } from './components/base-config/base-config.component';
 import { JumpNavComponent } from './components/jump-nav/jump-nav.component';
 
+// helpers
+
+import { PaginationComponent } from './pages/docs/components/helpers/pagination/pagination.component';
+import { DialogComponent } from './pages/docs/components/helpers/dialog/dialog.component';
+
 /**
  * Demo Components
  */
@@ -67,8 +72,11 @@ import {
   PcacPieChartModule,
   PcacTableModule,
   PcacBarHorizontalChartModule,
-  PcacLineAreaChartModule
+  PcacLineAreaChartModule,
+  PcacPaginationModule,
+  PcacDialogModule
 } from '@pioneer-code/pioneer-charts';
+
 
 const appRoutes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
@@ -78,6 +86,8 @@ const appRoutes: Routes = [
   { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
   { path: 'docs/components/charts/table', component: TableComponent },
   { path: 'docs/components/charts/pie-chart', component: PieChartComponent},
+  { path: 'docs/components/helpers/pagination', component: PaginationComponent},
+  { path: 'docs/components/helpers/dialog', component: DialogComponent},
   { path: 'docs/components/ui/header', component: HeaderComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
@@ -105,7 +115,9 @@ const appRoutes: Routes = [
     DataContractComponent,
     PublicComponent,
     JumpNavComponent,
-    StringifyPipe
+    StringifyPipe,
+    PaginationComponent,
+    DialogComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -117,7 +129,9 @@ const appRoutes: Routes = [
     PcacPieChartModule,
     PcacBarVerticalChartModule,
     PcacBarHorizontalChartModule,
-    PcacLineAreaChartModule
+    PcacLineAreaChartModule,
+    PcacDialogModule,
+    PcacPaginationModule
   ],
   providers: [
     PcRepository,

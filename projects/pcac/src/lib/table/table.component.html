@@ -6,11 +6,26 @@
           <i [ngClass]="header.icon"></i>
           {{header.value}}
         </th>
+        <th *ngIf="config?.enableActionRow"></th>
       </tr>
     </thead>
     <tbody #tableBody>
       <tr *ngFor="let row of rowData" #rows>
         <td *ngFor="let cell of row.data">{{cell.value}}</td>
+        <td *ngIf="config?.enableActionRow">
+          <section class="action-list">
+            <div (click)="onEditClicked(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
+              </svg>
+            </div>
+            <div (click)="onDeleteClicked(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M0 84V56c0-13.3 10.7-24 24-24h112l9.4-18.7c4-8.2 12.3-13.3 21.4-13.3h114.3c9.1 0 17.4 5.1 21.5 13.3L312 32h112c13.3 0 24 10.7 24 24v28c0 6.6-5.4 12-12 12H12C5.4 96 0 90.6 0 84zm415.2 56.7L394.8 467c-1.6 25.3-22.6 45-47.9 45H101.1c-25.3 0-46.3-19.7-47.9-45L32.8 140.7c-.4-6.9 5.1-12.7 12-12.7h358.5c6.8 0 12.3 5.8 11.9 12.7z"></path>
+              </svg>
+            </div>
+          </section>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -19,9 +34,10 @@
       <thead>
         <tr>
           <th *ngFor="let header of headers; let i = index" class="sortable" [style.width.px]="columnWidths[i]" (click)="sortTable(i)">
-           <i [ngClass]="header.icon"></i>
+            <i [ngClass]="header.icon"></i>
             {{header.value}}
           </th>
+          <th [style.width.px]="columnWidths[columnWidths.length - 1]" *ngIf="config?.enableActionRow"></th>
         </tr>
       </thead>
     </table>
@@ -30,7 +46,22 @@
     <table class="pcac-table">
       <tfoot>
         <tr>
-          <td *ngFor="let data of config?.data[config?.data.length - 1].data; let i = index" [style.width.px]="columnWidths[i]" class="sticky-resize">{{data.value}}</td>
+          <td *ngFor="let data of config?.data[config?.data.length - 1].data; let i = index" [style.width.px]="columnWidths[i]"
+            class="sticky-resize">{{data.value}}</td>
+          <td [style.width.px]="columnWidths[columnWidths.length - 1]" *ngIf="config?.enableActionRow">
+            <section class="action-list action-footer">
+              <div (click)="onEditClicked(config?.data[config?.data.length - 1])">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
+                </svg>
+              </div>
+              <div (click)="onDeleteClicked(config?.data[config?.data.length - 1])">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M0 84V56c0-13.3 10.7-24 24-24h112l9.4-18.7c4-8.2 12.3-13.3 21.4-13.3h114.3c9.1 0 17.4 5.1 21.5 13.3L312 32h112c13.3 0 24 10.7 24 24v28c0 6.6-5.4 12-12 12H12C5.4 96 0 90.6 0 84zm415.2 56.7L394.8 467c-1.6 25.3-22.6 45-47.9 45H101.1c-25.3 0-46.3-19.7-47.9-45L32.8 140.7c-.4-6.9 5.1-12.7 12-12.7h358.5c6.8 0 12.3 5.8 11.9 12.7z"></path>
+                </svg>
+              </div>
+            </section>
+          </td>
         </tr>
       </tfoot>
     </table>

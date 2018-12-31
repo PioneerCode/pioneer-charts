@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 import { PcService } from '../../../../../services/pc.service';
+import { IPcacData } from 'projects/pcac/src/lib/core/public_api';
 
 @Component({
   selector: 'pc-table',
@@ -40,4 +41,12 @@ export class TableComponent  {
   importCode = `import { PcacTableModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }
+
+  onEditClicked(row: IPcacData): void {
+    alert(row.value);
+  }
+
+  onDeleteClicked(row: IPcacData): void {
+    alert(row.value);
+  }
 }

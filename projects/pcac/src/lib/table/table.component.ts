@@ -2,14 +2,15 @@ import {
   Component,
   Input,
   OnChanges,
-  SimpleChanges,
   AfterViewInit,
   ElementRef,
   ViewChild,
   ChangeDetectorRef,
   QueryList,
   ViewChildren,
-  HostListener
+  HostListener,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { IPcacTableConfig, IPcacTableHeader, PcacTableSortIconsEnum } from './table.model';
 import { TableSortService } from './table-sort.service';
@@ -25,16 +26,19 @@ import { IPcacData } from '../core/chart.model';
 })
 export class PcacTableComponent implements OnChanges, AfterViewInit {
   @Input() config = { height: 240 } as IPcacTableConfig;
+  @Output() deleteClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() editClicked: EventEmitter<IPcacData> = new EventEmitter();
+
   @ViewChild('tableBody') tableBody: ElementRef;
   @ViewChild('tableFooter') tableFooter: ElementRef;
   @ViewChildren('rows') rows: QueryList<any>;
 
-  columnWidths = [] as number[];
-  rowHeight: number;
-  footerHeight: number;
-  headers = [] as IPcacTableHeader[];
-  rowData = [] as IPcacData[];
-  adjustedHeight = 200;
+  public columnWidths = [] as number[];
+  public rowHeight: number;
+  public footerHeight: number;
+  public headers = [] as IPcacTableHeader[];
+  public rowData = [] as IPcacData[];
+  public adjustedHeight = 200;
 
   private resizeWindowTimeout: any;
 
@@ -55,6 +59,14 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges() {
     this.initTableUi();
+  }
+
+  onEditClicked(row: IPcacData): void {
+    this.deleteClicked.emit(row);
+  }
+
+  onDeleteClicked(row: IPcacData): void {
+    this.editClicked.emit(row);
   }
 
   private initTableUi() {
@@ -126,8 +138,8 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   /**
- * Opting against fromEvent due to incompatibility with rxjs 5 => 6
- */
+   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
+   */
   @HostListener('window:resize')
   onResize() {
     const self = this;

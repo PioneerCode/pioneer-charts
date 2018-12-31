@@ -78,6 +78,31 @@ pcac-table {
         position: absolute;
         bottom: 0;
     }
+    .action-list {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        div {
+            margin-left: 0.5rem;
+            width: 12px;
+        }
+        svg path {
+            fill: $gray-500;
+            cursor: pointer;
+            &:hover {
+                transition: 0.25s all;
+                fill: $gray-700;
+            }
+        }
+    }
+    .action-list.action-footer {
+      svg path {
+          fill: $gray-200;
+          &:hover {
+              fill: $white;
+          }
+      }
+  }
 }
 
 .pcac-table-container {

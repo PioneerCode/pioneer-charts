@@ -3,6 +3,7 @@ import { IPcacChartConfig } from '../core/chart.model';
 export interface IPcacTableConfig extends IPcacChartConfig {
   enableStickyHeader: boolean;
   enableStickyFooter: boolean;
+  enableActionRow: boolean;
 }
 
 export interface IPcacTableHeader  {

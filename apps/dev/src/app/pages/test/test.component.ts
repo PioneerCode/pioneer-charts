@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { PcService } from '../../services/pc.service';
 import { IPcacPaginationConfig, PcacPaginationPageSizeEnum } from 'projects/pcac/src/lib/pagination/pagination.model';
 import { PcacDialogComponent } from 'projects/pcac/src/lib/dialog';
+import { IPcacData } from 'projects/pcac/src/lib/core/public_api';
 
 @Component({
   selector: 'pc-test',
@@ -19,11 +20,19 @@ export class TestComponent {
     currentPageIndex: 1,
     countPerPage: PcacPaginationPageSizeEnum.OneHundred,
     totalItemsInCollection: 13,
-    show: true,
+    show: true
   } as IPcacPaginationConfig;
 
   openDialog(): void {
     this.dialog.open();
+  }
+
+  onEditClicked(row: IPcacData): void {
+    alert(row.value);
+  }
+
+  onDeleteClicked(row: IPcacData): void {
+    alert(row.value);
   }
 
   onPerPageChanged(perPage: number): void {

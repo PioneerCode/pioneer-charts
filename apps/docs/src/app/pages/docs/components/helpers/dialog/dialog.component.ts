@@ -11,6 +11,7 @@ import { JumpNavLevel, IJumpNav } from 'apps/docs/src/app/components/jump-nav/ju
 })
 export class DialogComponent {
   public markupCode = `<pcac-dialog>Hello!</pcac-dialog>`;
+  public importCode = `import { PcacDialogModule } from '@pioneer-code/pioneer-charts';`;
   public callCode = `@ViewChild(PcacDialogComponent) dialog: PcacDialogComponent;
 
 openDialog(): void {
@@ -25,6 +26,16 @@ openDialog(): void {
     {
       key: 'Markup',
       value: 'markup',
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'Event',
+      value: 'event',
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'API',
+      value: 'api',
       level: JumpNavLevel.h2
     }
   ] as IJumpNav[];

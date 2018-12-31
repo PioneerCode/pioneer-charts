@@ -1,4 +1,11 @@
 
+<a name="0.16.6"></a>
+# [v0.16.6](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.16.6) (2018-12-31)
+
+### Added
+  - Pagination component.
+  - Dialog component.
+
 <a name="0.15.0"></a>
 # [v0.15.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.15.0) (2018-12-19)
 

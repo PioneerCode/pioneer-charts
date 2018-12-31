@@ -16,7 +16,7 @@ export class PaginationComponent  {
     totalItemsInCollection: 100,
     show: true
   } as IPcacPaginationConfig;
-
+  public importCode = `import { PcacPaginationModule } from '@pioneer-code/pioneer-charts';`;
   public jumpNav = [
     {
       key: 'Pagination',

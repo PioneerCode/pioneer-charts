@@ -1,4 +1,10 @@
 
+<a name="0.17.0"></a>
+# [v0.17.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.17.0) (2018-12-31)
+
+### Added
+  - Action Row option to table
+
 <a name="0.16.6"></a>
 # [v0.16.6](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.16.6) (2018-12-31)
 

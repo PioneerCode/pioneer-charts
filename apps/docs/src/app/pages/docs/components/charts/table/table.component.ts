@@ -9,7 +9,7 @@ import { IPcacData } from 'projects/pcac/src/lib/core/public_api';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent  {
+export class TableComponent {
   jumpNav = [
     {
       key: 'Table',
@@ -32,21 +32,26 @@ export class TableComponent  {
       level: JumpNavLevel.h3
     },
     {
+      key: 'Events',
+      value: 'event',
+      level: JumpNavLevel.h2
+    },
+    {
       key: 'Contract',
       value: 'contract',
       level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
-  markupCode = `<pcac-table [config]="config"></pcac-table>`;
+  markupCode = `<pcac-table [config]="config" (deleteClicked)="onDeleteClicked($event)" (editClicked)="onEditClicked($event)"></pcac-table>`;
   importCode = `import { PcacTableModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }
 
   onEditClicked(row: IPcacData): void {
-    alert(row.value);
+    alert("Edit Row");
   }
 
   onDeleteClicked(row: IPcacData): void {
-    alert(row.value);
+    alert("Delete Row");
   }
 }

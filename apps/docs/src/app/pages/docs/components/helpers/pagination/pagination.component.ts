@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { PcService } from '../../../../../services/pc.service';
 import { IPcacPaginationConfig, PcacPaginationPageSizeEnum } from 'projects/pcac/src/lib/pagination/public_api';
+import { JumpNavLevel, IJumpNav } from 'apps/docs/src/app/components/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-pagination',
@@ -15,6 +16,29 @@ export class PaginationComponent  {
     totalItemsInCollection: 100,
     show: true
   } as IPcacPaginationConfig;
+
+  public jumpNav = [
+    {
+      key: 'Pagination',
+      value: 'pagination',
+      level: JumpNavLevel.h1
+    },
+    {
+      key: 'Markup',
+      value: 'markup',
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'API',
+      value: 'api',
+      level: JumpNavLevel.h2
+    },
+    {
+      key: 'Contract',
+      value: 'contract',
+      level: JumpNavLevel.h2
+    }
+  ] as IJumpNav[];
 
   public markupCode = `<pcac-pagination (perPageChanged)="onPerPageChanged($event)"
   (startClicked)="onStartClicked($event)"

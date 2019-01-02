@@ -96,15 +96,21 @@ pcac-table {
         }
     }
     .action-list.action-footer {
-      svg path {
-          fill: $gray-200;
-          &:hover {
-              fill: $white;
-          }
-      }
-  }
+        svg path {
+            fill: $gray-200;
+            &:hover {
+                fill: $white;
+            }
+        }
+    }
 }
 
 .pcac-table-container {
     overflow: auto;
+    &.hide-first-column {
+        th:first-child,
+        td:first-child {
+            display: none;
+        }
+    }
 }

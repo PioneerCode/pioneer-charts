@@ -25,7 +25,7 @@ import { IPcacData } from '../core/chart.model';
   ]
 })
 export class PcacTableComponent implements OnChanges, AfterViewInit {
-  @Input() config = { height: 240 } as IPcacTableConfig;
+  @Input() config = { height: 400 } as IPcacTableConfig;
   @Output() deleteClicked: EventEmitter<IPcacData> = new EventEmitter();
   @Output() editClicked: EventEmitter<IPcacData> = new EventEmitter();
 

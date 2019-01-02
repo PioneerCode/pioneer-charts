@@ -28,11 +28,11 @@ export class TestComponent {
   }
 
   onEditClicked(row: IPcacData): void {
-    alert(row.value);
+    alert('edit');
   }
 
   onDeleteClicked(row: IPcacData): void {
-    alert(row.value);
+    alert('delete');
   }
 
   onPerPageChanged(perPage: number): void {

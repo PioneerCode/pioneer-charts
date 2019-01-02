@@ -4,6 +4,7 @@ export interface IPcacTableConfig extends IPcacChartConfig {
   enableStickyHeader: boolean;
   enableStickyFooter: boolean;
   enableActionRow: boolean;
+  hideColumnOne: boolean;
 }
 
 export interface IPcacTableHeader  {

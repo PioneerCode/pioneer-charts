@@ -62,11 +62,11 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   }
 
   onEditClicked(row: IPcacData): void {
-    this.deleteClicked.emit(row);
+    this.editClicked.emit(row);
   }
 
   onDeleteClicked(row: IPcacData): void {
-    this.editClicked.emit(row);
+    this.deleteClicked.emit(row);
   }
 
   private initTableUi() {

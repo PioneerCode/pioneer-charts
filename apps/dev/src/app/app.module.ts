@@ -27,6 +27,7 @@ import { PcacBarHorizontalChartModule } from '../../../../projects/pcac/src/lib/
 import { PcacLineAreaChartModule } from '../../../../projects/pcac/src/lib/line-area-chart';
 import { PcacPaginationModule } from 'projects/pcac/src/lib/pagination/pagination.module';
 import { PcacDialogModule } from 'projects/pcac/src/lib/dialog';
+import { PcacSpinnerModule } from 'projects/pcac/src/lib/spinner/spinner.module';
 
 /**
  * Pioneer Charts
@@ -56,7 +57,8 @@ const appRoutes: Routes = [
     PcacBarHorizontalChartModule,
     PcacLineAreaChartModule,
     PcacPaginationModule,
-    PcacDialogModule
+    PcacDialogModule,
+    PcacSpinnerModule
   ],
   providers: [
     PcRepository,

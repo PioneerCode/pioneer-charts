@@ -57,6 +57,12 @@
           Dialog
         </a>
       </li>
+      <li class="nav-item">
+        <a routerLink="/docs/components/helpers/spinner" class="nav-link" [ngClass]="{'active': pcService.currentDocRoute === 'spinner'}"
+          (click)="pcService.currentDocRoute = 'spinner'">
+          Spinner
+        </a>
+      </li>
     </ul>
   </div>
   <div class="pc-group">

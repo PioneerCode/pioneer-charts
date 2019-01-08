@@ -47,6 +47,7 @@ import { JumpNavComponent } from './components/jump-nav/jump-nav.component';
 
 import { PaginationComponent } from './pages/docs/components/helpers/pagination/pagination.component';
 import { DialogComponent } from './pages/docs/components/helpers/dialog/dialog.component';
+import { SpinnerComponent } from './pages/docs/components/helpers/spinner/spinner.component';
 
 /**
  * Demo Components
@@ -74,7 +75,8 @@ import {
   PcacBarHorizontalChartModule,
   PcacLineAreaChartModule,
   PcacPaginationModule,
-  PcacDialogModule
+  PcacDialogModule,
+  PcacSpinnerModule
 } from '@pioneer-code/pioneer-charts';
 
 
@@ -88,6 +90,7 @@ const appRoutes: Routes = [
   { path: 'docs/components/charts/pie-chart', component: PieChartComponent},
   { path: 'docs/components/helpers/pagination', component: PaginationComponent},
   { path: 'docs/components/helpers/dialog', component: DialogComponent},
+  { path: 'docs/components/helpers/spinner', component: SpinnerComponent},
   { path: 'docs/components/ui/header', component: HeaderComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
@@ -117,7 +120,8 @@ const appRoutes: Routes = [
     JumpNavComponent,
     StringifyPipe,
     PaginationComponent,
-    DialogComponent
+    DialogComponent,
+    SpinnerComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -131,7 +135,8 @@ const appRoutes: Routes = [
     PcacBarHorizontalChartModule,
     PcacLineAreaChartModule,
     PcacDialogModule,
-    PcacPaginationModule
+    PcacPaginationModule,
+    PcacSpinnerModule
   ],
   providers: [
     PcRepository,

@@ -9,7 +9,7 @@
           <pcac-pagination (perPageChanged)="onPerPageChanged($event)" (startClicked)="onStartClicked($event)"
             (leftClicked)="onLeftClicked($event)" (rightClicked)="onRightClicked($event)" (endClicked)="onEndClicked($event)"
             [(config)]="config"></pcac-pagination>
-          <pcac-spinner [show]="true"></pcac-spinner>
+          <pcac-spinner [showSpinner]="true" [showOverlay]="false"></pcac-spinner>
         </div>
       </div>
     </div>

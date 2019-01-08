@@ -7,5 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class PcacSpinnerComponent {
   @Input()
-  show = true;
+  showSpinner = true;
+
+  @Input()
+  showOverlay = true;
 }

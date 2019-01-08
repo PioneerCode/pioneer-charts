@@ -1,4 +1,10 @@
 
+<a name="0.18.0"></a>
+# [v0.18.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.18.0) (2019-01-08)
+
+### Added
+  - Spinner component
+  
 <a name="0.17.0"></a>
 # [v0.17.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.17.0) (2018-12-31)
 

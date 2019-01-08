@@ -2,9 +2,16 @@
 .pcac-spinner {
     .wrapper {
         position: absolute;
-        display: inline-block;
-        left: 1rem;
+        left: 2rem;
         top: 1rem;
+        width: 4rem;
+        z-index: 200;
+        path {
+            fill: $gray-600;
+        }
+        svg {
+            animation: fa-spin 2s infinite linear;
+        }
     }
     .overlay {
         position: absolute;
@@ -15,9 +22,5 @@
         background-color: $white;
         opacity: 0.8;
         z-index: 100;
-    }
-    i.fa {
-        color: $dark-gray;
-        font-size: 5rem;
     }
 }

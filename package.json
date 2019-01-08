@@ -1,6 +1,6 @@
 {
   "name": "pioneer-charts",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve pioneer-charts-dev",
@@ -43,7 +43,7 @@
     "@angular/language-service": "^7.1.4",
     "@pioneer-code/pioneer-charts": "^0.17.2",
     "@ryancavanaugh/prismjs": "^1.4.3-alpha",
-    "@types/d3": "^5.0.1",
+    "@types/d3": "^5.5.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
     "bootstrap": "^4.1.3",

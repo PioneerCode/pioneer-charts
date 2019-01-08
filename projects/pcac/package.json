@@ -22,10 +22,10 @@
     "type": "git",
     "url": "https://github.com/PioneerCode/pioneer-charts"
   },
-  "version": "0.17.2",
+  "version": "0.18.0",
   "license": "MIT",
   "devDependencies": {
-    "@types/d3": "^5.0.1",
+    "@types/d3": "^5.5.0",
     "d3": "^5.7.0"
   },
   "peerDependencies": {

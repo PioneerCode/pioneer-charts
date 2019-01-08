@@ -25,9 +25,9 @@ import { PcacPieChartModule } from '../../../../projects/pcac/src/lib/pie-chart'
 import { PcacBarVerticalChartModule } from '../../../../projects/pcac/src/lib/bar-chart/bar-vertical-chart';
 import { PcacBarHorizontalChartModule } from '../../../../projects/pcac/src/lib/bar-chart/bar-horizontal-chart';
 import { PcacLineAreaChartModule } from '../../../../projects/pcac/src/lib/line-area-chart';
-import { PcacPaginationModule } from 'projects/pcac/src/lib/pagination/pagination.module';
-import { PcacDialogModule } from 'projects/pcac/src/lib/dialog';
-import { PcacSpinnerModule } from 'projects/pcac/src/lib/spinner/spinner.module';
+import { PcacPaginationModule } from '../../../../projects/pcac/src/lib/pagination/pagination.module';
+import { PcacDialogModule } from '../../../../projects/pcac/src/lib/dialog';
+import { PcacSpinnerModule } from '../../../../projects/pcac/src/lib/spinner/spinner.module';
 
 /**
  * Pioneer Charts

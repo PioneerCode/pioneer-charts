@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'pcac-spinner',
-  templateUrl: './spinner.component.html',
-  styleUrls: ['./spinner.component.scss']
+  templateUrl: './spinner.component.html'
 })
 export class PcacSpinnerComponent {
   @Input()

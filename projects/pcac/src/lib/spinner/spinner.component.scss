@@ -10,7 +10,7 @@
             fill: $gray-600;
         }
         svg {
-            animation: fa-spin 2s infinite linear;
+            animation: paca-spin 2s infinite linear;
         }
     }
     .overlay {
@@ -22,5 +22,13 @@
         background-color: $white;
         opacity: 0.8;
         z-index: 100;
+    }
+    @keyframes paca-spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 }

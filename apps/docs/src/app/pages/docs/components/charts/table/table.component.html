@@ -27,26 +27,48 @@
         <div class="col-sm">
           <h3>API</h3>
           <pc-prism language="javascript" [code]="importCode"></pc-prism>
-          <pc-base-config>
-            <tr>
-              <td>enableStickyHeader</td>
-              <td>Enable sticky header.</td>
-            </tr>
-            <tr>
-              <td>enableStickyFooter</td>
-              <td>Enable sticky footer.</td>
-            </tr>
-            <tr>
-              <td>enableActionRow</td>
-              <td>An "Action Row' contains a delete and edit icon that when clicked, will emit data associated with
-                that event.</td>
-            </tr>
-            <tr>
-              <td>hideColumnOne</td>
-              <td>Often is of value to track an ID that is associated with a row, i.e. record. When that ID is part of
-                your data binding, you can place it in the first column and set this flag to true to hide that column.</td>
-            </tr>
-          </pc-base-config>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>height</td>
+                <td>Set the <b>max</b> height of the table.</td>
+              </tr>
+              <tr>
+                <td>data</td>
+                <td>
+                  Collection of <a routerlink="/docs/guides/data-contract" ng-reflect-router-link="/docs/guides/data-contract"
+                    href="/docs/guides/data-contract">IPcacData</a>
+                  objects.
+                </td>
+              </tr>
+              <tr>
+                <td>enableStickyHeader</td>
+                <td>Enable sticky header.</td>
+              </tr>
+              <tr>
+                <td>enableStickyFooter</td>
+                <td>Enable sticky footer.</td>
+              </tr>
+              <tr>
+                <td>enableActionRow</td>
+                <td>An "Action Row' contains a delete and edit icon that when clicked, will emit data associated with
+                  that event.</td>
+              </tr>
+              <tr>
+                <td>hideColumnOne</td>
+                <td>Often is of value to track an ID that is associated with a row, i.e. record. When that ID is part
+                  of
+                  your data binding, you can place it in the first column and set this flag to true to hide that
+                  column.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>

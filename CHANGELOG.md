@@ -1,4 +1,3 @@
-
 <a name="0.18.0"></a>
 # [v0.18.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.18.0) (2019-01-08)
 

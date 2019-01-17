@@ -1,5 +1,5 @@
 <div class="pcac-modal" *ngIf="show">
-  <div class="pcac-modal-overlay" (click)="show = false"></div>
+  <div class="pcac-modal-overlay" (click)="close()"></div>
   <div class="pcac-modal-dialog" ng-style="dialogStyle" [style.width]="width">
     <div class="pcac-modal-dialog-content">
       <ng-content></ng-content>

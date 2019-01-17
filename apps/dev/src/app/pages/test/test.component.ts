@@ -27,6 +27,14 @@ export class TestComponent {
     this.dialog.open();
   }
 
+  onClosed(): void {
+    alert('onClosed');
+  }
+
+  onOpened(): void {
+    alert('onOpened');
+  }
+
   onEditClicked(row: IPcacData): void {
     alert('edit');
   }

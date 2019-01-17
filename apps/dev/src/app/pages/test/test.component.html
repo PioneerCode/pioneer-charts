@@ -13,5 +13,7 @@
         </div>
       </div>
     </div>
+    <button class="btn btn-primary" (click)="openDialog()">Click Me!</button>
+    <pcac-dialog (closed)="onClosed()" (opened)="onOpened()">Hello!</pcac-dialog>
   </div>
 </section>

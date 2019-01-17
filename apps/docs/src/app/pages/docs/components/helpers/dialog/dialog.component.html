@@ -9,7 +9,7 @@
         <div class="col-sm">
           <div class="pc-chart-container">
             <button class="btn btn-primary" (click)="openDialog()">Click Me!</button>
-            <pcac-dialog>Hello!</pcac-dialog>
+            <pcac-dialog (opened)="onOpened()" (closed)="onClosed()">Hello!</pcac-dialog>
           </div>
         </div>
       </div>
@@ -25,16 +25,16 @@
     <section class="pc-doc-section">
       <div class="row">
         <div class="col-sm">
-          <h3>Event</h3>
-          <pc-prism language="javascript" [code]="callCode"></pc-prism>
+          <h3>API</h3>
+          <pc-prism language="javascript" [code]="importCode"></pc-prism>
         </div>
       </div>
     </section>
     <section class="pc-doc-section">
       <div class="row">
         <div class="col-sm">
-          <h3>API</h3>
-          <pc-prism language="javascript" [code]="importCode"></pc-prism>
+          <h3>Events</h3>
+          <pc-prism language="javascript" [code]="callCode"></pc-prism>
         </div>
       </div>
     </section>

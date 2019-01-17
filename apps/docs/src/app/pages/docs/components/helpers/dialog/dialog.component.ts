@@ -10,13 +10,22 @@ import { JumpNavLevel, IJumpNav } from 'apps/docs/src/app/components/jump-nav/ju
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent {
-  public markupCode = `<pcac-dialog>Hello!</pcac-dialog>`;
+  public markupCode = `<pcac-dialog (opened)="onOpened()" (closed)="onClosed()">Hello!</pcac-dialog>`;
   public importCode = `import { PcacDialogModule } from '@pioneer-code/pioneer-charts';`;
   public callCode = `@ViewChild(PcacDialogComponent) dialog: PcacDialogComponent;
 
 openDialog(): void {
   this.dialog.open();
+}
+
+onOpened(): void {
+  alert("Dialog Opened!")
+}
+
+onClosed(): void {
+  alert("Dialog Closed!")
 }`;
+
   public jumpNav = [
     {
       key: 'Dialog',
@@ -46,5 +55,13 @@ openDialog(): void {
 
   openDialog(): void {
     this.dialog.open();
+  }
+
+onOpened(): void {
+  alert("Dialog Opened!")
+}
+
+  onClosed(): void {
+    alert("Dialog Closed!")
   }
 }

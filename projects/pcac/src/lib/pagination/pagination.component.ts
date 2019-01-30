@@ -11,6 +11,7 @@ export class PaginationComponent {
     countPerPage: PcacPaginationPageSizeEnum.Ten,
     totalItemsInCollection: 10,
     show: false,
+    isCompactView: false
   } as IPcacPaginationConfig;
 
   @Output() perPageChanged = new EventEmitter<number>();
@@ -28,27 +29,11 @@ export class PaginationComponent {
   }
 
   get currentRangeText(): string {
-    return `${this.getStartingRangeText()}-${this.getEndingRangeText()} of ${this.config.totalItemsInCollection}`;
-  }
-
-  private getStartingRangeText(): number {
-    return this.config.countPerPage * (this.config.currentPageIndex - 1) + 1;
-  }
-
-  private getEndingRangeText(): number {
-    const totalPossiblePage = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
-
-    if (totalPossiblePage === 1) {
-      return this.config.totalItemsInCollection;
+    let text = `${this.getStartingRangeText()}-${this.getEndingRangeText()}`;
+    if (!this.config.isCompactView) {
+      text = text + ` of ${this.config.totalItemsInCollection}`;
     }
-
-    if (totalPossiblePage === this.config.currentPageIndex) {
-      const total = this.config.countPerPage * (this.config.currentPageIndex - 1);
-      const modulus = this.config.totalItemsInCollection % total;
-      return total + modulus;
-    }
-
-    return this.config.countPerPage * this.config.currentPageIndex;
+    return text;
   }
 
   onPerPageChanged(count: string): void {
@@ -82,5 +67,25 @@ export class PaginationComponent {
       this.config.currentPageIndex = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
       this.endClicked.emit(this.config.currentPageIndex);
     }
+  }
+
+  private getStartingRangeText(): number {
+    return this.config.countPerPage * (this.config.currentPageIndex - 1) + 1;
+  }
+
+  private getEndingRangeText(): number {
+    const totalPossiblePage = Math.ceil(this.config.totalItemsInCollection / this.config.countPerPage);
+
+    if (totalPossiblePage === 1) {
+      return this.config.totalItemsInCollection;
+    }
+
+    if (totalPossiblePage === this.config.currentPageIndex) {
+      const total = this.config.countPerPage * (this.config.currentPageIndex - 1);
+      const modulus = this.config.totalItemsInCollection % total;
+      return total + modulus;
+    }
+
+    return this.config.countPerPage * this.config.currentPageIndex;
   }
 }

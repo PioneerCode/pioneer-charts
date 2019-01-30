@@ -3,6 +3,7 @@ export interface IPcacPaginationConfig {
    * What page are we currently on?
    */
   currentPageIndex: number;
+
   /**
    * How many records do we who per page
    */
@@ -17,6 +18,11 @@ export interface IPcacPaginationConfig {
    * Hide or show
    */
   show: boolean;
+
+  /**
+   * Show compact view
+   */
+  isCompactView: Boolean;
 }
 
 export enum PcacPaginationPageSizeEnum {

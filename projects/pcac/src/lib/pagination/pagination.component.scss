@@ -9,14 +9,14 @@
     .range-text {
         display: flex;
         align-items: center;
-        padding: 0 1.25rem 0 0;
+        padding: 0 1rem 0 0;
         color: $gray-500;
         .pcac-icon path {
           fill: $gray-500;
         }
     }
     .direction {
-      padding: 0 0.5rem 0 0;
+      padding: 0 0.25rem 0 0;
     }
     .per-page {
         select {

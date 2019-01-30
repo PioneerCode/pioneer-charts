@@ -20,7 +20,8 @@ export class TestComponent {
     currentPageIndex: 1,
     countPerPage: PcacPaginationPageSizeEnum.OneHundred,
     totalItemsInCollection: 13,
-    show: true
+    show: true,
+    isCompactView: true
   } as IPcacPaginationConfig;
 
   openDialog(): void {

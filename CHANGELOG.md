@@ -1,3 +1,9 @@
+<a name="0.21.0"></a>
+# [v0.21.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.21.0) (2019-02-18)
+
+### Added
+  - Make individual "actions" configurable in table
+
 <a name="0.18.0"></a>
 # [v0.18.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.18.0) (2019-01-08)
 

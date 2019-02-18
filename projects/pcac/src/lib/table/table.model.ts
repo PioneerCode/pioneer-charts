@@ -3,7 +3,17 @@ import { IPcacChartConfig } from '../core/chart.model';
 export interface IPcacTableConfig extends IPcacChartConfig {
   enableStickyHeader: boolean;
   enableStickyFooter: boolean;
-  enableActionRow: boolean;
+
+  /**
+   * Show or hide edit icon
+   */
+  enableEditAction: boolean;
+
+  /**
+   * Show or hide delete icon
+   */
+  enableDeleteAction: boolean;
+
   hideColumnOne: boolean;
 }
 

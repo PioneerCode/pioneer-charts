@@ -2,8 +2,9 @@
   "height": 500,
   "enableStickyHeader": true,
   "enableStickyFooter": true,
-  "enableActionRow": true,
   "hideColumnOne": false,
+  "enableEditAction": false,
+  "enableDeleteAction": true,
   "data": [
     {
       "data": [

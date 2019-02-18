@@ -22,7 +22,7 @@ export interface IPcacPaginationConfig {
   /**
    * Show compact view
    */
-  isCompactView: Boolean;
+  isCompactView: boolean;
 }
 
 export enum PcacPaginationPageSizeEnum {

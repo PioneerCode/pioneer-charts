@@ -28,9 +28,10 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   @Input() config = { height: 400 } as IPcacTableConfig;
   @Output() deleteClicked: EventEmitter<IPcacData> = new EventEmitter();
   @Output() editClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() historyClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-  @ViewChild('tableBody') tableBody: ElementRef;
-  @ViewChild('tableFooter') tableFooter: ElementRef;
+  @ViewChild('tableBody', { static: true }) tableBody: ElementRef;
+  @ViewChild('tableFooter', { static: true }) tableFooter: ElementRef;
   @ViewChildren('rows') rows: QueryList<any>;
 
   public columnWidths = [] as number[];
@@ -67,6 +68,10 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
 
   onDeleteClicked(row: IPcacData): void {
     this.deleteClicked.emit(row);
+  }
+
+  onHistoryClicked(row: IPcacData): void {
+    this.historyClicked.emit(row);
   }
 
   private initTableUi() {

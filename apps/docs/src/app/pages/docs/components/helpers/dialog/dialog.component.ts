@@ -49,7 +49,7 @@ onClosed(): void {
     }
   ] as IJumpNav[];
 
-  @ViewChild(PcacDialogComponent) dialog: PcacDialogComponent;
+  @ViewChild(PcacDialogComponent, {static: false}) dialog: PcacDialogComponent;
 
   constructor(public pcService: PcService) { }
 

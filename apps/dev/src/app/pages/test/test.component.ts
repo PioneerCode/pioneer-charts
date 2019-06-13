@@ -12,7 +12,7 @@ import { IPcacData } from 'projects/pcac/src/lib/core/public_api';
 export class TestComponent {
   public showModal = true;
 
-  @ViewChild(PcacDialogComponent) dialog: PcacDialogComponent;
+  @ViewChild(PcacDialogComponent, { static: true }) dialog: PcacDialogComponent;
 
   constructor(public pcService: PcService) { }
 

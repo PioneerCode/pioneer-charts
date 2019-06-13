@@ -22,7 +22,7 @@ import { IPcacData } from '../core';
 })
 export class PcacLineAreaChartComponent implements OnChanges {
   @Input() config: IPcacLineAreaChartConfig;
-  @ViewChild('chart') chartElm: ElementRef;
+  @ViewChild('chart', { static: true }) chartElm: ElementRef;
   @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;

@@ -21,7 +21,7 @@ import { IPcacData } from '../../core';
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config: IPcacBarVerticalChartConfig;
-  @ViewChild('chart') chartElm: ElementRef;
+  @ViewChild('chart', { static: true }) chartElm: ElementRef;
   @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;

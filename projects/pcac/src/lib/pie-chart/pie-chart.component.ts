@@ -22,7 +22,7 @@ import { fromEvent, Subscription } from 'rxjs';
 })
 export class PcacPieChartComponent implements OnChanges {
   @Input() config: IPcacPieChartConfig;
-  @ViewChild('chart') chartElm: ElementRef;
+  @ViewChild('chart', { static: true }) chartElm: ElementRef;
   @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;

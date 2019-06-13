@@ -29,8 +29,8 @@ export class PcacTableComponent implements OnChanges, AfterViewInit {
   @Output() deleteClicked: EventEmitter<IPcacData> = new EventEmitter();
   @Output() editClicked: EventEmitter<IPcacData> = new EventEmitter();
 
-  @ViewChild('tableBody') tableBody: ElementRef;
-  @ViewChild('tableFooter') tableFooter: ElementRef;
+  @ViewChild('tableBody', { static: true }) tableBody: ElementRef;
+  @ViewChild('tableFooter', { static: true }) tableFooter: ElementRef;
   @ViewChildren('rows') rows: QueryList<any>;
 
   public columnWidths = [] as number[];

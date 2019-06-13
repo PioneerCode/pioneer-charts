@@ -1,9 +1,9 @@
-<a name="1.0.0"></a>
-# [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.0) (2019-06-13)
+<a name="1.0.1"></a>
+# [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)
 
 ### Added
   - Update to Angular 8, marking a 1.0 release.
-  - Added onHistoryClicked action to Table.   
+  - Added `onHistoryClicked` action to Table.   
 
 <a name="0.21.0"></a>
 # [v0.21.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/0.21.0) (2019-02-18)

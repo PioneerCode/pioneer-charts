@@ -18,4 +18,8 @@ export class ChartsComponent {
   onDeleteClicked(row: IPcacData): void {
     alert("Delete Row");
   }
+
+  onHistoryClicked(row: IPcacData): void {
+    alert("Show History");
+  }
 }

@@ -56,6 +56,6 @@ export class TableComponent {
   }
 
   onHistoryClicked(row: IPcacData): void {
-    alert("Delete Row");
+    alert("Show History");
   }
 }

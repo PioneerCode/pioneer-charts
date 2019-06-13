@@ -42,7 +42,7 @@ export class TableComponent {
       level: JumpNavLevel.h2
     }
   ] as IJumpNav[];
-  markupCode = `<pcac-table [config]="config" (deleteClicked)="onDeleteClicked($event)" (editClicked)="onEditClicked($event)"></pcac-table>`;
+  markupCode = `<pcac-table [config]="config" (deleteClicked)="onDeleteClicked($event)" (editClicked)="onEditClicked($event)" (historyClicked)="onHistoryClicked($event)"></pcac-table>`;
   importCode = `import { PcacTableModule } from '@pioneer-code/pioneer-charts';`;
 
   constructor(public pcService: PcService) { }
@@ -52,6 +52,10 @@ export class TableComponent {
   }
 
   onDeleteClicked(row: IPcacData): void {
+    alert("Delete Row");
+  }
+
+  onHistoryClicked(row: IPcacData): void {
     alert("Delete Row");
   }
 }

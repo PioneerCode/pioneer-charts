@@ -14,6 +14,11 @@ export interface IPcacTableConfig extends IPcacChartConfig {
    */
   enableDeleteAction: boolean;
 
+  /**
+   * Show or hide history icon
+   */
+  enableHistoryAction: boolean;
+
   hideColumnOne: boolean;
 }
 

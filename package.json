@@ -51,7 +51,7 @@
     "codelyzer": "^5.0.0",
     "copyfiles": "^2.1.0",
     "cpy": "^7.3.0",
-    "d3": "^5.9.2",
+    "d3": "^7.6.1",
     "font-awesome": "^4.7.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",

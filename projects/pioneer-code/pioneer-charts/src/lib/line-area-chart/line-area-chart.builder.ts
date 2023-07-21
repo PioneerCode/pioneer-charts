@@ -21,14 +21,11 @@ import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
 import { IPcacData } from '../core/chart.model';
 
-export interface ILineAreaChartBuilder {
-  buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void;
-}
 
 @Injectable({
   providedIn: 'root',
 })
-export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBuilder {
+export class LineAreaChartBuilder extends PcacChart {
   private line!: Line<[number, number]>;
   private area!: Area<[number, number]>;
   private xScale!: ScaleLinear<number, number>;
@@ -83,7 +80,7 @@ export class LineAreaChartBuilder extends PcacChart implements ILineAreaChartBui
       .range([0, this.width]);
 
     this.yScale = scaleLinear()
-      .domain([0, config.domainMax])
+      .domain([config.domainMin, config.domainMax])
       .range([this.height, 0]);
 
     this.line = line()

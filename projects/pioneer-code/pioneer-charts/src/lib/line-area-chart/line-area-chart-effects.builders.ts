@@ -80,7 +80,6 @@ export class LineAreaChartEffectsBuilder {
         const parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xForms);
         if(!parts)  
           return  this.onMouseMove([event.offsetX, event.offsetY]);
-          
         const x = Number(parts[1])
         this.onMouseMove([event.offsetX - x, event.offsetY]);
       });

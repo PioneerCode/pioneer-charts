@@ -20,8 +20,16 @@ import { IPcacData } from '../core';
   styleUrls: ['./line-area-chart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PcacLineAreaChartComponent implements OnChanges {
-  @Input() config!: IPcacLineAreaChartConfig;
+export class PcacLineAreaChartComponent {
+  private _config!: IPcacLineAreaChartConfig;
+  @Input()
+  get config() {
+    return this._config
+  }
+  set config(value: IPcacLineAreaChartConfig) {
+    this._config = value
+    this.buildChart()
+  }
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
   @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
 
@@ -33,10 +41,6 @@ export class PcacLineAreaChartComponent implements OnChanges {
     this.chartBuilder.dotClicked$.subscribe(data => {
       this.dotClicked.emit(data);
     });
-  }
-
-  ngOnChanges() {
-    this.buildChart();
   }
 
   buildChart(): void {

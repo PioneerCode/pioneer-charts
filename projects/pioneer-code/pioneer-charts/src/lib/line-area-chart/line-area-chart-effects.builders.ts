@@ -71,8 +71,18 @@ export class LineAreaChartEffectsBuilder {
         this.showEffects();
       })
       .on('mousemove', (event: MouseEvent) => {
-        const magic_offset = 65 // TODO: wish I understood this
-        this.onMouseMove([event.clientX - magic_offset, event.clientY]);
+        const current = event.currentTarget as Element
+        const parent = current.parentElement
+        const xForms = parent?.getAttribute('transform')
+        if(!xForms)  
+          return  this.onMouseMove([event.offsetX, event.offsetY]);
+        
+        const parts  = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(xForms);
+        if(!parts)  
+          return  this.onMouseMove([event.offsetX, event.offsetY]);
+          
+        const x = Number(parts[1])
+        this.onMouseMove([event.offsetX - x, event.offsetY]);
       });
   }
 

@@ -4,166 +4,204 @@
   "newProjectRoot": "projects",
   "projects": {
     "pioneer-charts": {
-      "root": "",
-      "sourceRoot": "apps/docs/src",
+      "projectType": "library",
+      "root": "projects/pioneer-charts",
+      "sourceRoot": "projects/pioneer-charts/src",
+      "prefix": "pcac",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/pioneer-charts/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/pioneer-charts/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/pioneer-charts/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "pioneer-charts-web": {
       "projectType": "application",
-      "prefix": "pc",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
+      "root": "projects/pioneer-charts-web",
+      "sourceRoot": "projects/pioneer-charts-web/src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pioneer-charts",
-            "index": "apps/docs/src/index.html",
-            "main": "apps/docs/src/main.ts",
-            "polyfills": "apps/docs/src/polyfills.ts",
-            "tsConfig": "apps/docs/src/tsconfig.app.json",
+            "outputPath": "dist/pioneer-charts-web",
+            "index": "projects/pioneer-charts-web/src/index.html",
+            "main": "projects/pioneer-charts-web/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/pioneer-charts-web/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "apps/docs/src/favicon.ico",
-              "apps/docs/src/assets",
-              "apps/docs/src/CNAME"
+              "projects/pioneer-charts-web/src/favicon.ico",
+              "projects/pioneer-charts-web/src/assets"
             ],
             "styles": [
-              "apps/docs/src/styles.scss",
-              "node_modules/prismjs/themes/prism.css"
+              "projects/pioneer-charts-web/src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-bash.js",
-              "node_modules/prismjs/components/prism-typescript.js",
-              "node_modules/prismjs/components/prism-json.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
+              "budgets": [
                 {
-                  "replace": "apps/docs/src/environments/environment.ts",
-                  "with": "apps/docs/src/environments/environment.prod.ts"
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "pioneer-charts:build"
-          },
           "configurations": {
             "production": {
-              "browserTarget": "pioneer-charts:build:production"
+              "browserTarget": "pioneer-charts-web:build:production"
+            },
+            "development": {
+              "browserTarget": "pioneer-charts-web:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pioneer-charts:build"
+            "browserTarget": "pioneer-charts-web:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "apps/docs/src/test.ts",
-            "polyfills": "apps/docs/src/polyfills.ts",
-            "tsConfig": "apps/docs/src/tsconfig.spec.json",
-            "karmaConfig": "apps/docs/src/karma.conf.js",
-            "styles": [
-              "styles.scss"
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
             ],
-            "scripts": [],
+            "tsConfig": "projects/pioneer-charts-web/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "apps/docs/src/favicon.ico",
-              "apps/docs/src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/docs/src/tsconfig.app.json",
-              "apps/docs/src/tsconfig.spec.json"
+              "projects/pioneer-charts-web/src/favicon.ico",
+              "projects/pioneer-charts-web/src/assets"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "styles": [
+              "projects/pioneer-charts-web/src/styles.scss"
+            ],
+            "scripts": []
           }
         }
       }
     },
     "pioneer-charts-dev": {
-      "root": "",
-      "sourceRoot": "apps/dev/src",
       "projectType": "application",
-      "prefix": "pc",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
+      "root": "projects/pioneer-charts-dev",
+      "sourceRoot": "projects/pioneer-charts-dev/src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/pioneer-charts-dev",
-            "index": "apps/dev/src/index.html",
-            "main": "apps/dev/src/main.ts",
-            "polyfills": "apps/dev/src/polyfills.ts",
-            "tsConfig": "apps/dev/src/tsconfig.app.json",
+            "index": "projects/pioneer-charts-dev/src/index.html",
+            "main": "projects/pioneer-charts-dev/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/pioneer-charts-dev/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "apps/dev/src/assets"
+              "projects/pioneer-charts-dev/src/favicon.ico",
+              "projects/pioneer-charts-dev/src/assets"
             ],
             "styles": [
-              "apps/dev/src/styles.scss"
+              "projects/pioneer-charts-dev/src/styles.scss"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
+              "budgets": [
                 {
-                  "replace": "apps/dev/src/environments/environment.ts",
-                  "with": "apps/dev/src/environments/environment.prod.ts"
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "pioneer-charts-dev:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "pioneer-charts-dev:build:production"
+            },
+            "development": {
+              "browserTarget": "pioneer-charts-dev:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -174,96 +212,23 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "apps/dev/src/test.ts",
-            "polyfills": "apps/dev/src/polyfills.ts",
-            "tsConfig": "apps/dev/src/tsconfig.spec.json",
-            "karmaConfig": "apps/dev/src/karma.conf.js",
-            "styles": [
-              "styles.scss"
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
             ],
-            "scripts": [],
+            "tsConfig": "projects/pioneer-charts-dev/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "apps/dev/src/favicon.ico",
-              "apps/dev/src/assets"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/dev/src/tsconfig.app.json",
-              "apps/dev/src/tsconfig.spec.json"
+              "projects/pioneer-charts-dev/src/favicon.ico",
+              "projects/pioneer-charts-dev/src/assets"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "pioneer-charts-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "pioneer-charts:serve"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "pcac": {
-      "root": "projects/pcac",
-      "sourceRoot": "projects/pcac/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/pcac/tsconfig.lib.json",
-            "project": "projects/pcac/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/pcac/ng-package.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/pcac/src/test.ts",
-            "tsConfig": "projects/pcac/tsconfig.spec.json",
-            "karmaConfig": "projects/pcac/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/pcac/tsconfig.lib.json",
-              "projects/pcac/tsconfig.spec.json"
+            "styles": [
+              "projects/pioneer-charts-dev/src/styles.scss"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "scripts": []
           }
         }
       }
     }
-  },
-  "defaultProject": "pioneer-charts"
+  }
 }

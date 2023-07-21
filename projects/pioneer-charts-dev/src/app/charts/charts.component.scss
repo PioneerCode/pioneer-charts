@@ -1,0 +1,35 @@
+.charts-content {
+  padding: 4rem 0;
+}
+
+.pc-chart-container {
+  padding: 1rem;
+  background: white;
+  box-shadow: 0.25rem 0.25rem 0.5rem gray;
+  border: 1px solid gray;
+}
+
+.pc-chart-container {
+  padding: 1rem;
+  background: color("white");
+  box-shadow: 0.25rem 0.25rem 0.5rem gray;
+  border: 1px solid gray;
+}
+
+.pc-page-content {
+  background: gray;
+  padding: 2rem 2rem;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  margin: 0 0 1rem;
+}

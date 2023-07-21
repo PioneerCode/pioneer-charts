@@ -1,9 +1,8 @@
-const cpy = require('cpy');
-const chalk = require('chalk');
+import cpy from 'cpy';
 
-cpy('./README.md', './dist/pcac/')
+cpy('./README.md', './dist/pioneer-code/pioneer-charts/')
   .then(() => {
-    console.log(chalk.cyan('Pioneer Charts: README.md copied!'));
+    console.log("Pioneer Charts: README.md copied!");
   });
 
 

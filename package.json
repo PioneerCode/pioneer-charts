@@ -1,26 +1,22 @@
 {
   "name": "pioneer-charts",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve pioneer-charts-dev",
     "start:docs": "ng serve pioneer-charts-web --port 4201",
-    "start:charts": "ng build @pioneer-code/pioneer-charts",
-
-
+    "start:charts": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-web --prod",
     "build:docs:404": "node ./build/404.js",
     "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:docs:404",
-
     "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme  && npm run build:lib:readme",
-    "build:lib:publish": "npm run build:lib && npm publish dist/@pioneer-code/pioneer-charts --access public",
-    "build:lib:publish:tag": "npm run build:lib && npm publish dist/@pioneer-code/pioneer-charts  --access public --tag rc",
-    
+    "build:lib:publish": "npm run build:lib && npm publish dist/pioneer-code/pioneer-charts --access public",
+    "build:lib:publish:tag": "npm run build:lib && npm publish dist/pioneer-code/pioneer-charts  --access public --tag rc",
     "build:lib:readme": "node ./build/readme.js",
     "build:lib:package": "ng build @pioneer-code/pioneer-charts",
     "build:lib:theme": "node ./build/theme.js",
     "build:lib:sass": "node ./build/sass.js",
-
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -44,6 +40,9 @@
     "@angular/compiler-cli": "^16.1.0",
     "@types/d3": "^7.4.0",
     "@types/jasmine": "~4.3.0",
+    "chalk": "^5.3.0",
+    "copyfiles": "^2.4.1",
+    "cpy": "^10.1.0",
     "d3": "^7.8.5",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
@@ -52,6 +51,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^16.0.0",
+    "node-sass": "^9.0.0",
     "typescript": "~5.1.3"
   }
 }

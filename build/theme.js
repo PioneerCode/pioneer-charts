@@ -1,46 +1,45 @@
 /**
  * Build pre-built theme
  */
-const sass = require('node-sass');
-const fs = require('fs');
-const outputDirectory = './dist/pcac/themes';
-const chalk = require('chalk');
+import { render } from 'node-sass';
+import { existsSync, mkdir, writeFile } from 'fs';
+const outputDirectory = './dist/pioneer-code/pioneer-charts/themes';
 
-sass.render({
-  file: './projects/pcac/src/lib/pcac.scss',
+render({
+  file: './projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss',
   sourceMap: true,
   outFile: 'pcac.css'
-}, function (error, result) {
-  if (fs.existsSync(outputDirectory)) {
-    writeFile(result.css.toString(), outputDirectory + "/pcac.css");
-    writeFile(result.map.toString(), outputDirectory + "/pcac.css.map");
+}, function (_, result) {
+  if (existsSync(outputDirectory)) {
+    _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
+    _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.css.map");
   } else {
-    return fs.mkdir(outputDirectory, function (error) {
-      writeFile(result.css.toString(), outputDirectory + "/pcac.css");
-      writeFile(result.map.toString(), outputDirectory + "/pcac.css.map");
+    return mkdir(outputDirectory, function () {
+      _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
+      _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.css.map");
     });
   }
 });
 
-sass.render({
-  file: './projects/pcac/src/lib/pcac.scss',
+render({
+  file: './projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss',
   sourceMap: true,
-  outFile: 'pcac.min.css',
+  outFile: 'pioneer-charts.min.css',
   outputStyle: 'compressed'
-}, function (error, result) {
-  if (fs.existsSync(outputDirectory)) {
-    writeFile(result.css.toString(), outputDirectory + "/pcac.min.css");
-    writeFile(result.map.toString(), outputDirectory + "/pcac.min.css.map");
+}, function (_, result) {
+  if (existsSync(outputDirectory)) {
+    _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.min.css");
+    _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.min.css.map");
   } else {
-    return fs.mkdir(outputDirectory, function (error) {
-      writeFile(result.css.toString(), outputDirectory + "/pcac.min.css");
-      writeFile(result.map.toString(), outputDirectory + "/pcac.min.css.map");
+    return mkdir(outputDirectory, function () {
+      _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.min.css");
+      _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.min.css.map");
     });
   }
 });
 
-function writeFile(data, dir) {
-  return fs.writeFile(dir, data, function (err) {
-    console.log(chalk.cyan('Pioneer Charts: ' + dir + ' theme was saved!'));
+function _writeFile(data, dir) {
+  return writeFile(dir, data, function () {
+    console.log('Pioneer Charts: ' + dir + ' theme was saved!');
   });
 }

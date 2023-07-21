@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartsComponent } from './charts/charts.component';
 
-import { PcacBarHorizontalChartModule, PcacBarVerticalChartModule, PcacLineAreaChartModule, PcacPieChartModule } from "pioneer-charts"
+import { PcacBarHorizontalChartModule, PcacBarVerticalChartModule, PcacLineAreaChartModule, PcacPieChartModule } from "@pioneer-code/pioneer-charts"
 import { TestComponent } from '../test/test.component';
 
 

@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { IPcacData } from 'pioneer-charts';
 
 @Component({
   selector: 'pc-test',

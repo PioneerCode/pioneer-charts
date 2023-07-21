@@ -6,7 +6,7 @@ import {
   IPcacBarHorizontalChartConfig,
   IPcacBarVerticalChartConfig,
   IPcacPieChartConfig
-} from 'pioneer-charts';
+} from '@pioneer-code/pioneer-charts';
 
 
 @Injectable({

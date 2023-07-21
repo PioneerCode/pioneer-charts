@@ -5,7 +5,7 @@ import {
   IPcacData,
   IPcacBarVerticalChartConfig,
   IPcacBarHorizontalChartConfig
-} from 'pioneer-charts';
+} from '@pioneer-code/pioneer-charts';
 
 import { PcRepository } from '../repository/pc.repository';
 

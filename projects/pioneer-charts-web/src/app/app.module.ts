@@ -26,7 +26,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { DocLayoutComponent } from './pages/layouts/doc/doc.component';
 import { PublicComponent } from './pages/layouts/public/public.component';
 import { StringifyPipe } from './pipes/stringify.pipe';
-import { PcacPieChartModule, PcacBarVerticalChartModule, PcacBarHorizontalChartModule, PcacLineAreaChartModule } from 'pioneer-charts';
+import { PcacPieChartModule, PcacBarVerticalChartModule, PcacBarHorizontalChartModule, PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 

@@ -12,12 +12,12 @@ pr:
       - master
 
 pool:
-  vmImage: 'Ubuntu-16.04'
-
+  vmImage: ubuntu-latest
+      
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '8.x'
+    versionSpec: '18.x'
   displayName: 'Install Node.js'
 
 - script: |

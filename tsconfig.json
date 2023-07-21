@@ -17,6 +17,9 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "paths": {
+      "@pioneer-code/pioneer-charts": [
+        "dist/pioneer-code/pioneer-charts"
+      ],
       "pioneer-charts": [
         "dist/pioneer-charts"
       ]

@@ -10,17 +10,18 @@
   background-color: rgba($gray-800, 0.85);
   color: $white;
   border-radius: 2px;
-  font-family: $font-family;
+  z-index: 1000
 }
 
 .pcac-grid-rule line {
-    stroke: $gray-200;
+  stroke: $gray-200;
 }
 
 .pcac-x-axis,
 .pcac-y-axis {
-    path,
-    line {
-        stroke: none;
-    }
+
+  path,
+  line {
+    stroke: none;
+  }
 }

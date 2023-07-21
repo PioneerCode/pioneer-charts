@@ -37,14 +37,17 @@
   <div class="pc-chart-container">
     <pcac-line-area-chart [config]="pcService.lineChartConfig"
       (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
-  </div>   -->
+  </div> 
+  <div class="pc-chart-container">
+    <pcac-line-area-chart [config]="pcService.areaChartHideConfig"
+      (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+  </div> -->
+  <div class="pc-chart-container">
+    <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"
+      (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
+  </div>
   <div class="pc-chart-container">
     <pcac-line-area-chart [config]="pcService.areaChartConfig"
       (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
   </div>
-
-  <!-- <div class="pc-chart-container">
-    <pcac-line-area-chart [config]="pcService.areaChartHideConfig"
-      (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
-  </div> -->
 </div>

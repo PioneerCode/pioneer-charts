@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft } from 'd3-axis';
-import { selection, BaseType, Selection } from 'd3-selection';
-import { format } from 'd3-format';
+import { BaseType, Selection } from 'd3-selection';
 import { PcacTickFormatEnum } from './chart.model';
 
 export interface IPcacAxisBuilderConfig {
@@ -55,7 +54,6 @@ export class PcacAxisBuilder {
     if (config.xFormat) {
       switch (config.xFormat.toLocaleLowerCase()) {
         case PcacTickFormatEnum.Percentage:
-          // let f = format('.0%') No longer works
           xAxis.tickFormat(d => d + "%");
           break;
         case PcacTickFormatEnum.Minutes:

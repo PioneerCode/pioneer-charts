@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
  */
 import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
-import { PcacAxisBuilder } from '../core/axis.builder';
+import { IPcacAxisBuilderConfig, PcacAxisBuilder } from '../core/axis.builder';
 import { IPcacGridBuilderConfig, PcacGridBuilder } from '../core/grid.builder';
 import { PcacTransitionService } from '../core/transition.service';
 import { PcacTooltipBuilder } from '../core/tooltip.builder';
@@ -109,8 +109,9 @@ export class LineAreaChartBuilder extends PcacChart {
         numberOfTicks: config.numberOfTicks || 5,
         height: this.height,
         xScale: this.xScale,
-        yScale: this.yScale
-      });
+        yScale: this.yScale,
+        yFormat: config.yTickFormat
+      } as IPcacAxisBuilderConfig);
     }
     if (!config.hideGrid) {
       this.gridBuilder.drawHorizontalGrid({

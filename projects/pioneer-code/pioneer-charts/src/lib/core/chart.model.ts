@@ -19,6 +19,7 @@ export interface IPcacData {
 export enum PcacTickFormatEnum {
   None = 'none',
   Percentage = 'percentage',
-  Minutes = 'minutes'
+  Minutes = 'minutes',
+  Fahrenheit = 'fahrenheit'
 }
 

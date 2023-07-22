@@ -34,11 +34,13 @@ export class PcacAxisBuilder {
     if (config.yFormat) {
       switch (config.yFormat.toLocaleLowerCase()) {
         case PcacTickFormatEnum.Percentage:
-          // let f = format('.0%') No longer works
           yAxis.tickFormat(d => d + "%");
           break;
         case PcacTickFormatEnum.Minutes:
           yAxis.tickFormat((d) => d + 'm');
+          break;
+        case PcacTickFormatEnum.Fahrenheit:
+          yAxis.tickFormat((d) => d + ' F');
           break;
       }
     }
@@ -58,6 +60,9 @@ export class PcacAxisBuilder {
           break;
         case PcacTickFormatEnum.Minutes:
           xAxis.tickFormat((d) => d + 'm');
+          break;
+        case PcacTickFormatEnum.Fahrenheit:
+          xAxis.tickFormat((d) => d + 'f');
           break;
       }
     }

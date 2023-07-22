@@ -58,7 +58,7 @@ export class PcRepository {
    * Line Area Charts
    */
   getLineChart() {
-    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-area-chart/line-chart.json');
+    return this.http.get<IPcacLineAreaChartConfig>('./assets/mock/line-area-chart/line-chart-2.json');
   }
 
   getAreaChart() {

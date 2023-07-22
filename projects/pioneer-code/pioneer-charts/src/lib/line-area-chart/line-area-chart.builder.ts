@@ -1,5 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 
+import { ScaleTime, extent, scaleTime } from 'd3';
 import { transition } from 'd3-transition';
 import { select } from 'd3-selection';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
@@ -19,7 +20,7 @@ import { PcacTransitionService } from '../core/transition.service';
 import { PcacTooltipBuilder } from '../core/tooltip.builder';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
-import { IPcacData } from '../core/chart.model';
+import { IPcacData, PcacTickFormatEnum } from '../core/chart.model';
 
 
 @Injectable({
@@ -28,7 +29,7 @@ import { IPcacData } from '../core/chart.model';
 export class LineAreaChartBuilder extends PcacChart {
   private line!: Line<[number, number]>;
   private area!: Area<[number, number]>;
-  private xScale!: ScaleLinear<number, number>;
+  private xScale!: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   private yScale!: ScaleLinear<number, number>;
   private dotClickedSource = new Subject<IPcacData>();
   private config!: IPcacLineAreaChartConfig;
@@ -75,25 +76,34 @@ export class LineAreaChartBuilder extends PcacChart {
   }
 
   private buildScales(config: IPcacLineAreaChartConfig): void {
-    this.xScale = scaleLinear()
-      .domain([0, config.data[0].data.length - 1])
-      .range([0, this.width]);
+    switch (config.xDomainFormat) {
+      case PcacTickFormatEnum.DateTime:
+        this.xScale = scaleTime()
+          .domain([new Date(config.xDomainMin), new Date(config.xDomainMax)])
+          .range([0, this.width]);
+        break
+      default:
+        this.xScale = scaleLinear()
+          .domain([0, config.data[0].data.length - 1])
+          .range([0, this.width]);
+    }
 
     this.yScale = scaleLinear()
-      .domain([config.domainMin, config.domainMax])
+      .domain([config.yDomainMin as number || 0, config.yDomainMax as number || 100])
       .range([this.height, 0]);
 
     this.line = line()
-      .x((d, i) => {
-        return this.xScale(i);
+      .x((d: any, i) => {
+        return this.getXFormat(config.xDomainFormat, d, i)
       })
       .y((d: any) => {
         return this.yScale(d.value);
       });
 
+
     this.area = area()
-      .x((d, i) => {
-        return this.xScale(i);
+      .x((d: any, i) => {
+        return this.getXFormat(config.xDomainFormat, d, i)
       })
       .y0(this.height)
       .y1((d: any) => {
@@ -198,7 +208,7 @@ export class LineAreaChartBuilder extends PcacChart {
           return this.colors[index];
         })
         .attr('cx', (d: IPcacData, i: number) => {
-          return this.xScale(i);
+          return this.getXFormat(config.xDomainFormat, d, i)
         })
         .attr('cy', (d: IPcacData) => {
           return this.yScale(0);
@@ -227,6 +237,18 @@ export class LineAreaChartBuilder extends PcacChart {
           return this.yScale(d.value as number);
         })
         .attr('r', 4);
+    }
+  }
+
+  private getXFormat(type: PcacTickFormatEnum, data: IPcacData, index: number) {
+    switch (type) {
+      case PcacTickFormatEnum.DateTime:
+        if (data.key) {
+          return this.xScale(new Date(data.key));
+        }
+        return 0
+      default:
+        return this.xScale(index)
     }
   }
 }

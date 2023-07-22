@@ -20,6 +20,7 @@ export enum PcacTickFormatEnum {
   None = 'none',
   Percentage = 'percentage',
   Minutes = 'minutes',
+  DateTime = 'dateTime',
   Fahrenheit = 'fahrenheit'
 }
 

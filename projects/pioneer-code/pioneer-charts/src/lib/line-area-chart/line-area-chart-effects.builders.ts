@@ -3,6 +3,7 @@ import { ScaleLinear } from 'd3-scale';
 import { IPcacData } from '../core';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
+import { ScaleTime } from 'd3';
 
 export interface ILineAreaChartEffectsBuilderConfig {
   colors: string[];
@@ -10,8 +11,8 @@ export interface ILineAreaChartEffectsBuilderConfig {
   width: number;
   height: number;
   svg: Selection<BaseType, {}, HTMLElement, any>;
-  x: ScaleLinear<number, number>;
-  y: ScaleLinear<number, number>;
+  x: ScaleLinear<number, number> | ScaleTime<number, number, never>;
+  y: ScaleLinear<number, number> | ScaleTime<number, number, never>;
 }
 
 @Injectable({
@@ -137,8 +138,9 @@ export class LineAreaChartEffectsBuilder {
           }
         }
 
+        let textTarget = this.config.y.invert(pos.y) as number
         select(nodes[index]).select('text')
-          .text(this.config.y.invert(pos.y).toFixed(0));
+          .text(textTarget.toFixed(0));
 
         return 'translate(' + mousePos[0] + ',' + pos.y + ')';
       });

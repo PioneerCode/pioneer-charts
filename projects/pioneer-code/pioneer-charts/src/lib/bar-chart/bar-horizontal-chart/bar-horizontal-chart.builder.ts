@@ -17,7 +17,7 @@ import { PcacTransitionService } from '../../core/transition.service';
 import { PcacTooltipBuilder } from '../../core/tooltip.builder';
 import { PcacColorService } from '../../core/color.service';
 import { PcacChart } from '../../core/chart';
-import { IPcacData, PcacTickFormatEnum } from '../../core/chart.model';
+import { IPcacData, PcacFormatEnum } from '../../core/chart.model';
 
 type GroupType = Selection<Element |
   EnterElement |
@@ -125,8 +125,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScaleStacked,
-      xFormat: config.tickFormat || PcacTickFormatEnum.None,
-      yFormat: PcacTickFormatEnum.None,
+      xFormat: config.tickFormat || PcacFormatEnum.None,
+      yFormat: PcacFormatEnum.None,
       hideXAxis: config.hideAxis
     });
     if (!config.hideGrid) {
@@ -219,7 +219,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
           });
       })
       .on('mousemove', (event: MouseEvent, d: IPcacData) => {
-        self.tooltipBuilder.showBarTooltip(event, d, config.tickFormat || PcacTickFormatEnum.None);
+        self.tooltipBuilder.showBarTooltip(event, d, config.tickFormat || PcacFormatEnum.None);
       })
       .on('mouseout', function (this: any, event: MouseEvent, d: IPcacData) {
         self.tooltipBuilder.hideTooltip();
@@ -251,7 +251,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return i;
       })
       .on('mousemove', (event: MouseEvent, _: IPcacData) => {
-        this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacTickFormatEnum.None);
+        this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
@@ -273,7 +273,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
           config.isStacked ?
             config.thresholds[index].data[0] :
             config.thresholds[index],
-          config.tickFormat || PcacTickFormatEnum.None
+          config.tickFormat || PcacFormatEnum.None
         );
       })
       .transition(transition()
@@ -295,7 +295,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         const index = Number(target.getAttribute("data-group-threshold-id"))
         self.tooltipBuilder.showBarTooltip(event,
           config.thresholds[Number(this.parentElement.dataset['groupId'])].data[index],
-          config.tickFormat || PcacTickFormatEnum.None
+          config.tickFormat || PcacFormatEnum.None
         );
       })
       .transition(transition()

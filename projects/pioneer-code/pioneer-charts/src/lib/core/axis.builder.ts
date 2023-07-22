@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PcacTickFormatEnum } from './chart.model';
+import { PcacFormatEnum } from './chart.model';
 
 export interface IPcacAxisBuilderConfig {
   svg: Selection<BaseType, {}, HTMLElement, any>;
@@ -9,8 +9,8 @@ export interface IPcacAxisBuilderConfig {
   xScale: any;
   yScale: any;
   numberOfTicks: number;
-  yFormat?: PcacTickFormatEnum;
-  xFormat?: PcacTickFormatEnum;
+  yFormat?: PcacFormatEnum;
+  xFormat?: PcacFormatEnum;
   hideYAxis?: boolean;
   hideXAxis?: boolean;
 }
@@ -33,13 +33,13 @@ export class PcacAxisBuilder {
 
     if (config.yFormat) {
       switch (config.yFormat.toLocaleLowerCase()) {
-        case PcacTickFormatEnum.Percentage:
+        case PcacFormatEnum.Percentage:
           yAxis.tickFormat(d => d + "%");
           break;
-        case PcacTickFormatEnum.Minutes:
+        case PcacFormatEnum.Minutes:
           yAxis.tickFormat((d) => d + 'm');
           break;
-        case PcacTickFormatEnum.Fahrenheit:
+        case PcacFormatEnum.Fahrenheit:
           yAxis.tickFormat((d) => d + ' F');
           break;
       }
@@ -55,13 +55,13 @@ export class PcacAxisBuilder {
 
     if (config.xFormat) {
       switch (config.xFormat.toLocaleLowerCase()) {
-        case PcacTickFormatEnum.Percentage:
+        case PcacFormatEnum.Percentage:
           xAxis.tickFormat(d => d + "%");
           break;
-        case PcacTickFormatEnum.Minutes:
+        case PcacFormatEnum.Minutes:
           xAxis.tickFormat((d) => d + 'm');
           break;
-        case PcacTickFormatEnum.Fahrenheit:
+        case PcacFormatEnum.Fahrenheit:
           xAxis.tickFormat((d) => d + 'f');
           break;
       }

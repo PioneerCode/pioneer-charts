@@ -1,4 +1,4 @@
-import { IPcacChartConfig, PcacTickFormatEnum } from '../core/chart.model';
+import { IPcacChartConfig, PcacFormatEnum } from '../core/chart.model';
 
 export interface IPcacLineAreaChartConfig extends IPcacChartConfig  {
 
@@ -7,8 +7,8 @@ export interface IPcacLineAreaChartConfig extends IPcacChartConfig  {
   numberOfTicks: number
   hideGrid: boolean
   hideAxis: boolean
-  yTickFormat: PcacTickFormatEnum
-  xDomainFormat: PcacTickFormatEnum
+  yFormat: PcacFormatEnum
+  xFormat: PcacFormatEnum
   yDomainMax: number | string
   yDomainMin: number | string
   xDomainMin: number | string

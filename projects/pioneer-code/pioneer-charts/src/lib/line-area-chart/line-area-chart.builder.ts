@@ -20,7 +20,7 @@ import { PcacTransitionService } from '../core/transition.service';
 import { PcacTooltipBuilder } from '../core/tooltip.builder';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
-import { IPcacData, PcacTickFormatEnum } from '../core/chart.model';
+import { IPcacData, PcacFormatEnum } from '../core/chart.model';
 
 
 @Injectable({
@@ -76,8 +76,8 @@ export class LineAreaChartBuilder extends PcacChart {
   }
 
   private buildScales(config: IPcacLineAreaChartConfig): void {
-    switch (config.xDomainFormat) {
-      case PcacTickFormatEnum.DateTime:
+    switch (config.xFormat) {
+      case PcacFormatEnum.DateTime:
         this.xScale = scaleTime()
           .domain([new Date(config.xDomainMin), new Date(config.xDomainMax)])
           .range([0, this.width]);
@@ -94,7 +94,7 @@ export class LineAreaChartBuilder extends PcacChart {
 
     this.line = line()
       .x((d: any, i) => {
-        return this.getXFormat(config.xDomainFormat, d, i)
+        return this.getXFormat(config.xFormat, d, i)
       })
       .y((d: any) => {
         return this.yScale(d.value);
@@ -103,7 +103,7 @@ export class LineAreaChartBuilder extends PcacChart {
 
     this.area = area()
       .x((d: any, i) => {
-        return this.getXFormat(config.xDomainFormat, d, i)
+        return this.getXFormat(config.xFormat, d, i)
       })
       .y0(this.height)
       .y1((d: any) => {
@@ -120,7 +120,7 @@ export class LineAreaChartBuilder extends PcacChart {
         height: this.height,
         xScale: this.xScale,
         yScale: this.yScale,
-        yFormat: config.yTickFormat
+        yFormat: config.yFormat
       } as IPcacAxisBuilderConfig);
     }
     if (!config.hideGrid) {
@@ -208,14 +208,14 @@ export class LineAreaChartBuilder extends PcacChart {
           return this.colors[index];
         })
         .attr('cx', (d: IPcacData, i: number) => {
-          return this.getXFormat(config.xDomainFormat, d, i)
+          return this.getXFormat(config.xFormat, d, i)
         })
         .attr('cy', (d: IPcacData) => {
           return this.yScale(0);
         })
         .attr('fill', '#fff')
         .on('mouseover', function (this: any, event: MouseEvent, d: IPcacData) {
-          self.tooltipBuilder.showBarTooltip(event, d);
+          self.tooltipBuilder.showBarTooltip(event, d, self.config.yFormat, self.config.xFormat);
           select(this).transition(transition()
             .duration(self.transitionService.getTransitionDuration() / 3))
             .attr('r', 6)
@@ -240,9 +240,9 @@ export class LineAreaChartBuilder extends PcacChart {
     }
   }
 
-  private getXFormat(type: PcacTickFormatEnum, data: IPcacData, index: number) {
+  private getXFormat(type: PcacFormatEnum, data: IPcacData, index: number) {
     switch (type) {
-      case PcacTickFormatEnum.DateTime:
+      case PcacFormatEnum.DateTime:
         if (data.key) {
           return this.xScale(new Date(data.key));
         }

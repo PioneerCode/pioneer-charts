@@ -16,7 +16,7 @@ export interface IPcacData {
   data: IPcacData[];
 }
 
-export enum PcacTickFormatEnum {
+export enum PcacFormatEnum {
   None = 'none',
   Percentage = 'percentage',
   Minutes = 'minutes',

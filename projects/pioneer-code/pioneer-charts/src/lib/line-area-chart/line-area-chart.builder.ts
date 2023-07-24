@@ -51,6 +51,31 @@ export class LineAreaChartBuilder extends PcacChart {
     );
   }
 
+  clearChart() {
+    let remove = (i: number) => {
+      let target = elements[i]
+      if(!target) return
+
+      let parent = target.parentNode
+      if(!parent) return
+      parent.removeChild(elements[i]);
+    }
+
+    var i, elements = document.getElementsByClassName('dots');
+    for (i = elements.length; i--;) {
+      remove(i)
+    };
+    var i, elements = document.getElementsByClassName('lines');
+    for (i = elements.length; i--;) {
+      remove(i)
+    };
+
+    var i, elements = document.getElementsByClassName('effects');
+    for (i = elements.length; i--;) {
+      remove(i)
+    };
+  }
+
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(this.config.data[0].data.length).map((d) => {
@@ -133,10 +158,10 @@ export class LineAreaChartBuilder extends PcacChart {
       } as IPcacGridBuilderConfig);
     }
     this.drawLineArea(config);
+    this.drawDots(config);
     if (config.enableEffects) {
       this.drawEffects(config);
     }
-    this.drawDots(config);
   }
 
   private drawLineArea(config: IPcacLineAreaChartConfig): void {

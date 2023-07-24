@@ -21,15 +21,7 @@ import { IPcacData } from '../core';
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
-  private _config!: IPcacLineAreaChartConfig;
-  @Input()
-  get config() {
-    return this._config
-  }
-  set config(value: IPcacLineAreaChartConfig) {
-    this._config = value
-    this.buildChart()
-  }
+  @Input() config!: IPcacLineAreaChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
   @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
 
@@ -47,13 +39,15 @@ export class PcacLineAreaChartComponent {
     if (changes['config'].currentValue !== changes['config'].previousValue) {
       this.buildChart()
     }
-    console.log(changes); // here you will get the data from parent once the input param is change
-  }   
+  }
 
   buildChart(): void {
-    if (this.config && this.config.data && this.config.data.length > 0) {
+    if (!this.config || !this.config.data) return
+
+    if (this.config.data.length === 0)
+      this.chartBuilder.clearChart()
+    else
       this.chartBuilder.buildChart(this.chartElm, this.config);
-    }
   }
 
   /**

@@ -3,6 +3,7 @@
     {
       "key": "Camera 0",
       "value": null,
+      "hide": true,
       "data": [
         {
           "key": "2023-07-20T14:52:11.116209",

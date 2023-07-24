@@ -44,7 +44,8 @@ export class LineAreaChartEffectsBuilder {
         return elm.data.length > 0;
       }))
       .enter().append('g')
-      .attr('class', 'effect-group');
+      .attr('class', 'effect-group')
+      .attr('style', (d: IPcacData) => d.hide ? 'display: none' : null);
 
     mousePerLine.append('circle')
       .attr('r', 7)

@@ -13,6 +13,7 @@ export interface IPcacChartConfig {
 export interface IPcacData {
   key: string | number;
   value: string | number;
+  hide: boolean;
   data: IPcacData[];
 }
 

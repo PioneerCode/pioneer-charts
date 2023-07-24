@@ -1,7 +1,6 @@
 import { IPcacChartConfig, PcacFormatEnum } from '../core/chart.model';
 
 export interface IPcacLineAreaChartConfig extends IPcacChartConfig  {
-
   isArea: boolean
   enableEffects: boolean
   numberOfTicks: number

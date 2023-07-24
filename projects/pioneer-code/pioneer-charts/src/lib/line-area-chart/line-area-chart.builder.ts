@@ -54,10 +54,10 @@ export class LineAreaChartBuilder extends PcacChart {
   clearChart() {
     let remove = (i: number) => {
       let target = elements[i]
-      if(!target) return
+      if (!target) return
 
       let parent = target.parentNode
-      if(!parent) return
+      if (!parent) return
       parent.removeChild(elements[i]);
     }
 
@@ -169,11 +169,11 @@ export class LineAreaChartBuilder extends PcacChart {
       if (config.isArea) {
         this.drawArea(config.data[i].data, i);
       }
-      this.drawLine(config.data[i].data, i);
+      this.drawLine(config.data[i].data, i, config.data[i].hide);
     }
   }
 
-  private drawLine(lineData: IPcacData[], index: number): void {
+  private drawLine(lineData: IPcacData[], index: number, hide = false): void {
     this.svg.append('g')
       .attr('class', 'lines')
       .append('path')
@@ -186,7 +186,8 @@ export class LineAreaChartBuilder extends PcacChart {
       .attr('stroke', () => {
         return this.colors[index];
       })
-      .attr('fill', 'none');
+      .attr('fill', 'none')
+      .attr('style', () => hide ? 'display: none' : null);
   }
 
   private drawArea(lineData: IPcacData[], index: number) {
@@ -261,7 +262,8 @@ export class LineAreaChartBuilder extends PcacChart {
         .attr('cy', (d: IPcacData) => {
           return this.yScale(d.value as number);
         })
-        .attr('r', 4);
+        .attr('r', 4)
+        .attr('style', () => config.data[index].hide ? 'display: none' : null);
     }
   }
 

@@ -3,11 +3,11 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  OnChanges,
   EventEmitter,
   Output,
   HostListener,
-  ViewEncapsulation
+  ViewEncapsulation,
+  SimpleChanges
 } from '@angular/core';
 
 import { IPcacLineAreaChartConfig } from './line-area-chart.model';
@@ -42,6 +42,13 @@ export class PcacLineAreaChartComponent {
       this.dotClicked.emit(data);
     });
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['config'].currentValue !== changes['config'].previousValue) {
+      this.buildChart()
+    }
+    console.log(changes); // here you will get the data from parent once the input param is change
+  }   
 
   buildChart(): void {
     if (this.config && this.config.data && this.config.data.length > 0) {

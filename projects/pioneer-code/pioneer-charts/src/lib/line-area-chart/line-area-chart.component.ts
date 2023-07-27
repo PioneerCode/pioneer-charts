@@ -39,15 +39,12 @@ export class PcacLineAreaChartComponent {
     if (changes['config'].currentValue !== changes['config'].previousValue) {
       this.buildChart()
     }
-  }
+  }   
 
   buildChart(): void {
-    if (!this.config || !this.config.data) return
-
-    if (this.config.data.length === 0)
-      this.chartBuilder.clearChart()
-    else
+    if (this.config && this.config.data && this.config.data.length > 0) {
       this.chartBuilder.buildChart(this.chartElm, this.config);
+    }
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { ScaleTime, extent, scaleTime } from 'd3';
+import { ScaleTime, scaleTime } from 'd3';
 import { transition } from 'd3-transition';
 import { select } from 'd3-selection';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
@@ -49,31 +49,6 @@ export class LineAreaChartBuilder extends PcacChart {
       tooltipBuilder,
       colorService
     );
-  }
-
-  clearChart() {
-    let remove = (i: number) => {
-      let target = elements[i]
-      if (!target) return
-
-      let parent = target.parentNode
-      if (!parent) return
-      parent.removeChild(elements[i]);
-    }
-
-    var i, elements = document.getElementsByClassName('dots');
-    for (i = elements.length; i--;) {
-      remove(i)
-    };
-    var i, elements = document.getElementsByClassName('lines');
-    for (i = elements.length; i--;) {
-      remove(i)
-    };
-
-    var i, elements = document.getElementsByClassName('effects');
-    for (i = elements.length; i--;) {
-      remove(i)
-    };
   }
 
   buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
@@ -158,10 +133,10 @@ export class LineAreaChartBuilder extends PcacChart {
       } as IPcacGridBuilderConfig);
     }
     this.drawLineArea(config);
-    this.drawDots(config);
     if (config.enableEffects) {
       this.drawEffects(config);
     }
+    this.drawDots(config);
   }
 
   private drawLineArea(config: IPcacLineAreaChartConfig): void {

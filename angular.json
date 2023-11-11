@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pioneer-charts-web:build:production"
+              "buildTarget": "pioneer-charts-web:build:production"
             },
             "development": {
-              "browserTarget": "pioneer-charts-web:build:development"
+              "buildTarget": "pioneer-charts-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pioneer-charts-web:build"
+            "buildTarget": "pioneer-charts-web:build"
           }
         },
         "test": {
@@ -162,10 +162,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pioneer-charts-dev:build:production"
+              "buildTarget": "pioneer-charts-dev:build:production"
             },
             "development": {
-              "browserTarget": "pioneer-charts-dev:build:development"
+              "buildTarget": "pioneer-charts-dev:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -173,7 +173,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pioneer-charts-dev:build"
+            "buildTarget": "pioneer-charts-dev:build"
           }
         },
         "test": {

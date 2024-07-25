@@ -1,0 +1,16 @@
+$primary: #24282e;
+$primary-light: #a3a1fb;
+$black: #0d0e10;
+
+$theme-colors: (
+  "primary": $primary,
+  "primary-light": $primary-light,
+  "success": #5ee2a0,
+  "danger": #ff6565,
+  "warning": #fec163,
+  "light": color("white"),
+  "dark": $black
+);
+
+$body-bg: color("white");
+$link-color: #8a88d6;

@@ -1,9 +1,8 @@
 /**
  * Move sass assets to lib dist
  */
-const copyfiles = require('copyfiles');
-const chalk = require('chalk');
+import copyfiles from 'copyfiles';
 
-copyfiles(['./projects/pcac/src/lib/**/*.scss', './dist/pcac/scss'], { up: 4 }, function () {
-  console.log(chalk.cyan('Pioneer Charts: Sass moved!'));
+copyfiles(['./projects/pioneer-code/pioneer-charts/src/lib/**/*.scss', './dist/pioneer-code/pioneer-charts/scss'], { up: 4 }, function () {
+  console.log('Pioneer Charts: Sass moved!');
 });

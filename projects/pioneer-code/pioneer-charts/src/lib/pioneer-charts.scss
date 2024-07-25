@@ -1,0 +1,27 @@
+@import "core/theme/imports";
+
+.pcac-d3-tooltip {
+  position: absolute;
+  text-align: center;
+  font-size: 14px;
+  padding: 0.5rem;
+  pointer-events: none;
+  display: none;
+  background-color: rgba($gray-800, 0.85);
+  color: $white;
+  border-radius: 2px;
+  z-index: 1000
+}
+
+.pcac-grid-rule line {
+  stroke: $gray-200;
+}
+
+.pcac-x-axis,
+.pcac-y-axis {
+
+  path,
+  line {
+    stroke: none;
+  }
+}

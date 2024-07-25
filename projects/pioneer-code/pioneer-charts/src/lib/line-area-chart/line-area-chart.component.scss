@@ -1,0 +1,35 @@
+@import "../core/theme/imports";
+
+.pcac-line-area-chart {
+  svg {
+    width: 100%;
+    display: block;
+    background-color: white;
+  }
+
+  .dot {
+    stroke-width: 2px;
+  }
+
+  .effects-canvas {
+    fill: none;
+  }
+
+  .effect-line {
+    stroke: $gray-400;
+    stroke-width: 1px;
+    opacity: 0;
+  }
+
+  .effect-circle {
+    stroke-width: 1px;
+    fill: none;
+    opacity: 0;
+  }
+
+  .effect-text {
+    font-size: 11px;
+    font-weight: bold;
+    fill: $gray-800;
+  }
+}

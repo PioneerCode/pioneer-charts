@@ -1,20 +1,18 @@
-<pc-doc-layout [jumpNav]="jumpNav">
+<app-doc-layout [jumpNav]="jumpNav">
   <div class="container-fluid">
     <section class="pc-doc-section">
-      <pc-page-header [title]="'Line Area Chart'" [anchor]="'line-area-chart'"></pc-page-header>
+      <app-page-header [title]="'Line Area Chart'" [anchor]="'line-area-chart'"></app-page-header>
       <p class="lead">Configurable to display an area or line chart.</p>
     </section>
     <section class="pc-doc-section">
       <div class="row pc-row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <!-- <pcac-header [config]="{'title':'Line Chart'}"></pcac-header> -->
             <pcac-line-area-chart [config]="pcService.lineChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
         <div class="col-sm">
           <div class="pc-chart-container">
-            <!-- <pcac-header [config]="{'title':'Area Chart'}"></pcac-header> -->
             <pcac-line-area-chart [config]="pcService.areaChartConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
@@ -22,7 +20,6 @@
       <div class="row">
         <div class="col-sm">
           <div class="pc-chart-container">
-            <!-- <pcac-header [config]="{'title':'Area Chart: Hide Axis & Grid'}"></pcac-header> -->
             <pcac-line-area-chart [config]="pcService.areaChartHideConfig" (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
           </div>
         </div>
@@ -41,7 +38,7 @@
         <div class="col-sm">
           <h3>API</h3>
           <!-- <pc-prism language="javascript" [code]="importCode"></pc-prism> -->
-          <pc-base-config [includeHideAxisAndGrid]="true">
+          <app-base-config [includeHideAxisAndGrid]="true">
             <tbody style="border-top: none;">
               <tr>
                 <td>domainMax</td>
@@ -60,7 +57,7 @@
                 <td>If true, on hover, ui will display continues values of all lines to the user.</td>
               </tr>
             </tbody>
-          </pc-base-config>
+          </app-base-config>
         </div>
       </div>
     </section>
@@ -98,4 +95,4 @@
       </div>
     </section>
   </div>
-</pc-doc-layout>
+</app-doc-layout>

@@ -62,45 +62,50 @@
     <div class="col">
       <h3 id="api">API</h3>
       <!-- <pc-prism language="typescript" [code]="importCode"></pc-prism> -->
-      <!-- <pc-base-config [includeTickFormat]="true" [includeHideAxisAndGrid]="true">
-            <tbody style="border-top: none;">
-              <tr>
-                <td>domainMax</td>
-                <td>Highest value in domain of data.</td>
-              </tr>
-              <tr>
-                <td>isGroup</td>
-                <td>If set to true, 2-dimensional data sets will be displayed as a group in n of the first dimension. If false,
-                  the group will produce a stack bar set. It is recommended in that when configured in the false state, your
-                  data is ordered highest to lowest so a bar does not get covered on the UI due to a back to front stack
-                  order.
-                </td>
-              </tr>
-              <tr>
-                <td>thresholds</td>
-                <td>Threshold are configure using the same structure as
-                  <a routerLink="/docs/guides/data-contract">IPcacData</a>.
-                  <ul style="margin: 0">
-                    <li>If the thresholds variable is left empty, you will get no thresholds on the UI.</li>
-                    <li>If there is one object in the first dimension with no objects in that "data" variable of that object,
-                      you will get a threshold that spans the entire chart.</li>
-                    <li>If there is more then one object "value" in the first dimension with no objects in each "data" variable,
-                      you will get a threshold that spans the each group in the data set.</li>
-                    <li>If there is more then one object "value" in the first dimension with in each "data" variable, you will
-                      get a threshold that spans the each bar of each group in the data set.</li>
-                  </ul>
-                </td>
-              </tr>
-              <tr>
-                <td>spreadColorsPerGroup</td>
-                <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
-              </tr>
-              <tr>
-                <td>colorOverride.colors</td>
-                <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each value of the collection.</td>
-              </tr>
-            </tbody>
-          </pc-base-config> -->
+      <app-base-config [includeTickFormat]="true" [includeHideAxisAndGrid]="true">
+        <tbody style="border-top: none;">
+          <tr>
+            <td>domainMax</td>
+            <td>Highest value in domain of data.</td>
+          </tr>
+          <tr>
+            <td>isGroup</td>
+            <td>If set to true, 2-dimensional data sets will be displayed as a group in n of the first dimension. If
+              false,
+              the group will produce a stack bar set. It is recommended in that when configured in the false state, your
+              data is ordered highest to lowest so a bar does not get covered on the UI due to a back to front stack
+              order.
+            </td>
+          </tr>
+          <tr>
+            <td>thresholds</td>
+            <td>Threshold are configure using the same structure as
+              <a routerLink="/docs/guides/data-contract">IPcacData</a>.
+              <ul style="margin: 0">
+                <li>If the thresholds variable is left empty, you will get no thresholds on the UI.</li>
+                <li>If there is one object in the first dimension with no objects in that "data" variable of that
+                  object,
+                  you will get a threshold that spans the entire chart.</li>
+                <li>If there is more then one object "value" in the first dimension with no objects in each "data"
+                  variable,
+                  you will get a threshold that spans the each group in the data set.</li>
+                <li>If there is more then one object "value" in the first dimension with in each "data" variable, you
+                  will
+                  get a threshold that spans the each bar of each group in the data set.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>spreadColorsPerGroup</td>
+            <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
+          </tr>
+          <tr>
+            <td>colorOverride.colors</td>
+            <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each
+              value of the collection.</td>
+          </tr>
+        </tbody>
+      </app-base-config>
     </div>
   </div>
   <h3 id="events">Events</h3>

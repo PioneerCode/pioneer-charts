@@ -5,6 +5,7 @@ import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/
 import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
 import { PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
 import { MatCardModule } from '@angular/material/card';
+import { BaseConfigComponent } from 'projects/pioneer-charts-web/src/app/components/base-config/base-config.component';
 
 @Component({
   selector: 'pc-bar-chart',
@@ -14,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
     PageHeaderComponent,
     DocLayoutComponent,
+    BaseConfigComponent,
     PcacBarChartHorizontalComponent,
     PcacBarVerticalChartComponent
   ]

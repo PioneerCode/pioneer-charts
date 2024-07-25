@@ -3,10 +3,11 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { IntroductionComponent } from './pages/docs/guides/introduction/introduction.component';
 import { ThemeComponent } from './pages/docs/guides/theme/theme.component';
+import { DataContractComponent } from './pages/docs/guides/data-contract/data-contract.component';
 
 export const routes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
-  // { path: 'docs/guides/data-contract', component: DataContractComponent },
+  { path: 'docs/guides/data-contract', component: DataContractComponent },
   { path: 'docs/guides/theme', component: ThemeComponent },
   // { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
   // { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
@@ -19,4 +20,3 @@ export const routes: Routes = [
   // { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
 ];
- 

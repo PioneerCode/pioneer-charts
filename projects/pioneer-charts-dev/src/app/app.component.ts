@@ -1,18 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PcService } from './services/pc.service';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    RouterLink
+  ]
 })
 export class AppComponent {
   title = 'pioneer-charts-dev';
 
-  constructor(
-    public pcacService: PcService) { }
+  readonly service = inject(PcService)
 
   ngOnInit() {
-    this.pcacService.getData();
+    this.service.getData();
   }
 }

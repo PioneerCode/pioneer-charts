@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
-
     "start": "ng serve pioneer-charts-dev",
     "start-docs": "ng serve pioneer-charts-web",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",

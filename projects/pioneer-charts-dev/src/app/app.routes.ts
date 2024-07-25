@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ChartsComponent } from './charts/charts.component';
-import { TestComponent } from '../test/test.component';
+import { TestComponent } from './test/test.component';
 
 
 

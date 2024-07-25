@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { PcService } from '../app/services/pc.service';
+import { PcService } from '../services/pc.service'
 
 @Component({
   selector: 'pc-test',

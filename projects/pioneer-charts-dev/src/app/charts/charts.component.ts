@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { IPcacData, PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
 import { PcService } from '../services/pc.service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'pc-charts',
@@ -11,7 +12,8 @@ import { PcService } from '../services/pc.service';
     PcacBarChartHorizontalComponent,
     PcacBarVerticalChartComponent,
     PcacLineAreaChartComponent,
-    PcacPieChartComponent
+    PcacPieChartComponent,
+    MatCardModule
   ]
 })
 export class ChartsComponent {

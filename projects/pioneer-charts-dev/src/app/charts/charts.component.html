@@ -1,53 +1,54 @@
-<div>
-  <div class="pc-chart-container">
+<div class="p-3">
+
+  <mat-card class="p-3 mb-3">
     <pcac-pie-chart [config]="service.pieChartConfig" (sliceClicked)="service.onClicked($event)"></pcac-pie-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig"
       (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-line-area-chart [config]="service.lineChartConfig"
       (dotClicked)="service.onClicked($event)"></pcac-line-area-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3">
     <pcac-line-area-chart [config]="service.areaChartHideConfig"
       (dotClicked)="service.onClicked($event)"></pcac-line-area-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-line-area-chart [config]="service.areaChartConfig"
       (dotClicked)="service.onClicked($event)"></pcac-line-area-chart>
-  </div>
-  <div class="pc-chart-container">
+  </mat-card>
+  <mat-card class="p-3 mb-3">
     <pcac-line-area-chart [config]="service.lineChartConfig"
       (dotClicked)="service.onClicked($event)"></pcac-line-area-chart>
-  </div>
+  </mat-card>
 </div>

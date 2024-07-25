@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcService } from '../../app.service';
+import { AppService } from '../../app.service';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -11,7 +11,7 @@ import { NgClass } from '@angular/common';
 })
 export class NavComponent {
 
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 
   onHamburgerClick(): void {
     // if (this.pcService.navDisplay === 'none') {

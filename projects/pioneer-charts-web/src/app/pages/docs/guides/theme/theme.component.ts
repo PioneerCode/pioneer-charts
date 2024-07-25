@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
 import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
+import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
+import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
 
 @Component({
   selector: 'pc-theme',
   templateUrl: './theme.component.html',
-  styleUrls: ['./theme.component.scss']
+  styleUrls: ['./theme.component.scss'],
+  standalone: true,
+  imports: [
+    PageHeaderComponent,
+    DocLayoutComponent,
+  ]
 })
 export class ThemeComponent {
   jumpNav = [

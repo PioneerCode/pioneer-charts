@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PcService } from '../../../../../app.service';
+import { AppService } from '../../../../../app.service';
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
@@ -55,5 +55,5 @@ export class BarChartComponent {
     }
   ] as IJumpNav[];
 
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 }

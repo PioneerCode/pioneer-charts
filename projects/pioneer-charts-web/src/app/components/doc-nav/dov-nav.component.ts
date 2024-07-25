@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcService } from '../../app.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'pc-doc-nav',
@@ -7,5 +7,5 @@ import { PcService } from '../../app.service';
   styleUrls: ['./doc-nav.component.scss']
 })
 export class DocNavComponent {
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 }

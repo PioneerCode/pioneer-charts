@@ -13,29 +13,29 @@ import { PcRepository } from './repository/pc.repository';
 @Injectable({
   providedIn: 'root',
 })
-export class PcService {
-  // barVerticalChartConfig!: IPcacBarVerticalChartConfig;
-  // barVerticalChartSingleConfig!: IPcacBarVerticalChartConfig;
-  // barVerticalChartGroupConfig!: IPcacBarVerticalChartConfig;
-  // barVerticalChartStackedConfig!: IPcacBarVerticalChartConfig;
-  // barHorizontalChartConfig!: IPcacBarHorizontalChartConfig;
-  // barHorizontalChartSingleConfig!: IPcacBarHorizontalChartConfig;
-  // barHorizontalChartGroupConfig!: IPcacBarHorizontalChartConfig;
-  // barHorizontalChartStackedConfig!: IPcacBarHorizontalChartConfig;
-  // lineChartConfig!: IPcacLineAreaChartConfig;
-  // areaChartConfig!: IPcacLineAreaChartConfig;
-  // areaChartHideConfig!: IPcacLineAreaChartConfig;
-  // pieChartConfig!: IPcacPieChartConfig;
-  // sharedConfig!: IPcacData[];
-  // currentMainRoute = 'home';
+export class AppService {
+  barVerticalChartConfig!: IPcacBarVerticalChartConfig;
+  barVerticalChartSingleConfig!: IPcacBarVerticalChartConfig;
+  barVerticalChartGroupConfig!: IPcacBarVerticalChartConfig;
+  barVerticalChartStackedConfig!: IPcacBarVerticalChartConfig;
+  barHorizontalChartConfig!: IPcacBarHorizontalChartConfig;
+  barHorizontalChartSingleConfig!: IPcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig!: IPcacBarHorizontalChartConfig;
+  barHorizontalChartStackedConfig!: IPcacBarHorizontalChartConfig;
+  lineChartConfig!: IPcacLineAreaChartConfig;
+  areaChartConfig!: IPcacLineAreaChartConfig;
+  areaChartHideConfig!: IPcacLineAreaChartConfig;
+  pieChartConfig!: IPcacPieChartConfig;
+  sharedConfig!: IPcacData[];
+  currentMainRoute = 'home';
   // currentDocRoute = 'bar-chart';
   // navDisplay = 'none';
 
   // constructor(private repository: PcRepository) { }
 
-  // onClicked(data: IPcacData) {
-  //   alert(`Key: ${data.key} - Value: ${data.value}`);
-  // }
+  onClicked(data: IPcacData) {
+    alert(`Key: ${data.key} - Value: ${data.value}`);
+  }
 
   // getData() {
   //   this.getBarCharts();

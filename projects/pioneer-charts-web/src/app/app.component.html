@@ -1,11 +1,30 @@
-<mat-sidenav-container class="layout-sidenav-container" autosize>
-  <mat-sidenav class="ilw-bg-dark ilw-text-light" [mode]="isMobile  ? 'over' : 'side'" [fixedInViewport]="isMobile"
-    [opened]="true">
-    asdfsdfasdfasdf
-    asdfasdf
+<mat-sidenav-container autosize class="main-container">
+  <mat-sidenav class="flex-grow-1" [mode]="isMobile  ? 'over' : 'side'" [fixedInViewport]="isMobile" [opened]="true">
+    <nav class="flex-grow-1">
+      <div>
+        <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+          Home
+        </a>
+      </div>
+      <div>
+        <a routerLink="/docs/guides/introduction" routerLinkActive="active" ariaCurrentWhenActive="page">
+          Documentation
+        </a>
+      </div>
+      <div>
+        <a routerLink="/charts" routerLinkActive="active" ariaCurrentWhenActive="page">
+          Charts
+        </a>
+      </div>
+      <div>
+        <a href="https://github.com/PioneerCode/pioneer-charts">
+          <i class="fa fa-github"></i>
+          GitHub
+        </a>
+      </div>
+    </nav>
   </mat-sidenav>
   <mat-sidenav-content class="h-100 d-flex flex-column overflow-hidden">
-    <router-outlet></router-outlet>a
-    sdf
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

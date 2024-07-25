@@ -1,10 +1,19 @@
 import { Component } from '@angular/core';
 import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
+import { DocLayoutComponent } from '../../../../layouts/doc/doc.component';
+import { PageHeaderComponent } from '../../../../layouts/page-header/page-header.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'pc-introduction',
   templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.scss']
+  styleUrls: ['./introduction.component.scss'],
+  standalone: true,
+  imports: [
+    RouterLink,
+    DocLayoutComponent,
+    PageHeaderComponent
+  ]
 })
 export class IntroductionComponent {
   jumpNav = [

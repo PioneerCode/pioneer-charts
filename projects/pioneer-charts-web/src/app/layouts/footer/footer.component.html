@@ -16,17 +16,17 @@
     </h5>
     <ul class="nav justify-content-center pages">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/" [ngClass]="{'active': pcService.currentMainRoute === 'home'}" (click)="pcService.currentMainRoute = 'home'">
+        <a class="nav-link" routerLink="/" [ngClass]="{'active': service.currentMainRoute === 'home'}" (click)="service.currentMainRoute = 'home'">
           Home
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/docs/guides/introduction" [ngClass]="{'active': pcService.currentMainRoute === 'api'}" (click)="pcService.currentMainRoute = 'api'">
+        <a class="nav-link" routerLink="/docs/guides/introduction" [ngClass]="{'active': service.currentMainRoute === 'api'}" (click)="service.currentMainRoute = 'api'">
           Documentation
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': pcService.currentMainRoute === 'charts'}" (click)="pcService.currentMainRoute = 'charts'">
+        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': service.currentMainRoute === 'charts'}" (click)="service.currentMainRoute = 'charts'">
           Charts
         </a>
       </li>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PcService } from '../../../../../app.service';
+import { AppService } from '../../../../../app.service';
 import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
 
 @Component({
@@ -43,5 +43,5 @@ export class PieChartComponent {
   markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
   importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
 
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 }

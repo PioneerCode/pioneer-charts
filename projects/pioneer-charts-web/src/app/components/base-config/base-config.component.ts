@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { PcService } from '../../app.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'pc-base-config',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IPcacData } from '@pioneer-code/pioneer-charts';
 
-import { PcService } from '../../app.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'pc-charts',
@@ -9,7 +9,7 @@ import { PcService } from '../../app.service';
   styleUrls: ['./charts.component.scss']
 })
 export class ChartsComponent {
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 
   onEditClicked(row: IPcacData): void {
     alert("Edit Row");

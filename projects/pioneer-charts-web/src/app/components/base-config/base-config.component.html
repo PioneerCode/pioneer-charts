@@ -1,5 +1,5 @@
 <h6 id="configuration">Configuration</h6>
-<table class="table">
+<table class="s">
   <thead>
     <tr>
       <th>Name</th>
@@ -10,13 +10,15 @@
     <tr>
       <td>data</td>
       <td>Collection of
-        <a routerLink="/docs/guides/data-contract">IPcacData</a> objects.</td>
+        <a routerLink="/docs/guides/data-contract">IPcacData</a> objects.
+      </td>
     </tr>
     <tr>
       <td>height</td>
       <td>Height of chart component.</td>
     </tr>
-    <tr *ngIf="includeTickFormat">
+    @if(includeTickFormat) {
+    <tr>
       <td>tickFormat</td>
       <td>Set this value to change the formatting of the domain axis of your chart and the tooltip value formatting.
         <ul>
@@ -24,7 +26,8 @@
             <b>Percentage</b>
             <ul>
               <li>
-                All values will be shifted by 100, and a percentage symbol will be added to your domain access and value displayed in the
+                All values will be shifted by 100, and a percentage symbol will be added to your domain access and value
+                displayed in the
                 tooltip.
               </li>
               <li>
@@ -35,14 +38,19 @@
         </ul>
       </td>
     </tr>
-    <tr *ngIf="includeHideAxisAndGrid">
+    }
+    @if(includeHideAxisAndGrid) {
+    <tr>
       <td>hideAxis</td>
       <td>If true, hide chart axis.</td>
     </tr>
-    <tr *ngIf="includeHideAxisAndGrid">
+    }
+    @if(includeHideAxisAndGrid) {
+    <tr>
       <td>hideGrid</td>
       <td>If true, hide chart grid.</td>
     </tr>
+    }
   </tbody>
   <ng-content></ng-content>
 </table>

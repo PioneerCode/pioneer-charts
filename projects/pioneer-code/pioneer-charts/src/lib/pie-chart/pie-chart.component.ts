@@ -17,7 +17,8 @@ import { IPcacData } from '../core';
   selector: 'pcac-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class PcacPieChartComponent implements OnChanges {
   @Input() config!: IPcacPieChartConfig;

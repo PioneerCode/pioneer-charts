@@ -1,50 +1,18 @@
+@import "material";
+
 /* You can add global styles to this file, and also import other style files */
-@import 'imports';
-
-.logo-icon {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
+html,
+body {
+  height: 100%;
 }
 
-.pc-config-container {
-  max-height: 400px;
-  overflow-y: auto;
-  .pc-prism {
-      margin: 0;
-  }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.pc-prism {
-  margin: 0 0 1rem;
-  display: inline-block;
-  width: 100%;
-  background: gray("100") !important;
-}
-
-.pc-chart-container {
-  padding: 1rem;
-  background: color("white");
-  box-shadow: 0.25rem 0.25rem 0.5rem gray("200");
-  border: 1px solid gray("200");
-}
-
-.pc-page-content {
-  background: gray("200");
-  padding: 2rem 2rem;
-}
-
-.pc-table {
-  display: block;
-}
-
-.pc-doc-section {
-  margin: 0 0 2rem;
-  table {
-      margin: 0;
-  }
-}
-
-.pc-row {
-  margin-bottom: 2rem;
+img {
+  max-width: 100% !important;
+  height: auto;
+  width: auto;
 }

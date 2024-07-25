@@ -6,7 +6,7 @@
     "ng": "ng",
 
     "start": "ng serve pioneer-charts-dev",
-    "start:docs": "ng serve pioneer-charts-web",
+    "start-docs": "ng serve pioneer-charts-web",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-web --prod",
     "build:docs:404": "node ./build/404.js",

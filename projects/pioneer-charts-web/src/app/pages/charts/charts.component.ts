@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IPcacData } from '@pioneer-code/pioneer-charts';
 
-import { PcService } from '../../services/pc.service';
+import { PcService } from '../../app.service';
 
 @Component({
   selector: 'pc-charts',

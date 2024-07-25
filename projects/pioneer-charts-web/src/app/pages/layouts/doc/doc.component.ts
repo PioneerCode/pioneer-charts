@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { PcService } from '../../../services/pc.service';
+import { PcService } from '../../../app.service';
 import { IJumpNav } from '../../../components/jump-nav/jump-nav.component';
 
 @Component({

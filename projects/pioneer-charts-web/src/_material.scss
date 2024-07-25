@@ -36,4 +36,4 @@ $pioneer-charts-web-theme: mat.define-theme((
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.
 // For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($pioneer-charts-web-theme);
+@include mat.typography-hierarchy($pioneer-charts-web-theme);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { JumpNavLevel, IJumpNav } from 'projects/pioneer-charts-web/src/app/components/jump-nav/jump-nav.component';
+import { JumpNavLevel, IJumpNav } from 'projects/pioneer-charts-web/src/app/layouts/jump-nav/jump-nav.component';
 
 @Component({
   selector: 'pc-spinner',

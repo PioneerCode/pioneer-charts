@@ -1,4 +1,4 @@
-<mat-sidenav-container autosize class="main-container">
+<mat-sidenav-container autosize class="d-flex flex-column flex-grow-1 h-100">
   <mat-sidenav class="flex-grow-1" [mode]="isMobile  ? 'over' : 'side'" [fixedInViewport]="isMobile" [opened]="true">
     <nav class="flex-grow-1">
       <div>
@@ -17,9 +17,9 @@
         </a>
       </div>
       <div>
-        <a href="https://github.com/PioneerCode/pioneer-charts">
-          <i class="fa fa-github"></i>
-          GitHub
+        <a href="https://github.com/PioneerCode/pioneer-charts" mat-fab
+          aria-label="Github">
+          <mat-icon>code</mat-icon>
         </a>
       </div>
     </nav>

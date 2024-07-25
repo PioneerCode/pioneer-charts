@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { Component, Input, OnInit, AfterViewChecked } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 export enum JumpNavLevel {
   h1,
@@ -14,9 +15,14 @@ export interface IJumpNav {
 }
 
 @Component({
-  selector: 'pc-jump-nav',
+  selector: 'app-jump-nav',
   templateUrl: './jump-nav.component.html',
-  styleUrls: ['./jump-nav.component.scss']
+  styleUrls: ['./jump-nav.component.scss'],
+  standalone: true,
+  imports: [
+    NgClass,
+    RouterLink,
+  ]
 })
 export class JumpNavComponent implements OnInit, AfterViewChecked {
   @Input() jumpNav: IJumpNav[] = []
@@ -24,7 +30,6 @@ export class JumpNavComponent implements OnInit, AfterViewChecked {
   fragment!: string;
 
   constructor(
-    private activeRoute: ActivatedRoute,
     private route: Router
   ) {
     this.route.events.subscribe((res) => {

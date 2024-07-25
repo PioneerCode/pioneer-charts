@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
+import { IJumpNav, JumpNavLevel } from '../../../../layouts/jump-nav/jump-nav.component';
 import { DocLayoutComponent } from '../../../../layouts/doc/doc.component';
 import { PageHeaderComponent } from '../../../../layouts/page-header/page-header.component';
 import { RouterLink } from '@angular/router';

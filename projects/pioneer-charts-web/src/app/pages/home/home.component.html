@@ -1,4 +1,4 @@
-<app-public-layout>
+<app-public-layout class="d-block p-3">
   <header>
     <h1>Pioneer Charts</h1>
     <p>Data Visualizations in Angular, beautiful & simple.</p>
@@ -10,14 +10,14 @@
     </svg> -->
   </header>
   <div class="row">
-    <div class="col-sm">
+    <div class="col">
       <i class="fa fa-bar-chart" aria-hidden="true"></i>
       <h3>Beautiful Charts</h3>
       <p>Data Visualizations don't need to be ugly! Pioneer Charts comes with a beautiful default theme of which
         is customizable
         to suit your needs.</p>
     </div>
-    <div class="col-sm">
+    <div class="col">
       <i class="fa fa-github-alt" aria-hidden="true"></i>
       <h3>Open Source</h3>
       <p>Pioneer Charts is developed and maintained in the
@@ -25,7 +25,7 @@
         feature request or found a bug? Contributions are welcome!
       </p>
     </div>
-    <div class="col-sm">
+    <div class="col">
       <i class="fa fa-code" aria-hidden="true"></i>
       <h3>Battle Tested Code</h3>
       <p>Pioneer Charts is built on top of
@@ -43,15 +43,14 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm">
-      <div class="pc-chart-container">
-        <!-- <pcac-header [config]="{'title':'Calories Per Day'}"></pcac-header> -->
+    <div class="col">
+      <mat-card class="p-3">
         <pcac-line-area-chart [config]="service.areaChartConfig"
           (dotClicked)="service.onClicked($event)"></pcac-line-area-chart>
-      </div>
+      </mat-card>
     </div>
   </div>
-  <div class="col-sm">
+  <div class="col">
     <h4>Standing on the shoulders of giants</h4>
     <p>Pioneer Charts utilizes
       <a href="angular.io" title="Angular">Angular</a> as its delivery method. Meaning, if you are familiar with
@@ -66,7 +65,7 @@
     </p>
   </div>
   <div class="row">
-    <div class="col-sm text-center">
+    <div class="col text-center">
       <button type="button" routerLink="/docs/guides/introduction" mat-button
         (click)="service.currentMainRoute = 'get-started'">Get
         Started</button>

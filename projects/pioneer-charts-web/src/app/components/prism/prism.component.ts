@@ -1,9 +1,6 @@
 import {
   Component,
-  AfterViewInit,
   Input,
-  ElementRef,
-  Renderer2,
   OnChanges
 } from '@angular/core';
 

@@ -5,19 +5,16 @@ import { IntroductionComponent } from './pages/docs/guides/introduction/introduc
 import { ThemeComponent } from './pages/docs/guides/theme/theme.component';
 import { DataContractComponent } from './pages/docs/guides/data-contract/data-contract.component';
 import { ChartsComponent } from './pages/charts/charts.component';
+import { BarChartComponent } from './pages/docs/components/charts/bar-chart/bar-chart.component';
 
 export const routes: Routes = [
   { path: 'docs/guides/introduction', component: IntroductionComponent },
   { path: 'docs/guides/data-contract', component: DataContractComponent },
   { path: 'docs/guides/theme', component: ThemeComponent },
-  // { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
+  { path: 'docs/components/charts/bar-chart', component: BarChartComponent },
   // { path: 'docs/components/charts/line-area-chart', component: LineAreaChartComponent },
   // { path: 'docs/components/charts/table', component: TableComponent },
   // { path: 'docs/components/charts/pie-chart', component: PieChartComponent},
-  // { path: 'docs/components/helpers/pagination', component: PaginationComponent},
-  // { path: 'docs/components/helpers/dialog', component: DialogComponent},
-  // { path: 'docs/components/helpers/spinner', component: SpinnerComponent},
-  // { path: 'docs/components/ui/header', component: HeaderComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', component: HomeComponent }
 ];

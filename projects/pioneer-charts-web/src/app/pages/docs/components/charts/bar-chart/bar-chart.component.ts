@@ -1,11 +1,24 @@
 import { Component } from '@angular/core';
-import { PcService } from '../../../../../services/pc.service';
-import { IJumpNav, JumpNavLevel } from '../../../../../components/jump-nav/jump-nav.component';
+import { AppService } from '../../../../../app.service';
+import { IJumpNav, JumpNavLevel } from '../../../../../layouts/jump-nav/jump-nav.component';
+import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
+import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
+import { PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
+import { MatCardModule } from '@angular/material/card';
+import { BaseConfigComponent } from 'projects/pioneer-charts-web/src/app/components/base-config/base-config.component';
 
 @Component({
   selector: 'pc-bar-chart',
   templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.scss']
+  standalone: true,
+  imports: [
+    MatCardModule,
+    PageHeaderComponent,
+    DocLayoutComponent,
+    BaseConfigComponent,
+    PcacBarChartHorizontalComponent,
+    PcacBarVerticalChartComponent
+  ]
 })
 export class BarChartComponent {
   verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-vertical-chart>`;
@@ -55,5 +68,5 @@ export class BarChartComponent {
     }
   ] as IJumpNav[];
 
-  constructor(public pcService: PcService) { }
+  constructor(public pcService: AppService) { }
 }

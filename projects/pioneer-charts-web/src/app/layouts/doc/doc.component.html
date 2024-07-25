@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-12 col-md-3 col-xl-2 pc-doc-sidebar">
+    <app-doc-nav></app-doc-nav>
+  </div>
+  <main class="col-12 col-md-9 col-xl-8 pc-doc-content">
+    <ng-content></ng-content>
+  </main>
+  <div class="d-none d-xl-block col-xl-2">
+    <app-jump-nav [jumpNav]="jumpNav"></app-jump-nav>
+  </div>
+</div>

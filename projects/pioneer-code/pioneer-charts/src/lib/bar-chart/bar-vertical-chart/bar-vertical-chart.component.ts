@@ -17,7 +17,8 @@ import { IPcacData } from '../../core';
   selector: 'pcac-bar-vertical-chart',
   templateUrl: './bar-vertical-chart.component.html',
   styleUrls: ['./bar-vertical-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
   @Input() config!: IPcacBarVerticalChartConfig;

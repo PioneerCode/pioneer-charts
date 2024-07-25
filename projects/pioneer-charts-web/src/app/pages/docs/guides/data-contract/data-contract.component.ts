@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
-import { IJumpNav, JumpNavLevel } from '../../../../components/jump-nav/jump-nav.component';
+import { IJumpNav, JumpNavLevel } from '../../../../layouts/jump-nav/jump-nav.component';
+import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
+import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
 
 @Component({
   selector: 'pc-data-contract',
   templateUrl: './data-contract.component.html',
-  styleUrls: ['./data-contract.component.scss']
+  standalone: true,
+  imports: [
+    DocLayoutComponent,
+    PageHeaderComponent
+  ]
+
 })
 export class DataContractComponent {
   jumpNav = [

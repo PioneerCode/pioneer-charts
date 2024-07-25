@@ -1,15 +1,25 @@
-import { Component } from '@angular/core';
-import { IPcacData } from '@pioneer-code/pioneer-charts';
+import { Component, inject } from '@angular/core';
+import { IPcacData, PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
 
-import { PcService } from '../../services/pc.service';
+import { AppService } from '../../app.service';
+import { PublicLayoutComponent } from '../../layouts/public/public.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'pc-charts',
   templateUrl: './charts.component.html',
-  styleUrls: ['./charts.component.scss']
+  standalone: true,
+  imports: [
+    PublicLayoutComponent,
+    PcacBarVerticalChartComponent,
+    PcacBarChartHorizontalComponent,
+    PcacLineAreaChartComponent,
+    PcacPieChartComponent,
+    MatCardModule
+  ]
 })
 export class ChartsComponent {
-  constructor(public pcService: PcService) { }
+  readonly service = inject(AppService);
 
   onEditClicked(row: IPcacData): void {
     alert("Edit Row");

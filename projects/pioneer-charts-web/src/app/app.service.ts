@@ -7,7 +7,7 @@ import {
   IPcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-charts';
 
-import { PcRepository } from './repository/pc.repository';
+import { AppRepository } from './app.repository';
 
 
 @Injectable({
@@ -31,8 +31,7 @@ export class AppService {
   currentDocRoute = 'bar-chart';
   navDisplay = 'block';
 
-  private readonly repository = inject(PcRepository);
-
+  private readonly repository = inject(AppRepository);
 
   onClicked(data: IPcacData) {
     alert(`Key: ${data.key} - Value: ${data.value}`);

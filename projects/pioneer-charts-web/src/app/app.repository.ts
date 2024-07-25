@@ -12,7 +12,7 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class PcRepository {
+export class AppRepository {
 
   constructor(private http: HttpClient) { }
 

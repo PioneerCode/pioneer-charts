@@ -7,5 +7,5 @@ import { FooterComponent } from '../footer/footer.component';
   standalone: true,
   imports: [FooterComponent]
 })
-export class PublicComponent {
+export class PublicLayoutComponent {
 }

@@ -17,7 +17,8 @@ import { IPcacData } from '../../core';
   selector: 'pcac-bar-horizontal-chart',
   templateUrl: './bar-horizontal-chart.component.html',
   styleUrls: ['./bar-horizontal-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class PcacBarChartHorizontalComponent implements OnChanges {
   @Input() config!: IPcacBarHorizontalChartConfig;

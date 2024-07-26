@@ -1,42 +1,28 @@
 /**
  * Build pre-built theme
  */
-import { render } from 'node-sass';
+import * as sass from 'sass';
 import { existsSync, mkdir, writeFile } from 'fs';
 const outputDirectory = './dist/pioneer-code/pioneer-charts/themes';
 
-render({
-  file: './projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss',
-  sourceMap: true,
-  outFile: 'pcac.css'
-}, function (_, result) {
-  if (existsSync(outputDirectory)) {
+const result = sass.compile('./projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss');
+if (existsSync(outputDirectory)) {
+  _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
+} else {
+  mkdir(outputDirectory, function () {
     _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
-    _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.css.map");
-  } else {
-    return mkdir(outputDirectory, function () {
-      _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
-      _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.css.map");
-    });
-  }
-});
+  });
+}
 
-render({
-  file: './projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss',
-  sourceMap: true,
-  outFile: 'pioneer-charts.min.css',
-  outputStyle: 'compressed'
-}, function (_, result) {
-  if (existsSync(outputDirectory)) {
-    _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.min.css");
-    _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.min.css.map");
-  } else {
-    return mkdir(outputDirectory, function () {
-      _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.min.css");
-      _writeFile(result.map.toString(), outputDirectory + "/pioneer-charts.min.css.map");
-    });
-  }
-});
+const resultMin = sass.compile('./projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss', { style: "compressed" });
+if (existsSync(outputDirectory)) {
+  _writeFile(resultMin.css.toString(), outputDirectory + "/pioneer-charts.min.css");
+} else {
+  mkdir(outputDirectory, function () {
+    _writeFile(resultMin.css.toString(), outputDirectory + "/pioneer-charts.min.css");
+  });
+}
+
 
 function _writeFile(data, dir) {
   return writeFile(dir, data, function () {

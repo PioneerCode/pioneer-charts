@@ -2,5 +2,10 @@
   "cSpell.words": [
     "copyfiles",
     "Pcac"
-  ]
+  ],
+  "files.exclude": {
+    "**/.angular": true,
+    "**/node_modules": true,
+    "**/dist": true,
+  },
 }

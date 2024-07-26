@@ -1,6 +1,7 @@
 @import "./material";
 @import "bootstrap";
 
+
 /* You can add global styles to this file, and also import other style files */
 html,
 body {
@@ -16,4 +17,11 @@ img {
   max-width: 100% !important;
   height: auto;
   width: auto;
+}
+
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
 }

@@ -12,14 +12,14 @@ import { color } from 'd3-color';
 /**
  * Lib
  */
-import { IPcacPieChartConfig } from './pie-chart.model';
+import { PcacPieChartConfig } from './pie-chart.model';
 import { PcacAxisBuilder } from '../core/axis.builder';
 import { PcacGridBuilder } from '../core/grid.builder';
 import { PcacTransitionService } from '../core/transition.service';
 import { PcacTooltipBuilder } from '../core/tooltip.builder';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
-import { IPcacData } from '../core/chart.model';
+import { PcacData } from '../core/chart.model';
 
 import { Subject } from 'rxjs';
 
@@ -32,7 +32,7 @@ export class PieChartBuilder extends PcacChart {
   private arcShape!: Arc<any, DefaultArcObject> | any;
   private arcOverShape!: Arc<any, DefaultArcObject> | any;
   private pieAngles!: Pie<any, number | {}> | any;
-  private sliceClickedSource = new Subject<IPcacData>();
+  private sliceClickedSource = new Subject<PcacData>();
   sliceClicked$ = this.sliceClickedSource.asObservable();
 
   constructor(
@@ -51,14 +51,14 @@ export class PieChartBuilder extends PcacChart {
     );
   }
 
-  buildChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
+  buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
     this.buildShapes(config);
     this.drawChart(chartElm, config);
   }
 
-  private buildShapes(config: IPcacPieChartConfig): void {
+  private buildShapes(config: PcacPieChartConfig): void {
     const radiusOffset = 10;
 
     this.arcShape = arc()
@@ -74,7 +74,7 @@ export class PieChartBuilder extends PcacChart {
       .value((d: any) => d.value);  // TODO: Strongly type
   }
 
-  private drawChart(chartElm: ElementRef, config: IPcacPieChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
     this.buildContainer(chartElm, true);
     const self = this;
     this.svg.selectAll('.pcac-arc')
@@ -82,10 +82,10 @@ export class PieChartBuilder extends PcacChart {
       .enter().append('g')
       .attr('class', 'pcac-arc')
       .append('path')
-      .style('fill', (d: PieArcDatum<IPcacData>, i: number) => {
+      .style('fill', (d: PieArcDatum<PcacData>, i: number) => {
         return this.colors[i];
       })
-      .on('mouseover', function (this: any, _: MouseEvent, d: PieArcDatum<IPcacData>) {
+      .on('mouseover', function (this: any, _: MouseEvent, d: PieArcDatum<PcacData>) {
         const t = transition().duration(self.transitionService.getTransitionDuration() / 3)
         const c = color(self.colors[d.index])
         const ct = c ? c.darker(1).toString() : self.colors[d.index]
@@ -93,22 +93,22 @@ export class PieChartBuilder extends PcacChart {
           .attr('d', self.arcOverShape)
           .style('fill', ct);
       })
-      .on('mousemove', (event: MouseEvent, d: PieArcDatum<IPcacData>) => {
+      .on('mousemove', (event: MouseEvent, d: PieArcDatum<PcacData>) => {
         self.tooltipBuilder.showBarTooltip(event, d.data);
       })
-      .on('mouseout', function (this: any, _: MouseEvent, d: PieArcDatum<IPcacData>) {
+      .on('mouseout', function (this: any, _: MouseEvent, d: PieArcDatum<PcacData>) {
         self.tooltipBuilder.hideTooltip();
         select(this).transition(transition()
           .duration(self.transitionService.getTransitionDuration() / 3))
           .attr('d', self.arcShape)
           .style('fill', self.colors[d.index]);
       })
-      .on('click', (d: PieArcDatum<IPcacData>, i: number) => {
+      .on('click', (d: PieArcDatum<PcacData>, i: number) => {
         this.sliceClickedSource.next(d.data);
       })
       .transition(transition()
         .duration(this.transitionService.getTransitionDuration()))
-      .attrTween('d', (b: PieArcDatum<IPcacData>) => {
+      .attrTween('d', (b: PieArcDatum<PcacData>) => {
         return this.tweenChart(b);
       });
   }

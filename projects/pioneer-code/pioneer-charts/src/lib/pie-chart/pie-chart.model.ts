@@ -1,5 +1,5 @@
-import { IPcacChartConfig } from '../core/chart.model';
+import { PcacChartConfig } from '../core/chart.model';
 
-export interface IPcacPieChartConfig extends IPcacChartConfig  {
-  numberOfTicks: number;
+export class PcacPieChartConfig extends PcacChartConfig  {
+  numberOfTicks: number = 5
 }

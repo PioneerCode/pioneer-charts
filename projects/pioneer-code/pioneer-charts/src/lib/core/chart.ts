@@ -2,11 +2,11 @@ import { axisLeft } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
 import { PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
-import { IPcacChartConfig } from './chart.model';
+import { PcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, Injectable } from '@angular/core';
-import { IPcacData } from '.';
+import { PcacData } from '.';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 
@@ -35,7 +35,7 @@ export class PcacChart {
    * @param chartElm Reference to SVG on dom
    * @param config Chart specific configuration
    */
-  initializeChartState(chartElm: ElementRef, config: IPcacChartConfig): void {
+  initializeChartState(chartElm: ElementRef, config: PcacChartConfig): void {
     select(chartElm.nativeElement).select('g').remove();
     this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
     this.height = config.height;
@@ -74,7 +74,7 @@ export class PcacChart {
    * @param data Generic multi-dimensional IPcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
-  setHorizontalMarginsBasedOnContent(chartElm: ElementRef, data: IPcacData[], yScale: any): void {
+  setHorizontalMarginsBasedOnContent(chartElm: ElementRef, data: PcacData[], yScale: any): void {
     const axisY = axisLeft(yScale).ticks(5);
     let max = 0;
     select(chartElm.nativeElement).append('g')

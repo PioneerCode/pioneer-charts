@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  IPcacLineAreaChartConfig,
-  IPcacPieChartConfig,
-  IPcacData,
-  IPcacBarVerticalChartConfig,
-  IPcacBarHorizontalChartConfig
+  PcacLineAreaChartConfig,
+  PcacPieChartConfig,
+  PcacData,
+  PcacBarVerticalChartConfig,
+  PcacBarHorizontalChartConfig
 } from '@pioneer-code/pioneer-charts';
 
 import { AppRepository } from './app.repository';
@@ -14,26 +14,26 @@ import { AppRepository } from './app.repository';
   providedIn: 'root',
 })
 export class AppService {
-  barVerticalChartConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartSingleConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartGroupConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartStackedConfig!: IPcacBarVerticalChartConfig;
-  barHorizontalChartConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartSingleConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartGroupConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartStackedConfig!: IPcacBarHorizontalChartConfig;
-  lineChartConfig!: IPcacLineAreaChartConfig;
-  areaChartConfig!: IPcacLineAreaChartConfig;
-  areaChartHideConfig!: IPcacLineAreaChartConfig;
-  pieChartConfig!: IPcacPieChartConfig;
-  sharedConfig!: IPcacData[];
+  barVerticalChartConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartSingleConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartGroupConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartStackedConfig!: PcacBarVerticalChartConfig;
+  barHorizontalChartConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartSingleConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartStackedConfig!: PcacBarHorizontalChartConfig;
+  lineChartConfig!: PcacLineAreaChartConfig;
+  areaChartConfig!: PcacLineAreaChartConfig;
+  areaChartHideConfig!: PcacLineAreaChartConfig;
+  pieChartConfig!: PcacPieChartConfig;
+  sharedConfig!: PcacData[];
   currentMainRoute = 'home';
   currentDocRoute = 'bar-chart';
   navDisplay = 'block';
 
   private readonly repository = inject(AppRepository);
 
-  onClicked(data: IPcacData) {
+  onClicked(data: PcacData) {
     alert(`Key: ${data.key} - Value: ${data.value}`);
   }
 

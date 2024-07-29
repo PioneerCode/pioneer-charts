@@ -10,9 +10,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import { IPcacLineAreaChartConfig } from './line-area-chart.model';
+import { PcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
-import { IPcacData } from '../core';
+import { PcacData } from '../core';
 
 @Component({
   selector: 'pcac-line-area-chart',
@@ -22,9 +22,9 @@ import { IPcacData } from '../core';
   standalone: true
 })
 export class PcacLineAreaChartComponent {
-  @Input() config!: IPcacLineAreaChartConfig;
+  @Input() config!: PcacLineAreaChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
-  @Output() dotClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() dotClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 

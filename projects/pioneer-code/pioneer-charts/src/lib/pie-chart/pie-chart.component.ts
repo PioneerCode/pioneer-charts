@@ -9,9 +9,9 @@ import {
   HostListener,
   ViewEncapsulation
 } from '@angular/core';
-import { IPcacPieChartConfig } from './pie-chart.model';
+import { PcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
-import { IPcacData } from '../core';
+import { PcacData } from '../core';
 
 @Component({
   selector: 'pcac-pie-chart',
@@ -21,9 +21,9 @@ import { IPcacData } from '../core';
   standalone: true
 })
 export class PcacPieChartComponent implements OnChanges {
-  @Input() config!: IPcacPieChartConfig;
+  @Input() config!: PcacPieChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
-  @Output() sliceClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() sliceClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 

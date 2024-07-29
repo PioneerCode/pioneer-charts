@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { IPcacData, PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
+import { PcacData, PcacBarHorizontalChartComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
 import { PublicLayoutComponent } from '../../layouts/public/public.component';
@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     PublicLayoutComponent,
     PcacBarVerticalChartComponent,
-    PcacBarChartHorizontalComponent,
+    PcacBarHorizontalChartComponent,
     PcacLineAreaChartComponent,
     PcacPieChartComponent,
     MatCardModule
@@ -21,15 +21,15 @@ import { MatCardModule } from '@angular/material/card';
 export class ChartsComponent {
   readonly service = inject(AppService);
 
-  onEditClicked(row: IPcacData): void {
+  onEditClicked(row: PcacData): void {
     alert("Edit Row");
   }
 
-  onDeleteClicked(row: IPcacData): void {
+  onDeleteClicked(row: PcacData): void {
     alert("Delete Row");
   }
 
-  onHistoryClicked(row: IPcacData): void {
+  onHistoryClicked(row: PcacData): void {
     alert("Show History");
   }
 }

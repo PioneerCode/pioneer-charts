@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IPcacData, PcacFormatEnum } from './chart.model';
+import { PcacData, PcacFormatEnum } from './chart.model';
 import { select } from 'd3';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class PcacTooltipBuilder {
     .append('div')
     .attr('class', 'pcac-d3-tooltip') as any; // TODO: Strongly type
 
-  showBarTooltip(event: MouseEvent, data: IPcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
+  showBarTooltip(event: MouseEvent, data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
     this.tooltip.style('left', event.pageX - 60 + 'px')
       .style('top', event.pageY - 55 + 'px')
       .style('display', 'inline-block')
@@ -21,7 +21,7 @@ export class PcacTooltipBuilder {
     this.tooltip.style('display', 'none');
   }
 
-  private getBarTipData(data: IPcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): string {
+  private getBarTipData(data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): string | null {
     let value = data.value;
     let key = data.key
 
@@ -36,7 +36,7 @@ export class PcacTooltipBuilder {
       }
     }
 
-    if (keyFormat) {
+    if (key && keyFormat) {
       switch (keyFormat) {
         case PcacFormatEnum.DateTime:
           key = new Date(key).toLocaleDateString('en-US', {
@@ -51,6 +51,8 @@ export class PcacTooltipBuilder {
       }
     }
 
-    return key ? key + '</br>' + value.toString() : value.toString();
+    let finalValue = value ? value.toString() : null;
+
+    return key ? key + '</br>' + finalValue : finalValue;
   }
 }

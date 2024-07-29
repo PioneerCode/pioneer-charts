@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { IPcacData, PcacBarChartHorizontalComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
+import { IPcacData, PcacBarHorizontalChartComponent, PcacBarVerticalChartComponent, PcacLineAreaChartComponent, PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
 import { PcService } from '../services/pc.service';
 import { MatCardModule } from '@angular/material/card';
 
@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrls: ['./charts.component.scss'],
   standalone: true,
   imports: [
-    PcacBarChartHorizontalComponent,
+    PcacBarHorizontalChartComponent,
     PcacBarVerticalChartComponent,
     PcacLineAreaChartComponent,
     PcacPieChartComponent,

@@ -1,13 +1,13 @@
 import { Selection, BaseType } from 'd3-selection';
 import { ScaleLinear } from 'd3-scale';
-import { IPcacData } from '../core';
+import { PcacData } from '../core';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
 import { ScaleTime } from 'd3';
 
 export interface ILineAreaChartEffectsBuilderConfig {
   colors: string[];
-  data: IPcacData[];
+  data: PcacData[];
   width: number;
   height: number;
   svg: Selection<BaseType, {}, HTMLElement, any>;
@@ -45,12 +45,12 @@ export class LineAreaChartEffectsBuilder {
       }))
       .enter().append('g')
       .attr('class', 'effect-group')
-      .attr('style', (d: IPcacData) => d.hide ? 'display: none' : null);
+      .attr('style', (d: PcacData) => d.hide ? 'display: none' : null);
 
     mousePerLine.append('circle')
       .attr('r', 7)
       .attr('class', 'effect-circle')
-      .style('stroke', (d: IPcacData, i: number) => {
+      .style('stroke', (d: PcacData, i: number) => {
         return this.config.colors[i];
       });
 

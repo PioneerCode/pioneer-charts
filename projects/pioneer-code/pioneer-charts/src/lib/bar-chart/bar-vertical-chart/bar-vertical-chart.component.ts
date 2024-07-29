@@ -10,8 +10,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
-import { IPcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { IPcacData } from '../../core';
+import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { PcacData } from '../../core';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',
@@ -21,9 +21,9 @@ import { IPcacData } from '../../core';
   standalone: true
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
-  @Input() config!: IPcacBarVerticalChartConfig;
+  @Input() config!: PcacBarVerticalChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
-  @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() barClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 

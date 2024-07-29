@@ -1,15 +1,15 @@
-import { IPcacChartConfig, PcacFormatEnum } from '../core/chart.model';
+import { PcacChartConfig, PcacFormatEnum } from '../core/chart.model';
 
-export interface IPcacLineAreaChartConfig extends IPcacChartConfig  {
-  isArea: boolean
-  enableEffects: boolean
-  numberOfTicks: number
-  hideGrid: boolean
-  hideAxis: boolean
-  yFormat: PcacFormatEnum
-  xFormat: PcacFormatEnum
-  yDomainMax: number | string
-  yDomainMin: number | string
-  xDomainMin: number | string
-  xDomainMax: number | string
+export class PcacLineAreaChartConfig extends PcacChartConfig  {
+  isArea: boolean = false
+  enableEffects: boolean = true
+  numberOfTicks: number = 5
+  hideGrid: boolean = false
+  hideAxis: boolean = false
+  yFormat: PcacFormatEnum = PcacFormatEnum.None
+  xFormat: PcacFormatEnum = PcacFormatEnum.None
+  yDomainMax!: number | string
+  yDomainMin!: number | string
+  xDomainMin!: number | string
+  xDomainMax!: number | string
 }

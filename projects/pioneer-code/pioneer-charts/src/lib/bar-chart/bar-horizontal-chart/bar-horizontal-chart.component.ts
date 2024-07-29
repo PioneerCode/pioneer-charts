@@ -10,8 +10,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
-import { IPcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { IPcacData } from '../../core';
+import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
+import { PcacData } from '../../core';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -20,10 +20,10 @@ import { IPcacData } from '../../core';
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
-export class PcacBarChartHorizontalComponent implements OnChanges {
-  @Input() config!: IPcacBarHorizontalChartConfig;
+export class PcacBarHorizontalChartComponent implements OnChanges {
+  @Input() config!: PcacBarHorizontalChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
-  @Output() barClicked: EventEmitter<IPcacData> = new EventEmitter();
+  @Output() barClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 

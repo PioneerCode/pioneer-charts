@@ -13,14 +13,14 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
-import { IPcacLineAreaChartConfig } from './line-area-chart.model';
+import { PcacLineAreaChartConfig } from './line-area-chart.model';
 import { IPcacAxisBuilderConfig, PcacAxisBuilder } from '../core/axis.builder';
 import { IPcacGridBuilderConfig, PcacGridBuilder } from '../core/grid.builder';
 import { PcacTransitionService } from '../core/transition.service';
 import { PcacTooltipBuilder } from '../core/tooltip.builder';
 import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
-import { IPcacData, PcacFormatEnum } from '../core/chart.model';
+import { PcacData, PcacFormatEnum } from '../core/chart.model';
 
 
 @Injectable({
@@ -31,8 +31,8 @@ export class LineAreaChartBuilder extends PcacChart {
   private area!: Area<[number, number]>;
   private xScale!: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   private yScale!: ScaleLinear<number, number>;
-  private dotClickedSource = new Subject<IPcacData>();
-  private config!: IPcacLineAreaChartConfig;
+  private dotClickedSource = new Subject<PcacData>();
+  private config!: PcacLineAreaChartConfig;
   dotClicked$ = this.dotClickedSource.asObservable();
 
   constructor(
@@ -51,7 +51,7 @@ export class LineAreaChartBuilder extends PcacChart {
     );
   }
 
-  buildChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
+  buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(this.config.data[0].data.length).map((d) => {
       return {
@@ -75,7 +75,7 @@ export class LineAreaChartBuilder extends PcacChart {
     this.margin.right = 8;
   }
 
-  private buildScales(config: IPcacLineAreaChartConfig): void {
+  private buildScales(config: PcacLineAreaChartConfig): void {
     switch (config.xFormat) {
       case PcacFormatEnum.DateTime:
         this.xScale = scaleTime()
@@ -111,7 +111,7 @@ export class LineAreaChartBuilder extends PcacChart {
       });
   }
 
-  private drawChart(chartElm: ElementRef, config: IPcacLineAreaChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {
     this.buildContainer(chartElm);
     if (!config.hideAxis) {
       this.axisBuilder.drawAxis({
@@ -139,7 +139,7 @@ export class LineAreaChartBuilder extends PcacChart {
     this.drawDots(config);
   }
 
-  private drawLineArea(config: IPcacLineAreaChartConfig): void {
+  private drawLineArea(config: PcacLineAreaChartConfig): void {
     for (let i = 0; i < config.data.length; i++) {
       if (config.isArea) {
         this.drawArea(config.data[i].data, i);
@@ -148,7 +148,7 @@ export class LineAreaChartBuilder extends PcacChart {
     }
   }
 
-  private drawLine(lineData: IPcacData[], index: number, hide = false): void {
+  private drawLine(lineData: PcacData[], index: number, hide = false): void {
     this.svg.append('g')
       .attr('class', 'lines')
       .append('path')
@@ -165,7 +165,7 @@ export class LineAreaChartBuilder extends PcacChart {
       .attr('style', () => hide ? 'display: none' : null);
   }
 
-  private drawArea(lineData: IPcacData[], index: number) {
+  private drawArea(lineData: PcacData[], index: number) {
     this.svg.append('g')
       .attr('class', 'areas')
       .append('path')
@@ -181,7 +181,7 @@ export class LineAreaChartBuilder extends PcacChart {
       .attr('d', this.area as any);  // TODO: strongly type
   }
 
-  private drawEffects(config: IPcacLineAreaChartConfig) {
+  private drawEffects(config: PcacLineAreaChartConfig) {
     if (config.enableEffects) {
       const effectsBuilder = new LineAreaChartEffectsBuilder();
       effectsBuilder.buildEffects({
@@ -196,7 +196,7 @@ export class LineAreaChartBuilder extends PcacChart {
     }
   }
 
-  private drawDots(config: IPcacLineAreaChartConfig): void {
+  private drawDots(config: PcacLineAreaChartConfig): void {
     const self = this;
     for (let index = 0; index < config.data.length; index++) {
       this.svg.append('g')
@@ -205,17 +205,17 @@ export class LineAreaChartBuilder extends PcacChart {
         .data(config.data[index].data)
         .enter().append('circle')
         .attr('class', 'dot')
-        .attr('stroke', (d: IPcacData) => {
+        .attr('stroke', (d: PcacData) => {
           return this.colors[index];
         })
-        .attr('cx', (d: IPcacData, i: number) => {
+        .attr('cx', (d: PcacData, i: number) => {
           return this.getXFormat(config.xFormat, d, i)
         })
-        .attr('cy', (d: IPcacData) => {
+        .attr('cy', (d: PcacData) => {
           return this.yScale(0);
         })
         .attr('fill', '#fff')
-        .on('mouseover', function (this: any, event: MouseEvent, d: IPcacData) {
+        .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
           self.tooltipBuilder.showBarTooltip(event, d, self.config.yFormat, self.config.xFormat);
           select(this).transition(transition()
             .duration(self.transitionService.getTransitionDuration() / 3))
@@ -229,12 +229,12 @@ export class LineAreaChartBuilder extends PcacChart {
             .attr('r', 4)
             .attr('fill', '#fff');
         })
-        .on('click', (d: IPcacData, i: number) => {
+        .on('click', (d: PcacData, i: number) => {
           this.dotClickedSource.next(d);
         })
         .transition(transition()
           .duration(this.transitionService.getTransitionDuration()))
-        .attr('cy', (d: IPcacData) => {
+        .attr('cy', (d: PcacData) => {
           return this.yScale(d.value as number);
         })
         .attr('r', 4)
@@ -242,7 +242,7 @@ export class LineAreaChartBuilder extends PcacChart {
     }
   }
 
-  private getXFormat(type: PcacFormatEnum, data: IPcacData, index: number) {
+  private getXFormat(type: PcacFormatEnum, data: PcacData, index: number) {
     switch (type) {
       case PcacFormatEnum.DateTime:
         if (data.key) {

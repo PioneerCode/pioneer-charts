@@ -2,19 +2,19 @@
  * Base configuration for all charts.
  *    INewChart extends IChart
  */
-export interface IPcacChartConfig {
+export class PcacChartConfig {
   /**
    * Height in pixels
    */
-  height: number;
-  data: IPcacData[];
+  height: number = 200
+  data: PcacData[] = []
 }
 
-export interface IPcacData {
-  key: string | number;
-  value: string | number;
-  hide: boolean;
-  data: IPcacData[];
+export class PcacData {
+  key: string | number | null = null
+  value: string | number| null = null
+  hide: boolean = false
+  data: PcacData[] = []
 }
 
 export enum PcacFormatEnum {

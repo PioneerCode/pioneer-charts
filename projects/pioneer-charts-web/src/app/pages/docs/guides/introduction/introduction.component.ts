@@ -3,6 +3,7 @@ import { IJumpNav, JumpNavLevel } from '../../../../layouts/jump-nav/jump-nav.co
 import { DocLayoutComponent } from '../../../../layouts/doc/doc.component';
 import { PageHeaderComponent } from '../../../../layouts/page-header/page-header.component';
 import { RouterLink } from '@angular/router';
+import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
 
 @Component({
   selector: 'pc-introduction',
@@ -12,7 +13,8 @@ import { RouterLink } from '@angular/router';
   imports: [
     RouterLink,
     DocLayoutComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    CodeComponent
   ]
 })
 export class IntroductionComponent {

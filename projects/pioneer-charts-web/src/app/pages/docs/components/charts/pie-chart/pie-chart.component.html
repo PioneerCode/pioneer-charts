@@ -8,7 +8,6 @@
       <div class="row">
         <div class="col-6">
           <div class="pc-chart-container">
-            <!-- <pcac-header [config]="{'title':'Pie Chart'}"></pcac-header> -->
             <pcac-pie-chart [config]="pcService.pieChartConfig" (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
           </div>
         </div>
@@ -18,7 +17,7 @@
       <div class="row">
         <div class="col-sm">
           <h3>Markup</h3>
-          <!-- <pc-prism language="markup" [code]="markupCode"></pc-prism> -->
+          <app-code language="markup" [code]="markupCode"></app-code>
         </div>
       </div>
     </section>
@@ -26,7 +25,7 @@
       <div class="row">
         <div class="col-sm">
           <h3>API</h3>
-          <!-- <pc-prism language="javascript" [code]="importCode"></pc-prism> -->
+          <app-code language="javascript" [code]="importCode"></app-code>
           <app-base-config></app-base-config>
         </div>
       </div>
@@ -59,7 +58,7 @@
         <div class="col-sm">
           <h3 id="contract">Contract</h3>
           <div class="pc-config-container">
-            <!-- <pc-prism language="json" [code]="pcService.pieChartConfig | stringify"></pc-prism> -->
+            <app-code language="json" [code]="pcService.pieChartConfig | stringify"></app-code>
           </div>
         </div>
       </div>

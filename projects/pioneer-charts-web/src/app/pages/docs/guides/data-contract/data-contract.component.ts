@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IJumpNav, JumpNavLevel } from '../../../../layouts/jump-nav/jump-nav.component';
 import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
 import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
+import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
 
 @Component({
   selector: 'pc-data-contract',
@@ -9,7 +10,8 @@ import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts
   standalone: true,
   imports: [
     DocLayoutComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    CodeComponent
   ]
 
 })

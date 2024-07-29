@@ -6,6 +6,8 @@ import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
 import { BaseConfigComponent } from 'projects/pioneer-charts-web/src/app/components/base-config/base-config.component';
 import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
 import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
+import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
+import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pipe';
 
 @Component({
   selector: 'pc-line-area-chart',
@@ -16,7 +18,9 @@ import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts
     PcacLineAreaChartComponent,
     BaseConfigComponent,
     DocLayoutComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    CodeComponent,
+    StringifyPipe,
   ]
 })
 export class LineAreaChartComponent {

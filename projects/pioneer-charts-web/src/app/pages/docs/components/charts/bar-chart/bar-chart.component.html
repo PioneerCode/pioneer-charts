@@ -6,62 +6,62 @@
   <div class="row mb-3">
     <div class="col">
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="pcService.barVerticalChartSingleConfig"
-          (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
       </mat-card>
     </div>
     <div class="col">
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="pcService.barVerticalChartGroupConfig"
-          (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
       </mat-card>
     </div>
     <div class="col">
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="pcService.barVerticalChartStackedConfig"
-          (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
       </mat-card>
     </div>
   </div>
   <div class="row mb-3">
     <div class="col">
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartSingleConfig"
-          (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
       </mat-card>
     </div>
     <div class="col">
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartGroupConfig"
-          (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
       </mat-card>
     </div>
   </div>
   <mat-card class="p-3 mb-3">
-    <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartStackedConfig"
-      (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
+    <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig"
+      (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
   </mat-card>
   <mat-card class="p-3 mb-3">
-    <pcac-bar-horizontal-chart [config]="pcService.barHorizontalChartConfig"
-      (barClicked)="pcService.onClicked($event)"></pcac-bar-horizontal-chart>
+    <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig"
+      (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
   </mat-card>
   <mat-card class="p-3 mb-3">
-    <pcac-bar-vertical-chart [config]="pcService.barVerticalChartConfig"
-      (barClicked)="pcService.onClicked($event)"></pcac-bar-vertical-chart>
+    <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig"
+      (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
   </mat-card>
   <div class="row">
     <div class="col">
       <h3 id="markup">Markup</h3>
       <h6 id="horizontal">Horizontal</h6>
-      <!-- <pc-prism language="markup" [code]="horizontalCode"></pc-prism> -->
+      <app-code language="markup" [code]="horizontalCode"></app-code>
       <h6 id="vertical">Vertical</h6>
-      <!-- <pc-prism language="markup" [code]="verticalCode"></pc-prism> -->
+      <app-code language="markup" [code]="verticalCode"></app-code>
     </div>
   </div>
   <div class="row">
     <div class="col">
       <h3 id="api">API</h3>
-      <!-- <pc-prism language="typescript" [code]="importCode"></pc-prism> -->
+      <app-code language="typescript" [code]="importCode"></app-code>
       <app-base-config [includeTickFormat]="true" [includeHideAxisAndGrid]="true">
         <tbody style="border-top: none;">
           <tr>
@@ -120,7 +120,7 @@
     <tbody>
       <tr>
         <td>
-          (barClicked)="pcService.onClicked($event)"
+          (barClicked)="service.onClicked($event)"
         </td>
         <td>Emitted when a bar in the graph is clicked.</td>
         <td>
@@ -134,25 +134,25 @@
     <div class="col-3">
       <h6>Vertical Single</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barVerticalChartSingleConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barVerticalChartSingleConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Vertical Grouped</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barVerticalChartGroupConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barVerticalChartGroupConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Vertical Stacked</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barVerticalChartStackedConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barVerticalChartStackedConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Vertical Multi</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barVerticalChartConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barVerticalChartConfig | stringify"></app-code>
       </div>
     </div>
   </div>
@@ -160,25 +160,25 @@
     <div class="col-3">
       <h6>Horizontal Single</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barHorizontalChartSingleConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barHorizontalChartSingleConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Horizontal Grouped</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barHorizontalChartGroupConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barHorizontalChartGroupConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Horizontal Stacked</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barHorizontalChartStackedConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barHorizontalChartStackedConfig | stringify"></app-code>
       </div>
     </div>
     <div class="col-3">
       <h6>Horizontal Multi</h6>
       <div class="pc-config-container">
-        <!-- <pc-prism language="json" [code]="pcService.barHorizontalChartConfig | stringify"></pc-prism> -->
+        <app-code language="json" [code]="service.barHorizontalChartConfig | stringify"></app-code>
       </div>
     </div>
   </div>

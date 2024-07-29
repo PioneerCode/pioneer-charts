@@ -29,7 +29,7 @@
       <div class="row">
         <div class="col-sm">
           <h3>Markup</h3>
-          <!-- <pc-prism language="markup" [code]="markupCode"></pc-prism> -->
+          <app-code language="markup" [code]="markupCode"></app-code>
         </div>
       </div>
     </section>
@@ -37,7 +37,7 @@
       <div class="row">
         <div class="col-sm">
           <h3>API</h3>
-          <!-- <pc-prism language="javascript" [code]="importCode"></pc-prism> -->
+          <app-code language="javascript" [code]="importCode"></app-code>
           <app-base-config [includeHideAxisAndGrid]="true">
             <tbody style="border-top: none;">
               <tr>
@@ -89,7 +89,7 @@
         <div class="col-sm">
           <h3 id="contract">Contract</h3>
           <div class="pc-config-container">
-            <!-- <pc-prism language="json" [code]="pcService.areaChartConfig | stringify"></pc-prism> -->
+            <app-code language="json" [code]="pcService.areaChartConfig | stringify"></app-code>
           </div>
         </div>
       </div>

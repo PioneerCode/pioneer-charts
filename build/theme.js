@@ -5,7 +5,7 @@ import * as sass from 'sass';
 import { existsSync, mkdir, writeFile } from 'fs';
 const outputDirectory = './dist/pioneer-charts/themes';
 
-const result = sass.compile('./projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss');
+const result = sass.compile('./projects/pioneer-charts/src/lib/pioneer-charts.scss');
 if (existsSync(outputDirectory)) {
   _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
 } else {
@@ -14,7 +14,7 @@ if (existsSync(outputDirectory)) {
   });
 }
 
-const resultMin = sass.compile('./projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss', { style: "compressed" });
+const resultMin = sass.compile('./projects/pioneer-charts/src/lib/pioneer-charts.scss', { style: "compressed" });
 if (existsSync(outputDirectory)) {
   _writeFile(resultMin.css.toString(), outputDirectory + "/pioneer-charts.min.css");
 } else {

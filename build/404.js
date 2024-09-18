@@ -1,6 +1,6 @@
 import cpy from 'cpy';
 
-await cpy('./dist/pioneer-charts/index.html', './dist/pioneer-code/pioneer-charts/', {
+await cpy('./dist/pioneer-charts/index.html', './dist/pioneer-charts/', {
   rename: () => `404.html`
 })
 

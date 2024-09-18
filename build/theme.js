@@ -3,7 +3,7 @@
  */
 import * as sass from 'sass';
 import { existsSync, mkdir, writeFile } from 'fs';
-const outputDirectory = './dist/pioneer-code/pioneer-charts/themes';
+const outputDirectory = './dist/pioneer-charts/themes';
 
 const result = sass.compile('./projects/pioneer-code/pioneer-charts/src/lib/pioneer-charts.scss');
 if (existsSync(outputDirectory)) {

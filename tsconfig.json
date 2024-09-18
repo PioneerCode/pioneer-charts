@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "paths": {
       "@pioneer-code/pioneer-charts": [
-        "dist/pioneer-code/pioneer-charts"
+        "dist/pioneer-charts"
       ],
       "pioneer-charts": [
         "dist/pioneer-charts"

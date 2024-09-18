@@ -198,21 +198,21 @@
     },
     "@pioneer-code/pioneer-charts": {
       "projectType": "library",
-      "root": "projects/pioneer-code/pioneer-charts",
-      "sourceRoot": "projects/pioneer-code/pioneer-charts/src",
+      "root": "projects/pioneer-charts",
+      "sourceRoot": "projects/pioneer-charts/src",
       "prefix": "pc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/pioneer-code/pioneer-charts/ng-package.json"
+            "project": "projects/pioneer-charts/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/pioneer-code/pioneer-charts/tsconfig.lib.prod.json"
+              "tsConfig": "projects/pioneer-charts/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/pioneer-code/pioneer-charts/tsconfig.lib.json"
+              "tsConfig": "projects/pioneer-charts/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -220,9 +220,9 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/iris-link-web-components/src/test.ts",
-            "tsConfig": "projects/iris-link-web-components/tsconfig.spec.json",
-            "karmaConfig": "projects/iris-link-web-components/karma.conf.js"
+            "main": "projects/pioneer-chart/src/test.ts",
+            "tsConfig": "projects/pioneer-chart/tsconfig.spec.json",
+            "karmaConfig": "projects/pioneer-chart/karma.conf.js"
           }
         }
       }

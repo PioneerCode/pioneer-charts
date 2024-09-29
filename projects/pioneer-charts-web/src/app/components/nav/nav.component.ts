@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AppService } from '../../app.service';
 import { NgClass } from '@angular/common';
 
@@ -10,8 +10,7 @@ import { NgClass } from '@angular/common';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-
-  constructor(public pcService: AppService) { }
+  readonly pcService = inject(AppService);
 
   onHamburgerClick(): void {
     // if (this.pcService.navDisplay === 'none') {

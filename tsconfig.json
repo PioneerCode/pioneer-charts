@@ -14,9 +14,6 @@
     "paths": {
       "@pioneer-code/pioneer-charts": [
         "dist/pioneer-charts"
-      ],
-      "pioneer-charts": [
-        "dist/pioneer-charts"
       ]
     },
     "esModuleInterop": true,

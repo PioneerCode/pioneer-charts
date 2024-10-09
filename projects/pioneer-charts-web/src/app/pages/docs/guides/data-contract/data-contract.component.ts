@@ -23,7 +23,7 @@ export class DataContractComponent {
       level: JumpNavLevel.h1
     },
     {
-      key: 'IPcacData',
+      key: 'PcacData',
       value: 'data',
       level: JumpNavLevel.h2
     },
@@ -44,10 +44,10 @@ export class DataContractComponent {
     }
   ] as IJumpNav[];
 
-  data = `export interface IPcacData {
+  data = `export interface PcacData {
   key: string | number;
   value: string | number;
-  data: IPcacData[];
+  data: PcacData[];
 }`;
 
   baseConfig = `export interface IPcacChartConfig {
@@ -56,7 +56,7 @@ export class DataContractComponent {
    */
   height: number;
   ...
-  data: IPcacData[];
+  data: PcacData[];
 }`;
 
   barChartConfig = `import { IPcacChartConfig } from '../core/chart.model';

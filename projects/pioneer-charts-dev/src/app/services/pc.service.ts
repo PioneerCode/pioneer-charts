@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  IPcacLineAreaChartConfig,
-  IPcacData,
-  IPcacBarVerticalChartConfig,
-  IPcacBarHorizontalChartConfig,
-  IPcacPieChartConfig,
+  PcacLineAreaChartConfig,
+  PcacData,
+  PcacBarVerticalChartConfig,
+  PcacBarHorizontalChartConfig,
+  PcacPieChartConfig,
 } from '@pioneer-code/pioneer-charts';
 import { PcRepository } from './pc.repository';
 
@@ -13,19 +13,19 @@ import { PcRepository } from './pc.repository';
   providedIn: 'root',
 })
 export class PcService {
-  barVerticalChartConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartSingleConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartGroupConfig!: IPcacBarVerticalChartConfig;
-  barVerticalChartStackedConfig!: IPcacBarVerticalChartConfig;
-  barHorizontalChartConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartSingleConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartGroupConfig!: IPcacBarHorizontalChartConfig;
-  barHorizontalChartStackedConfig!: IPcacBarHorizontalChartConfig;
-  lineChartConfig!: IPcacLineAreaChartConfig;
-  areaChartConfig!: IPcacLineAreaChartConfig;
-  areaChartHideConfig!: IPcacLineAreaChartConfig;
-  pieChartConfig!: IPcacPieChartConfig;
-  sharedConfig = [] as IPcacData[];
+  barVerticalChartConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartSingleConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartGroupConfig!: PcacBarVerticalChartConfig;
+  barVerticalChartStackedConfig!: PcacBarVerticalChartConfig;
+  barHorizontalChartConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartSingleConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartGroupConfig!: PcacBarHorizontalChartConfig;
+  barHorizontalChartStackedConfig!: PcacBarHorizontalChartConfig;
+  lineChartConfig!: PcacLineAreaChartConfig;
+  areaChartConfig!: PcacLineAreaChartConfig;
+  areaChartHideConfig!: PcacLineAreaChartConfig;
+  pieChartConfig!: PcacPieChartConfig;
+  sharedConfig = [] as PcacData[];
   currentMainRoute = 'home';
   currentDocRoute = 'bar-chart';
   navDisplay = 'none';

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { PcService } from '../services/pc.service'
-import { IPcacBarVerticalChartConfig, IPcacData, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
+import { PcacBarVerticalChartConfig, PcacData, PcacBarVerticalChartComponent, PcacFormatEnum, PcacBarVerticalChartColorOverrideConfig } from '@pioneer-code/pioneer-charts';
 
 @Component({
   selector: 'pc-test',
@@ -13,17 +13,22 @@ import { IPcacBarVerticalChartConfig, IPcacData, PcacBarVerticalChartComponent }
 })
 export class TestComponent {
   readonly service = inject(PcService)
-  data: IPcacBarVerticalChartConfig = {
+  data: PcacBarVerticalChartConfig = {
     "domainMax": 1000,
     "height": 200,
     "isStacked": false,
+    "tickFormat": PcacFormatEnum.None,
+    "spreadColorsPerGroup": false,
+    "hideGrid": false,
+    "hideAxis": false,
+    "colorOverride": new PcacBarVerticalChartColorOverrideConfig(),
     "numberOfTicks": 5,
     "thresholds": [
     ],
     "data": [
       {
         "key": "7/29",
-        "data":  [
+        "data": [
           {
             "value": 687,
             "hide": false
@@ -90,6 +95,6 @@ export class TestComponent {
           }
         ]
       }
-    ] as IPcacData[]
+    ] as PcacData[]
   }
 }

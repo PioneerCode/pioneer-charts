@@ -59,7 +59,7 @@ this.colors = this.colorService.getColorScale(config.data.length);
 ...
 
 ...
-.style('fill', (d: IPcacData, i: number) => {
+.style('fill', (d: PcacData, i: number) => {
   return this.colors[i];
 })
 ...`;

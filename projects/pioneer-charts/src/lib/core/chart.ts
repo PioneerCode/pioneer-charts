@@ -71,7 +71,7 @@ export class PcacChart {
    * For example, labels on a horizontal bar chart are dynamic and such the margin needs to be calculated ahead of
    * chart axis construction.
    * @param chartElm Reference to SVG on dom
-   * @param data Generic multi-dimensional IPcacData structure
+   * @param data Generic multi-dimensional PcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
   setHorizontalMarginsBasedOnContent(chartElm: ElementRef, data: PcacData[], yScale: any): void {

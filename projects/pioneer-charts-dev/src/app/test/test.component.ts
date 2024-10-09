@@ -30,11 +30,11 @@ export class TestComponent {
         "key": "7/29",
         "data": [
           {
-            "value": 687,
+            "value": null,
             "hide": false
           },
           {
-            "value": 400,
+            "value": null,
             "hide": false
           }
         ]

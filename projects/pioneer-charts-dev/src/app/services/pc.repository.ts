@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   PcacLineAreaChartConfig,
@@ -13,8 +13,7 @@ import {
   providedIn: 'root',
 })
 export class PcRepository {
-
-  constructor(private http: HttpClient) { }
+  private readonly http = inject(HttpClient);
 
   /**
    * Bar Charts Horizontal

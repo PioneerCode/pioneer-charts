@@ -6,16 +6,15 @@ import { RouterLink } from '@angular/router';
 import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
 
 @Component({
-  selector: 'pc-introduction',
-  templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.scss'],
-  standalone: true,
-  imports: [
-    RouterLink,
-    DocLayoutComponent,
-    PageHeaderComponent,
-    CodeComponent
-  ]
+    selector: 'pc-introduction',
+    templateUrl: './introduction.component.html',
+    styleUrls: ['./introduction.component.scss'],
+    imports: [
+        RouterLink,
+        DocLayoutComponent,
+        PageHeaderComponent,
+        CodeComponent
+    ]
 })
 export class IntroductionComponent {
   jumpNav = [

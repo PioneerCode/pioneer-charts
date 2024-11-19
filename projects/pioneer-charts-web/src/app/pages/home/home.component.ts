@@ -7,17 +7,16 @@ import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'pc-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: true,
-  imports:[
-    RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    PublicLayoutComponent,
-    PcacLineAreaChartComponent
-  ]
+    selector: 'pc-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [
+        RouterLink,
+        MatButtonModule,
+        MatCardModule,
+        PublicLayoutComponent,
+        PcacLineAreaChartComponent
+    ]
 })
 export class HomeComponent {
   readonly service = inject(AppService)

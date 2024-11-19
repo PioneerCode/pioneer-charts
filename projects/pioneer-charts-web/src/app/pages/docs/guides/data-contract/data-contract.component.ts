@@ -5,15 +5,13 @@ import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts
 import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
 
 @Component({
-  selector: 'pc-data-contract',
-  templateUrl: './data-contract.component.html',
-  standalone: true,
-  imports: [
-    DocLayoutComponent,
-    PageHeaderComponent,
-    CodeComponent
-  ]
-
+    selector: 'pc-data-contract',
+    templateUrl: './data-contract.component.html',
+    imports: [
+        DocLayoutComponent,
+        PageHeaderComponent,
+        CodeComponent
+    ]
 })
 export class DataContractComponent {
   jumpNav = [

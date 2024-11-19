@@ -15,11 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pioneer-charts-web",
+            "outputPath": {
+              "base": "dist/pioneer-charts-web"
+            },
             "index": "projects/pioneer-charts-web/src/index.html",
-            "main": "projects/pioneer-charts-web/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -32,7 +33,8 @@
             "styles": [
               "projects/pioneer-charts-web/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/pioneer-charts-web/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -51,9 +53,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -112,11 +112,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pioneer-charts-dev",
+            "outputPath": {
+              "base": "dist/pioneer-charts-dev"
+            },
             "index": "projects/pioneer-charts-dev/src/index.html",
-            "main": "projects/pioneer-charts-dev/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -130,7 +131,8 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "projects/pioneer-charts-dev/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "projects/pioneer-charts-dev/src/main.ts"
           },
           "configurations": {
             "production": {

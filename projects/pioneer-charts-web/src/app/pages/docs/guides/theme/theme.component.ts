@@ -5,15 +5,14 @@ import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/
 import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
 
 @Component({
-  selector: 'pc-theme',
-  templateUrl: './theme.component.html',
-  styleUrls: ['./theme.component.scss'],
-  standalone: true,
-  imports: [
-    PageHeaderComponent,
-    DocLayoutComponent,
-    CodeComponent
-  ]
+    selector: 'pc-theme',
+    templateUrl: './theme.component.html',
+    styleUrls: ['./theme.component.scss'],
+    imports: [
+        PageHeaderComponent,
+        DocLayoutComponent,
+        CodeComponent
+    ]
 })
 export class ThemeComponent {
   jumpNav = [

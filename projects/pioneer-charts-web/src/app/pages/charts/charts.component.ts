@@ -6,17 +6,16 @@ import { PublicLayoutComponent } from '../../layouts/public/public.component';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'pc-charts',
-  templateUrl: './charts.component.html',
-  standalone: true,
-  imports: [
-    PublicLayoutComponent,
-    PcacBarVerticalChartComponent,
-    PcacBarHorizontalChartComponent,
-    PcacLineAreaChartComponent,
-    PcacPieChartComponent,
-    MatCardModule
-  ]
+    selector: 'pc-charts',
+    templateUrl: './charts.component.html',
+    imports: [
+        PublicLayoutComponent,
+        PcacBarVerticalChartComponent,
+        PcacBarHorizontalChartComponent,
+        PcacLineAreaChartComponent,
+        PcacPieChartComponent,
+        MatCardModule
+    ]
 })
 export class ChartsComponent {
   readonly service = inject(AppService);

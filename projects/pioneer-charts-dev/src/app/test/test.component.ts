@@ -3,13 +3,12 @@ import { PcService } from '../services/pc.service'
 import { PcacBarVerticalChartConfig, PcacData, PcacBarVerticalChartComponent, PcacFormatEnum, PcacBarVerticalChartColorOverrideConfig } from '@pioneer-code/pioneer-charts';
 
 @Component({
-  selector: 'pc-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.scss'],
-  standalone: true,
-  imports: [
-    PcacBarVerticalChartComponent
-  ]
+    selector: 'pc-test',
+    templateUrl: './test.component.html',
+    styleUrls: ['./test.component.scss'],
+    imports: [
+        PcacBarVerticalChartComponent
+    ]
 })
 export class TestComponent {
   readonly service = inject(PcService)

@@ -10,19 +10,18 @@ import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/pr
 import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pipe';
 
 @Component({
-  selector: 'pc-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    PageHeaderComponent,
-    DocLayoutComponent,
-    BaseConfigComponent,
-    CodeComponent,
-    StringifyPipe,
-    PcacBarHorizontalChartComponent,
-    PcacBarVerticalChartComponent
-  ]
+    selector: 'pc-bar-chart',
+    templateUrl: './bar-chart.component.html',
+    imports: [
+        MatCardModule,
+        PageHeaderComponent,
+        DocLayoutComponent,
+        BaseConfigComponent,
+        CodeComponent,
+        StringifyPipe,
+        PcacBarHorizontalChartComponent,
+        PcacBarVerticalChartComponent
+    ]
 })
 export class BarChartComponent {
   verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-vertical-chart>`;

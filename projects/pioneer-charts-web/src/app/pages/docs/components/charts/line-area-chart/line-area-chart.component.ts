@@ -10,18 +10,17 @@ import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/pr
 import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pipe';
 
 @Component({
-  selector: 'pc-line-area-chart',
-  templateUrl: './line-area-chart.component.html',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    PcacLineAreaChartComponent,
-    BaseConfigComponent,
-    DocLayoutComponent,
-    PageHeaderComponent,
-    CodeComponent,
-    StringifyPipe,
-  ]
+    selector: 'pc-line-area-chart',
+    templateUrl: './line-area-chart.component.html',
+    imports: [
+        MatCardModule,
+        PcacLineAreaChartComponent,
+        BaseConfigComponent,
+        DocLayoutComponent,
+        PageHeaderComponent,
+        CodeComponent,
+        StringifyPipe,
+    ]
 })
 export class LineAreaChartComponent {
   jumpNav = [

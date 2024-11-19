@@ -5,12 +5,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-code',
-  templateUrl: './code.component.html',
-  standalone: true,
-  imports: [
-   JsonPipe
-  ]
+    selector: 'app-code',
+    templateUrl: './code.component.html',
+    imports: [
+        JsonPipe
+    ]
 })
 export class CodeComponent {
   @Input() code!: string;

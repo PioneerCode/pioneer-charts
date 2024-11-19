@@ -3,13 +3,12 @@ import { PcService } from './services/pc.service';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    RouterLink
-  ]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    imports: [
+        RouterOutlet,
+        RouterLink
+    ]
 })
 export class AppComponent {
   title = 'pioneer-charts-dev';

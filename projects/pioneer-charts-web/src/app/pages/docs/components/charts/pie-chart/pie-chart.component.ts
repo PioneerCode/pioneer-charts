@@ -10,18 +10,17 @@ import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/pr
 import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pipe';
 
 @Component({
-  selector: 'pc-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    PcacPieChartComponent,
-    BaseConfigComponent,
-    DocLayoutComponent,
-    PageHeaderComponent,
-    CodeComponent,
-    StringifyPipe,
-  ]
+    selector: 'pc-pie-chart',
+    templateUrl: './pie-chart.component.html',
+    imports: [
+        MatCardModule,
+        PcacPieChartComponent,
+        BaseConfigComponent,
+        DocLayoutComponent,
+        PageHeaderComponent,
+        CodeComponent,
+        StringifyPipe,
+    ]
 })
 export class PieChartComponent {
   jumpNav = [

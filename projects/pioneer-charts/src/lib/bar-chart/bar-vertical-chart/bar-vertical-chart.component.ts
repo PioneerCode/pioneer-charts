@@ -1,14 +1,4 @@
-import {
-  Component,
-  Input,
-  ElementRef,
-  ViewChild,
-  OnChanges,
-  EventEmitter,
-  Output,
-  HostListener,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, OnChanges, EventEmitter, Output, HostListener, ViewEncapsulation, inject } from '@angular/core';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacData } from '../../core';
@@ -21,15 +11,15 @@ import { PcacData } from '../../core';
   standalone: true
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
+  private chartBuilder = inject(BarVerticalChartBuilder);
+
   @Input() config!: PcacBarVerticalChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
   @Output() barClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 
-  constructor(
-    private chartBuilder: BarVerticalChartBuilder
-  ) {
+  constructor() {
     this.chartBuilder.barClicked$.subscribe(data => {
       this.barClicked.emit(data);
     });

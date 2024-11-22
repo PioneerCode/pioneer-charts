@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, inject } from '@angular/core';
 
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
@@ -34,6 +34,12 @@ type GroupType = Selection<Element |
   providedIn: 'root',
 })
 export class BarHorizontalChartBuilder extends PcacChart {
+  override axisBuilder: PcacAxisBuilder;
+  override gridBuilder: PcacGridBuilder;
+  override transitionService: PcacTransitionService;
+  override tooltipBuilder: PcacTooltipBuilder;
+  override colorService: PcacColorService;
+
 
   private xScale!: ScaleLinear<number, number>;
   private yScaleStacked!: ScaleBand<string>;
@@ -43,13 +49,13 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private cachedMargins: any;
   barClicked$ = this.barClickedSource.asObservable();
 
-  constructor(
-    public override axisBuilder: PcacAxisBuilder,
-    public override gridBuilder: PcacGridBuilder,
-    public override transitionService: PcacTransitionService,
-    public override tooltipBuilder: PcacTooltipBuilder,
-    public override colorService: PcacColorService
-  ) {
+  constructor() {
+    const axisBuilder = inject(PcacAxisBuilder);
+    const gridBuilder = inject(PcacGridBuilder);
+    const transitionService = inject(PcacTransitionService);
+    const tooltipBuilder = inject(PcacTooltipBuilder);
+    const colorService = inject(PcacColorService);
+
     super(
       axisBuilder,
       gridBuilder,
@@ -57,6 +63,12 @@ export class BarHorizontalChartBuilder extends PcacChart {
       tooltipBuilder,
       colorService
     );
+    this.axisBuilder = axisBuilder;
+    this.gridBuilder = gridBuilder;
+    this.transitionService = transitionService;
+    this.tooltipBuilder = tooltipBuilder;
+    this.colorService = colorService;
+
   }
 
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {

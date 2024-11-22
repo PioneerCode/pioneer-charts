@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   PcacLineAreaChartConfig,
   PcacData,
@@ -13,6 +13,8 @@ import { PcRepository } from './pc.repository';
   providedIn: 'root',
 })
 export class PcService {
+  private repository = inject(PcRepository);
+
   barVerticalChartConfig!: PcacBarVerticalChartConfig;
   barVerticalChartSingleConfig!: PcacBarVerticalChartConfig;
   barVerticalChartGroupConfig!: PcacBarVerticalChartConfig;
@@ -29,8 +31,6 @@ export class PcService {
   currentMainRoute = 'home';
   currentDocRoute = 'bar-chart';
   navDisplay = 'none';
-
-  constructor(private repository: PcRepository) { }
 
   onClicked(data: any) {
     alert(`Key: ${data.key} - Value: ${data.value}`);

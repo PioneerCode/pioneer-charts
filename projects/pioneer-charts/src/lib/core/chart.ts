@@ -5,7 +5,7 @@ import { PcacGridBuilder } from './grid.builder';
 import { PcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 import { PcacData } from '.';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
@@ -14,21 +14,19 @@ import { PcacTooltipBuilder } from './tooltip.builder';
   providedIn: 'root',
 })
 export class PcacChart {
+  axisBuilder = inject(PcacAxisBuilder);
+  gridBuilder = inject(PcacGridBuilder);
+  transitionService = inject(PcacTransitionService);
+  tooltipBuilder = inject(PcacTooltipBuilder);
+  colorService = inject(PcacColorService);
+
   margin = { top: 8, right: 16, bottom: 20, left: 40 };
   svg: Selection<BaseType, {}, HTMLElement, any> | any; // Typing?
   width = 400;
   height = 400;
   colors = [] as string[];
   startData = [] as any[]; // TODO: Strongly type
-  endData = [] as any[]; // TODO: Strongly type
-
-  constructor(
-    public axisBuilder: PcacAxisBuilder,
-    public gridBuilder: PcacGridBuilder,
-    public transitionService: PcacTransitionService,
-    public tooltipBuilder: PcacTooltipBuilder,
-    public colorService: PcacColorService
-  ) { }
+  endData = [] as any[];
 
   /**
    * Prior to building a chart, we need to initialize the state of the chart

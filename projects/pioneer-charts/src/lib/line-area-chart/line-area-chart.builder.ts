@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable, ElementRef, inject } from '@angular/core';
 
 import { ScaleTime, scaleTime } from 'd3';
 import { transition } from 'd3-transition';
@@ -27,6 +27,12 @@ import { PcacData, PcacFormatEnum } from '../core/chart.model';
   providedIn: 'root',
 })
 export class LineAreaChartBuilder extends PcacChart {
+  override axisBuilder: PcacAxisBuilder;
+  override gridBuilder: PcacGridBuilder;
+  override transitionService: PcacTransitionService;
+  override tooltipBuilder: PcacTooltipBuilder;
+  override colorService: PcacColorService;
+
   private line!: Line<[number, number]>;
   private area!: Area<[number, number]>;
   private xScale!: ScaleLinear<number, number> | ScaleTime<number, number, never>;
@@ -35,13 +41,13 @@ export class LineAreaChartBuilder extends PcacChart {
   private config!: PcacLineAreaChartConfig;
   dotClicked$ = this.dotClickedSource.asObservable();
 
-  constructor(
-    public override axisBuilder: PcacAxisBuilder,
-    public override gridBuilder: PcacGridBuilder,
-    public override transitionService: PcacTransitionService,
-    public override tooltipBuilder: PcacTooltipBuilder,
-    public override colorService: PcacColorService
-  ) {
+  constructor() {
+    const axisBuilder = inject(PcacAxisBuilder);
+    const gridBuilder = inject(PcacGridBuilder);
+    const transitionService = inject(PcacTransitionService);
+    const tooltipBuilder = inject(PcacTooltipBuilder);
+    const colorService = inject(PcacColorService);
+
     super(
       axisBuilder,
       gridBuilder,
@@ -49,6 +55,12 @@ export class LineAreaChartBuilder extends PcacChart {
       tooltipBuilder,
       colorService
     );
+    this.axisBuilder = axisBuilder;
+    this.gridBuilder = gridBuilder;
+    this.transitionService = transitionService;
+    this.tooltipBuilder = tooltipBuilder;
+    this.colorService = colorService;
+
   }
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {

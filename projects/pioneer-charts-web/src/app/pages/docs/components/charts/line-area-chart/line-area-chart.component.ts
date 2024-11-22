@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AppService } from '../../../../../app.service';
 import { IJumpNav, JumpNavLevel } from '../../../../../layouts/jump-nav/jump-nav.component';
 import { MatCardModule } from '@angular/material/card';
@@ -23,6 +23,8 @@ import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pip
     ]
 })
 export class LineAreaChartComponent {
+  pcService = inject(AppService);
+
   jumpNav = [
     {
       key: 'Line Area Chart',
@@ -57,6 +59,5 @@ export class LineAreaChartComponent {
   ] as IJumpNav[];
   markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
   importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
-  constructor(public pcService: AppService) { }
 }
 

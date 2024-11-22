@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AppService } from '../../../../../app.service';
 import { IJumpNav, JumpNavLevel } from '../../../../../layouts/jump-nav/jump-nav.component';
 import { PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
@@ -23,6 +23,8 @@ import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pip
     ]
 })
 export class PieChartComponent {
+  pcService = inject(AppService);
+
   jumpNav = [
     {
       key: 'Pie Chart',
@@ -57,6 +59,4 @@ export class PieChartComponent {
   ] as IJumpNav[];
   markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
   importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
-
-  constructor(public pcService: AppService) { }
 }

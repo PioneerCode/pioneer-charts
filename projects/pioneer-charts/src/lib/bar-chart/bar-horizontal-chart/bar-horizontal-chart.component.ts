@@ -1,14 +1,4 @@
-import {
-  Component,
-  Input,
-  ElementRef,
-  ViewChild,
-  OnChanges,
-  EventEmitter,
-  Output,
-  HostListener,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, OnChanges, EventEmitter, Output, HostListener, ViewEncapsulation, inject } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacData } from '../../core';
@@ -21,15 +11,15 @@ import { PcacData } from '../../core';
   standalone: true
 })
 export class PcacBarHorizontalChartComponent implements OnChanges {
+  private chartBuilder = inject(BarHorizontalChartBuilder);
+
   @Input() config!: PcacBarHorizontalChartConfig;
   @ViewChild('chart', { static: true }) chartElm!: ElementRef;
   @Output() barClicked: EventEmitter<PcacData> = new EventEmitter();
 
   private resizeWindowTimeout: any;
 
-  constructor(
-    private chartBuilder: BarHorizontalChartBuilder,
-  ) {
+  constructor() {
     this.chartBuilder.barClicked$.subscribe(data => {
       this.barClicked.emit(data);
     });

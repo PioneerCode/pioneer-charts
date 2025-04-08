@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-page-header',
@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
   standalone: true
 })
 export class PageHeaderComponent {
-  @Input() title!: string;
-  @Input() anchor = '';
+  readonly title = input.required<string>();
+  readonly anchor = input('');
 }

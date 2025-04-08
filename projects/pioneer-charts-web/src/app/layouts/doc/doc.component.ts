@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { IJumpNav, JumpNavComponent } from '../jump-nav/jump-nav.component';
 import { DocNavComponent } from './doc-nav/dov-nav.component';
 
@@ -12,5 +12,5 @@ import { DocNavComponent } from './doc-nav/dov-nav.component';
     ]
 })
 export class DocLayoutComponent {
-  @Input() jumpNav!: IJumpNav[];
+  readonly jumpNav = input.required<IJumpNav[]>();
 }

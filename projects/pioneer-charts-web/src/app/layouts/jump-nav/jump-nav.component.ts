@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnInit, AfterViewChecked, inject } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 export enum JumpNavLevel {
@@ -26,7 +26,7 @@ export interface IJumpNav {
 export class JumpNavComponent implements OnInit, AfterViewChecked {
   private route = inject(Router);
 
-  @Input() jumpNav: IJumpNav[] = []
+  readonly jumpNav = input<IJumpNav[]>([]);
   currentRoute: string[] = []
   fragment!: string;
 

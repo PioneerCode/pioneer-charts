@@ -17,7 +17,7 @@
       <td>height</td>
       <td>Height of chart component.</td>
     </tr>
-    @if(includeTickFormat) {
+    @if(includeTickFormat()) {
     <tr>
       <td>tickFormat</td>
       <td>Set this value to change the formatting of the domain axis of your chart and the tooltip value formatting.
@@ -39,13 +39,13 @@
       </td>
     </tr>
     }
-    @if(includeHideAxisAndGrid) {
+    @if(includeHideAxisAndGrid()) {
     <tr>
       <td>hideAxis</td>
       <td>If true, hide chart axis.</td>
     </tr>
     }
-    @if(includeHideAxisAndGrid) {
+    @if(includeHideAxisAndGrid()) {
     <tr>
       <td>hideGrid</td>
       <td>If true, hide chart grid.</td>

@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input } from '@angular/core';
 import { PcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { PcacData } from '../core';
@@ -13,7 +13,7 @@ import { PcacData } from '../core';
 export class PcacPieChartComponent implements OnChanges {
   private chartBuilder = inject(PieChartBuilder);
 
-  @Input() config!: PcacPieChartConfig;
+  readonly config = input.required<PcacPieChartConfig>();
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly sliceClicked = output<PcacData>();
 
@@ -30,8 +30,9 @@ export class PcacPieChartComponent implements OnChanges {
   }
 
   buildChart(): void {
-    if (this.config && this.config.data && this.config.data.length > 0) {
-      this.chartBuilder.buildChart(this.chartElm(), this.config);
+    const config = this.config();
+    if (config && config.data && config.data.length > 0) {
+      this.chartBuilder.buildChart(this.chartElm(), config);
     }
   }
 

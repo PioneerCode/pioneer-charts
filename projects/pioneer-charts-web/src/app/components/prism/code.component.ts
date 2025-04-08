@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import {
   Component,
-  Input,
+  input
 } from '@angular/core';
 
 @Component({
@@ -12,6 +12,6 @@ import {
     ]
 })
 export class CodeComponent {
-  @Input() code!: string;
-  @Input() language!: string;
+  readonly code = input.required<string>();
+  readonly language = input.required<string>();
 }

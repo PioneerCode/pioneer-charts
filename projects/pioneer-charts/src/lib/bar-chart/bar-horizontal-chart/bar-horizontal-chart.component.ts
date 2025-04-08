@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacData } from '../../core';
@@ -13,7 +13,7 @@ import { PcacData } from '../../core';
 export class PcacBarHorizontalChartComponent implements OnChanges {
   private chartBuilder = inject(BarHorizontalChartBuilder);
 
-  @Input() config!: PcacBarHorizontalChartConfig;
+  readonly config = input.required<PcacBarHorizontalChartConfig>();
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly barClicked = output<PcacData>();
 
@@ -30,8 +30,9 @@ export class PcacBarHorizontalChartComponent implements OnChanges {
   }
 
   buildChart(): void {
-    if (this.config && this.config.data && this.config.data.length > 0) {
-      this.chartBuilder.buildChart(this.chartElm(), this.config);
+    const config = this.config();
+    if (config && config.data && config.data.length > 0) {
+      this.chartBuilder.buildChart(this.chartElm(), config);
     }
   }
 

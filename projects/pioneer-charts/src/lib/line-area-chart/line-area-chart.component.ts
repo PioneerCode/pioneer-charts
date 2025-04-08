@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, EventEmitter, Output, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild } from '@angular/core';
+import { Component, Input, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output } from '@angular/core';
 
 import { PcacLineAreaChartConfig } from './line-area-chart.model';
 import { LineAreaChartBuilder } from './line-area-chart.builder';
@@ -16,7 +16,7 @@ export class PcacLineAreaChartComponent {
 
   @Input() config!: PcacLineAreaChartConfig;
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  @Output() dotClicked: EventEmitter<PcacData> = new EventEmitter();
+  readonly dotClicked = output<PcacData>();
 
   private resizeWindowTimeout: any;
 

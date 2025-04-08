@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, OnChanges, Output, EventEmitter, HostListener, ViewEncapsulation, inject, viewChild } from '@angular/core';
+import { Component, Input, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output } from '@angular/core';
 import { PcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { PcacData } from '../core';
@@ -15,7 +15,7 @@ export class PcacPieChartComponent implements OnChanges {
 
   @Input() config!: PcacPieChartConfig;
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  @Output() sliceClicked: EventEmitter<PcacData> = new EventEmitter();
+  readonly sliceClicked = output<PcacData>();
 
   private resizeWindowTimeout: any;
 

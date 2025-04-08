@@ -1,5 +1,5 @@
 <app-doc-layout [jumpNav]="jumpNav">
-  <app-page-header [title]="'Bar Chart'" [anchor]="'bar-chart'"></app-page-header>
+  <app-page-header [title]="'Bar Chart'" [anchor]="'bar-chart'" />
   <p class="lead">Configurable to display a single, multi, and stacked group variants of vertical and horizontal bar
     charts. Add thresholds
     across all variants through a matching api.</p>
@@ -39,15 +39,15 @@
   </div>
   <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig"
-      (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      (barClicked)="service.onClicked($event)" />
   </mat-card>
   <mat-card class="p-3 mb-3">
     <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig"
-      (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      (barClicked)="service.onClicked($event)" />
   </mat-card>
   <mat-card class="p-3 mb-3">
     <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig"
-      (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+      (barClicked)="service.onClicked($event)" />
   </mat-card>
   <div class="row">
     <div class="col">

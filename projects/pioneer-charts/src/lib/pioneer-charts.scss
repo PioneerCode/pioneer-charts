@@ -1,4 +1,4 @@
-@import "core/theme/imports";
+@use "core/theme/imports";
 
 .pcac-d3-tooltip {
   position: absolute;
@@ -7,14 +7,14 @@
   padding: 0.5rem;
   pointer-events: none;
   display: none;
-  background-color: rgba($gray-800, 0.85);
-  color: $white;
+  background-color: rgba(imports.$gray-800, 0.85);
+  color: imports.$white;
   border-radius: 2px;
   z-index: 1000
 }
 
 .pcac-grid-rule line {
-  stroke: $gray-200;
+  stroke: imports.$gray-200;
 }
 
 .pcac-x-axis,

@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "ng": "ng",
     "start": "ng serve pioneer-charts-dev",
     "start-docs": "ng serve pioneer-charts-web",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
@@ -23,12 +22,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^20.0.4",
-    "@angular/cdk": "^19.2.16",
+    "@angular/cdk": "^20.0.3",
     "@angular/common": "^20.0.4",
     "@angular/compiler": "^20.0.4",
     "@angular/core": "^20.0.4",
     "@angular/forms": "^20.0.4",
-    "@angular/material": "^19.2.16",
+    "@angular/material": "^20.0.3",
     "@angular/platform-browser": "^20.0.4",
     "@angular/platform-browser-dynamic": "^20.0.4",
     "@angular/router": "^20.0.4",

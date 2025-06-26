@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, inject } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 import { select, Selection, EnterElement, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
@@ -9,11 +9,7 @@ import { transition } from 'd3-transition';
  * Lib
  */
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { PcacAxisBuilder } from '../../core/axis.builder';
-import { IPcacGridBuilderConfig, PcacGridBuilder } from '../../core/grid.builder';
-import { PcacTransitionService } from '../../core/transition.service';
-import { PcacTooltipBuilder } from '../../core/tooltip.builder';
-import { PcacColorService } from '../../core/color.service';
+import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
@@ -38,39 +34,13 @@ export interface IBarVerticalChartBuilder {
   providedIn: 'root',
 })
 export class BarVerticalChartBuilder extends PcacChart {
-  override axisBuilder: PcacAxisBuilder;
-  override gridBuilder: PcacGridBuilder;
-  override transitionService: PcacTransitionService;
-  override tooltipBuilder: PcacTooltipBuilder;
-  override colorService: PcacColorService;
-
   private xScaleStacked!: ScaleBand<string>;
   private xScaleGrouped!: ScaleBand<string>;
   private yScale!: ScaleLinear<number, number>;
   private barClickedSource = new Subject<PcacData>();
   barClicked$ = this.barClickedSource.asObservable();
 
-  constructor() {
-    const axisBuilder = inject(PcacAxisBuilder);
-    const gridBuilder = inject(PcacGridBuilder);
-    const transitionService = inject(PcacTransitionService);
-    const tooltipBuilder = inject(PcacTooltipBuilder);
-    const colorService = inject(PcacColorService);
 
-    super(
-      axisBuilder,
-      gridBuilder,
-      transitionService,
-      tooltipBuilder,
-      colorService
-    );
-    this.axisBuilder = axisBuilder;
-    this.gridBuilder = gridBuilder;
-    this.transitionService = transitionService;
-    this.tooltipBuilder = tooltipBuilder;
-    this.colorService = colorService;
-
-  }
 
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
     if (config.colorOverride && config.colorOverride.colors) {

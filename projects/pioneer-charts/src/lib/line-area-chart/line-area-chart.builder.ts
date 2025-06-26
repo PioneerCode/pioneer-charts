@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, inject } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 import { ScaleTime, scaleTime } from 'd3';
 import { transition } from 'd3-transition';
@@ -14,11 +14,8 @@ import { Subject } from 'rxjs';
  */
 import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
 import { PcacLineAreaChartConfig } from './line-area-chart.model';
-import { IPcacAxisBuilderConfig, PcacAxisBuilder } from '../core/axis.builder';
-import { IPcacGridBuilderConfig, PcacGridBuilder } from '../core/grid.builder';
-import { PcacTransitionService } from '../core/transition.service';
-import { PcacTooltipBuilder } from '../core/tooltip.builder';
-import { PcacColorService } from '../core/color.service';
+import { IPcacAxisBuilderConfig } from '../core/axis.builder';
+import { IPcacGridBuilderConfig } from '../core/grid.builder';
 import { PcacChart } from '../core/chart';
 import { PcacData, PcacFormatEnum } from '../core/chart.model';
 
@@ -27,12 +24,6 @@ import { PcacData, PcacFormatEnum } from '../core/chart.model';
   providedIn: 'root',
 })
 export class LineAreaChartBuilder extends PcacChart {
-  override axisBuilder: PcacAxisBuilder;
-  override gridBuilder: PcacGridBuilder;
-  override transitionService: PcacTransitionService;
-  override tooltipBuilder: PcacTooltipBuilder;
-  override colorService: PcacColorService;
-
   private line!: Line<[number, number]>;
   private area!: Area<[number, number]>;
   private xScale!: ScaleLinear<number, number> | ScaleTime<number, number, never>;
@@ -41,27 +32,6 @@ export class LineAreaChartBuilder extends PcacChart {
   private config!: PcacLineAreaChartConfig;
   dotClicked$ = this.dotClickedSource.asObservable();
 
-  constructor() {
-    const axisBuilder = inject(PcacAxisBuilder);
-    const gridBuilder = inject(PcacGridBuilder);
-    const transitionService = inject(PcacTransitionService);
-    const tooltipBuilder = inject(PcacTooltipBuilder);
-    const colorService = inject(PcacColorService);
-
-    super(
-      axisBuilder,
-      gridBuilder,
-      transitionService,
-      tooltipBuilder,
-      colorService
-    );
-    this.axisBuilder = axisBuilder;
-    this.gridBuilder = gridBuilder;
-    this.transitionService = transitionService;
-    this.tooltipBuilder = tooltipBuilder;
-    this.colorService = colorService;
-
-  }
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));

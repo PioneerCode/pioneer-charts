@@ -132,7 +132,17 @@
               "projects/pioneer-charts-dev/src/styles.scss"
             ],
             "scripts": [],
-            "browser": "projects/pioneer-charts-dev/src/main.ts"
+            "browser": "projects/pioneer-charts-dev/src/main.ts",
+                     "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": [
+                  "mixed-decls",
+                  "color-functions",
+                  "global-builtin",
+                  "import"
+                ]
+              }
+            }
           },
           "configurations": {
             "production": {

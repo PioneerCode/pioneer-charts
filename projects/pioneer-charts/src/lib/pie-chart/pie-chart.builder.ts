@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, inject } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 /**
  * D3
@@ -13,11 +13,6 @@ import { color } from 'd3-color';
  * Lib
  */
 import { PcacPieChartConfig } from './pie-chart.model';
-import { PcacAxisBuilder } from '../core/axis.builder';
-import { PcacGridBuilder } from '../core/grid.builder';
-import { PcacTransitionService } from '../core/transition.service';
-import { PcacTooltipBuilder } from '../core/tooltip.builder';
-import { PcacColorService } from '../core/color.service';
 import { PcacChart } from '../core/chart';
 import { PcacData } from '../core/chart.model';
 
@@ -28,40 +23,12 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class PieChartBuilder extends PcacChart {
-  override axisBuilder: PcacAxisBuilder;
-  override gridBuilder: PcacGridBuilder;
-  override transitionService: PcacTransitionService;
-  override tooltipBuilder: PcacTooltipBuilder;
-  override colorService: PcacColorService;
-
   private radius!: number;
   private arcShape!: Arc<any, DefaultArcObject> | any;
   private arcOverShape!: Arc<any, DefaultArcObject> | any;
   private pieAngles!: Pie<any, number | {}> | any;
   private sliceClickedSource = new Subject<PcacData>();
   sliceClicked$ = this.sliceClickedSource.asObservable();
-
-  constructor() {
-    const axisBuilder = inject(PcacAxisBuilder);
-    const gridBuilder = inject(PcacGridBuilder);
-    const transitionService = inject(PcacTransitionService);
-    const tooltipBuilder = inject(PcacTooltipBuilder);
-    const colorService = inject(PcacColorService);
-
-    super(
-      axisBuilder,
-      gridBuilder,
-      transitionService,
-      tooltipBuilder,
-      colorService
-    );
-    this.axisBuilder = axisBuilder;
-    this.gridBuilder = gridBuilder;
-    this.transitionService = transitionService;
-    this.tooltipBuilder = tooltipBuilder;
-    this.colorService = colorService;
-
-  }
 
   buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
     this.initializeChartState(chartElm, config);

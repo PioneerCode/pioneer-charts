@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, inject } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 import { transition } from 'd3-transition';
 import { color } from 'd3-color';
@@ -11,11 +11,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { PcacAxisBuilder } from '../../core/axis.builder';
-import { IPcacGridBuilderConfig, PcacGridBuilder } from '../../core/grid.builder';
-import { PcacTransitionService } from '../../core/transition.service';
-import { PcacTooltipBuilder } from '../../core/tooltip.builder';
-import { PcacColorService } from '../../core/color.service';
+import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
@@ -34,13 +30,6 @@ type GroupType = Selection<Element |
   providedIn: 'root',
 })
 export class BarHorizontalChartBuilder extends PcacChart {
-  override axisBuilder: PcacAxisBuilder;
-  override gridBuilder: PcacGridBuilder;
-  override transitionService: PcacTransitionService;
-  override tooltipBuilder: PcacTooltipBuilder;
-  override colorService: PcacColorService;
-
-
   private xScale!: ScaleLinear<number, number>;
   private yScaleStacked!: ScaleBand<string>;
   private yScaleGrouped!: ScaleBand<string>;
@@ -48,28 +37,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private config!: PcacBarHorizontalChartConfig;
   private cachedMargins: any;
   barClicked$ = this.barClickedSource.asObservable();
-
-  constructor() {
-    const axisBuilder = inject(PcacAxisBuilder);
-    const gridBuilder = inject(PcacGridBuilder);
-    const transitionService = inject(PcacTransitionService);
-    const tooltipBuilder = inject(PcacTooltipBuilder);
-    const colorService = inject(PcacColorService);
-
-    super(
-      axisBuilder,
-      gridBuilder,
-      transitionService,
-      tooltipBuilder,
-      colorService
-    );
-    this.axisBuilder = axisBuilder;
-    this.gridBuilder = gridBuilder;
-    this.transitionService = transitionService;
-    this.tooltipBuilder = tooltipBuilder;
-    this.colorService = colorService;
-
-  }
 
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
     this.config = JSON.parse(JSON.stringify(config));

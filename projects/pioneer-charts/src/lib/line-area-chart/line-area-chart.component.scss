@@ -1,4 +1,4 @@
-@import "../core/theme/imports";
+@use "../core/theme/imports";
 
 .pcac-line-area-chart {
   svg {
@@ -15,7 +15,7 @@
   }
 
   .effect-line {
-    stroke: $gray-400;
+    stroke: imports.$gray-400;
     stroke-width: 1px;
     opacity: 0;
   }
@@ -29,6 +29,6 @@
   .effect-text {
     font-size: 11px;
     font-weight: bold;
-    fill: $gray-800;
+    fill: imports.$gray-800;
   }
 }

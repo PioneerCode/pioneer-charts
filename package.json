@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "ng serve pioneer-charts-dev",
-    "start-docs": "ng serve pioneer-charts-web",
+    "start-web": "ng serve pioneer-charts-web",
+    "start-docs": "ng serve pioneer-charts-docs",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-web --prod",
     "build:docs:404": "node ./build/404.js",
@@ -17,7 +18,8 @@
     "build:lib:theme": "node ./build/theme.js",
     "build:lib:sass": "node ./build/sass.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:ssr:pioneer-charts-docs": "node dist/pioneer-charts-docs/server/server.mjs"
   },
   "private": true,
   "dependencies": {
@@ -30,7 +32,10 @@
     "@angular/material": "^20.1.3",
     "@angular/platform-browser": "^20.1.3",
     "@angular/platform-browser-dynamic": "^20.1.3",
+    "@angular/platform-server": "^20.1.3",
     "@angular/router": "^20.1.3",
+    "@angular/ssr": "^20.1.3",
+    "express": "^5.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -40,8 +45,9 @@
     "@angular/cli": "~20.1.3",
     "@angular/compiler-cli": "^20.1.3",
     "@types/d3": "^7.4.3",
+    "@types/express": "^5.0.1",
     "@types/jasmine": "~4.0.0",
-    "@types/node": "^22.14.0",
+    "@types/node": "^20.17.19",
     "bootstrap": "^5.3.7",
     "cpy": "^11.1.0",
     "d3": "^7.9.0",

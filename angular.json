@@ -238,6 +238,95 @@
           }
         }
       }
+    },
+    "pioneer-charts-docs": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/pioneer-charts-docs",
+      "sourceRoot": "projects/pioneer-charts-docs/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/pioneer-charts-docs/src/main.ts",
+            "tsConfig": "projects/pioneer-charts-docs/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/pioneer-charts-docs/public"
+              }
+            ],
+            "styles": [
+              "projects/pioneer-charts-docs/src/styles.scss"
+            ],
+            "server": "projects/pioneer-charts-docs/src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "projects/pioneer-charts-docs/src/server.ts"
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "pioneer-charts-docs:build:production"
+            },
+            "development": {
+              "buildTarget": "pioneer-charts-docs:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/pioneer-charts-docs/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/pioneer-charts-docs/public"
+              }
+            ],
+            "styles": [
+              "projects/pioneer-charts-docs/src/styles.scss"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

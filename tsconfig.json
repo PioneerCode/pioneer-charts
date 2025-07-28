@@ -35,5 +35,13 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/pioneer-charts-docs/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/pioneer-charts-docs/tsconfig.spec.json"
+    }
+  ]
 }

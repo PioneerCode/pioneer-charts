@@ -212,13 +212,10 @@
       "projectType": "library",
       "root": "projects/pioneer-charts",
       "sourceRoot": "projects/pioneer-charts/src",
-      "prefix": "pc",
+      "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/pioneer-charts/ng-package.json"
-          },
           "configurations": {
             "production": {
               "tsConfig": "projects/pioneer-charts/tsconfig.lib.prod.json"
@@ -232,9 +229,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "main": "projects/pioneer-chart/src/test.ts",
-            "tsConfig": "projects/pioneer-chart/tsconfig.spec.json",
-            "karmaConfig": "projects/pioneer-chart/karma.conf.js"
+            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json"
           }
         }
       }
@@ -263,6 +258,7 @@
               }
             ],
             "styles": [
+              "node_modules/modern-normalize/modern-normalize.css",
               "projects/pioneer-charts-docs/src/styles.scss"
             ],
             "server": "projects/pioneer-charts-docs/src/main.server.ts",
@@ -327,35 +323,6 @@
           }
         }
       }
-    }
-  },
-  "cli": {
-    "analytics": false
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "type": "component"
-    },
-    "@schematics/angular:directive": {
-      "type": "directive"
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
     }
   }
 }

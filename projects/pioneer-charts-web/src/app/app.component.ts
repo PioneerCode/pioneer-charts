@@ -7,18 +7,18 @@ import { AppService } from './app.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
-    selector: 'app-root',
-    imports: [
-        RouterOutlet,
-        RouterLink,
-        RouterLinkActive,
-        MatSidenavModule,
-        MatButtonModule,
-        MatIconModule,
-        MatToolbarModule
-    ],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule
+  ],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   isMobile = false

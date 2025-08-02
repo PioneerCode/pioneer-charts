@@ -3,11 +3,12 @@ import { AppService } from '../../../../../app.service';
 import { IJumpNav, JumpNavLevel } from '../../../../../layouts/jump-nav/jump-nav.component';
 import { MatCardModule } from '@angular/material/card';
 import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
-import { BaseConfigComponent } from 'projects/pioneer-charts-web/src/app/components/base-config/base-config.component';
-import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
-import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
-import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
-import { StringifyPipe } from 'projects/pioneer-charts-web/src/app/stringify.pipe';
+import { BaseConfigComponent } from '../../../../../components/base-config/base-config.component';
+import { CodeComponent } from '../../../../../components/prism/code.component';
+import { DocLayoutComponent } from '../../../../../layouts/doc/doc.component';
+import { PageHeaderComponent } from '../../../../../layouts/page-header/page-header.component';
+import { StringifyPipe } from '../../../../../stringify.pipe';
+
 
 @Component({
     selector: 'pc-line-area-chart',

@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { IJumpNav, JumpNavLevel } from '../../../../layouts/jump-nav/jump-nav.component';
-import { PageHeaderComponent } from 'projects/pioneer-charts-web/src/app/layouts/page-header/page-header.component';
-import { DocLayoutComponent } from 'projects/pioneer-charts-web/src/app/layouts/doc/doc.component';
-import { CodeComponent } from 'projects/pioneer-charts-web/src/app/components/prism/code.component';
+import { PageHeaderComponent } from '../../../../layouts/page-header/page-header.component';
+import { DocLayoutComponent } from '../../../../layouts/doc/doc.component';
+import { CodeComponent } from '../../../../components/prism/code.component';
 
 @Component({
-    selector: 'pc-theme',
-    templateUrl: './theme.component.html',
-    styleUrls: ['./theme.component.scss'],
-    imports: [
-        PageHeaderComponent,
-        DocLayoutComponent,
-        CodeComponent
-    ]
+  selector: 'pc-theme',
+  templateUrl: './theme.component.html',
+  styleUrls: ['./theme.component.scss'],
+  imports: [
+    PageHeaderComponent,
+    DocLayoutComponent,
+    CodeComponent
+  ]
 })
 export class ThemeComponent {
   jumpNav = [

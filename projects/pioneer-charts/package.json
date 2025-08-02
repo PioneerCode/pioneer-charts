@@ -25,8 +25,8 @@
   "version": "20.0.2",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
+    "@angular/common": "^20.1.0",
+    "@angular/core": "^20.1.0",
     "d3": "^7.9.0",
     "@types/d3": "^7.4.3"
   },

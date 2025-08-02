@@ -229,11 +229,15 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json"
+            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
-    },
+    }
     "pioneer-charts-docs": {
       "projectType": "application",
       "schematics": {
@@ -249,6 +253,9 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/pioneer-charts-docs/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "projects/pioneer-charts-docs/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -258,7 +265,6 @@
               }
             ],
             "styles": [
-              "node_modules/modern-normalize/modern-normalize.css",
               "projects/pioneer-charts-docs/src/styles.scss"
             ],
             "server": "projects/pioneer-charts-docs/src/main.server.ts",
@@ -309,6 +315,10 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "projects/pioneer-charts-docs/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -323,6 +333,6 @@
           }
         }
       }
-    }
+    },
   }
 }

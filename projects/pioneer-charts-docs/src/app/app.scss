@@ -1,3 +1,14 @@
+@use '@angular/material' as mat;
+@use "../../../pioneer-charts/colors.scss";
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:host {
+  @include mat.toolbar-overrides((
+    container-background-color: colors.$primary,
+    container-text-color: #fff,
+  ));
+}
+
 .logo-icon {
   position: relative;
   top: 4px;

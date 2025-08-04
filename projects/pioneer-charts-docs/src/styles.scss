@@ -1,5 +1,6 @@
 @use 'modern-normalize';
 @use 'theme';
+@use "../../pioneer-charts/colors.scss";
 
 
 body {
@@ -30,3 +31,4 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+

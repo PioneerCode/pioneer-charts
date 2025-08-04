@@ -237,7 +237,7 @@
           }
         }
       }
-    }
+    },
     "pioneer-charts-docs": {
       "projectType": "application",
       "schematics": {

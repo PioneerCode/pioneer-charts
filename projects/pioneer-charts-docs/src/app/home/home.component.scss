@@ -1,0 +1,20 @@
+@use "../../../../pioneer-charts/colors.scss";
+
+header {
+    background-color: colors.$primary;
+    color: white;
+    position: relative;
+    text-align: center;
+    padding: 5rem 0;
+
+    h1 {
+        margin-bottom: 0;
+        padding-top: 5rem;
+    }
+
+    p,
+    button {
+        margin-bottom: 5rem;
+    }
+
+}

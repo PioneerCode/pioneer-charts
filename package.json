@@ -18,8 +18,7 @@
     "build:lib:theme": "node ./build/theme.js",
     "build:lib:sass": "node ./build/sass.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:pioneer-charts-docs": "node dist/pioneer-charts-docs/server/server.mjs"
+    "test": "ng test"
   },
   "prettier": {
     "overrides": [
@@ -41,11 +40,7 @@
     "@angular/forms": "^20.1.6",
     "@angular/material": "^20.1.5",
     "@angular/platform-browser": "^20.1.6",
-    "@angular/platform-browser-dynamic": "^20.1.6",
-    "@angular/platform-server": "^20.1.6",
     "@angular/router": "^20.1.6",
-    "@angular/ssr": "^20.1.5",
-    "express": "^5.1.0",
     "modern-normalize": "^3.0.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
@@ -56,9 +51,8 @@
     "@angular/cli": "~20.1.5",
     "@angular/compiler-cli": "^20.1.6",
     "@types/d3": "^7.4.3",
-    "@types/express": "^5.0.1",
     "@types/jasmine": "~4.0.0",
-    "@types/node": "^20.17.19",
+    "@types/node": "^24.2.0",
     "bootstrap": "^5.3.7",
     "cpy": "^11.1.0",
     "d3": "^7.9.0",

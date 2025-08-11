@@ -238,7 +238,7 @@
         }
       }
     },
-    "pioneer-charts-docs": {
+     "pioneer-charts-docs": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -266,12 +266,7 @@
             ],
             "styles": [
               "projects/pioneer-charts-docs/src/styles.scss"
-            ],
-            "server": "projects/pioneer-charts-docs/src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "projects/pioneer-charts-docs/src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -333,6 +328,6 @@
           }
         }
       }
-    },
+    }
   }
 }

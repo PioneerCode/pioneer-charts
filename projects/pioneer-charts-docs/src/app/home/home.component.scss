@@ -3,18 +3,7 @@
 header {
     background-color: colors.$primary;
     color: white;
-    position: relative;
-    text-align: center;
-    padding: 5rem 0;
-
-    h1 {
-        margin-bottom: 0;
-        padding-top: 5rem;
+    .logo-polygon {
+      fill: rgb(91, 95, 101)
     }
-
-    p,
-    button {
-        margin-bottom: 5rem;
-    }
-
 }

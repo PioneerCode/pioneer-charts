@@ -1,5 +1,5 @@
 <mat-toolbar class="nav">
-  <button type="button" matButton>
+  <button type="button" matButton routerLink="/">
     <div class="logo-icon">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         viewBox="0 0 208.7 161.3" xml:space="preserve">
@@ -11,7 +11,7 @@
     </div>
     Pioneer Charts
   </button>
-  <button type="button" matButton>Documentation</button>
-  <button type="button" matButton>Charts</button>
+  <button type="button" matButton routerLink="/docs/guides/introduction">Documentation</button>
+  <button type="button" matButton routerLink="/charts">Charts</button>
 </mat-toolbar>
 <router-outlet />

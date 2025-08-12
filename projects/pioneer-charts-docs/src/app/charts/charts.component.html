@@ -1,0 +1,84 @@
+<div class="mt-8 mb-8">
+  <div class="container mx-auto grid grid-cols-4 gap-4">
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container mx-auto grid grid-cols-4 gap-4 mt-3">
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig()"
+          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container mx-auto grid grid-cols-2 gap-4 mt-3">
+    <div>
+      <mat-card class="p-3">
+        <pcac-line-area-chart [config]="service.lineChartConfig()" (dotClicked)="service.onClicked($event)">
+        </pcac-line-area-chart>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <pcac-line-area-chart [config]="service.areaChartConfig()" (dotClicked)="service.onClicked($event)">
+        </pcac-line-area-chart>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
+    <div>
+      <mat-card class="p-3">
+        <pcac-line-area-chart [config]="service.areaChartHideConfig()" (dotClicked)="service.onClicked($event)">
+        </pcac-line-area-chart>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
+    <div>
+      <mat-card class="p-3">
+        <pcac-pie-chart [config]="service.pieChartConfig()" (sliceClicked)="service.onClicked($event)">
+        </pcac-pie-chart>
+      </mat-card>
+    </div>
+  </div>
+</div>

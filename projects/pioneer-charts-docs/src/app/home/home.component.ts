@@ -4,12 +4,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { AppService, MainRoutes } from '../app.service';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'pc-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
+    RouterLink,
     MatButtonModule,
     MatCardModule,
     MatIconModule,

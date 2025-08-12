@@ -49,6 +49,7 @@
   <div class="container grid grid-cols-1 mx-auto">
     <div class="col">
       <mat-card class="p-3">
+        <pre>{{ appService.areaChartConfig() | json }}</pre>
         <pcac-line-area-chart [config]="appService.areaChartConfig()"
           (dotClicked)="appService.onClicked($event)"></pcac-line-area-chart>
       </mat-card>

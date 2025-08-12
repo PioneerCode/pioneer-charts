@@ -1,31 +1,53 @@
-name: Deploy Angular to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main # Or your primary branch like 'master'
+    branches: [ main ]   # change if your default branch is different
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write          # required
+  id-token: write       # required
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      # (Optional) Setup Node if you’re building a JS site. Remove if not needed.
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify your Node.js version
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Install dependencies
+      # (Optional) Install & build – customize for your toolchain
+      - name: Install deps
         run: npm ci
-
-      - name: Build Angular application
+      - name: Build
         run: npm run build:lib && npm run build:docs
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      # Upload the directory that contains your built site:
+      #   Vite/React/Angular often output to "dist" or "build"
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/pioneer-charts-docs 
+          path: ./dist/pioneer-charts/docs/browser  # <-- change to your build output folder (e.g., ./build or ./public)
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

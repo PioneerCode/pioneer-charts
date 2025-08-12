@@ -22,8 +22,8 @@ jobs:
         run: npm ci
 
       - name: Install Dependencies
-          run: npm install
-          
+        run: npm install
+
       - name: Build Angular application
         run: ng build pioneer-charts-docs --base-href /pioneer-charts/ 
 

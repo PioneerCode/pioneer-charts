@@ -1,9 +1,19 @@
 @use "../../../../pioneer-charts/colors.scss";
 
 header {
-    background-color: colors.$primary;
-    color: white;
-    .logo-polygon {
-      fill: rgb(91, 95, 101)
-    }
+  background-color: colors.$primary;
+  color: white;
+
+  .logo-polygon {
+    fill: rgb(91, 95, 101)
+  }
+}
+
+$icon-size: 128px;
+
+.large-icon {
+  font-size: $icon-size;
+  height: $icon-size;
+  width: $icon-size;
+  color: colors.$accent;
 }

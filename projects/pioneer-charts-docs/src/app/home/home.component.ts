@@ -3,6 +3,7 @@ import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { AppService, MainRoutes } from '../app.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'pc-home',
@@ -11,6 +12,7 @@ import { AppService, MainRoutes } from '../app.service';
   imports: [
     MatButtonModule,
     MatCardModule,
+    MatIconModule,
     PcacLineAreaChartComponent,
   ]
 })

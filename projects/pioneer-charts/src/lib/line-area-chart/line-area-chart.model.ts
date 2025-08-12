@@ -1,6 +1,6 @@
 import { PcacChartConfig, PcacFormatEnum } from '../core/chart.model';
 
-export class PcacLineAreaChartConfig extends PcacChartConfig  {
+export class PcacLineAreaChartConfig extends PcacChartConfig {
   isArea: boolean = false
   enableEffects: boolean = true
   numberOfTicks: number = 5

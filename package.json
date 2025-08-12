@@ -7,7 +7,7 @@
     "start-web": "ng serve pioneer-charts-web",
     "start-docs": "ng serve pioneer-charts-docs",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
-    "build:docs": "ng build pioneer-charts-web --prod",
+    "build:docs": "ng build pioneer-charts-docs --base-href /pioneer-charts/ ",
     "build:docs:404": "node ./build/404.js",
     "build:docs:prod": "npm run build:lib && npm run build:docs && npm run build:docs:404",
     "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme  && npm run build:lib:readme",

@@ -39,7 +39,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/pioneer-charts/docs/browser  # <-- change to your build output folder (e.g., ./build or ./public)
+          path: ./dist/pioneer-charts-docs/browser  # <-- change to your build output folder (e.g., ./build or ./public)
 
   deploy:
     environment:

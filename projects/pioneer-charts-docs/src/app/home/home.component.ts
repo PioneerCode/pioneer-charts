@@ -15,7 +15,6 @@ import { AppService, MainRoutes } from '../app.service';
   ]
 })
 export class HomeComponent {
-
   readonly appService = inject(AppService);
   MainRoutes = MainRoutes;
 }

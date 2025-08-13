@@ -2,14 +2,14 @@ import { Component, inject } from '@angular/core';
 import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { AppService, MainRoutes } from '../app.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { AppService, MainRoutes } from '../app.service';
 
 @Component({
   selector: 'pc-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  templateUrl: './home.html',
+  styleUrls: ['./home.scss'],
   imports: [
     RouterLink,
     MatButtonModule,
@@ -18,9 +18,7 @@ import { RouterLink } from '@angular/router';
     PcacLineAreaChartComponent,
   ]
 })
-export class HomeComponent {
+export class Home {
   readonly appService = inject(AppService);
   MainRoutes = MainRoutes;
-
-
 }

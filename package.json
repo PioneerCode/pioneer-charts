@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "ng serve pioneer-charts-dev",
+    "start": "ng serve pioneer-charts-docs",
     "start-web": "ng serve pioneer-charts-web",
-    "start-docs": "ng serve pioneer-charts-docs",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-docs ",
     "build:docs:404": "node ./build/404.js",

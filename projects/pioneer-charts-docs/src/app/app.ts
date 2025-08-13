@@ -1,20 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterOutlet } from '@angular/router';
 import { AppService } from './app.service';
+import { LayoutHeader } from './layout/header/header';
+import { LayoutFooter } from './layout/footer/footer';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    RouterLink,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule
+    LayoutHeader,
+    LayoutFooter
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'

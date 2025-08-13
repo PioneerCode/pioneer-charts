@@ -7,6 +7,7 @@ export enum MainRoutes {
   HOME = 'home',
   GET_STARTED = 'get-started',
   CHARTS = 'charts',
+  API = 'api'
 }
 
 @Injectable({

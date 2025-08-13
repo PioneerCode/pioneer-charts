@@ -40,9 +40,6 @@ jobs:
           path: ./dist/pioneer-charts-docs/browser  # <-- change to your build output folder (e.g., ./build or ./public)
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
 

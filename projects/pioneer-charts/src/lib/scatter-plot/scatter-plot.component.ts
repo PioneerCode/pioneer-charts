@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'lib-scatter-plot',
   imports: [],
-  templateUrl: './scatter-plot.html'
+  templateUrl: './scatter-plot.component.html'
 })
-export class PcacScatterPlot {
+export class PcacChartScatterPlot {
 
 }

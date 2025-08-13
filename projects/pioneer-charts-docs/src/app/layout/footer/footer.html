@@ -1,52 +1,50 @@
 <footer class="mt-16">
-  <div class="meta-top grid grid-cols-2">
-    <h5>
-      <a class="nav-link" href="http://pioneercode.com">
-        Pioneer Code
-        <div class="logo-icon">
+  <div class="meta-top container grid grid-cols-2 mx-auto pt-8 pb-8">
+    <h5 class="mb-0">
+      <a class="flex items-center" href="https://github.com/PioneerCode">
+        <div class="logo-icon w-8 inline-block me-4">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
             y="0px" viewBox="0 0 208.7 161.3" xml:space="preserve">
-            <polygon style="fill:#fff;"
+            <polygon class="polygon"
               points="122.2,7.6 122.5,7.6 200.3,161.2 207.6,161.2 125.9,0.3 118.8,0.3 82.7,71.5 67.8,42.2 60.8,42.2 0.4,161.2
                 7.7,161.2 64.1,49.5 64.5,49.5 79.2,78.5 37.2,161.2 44.5,161.2 82.7,85.6 98.7,117.2 76.3,161.2 83.6,161.2 102.3,124.3
                 120.9,161.2 128.2,161.2 105.8,117.2 122.3,84.6 122.7,84.6 161.4,161.2 168.6,161.2 126,77.3 118.9,77.3 102.3,110.2 86.3,78.6 " />
           </svg>
         </div>
+        <div class="pt-1">
+          Pioneer Code
+        </div>
       </a>
     </h5>
-    <ul class="nav justify-content-center pages">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/" [ngClass]="{'active': service.mainRoute() === MainRoutes.HOME}"
-          (click)="service.mainRoute.set(MainRoutes.HOME)">
-          Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/docs/guides/introduction"
-          [ngClass]="{'active': service.mainRoute() === MainRoutes.API}"
-          (click)="service.mainRoute.set(MainRoutes.API)">
-          Documentation
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/charts" [ngClass]="{'active': service.mainRoute() === MainRoutes.CHARTS}"
-          (click)="service.mainRoute.set(MainRoutes.CHARTS)">
-          Charts
-        </a>
-      </li>
-    </ul>
+    <div class="flex items-center justify-end">
+      <a class="me-3" routerLink="/" [ngClass]="{'active': service.mainRoute() === MainRoutes.HOME}"
+        (click)="service.mainRoute.set(MainRoutes.HOME)">
+        Home
+      </a>
+      <a class="me-3" routerLink="/docs/guides/introduction"
+        [ngClass]="{'active': service.mainRoute() === MainRoutes.API}" (click)="service.mainRoute.set(MainRoutes.API)">
+        Documentation
+      </a>
+      <a class="me-3" routerLink="/charts" [ngClass]="{'active': service.mainRoute() === MainRoutes.CHARTS}"
+        (click)="service.mainRoute.set(MainRoutes.CHARTS)">
+        Charts
+      </a>
+    </div>
   </div>
-  <div class="meta-bottom grid grid-cols-1">
-    <div class="col-sm">
-      <p class="float-left">
+  <mat-divider />
+  <div class="meta-bottom container grid grid-cols-2 mx-auto pt-2 pb-2">
+    <div>
+      <p class="float-left m-0">
         Version: {{version()}}
       </p>
-      <p class="float-right">
-        Develop by
-        <a href="https://twitter.com/chad_ramos" alt="Chad Ramos">Chad Ramos</a> &#64;
-        <a href="https://pioneercode.com" alt="Pioneer Code">Pioneer Code</a> ©2018. Code and Docs licensed under an
+    </div>
+    <div>
+      <p class="float-right m-0">
+        Develop by <a href="https://github.com/PioneerCode" alt="Pioneer Code">Pioneer Code</a> ©2025. Code and Docs
+        licensed under an
         <a href="https://github.com/PioneerCode/pioneer-charts/blob/master/LICENSE"
-          alt="Pioneer Charts License">MIT-style License</a>.
+          alt="Pioneer Charts License">MIT-style
+          License</a>.
       </p>
     </div>
   </div>

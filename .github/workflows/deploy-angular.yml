@@ -18,26 +18,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # (Optional) Setup Node if you’re building a JS site. Remove if not needed.
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
-      # (Optional) Install & build – customize for your toolchain
       - name: Install deps
         run: npm ci
       - name: Build
         run: npm run build:lib && npm run build:docs
-
-      # Upload the directory that contains your built site:
-      #   Vite/React/Angular often output to "dist" or "build"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/pioneer-charts-docs/browser  # <-- change to your build output folder (e.g., ./build or ./public)
+          path: ./dist/pioneer-charts-docs/browser  
 
   deploy:
     needs: build

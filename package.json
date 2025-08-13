@@ -12,7 +12,7 @@
     "build:lib:readme": "node ./build/readme.js",
     "build:lib:package": "ng build @pioneer-code/pioneer-charts",
     "build:lib:theme": "node ./build/theme.js",
-    "build:lib:sass": "node ./build/sass.js",
+    "build:lib:sass": "node ./build/sass.js"
   },
   "prettier": {
     "overrides": [

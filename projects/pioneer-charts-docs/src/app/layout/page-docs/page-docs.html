@@ -1,10 +1,21 @@
-<mat-sidenav-container class="sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0" autosize>
-  <mat-sidenav [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56" [opened]="true">
-    side
+<mat-sidenav-container  [style.marginTop.px]="isMobile() ? 56 : 0" autosize>
+  <mat-sidenav class="sidenav-container" [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56" [opened]="true">
+    
+    <h3 class="m-0 ms-3 me-3 mt-2">Getting Started</h3>
+    <mat-nav-list>
+      <a mat-list-item href="/docs/guides/introduction">Introduction</a>
+      <a mat-list-item href="/docs/guides/theme">Theme</a>
+    </mat-nav-list>
+    <h3 class="m-0 ms-3 me-3 mt-3">Charts</h3>
+    <mat-nav-list>
+      <a mat-list-item href="/docs/components/charts/bar-chart">Bar Chart</a>
+      <a mat-list-item href="/docs/components/charts/line-area-chart">Line Area Chart</a>
+      <a mat-list-item href="/docs/components/charts/pie-chart">Pie Chart</a>
+    </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <h1 class="mt-6">{{ pageTitle() }}</h1>
+  <mat-sidenav-content class="p-6 pt-4">
+    <h1>{{ pageTitle() }}</h1>
     <ng-content />
   </mat-sidenav-content>
 </mat-sidenav-container>

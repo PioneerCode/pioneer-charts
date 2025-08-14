@@ -1,11 +1,12 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
-
+import { MatListModule } from '@angular/material/list';
 @Component({
   selector: 'app-layout-page-docs',
   imports: [
-    MatSidenavModule
+    MatSidenavModule,
+    MatListModule
   ],
   templateUrl: './page-docs.html',
   styleUrls: ['./page-docs.scss']

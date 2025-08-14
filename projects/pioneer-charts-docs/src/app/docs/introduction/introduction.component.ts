@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
+import { LayoutCode } from '../../layout/code/code';
 
 @Component({
   selector: 'pc-introduction',
   templateUrl: './introduction.component.html',
   styleUrls: ['./introduction.component.scss'],
   imports: [
+    LayoutCode,
     LayoutPageDocs,
   ]
 })

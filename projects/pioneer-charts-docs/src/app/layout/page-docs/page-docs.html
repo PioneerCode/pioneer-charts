@@ -1,9 +1,10 @@
-<mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0">
-    <mat-sidenav [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56">
-        side
-    </mat-sidenav>
+<mat-sidenav-container class="sidenav-container" [style.marginTop.px]="isMobile() ? 56 : 0" autosize>
+  <mat-sidenav [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56" [opened]="true">
+    side
+  </mat-sidenav>
 
-    <mat-sidenav-content>
-        <ng-content />
-    </mat-sidenav-content>
+  <mat-sidenav-content>
+    <h1 class="mt-6">{{ pageTitle() }}</h1>
+    <ng-content />
+  </mat-sidenav-content>
 </mat-sidenav-container>

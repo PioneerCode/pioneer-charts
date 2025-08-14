@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 
@@ -7,9 +7,12 @@ import { MediaMatcher } from '@angular/cdk/layout';
   imports: [
     MatSidenavModule
   ],
-  templateUrl: './page-docs.html'
+  templateUrl: './page-docs.html',
+  styleUrls: ['./page-docs.scss']
 })
 export class LayoutPageDocs {
+  pageTitle = input.required<string>()
+
   protected readonly isMobile = signal(true);
   private readonly _mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;

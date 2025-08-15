@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { AppService } from '../../app.service';
+import { StringifyPipe } from '../../stringify.pipe';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { AppService } from '../../app.service';
     // DocLayoutComponent,
     // BaseConfigComponent,
     // CodeComponent,
-    // StringifyPipe,
+    StringifyPipe,
     PcacBarHorizontalChartComponent,
     PcacBarVerticalChartComponent
   ]

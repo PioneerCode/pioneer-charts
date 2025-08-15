@@ -1,0 +1,56 @@
+<h5 id="configuration">Configuration</h5>
+<table class="s">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>data</td>
+      <td>Collection of
+        <a routerLink="/docs/guides/data-contract">PcacData</a> objects.
+      </td>
+    </tr>
+    <tr>
+      <td>height</td>
+      <td>Height of chart component.</td>
+    </tr>
+    @if(includeTickFormat()) {
+    <tr>
+      <td>tickFormat</td>
+      <td>Set this value to change the formatting of the domain axis of your chart and the tooltip value formatting.
+        <ul>
+          <li>
+            <b>Percentage</b>
+            <ul>
+              <li>
+                All values will be shifted by 100, and a percentage symbol will be added to your domain access and value
+                displayed in the
+                tooltip.
+              </li>
+              <li>
+                1.0 = 100%
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    }
+    @if(includeHideAxisAndGrid()) {
+    <tr>
+      <td>hideAxis</td>
+      <td>If true, hide chart axis.</td>
+    </tr>
+    }
+    @if(includeHideAxisAndGrid()) {
+    <tr>
+      <td>hideGrid</td>
+      <td>If true, hide chart grid.</td>
+    </tr>
+    }
+  </tbody>
+  <ng-content></ng-content>
+</table>

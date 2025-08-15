@@ -37,56 +37,56 @@
     <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig()" (barClicked)="service.onClicked($event)" />
   </mat-card>
   <h3 id="markup">Markup</h3>
-  <h6 id="horizontal">Horizontal</h6>
+  <h5 id="horizontal">Horizontal</h5>
   <app-layout-code language="markup" [code]="horizontalCode"></app-layout-code>
-  <h6 id="vertical">Vertical</h6>
+  <h5 id="vertical">Vertical</h5>
   <app-layout-code language="markup" [code]="verticalCode"></app-layout-code>
   <h3 id="api">API</h3>
   <app-layout-code language="typescript" [code]="importCode"></app-layout-code>
-  <!-- <app-base-config [includeTickFormat]="true" [includeHideAxisAndGrid]="true">
-        <tbody style="border-top: none;">
-          <tr>
-            <td>domainMax</td>
-            <td>Highest value in domain of data.</td>
-          </tr>
-          <tr>
-            <td>isGroup</td>
-            <td>If set to true, 2-dimensional data sets will be displayed as a group in n of the first dimension. If
-              false,
-              the group will produce a stack bar set. It is recommended in that when configured in the false state, your
-              data is ordered highest to lowest so a bar does not get covered on the UI due to a back to front stack
-              order.
-            </td>
-          </tr>
-          <tr>
-            <td>thresholds</td>
-            <td>Threshold are configure using the same structure as
-              <a routerLink="/docs/guides/data-contract">PcacData</a>.
-              <ul style="margin: 0">
-                <li>If the thresholds variable is left empty, you will get no thresholds on the UI.</li>
-                <li>If there is one object in the first dimension with no objects in that "data" variable of that
-                  object,
-                  you will get a threshold that spans the entire chart.</li>
-                <li>If there is more then one object "value" in the first dimension with no objects in each "data"
-                  variable,
-                  you will get a threshold that spans the each group in the data set.</li>
-                <li>If there is more then one object "value" in the first dimension with in each "data" variable, you
-                  will
-                  get a threshold that spans the each bar of each group in the data set.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>spreadColorsPerGroup</td>
-            <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
-          </tr>
-          <tr>
-            <td>colorOverride.colors</td>
-            <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each
-              value of the collection.</td>
-          </tr>
-        </tbody>
-      </app-base-config> -->
+  <app-layout-base-config [includeTickFormat]="true" [includeHideAxisAndGrid]="true">
+    <tbody style="border-top: none;">
+      <tr>
+        <td>domainMax</td>
+        <td>Highest value in domain of data.</td>
+      </tr>
+      <tr>
+        <td>isGroup</td>
+        <td>If set to true, 2-dimensional data sets will be displayed as a group in n of the first dimension. If
+          false,
+          the group will produce a stack bar set. It is recommended in that when configured in the false state, your
+          data is ordered highest to lowest so a bar does not get covered on the UI due to a back to front stack
+          order.
+        </td>
+      </tr>
+      <tr>
+        <td>thresholds</td>
+        <td>Threshold are configure using the same structure as
+          <a routerLink="/docs/guides/data-contract">PcacData</a>.
+          <ul style="margin: 0">
+            <li>If the thresholds variable is left empty, you will get no thresholds on the UI.</li>
+            <li>If there is one object in the first dimension with no objects in that "data" variable of that
+              object,
+              you will get a threshold that spans the entire chart.</li>
+            <li>If there is more then one object "value" in the first dimension with no objects in each "data"
+              variable,
+              you will get a threshold that spans the each group in the data set.</li>
+            <li>If there is more then one object "value" in the first dimension with in each "data" variable, you
+              will
+              get a threshold that spans the each bar of each group in the data set.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>spreadColorsPerGroup</td>
+        <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
+      </tr>
+      <tr>
+        <td>colorOverride.colors</td>
+        <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each
+          value of the collection.</td>
+      </tr>
+    </tbody>
+  </app-layout-base-config>
   <h3 id="events">Events</h3>
   <table class="table">
     <thead>
@@ -111,56 +111,46 @@
   <h3 id="contract">Contract</h3>
   <div class="grid grid-cols-4 gap-4">
     <div>
-      <h6>Vertical Single</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barVerticalChartSingleConfig()| stringify"></app-layout-code>
-      </div>
+      <h5>Vertical Single</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barVerticalChartSingleConfig()| stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Vertical Grouped</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barVerticalChartGroupConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Vertical Grouped</h5>
+      <app-layout-code [setMax]="true" [setMax]="true" language="json"
+        [code]="service.barVerticalChartGroupConfig() | stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Vertical Stacked</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barVerticalChartStackedConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Vertical Stacked</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barVerticalChartStackedConfig() | stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Vertical Multi</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barVerticalChartConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Vertical Multi</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barVerticalChartConfig() | stringify"></app-layout-code>
     </div>
   </div>
   <div class="grid grid-cols-4 gap-4">
     <div>
-      <h6>Horizontal Single</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json"
-          [code]="service.barHorizontalChartSingleConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Horizontal Single</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barHorizontalChartSingleConfig() | stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Horizontal Grouped</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barHorizontalChartGroupConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Horizontal Grouped</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barHorizontalChartGroupConfig() | stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Horizontal Stacked</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json"
-          [code]="service.barHorizontalChartStackedConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Horizontal Stacked</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barHorizontalChartStackedConfig() | stringify"></app-layout-code>
     </div>
     <div>
-      <h6>Horizontal Multi</h6>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="service.barHorizontalChartConfig() | stringify"></app-layout-code>
-      </div>
+      <h5>Horizontal Multi</h5>
+      <app-layout-code [setMax]="true" language="json"
+        [code]="service.barHorizontalChartConfig() | stringify"></app-layout-code>
     </div>
   </div>
 </app-layout-page-docs>

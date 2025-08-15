@@ -15,4 +15,5 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class LayoutCode {
   readonly code = input.required<string>();
+  readonly setMax = input(false);
 }

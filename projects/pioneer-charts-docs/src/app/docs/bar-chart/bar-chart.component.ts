@@ -6,6 +6,7 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { AppService } from '../../app.service';
 import { StringifyPipe } from '../../stringify.pipe';
+import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 
 
 @Component({
@@ -13,12 +14,9 @@ import { StringifyPipe } from '../../stringify.pipe';
   templateUrl: './bar-chart.component.html',
   imports: [
     LayoutCode,
+    LayoutBaseConfig,
     LayoutPageDocs,
     MatCardModule,
-    // PageHeaderComponent,
-    // DocLayoutComponent,
-    // BaseConfigComponent,
-    // CodeComponent,
     StringifyPipe,
     PcacBarHorizontalChartComponent,
     PcacBarVerticalChartComponent

@@ -1,15 +1,17 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { MatListModule } from '@angular/material/list';
-import { RouterLink } from '@angular/router';
+import { LayoutPageDocsContent } from './content/content';
+import { LayoutPageDocsNavigation } from './navigation/navigation';
+import { c } from "../../../../../../node_modules/@angular/cdk/a11y-module.d--J1yhM7R";
+
 @Component({
   selector: 'app-layout-page-docs',
   imports: [
-    RouterLink,
     MatSidenavModule,
-    MatListModule
-  ],
+    LayoutPageDocsContent,
+    LayoutPageDocsNavigation
+],
   templateUrl: './page-docs.html',
   styleUrls: ['./page-docs.scss']
 })

@@ -1,0 +1,96 @@
+<app-layout-page-docs pageTitle="Line Area Chart">
+  <p class="lead">Configurable to display an area or line chart.</p>
+  <section class="pc-doc-section">
+    <div class="row pc-row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-line-area-chart [config]="pcService.lineChartConfig()"
+            (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-line-area-chart [config]="pcService.areaChartConfig()"
+            (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <div class="pc-chart-container">
+          <pcac-line-area-chart [config]="pcService.areaChartHideConfig()"
+            (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="pc-doc-section">
+    <div class="row">
+      <div class="col-sm">
+        <h3>Markup</h3>
+        <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+      </div>
+    </div>
+  </section>
+  <section class="pc-doc-section">
+    <div class="row">
+      <div class="col-sm">
+        <h3>API</h3>
+        <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+        <app-layout-base-config [includeHideAxisAndGrid]="true">
+          <tbody style="border-top: none;">
+            <tr>
+              <td>domainMax</td>
+              <td>Highest value in domain of data.</td>
+            </tr>
+            <tr>
+              <td>numberOfTicks</td>
+              <td>Number of ui intersects in the domain.</td>
+            </tr>
+            <tr>
+              <td>isArea</td>
+              <td>If false, ui will display a line chart. If true, ui will display an area chart.</td>
+            </tr>
+            <tr>
+              <td>enableEffects</td>
+              <td>If true, on hover, ui will display continues values of all lines to the user.</td>
+            </tr>
+          </tbody>
+        </app-layout-base-config>
+      </div>
+    </div>
+  </section>
+  <section class="pc-doc-section">
+    <h3 id="events">Events</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Binding</th>
+          <th>Description</th>
+          <th>Payload</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            (dotClicked)="onClicked($event)"
+          </td>
+          <td>Emitted when a dot on a line is clicked clicked.</td>
+          <td>
+            <a routerLink="/docs/guides/data-contract">PcacData</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="pc-doc-section">
+    <div class="row">
+      <div class="col-sm">
+        <h3 id="contract">Contract</h3>
+        <div class="pc-config-container">
+          <app-layout-code language="json" [code]="pcService.areaChartConfig | stringify"></app-layout-code>
+        </div>
+      </div>
+    </div>
+  </section>
+</app-layout-page-docs>

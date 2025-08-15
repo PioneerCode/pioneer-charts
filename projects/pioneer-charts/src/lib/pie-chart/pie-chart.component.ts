@@ -7,8 +7,7 @@ import { PcacData } from '../core';
   selector: 'pcac-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  standalone: true
+  encapsulation: ViewEncapsulation.None
 })
 export class PcacPieChartComponent implements OnChanges {
   private chartBuilder = inject(PieChartBuilder);

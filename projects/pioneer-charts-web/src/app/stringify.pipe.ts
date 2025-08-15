@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'stringify',
-  standalone: true
+  name: 'stringify'
 })
 export class StringifyPipe implements PipeTransform {
   transform(val: any) {

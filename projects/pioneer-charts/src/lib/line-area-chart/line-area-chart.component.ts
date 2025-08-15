@@ -8,8 +8,7 @@ import { PcacData } from '../core';
   selector: 'pcac-line-area-chart',
   templateUrl: './line-area-chart.component.html',
   styleUrls: ['./line-area-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  standalone: true
+  encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
   private chartBuilder = inject(LineAreaChartBuilder);

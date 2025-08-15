@@ -5,7 +5,6 @@ import { NgClass } from '@angular/common';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  standalone: true,
   imports: [ NgClass ],
   styleUrls: ['./nav.component.scss']
 })

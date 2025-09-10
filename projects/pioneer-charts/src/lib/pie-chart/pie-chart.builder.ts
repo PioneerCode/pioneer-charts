@@ -77,16 +77,17 @@ export class PieChartBuilder extends PcacChart {
       })
       .on('mouseout', function (this: any, _: MouseEvent, d: PieArcDatum<PcacData>) {
         self.tooltipBuilder.hideTooltip();
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 3))
+        select(this)
+          .transition()
+          .duration(self.transitionService.getTransitionDuration() / 3)
           .attr('d', self.arcShape)
           .style('fill', self.colors[d.index]);
       })
       .on('click', (d: PieArcDatum<PcacData>, i: number) => {
         this.sliceClickedSource.next(d.data);
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attrTween('d', (b: PieArcDatum<PcacData>) => {
         return this.tweenChart(b);
       });

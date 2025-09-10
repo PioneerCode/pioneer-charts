@@ -1,6 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-
-import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection, EnterElement } from 'd3-selection';
@@ -44,6 +42,11 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.adjustForHiddenAxis();
     }
     this.initializeChartState(chartElm, this.config);
+
+    if(this.width <= 0) {
+      return; // TODO: Figure out why this is happening on initial load sometimes
+    }
+
     if (config.colorOverride && config.colorOverride.colors) {
       this.colors = config.colorOverride.colors.reverse();
     }
@@ -182,8 +185,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', 0)
       .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 7.5))
+        select(this
+          .transition()
+          .duration(this.transitionService.getTransitionDuration() / 7.5))
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -202,8 +206,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .on('mouseout', function (this: any, event: MouseEvent, d: PcacData) {
         self.tooltipBuilder.hideTooltip();
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 5))
+        select(this)
+          .transition()
+          .duration(this.transitionService.getTransitionDuration() / 5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -216,8 +221,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .on('click', (d: PcacData) => {
         this.barClickedSource.next(d);
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('width', (d: PcacData) => {
         return this.xScale(d.value as number);
       });
@@ -232,8 +237,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .on('mousemove', (event: MouseEvent, _: PcacData) => {
         this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('x', (d: PcacData, i: number) => {
         return this.xScale(config.thresholds[i].value as number);
       });
@@ -255,8 +260,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
           config.tickFormat || PcacFormatEnum.None
         );
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('x', (_: PcacData, i: number) => {
         return this.xScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
@@ -277,8 +282,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
           config.tickFormat || PcacFormatEnum.None
         );
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData) => {
         return this.yScaleGrouped(d.key as string);
       })

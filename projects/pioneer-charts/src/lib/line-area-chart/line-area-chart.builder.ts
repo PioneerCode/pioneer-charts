@@ -137,8 +137,8 @@ export class LineAreaChartBuilder extends PcacChart {
       .datum(lineData)
       .attr('class', 'line')
       .attr('d', this.line(this.startData))
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('d', this.line as any) // TODO: strongly type
       .attr('stroke', () => {
         return this.colors[index];
@@ -158,8 +158,8 @@ export class LineAreaChartBuilder extends PcacChart {
         return this.colors[index];  // TODO: strongly type
       })
       .attr('d', this.line(this.startData))
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('d', this.area as any);  // TODO: strongly type
   }
 
@@ -199,23 +199,25 @@ export class LineAreaChartBuilder extends PcacChart {
         .attr('fill', '#fff')
         .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
           self.tooltipBuilder.showBarTooltip(event, d, self.config.yFormat, self.config.xFormat);
-          select(this).transition(transition()
-            .duration(self.transitionService.getTransitionDuration() / 3))
+          select(this)
+            .transition()
+            .duration(self.transitionService.getTransitionDuration() / 3)
             .attr('r', 6)
             .attr('fill', self.colors[index]);
         })
         .on('mouseout', function (this: any) {
           self.tooltipBuilder.hideTooltip();
-          select(this).transition(transition()
-            .duration(self.transitionService.getTransitionDuration() / 3))
+          select(this)
+            .transition()
+            .duration(self.transitionService.getTransitionDuration() / 3)
             .attr('r', 4)
             .attr('fill', '#fff');
         })
         .on('click', (d: PcacData, i: number) => {
           this.dotClickedSource.next(d);
         })
-        .transition(transition()
-          .duration(this.transitionService.getTransitionDuration()))
+        .transition()
+        .duration(this.transitionService.getTransitionDuration())
         .attr('cy', (d: PcacData) => {
           return this.yScale(d.value as number);
         })

@@ -50,6 +50,11 @@ export class BarVerticalChartBuilder extends PcacChart {
       this.adjustForHiddenAxis(config);
     }
     this.initializeChartState(chartElm, config);
+
+    if(this.width <= 0) {
+      return; // TODO: Figure out why this is happening on initial load sometimes
+    }
+
     if (config.colorOverride && config.colorOverride.colors) {
       this.colors = config.colorOverride.colors.reverse();
     }
@@ -185,8 +190,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .attr('height', 0)
       .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 5))
+        select(this)
+          .transition()
+          .duration(self.transitionService.getTransitionDuration() / 5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -205,8 +211,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .on('mouseout', function (this: any, d: PcacData) {
         self.tooltipBuilder.hideTooltip();
-        select(this).transition(transition()
-          .duration(self.transitionService.getTransitionDuration() / 5))
+        select(this)
+          .transition()
+          .duration(self.transitionService.getTransitionDuration() / 5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -219,8 +226,11 @@ export class BarVerticalChartBuilder extends PcacChart {
       .on('click', (_, d: PcacData) => {
         this.barClickedSource.next(d);
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
+      // .transition(
+      //   transition().duration(this.transitionService.getTransitionDuration())
+      // )
       .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', (d: PcacData) => {
         return this.yScale(d.value as number);
@@ -239,8 +249,8 @@ export class BarVerticalChartBuilder extends PcacChart {
       .on('mousemove', (event: MouseEvent, d: PcacData, i: number) => {
         this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData, i: number) => {
         return this.yScale(config.thresholds[i].value as number);
       });
@@ -261,8 +271,8 @@ export class BarVerticalChartBuilder extends PcacChart {
           config.tickFormat || PcacFormatEnum.None
         );
       })
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData, i: number) => {
         return this.yScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
@@ -274,7 +284,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .attr('data-group-threshold-id', (_: PcacData, i: number) => {
         return i;
       })
-      .on('mousemove', function(this: any, event: MouseEvent, _: PcacData)  {
+      .on('mousemove', function (this: any, event: MouseEvent, _: PcacData) {
         const target = event.target as Element
         const index = Number(target.getAttribute("data-group-threshold-id"))
         self.tooltipBuilder.showBarTooltip(
@@ -284,8 +294,8 @@ export class BarVerticalChartBuilder extends PcacChart {
         );
       })
       .attr('width', this.xScaleGrouped.bandwidth())
-      .transition(transition()
-        .duration(this.transitionService.getTransitionDuration()))
+      .transition()
+      .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData, i: number, n: any) => {
         return this.yScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
       });

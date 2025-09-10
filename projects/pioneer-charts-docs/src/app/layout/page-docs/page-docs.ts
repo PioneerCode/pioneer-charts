@@ -3,7 +3,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { LayoutPageDocsContent } from './content/content';
 import { LayoutPageDocsNavigation } from './navigation/navigation';
-import { c } from "../../../../../../node_modules/@angular/cdk/a11y-module.d--J1yhM7R";
 
 @Component({
   selector: 'app-layout-page-docs',

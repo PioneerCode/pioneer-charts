@@ -71,4 +71,8 @@ export class BarChartComponent {
   // ] as IJumpNav[];
 
   readonly service = inject(AppService);
+  
+  ngOnInit() {
+    window.dispatchEvent(new Event('resize'));
+  }
 }

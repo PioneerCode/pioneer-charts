@@ -50,6 +50,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       this.adjustForHiddenAxis(config);
     }
     this.initializeChartState(chartElm, config);
+    if (this.width <= 0) {
+      return;
+    }
     if (config.colorOverride && config.colorOverride.colors) {
       this.colors = config.colorOverride.colors.reverse();
     }

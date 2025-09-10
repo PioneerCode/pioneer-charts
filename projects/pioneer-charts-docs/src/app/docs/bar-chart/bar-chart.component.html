@@ -3,18 +3,18 @@
     charts. Add thresholds
     across all variants through a matching api.</p>
   <div class="grid grid-cols-3 gap-4 mx-auto mb-6">
-    <mat-card class="p-3">s
+    <mat-card class="p-3">
       <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig()"
         (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
     </mat-card>
-    <!-- <mat-card class="p-3">
+    <mat-card class="p-3">
       <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig()"
         (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
     </mat-card>
     <mat-card class="p-3">
       <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig()"
         (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
-    </mat-card> -->
+    </mat-card>
   </div>
   <!-- <div class="grid grid-cols-2 gap-4 mx-auto mb-6">
     <mat-card class="p-3">

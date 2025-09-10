@@ -1,6 +1,4 @@
 import { Injectable, ElementRef } from '@angular/core';
-
-import { transition } from 'd3-transition';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection, EnterElement } from 'd3-selection';

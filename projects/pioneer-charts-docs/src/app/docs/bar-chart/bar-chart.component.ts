@@ -73,6 +73,6 @@ export class BarChartComponent {
   readonly service = inject(AppService);
   
   ngOnInit() {
-    window.dispatchEvent(new Event('resize'));
+    // window.dispatchEvent(new Event('resize'));
   }
 }

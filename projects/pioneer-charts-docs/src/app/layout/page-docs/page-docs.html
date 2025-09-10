@@ -1,4 +1,4 @@
-@if(isMobile()) {
+<!-- @if(isMobile()) {
 <mat-sidenav-container [style.marginTop.px]="isMobile() ? 56 : 0">
   <mat-sidenav class="sidenav-container" [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()"
     fixedTopGap="56" [opened]="true">
@@ -17,4 +17,10 @@
     <ng-content />
   </app-layout-page-docs-content>
 </div>
-}
+} -->
+<div class="flex max-h-screen w-[100%]">
+  <app-layout-page-docs-navigation />
+  <app-layout-page-docs-content [pageTitle]="pageTitle()">
+    <ng-content />
+  </app-layout-page-docs-content>
+</div>

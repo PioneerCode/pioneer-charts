@@ -6,6 +6,7 @@ export const routes: Routes = [
     { path: 'docs/guides/data-contract', loadComponent: () => import('./docs/data-contract/data-contract.component').then(m => m.DataContractComponent) },
     { path: 'docs/components/charts/bar-chart', loadComponent: () => import('./docs/bar-chart/bar-chart.component').then(m => m.BarChartComponent) },
     { path: 'docs/components/charts/line-area-chart', loadComponent: () => import('./docs/line-area-chart/line-area-chart.component').then(m => m.LineAreaChartComponent) },
+    { path: 'docs/components/charts/pie-chart', loadComponent: () => import('./docs/pie-chart/pie-chart.component').then(m => m.PieChartComponent) },
     { path: 'charts', loadComponent: () => import('./charts/charts.component').then(m => m.ChartsComponent) },
     { path: '**', loadComponent: () => import('./home/home').then(m => m.Home) }
 ];

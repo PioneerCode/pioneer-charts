@@ -43,7 +43,7 @@
   }
 
   ul {
-    padding: 0 0 1rem 1.25rem ;
+    padding: 0 0 1rem 1.25rem;
     list-style-type: disc;
   }
 }
@@ -81,4 +81,43 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
   line-height: 1.5;
+}
+
+
+
+.pc-table {
+  min-width: 100%;
+  border: 0;
+  border-spacing: 0;
+  table-layout: auto;
+
+  white-space: normal;
+
+  tr {
+    height: 56px;
+
+    th {
+      color: rgba(0, 0, 0, 0.87);
+      text-align: left;
+      font-weight: 500;
+      padding: 16px;
+      line-height: 20px;
+      font-size: 14px;
+      border-bottom: 1px solid #74777f;
+    }
+
+    td {
+      padding: 16px;
+      font-size: 14px;
+      border-bottom: 1px solid #74777f;
+    }
+  }
+
+  ul {
+    padding-bottom: 0;
+  }
+}
+
+.pc-doc-section {
+  margin-bottom: 2rem;
 }

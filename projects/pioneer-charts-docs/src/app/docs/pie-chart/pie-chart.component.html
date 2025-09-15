@@ -1,53 +1,49 @@
 <app-layout-page-docs pageTitle="Pie Chart">
   <p class="lead">Pie chart component with beautiful animated transitions.</p>
-  <div class="row">
-    <div class="col-6">
+  <section class="pc-doc-section">
+    <div class="grid grid-cols-2 gap-4">
       <div class="pc-chart-container">
         <pcac-pie-chart [config]="pcService.pieChartConfig()"
           (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm">
-      <h3>Markup</h3>
-      <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h3>Markup</h3>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h3>API</h3>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config />
+  </section>
+  <section class="pc-doc-section">
+    <h3 id="events" class="mb-0">Events</h3>
+    <table class="pc-table">
+      <thead>
+        <tr>
+          <th>Binding</th>
+          <th>Description</th>
+          <th>Payload</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            (sliceClicked)="onClicked($event)"
+          </td>
+          <td>Emitted when a slice is clicked.</td>
+          <td>
+            <a routerLink="/docs/guides/data-contract">PcacData</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="pc-doc-section">
+    <h3 id="contract">Contract</h3>
+    <div class="pc-config-container">
+      <app-layout-code language="json" [code]="pcService.pieChartConfig() | stringify"></app-layout-code>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm">
-      <h3>API</h3>
-      <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
-      <app-layout-base-config/>
-    </div>
-  </div>
-  <h3 id="events">Events</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Binding</th>
-        <th>Description</th>
-        <th>Payload</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          (sliceClicked)="onClicked($event)"
-        </td>
-        <td>Emitted when a slice is clicked.</td>
-        <td>
-          <a routerLink="/docs/guides/data-contract">PcacData</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="row ">
-    <div class="col-sm">
-      <h3 id="contract">Contract</h3>
-      <div class="pc-config-container">
-        <app-layout-code language="json" [code]="pcService.pieChartConfig() | stringify"></app-layout-code>
-      </div>
-    </div>
-  </div>
+  </section>
 </app-layout-page-docs>

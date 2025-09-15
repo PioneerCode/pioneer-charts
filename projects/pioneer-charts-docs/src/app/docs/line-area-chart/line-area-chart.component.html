@@ -1,14 +1,20 @@
 <app-layout-page-docs pageTitle="Line Area Chart">
   <p class="lead">Configurable to display an area or line chart.</p>
   <section class="pc-doc-section">
-    <div class="grid grid-cols-2 gap-4">
-      <pcac-line-area-chart [config]="pcService.lineChartConfig()"
-        (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
-      <pcac-line-area-chart [config]="pcService.areaChartConfig()"
-        (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <mat-card class="p-3">
+        <pcac-line-area-chart [config]="pcService.lineChartConfig()"
+          (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+      </mat-card>
+      <mat-card class="p-3">
+        <pcac-line-area-chart [config]="pcService.areaChartConfig()"
+          (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+      </mat-card>
     </div>
-    <pcac-line-area-chart [config]="pcService.areaChartHideConfig()"
-      (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+    <mat-card class="p-3 ">
+      <pcac-line-area-chart [config]="pcService.areaChartHideConfig()"
+        (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+    </mat-card>
   </section>
   <section class="pc-doc-section">
     <h3>Markup</h3>
@@ -63,6 +69,6 @@
   </section>
   <section class="pc-doc-section">
     <h3 id="contract">Contract</h3>
-    <app-layout-code language="json" [code]="pcService.areaChartConfig | stringify"></app-layout-code>
+    <app-layout-code language="json" [code]="pcService.areaChartConfig() | stringify"></app-layout-code>
   </section>
 </app-layout-page-docs>

@@ -1,11 +1,11 @@
 <app-layout-page-docs pageTitle="Pie Chart">
   <p class="lead">Pie chart component with beautiful animated transitions.</p>
   <section class="pc-doc-section">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="pc-chart-container">
+    <div class="grid grid-cols-1 gap-4 mb-6">
+      <mat-card class="p-3">
         <pcac-pie-chart [config]="pcService.pieChartConfig()"
           (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
-      </div>
+      </mat-card>
     </div>
   </section>
   <section class="pc-doc-section">

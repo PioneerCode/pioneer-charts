@@ -6,8 +6,8 @@ export class PcacChartConfig {
   /**
    * Height in pixels
    */
-  height: number = 200
   data: PcacData[] = []
+  height: number = 200
 }
 
 export class PcacData {

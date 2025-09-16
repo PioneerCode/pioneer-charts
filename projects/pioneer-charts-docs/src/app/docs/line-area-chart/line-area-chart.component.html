@@ -26,8 +26,8 @@
     <app-layout-base-config [includeHideAxisAndGrid]="true">
       <tbody style="border-top: none;">
         <tr>
-          <td>domainMax</td>
-          <td>Highest value in domain of data.</td>
+          <td>yDomainMax</td>
+          <td>Put a ceiling on y-axis domain. Default is 100.</td>
         </tr>
         <tr>
           <td>numberOfTicks</td>
@@ -37,6 +37,10 @@
           <td>isArea</td>
           <td>If false, ui will display a line chart. If true, ui will display an area chart.</td>
         </tr>
+        <tr>
+          <td>enableEffects</td>
+          <td>If true, on hover, ui will display continuous values of all lines to the user.</td>
+
         <tr>
           <td>enableEffects</td>
           <td>If true, on hover, ui will display continuous values of all lines to the user.</td>

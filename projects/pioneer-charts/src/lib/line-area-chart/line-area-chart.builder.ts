@@ -1,7 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 
 import { ScaleTime, scaleTime } from 'd3';
-import { transition } from 'd3-transition';
 import { select } from 'd3-selection';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
 import { line, Line, area, Area } from 'd3-shape';

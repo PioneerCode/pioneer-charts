@@ -1,0 +1,11 @@
+@use "../../../../../../pioneer-charts/colors.scss";
+
+:host {
+    background-color: #fff;
+
+
+}
+
+nav {
+    border-left: 4px solid colors.$accent;
+}

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
+import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
 @Component({
   selector: 'pc-data-contract',
@@ -11,33 +12,28 @@ import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
   ]
 })
 export class DataContractComponent {
-  // jumpNav = [
-  //   {
-  //     key: 'Data Contract',
-  //     value: 'data-contract',
-  //     level: JumpNavLevel.h1
-  //   },
-  //   {
-  //     key: 'PcacData',
-  //     value: 'data',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'IPcacChartConfig',
-  //     value: 'chart-config',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'New Chart Config',
-  //     value: 'new-chart-config',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Binding Configuration',
-  //     value: 'map',
-  //     level: JumpNavLevel.h2
-  //   }
-  // ] as IJumpNav[];
+  jumpNav = signal<IJumpNav[]>([
+    {
+      key: 'Data Contract',
+      value: 'data-contract',
+    },
+    {
+      key: 'PcacData',
+      value: 'data',
+    },
+    {
+      key: 'IPcacChartConfig',
+      value: 'chart-config',
+    },
+    {
+      key: 'New Chart Config',
+      value: 'new-chart-config',
+    },
+    {
+      key: 'Binding Configuration',
+      value: 'map',
+    }
+  ])
 
   data = `export interface PcacData {
   key: string | number;

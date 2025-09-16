@@ -15,18 +15,17 @@ export interface IJumpNav {
 }
 
 @Component({
-    selector: 'app-jump-nav',
-    templateUrl: './jump-nav.component.html',
-    styleUrls: ['./jump-nav.component.scss'],
-    imports: [
-        NgClass,
-        RouterLink,
-    ]
+  selector: 'app-jump-nav',
+  templateUrl: './jump-nav.component.html',
+  styleUrls: ['./jump-nav.component.scss'],
+  imports: [
+    NgClass,
+    RouterLink,
+  ]
 })
 export class JumpNavComponent implements OnInit, AfterViewChecked {
   private route = inject(Router);
-
-  readonly jumpNav = input<IJumpNav[]>([]);
+  readonly jumpNav = input.required<IJumpNav[]>();
   currentRoute: string[] = []
   fragment!: string;
 

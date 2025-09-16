@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutCode } from '../../layout/code/code';
+import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
 @Component({
   selector: 'pc-introduction',
@@ -12,38 +13,32 @@ import { LayoutCode } from '../../layout/code/code';
   ]
 })
 export class IntroductionComponent {
-  // jumpNav = [
-  //   {
-  //     key: 'Getting Started',
-  //     value: 'getting-started',
-  //     level: JumpNavLevel.h1
-  //   },
-  //   {
-  //     key: 'Introduction',
-  //     value: 'introduction',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Quick Start',
-  //     value: 'quick-start',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Install',
-  //     value: 'step-1-install-pioneer-charts',
-  //     level: JumpNavLevel.h3
-  //   },
-  //   {
-  //     key: 'Import Modules',
-  //     value: 'step-2-import-modules',
-  //     level: JumpNavLevel.h3
-  //   },
-  //   {
-  //     key: 'Import Styles',
-  //     value: 'step-3-import-styles',
-  //     level: JumpNavLevel.h3
-  //   }
-  // ] as IJumpNav[];
+  jumpNav = signal<IJumpNav[]>([
+    {
+      key: 'Getting Started',
+      value: 'getting-started',
+    },
+    {
+      key: 'Introduction',
+      value: 'introduction',
+    },
+    {
+      key: 'Quick Start',
+      value: 'quick-start',
+    },
+    {
+      key: 'Install',
+      value: 'step-1-install-pioneer-charts',
+    },
+    {
+      key: 'Import Modules',
+      value: 'step-2-import-modules',
+    },
+    {
+      key: 'Import Styles',
+      value: 'step-3-import-styles',
+    }
+  ])
 
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
   yarnInstallCode = `yarn add @pioneer-code/pioneer-charts`;

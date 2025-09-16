@@ -3,19 +3,22 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { LayoutPageDocsContent } from './content/content';
 import { LayoutPageDocsNavigation } from './navigation/navigation';
+import { IJumpNav, LayoutJumpNav } from './jump-nav/jump-nav';
 
 @Component({
   selector: 'app-layout-page-docs',
   imports: [
     MatSidenavModule,
     LayoutPageDocsContent,
-    LayoutPageDocsNavigation
+    LayoutPageDocsNavigation,
+    LayoutJumpNav
 ],
   templateUrl: './page-docs.html',
   styleUrls: ['./page-docs.scss']
 })
 export class LayoutPageDocs {
   pageTitle = input.required<string>()
+  jumpNav = input<IJumpNav[]>([]);
 
   protected readonly isMobile = signal(true);
   private readonly _mobileQuery: MediaQueryList;

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
+import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
 @Component({
   selector: 'pc-theme',
@@ -12,38 +13,32 @@ import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
   ]
 })
 export class ThemeComponent {
-  // jumpNav = [
-  //   {
-  //     key: 'Theme',
-  //     value: 'theme',
-  //     level: JumpNavLevel.h1
-  //   },
-  //   {
-  //     key: 'Default Theme',
-  //     value: 'default-theme',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Sass',
-  //     value: 'sass',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Customize',
-  //     value: 'customize',
-  //     level: JumpNavLevel.h2
-  //   },
-  //   {
-  //     key: 'Styles',
-  //     value: 'styles',
-  //     level: JumpNavLevel.h3
-  //   },
-  //   {
-  //     key: 'Color Service',
-  //     value: 'color-service',
-  //     level: JumpNavLevel.h3
-  //   }
-  // ] as IJumpNav[];
+  jumpNav = signal<IJumpNav[]>([
+    {
+      key: 'Theme',
+      value: 'theme',
+    },
+    {
+      key: 'Default Theme',
+      value: 'default-theme',
+    },
+    {
+      key: 'Sass',
+      value: 'sass',
+    },
+    {
+      key: 'Customize',
+      value: 'customize',
+    },
+    {
+      key: 'Styles',
+      value: 'styles',
+    },
+    {
+      key: 'Color Service',
+      value: 'color-service',
+    }
+  ]);
   importStylesCode = `@import "node_modules/@pioneer-code/pioneer-charts/scss/pcac";`;
   importStylesCodeOverride = `// Your variable overrides
 $theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);

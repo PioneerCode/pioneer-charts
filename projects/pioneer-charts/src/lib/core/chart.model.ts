@@ -22,6 +22,13 @@ export enum PcacFormatEnum {
   Percentage = 'percentage',
   Minutes = 'minutes',
   DateTime = 'dateTime',
-  Fahrenheit = 'fahrenheit'
+  Fahrenheit = 'fahrenheit',
+
+  /**
+   * Expectation is we will be given a range of data from 0-23
+   * and we will map that to a 12 hour clock with am/pm
+   * e.g. 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm
+   */
+  OneDayHours = 'oneDayHours'
 }
 

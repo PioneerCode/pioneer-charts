@@ -64,8 +64,15 @@ export class PcacAxisBuilder {
         case PcacFormatEnum.Fahrenheit:
           xAxis.tickFormat((d) => d + 'f');
           break;
+        case PcacFormatEnum.OneDayHours:
+          xAxis.tickFormat((d, i) => {
+            const hour = i % 12 === 0 ? 12 : i % 12;
+            const period = i < 12 ? 'am' : 'pm';
+            return `${hour}${period}`;
+          });
       }
     }
+
 
     config.svg.append('g')
       .attr('class', 'pcac-x-axis')

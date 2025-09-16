@@ -1,6 +1,6 @@
 <nav class="mt-6 px-6 min-w-[300px]">
     <h6><small>ON THIS PAGE</small></h6>
     @for (item of jumpNav(); track $index) {
-    <a [routerLink]="item.value" routerLinkActive="active" class="w-[100%] block">{{ item.key }}</a>
+    <a  routerLink="." [fragment]="item.value" class="w-[100%] block">{{ item.key }}</a>
     }
 </nav>

@@ -101,7 +101,8 @@ export class LineAreaChartBuilder extends PcacChart {
         height: this.height,
         xScale: this.xScale,
         yScale: this.yScale,
-        yFormat: config.yFormat
+        yFormat: config.yFormat,
+        xFormat: config.xFormat
       } as IPcacAxisBuilderConfig);
     }
     if (!config.hideGrid) {

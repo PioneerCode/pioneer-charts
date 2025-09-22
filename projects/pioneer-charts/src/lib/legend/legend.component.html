@@ -1,0 +1,6 @@
+<section class="example-section">
+  <label class="example-margin">Lanes:</label>
+  @for(item of [].constructor(config().items); track item; let i = $index) {
+    {{ item.label }}
+  }
+</section>

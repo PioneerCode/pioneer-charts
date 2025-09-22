@@ -51,8 +51,8 @@ export class PcacTooltipBuilder {
       }
     }
 
-    let finalValue = value ? value.toString() : null;
+    let finalValue = value ? value.toString() : value;
 
-    return key ? key + '</br>' + finalValue : finalValue;
+    return key ? key + '</br>' + finalValue : `${finalValue}`;
   }
 }

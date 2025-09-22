@@ -32,3 +32,16 @@
     fill: imports.$gray-800;
   }
 }
+
+.pcac-d3-tooltip {
+  position: absolute;
+  text-align: center;
+  font-size: 14px;
+  padding: 0.5rem;
+  pointer-events: none;
+  display: none;
+  background-color: rgba(0,0,0, 0.75);
+  color: white;
+  border-radius: 5px;
+}
+

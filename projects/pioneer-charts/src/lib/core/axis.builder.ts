@@ -54,7 +54,7 @@ export class PcacAxisBuilder {
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
 
     if (config.xFormat) {
-      switch (config.xFormat.toLocaleLowerCase()) {
+      switch (config.xFormat) {
         case PcacFormatEnum.Percentage:
           xAxis.tickFormat(d => d + "%");
           break;

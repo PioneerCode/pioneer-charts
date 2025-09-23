@@ -1,0 +1,23 @@
+.pcac-legend-item {
+  cursor: pointer;
+
+  &:hover {
+    .pcac-legend-circle {
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+      transform: scale(1.2);
+    }
+  }
+}
+
+.pcac-legend-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 4px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.pcac-legend-unchecked {
+  opacity: 0.5;
+}

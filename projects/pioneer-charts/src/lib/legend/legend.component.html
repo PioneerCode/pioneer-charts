@@ -1,8 +1,9 @@
-<section class="example-section">
-  <label class="example-margin">{{config().heading}}</label>
-  @for(item of config().items; track item; let i = $index) { 
-  <div>
-    {{ item.label }}
+<section class="flex items-center">
+  <label class="me-2 mb-[2px]"><small>{{config().heading}}</small></label>
+  @for(item of config().items; track item; let i = $index; let first = $first; let last = $last;) {
+  <div class="flex items-center pcac-legend-item" [class.me-2]="!last" [class.pcac-legend-unchecked]="item.checked" (click)="onItemClicked(i)">
+    <div class="pcac-legend-circle" [style.backgroundColor]="colorScale()[i]"></div>
+    <small>{{ item.label }}</small>
   </div>
   }
 </section>

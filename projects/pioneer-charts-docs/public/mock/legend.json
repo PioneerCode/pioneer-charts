@@ -1,5 +1,5 @@
 {
-    "heading": "Legend",
+    "heading": "Legend:",
     "items": [
         { "label": "Item 1", "checked": true },
         { "label": "Item 2", "checked": false }

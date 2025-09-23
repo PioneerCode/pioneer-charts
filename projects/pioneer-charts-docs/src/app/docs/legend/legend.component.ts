@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
-import { PcacLegend } from '@pioneer-code/pioneer-charts';
+import { PcacLegend, PcacLegendConfigItem } from '@pioneer-code/pioneer-charts';
 import { AppService } from '../../app.service';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
@@ -50,4 +50,8 @@ export class LegendComponent {
   ])
   markupCode = `<pcac-legend [config]="config()"/>`;
   importCode = `import { PcacLegend } from '@pioneer-code/pioneer-charts';`;
+
+  onItemClicked(_: PcacLegendConfigItem[]) {
+    alert('Legend item clicked.');
+  }
 }

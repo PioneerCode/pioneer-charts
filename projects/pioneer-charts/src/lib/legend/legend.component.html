@@ -1,6 +1,6 @@
-<label class="me-2 mb-[2px]"><small>{{config().heading}}</small></label>
+<label class="pcac-legend-label"><small>{{config().heading}}</small></label>
 @for(item of config().items; track item; let i = $index; let first = $first; let last = $last;) {
-<div class="pcac-legend-item" [class.me-2]="!last" [class.pcac-legend-unchecked]="item.checked"
+<div class="pcac-legend-item" [class.pcac-legend-item-last]="last" [class.pcac-legend-unchecked]="item.checked"
   (click)="onItemClicked(i)">
   <div class="pcac-legend-circle" [style.backgroundColor]="colorScale()[i]"></div>
   <small>{{ item.label }}</small>

@@ -3,10 +3,16 @@
   align-items: center;
 }
 
+.pcac-legend-label {
+  margin-right: 8px;
+  margin-bottom: 2px;
+}
+
 .pcac-legend-item {
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-right: 8px;
 
   &:hover {
     .pcac-legend-circle {
@@ -27,4 +33,8 @@
 
 .pcac-legend-unchecked {
   opacity: 0.5;
+}
+
+.pcac-legend-item-last {
+  margin-right: 0;
 }

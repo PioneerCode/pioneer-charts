@@ -1,20 +1,45 @@
 <app-layout-page-docs pageTitle="Legend" [jumpNav]="jumpNav()">
-  <p class="lead">Legend component for displaying chart legends.</p>
+  <p class="lead">Legend component for displaying chart legends and binding to click events of individual legend items.
+  </p>
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-legend [config]="{ heading: 'Legend', items: [{ label: 'Legend Item 1' }, { label: 'Legend Item 2' }] }"/>
+        <pcac-legend
+          [config]="{ heading: 'Legend', items: [{ label: 'Legend Item 1' }, { label: 'Legend Item 2' }] }" />
       </mat-card>
     </div>
   </section>
   <section class="pc-doc-section">
     <h3>Markup</h3>
-    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+    <app-layout-code language="markup" [code]="markupCode" />
   </section>
   <section class="pc-doc-section">
     <h3>API</h3>
-    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
-    <app-layout-base-config />
+    <app-layout-code language="javascript" [code]="importCode" />
+    <h5 id="configuration" class="mb-0">Configuration</h5>
+    <table class="pc-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>heading</td>
+          <td>If provided, will display a Heading for the legend. </td>
+          <td><code>string</code></td>
+          <td><code>null</code></td>
+        </tr>
+        <tr>
+          <td>items</td>
+          <td>Collection of legend items to display.</td>
+          <td><code>PcacLegendConfigItem[]</code></td>
+          <td><code>[]</code></td>
+      </tbody>
+    </table>
   </section>
   <section class="pc-doc-section">
     <h3 id="events" class="mb-0">Events</h3>
@@ -31,9 +56,9 @@
           <td>
             (sliceClicked)="onClicked($event)"
           </td>
-          <td>Emitted when a slice is clicked.</td>
+          <td>Emitted a legend item is clicked. Will include the updated legend item data.</td>
           <td>
-            <a routerLink="/docs/guides/data-contract">PcacData</a>
+            PcacLegendConfigItem[]
           </td>
         </tr>
       </tbody>

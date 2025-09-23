@@ -3,7 +3,6 @@ import { MatCardModule } from '@angular/material/card';
 
 import { PcacLegend } from '@pioneer-code/pioneer-charts';
 import { AppService } from '../../app.service';
-import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { StringifyPipe } from '../../stringify.pipe';
@@ -15,7 +14,6 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   templateUrl: './legend.component.html',
   imports: [
     LayoutCode,
-    LayoutBaseConfig,
     LayoutPageDocs,
     MatCardModule,
     PcacLegend,
@@ -50,6 +48,6 @@ export class LegendComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-legend [config]="config"></pcac-legend>`;
+  markupCode = `<pcac-legend [config]="config"/>`;
   importCode = `import { PcacLegend } from '@pioneer-code/pioneer-charts';`;
 }

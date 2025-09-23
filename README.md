@@ -1,6 +1,4 @@
-# PioneerCharts
-
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
+# Pioneer Charts
 
 ## Overview
 

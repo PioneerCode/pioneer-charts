@@ -1,6 +1,8 @@
 # Pioneer Charts
 
-[Docs](https://charts.pioneercode.com)
+## Documentation
+
+See the [docs site](https://charts.pioneercode.com) for guides, API reference, and examples.
 
 ## Overview
 
@@ -53,31 +55,6 @@ Add the Pioneer Charts CSS to your global styles:
 <pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onBarClicked($event)"></pcac-bar-vertical-chart>
 ```
 
-## Development
-
-### Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-### Code scaffolding
-
-Run `ng generate component component-name --project pioneer-charts` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project pioneer-charts`.
-
-### Build
-
-Run `ng build pioneer-charts` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-### Publishing
-
-After building your library with `ng build pioneer-charts`, go to the dist folder `cd dist/pioneer-charts` and run `npm publish`.
-
-### Running unit tests
-
-Run `ng test pioneer-charts` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Documentation
-
-See the [docs site](https://github.com/PioneerCode/pioneer-charts) for guides, API reference, and examples.
 
 ## License
 

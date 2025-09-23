@@ -48,6 +48,6 @@ export class LegendComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-legend [config]="config"/>`;
+  markupCode = `<pcac-legend [config]="config()"/>`;
   importCode = `import { PcacLegend } from '@pioneer-code/pioneer-charts';`;
 }

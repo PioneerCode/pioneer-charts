@@ -1,6 +1,8 @@
 <section class="example-section">
-  <label class="example-margin">Lanes:</label>
-  @for(item of [].constructor(config().items); track item; let i = $index) {
+  <label class="example-margin">{{config().heading}}</label>
+  @for(item of config().items; track item; let i = $index) { 
+  <div>
     {{ item.label }}
+  </div>
   }
 </section>

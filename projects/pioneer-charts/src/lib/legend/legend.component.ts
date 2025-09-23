@@ -13,9 +13,8 @@ export class PcacLegendConfig {
 
 @Component({
   selector: 'pcac-legend',
-  imports: [
-  ],
-  templateUrl: './legend.component.html'
+  templateUrl: './legend.component.html',
+  styleUrls: ['./legend.component.scss'],
 })
 export class PcacLegend {
   config = model.required<PcacLegendConfig>();

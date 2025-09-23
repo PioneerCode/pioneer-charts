@@ -48,7 +48,7 @@ export class AppService {
       .subscribe(data => this.sharedConfig.set(data));
 
     this.repository.getLegendConfig()
-      .subscribe(data =>  this.legendConfig.set(data[0]));
+      .subscribe(data =>  this.legendConfig.set(data));
   }
 
   onClicked(data: PcacData) {

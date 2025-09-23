@@ -79,6 +79,6 @@ export class AppRepository {
   }
 
   getLegendConfig() {
-    return this.http.get<PcacLegendConfig[]>('./mock/legend-config.json');
+    return this.http.get<PcacLegendConfig>('./mock/legend.json');
   }
 }

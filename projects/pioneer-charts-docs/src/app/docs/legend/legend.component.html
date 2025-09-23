@@ -5,7 +5,7 @@
     <div class="grid grid-cols-1 gap-4 mb-6">
       <mat-card class="p-3">
         <pcac-legend
-          [config]="{ heading: 'Legend', items: [{ label: 'Legend Item 1' }, { label: 'Legend Item 2' }] }" />
+          [config]="{ heading: 'Legend', items: [&#123; label: 'Item 1', checked: true &#125;, &#123; label: 'Item 2', checked: false &#125;] }" />
       </mat-card>
     </div>
   </section>
@@ -56,9 +56,9 @@
           <td>
             (sliceClicked)="onClicked($event)"
           </td>
-          <td>Emitted a legend item is clicked. Will include the updated legend item data.</td>
+          <td>Emitted when a legend item is clicked. Will include the updated legend item data.</td>
           <td>
-            PcacLegendConfigItem[]
+            <code>PcacLegendConfigItem[]</code>
           </td>
         </tr>
       </tbody>
@@ -67,7 +67,7 @@
   <section class="pc-doc-section">
     <h3 id="contract">Contract</h3>
     <div class="pc-config-container">
-      <app-layout-code language="json" [code]="pcService.pieChartConfig() | stringify"></app-layout-code>
+      <app-layout-code language="json" [code]="pcService.legendConfig() | stringify"></app-layout-code>
     </div>
   </section>
 </app-layout-page-docs>

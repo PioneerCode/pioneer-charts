@@ -1,27 +1,84 @@
 # PioneerCharts
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.3.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
 
-## Development server
+## Overview
+
+Pioneer Charts is an Angular library for building beautiful, customizable, and responsive data visualizations. It leverages [D3.js](https://d3js.org/) for rendering and supports a variety of chart types including bar, line/area, pie, and more.
+
+## Features
+
+- Beautiful default theme, easily customizable via SCSS.
+- Supports Bar, Line/Area, Pie charts, and Legends.
+- Event emitters for user interaction.
+- Strongly typed configuration contracts.
+- Open source and actively maintained.
+
+## Quick Start
+
+### 1. Install Pioneer Charts
+
+```bash
+npm install --save @pioneer-code/pioneer-charts
+```
+
+### 2. Import Component Modules
+
+Import the modules you need in your `AppModule`:
+
+```typescript
+import { PcacBarVerticalChartModule, PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';
+
+@NgModule({
+  imports: [
+    PcacBarVerticalChartModule,
+    PcacLineAreaChartModule,
+    // ...other modules
+  ],
+})
+export class AppModule { }
+```
+
+### 3. Import Styles
+
+Add the Pioneer Charts CSS to your global styles:
+
+```scss
+@import "~@pioneer-code/pioneer-charts/pcac.css";
+```
+
+## Usage Example
+
+```html
+<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onBarClicked($event)"></pcac-bar-vertical-chart>
+```
+
+## Development
+
+### Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+### Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component component-name --project pioneer-charts` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project pioneer-charts`.
 
-## Build
+### Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build pioneer-charts` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+### Publishing
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+After building your library with `ng build pioneer-charts`, go to the dist folder `cd dist/pioneer-charts` and run `npm publish`.
 
-## Running end-to-end tests
+### Running unit tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Run `ng test pioneer-charts` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Further help
+## Documentation
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+See the [docs site](https://github.com/PioneerCode/pioneer-charts) for guides, API reference, and examples.
+
+## License
+
+MIT © [Chad Ramos & Pioneer Code](LICENSE)

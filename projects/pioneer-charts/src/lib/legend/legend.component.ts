@@ -18,9 +18,7 @@ export class PcacLegendConfig {
 })
 export class PcacLegend {
   readonly colorService = inject(PcacColorService);
-
   config = model.required<PcacLegendConfig>();
-
   itemClicked = output<PcacLegendConfigItem[]>();
 
   colorScale = computed(() => 
@@ -33,5 +31,4 @@ export class PcacLegend {
     this.config.set(data);
     this.itemClicked.emit(data.items);
   }
-
 }

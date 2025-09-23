@@ -1,5 +1,12 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
 .pcac-legend-item {
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   &:hover {
     .pcac-legend-circle {

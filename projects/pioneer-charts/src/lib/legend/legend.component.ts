@@ -1,5 +1,5 @@
 import { Component, inject, model } from '@angular/core';
-import { PcacColorService } from '@pioneer-code/pioneer-charts';
+import { PcacColorService } from '../core';
 
 export class PcacLegendConfig {
   heading: string | null = null;

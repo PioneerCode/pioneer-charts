@@ -5,7 +5,8 @@ import {
   PcacBarVerticalChartConfig,
   PcacLineAreaChartConfig,
   PcacPieChartConfig,
-  PcacData
+  PcacData,
+  PcacLegendConfig
 } from '@pioneer-code/pioneer-charts';
 
 
@@ -75,5 +76,9 @@ export class AppRepository {
 
   getShareConfig() {
     return this.http.get<PcacData[]>('./mock/shared-config.json');
+  }
+
+  getLegendConfig() {
+    return this.http.get<PcacLegendConfig[]>('./mock/legend-config.json');
   }
 }

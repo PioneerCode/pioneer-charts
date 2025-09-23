@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { AppRepository } from './app.repository';
-import { PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLineAreaChartConfig, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
+import { PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineAreaChartConfig, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
 
 
 export enum MainRoutes {
@@ -35,6 +35,8 @@ export class AppService {
   areaChartConfig = signal<PcacLineAreaChartConfig>(new PcacLineAreaChartConfig());
   areaChartHideConfig = signal<PcacLineAreaChartConfig>(new PcacLineAreaChartConfig());
 
+  legendConfig = signal<PcacLegendConfig>(new PcacLegendConfig());
+
   getData() {
     this.getBarCharts();
     this.getLineAreaCharts();
@@ -44,6 +46,9 @@ export class AppService {
 
     this.repository.getShareConfig()
       .subscribe(data => this.sharedConfig.set(data));
+
+    this.repository.getLegendConfig()
+      .subscribe(data =>  this.legendConfig.set(data[0]));
   }
 
   onClicked(data: PcacData) {

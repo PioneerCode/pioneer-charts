@@ -33,7 +33,6 @@ export class PcacLineAreaChartComponent {
 
   buildChart(): void {
     const config = this.config();
-    console.log('Building chart with config:', config);
     if (config && config.data && config.data.length > 0) {
       this.chartBuilder.buildChart(this.chartElm(), config);
     }

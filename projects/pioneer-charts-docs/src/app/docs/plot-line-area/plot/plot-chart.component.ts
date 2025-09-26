@@ -2,11 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
-import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
-import { LayoutCode } from '../../../layout/code/code';
-import { LayoutPageDocs } from '../../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
 import { PcacPlotChart } from '@pioneer-code/pioneer-charts';
+import { PlotLineAreaBaseComponent } from '../base/base.component';
 
 
 
@@ -14,12 +12,10 @@ import { PcacPlotChart } from '@pioneer-code/pioneer-charts';
   selector: 'pc-plot-chart',
   templateUrl: './plot-chart.component.html',
   imports: [
+    PlotLineAreaBaseComponent,
     MatCardModule,
     PcacPlotChart,
-    StringifyPipe,
-    LayoutCode,
-    LayoutBaseConfig,
-    LayoutPageDocs,
+    StringifyPipe
   ]
 })
 export class PlotChartComponent {
@@ -50,7 +46,7 @@ export class PlotChartComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
-  importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
+  markupCode = `<pcac-plot-chart [config]="config" (dotClicked)="onClicked($event)"/>`;
+  importCode = `import { PcacPlotChart } from '@pioneer-code/pioneer-charts';`;
 }
 

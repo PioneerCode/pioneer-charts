@@ -1,91 +1,14 @@
-<app-layout-page-docs pageTitle="Line Area Chart" [jumpNav]="jumpNav()">
-  <p class="lead">Configurable to display an area or line chart.</p>
-  <section class="pc-doc-section">
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <mat-card class="p-3">
-        <pcac-plot-chart [config]="pcService.lineChartConfig()"
-          (dotClicked)="pcService.onClicked($event)"/>
-      </mat-card>
-      <mat-card class="p-3">
-        <pcac-plot-chart [config]="pcService.areaChartConfig()"
-          (dotClicked)="pcService.onClicked($event)"/>
-      </mat-card>
-    </div>
-    <mat-card class="p-3 ">
-      <pcac-plot-chart [config]="pcService.areaChartHideConfig()"
-        (dotClicked)="pcService.onClicked($event)"/>
+<app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Configurable to display an area or line chart.'"
+  [markup]="markupCode" [contract]="pcService.areaChartConfig() | stringify">
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <mat-card class="p-3">
+      <pcac-plot-chart [config]="pcService.lineChartConfig()" (dotClicked)="pcService.onClicked($event)" />
     </mat-card>
-  </section>
-  <section class="pc-doc-section">
-    <h3>Markup</h3>
-    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
-  </section>
-  <section class="pc-doc-section">
-    <h3>API</h3>
-    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
-    <app-layout-base-config [includeHideAxisAndGrid]="true">
-      <tbody style="border-top: none;">
-        <tr>
-          <td>yDomainMax</td>
-          <td>Put a ceiling on y-axis domain. Default is 100.</td>
-        </tr>
-        <tr>
-          <td>xFormat</td>
-          <td>Set this value to change the formatting of the the x-axis labels.
-            <ul>
-              <li>
-                <b>OneDayHours</b>
-                <ul>
-                  <li>Expectation is we will be given a range of data from 0-23 and we will map that to a 12 hour clock with am/pm
-                  </li>
-                  <li>
-                    e.g. 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td>numberOfTicks</td>
-          <td>Number of ui intersects in the domain.</td>
-        </tr>
-        <tr>
-          <td>type</td>
-          <td>If "line", ui will display a line chart. If "area", ui will display an area chart.</td>
-        </tr>
-        <tr>
-          <td>enableEffects</td>
-          <td>If true, on hover, ui will display continuous values of all lines to the user.</td>
-        </tr>
-      </tbody>
-    </app-layout-base-config>
-  </section>
-  <section class="pc-doc-section">
-    <h3 id="events" class="mb-0">Events</h3>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Binding</th>
-          <th>Description</th>
-          <th>Payload</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            (dotClicked)="onClicked($event)"
-          </td>
-          <td>Emitted when a dot on a line is clicked.</td>
-          <td>
-            <a routerLink="/docs/guides/data-contract">PcacData</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-  <section class="pc-doc-section">
-    <h3 id="contract">Contract</h3>
-    <app-layout-code language="json" [code]="pcService.areaChartConfig() | stringify"></app-layout-code>
-  </section>
-</app-layout-page-docs>
+    <mat-card class="p-3">
+      <pcac-plot-chart [config]="pcService.areaChartConfig()" (dotClicked)="pcService.onClicked($event)" />
+    </mat-card>
+  </div>
+  <mat-card class="p-3 ">
+    <pcac-plot-chart [config]="pcService.areaChartHideConfig()" (dotClicked)="pcService.onClicked($event)" />
+  </mat-card>
+</app-plot-line-area-base>

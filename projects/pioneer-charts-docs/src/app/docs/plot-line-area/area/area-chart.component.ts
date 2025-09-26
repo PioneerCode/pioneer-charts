@@ -3,10 +3,8 @@ import { MatCardModule } from '@angular/material/card';
 import { PcacAreaChart } from '@pioneer-code/pioneer-charts';
 import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
-import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
-import { LayoutCode } from '../../../layout/code/code';
-import { LayoutPageDocs } from '../../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
+import { PlotLineAreaBaseComponent } from '../base/base.component';
 
 
 
@@ -14,12 +12,10 @@ import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
   selector: 'pc-area-chart',
   templateUrl: './area-chart.component.html',
   imports: [
+    PlotLineAreaBaseComponent,
     MatCardModule,
     PcacAreaChart,
-    StringifyPipe,
-    LayoutCode,
-    LayoutBaseConfig,
-    LayoutPageDocs,
+    StringifyPipe
   ]
 })
 export class AreaChartComponent {
@@ -50,7 +46,7 @@ export class AreaChartComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
-  importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
+  markupCode = `<pcac-area-chart [config]="config" (dotClicked)="onClicked($event)"/>`;
+  importCode = `import { PcacAreaChart } from '@pioneer-code/pioneer-charts';`;
 }
 

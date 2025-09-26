@@ -1,33 +1,33 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
-import { StringifyPipe } from '../../stringify.pipe';
-import { AppService } from '../../app.service';
-import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
-import { LayoutCode } from '../../layout/code/code';
-import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
-import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { StringifyPipe } from '../../../stringify.pipe';
+import { AppService } from '../../../app.service';
+import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
+import { LayoutCode } from '../../../layout/code/code';
+import { LayoutPageDocs } from '../../../layout/page-docs/page-docs';
+import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
+import { PcacPlotChart } from '@pioneer-code/pioneer-charts';
 
 
 
 @Component({
-  selector: 'pc-line-area-chart',
-  templateUrl: './line-area-chart.component.html',
+  selector: 'pc-plot-chart',
+  templateUrl: './plot-chart.component.html',
   imports: [
     MatCardModule,
-    PcacLineAreaChartComponent,
+    PcacPlotChart,
     StringifyPipe,
     LayoutCode,
     LayoutBaseConfig,
     LayoutPageDocs,
   ]
 })
-export class LineAreaChartComponent {
+export class PlotChartComponent {
   pcService = inject(AppService);
   jumpNav = signal<IJumpNav[]>([
     {
-      key: 'Line Area Chart',
-      value: 'line-area-chart',
+      key: 'Plot Chart',
+      value: 'plot-chart',
     },
     {
       key: 'Markup',

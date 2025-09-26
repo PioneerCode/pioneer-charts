@@ -3,8 +3,9 @@ import {
   PcacData, 
   PcacBarHorizontalChartComponent, 
   PcacBarVerticalChartComponent, 
-  PcacLineAreaChartComponent, 
-  PcacPieChartComponent 
+  PcacPieChartComponent, 
+  PcacAreaChart,
+  PcacLineChart
 } from '@pioneer-code/pioneer-charts';
 import { MatCardModule } from '@angular/material/card';
 import { AppService } from '../app.service';
@@ -15,7 +16,8 @@ import { AppService } from '../app.service';
   imports: [
     PcacBarVerticalChartComponent,
     PcacBarHorizontalChartComponent,
-    PcacLineAreaChartComponent,
+    PcacLineChart,
+    PcacAreaChart,
     PcacPieChartComponent,
     MatCardModule
   ]

@@ -3,17 +3,17 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-2 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-line-area-chart [config]="pcService.lineChartConfig()"
-          (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        <pcac-plot-chart [config]="pcService.lineChartConfig()"
+          (dotClicked)="pcService.onClicked($event)"/>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-line-area-chart [config]="pcService.areaChartConfig()"
-          (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+        <pcac-plot-chart [config]="pcService.areaChartConfig()"
+          (dotClicked)="pcService.onClicked($event)"/>
       </mat-card>
     </div>
     <mat-card class="p-3 ">
-      <pcac-line-area-chart [config]="pcService.areaChartHideConfig()"
-        (dotClicked)="pcService.onClicked($event)"></pcac-line-area-chart>
+      <pcac-plot-chart [config]="pcService.areaChartHideConfig()"
+        (dotClicked)="pcService.onClicked($event)"/>
     </mat-card>
   </section>
   <section class="pc-doc-section">

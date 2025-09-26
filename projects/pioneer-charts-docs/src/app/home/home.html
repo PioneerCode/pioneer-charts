@@ -53,7 +53,7 @@
   <div class="container grid grid-cols-1 mx-auto">
     <div class="col">
       <mat-card class="p-3">
-        <pcac-line-area-chart [config]="appService.areaChartConfig()"
+        <pcac-area-chart [config]="appService.areaChartConfig()"
           (dotClicked)="appService.onClicked($event)" />
       </mat-card>
     </div>

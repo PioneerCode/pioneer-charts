@@ -1,7 +1,8 @@
-import { Component, input } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 import { PcacAreaChartConfig } from "./area.model";
 import { PcacLineAreaChartComponent } from "../plot-line-area-chart.component";
 import { PcacLineAreaPlotChartConfigType } from "../plot-line-area-chart.model";
+import { PcacData } from "../../core";
 
 @Component({
   selector: 'pcac-area-chart',
@@ -11,4 +12,5 @@ import { PcacLineAreaPlotChartConfigType } from "../plot-line-area-chart.model";
 export class PcacAreaChart {
   readonly config = input.required<PcacAreaChartConfig>();
   readonly types = PcacLineAreaPlotChartConfigType;
+  readonly dotClicked = output<PcacData>()
 }

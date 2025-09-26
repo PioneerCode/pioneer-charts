@@ -54,19 +54,19 @@
   <div class="container mx-auto grid grid-cols-2 gap-4 mt-3">
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-line-area-chart [config]="service.lineChartConfig()" (dotClicked)="service.onClicked($event)" />
+        <pcac-line-chart [config]="service.lineChartConfig()" (dotClicked)="service.onClicked($event)" />
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-line-area-chart [config]="service.areaChartConfig()" (dotClicked)="service.onClicked($event)" />
+        <pcac-area-chart [config]="service.areaChartConfig()" (dotClicked)="service.onClicked($event)" />
       </mat-card>
     </div>
   </div>
   <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
     <div>
       <mat-card class="p-3">
-        <pcac-line-area-chart [config]="service.areaChartHideConfig()" (dotClicked)="service.onClicked($event)" />
+        <pcac-area-chart [config]="service.areaChartHideConfig()" (dotClicked)="service.onClicked($event)" />
       </mat-card>
     </div>
   </div>

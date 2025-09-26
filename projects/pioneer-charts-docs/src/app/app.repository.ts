@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import {
   PcacBarHorizontalChartConfig,
   PcacBarVerticalChartConfig,
-  PcacLineAreaChartConfig,
   PcacPieChartConfig,
   PcacData,
-  PcacLegendConfig
+  PcacLegendConfig,
+  PcacLineChartConfig,
+  PcacAreaChartConfig
 } from '@pioneer-code/pioneer-charts';
 
 
@@ -59,15 +60,15 @@ export class AppRepository {
    * Line Area Charts
    */
   getLineChart() {
-    return this.http.get<PcacLineAreaChartConfig>('./mock/line-area-chart/line-chart.json');
+    return this.http.get<PcacLineChartConfig>('./mock/line-area-chart/line-chart.json');
   }
 
   getAreaChart() {
-    return this.http.get<PcacLineAreaChartConfig>('./mock/line-area-chart/area-chart.json');
+    return this.http.get<PcacAreaChartConfig>('./mock/line-area-chart/area-chart.json');
   }
 
   getAreaHideChart() {
-    return this.http.get<PcacLineAreaChartConfig>('./mock/line-area-chart/area-chart-hide.json');
+    return this.http.get<PcacAreaChartConfig>('./mock/line-area-chart/area-chart-hide.json');
   }
 
   getPieChartConfig() {

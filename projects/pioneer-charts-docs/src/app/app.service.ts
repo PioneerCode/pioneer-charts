@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { AppRepository } from './app.repository';
-import { PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineAreaChartConfig, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
+import { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
 
 
 export enum MainRoutes {
@@ -31,9 +31,9 @@ export class AppService {
   barHorizontalChartGroupConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
   barHorizontalChartStackedConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
 
-  lineChartConfig = signal<PcacLineAreaChartConfig>(new PcacLineAreaChartConfig());
-  areaChartConfig = signal<PcacLineAreaChartConfig>(new PcacLineAreaChartConfig());
-  areaChartHideConfig = signal<PcacLineAreaChartConfig>(new PcacLineAreaChartConfig());
+  lineChartConfig = signal<PcacLineChartConfig>(new PcacLineChartConfig());
+  areaChartConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
+  areaChartHideConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
 
   legendConfig = signal<PcacLegendConfig>(new PcacLegendConfig());
 

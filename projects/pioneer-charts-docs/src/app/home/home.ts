@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { PcacLineAreaChartComponent } from '@pioneer-code/pioneer-charts';
+import { PcacAreaChart } from '@pioneer-code/pioneer-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,7 @@ import { AppService, MainRoutes } from '../app.service';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    PcacLineAreaChartComponent,
+    PcacAreaChart,
   ]
 })
 export class Home {

@@ -1,7 +1,7 @@
 {
   "yDomainMax": 1000,
   "height": 100,
-  "isArea": true,
+  "type": "area",
   "enableEffects": true,
   "hideGrid": true,
   "hideAxis": true,

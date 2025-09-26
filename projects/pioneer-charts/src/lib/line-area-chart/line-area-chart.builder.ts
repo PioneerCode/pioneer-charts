@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
-import { PcacLineAreaChartConfig } from './line-area-chart.model';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './line-area-chart.model';
 import { IPcacAxisBuilderConfig } from '../core/axis.builder';
 import { IPcacGridBuilderConfig } from '../core/grid.builder';
 import { PcacChart } from '../core/chart';
@@ -123,7 +123,7 @@ export class LineAreaChartBuilder extends PcacChart {
 
   private drawLineArea(config: PcacLineAreaChartConfig): void {
     for (let i = 0; i < config.data.length; i++) {
-      if (config.isArea) {
+      if (config.type === PcacLineAreaPlotChartConfigType.Area) {
         this.drawArea(config.data[i].data, i);
       }
       this.drawLine(config.data[i].data, i, config.data[i].hide);

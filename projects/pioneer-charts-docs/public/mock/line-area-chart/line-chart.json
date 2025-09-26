@@ -1,7 +1,7 @@
 {
   "yDomainMax": 1000,
   "height": 200,
-  "isArea": false,
+  "type": "line",
   "enableEffects": true,
   "data": [
     {

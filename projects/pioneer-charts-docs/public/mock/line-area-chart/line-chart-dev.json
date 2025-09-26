@@ -610,7 +610,7 @@
     "hideGrid": false,
     "yDomainMax": 499,
     "numberOfTicks": 5,
-    "isArea": false,
+    "type": "line",
     "enableEffects": false,
     "xFormat": "oneDayHours"
 }

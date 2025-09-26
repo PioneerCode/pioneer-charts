@@ -1,7 +1,16 @@
 import { PcacChartConfig, PcacFormatEnum } from '../core/chart.model';
 
+export enum PcacLineAreaPlotChartConfigType {
+  Line = 'line',
+  Area = 'area',
+  Plot = 'plot'
+}
+
 export class PcacLineAreaChartConfig extends PcacChartConfig {
-  isArea: boolean = false
+  /**
+   * Transform type of the chart.
+   */
+  type: PcacLineAreaPlotChartConfigType = PcacLineAreaPlotChartConfigType.Line
   enableEffects: boolean = true
   numberOfTicks: number = 5
   hideGrid: boolean = false

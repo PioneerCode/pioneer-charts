@@ -41,7 +41,6 @@ export class IntroductionComponent {
   ])
 
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
-  yarnInstallCode = `yarn add @pioneer-code/pioneer-charts`;
   appModuleCode = `import {PcacLineChart} from '@pioneer-code/pioneer-charts';
 
 @NgModule({

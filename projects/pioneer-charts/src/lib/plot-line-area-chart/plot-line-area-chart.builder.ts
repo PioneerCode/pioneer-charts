@@ -11,8 +11,8 @@ import { Subject } from 'rxjs';
 /**
  * Lib
  */
-import { LineAreaChartEffectsBuilder } from './line-area-chart-effects.builders';
-import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './line-area-chart.model';
+import { LineAreaChartEffectsBuilder } from './plot-line-area-chart-effects.builders';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { IPcacAxisBuilderConfig } from '../core/axis.builder';
 import { IPcacGridBuilderConfig } from '../core/grid.builder';
 import { PcacChart } from '../core/chart';

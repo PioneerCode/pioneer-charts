@@ -1,13 +1,13 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input } from '@angular/core';
 
-import { PcacLineAreaChartConfig } from './line-area-chart.model';
-import { LineAreaChartBuilder } from './line-area-chart.builder';
+import { PcacLineAreaChartConfig } from './plot-line-area-chart.model';
+import { LineAreaChartBuilder } from './plot-line-area-chart.builder';
 import { PcacData } from '../core';
 
 @Component({
   selector: 'pcac-line-area-chart',
-  templateUrl: './line-area-chart.component.html',
-  styleUrls: ['./line-area-chart.component.scss'],
+  templateUrl: './plot-line-area-chart.component.html',
+  styleUrls: ['./plot-line-area-chart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
@@ -29,7 +29,7 @@ export class PcacLineAreaChartComponent {
     if (changes['config'].currentValue !== changes['config'].previousValue) {
       this.buildChart()
     }
-  }   
+  }
 
   buildChart(): void {
     const config = this.config();

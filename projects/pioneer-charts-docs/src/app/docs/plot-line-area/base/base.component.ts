@@ -23,8 +23,8 @@ export class PlotLineAreaBaseComponent {
   pcService = inject(AppService);
   jumpNav = signal<IJumpNav[]>([
     {
-      key: 'Area Chart',
-      value: 'area-chart',
+      key: 'Chart',
+      value: 'chart',
     },
     {
       key: 'Markup',

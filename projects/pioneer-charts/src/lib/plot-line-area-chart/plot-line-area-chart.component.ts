@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input } from '@angular/core';
 
-import { PcacLineAreaChartConfig } from './plot-line-area-chart.model';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { LineAreaChartBuilder } from './plot-line-area-chart.builder';
 import { PcacData } from '../core';
 
@@ -14,6 +14,9 @@ export class PcacLineAreaChartComponent {
   private chartBuilder = inject(LineAreaChartBuilder);
 
   readonly config = input.required<PcacLineAreaChartConfig>();
+  readonly type = input.required<PcacLineAreaPlotChartConfigType>();
+
+
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly dotClicked = output<PcacData>();
 
@@ -34,7 +37,7 @@ export class PcacLineAreaChartComponent {
   buildChart(): void {
     const config = this.config();
     if (config && config.data && config.data.length > 0) {
-      this.chartBuilder.buildChart(this.chartElm(), config);
+      this.chartBuilder.buildChart(this.chartElm(), config, this.type());
     }
   }
 

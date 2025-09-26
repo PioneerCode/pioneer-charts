@@ -7,10 +7,7 @@ export enum PcacLineAreaPlotChartConfigType {
 }
 
 export class PcacLineAreaChartConfig extends PcacChartConfig {
-  /**
-   * Transform type of the chart.
-   */
-  type: PcacLineAreaPlotChartConfigType = PcacLineAreaPlotChartConfigType.Line
+
   enableEffects: boolean = true
   numberOfTicks: number = 5
   hideGrid: boolean = false

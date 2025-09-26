@@ -32,7 +32,7 @@ export class LineAreaChartBuilder extends PcacChart {
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
-  buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {
+  buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(this.config.data[0].data.length).map((d) => {
       return {
@@ -45,7 +45,7 @@ export class LineAreaChartBuilder extends PcacChart {
     }
     this.initializeChartState(chartElm, this.config);
     this.buildScales(this.config);
-    this.drawChart(chartElm, this.config);
+    this.drawChart(chartElm, this.config, type);
   }
 
   private adjustForHiddenAxis() {
@@ -92,7 +92,7 @@ export class LineAreaChartBuilder extends PcacChart {
       });
   }
 
-  private drawChart(chartElm: ElementRef, config: PcacLineAreaChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     this.buildContainer(chartElm);
     if (!config.hideAxis) {
       this.axisBuilder.drawAxis({
@@ -114,16 +114,16 @@ export class LineAreaChartBuilder extends PcacChart {
         yScale: this.yScale
       } as IPcacGridBuilderConfig);
     }
-    this.drawLineArea(config);
+    this.drawLineArea(config, type);
     if (config.enableEffects) {
       this.drawEffects(config);
     }
     this.drawDots(config);
   }
 
-  private drawLineArea(config: PcacLineAreaChartConfig): void {
+  private drawLineArea(config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     for (let i = 0; i < config.data.length; i++) {
-      if (config.type === PcacLineAreaPlotChartConfigType.Area) {
+      if (type === PcacLineAreaPlotChartConfigType.Area) {
         this.drawArea(config.data[i].data, i);
       }
       this.drawLine(config.data[i].data, i, config.data[i].hide);

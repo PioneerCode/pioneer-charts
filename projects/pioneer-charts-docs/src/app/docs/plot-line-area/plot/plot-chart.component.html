@@ -1,14 +1,6 @@
 <app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [contract]="pcService.areaChartConfig() | stringify">
-  <div class="grid grid-cols-2 gap-4 mb-6">
-    <mat-card class="p-3">
-      <pcac-plot-chart [config]="pcService.lineChartConfig()" (dotClicked)="pcService.onClicked($event)" />
-    </mat-card>
-    <mat-card class="p-3">
-      <pcac-plot-chart [config]="pcService.areaChartConfig()" (dotClicked)="pcService.onClicked($event)" />
-    </mat-card>
-  </div>
+  [markup]="markupCode" [contract]="pcService.plotConfig() | stringify">
   <mat-card class="p-3 ">
-    <pcac-plot-chart [config]="pcService.areaChartHideConfig()" (dotClicked)="pcService.onClicked($event)" />
+    <pcac-plot-chart [config]="pcService.plotConfig()" (dotClicked)="pcService.onClicked($event)" />
   </mat-card>
 </app-plot-line-area-base>

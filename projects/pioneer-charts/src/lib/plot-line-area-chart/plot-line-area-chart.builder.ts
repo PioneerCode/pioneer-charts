@@ -63,6 +63,16 @@ export class LineAreaChartBuilder extends PcacChart {
           .domain([new Date(config.xDomainMin), new Date(config.xDomainMax)])
           .range([0, this.width]);
         break
+      case PcacFormatEnum.Decimal:
+        this.xScale = scaleLinear()
+          .domain([config.xDomainMin as number || 0, config.xDomainMax as number || 100])
+          .range([0, this.width]);
+        break
+      case PcacFormatEnum.DatasetLength:
+        this.xScale = scaleLinear()
+          .domain([0, config.data[0].data.length - 1])
+          .range([0, this.width]);
+        break
       default:
         this.xScale = scaleLinear()
           .domain([0, config.data[0].data.length - 1])
@@ -232,6 +242,11 @@ export class LineAreaChartBuilder extends PcacChart {
       case PcacFormatEnum.DateTime:
         if (data.key) {
           return this.xScale(new Date(data.key));
+        }
+        return 0
+      case PcacFormatEnum.Decimal:
+        if (data.key) { 
+          return this.xScale(data.key as unknown as number);
         }
         return 0
       default:

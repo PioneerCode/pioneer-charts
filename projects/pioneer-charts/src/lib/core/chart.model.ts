@@ -19,6 +19,8 @@ export class PcacData {
 
 export enum PcacFormatEnum {
   None = 'none',
+  Decimal = 'decimal',
+  DatasetLength = 'datasetLength',
   Percentage = 'percentage',
   Minutes = 'minutes',
   DateTime = 'dateTime',

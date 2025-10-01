@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
 import { PcacFormatEnum } from './chart.model';
+import { format } from 'd3-format';
 
 export interface IPcacAxisBuilderConfig {
   svg: Selection<BaseType, {}, HTMLElement, any>;
@@ -71,6 +72,9 @@ export class PcacAxisBuilder {
             const period = h < 12 ? 'am' : 'pm';
             return `${hour}${period}`;
           });
+          break;
+        case PcacFormatEnum.Decimal:
+          xAxis.tickFormat((d: any, i: number) => format(".2s")(d));
           break;
 
       }

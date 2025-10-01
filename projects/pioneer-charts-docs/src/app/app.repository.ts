@@ -71,6 +71,10 @@ export class AppRepository {
     return this.http.get<PcacAreaChartConfig>('./mock/line-area-chart/area-chart-hide.json');
   }
 
+  getPlotChart() {
+    return this.http.get<PcacLineChartConfig>('./mock/line-area-chart/plot-chart.json');
+  }
+
   getPieChartConfig() {
     return this.http.get<PcacPieChartConfig>('./mock/pie-chart.json');
   }

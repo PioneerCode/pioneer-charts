@@ -484,5 +484,5 @@
     "numberOfTicks": 5,
     "enableEffects": false,
     "xFormat": "decimal",
-    "colorOverride": ["yellow", "green", "red"]
+    "colorOverride": ["#f1c40f", "green", "red"]
 }

@@ -34,6 +34,9 @@ export class LineAreaChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     this.config = JSON.parse(JSON.stringify(config));
+
+
+
     this.startData = range(this.config.data[0].data.length).map((d) => {
       return {
         value: 0,
@@ -43,7 +46,12 @@ export class LineAreaChartBuilder extends PcacChart {
     if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
+    
     this.initializeChartState(chartElm, this.config);
+    if (this.config.colorOverride) {
+      this.colors = this.config.colorOverride;
+    }
+
     this.buildScales(this.config);
     this.drawChart(chartElm, this.config, type);
   }
@@ -137,7 +145,7 @@ export class LineAreaChartBuilder extends PcacChart {
         this.drawArea(config.data[i].data, i);
       } else if (type === PcacLineAreaPlotChartConfigType.Line) {
         this.drawLine(config.data[i].data, i, config.data[i].hide);
-      } 
+      }
     }
   }
 
@@ -245,7 +253,7 @@ export class LineAreaChartBuilder extends PcacChart {
         }
         return 0
       case PcacFormatEnum.Decimal:
-        if (data.key) { 
+        if (data.key) {
           return this.xScale(data.key as unknown as number);
         }
         return 0

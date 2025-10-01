@@ -125,8 +125,9 @@ export class LineAreaChartBuilder extends PcacChart {
     for (let i = 0; i < config.data.length; i++) {
       if (type === PcacLineAreaPlotChartConfigType.Area) {
         this.drawArea(config.data[i].data, i);
-      }
-      this.drawLine(config.data[i].data, i, config.data[i].hide);
+      } else if (type === PcacLineAreaPlotChartConfigType.Line) {
+        this.drawLine(config.data[i].data, i, config.data[i].hide);
+      } 
     }
   }
 

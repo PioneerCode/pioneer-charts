@@ -9,6 +9,7 @@ export class PcacLegendConfigItem {
 export class PcacLegendConfig {
   heading: string | null = null;
   items: PcacLegendConfigItem[] = [];
+  colorOverride: string | null = null;
 }
 
 @Component({

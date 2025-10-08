@@ -1,7 +1,8 @@
 {
     "heading": "Legend:",
     "items": [
-        { "label": "Item 1", "checked": true },
-        { "label": "Item 2", "checked": false }
+        { "label": "Checked", "checked": true },
+        { "label": "Checked & Color Override", "checked": true, "colorOverride": "#abf000" },
+        { "label": "Unchecked", "checked": false }
     ]
 }

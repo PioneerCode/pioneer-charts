@@ -4,12 +4,12 @@ import { PcacColorService } from '../core';
 export class PcacLegendConfigItem {
   label!: string;
   checked: boolean = true;
+  colorOverride: string | null = null;
 }
 
 export class PcacLegendConfig {
   heading: string | null = null;
   items: PcacLegendConfigItem[] = [];
-  colorOverride: string | null = null;
 }
 
 @Component({

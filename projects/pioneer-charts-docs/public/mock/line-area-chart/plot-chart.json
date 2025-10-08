@@ -2,90 +2,1549 @@
     "height": 150,
     "data": [
         {
+            "key": "Dark",
+            "value": null,
+            "hide": false,
+            "data": []
+        },
+        {
+            "key": "Green",
+            "value": null,
+            "hide": false,
+            "data": [
+                {
+                    "key": 36.495,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 38.99,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 39.001,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 39.003,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 39.875,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 40.145,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 40.739,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 40.848,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 40.974,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 40.981,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.007,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.013,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.09,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.103,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.115,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.141,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.171,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.259,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.372,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.391,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.411,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.471,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.512,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.552,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.621,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.659,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.673,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.677,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.678,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.679,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.682,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.683,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.684,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.686,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.687,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.688,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.689,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.691,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.692,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.693,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.696,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.697,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.698,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.7,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.701,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.702,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.703,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.704,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.705,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.706,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.707,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.71,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.711,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.712,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.714,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.715,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.716,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.717,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.721,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.726,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.729,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.73,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 41.863,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.079,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.111,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.138,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.191,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.235,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.256,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.263,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.362,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.377,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.386,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.422,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.468,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.48,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.511,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.552,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.712,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.771,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.826,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.845,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.853,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.86,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.925,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.959,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 42.972,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.027,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.037,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.14,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.213,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.358,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.382,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.624,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.676,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.68,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.681,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.682,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.685,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.686,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.687,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.689,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.69,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.691,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.694,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.695,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.696,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.698,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.699,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.7,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.701,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.703,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.704,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.705,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.706,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.708,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.709,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.71,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.713,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.714,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.715,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.717,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.718,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.719,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.72,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.722,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.724,
+                    "value": 9,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.727,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.729,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.732,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.733,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.734,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.736,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.737,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.738,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.812,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.868,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.92,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.971,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 43.973,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.019,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.025,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.081,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.087,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.119,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.153,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.217,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.349,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.359,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.385,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.52,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.552,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.625,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.712,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.768,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.803,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.821,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 44.88,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.16,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.489,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.655,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.823,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.9,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 45.956,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.09,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.098,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.213,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.285,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.326,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.352,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.379,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.46,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.513,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.678,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.679,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.682,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.683,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.684,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.685,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.687,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.688,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.689,
+                    "value": 10,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.692,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.693,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.694,
+                    "value": 9,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.696,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.697,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.698,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.699,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.701,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.702,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.703,
+                    "value": 15,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.706,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.707,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.708,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.711,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.712,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.713,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.714,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.715,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.716,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.717,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.72,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.721,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.722,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.724,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.725,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.726,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.727,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.729,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.731,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.736,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.74,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 46.986,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.098,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.223,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.263,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.273,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.31,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.343,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.363,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.373,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.387,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.396,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.398,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.409,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.441,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.503,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.52,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.526,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.54,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.544,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.763,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 47.917,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 51.629,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 51.688,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 66.901,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 85.827,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 104.988,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 105.013,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 105.026,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 105.041,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 148.756,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                }
+            ]
+        },
+        {
             "key": "Yellow",
             "value": null,
             "hide": false,
             "data": [
                 {
-                    "key": 0.297,
+                    "key": 0.338,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 0.712,
+                    "key": 1.219,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.008,
+                    "key": 1.349,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.064,
+                    "key": 1.541,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.102,
+                    "key": 1.583,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.177,
+                    "key": 1.803,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.196,
+                    "key": 1.924,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.391,
+                    "key": 1.983,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.597,
+                    "key": 1.984,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.84,
+                    "key": 2.096,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 1.942,
+                    "key": 2.143,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.017,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.148,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.157,
+                    "key": 2.161,
                     "value": 1,
                     "hide": false,
                     "data": []
@@ -97,182 +1556,164 @@
                     "data": []
                 },
                 {
-                    "key": 2.26,
+                    "key": 2.184,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.35,
+                    "key": 2.19,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.367,
+                    "key": 2.193,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.44,
+                    "key": 2.21,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 2.246,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.465,
+                    "key": 2.274,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.521,
+                    "key": 2.451,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 2.53,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.572,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.61,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.75,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.779,
+                    "key": 2.853,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.97,
-                    "value": 8,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.979,
-                    "value": 1,
+                    "value": 2,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.98,
-                    "value": 7,
+                    "value": 5,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.988,
-                    "value": 7,
+                    "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.989,
-                    "value": 2,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.993,
-                    "value": 2,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 2.995,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.997,
-                    "value": 77,
+                    "value": 55,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 2.998,
-                    "value": 141,
+                    "value": 68,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.002,
-                    "value": 126,
+                    "value": 87,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.003,
-                    "value": 54,
+                    "value": 32,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.004,
-                    "value": 2,
+                    "value": 3,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.006,
-                    "value": 6,
+                    "value": 4,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.007,
-                    "value": 181,
+                    "value": 132,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.009,
-                    "value": 2,
+                    "key": 3.008,
+                    "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.011,
-                    "value": 23,
+                    "value": 18,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.012,
-                    "value": 34,
+                    "value": 22,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.013,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 3.014,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 3.016,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.02,
-                    "value": 12,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 3.021,
+                    "value": 2,
                     "hide": false,
                     "data": []
                 },
@@ -283,121 +1724,49 @@
                     "data": []
                 },
                 {
-                    "key": 3.06,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.065,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
                     "key": 3.07,
-                    "value": 25,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.102,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.107,
-                    "value": 1,
+                    "value": 17,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.11,
-                    "value": 4,
+                    "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
                     "key": 3.12,
-                    "value": 3,
+                    "value": 5,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.13,
+                    "key": 3.502,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.21,
+                    "key": 3.606,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.3,
-                    "value": 2,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.304,
-                    "value": 2,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.368,
+                    "key": 3.625,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.555,
+                    "key": 3.678,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 3.714,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.76,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.779,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.802,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.844,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.854,
-                    "value": 1,
-                    "hide": false,
-                    "data": []
-                },
-                {
-                    "key": 3.88,
+                    "key": 3.719,
                     "value": 1,
                     "hide": false,
                     "data": []
@@ -409,67 +1778,1574 @@
                     "data": []
                 },
                 {
-                    "key": 4.036,
+                    "key": 3.933,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.134,
+                    "key": 3.951,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.218,
+                    "key": 3.975,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.349,
+                    "key": 4.133,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.372,
+                    "key": 4.253,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.386,
+                    "key": 4.718,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 4.545,
+                    "key": 5.016,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 5.142,
+                    "key": 31.099,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 58.289,
+                    "key": 31.67,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 63.293,
+                    "key": 58.301,
                     "value": 1,
                     "hide": false,
                     "data": []
                 },
                 {
-                    "key": 104.961,
+                    "key": 60.249,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 63.267,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 104.981,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                }
+            ]
+        },
+        {
+            "key": "Red",
+            "value": null,
+            "hide": false,
+            "data": [
+                {
+                    "key": 3.111,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 19.195,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 30.0,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 30.309,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 30.958,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 32.191,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 38.057,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 53.391,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.382,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.402,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.464,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.541,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.547,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.587,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.594,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.61,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.617,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.623,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.673,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.686,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.731,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.776,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 54.907,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.178,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.264,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.269,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.27,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.271,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.274,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.275,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.276,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.278,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.279,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.28,
+                    "value": 14,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.281,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.283,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.284,
+                    "value": 9,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.285,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.287,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.288,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.289,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.29,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.292,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.293,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.294,
+                    "value": 11,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.297,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.298,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.299,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.301,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.302,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.303,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.304,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.307,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.308,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.309,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.311,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.312,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.313,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.316,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.317,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.322,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.325,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.33,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.331,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.332,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.337,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.497,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.568,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.634,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.698,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.706,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.718,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.812,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 55.916,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.025,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.033,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.075,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.144,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.322,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 56.75,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.227,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.292,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.38,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.479,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.508,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.521,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.587,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.589,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.619,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.686,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.765,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.81,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.838,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.9,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.913,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.941,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 57.981,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.049,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.063,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.066,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.067,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.189,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.211,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.268,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.269,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.271,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.273,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.278,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.282,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.283,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.285,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.286,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.29,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.291,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.292,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.294,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.295,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.296,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.297,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.3,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.301,
+                    "value": 13,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.304,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.305,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.306,
+                    "value": 8,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.309,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.31,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.311,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.314,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.315,
+                    "value": 13,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.316,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.318,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.319,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.32,
+                    "value": 9,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.323,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.324,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.325,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.327,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.328,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.329,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.332,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.334,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.337,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.339,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.385,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.39,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.417,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.56,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.651,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.678,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.698,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.759,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.794,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.814,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.966,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 58.984,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.019,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.049,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.056,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.08,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.142,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.179,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.211,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.418,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.487,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.504,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.523,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.529,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.561,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.683,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.686,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.751,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.827,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 59.922,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.068,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.261,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.262,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.265,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.266,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.267,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.27,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.271,
+                    "value": 7,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.272,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.274,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.275,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.276,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.279,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.28,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.281,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.284,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.285,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.286,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.288,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.289,
+                    "value": 3,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.29,
+                    "value": 6,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.293,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.294,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.295,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.298,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.299,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.3,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.303,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.304,
+                    "value": 4,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.307,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.309,
+                    "value": 5,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.313,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.314,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.318,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.326,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.33,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.47,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.474,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.492,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.542,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.606,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.618,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.732,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.803,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.827,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.834,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.87,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.905,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 60.965,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 61.001,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 61.017,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 61.159,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 61.219,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 61.841,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 62.116,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.72,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.937,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.946,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.968,
+                    "value": 2,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.973,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.975,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.978,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.991,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 101.994,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.0,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.001,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.005,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.006,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.01,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.018,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.02,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.023,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.031,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 102.04,
+                    "value": 1,
+                    "hide": false,
+                    "data": []
+                },
+                {
+                    "key": 103.038,
                     "value": 1,
                     "hide": false,
                     "data": []
@@ -479,10 +3355,15 @@
     ],
     "hideAxis": false,
     "hideGrid": false,
-    "yDomainMax": 181,
-    "xDomainMax": 104.961,
+    "yDomainMax": 132,
+    "xDomainMax": 148.756,
     "numberOfTicks": 5,
     "enableEffects": false,
     "xFormat": "decimal",
-    "colorOverride": ["#f1c40f", "green", "red"]
+    "colorOverride": [
+        "#000000",
+        "#4CAF50",
+        "#f1c40f",
+        "#f44336"
+    ]
 }

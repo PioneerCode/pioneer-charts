@@ -3359,6 +3359,7 @@
     "xDomainMax": 148.756,
     "numberOfTicks": 5,
     "enableEffects": false,
+    "enableZoom": true,
     "xFormat": "decimal",
     "colorOverride": [
         "#000000",

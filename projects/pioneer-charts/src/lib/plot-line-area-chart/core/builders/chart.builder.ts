@@ -58,53 +58,42 @@ export class PlaChartBuilder extends PcacChart {
     this.scales = new PlaChartScalesBuilder().build(config, this.width, this.height);
     this.lineGenerator = buildLineGenerator(config.xFormat, this.scales);
     this.areaGenerator = buildAreaGenerator(config.xFormat, this.scales, this.height);
-    this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
-      // Rescale x
-      const newX = event.transform.rescaleX(this.scales.x);
 
-      // Update axis
-      this.axisBuilder.drawXAxis({
-        svg: this.svg,
-        numberOfTicks: this.config.numberOfTicks || 5,
-        height: this.height,
-        xScale: newX,
-        yScale: this.scales.y,
-        yFormat: this.config.yFormat,
-        xFormat: this.config.xFormat
-      } as IPcacAxisBuilderConfig);
+    if (this.config.enableZoom) {
+      this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
+        // Rescale x
+        const newX = event.transform.rescaleX(this.scales.x);
 
-      // Update lines/areas
-      this.svg.selectAll('.line')
-        .attr('d', (d: any) => this.lineGenerator.x((_: any, i: number) => newX(i))(d));
+        // Update axis
+        this.axisBuilder.drawXAxis({
+          svg: this.svg,
+          numberOfTicks: this.config.numberOfTicks || 5,
+          height: this.height,
+          xScale: newX,
+          yScale: this.scales.y,
+          yFormat: this.config.yFormat,
+          xFormat: this.config.xFormat
+        } as IPcacAxisBuilderConfig);
 
-      this.svg.selectAll('.area')
-        .attr('d', (d: any) => this.areaGenerator.x((_: any, i: number) => newX(i))(d));
+        // Update lines/areas
+        this.svg.selectAll('.line')
+          .attr('d', (d: any) => this.lineGenerator.x((_: any, i: number) => newX(i))(d));
 
-      // Update dots
-      this.svg.selectAll('.dot')
-        .attr('cx', (d: PcacData, i: number) => getXFormat(this.config.xFormat, d, i, newX));
-    });
+        this.svg.selectAll('.area')
+          .attr('d', (d: any) => this.areaGenerator.x((_: any, i: number) => newX(i))(d));
+
+        // Update dots
+        this.svg.selectAll('.dot')
+          .attr('cx', (d: PcacData, i: number) => getXFormat(this.config.xFormat, d, i, newX));
+      });
+    }
 
     this.drawChart(chartElm, this.config, type);
   }
 
   private drawChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     this.buildContainer(chartElm);
-
-    // Add a transparent rect to capture zoom events
-    this.svg.insert('rect', ':first-child')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('fill', 'none')
-      .attr('pointer-events', 'all')
-      .call(this.zoomBehavior)
-      .transition()
-      .duration(750)
-
-    this.svg.call(this.zoomBehavior)
-      .transition()
-      .duration(750)
-
+    this.attachZoomBehavior();
 
     if (!config.hideAxis) {
       this.axisBuilder.drawAxis({
@@ -143,6 +132,24 @@ export class PlaChartBuilder extends PcacChart {
     }
 
     this.drawDots(config);
+  }
+
+  private attachZoomBehavior(): void {
+    if (!this.config.enableZoom) return;
+
+    // Add a transparent rect to capture zoom events
+    this.svg.insert('rect', ':first-child')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .call(this.zoomBehavior)
+      .transition()
+      .duration(750)
+
+    this.svg.call(this.zoomBehavior)
+      .transition()
+      .duration(750)
   }
 
   private drawLineArea(config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {

@@ -8,6 +8,7 @@ export enum PcacLineAreaPlotChartConfigType {
 
 export class PcacLineAreaChartConfig extends PcacChartConfig {
   enableEffects: boolean = true
+  enableZoom: boolean = true
   numberOfTicks: number = 5
   hideGrid: boolean = false
   hideAxis: boolean = false

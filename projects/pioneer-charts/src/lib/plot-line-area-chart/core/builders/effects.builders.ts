@@ -1,11 +1,11 @@
 import { Selection, BaseType } from 'd3-selection';
 import { ScaleLinear } from 'd3-scale';
-import { PcacData } from '../core';
+import { PcacData } from '../../../core';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
 import { ScaleTime } from 'd3';
 
-export interface ILineAreaChartEffectsBuilderConfig {
+export interface IPlaChartEffectsBuilderConfig {
   colors: string[];
   data: PcacData[];
   width: number;
@@ -18,11 +18,11 @@ export interface ILineAreaChartEffectsBuilderConfig {
 @Injectable({
   providedIn: 'root',
 })
-export class LineAreaChartEffectsBuilder {
-  private config!: ILineAreaChartEffectsBuilderConfig;
+export class PlaChartEffectsBuilder {
+  private config!: IPlaChartEffectsBuilderConfig;
   private lines = [] as any[];
 
-  buildEffects(config: ILineAreaChartEffectsBuilderConfig): void {
+  buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
     this.lines = [] as any[];
     this.config.svg.selectAll('.line').each((d, i, n) => {

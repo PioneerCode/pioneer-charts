@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input } from '@angular/core';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
-import { LineAreaChartBuilder } from './plot-line-area-chart.builder';
+import { PlaChartBuilder } from './core/builders/chart.builder';
 import { PcacData } from '../core';
 
 @Component({
@@ -11,7 +11,7 @@ import { PcacData } from '../core';
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
-  private chartBuilder = inject(LineAreaChartBuilder);
+  private chartBuilder = inject(PlaChartBuilder);
 
   readonly config = input.required<PcacLineAreaChartConfig>();
   readonly type = input.required<PcacLineAreaPlotChartConfigType>();

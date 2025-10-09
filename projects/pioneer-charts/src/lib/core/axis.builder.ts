@@ -21,15 +21,13 @@ export interface IPcacAxisBuilderConfig {
 })
 export class PcacAxisBuilder {
   drawAxis(config: IPcacAxisBuilderConfig): void {
-    if (!config.hideXAxis) {
-      this.drawXAxis(config);
-    }
-    if (!config.hideYAxis) {
-      this.drawYAxis(config);
-    }
+    this.drawXAxis(config);
+    this.drawYAxis(config);
   }
 
-  private drawYAxis(config: IPcacAxisBuilderConfig) {
+  drawYAxis(config: IPcacAxisBuilderConfig) {
+    if (config.hideYAxis) return;
+
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
 
     if (config.yFormat) {
@@ -51,7 +49,10 @@ export class PcacAxisBuilder {
       .call(yAxis);
   }
 
-  private drawXAxis(config: IPcacAxisBuilderConfig) {
+  drawXAxis(config: IPcacAxisBuilderConfig) {
+    if (config.hideYAxis) return;
+    config.svg.selectAll('.pcac-x-axis').remove();
+
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
 
     if (config.xFormat) {
@@ -76,10 +77,8 @@ export class PcacAxisBuilder {
         case PcacFormatEnum.Decimal:
           xAxis.tickFormat((d: any, i: number) => format(".2s")(d));
           break;
-
       }
     }
-
 
     config.svg.append('g')
       .attr('class', 'pcac-x-axis')

@@ -11,7 +11,7 @@ import { PcacData } from '../core';
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
-  private chartBuilder = inject(PlaChartBuilder);
+  private chartBuilder = new PlaChartBuilder();
 
   readonly config = input.required<PcacLineAreaChartConfig>();
   readonly type = input.required<PcacLineAreaPlotChartConfigType>();

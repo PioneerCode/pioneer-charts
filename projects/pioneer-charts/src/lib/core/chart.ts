@@ -5,14 +5,12 @@ import { PcacGridBuilder } from './grid.builder';
 import { PcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
-import { ElementRef, Injectable, inject } from '@angular/core';
+import { ElementRef, inject } from '@angular/core';
 import { PcacData } from '.';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 
-@Injectable({
-  providedIn: 'root',
-})
+
 export class PcacChart {
   axisBuilder = inject(PcacAxisBuilder);
   gridBuilder = inject(PcacGridBuilder);

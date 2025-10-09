@@ -27,6 +27,7 @@ export class PlaChartBuilder extends PcacChart {
   private zoomBehavior!: d3.ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
+  private clipPathId!: string; // <-- added
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -92,6 +93,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     this.buildContainer(chartElm);
     this.attachZoomBehavior();
+    this.createReusableClipPath(); 
 
     if (!config.hideAxis) {
       this.axisBuilder.drawAxis({
@@ -132,6 +134,19 @@ export class PlaChartBuilder extends PcacChart {
     this.drawDots(config);
   }
 
+  private createReusableClipPath(): void {
+    this.clipPathId = `pcac-clip-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    this.svg.selectAll(`defs #${this.clipPathId}`).remove();
+    this.svg.append('defs')
+      .append('clipPath')
+      .attr('id', this.clipPathId)
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', -10) // extend clip-path a bit above to avoid cutting off top of line
+      .attr('width', this.width)
+      .attr('height', this.height + 20); // +20 to ensure dots at bottom are not clipped
+  }
+
   private attachZoomBehavior(): void {
     if (!this.config.enableZoom) return;
 
@@ -163,6 +178,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawLine(lineData: PcacData[], index: number, hide = false): void {
     this.svg.append('g')
       .attr('class', 'lines')
+      .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip-path to line group
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
@@ -180,6 +196,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawArea(lineData: PcacData[], index: number) {
     this.svg.append('g')
       .attr('class', 'areas')
+      .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
       .append('path')
       .datum(lineData)
       .attr('class', 'area')
@@ -198,6 +215,7 @@ export class PlaChartBuilder extends PcacChart {
     for (let index = 0; index < config.data.length; index++) {
       this.svg.append('g')
         .attr('class', 'dots')
+        .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
         .selectAll('.dot')
         .data(config.data[index].data)
         .enter().append('circle')

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PcacAreaChart } from '@pioneer-code/pioneer-charts';
 import { StringifyPipe } from '../../../stringify.pipe';
@@ -10,6 +10,7 @@ import { PlotLineAreaBaseComponent } from '../base/base.component';
 @Component({
   selector: 'pc-area-chart',
   templateUrl: './area-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     PlotLineAreaBaseComponent,
     MatCardModule,

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacData } from '../../core';
@@ -7,6 +7,7 @@ import { PcacData } from '../../core';
   selector: 'pcac-bar-vertical-chart',
   templateUrl: './bar-vertical-chart.component.html',
   styleUrls: ['./bar-vertical-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacBarVerticalChartComponent implements OnChanges {

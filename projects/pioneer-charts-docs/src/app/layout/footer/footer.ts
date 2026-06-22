@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { AppService, MainRoutes } from '../../app.service';
 import { NgClass } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
     MatDividerModule
   ],
   templateUrl: './footer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./footer.scss'],
 })
 export class LayoutFooter {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
 import { PcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
 import { PcacData } from '../core';
@@ -7,6 +7,7 @@ import { PcacData } from '../core';
   selector: 'pcac-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacPieChartComponent implements OnChanges {

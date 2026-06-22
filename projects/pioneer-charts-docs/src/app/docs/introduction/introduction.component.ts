@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutCode } from '../../layout/code/code';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -7,6 +7,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   selector: 'pc-introduction',
   templateUrl: './introduction.component.html',
   styleUrls: ['./introduction.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LayoutCode,
     LayoutPageDocs,

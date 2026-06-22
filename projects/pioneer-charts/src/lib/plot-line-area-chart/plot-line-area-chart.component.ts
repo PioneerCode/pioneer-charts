@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
@@ -8,6 +8,7 @@ import { PcacData } from '../core';
   selector: 'pcac-line-area-chart',
   templateUrl: './plot-line-area-chart.component.html',
   styleUrls: ['./plot-line-area-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {

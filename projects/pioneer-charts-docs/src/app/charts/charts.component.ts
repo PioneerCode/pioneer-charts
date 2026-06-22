@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { 
   PcacData, 
   PcacBarHorizontalChartComponent, 
@@ -13,6 +13,7 @@ import { AppService } from '../app.service';
 @Component({
   selector: 'pc-charts',
   templateUrl: './charts.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     PcacBarVerticalChartComponent,
     PcacBarHorizontalChartComponent,

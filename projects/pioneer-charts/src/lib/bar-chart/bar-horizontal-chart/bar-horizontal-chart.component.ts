@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacData } from '../../core';
@@ -7,6 +7,7 @@ import { PcacData } from '../../core';
   selector: 'pcac-bar-horizontal-chart',
   templateUrl: './bar-horizontal-chart.component.html',
   styleUrls: ['./bar-horizontal-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacBarHorizontalChartComponent implements OnChanges {

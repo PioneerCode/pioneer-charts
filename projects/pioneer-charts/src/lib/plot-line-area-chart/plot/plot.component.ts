@@ -1,4 +1,4 @@
-import { Component, input, output, viewChild } from "@angular/core";
+import { Component, input, output, viewChild, ChangeDetectionStrategy } from "@angular/core";
 import { PcacLineAreaChartComponent } from "../plot-line-area-chart.component";
 import { PcacPlotChartConfig } from "./plot.model";
 import { PcacLineAreaPlotChartConfigType } from "../plot-line-area-chart.model";
@@ -7,6 +7,7 @@ import { PcacData } from "../../core";
 @Component({
   selector: 'pcac-plot-chart',
   templateUrl: './plot.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [PcacLineAreaChartComponent]
 })
 export class PcacPlotChart {

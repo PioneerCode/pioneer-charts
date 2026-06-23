@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -6,6 +6,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-data-contract',
   templateUrl: './data-contract.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LayoutCode,
     LayoutPageDocs

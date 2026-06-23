@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, output } from '@angular/core';
+import { Component, computed, inject, model, output, ChangeDetectionStrategy } from '@angular/core';
 import { PcacColorService } from '../core';
 
 export class PcacLegendConfigItem {
@@ -15,6 +15,7 @@ export class PcacLegendConfig {
 @Component({
   selector: 'pcac-legend',
   templateUrl: './legend.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./legend.component.scss'],
 })
 export class PcacLegend {

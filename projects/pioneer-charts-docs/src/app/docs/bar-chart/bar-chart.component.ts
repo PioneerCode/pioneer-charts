@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PcacBarHorizontalChartComponent, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
 import { MatCardModule } from '@angular/material/card';
 
@@ -13,6 +13,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-bar-chart',
   templateUrl: './bar-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LayoutCode,
     LayoutBaseConfig,

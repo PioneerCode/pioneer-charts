@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export interface IJumpNav {
@@ -12,6 +12,7 @@ export interface IJumpNav {
     RouterLink
   ],
   templateUrl: './jump-nav.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./jump-nav.scss']
 })
 export class LayoutJumpNav {

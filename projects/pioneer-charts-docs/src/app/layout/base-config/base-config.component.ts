@@ -1,7 +1,8 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-layout-base-config',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './base-config.component.html',
 })
 export class LayoutBaseConfig {

@@ -1,13 +1,12 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, input } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { PcacPieChartConfig } from './pie-chart.model';
 import { PieChartBuilder } from './pie-chart.builder';
-import { PcacData } from '../core';
 
 @Component({
   selector: 'pcac-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacPieChartComponent implements OnChanges {
@@ -15,15 +14,9 @@ export class PcacPieChartComponent implements OnChanges {
 
   readonly config = input.required<PcacPieChartConfig>();
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  readonly sliceClicked = output<PcacData>();
+  readonly sliceClicked = outputFromObservable(this.chartBuilder.sliceClicked$);
 
   private resizeWindowTimeout: any;
-
-  constructor() {
-    this.chartBuilder.sliceClicked$.subscribe(data => {
-      this.sliceClicked.emit(data);
-    });
-  }
 
   ngOnChanges() {
     this.buildChart();

@@ -1,14 +1,13 @@
-import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, viewChild, input } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
-import { PcacData } from '../core';
 
 @Component({
   selector: 'pcac-line-area-chart',
   templateUrl: './plot-line-area-chart.component.html',
   styleUrls: ['./plot-line-area-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacLineAreaChartComponent {
@@ -19,15 +18,9 @@ export class PcacLineAreaChartComponent {
 
 
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  readonly dotClicked = output<PcacData>();
+  readonly dotClicked = outputFromObservable(this.chartBuilder.dotClicked$);
 
   private resizeWindowTimeout: any;
-
-  constructor() {
-    this.chartBuilder.dotClicked$.subscribe(data => {
-      this.dotClicked.emit(data);
-    });
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['config'].currentValue !== changes['config'].previousValue) {

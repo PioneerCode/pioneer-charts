@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 import { PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
@@ -13,7 +13,6 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-pie-chart',
   templateUrl: './pie-chart.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LayoutCode,
     LayoutBaseConfig,

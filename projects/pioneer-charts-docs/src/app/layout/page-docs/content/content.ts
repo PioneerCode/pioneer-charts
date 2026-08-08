@@ -1,10 +1,9 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-layout-page-docs-content',
   imports: [],
   templateUrl: './content.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content.scss']
 })
 export class LayoutPageDocsContent {

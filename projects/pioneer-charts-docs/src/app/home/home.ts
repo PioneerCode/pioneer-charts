@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PcacAreaChart } from '@pioneer-code/pioneer-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,6 @@ import { AppService, MainRoutes } from '../app.service';
   selector: 'pc-home',
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     MatButtonModule,

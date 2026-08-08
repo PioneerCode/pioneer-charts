@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -10,7 +10,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatListModule
   ],
   templateUrl: './navigation.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./navigation.scss']
 })
 export class LayoutPageDocsNavigation {

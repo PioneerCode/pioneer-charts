@@ -1,7 +1,6 @@
 import {
   Component,
-  input,
-  ChangeDetectionStrategy
+  input
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
@@ -11,7 +10,6 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     MatCardModule
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./code.scss'],
   
 })

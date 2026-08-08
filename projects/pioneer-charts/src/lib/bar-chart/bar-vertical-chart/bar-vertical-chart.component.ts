@@ -1,13 +1,12 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, input } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { PcacData } from '../../core';
 
 @Component({
   selector: 'pcac-bar-vertical-chart',
   templateUrl: './bar-vertical-chart.component.html',
   styleUrls: ['./bar-vertical-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
@@ -15,15 +14,9 @@ export class PcacBarVerticalChartComponent implements OnChanges {
 
   readonly config = input.required<PcacBarVerticalChartConfig>();
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  readonly barClicked = output<PcacData>();
+  readonly barClicked = outputFromObservable(this.chartBuilder.barClicked$);
 
   private resizeWindowTimeout: any;
-
-  constructor() {
-    this.chartBuilder.barClicked$.subscribe(data => {
-      this.barClicked.emit(data);
-    });
-  }
 
   ngOnChanges() {
     this.buildChart();

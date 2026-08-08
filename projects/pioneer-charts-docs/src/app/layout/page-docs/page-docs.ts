@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { LayoutPageDocsContent } from './content/content';
@@ -14,7 +14,6 @@ import { IJumpNav, LayoutJumpNav } from './jump-nav/jump-nav';
     LayoutJumpNav
 ],
   templateUrl: './page-docs.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./page-docs.scss']
 })
 export class LayoutPageDocs {

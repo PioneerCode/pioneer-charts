@@ -27,9 +27,10 @@ export class PcacLegend {
   );
 
   onItemClicked(index: number) {
-    const data = this.config();
-    data.items[index].checked = !data.items[index].checked;
-    this.config.set(data);
-    this.itemClicked.emit(data.items);
+    const items = this.config().items.map((item, i) =>
+      i === index ? { ...item, checked: !item.checked } : item
+    );
+    this.config.set({ ...this.config(), items });
+    this.itemClicked.emit(items);
   }
 }

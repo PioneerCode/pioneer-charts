@@ -59,7 +59,6 @@ export class PlaChartBuilder extends PcacChart {
 
     if (this.config.enableZoom) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
-        console.log('Zoom Event', event);
         // Rescale x
         const newX = event.transform.rescaleX(this.scales.x);
 

@@ -16,9 +16,5 @@ import { LayoutFooter } from './layout/footer/footer';
 })
 export class App {
   protected readonly title = signal('Pioneer Charts');
-  private readonly service = inject(AppService)
-
-  ngOnInit() {
-    this.service.getData();
-  }
+  private readonly service = inject(AppService);
 }

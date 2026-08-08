@@ -1,4 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AppRepository } from './app.repository';
 import { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig, PcacPlotChartConfig } from '@pioneer-code/pioneer-charts';
 
@@ -18,80 +19,27 @@ export class AppService {
 
   mainRoute = signal<MainRoutes>(MainRoutes.HOME);
 
-  pieChartConfig = signal<PcacPieChartConfig>(new PcacPieChartConfig());
-  sharedConfig = signal<PcacData[]>([]);
+  pieChartConfig = toSignal(this.repository.getPieChartConfig(), { initialValue: new PcacPieChartConfig() });
+  sharedConfig = toSignal(this.repository.getShareConfig(), { initialValue: [] as PcacData[] });
 
-  barVerticalChartConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartSingleConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartGroupConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartStackedConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
+  barVerticalChartConfig = toSignal(this.repository.getBarVerticalChart(), { initialValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartSingleConfig = toSignal(this.repository.getBarVerticalChartSingle(), { initialValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartGroupConfig = toSignal(this.repository.getBarVerticalChartGroup(), { initialValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartStackedConfig = toSignal(this.repository.getBarVerticalChartStacked(), { initialValue: new PcacBarVerticalChartConfig() });
 
-  barHorizontalChartConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartSingleConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartGroupConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartStackedConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
+  barHorizontalChartConfig = toSignal(this.repository.getBarHorizontalChart(), { initialValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartSingleConfig = toSignal(this.repository.getBarHorizontalChartSingle(), { initialValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartGroupConfig = toSignal(this.repository.getBarHorizontalChartGroup(), { initialValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartStackedConfig = toSignal(this.repository.getBarHorizontalChartStacked(), { initialValue: new PcacBarHorizontalChartConfig() });
 
-  lineChartConfig = signal<PcacLineChartConfig>(new PcacLineChartConfig());
-  areaChartConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
-  areaChartHideConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
-  plotConfig = signal<PcacPlotChartConfig>(new PcacPlotChartConfig());
+  lineChartConfig = toSignal(this.repository.getLineChart(), { initialValue: new PcacLineChartConfig() });
+  areaChartConfig = toSignal(this.repository.getAreaChart(), { initialValue: new PcacAreaChartConfig() });
+  areaChartHideConfig = toSignal(this.repository.getAreaHideChart(), { initialValue: new PcacAreaChartConfig() });
+  plotConfig = toSignal(this.repository.getPlotChart(), { initialValue: new PcacPlotChartConfig() });
 
-  legendConfig = signal<PcacLegendConfig>(new PcacLegendConfig());
-
-  getData() {
-    this.getBarCharts();
-    this.getLineAreaCharts();
-
-    this.repository.getPlotChart()
-      .subscribe(data => this.plotConfig.set(data));
-
-    this.repository.getPieChartConfig()
-      .subscribe(data => this.pieChartConfig.set(data));
-
-    this.repository.getShareConfig()
-      .subscribe(data => this.sharedConfig.set(data));
-
-    this.repository.getLegendConfig()
-      .subscribe(data =>  this.legendConfig.set(data));
-  }
+  legendConfig = toSignal(this.repository.getLegendConfig(), { initialValue: new PcacLegendConfig() });
 
   onClicked(data: PcacData) {
     alert(`Key: ${data.key} - Value: ${data.value}`);
-  }
-
-  private getLineAreaCharts() {
-    this.repository.getLineChart()
-      .subscribe(data => this.lineChartConfig.set(data));
-    this.repository.getAreaChart()
-      .subscribe(data => this.areaChartConfig.set(data));
-    this.repository.getAreaHideChart()
-      .subscribe(data => this.areaChartHideConfig.set(data));
-  }
-
-  private getBarCharts() {
-    this.getBarChartsVertical();
-    this.getBarChartsHorizontal();
-  }
-
-  private getBarChartsHorizontal() {
-    this.repository.getBarHorizontalChart()
-      .subscribe(data => this.barHorizontalChartConfig.set(data));
-    this.repository.getBarHorizontalChartSingle()
-      .subscribe(data => this.barHorizontalChartSingleConfig.set(data));
-    this.repository.getBarHorizontalChartGroup()
-      .subscribe(data => this.barHorizontalChartGroupConfig.set(data));
-    this.repository.getBarHorizontalChartStacked()
-      .subscribe(data => this.barHorizontalChartStackedConfig.set(data));
-  }
-
-  private getBarChartsVertical() {
-    this.repository.getBarVerticalChart()
-      .subscribe(data => this.barVerticalChartConfig.set(data));
-    this.repository.getBarVerticalChartSingle()
-      .subscribe(data => this.barVerticalChartSingleConfig.set(data));
-    this.repository.getBarVerticalChartGroup()
-      .subscribe(data => this.barVerticalChartGroupConfig.set(data));
-    this.repository.getBarVerticalChartStacked()
-      .subscribe(data => this.barVerticalChartStackedConfig.set(data));
   }
 }

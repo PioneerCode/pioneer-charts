@@ -22,9 +22,11 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json"
+            "tsConfig": "projects/pioneer-charts/tsconfig.spec.json",
+            "buildTarget": ":build:development",
+            "runner": "vitest"
           }
         }
       }

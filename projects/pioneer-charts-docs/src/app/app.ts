@@ -16,5 +16,10 @@ import { LayoutFooter } from './layout/footer/footer';
 })
 export class App {
   protected readonly title = signal('Pioneer Charts');
-  private readonly service = inject(AppService);
+
+  constructor() {
+    // Eagerly instantiate the root-scoped AppService here so its toSignal()-backed
+    // chart configs start loading at app bootstrap instead of on first use.
+    inject(AppService);
+  }
 }

@@ -23,7 +23,7 @@ export class PcacChart {
   width = 400;
   height = 400;
   colors = [] as string[];
-  startData = [] as any[]; // TODO: Strongly type
+  startData: PcacData[] = [];
 
   /**
    * Prior to building a chart, we need to initialize the state of the chart

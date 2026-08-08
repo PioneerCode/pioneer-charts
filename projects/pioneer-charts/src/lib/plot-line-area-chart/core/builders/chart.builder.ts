@@ -22,8 +22,8 @@ import { buildZoomBehavior } from './zoom-behavior.builder';
 
 export class PlaChartBuilder extends PcacChart {
   private scales!: PlaChartScales;
-  private lineGenerator!: Line<[number, number]>;
-  private areaGenerator!: Area<[number, number]>;
+  private lineGenerator!: Line<PcacData>;
+  private areaGenerator!: Area<PcacData>;
   private zoomBehavior!: d3.ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
@@ -37,12 +37,12 @@ export class PlaChartBuilder extends PcacChart {
     }
 
     this.config = JSON.parse(JSON.stringify(config));
-    this.startData = range(this.config.data[0].data.length).map(() => {
-      return {
-        value: 0,
-        key: ''
-      };
-    });
+    this.startData = range(this.config.data[0].data.length).map((): PcacData => ({
+      key: '',
+      value: 0,
+      hide: false,
+      data: []
+    }));
 
     if (this.config.hideAxis) {
       this.config.height = this.config.height + 12;
@@ -78,11 +78,11 @@ export class PlaChartBuilder extends PcacChart {
         } as IPcacAxisBuilderConfig);
 
         // Update lines/areas
-        this.svg.selectAll('.line')
-          .attr('d', (d: any) => this.lineGenerator.x((_: any, i: number) => newX(i))(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.line')
+          .attr('d', (d: PcacData[]) => this.lineGenerator.x((_: PcacData, i: number) => newX(i))(d));
 
-        this.svg.selectAll('.area')
-          .attr('d', (d: any) => this.areaGenerator.x((_: any, i: number) => newX(i))(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.area')
+          .attr('d', (d: PcacData[]) => this.areaGenerator.x((_: PcacData, i: number) => newX(i))(d));
 
         // Update dots
         this.svg.selectAll<Element, PcacData>('.dot')
@@ -193,7 +193,7 @@ export class PlaChartBuilder extends PcacChart {
       .attr('d', this.lineGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.lineGenerator as any) // TODO: strongly type
+      .attr('d', this.lineGenerator)
       .attr('stroke', () => {
         return this.colors[index];
       })
@@ -212,10 +212,10 @@ export class PlaChartBuilder extends PcacChart {
       .style('fill', () => {
         return this.colors[index];  // TODO: strongly type
       })
-      .attr('d', this.lineGenerator(this.startData))
+      .attr('d', this.areaGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.areaGenerator as any);  // TODO: strongly type
+      .attr('d', this.areaGenerator);
   }
 
   private drawDots(config: PcacLineAreaChartConfig): void {

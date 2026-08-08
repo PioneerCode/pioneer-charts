@@ -26,7 +26,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 export class BarChartComponent {
   verticalCode = `<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-vertical-chart>`;
   horizontalCode = `<pcac-bar-horizontal-chart [config]="barHorizontalChartConfig" (barClicked)="onClicked($event)"></pcac-bar-horizontal-chart>`;
-  importCode = `import { PcacBarVerticalChartModule, PcacBarHorizontalChartModule } from '@pioneer-code/pioneer-charts';`;
+  importCode = `import { PcacBarVerticalChartComponent, PcacBarHorizontalChartComponent } from '@pioneer-code/pioneer-charts';`;
   jumpNav = signal<IJumpNav[]>([
     {
       key: 'Bar Chart',

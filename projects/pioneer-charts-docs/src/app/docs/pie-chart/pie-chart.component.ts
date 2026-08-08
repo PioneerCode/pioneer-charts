@@ -52,5 +52,5 @@ export class PieChartComponent {
     }
   ])
   markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
-  importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
+  importCode = `import { PcacPieChartComponent } from '@pioneer-code/pioneer-charts';`;
 }

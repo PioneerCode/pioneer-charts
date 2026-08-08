@@ -7,6 +7,7 @@ import {
   PcacData,
   PcacLegendConfig,
   PcacLineChartConfig,
+  PcacPlotChartConfig,
   PcacAreaChartConfig
 } from '@pioneer-code/pioneer-charts';
 
@@ -72,7 +73,7 @@ export class AppRepository {
   }
 
   getPlotChart() {
-    return this.http.get<PcacLineChartConfig>('./mock/line-area-chart/plot-chart.json');
+    return this.http.get<PcacPlotChartConfig>('./mock/line-area-chart/plot-chart.json');
   }
 
   getPieChartConfig() {

@@ -1,5 +1,5 @@
 <app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [contract]="pcService.plotConfig() | stringify">
+  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.plotConfig() | stringify">
   <mat-card class="p-3">
     <pcac-plot-chart [config]="pcService.plotConfig()" (dotClicked)="pcService.onClicked($event)" />
   </mat-card>

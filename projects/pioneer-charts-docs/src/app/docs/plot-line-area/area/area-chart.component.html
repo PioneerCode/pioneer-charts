@@ -1,4 +1,4 @@
-<app-plot-line-area-base [title]="'Area Chart'" [lead]="'Configurable to display an area or line chart.'" [markup]="markupCode" [contract]="pcService.areaChartConfig() | stringify">
+<app-plot-line-area-base [title]="'Area Chart'" [lead]="'Configurable to display an area or line chart.'" [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig() | stringify">
   <div class="grid grid-cols-2 gap-4 mb-6">
     <mat-card class="p-3">
       <pcac-area-chart [config]="pcService.lineChartConfig()" (dotClicked)="pcService.onClicked($event)" />

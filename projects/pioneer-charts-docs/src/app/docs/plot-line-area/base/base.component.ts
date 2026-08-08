@@ -18,6 +18,7 @@ export class PlotLineAreaBaseComponent {
   readonly title = input.required<string>();
   readonly lead = input.required<string>();
   readonly markup = input.required<string>();
+  readonly importCode = input.required<string>();
   readonly contract = input.required<string>();
 
   pcService = inject(AppService);
@@ -47,6 +48,4 @@ export class PlotLineAreaBaseComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
-  importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
 }

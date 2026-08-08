@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef } from '@angular/core';
 import { select } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
@@ -233,7 +233,7 @@ export class PlaChartBuilder extends PcacChart {
         .attr('cx', (d: PcacData, i: number) => {
           return getXFormat(config.xFormat, d, i, this.scales.x);
         })
-        .attr('cy', (d: PcacData) => {
+        .attr('cy', (_: PcacData) => {
           return this.scales.y(0);
         })
         .attr('fill', '#fff')

@@ -10,7 +10,7 @@ export interface IPlaChartEffectsBuilderConfig {
   data: PcacData[];
   width: number;
   height: number;
-  svg: Selection<BaseType, {}, HTMLElement, any>;
+  svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   x: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   y: ScaleLinear<number, number> | ScaleTime<number, number, never>;
 }

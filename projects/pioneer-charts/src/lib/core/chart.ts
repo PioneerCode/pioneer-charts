@@ -19,7 +19,7 @@ export class PcacChart {
   colorService = inject(PcacColorService);
 
   margin = { top: 8, right: 16, bottom: 20, left: 40 };
-  svg: Selection<BaseType, {}, HTMLElement, any> | any; // Typing?
+  svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
   width = 400;
   height = 400;
   colors = [] as string[];

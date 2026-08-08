@@ -3,7 +3,7 @@ import { Injectable, ElementRef } from '@angular/core';
 /**
  * D3
  */
-import { arc, pie, DefaultArcObject, Arc, Pie, PieArcDatum } from 'd3-shape';
+import { arc, pie, Arc, Pie, PieArcDatum } from 'd3-shape';
 import { select } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
 import { transition } from 'd3-transition';
@@ -28,9 +28,9 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class PieChartBuilder extends PcacChart {
   private radius!: number;
-  private arcShape!: Arc<any, DefaultArcObject> | any;
-  private arcOverShape!: Arc<any, DefaultArcObject> | any;
-  private pieAngles!: Pie<any, number | {}> | any;
+  private arcShape!: Arc<any, PieArcDatum<PcacData>>;
+  private arcOverShape!: Arc<any, PieArcDatum<PcacData>>;
+  private pieAngles!: Pie<any, PcacData>;
   private sliceClickedSource = new Subject<PcacData>();
   sliceClicked$ = this.sliceClickedSource.asObservable();
 
@@ -48,17 +48,17 @@ export class PieChartBuilder extends PcacChart {
   private buildShapes(config: PcacPieChartConfig): void {
     const radiusOffset = 10;
 
-    this.arcShape = arc()
+    this.arcShape = arc<any, PieArcDatum<PcacData>>()
       .innerRadius(0)
       .outerRadius(this.radius - radiusOffset);
 
-    this.arcOverShape = arc()
+    this.arcOverShape = arc<any, PieArcDatum<PcacData>>()
       .innerRadius(0)
       .outerRadius(this.radius - radiusOffset + radiusOffset);
 
-    this.pieAngles = pie()
+    this.pieAngles = pie<PcacData>()
       .sort(null)
-      .value((d: any) => d.value);  // TODO: Strongly type
+      .value((d: PcacData) => d.value as number);
   }
 
   private drawChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
@@ -72,26 +72,26 @@ export class PieChartBuilder extends PcacChart {
       .style('fill', (d: PieArcDatum<PcacData>, i: number) => {
         return this.colors[i];
       })
-      .on('mouseover', function (this: any, _: MouseEvent, d: PieArcDatum<PcacData>) {
+      .on('mouseover', function (this: SVGPathElement, _: MouseEvent, d: PieArcDatum<PcacData>) {
         const t = transition().duration(self.transitionService.getTransitionDuration() / 3)
         const c = color(self.colors[d.index])
         const ct = c ? c.darker(1).toString() : self.colors[d.index]
-        select(this).transition(t)
+        select<SVGPathElement, PieArcDatum<PcacData>>(this).transition(t)
           .attr('d', self.arcOverShape)
           .style('fill', ct);
       })
       .on('mousemove', (event: MouseEvent, d: PieArcDatum<PcacData>) => {
         self.tooltipBuilder.showBarTooltip(event, d.data);
       })
-      .on('mouseout', function (this: any, _: MouseEvent, d: PieArcDatum<PcacData>) {
+      .on('mouseout', function (this: SVGPathElement, _: MouseEvent, d: PieArcDatum<PcacData>) {
         self.tooltipBuilder.hideTooltip();
-        select(this)
+        select<SVGPathElement, PieArcDatum<PcacData>>(this)
           .transition()
           .duration(self.transitionService.getTransitionDuration() / 3)
           .attr('d', self.arcShape)
           .style('fill', self.colors[d.index]);
       })
-      .on('click', (d: PieArcDatum<PcacData>, i: number) => {
+      .on('click', (_event: MouseEvent, d: PieArcDatum<PcacData>) => {
         this.sliceClickedSource.next(d.data);
       })
       .transition()
@@ -101,9 +101,11 @@ export class PieChartBuilder extends PcacChart {
       });
   }
 
-  private tweenChart(b: any) {  // TODO: Strongly type
-    b.innerRadius = 0;
+  private tweenChart(b: PieArcDatum<PcacData>) {
+    // `innerRadius`/`outerRadius` aren't part of PieArcDatum - arcShape's own .innerRadius()/.outerRadius()
+    // accessors are fixed constants and never read them from the datum, so this is a legacy no-op kept for parity.
+    (b as unknown as { innerRadius: number }).innerRadius = 0;
     const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
-    return (t: any) => this.arcShape(i(t));  // TODO: Strongly type
+    return (t: number) => this.arcShape(i(t)) ?? '';
   }
 }

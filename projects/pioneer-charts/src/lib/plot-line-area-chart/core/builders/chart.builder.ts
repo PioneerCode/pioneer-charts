@@ -85,7 +85,7 @@ export class PlaChartBuilder extends PcacChart {
           .attr('d', (d: any) => this.areaGenerator.x((_: any, i: number) => newX(i))(d));
 
         // Update dots
-        this.svg.selectAll('.dot')
+        this.svg.selectAll<Element, PcacData>('.dot')
           .attr('cx', (d: PcacData, i: number) => getXFormat(this.config.xFormat, d, i, newX));
       });
     }
@@ -154,16 +154,21 @@ export class PlaChartBuilder extends PcacChart {
     if (!this.config.enableZoom) return;
 
     // Add a transparent rect to capture zoom events
+    //
+    // d3's `ZoomBehavior<Element, unknown>` vs. our concretely-typed `Selection<SVGRectElement|SVGGElement, ...>`
+    // is a known D3+TS typings friction point: `.call()` structurally compares nested generic Selection
+    // methods (`.merge()`, `.select()`, ...) and those never line up across two different concrete element
+    // types, even though a zoom behavior works on any element at runtime. Narrow, local `any` escape hatch.
     this.svg.insert('rect', ':first-child')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
-      .call(this.zoomBehavior)
+      .call(this.zoomBehavior as any)
       .transition()
       .duration(750)
 
-    this.svg.call(this.zoomBehavior)
+    this.svg.call(this.zoomBehavior as any)
       .transition()
       .duration(750)
   }
@@ -249,7 +254,7 @@ export class PlaChartBuilder extends PcacChart {
             .attr('r', 4)
             .attr('fill', '#fff');
         })
-        .on('click', (d: PcacData, i: number) => {
+        .on('click', (_event: MouseEvent, d: PcacData) => {
           this.dotClickedSource.next(d);
         })
         .transition()

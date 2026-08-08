@@ -5,7 +5,7 @@ import { PcacFormatEnum } from './chart.model';
 import { format } from 'd3-format';
 
 export interface IPcacAxisBuilderConfig {
-  svg: Selection<BaseType, {}, HTMLElement, any>;
+  svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   height: number;
   xScale: any;
   yScale: any;

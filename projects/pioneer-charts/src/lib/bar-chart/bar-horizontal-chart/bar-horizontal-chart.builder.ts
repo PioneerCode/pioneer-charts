@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
-import { select, Selection, EnterElement } from 'd3-selection';
+import { select, Selection } from 'd3-selection';
 import { BaseType } from 'd3-selection';
 import { Subject } from 'rxjs';
 
@@ -13,16 +13,9 @@ import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
-type GroupType = Selection<Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData,
-  Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData>;
+// `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
+// actually matched what `.selectAll()`'s default generics resolve to).
+type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
 /**
  * Provided per-component (see PcacBarHorizontalChartComponent's `providers`), not root-scoped:
@@ -239,15 +232,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private drawThresholdAcrossChart(config: PcacBarHorizontalChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('height', this.height)
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', (event: MouseEvent, _: PcacData) => {
+      .on('mousemove', (event: MouseEvent, _: unknown) => {
         this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('x', (d: PcacData, i: number) => {
+      .attr('x', (_: unknown, i: number) => {
         return this.xScale(config.thresholds[i].value as number);
       });
   }
@@ -256,10 +249,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
     const self = this
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('height', this.yScaleStacked.bandwidth())
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', function (this: any, event: MouseEvent, d: PcacData, i: number) {
+      .on('mousemove', function (this: any, event: MouseEvent) {
         const index = Number(this.parentElement.dataset['groupId'])
         self.tooltipBuilder.showBarTooltip(event,
           config.isStacked ?
@@ -270,7 +263,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('x', (_: PcacData, i: number) => {
+      .attr('x', (_: unknown, i: number) => {
         return this.xScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
   }
@@ -282,7 +275,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return i;
       })
       .attr('height', this.yScaleGrouped.bandwidth())
-      .on('mousemove', function (this: any, event: MouseEvent, d: PcacData, i: number, n: any) {
+      .on('mousemove', function (this: any, event: MouseEvent) {
         const target = event.target as Element
         const index = Number(target.getAttribute("data-group-threshold-id"))
         self.tooltipBuilder.showBarTooltip(event,
@@ -293,14 +286,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .transition()
       .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData) => {
-        return this.yScaleGrouped(d.key as string);
+        // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
+        return this.yScaleGrouped(d.key as string) ?? null;
       })
       .attr('x', (d: PcacData, i: number, n: any) => {
         return this.xScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: PcacBarHorizontalChartConfig) {
+  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S, config: PcacBarHorizontalChartConfig): S {
     return elm.attr('class', 'pcac-threshold')
       .style('fill', () => {
         return this.colorService.getAlert();

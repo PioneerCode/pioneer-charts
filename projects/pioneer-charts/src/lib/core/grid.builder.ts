@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseType, Selection } from 'd3-selection';
 
 export interface IPcacGridBuilderConfig {
-  svg: Selection<BaseType, {}, HTMLElement, any>;
+  svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   /**
    * Required for horizontal grid
    */

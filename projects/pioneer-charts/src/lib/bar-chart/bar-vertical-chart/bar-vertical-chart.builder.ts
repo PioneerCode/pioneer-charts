@@ -9,7 +9,6 @@ import { transition } from 'd3-transition';
  * Lib
  */
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
@@ -119,9 +118,10 @@ export class BarVerticalChartBuilder extends PcacChart {
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
         width: this.width,
+        height: this.height,
         xScale: this.xScaleStacked,
         yScale: this.yScale
-      } as IPcacGridBuilderConfig);
+      });
     }
     this.addGroups(config);
   }

@@ -9,8 +9,6 @@ import { Subject } from 'rxjs';
  */
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
-import { IPcacAxisBuilderConfig } from '../../../core/axis.builder';
-import { IPcacGridBuilderConfig } from '../../../core/grid.builder';
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
 import { PlaChartScalesBuilder, PlaChartScales } from './scales.builder';
@@ -75,7 +73,7 @@ export class PlaChartBuilder extends PcacChart {
           yScale: this.scales.y,
           yFormat: this.config.yFormat,
           xFormat: this.config.xFormat
-        } as IPcacAxisBuilderConfig);
+        });
 
         // Update lines/areas
         this.svg.selectAll<SVGPathElement, PcacData[]>('.line')
@@ -107,7 +105,7 @@ export class PlaChartBuilder extends PcacChart {
         yScale: this.scales.y,
         yFormat: config.yFormat,
         xFormat: config.xFormat
-      } as IPcacAxisBuilderConfig);
+      });
     }
 
     if (!config.hideGrid) {
@@ -115,9 +113,10 @@ export class PlaChartBuilder extends PcacChart {
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
         width: this.width,
+        height: this.height,
         xScale: this.scales.x,
         yScale: this.scales.y
-      } as IPcacGridBuilderConfig);
+      });
     }
 
     this.drawLineArea(config, type);

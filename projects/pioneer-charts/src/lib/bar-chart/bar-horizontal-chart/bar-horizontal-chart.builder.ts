@@ -9,7 +9,6 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
@@ -116,10 +115,11 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.gridBuilder.drawVerticalGrid({
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
+        width: this.width,
         height: this.height,
         xScale: this.xScale,
         yScale: this.yScaleStacked
-      } as IPcacGridBuilderConfig);
+      });
     }
     this.addGroups(config);
   }

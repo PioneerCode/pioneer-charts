@@ -50,7 +50,7 @@ export class PcacAxisBuilder {
   }
 
   drawXAxis(config: IPcacAxisBuilderConfig) {
-    if (config.hideYAxis) return;
+    if (config.hideXAxis) return;
     config.svg.selectAll('.pcac-x-axis').remove();
 
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);

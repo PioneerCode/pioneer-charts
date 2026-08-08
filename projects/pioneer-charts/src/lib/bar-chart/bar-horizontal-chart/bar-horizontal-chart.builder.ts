@@ -24,9 +24,13 @@ type GroupType = Selection<Element |
   Window,
   PcacData>;
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacBarHorizontalChartComponent's `providers`), not root-scoped:
+ * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-bar-horizontal-chart> rendered at once.
+ */
+@Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale!: ScaleLinear<number, number>;
   private yScaleStacked!: ScaleBand<string>;

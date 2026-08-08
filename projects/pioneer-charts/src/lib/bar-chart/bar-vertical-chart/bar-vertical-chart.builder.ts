@@ -30,9 +30,13 @@ export interface IBarVerticalChartBuilder {
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacBarVerticalChartComponent's `providers`), not root-scoped:
+ * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-bar-vertical-chart> rendered at once.
+ */
+@Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked!: ScaleBand<string>;
   private xScaleGrouped!: ScaleBand<string>;

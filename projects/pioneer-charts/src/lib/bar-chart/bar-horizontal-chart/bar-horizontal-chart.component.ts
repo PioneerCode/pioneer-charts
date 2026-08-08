@@ -7,7 +7,8 @@ import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
   selector: 'pcac-bar-horizontal-chart',
   templateUrl: './bar-horizontal-chart.component.html',
   styleUrls: ['./bar-horizontal-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [BarHorizontalChartBuilder]
 })
 export class PcacBarHorizontalChartComponent implements OnChanges {
   private chartBuilder = inject(BarHorizontalChartBuilder);

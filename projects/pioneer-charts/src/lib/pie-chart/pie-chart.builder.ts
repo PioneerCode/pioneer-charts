@@ -19,9 +19,13 @@ import { PcacData } from '../core/chart.model';
 import { Subject } from 'rxjs';
 
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacPieChartComponent's `providers`), not root-scoped:
+ * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-pie-chart> rendered at once.
+ */
+@Injectable()
 export class PieChartBuilder extends PcacChart {
   private radius!: number;
   private arcShape!: Arc<any, DefaultArcObject> | any;

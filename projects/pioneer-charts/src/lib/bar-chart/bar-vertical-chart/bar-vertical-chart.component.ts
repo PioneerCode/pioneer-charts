@@ -7,7 +7,8 @@ import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
   selector: 'pcac-bar-vertical-chart',
   templateUrl: './bar-vertical-chart.component.html',
   styleUrls: ['./bar-vertical-chart.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [BarVerticalChartBuilder]
 })
 export class PcacBarVerticalChartComponent implements OnChanges {
   private chartBuilder = inject(BarVerticalChartBuilder);

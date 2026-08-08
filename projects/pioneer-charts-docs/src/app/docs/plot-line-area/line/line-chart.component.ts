@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PcacLineChart } from '@pioneer-code/pioneer-charts';
 import { StringifyPipe } from '../../../stringify.pipe';

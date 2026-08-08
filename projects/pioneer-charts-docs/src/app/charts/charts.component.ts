@@ -25,15 +25,15 @@ import { AppService } from '../app.service';
 export class ChartsComponent {
   readonly service = inject(AppService);
 
-  onEditClicked(row: PcacData): void {
+  onEditClicked(_row: PcacData): void {
     alert("Edit Row");
   }
 
-  onDeleteClicked(row: PcacData): void {
+  onDeleteClicked(_row: PcacData): void {
     alert("Delete Row");
   }
 
-  onHistoryClicked(row: PcacData): void {
+  onHistoryClicked(_row: PcacData): void {
     alert("Show History");
   }
 }

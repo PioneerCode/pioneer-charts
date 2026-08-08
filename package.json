@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "start": "ng serve pioneer-charts-docs",
-    "start-web": "ng serve pioneer-charts-web",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-docs ",
     "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme  && npm run build:lib:readme",
@@ -52,6 +51,7 @@
     "cpy": "^12.0.1",
     "d3": "^7.9.0",
     "istanbul-lib-instrument": "^6.0.3",
+    "jsdom": "^30.0.1",
     "ng-packagr": "^22.0.0",
     "postcss": "^8.5.3",
     "sass": "^1.97.3",

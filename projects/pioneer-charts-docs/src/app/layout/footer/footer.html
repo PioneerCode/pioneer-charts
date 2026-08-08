@@ -17,15 +17,15 @@
       </a>
     </h5>
     <div class="flex items-center justify-end">
-      <a class="me-3" routerLink="/" [ngClass]="{'active': service.mainRoute() === MainRoutes.HOME}"
+      <a class="me-3" routerLink="/" [class.active]="service.mainRoute() === MainRoutes.HOME"
         (click)="service.mainRoute.set(MainRoutes.HOME)">
         Home
       </a>
       <a class="me-3" routerLink="/docs/guides/introduction"
-        [ngClass]="{'active': service.mainRoute() === MainRoutes.API}" (click)="service.mainRoute.set(MainRoutes.API)">
+        [class.active]="service.mainRoute() === MainRoutes.API" (click)="service.mainRoute.set(MainRoutes.API)">
         Documentation
       </a>
-      <a class="me-3" routerLink="/charts" [ngClass]="{'active': service.mainRoute() === MainRoutes.CHARTS}"
+      <a class="me-3" routerLink="/charts" [class.active]="service.mainRoute() === MainRoutes.CHARTS"
         (click)="service.mainRoute.set(MainRoutes.CHARTS)">
         Charts
       </a>

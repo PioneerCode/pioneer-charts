@@ -1,5 +1,7 @@
-import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, viewChild, input } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, ViewEncapsulation, SimpleChanges, viewChild, input } from '@angular/core';
+import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
@@ -20,7 +22,18 @@ export class PcacLineAreaChartComponent {
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly dotClicked = outputFromObservable(this.chartBuilder.dotClicked$);
 
-  private resizeWindowTimeout: any;
+  private resize = new Subject<void>();
+
+  constructor() {
+    this.resize.pipe(
+      debounceTime(300),
+      takeUntilDestroyed()
+    ).subscribe(() => this.buildChart());
+
+    fromEvent(window, 'resize').pipe(
+      takeUntilDestroyed()
+    ).subscribe(() => this.resize.next());
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['config'].currentValue !== changes['config'].previousValue) {
@@ -35,15 +48,7 @@ export class PcacLineAreaChartComponent {
     }
   }
 
-  /**
-   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
-   */
-  @HostListener('window:resize')
-  onResize() {
-    const self = this;
-    clearTimeout(this.resizeWindowTimeout);
-    this.resizeWindowTimeout = setTimeout(() => {
-      self.buildChart();
-    }, 300);
+  onResize(): void {
+    this.resize.next();
   }
 }

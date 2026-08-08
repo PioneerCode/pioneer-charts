@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnChanges, HostListener, ViewEncapsulation, inject, viewChild, input } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, OnChanges, ViewEncapsulation, inject, viewChild, input } from '@angular/core';
+import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
@@ -17,7 +19,18 @@ export class PcacBarHorizontalChartComponent implements OnChanges {
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly barClicked = outputFromObservable(this.chartBuilder.barClicked$);
 
-  private resizeWindowTimeout: any;
+  private resize = new Subject<void>();
+
+  constructor() {
+    this.resize.pipe(
+      debounceTime(300),
+      takeUntilDestroyed()
+    ).subscribe(() => this.buildChart());
+
+    fromEvent(window, 'resize').pipe(
+      takeUntilDestroyed()
+    ).subscribe(() => this.resize.next());
+  }
 
   ngOnChanges() {
     this.buildChart();
@@ -30,15 +43,7 @@ export class PcacBarHorizontalChartComponent implements OnChanges {
     }
   }
 
-  /**
-   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
-   */
-  @HostListener('window:resize')
-  onResize() {
-    const self = this;
-    clearTimeout(this.resizeWindowTimeout);
-    this.resizeWindowTimeout = setTimeout(() => {
-        self.buildChart();
-    }, 300);
+  onResize(): void {
+    this.resize.next();
   }
 }

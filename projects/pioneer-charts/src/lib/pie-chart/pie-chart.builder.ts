@@ -35,6 +35,10 @@ export class PieChartBuilder extends PcacChart {
   sliceClicked$ = this.sliceClickedSource.asObservable();
 
   buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     this.initializeChartState(chartElm, config);
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
     this.buildShapes(config);

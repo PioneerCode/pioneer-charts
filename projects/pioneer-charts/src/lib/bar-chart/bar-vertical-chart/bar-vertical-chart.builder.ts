@@ -47,6 +47,10 @@ export class BarVerticalChartBuilder extends PcacChart {
 
 
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     if (config.colorOverride && config.colorOverride.colors) {
       this.colors = config.colorOverride.colors;
     }

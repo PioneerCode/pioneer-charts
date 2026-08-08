@@ -41,6 +41,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
   barClicked$ = this.barClickedSource.asObservable();
 
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     this.config = JSON.parse(JSON.stringify(config));
     if (this.config.hideAxis) {
       this.adjustForHiddenAxis();

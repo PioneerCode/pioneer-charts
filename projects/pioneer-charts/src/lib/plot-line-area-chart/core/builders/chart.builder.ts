@@ -32,6 +32,10 @@ export class PlaChartBuilder extends PcacChart {
 
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(this.config.data[0].data.length).map(() => {
       return {

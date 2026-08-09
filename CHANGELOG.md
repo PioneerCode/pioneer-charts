@@ -23,6 +23,13 @@
     along, but area-type charts draw `<path class="area">` instead, so it never found anything to
     measure. It now recognizes both, and no longer throws at all for chart types (e.g. `plot`)
     that draw neither.
+  - Hovering any bar in `<pcac-bar-horizontal-chart>` threw `TypeError: this.transition is not a
+    function` (mouseover) followed by `TypeError: Cannot read properties of undefined (reading
+    'getTransitionDuration')` (mouseout): both handlers confused the raw DOM element (`this`,
+    inside D3's `function (this: any, ...)` callback convention) with the builder instance
+    (captured separately as `self`) — mouseover called `.transition()` directly on the element
+    outside its `select(...)` wrapper, and both read `.transitionService` off the element instead
+    of the builder. The hover-darken effect these were meant to drive had never actually worked.
 
 ### Changed
   - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,

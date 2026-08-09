@@ -184,9 +184,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', 0)
       .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
-        select(this
+        select(this)
           .transition()
-          .duration(this.transitionService.getTransitionDuration() / 7.5))
+          .duration(self.transitionService.getTransitionDuration() / 7.5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -207,7 +207,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.tooltipBuilder.hideTooltip();
         select(this)
           .transition()
-          .duration(this.transitionService.getTransitionDuration() / 5)
+          .duration(self.transitionService.getTransitionDuration() / 5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);

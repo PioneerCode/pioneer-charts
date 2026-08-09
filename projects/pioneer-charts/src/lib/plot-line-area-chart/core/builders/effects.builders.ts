@@ -25,14 +25,17 @@ export interface IPlaChartEffectsBuilderConfig {
 @Injectable()
 export class PlaChartEffectsBuilder {
   private config!: IPlaChartEffectsBuilderConfig;
-  // .getTotalLength()/.getPointAtLength() below are SVGGeometryElement methods - the '.line'
-  // paths this collects are always <path> elements (see PlaChartBuilder.drawLine).
+  // .getTotalLength()/.getPointAtLength() below are SVGGeometryElement methods - the paths this
+  // collects are always <path> elements (see PlaChartBuilder.drawLine/.drawArea). A chart draws
+  // one or the other depending on its `type` (never both), so this selector is never ambiguous.
+  // Plot-type charts draw neither (just standalone dots, no connecting geometry) - updateEffects()
+  // below guards against that rather than this collecting nothing for it to index into.
   private lines: SVGGeometryElement[] = [];
 
   buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
     this.lines = [];
-    this.config.svg.selectAll('.line').each((d, i, n) => {
+    this.config.svg.selectAll('.line, .area').each((d, i, n) => {
       this.lines.push(n[i] as SVGGeometryElement);
     });
     this.buildCollection();
@@ -125,14 +128,22 @@ export class PlaChartEffectsBuilder {
   private updateEffects(mousePos: [number, number]) {
     this.config.svg.selectAll('.effect-group')
       .attr('transform', (data, index: number, nodes) => {
+        const line = this.lines[index];
+        if (!line) {
+          // No connected line/area geometry for this group to walk (a plot-type chart, whose
+          // dots aren't joined by a path) — nothing to position the crosshair against, so leave
+          // it where it was rather than reading .getTotalLength() off undefined.
+          return null;
+        }
+
         let beginning = 0;
-        let end = this.lines[index].getTotalLength();
+        let end = line.getTotalLength();
         let target = 0;
         let pos;
 
         while (true) {
           target = Math.floor((beginning + end) / 2);
-          pos = this.lines[index].getPointAtLength(target);
+          pos = line.getPointAtLength(target);
           if ((target === end || target === beginning) && pos.x !== mousePos[0]) {
             break;
           }

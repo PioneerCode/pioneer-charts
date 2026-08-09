@@ -17,6 +17,12 @@
     them could animate a *different* instance's crosshair/tooltip effect (whichever chart had
     built most recently) instead of the one actually under the cursor. `PlaChartEffectsBuilder`
     is now scoped per chart instance, like every other per-chart builder in the library.
+  - Hovering a `<pcac-area-chart>` (`type: 'area'`) with `enableEffects: true` threw
+    `TypeError: Cannot read properties of undefined (reading 'getTotalLength')` on every
+    mousemove: the crosshair effect always looked for `<path class="line">` to measure positions
+    along, but area-type charts draw `<path class="area">` instead, so it never found anything to
+    measure. It now recognizes both, and no longer throws at all for chart types (e.g. `plot`)
+    that draw neither.
 
 ### Changed
   - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,

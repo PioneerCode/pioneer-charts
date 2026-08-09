@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, signal } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { LayoutPageDocsContent } from './content/content';
@@ -14,25 +14,20 @@ import { IJumpNav, LayoutJumpNav } from './jump-nav/jump-nav';
     LayoutJumpNav
 ],
   templateUrl: './page-docs.html',
-  styleUrls: ['./page-docs.scss']
+  styleUrl: './page-docs.scss'
 })
 export class LayoutPageDocs {
   pageTitle = input.required<string>()
   jumpNav = input<IJumpNav[]>([]);
 
   protected readonly isMobile = signal(true);
-  private readonly _mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
 
   constructor() {
-    const media = inject(MediaMatcher);
-    this._mobileQuery = media.matchMedia('(max-width: 600px)');
-    this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
-  }
+    const mobileQuery = inject(MediaMatcher).matchMedia('(max-width: 600px)');
+    this.isMobile.set(mobileQuery.matches);
 
-  ngOnDestroy(): void {
-    this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    const listener = () => this.isMobile.set(mobileQuery.matches);
+    mobileQuery.addEventListener('change', listener);
+    inject(DestroyRef).onDestroy(() => mobileQuery.removeEventListener('change', listener));
   }
 }

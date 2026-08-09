@@ -1,7 +1,4 @@
-import {
-  Component,
-  input
-} from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -10,8 +7,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     MatCardModule
   ],
-  styleUrls: ['./code.scss'],
-  
+  styleUrl: './code.scss'
 })
 export class LayoutCode {
   readonly code = input.required<string>();

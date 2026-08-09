@@ -12,7 +12,7 @@ export interface IJumpNav {
     RouterLink
   ],
   templateUrl: './jump-nav.html',
-  styleUrls: ['./jump-nav.scss']
+  styleUrl: './jump-nav.scss'
 })
 export class LayoutJumpNav {
   readonly jumpNav = input<IJumpNav[]>([]);

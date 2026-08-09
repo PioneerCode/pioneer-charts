@@ -10,11 +10,12 @@ import { RouterLink } from '@angular/router';
     MatDividerModule
   ],
   templateUrl: './footer.html',
-  styleUrls: ['./footer.scss'],
+  styleUrl: './footer.scss',
 })
 export class LayoutFooter {
   readonly service = inject(AppService)
 
-  version = signal<string>("this.service.version");
+  // Kept in sync with projects/pioneer-charts/package.json's published version.
+  version = signal<string>('22.0.0');
   MainRoutes = MainRoutes;
 }

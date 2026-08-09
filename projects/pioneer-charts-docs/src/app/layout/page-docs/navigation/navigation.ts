@@ -10,7 +10,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatListModule
   ],
   templateUrl: './navigation.html',
-  styleUrls: ['./navigation.scss']
+  styleUrl: './navigation.scss'
 })
 export class LayoutPageDocsNavigation {
 

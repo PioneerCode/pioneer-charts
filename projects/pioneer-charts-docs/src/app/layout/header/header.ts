@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
     MatButtonModule,
   ],
   templateUrl: './header.html',
-  styleUrls: ['./header.scss']
+  styleUrl: './header.scss'
 })
 export class LayoutHeader {
 

@@ -5,8 +5,6 @@ import { AppService } from '../../../app.service';
 import { PcacPlotChart } from '@pioneer-code/pioneer-charts';
 import { PlotLineAreaBaseComponent } from '../base/base.component';
 
-
-
 @Component({
   selector: 'pc-plot-chart',
   templateUrl: './plot-chart.component.html',
@@ -22,4 +20,3 @@ export class PlotChartComponent {
   markupCode = `<pcac-plot-chart [config]="config" (dotClicked)="onClicked($event)"/>`;
   importCode = `import { PcacPlotChart } from '@pioneer-code/pioneer-charts';`;
 }
-

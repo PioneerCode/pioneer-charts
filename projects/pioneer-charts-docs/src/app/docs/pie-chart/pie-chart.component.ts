@@ -9,7 +9,6 @@ import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { StringifyPipe } from '../../stringify.pipe';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
-
 @Component({
   selector: 'pc-pie-chart',
   templateUrl: './pie-chart.component.html',

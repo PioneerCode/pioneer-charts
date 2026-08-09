@@ -9,7 +9,7 @@ import { AppService, MainRoutes } from '../app.service';
 @Component({
   selector: 'pc-home',
   templateUrl: './home.html',
-  styleUrls: ['./home.scss'],
+  styleUrl: './home.scss',
   imports: [
     RouterLink,
     MatButtonModule,

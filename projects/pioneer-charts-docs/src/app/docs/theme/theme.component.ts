@@ -6,7 +6,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-theme',
   templateUrl: './theme.component.html',
-  styleUrls: ['./theme.component.scss'],
+  styleUrl: './theme.component.scss',
   imports: [
     LayoutCode,
     LayoutPageDocs
@@ -54,16 +54,19 @@ this.colors = this.colorService.getColorScale(config.data.length);
   return this.colors[i];
 })
 ...`;
-  importColorService = `import { Component, OnInit } from '@angular/core';
-import { PcacColorService } from '@pioneer-code/pioneer-charts';;
+  importColorService = `import { Component, inject } from '@angular/core';
+import { PcacColorService } from '@pioneer-code/pioneer-charts';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  constructor(public colorService: PcacColorService) { }
-  this.colorService.setScale([...]);
+export class AppComponent {
+  colorService = inject(PcacColorService);
+
+  constructor() {
+    this.colorService.setScale([...]);
+  }
 }`;
 }

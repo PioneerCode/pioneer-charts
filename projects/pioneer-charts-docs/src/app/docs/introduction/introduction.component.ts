@@ -6,7 +6,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-introduction',
   templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.scss'],
+  styleUrl: './introduction.component.scss',
   imports: [
     LayoutCode,
     LayoutPageDocs,

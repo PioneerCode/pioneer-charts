@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'app-layout-page-docs-content',
   imports: [],
   templateUrl: './content.html',
-  styleUrls: ['./content.scss']
+  styleUrl: './content.scss'
 })
 export class LayoutPageDocsContent {
   pageTitle = input.required<string>()

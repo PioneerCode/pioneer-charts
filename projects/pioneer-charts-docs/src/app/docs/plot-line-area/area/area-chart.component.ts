@@ -5,8 +5,6 @@ import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
 import { PlotLineAreaBaseComponent } from '../base/base.component';
 
-
-
 @Component({
   selector: 'pc-area-chart',
   templateUrl: './area-chart.component.html',
@@ -22,4 +20,3 @@ export class AreaChartComponent {
   markupCode = `<pcac-area-chart [config]="config" (dotClicked)="onClicked($event)"/>`;
   importCode = `import { PcacAreaChart } from '@pioneer-code/pioneer-charts';`;
 }
-

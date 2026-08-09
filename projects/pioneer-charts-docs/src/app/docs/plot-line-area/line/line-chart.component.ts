@@ -4,6 +4,7 @@ import { PcacLineChart } from '@pioneer-code/pioneer-charts';
 import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
 import { PlotLineAreaBaseComponent } from '../base/base.component';
+import { LayoutResourceState } from '../../../layout/resource-state/resource-state';
 
 @Component({
   selector: 'pc-line-chart',
@@ -13,6 +14,7 @@ import { PlotLineAreaBaseComponent } from '../base/base.component';
     MatCardModule,
     PcacLineChart,
     StringifyPipe,
+    LayoutResourceState,
   ]
 })
 export class LineChartComponent {

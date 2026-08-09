@@ -4,7 +4,9 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-legend [config]="pcService.legendConfig.value()" (itemClicked)="onItemClicked($event)"/>
+        <app-layout-resource-state [resource]="pcService.legendConfig">
+          <pcac-legend [config]="pcService.legendConfig.value()" (itemClicked)="onItemClicked($event)"/>
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </section>

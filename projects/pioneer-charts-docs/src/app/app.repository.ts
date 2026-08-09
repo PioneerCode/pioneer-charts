@@ -68,10 +68,6 @@ export class AppRepository {
     return './mock/pie-chart.json';
   }
 
-  getShareConfigUrl() {
-    return './mock/shared-config.json';
-  }
-
   getLegendConfigUrl() {
     return './mock/legend.json';
   }

@@ -8,6 +8,7 @@ import { AppService } from '../../app.service';
 import { StringifyPipe } from '../../stringify.pipe';
 import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 
 @Component({
   selector: 'pc-bar-chart',
@@ -19,7 +20,8 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
     MatCardModule,
     StringifyPipe,
     PcacBarHorizontalChartComponent,
-    PcacBarVerticalChartComponent
+    PcacBarVerticalChartComponent,
+    LayoutResourceState
   ]
 })
 export class BarChartComponent {

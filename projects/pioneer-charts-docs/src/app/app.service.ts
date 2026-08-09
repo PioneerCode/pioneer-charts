@@ -20,7 +20,6 @@ export class AppService {
   mainRoute = signal<MainRoutes>(MainRoutes.HOME);
 
   pieChartConfig = httpResource<PcacPieChartConfig>(() => this.repository.getPieChartConfigUrl(), { defaultValue: new PcacPieChartConfig() });
-  sharedConfig = httpResource<PcacData[]>(() => this.repository.getShareConfigUrl(), { defaultValue: [] });
 
   barVerticalChartConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
   barVerticalChartSingleConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartSingleUrl(), { defaultValue: new PcacBarVerticalChartConfig() });

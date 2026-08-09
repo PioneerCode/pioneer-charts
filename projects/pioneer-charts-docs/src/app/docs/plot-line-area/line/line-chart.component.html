@@ -2,13 +2,19 @@
   [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig.value() | stringify">
   <div class="grid grid-cols-2 gap-4 mb-6">
     <mat-card class="p-3">
-      <pcac-line-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+      <app-layout-resource-state [resource]="pcService.lineChartConfig">
+        <pcac-line-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
     <mat-card class="p-3">
-      <pcac-line-chart [config]="pcService.areaChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+      <app-layout-resource-state [resource]="pcService.areaChartConfig">
+        <pcac-line-chart [config]="pcService.areaChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
   </div>
   <mat-card class="p-3 ">
-    <pcac-line-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+    <app-layout-resource-state [resource]="pcService.areaChartHideConfig">
+      <pcac-line-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
   </mat-card>
 </app-plot-line-area-base>

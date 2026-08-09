@@ -5,38 +5,54 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-3 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartStackedConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div class="grid grid-cols-2 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        <app-layout-resource-state [resource]="service.barHorizontalChartGroupConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
-        (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barHorizontalChartStackedConfig">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
+          (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
-        (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
+          (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()" (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()" (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
   </section>
   <section class="pc-doc-section">

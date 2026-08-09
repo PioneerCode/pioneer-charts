@@ -2,78 +2,102 @@
   <div class="container mx-auto grid grid-cols-4 gap-4">
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barVerticalChartStackedConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>
   <div class="container mx-auto grid grid-cols-4 gap-4 mt-3">
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barHorizontalChartGroupConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barHorizontalChartStackedConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
-          (barClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
+            (barClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>
   <div class="container mx-auto grid grid-cols-2 gap-4 mt-3">
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-line-chart [config]="service.lineChartConfig.value()" (dotClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.lineChartConfig">
+          <pcac-line-chart [config]="service.lineChartConfig.value()" (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div>
       <mat-card class="p-3 h-full">
-        <pcac-area-chart [config]="service.areaChartConfig.value()" (dotClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.areaChartConfig">
+          <pcac-area-chart [config]="service.areaChartConfig.value()" (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>
   <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
     <div>
       <mat-card class="p-3">
-        <pcac-area-chart [config]="service.areaChartHideConfig.value()" (dotClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.areaChartHideConfig">
+          <pcac-area-chart [config]="service.areaChartHideConfig.value()" (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>
   <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
     <div>
       <mat-card class="p-3">
-        <pcac-pie-chart [config]="service.pieChartConfig.value()" (sliceClicked)="service.onClicked($event)" />
+        <app-layout-resource-state [resource]="service.pieChartConfig">
+          <pcac-pie-chart [config]="service.pieChartConfig.value()" (sliceClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>

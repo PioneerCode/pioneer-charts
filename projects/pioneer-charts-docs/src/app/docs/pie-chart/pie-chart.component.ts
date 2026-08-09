@@ -8,6 +8,7 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { StringifyPipe } from '../../stringify.pipe';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 
 @Component({
   selector: 'pc-pie-chart',
@@ -19,6 +20,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
     MatCardModule,
     PcacPieChartComponent,
     StringifyPipe,
+    LayoutResourceState,
   ]
 })
 export class PieChartComponent {

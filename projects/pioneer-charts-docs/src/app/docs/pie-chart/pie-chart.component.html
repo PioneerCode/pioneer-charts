@@ -3,8 +3,10 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-pie-chart [config]="pcService.pieChartConfig.value()"
-          (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
+        <app-layout-resource-state [resource]="pcService.pieChartConfig">
+          <pcac-pie-chart [config]="pcService.pieChartConfig.value()"
+            (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </section>

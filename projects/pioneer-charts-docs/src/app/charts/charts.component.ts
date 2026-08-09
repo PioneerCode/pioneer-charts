@@ -8,6 +8,7 @@ import {
 } from '@pioneer-code/pioneer-charts';
 import { MatCardModule } from '@angular/material/card';
 import { AppService } from '../app.service';
+import { LayoutResourceState } from '../layout/resource-state/resource-state';
 
 @Component({
   selector: 'pc-charts',
@@ -18,7 +19,8 @@ import { AppService } from '../app.service';
     PcacLineChart,
     PcacAreaChart,
     PcacPieChartComponent,
-    MatCardModule
+    MatCardModule,
+    LayoutResourceState
   ]
 })
 export class ChartsComponent {

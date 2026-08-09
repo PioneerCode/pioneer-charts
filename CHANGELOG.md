@@ -30,6 +30,12 @@
     (captured separately as `self`) — mouseover called `.transition()` directly on the element
     outside its `select(...)` wrapper, and both read `.transitionService` off the element instead
     of the builder. The hover-darken effect these were meant to drive had never actually worked.
+  - In `plot-line-area-chart`, a dot sitting exactly at the x-domain's minimum or maximum value
+    (a very common case — e.g. the first/last point of any line) was rendered half-clipped: its
+    clip-path `<rect>` spanned exactly `[0, width]` with no horizontal buffer, so half of a dot's
+    radius fell outside it right at either edge (left half missing at the minimum, right half at
+    the maximum). The vertical dimension already carried a 10px buffer on each side for the
+    identical reason; the horizontal dimension now gets the same treatment.
 
 ### Changed
   - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,

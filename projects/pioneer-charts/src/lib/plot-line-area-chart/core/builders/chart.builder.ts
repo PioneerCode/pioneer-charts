@@ -152,9 +152,9 @@ export class PlaChartBuilder extends PcacChart {
       .append('clipPath')
       .attr('id', this.clipPathId)
       .append('rect')
-      .attr('x', 0)
+      .attr('x', -10) // extend clip-path a bit left to avoid cutting off a dot at the x-domain's minimum
       .attr('y', -10) // extend clip-path a bit above to avoid cutting off top of line
-      .attr('width', this.width)
+      .attr('width', this.width + 20) // +20 to also cover a dot at the x-domain's maximum
       .attr('height', this.height + 20); // +20 to ensure dots at bottom are not clipped
   }
 

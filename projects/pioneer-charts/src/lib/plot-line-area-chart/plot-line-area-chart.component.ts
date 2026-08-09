@@ -3,16 +3,22 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
+import { PlaChartEffectsBuilder } from './core/builders/effects.builders';
 import { PcacChartResizeService } from '../core/resize.service';
 
 @Component({
   selector: 'pcac-line-area-chart',
   templateUrl: './plot-line-area-chart.component.html',
   styleUrl: './plot-line-area-chart.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  // PlaChartEffectsBuilder must be listed here too, not just PlaChartBuilder: it's injected
+  // *inside* PlaChartBuilder, but its own per-instance state (see its class doc) still needs
+  // this component's injector to shadow its (default) root scope, or every <pcac-line-area-chart>
+  // on the page would share one PlaChartEffectsBuilder instance.
+  providers: [PlaChartBuilder, PlaChartEffectsBuilder]
 })
 export class PcacLineAreaChartComponent {
-  private chartBuilder = new PlaChartBuilder();
+  private chartBuilder = inject(PlaChartBuilder);
 
   readonly config = input.required<PcacLineAreaChartConfig>();
   readonly type = input.required<PcacLineAreaPlotChartConfigType>();

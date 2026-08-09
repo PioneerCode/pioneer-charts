@@ -1,4 +1,4 @@
-import { ElementRef } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 import { select } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
@@ -17,8 +17,15 @@ import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
 
-
+/**
+ * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
+ * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-line-area-chart> rendered at once.
+ */
+@Injectable()
 export class PlaChartBuilder extends PcacChart {
+  private effectsBuilder = inject(PlaChartEffectsBuilder);
   private scales!: PlaChartScales;
   private lineGenerator!: Line<PcacData>;
   private areaGenerator!: Area<PcacData>;
@@ -124,7 +131,7 @@ export class PlaChartBuilder extends PcacChart {
     this.drawLineArea(config, type);
 
     if (config.enableEffects) {
-      new PlaChartEffectsBuilder().buildEffects({
+      this.effectsBuilder.buildEffects({
         svg: this.svg,
         height: this.height,
         width: this.width,

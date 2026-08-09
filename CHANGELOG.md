@@ -12,6 +12,11 @@
     already-successful draw and restarting its enter transition mid-animation. The retry now
     checks the container's actual measured size against the last successful build before
     triggering a rebuild, so it only fires when something has genuinely changed.
+  - Multiple `<pcac-line-chart>`/`<pcac-area-chart>`/`<pcac-plot-chart>` instances with
+    `enableEffects: true` on the same page shared one `PlaChartEffectsBuilder`, so hovering any of
+    them could animate a *different* instance's crosshair/tooltip effect (whichever chart had
+    built most recently) instead of the one actually under the cursor. `PlaChartEffectsBuilder`
+    is now scoped per chart instance, like every other per-chart builder in the library.
 
 ### Changed
   - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,
@@ -31,6 +36,9 @@
     for existing consumers.
   - Assorted `any` types removed in favor of real ones (`PcacChartMargin`, `SVGGeometryElement`,
     a generic `AxisScale<Domain>`, and the D3 tooltip selection's inferred type).
+  - `PlaChartBuilder` is now `@Injectable()` + provided per-component like the other three chart
+    builders, instead of `new PlaChartBuilder()`'d manually — see the `PlaChartEffectsBuilder` fix
+    above, which this made possible to catch and fix correctly.
 
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)

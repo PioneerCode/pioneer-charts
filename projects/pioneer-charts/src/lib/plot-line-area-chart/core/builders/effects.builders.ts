@@ -15,9 +15,14 @@ export interface IPlaChartEffectsBuilderConfig {
   y: ScaleLinear<number, number> | ScaleTime<number, number, never>;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
+ * holds mutable per-chart-instance state (`config`, `lines`) despite looking like a stateless
+ * helper. A root singleton would be shared and clobbered by every `<pcac-line-area-chart>`
+ * rendered at once — each instance's hover effects would end up reading/writing whichever
+ * chart's `buildEffects()` ran last, not their own.
+ */
+@Injectable()
 export class PlaChartEffectsBuilder {
   private config!: IPlaChartEffectsBuilderConfig;
   // .getTotalLength()/.getPointAtLength() below are SVGGeometryElement methods - the '.line'

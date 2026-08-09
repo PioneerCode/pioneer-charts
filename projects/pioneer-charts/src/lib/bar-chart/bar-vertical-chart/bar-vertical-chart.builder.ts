@@ -49,10 +49,8 @@ export class BarVerticalChartBuilder extends PcacChart {
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
-    this.initializeChartState(chartElm, config);
-
-    if(this.width <= 0) {
-      return; // TODO: Figure out why this is happening on initial load sometimes
+    if (!this.initializeChartState(chartElm, config)) {
+      return;
     }
 
     if (config.colorOverride && config.colorOverride.colors) {

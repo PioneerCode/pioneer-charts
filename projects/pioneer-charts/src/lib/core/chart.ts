@@ -26,15 +26,57 @@ export class PcacChart {
   startData: PcacData[] = [];
 
   /**
-   * Prior to building a chart, we need to initialize the state of the chart
+   * Raw, unadjusted container width measured by the last successful `initializeChartState()`
+   * call, or `null` if none has succeeded yet. Deliberately tracked separately from `width`:
+   * some builders (e.g. bar-horizontal-chart's `setHorizontalMarginsBasedOnContent`) recompute
+   * `width`/`margin.left` mid-build from measured axis-label sizes, so `width` alone isn't a
+   * stable basis for "did the container itself resize" — the raw container measurement is.
+   */
+  private lastContainerWidth: number | null = null;
+
+  /**
+   * Prior to building a chart, we need to initialize the state of the chart.
+   *
+   * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
+   * been laid out yet, so its `clientWidth` measures 0 — this happens when a chart mounts
+   * already holding data (e.g. behind a loading gate) and its first `ngOnChanges` fires before
+   * the browser has committed layout for its own just-created DOM node. Callers should bail out
+   * of their build on `false` rather than proceeding with a degenerate width; `PcacChartResizeService`
+   * (wired up by every chart component) retries the build once the container has a real size.
    * @param chartElm Reference to SVG on dom
    * @param config Chart specific configuration
    */
-  initializeChartState(chartElm: ElementRef, config: PcacChartConfig): void {
+  initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     select(chartElm.nativeElement).select('g').remove();
-    this.width = chartElm.nativeElement.parentNode.clientWidth - this.margin.left - this.margin.right;
+    const containerWidth = chartElm.nativeElement.parentNode.clientWidth;
+    this.width = containerWidth - this.margin.left - this.margin.right;
+    if (this.width <= 0) {
+      return false;
+    }
     this.height = config.height;
     this.colors = this.colorService.getColorScale(Math.max(config.data.length, config.data[0]?.data ? config.data[0].data.length : 0));
+    this.lastContainerWidth = containerWidth;
+    return true;
+  }
+
+  /**
+   * True if the container's current raw layout width differs from the one measured by the last
+   * successful build, or if no successful build has happened yet.
+   *
+   * `PcacChartResizeService`'s `ResizeObserver` is guaranteed to fire once as soon as it starts
+   * observing — that's what lets a chart recover from the 0-width race described on
+   * `initializeChartState`, but it also means that "routine" first callback usually lands
+   * moments after `ngOnChanges` already built successfully at the same width. Without this
+   * check, that redundant callback would restart the chart's enter transition mid-animation for
+   * no visual change. Only `ngOnChanges` (which reacts to data, not size) should skip this check.
+   * @param chartElm Reference to SVG on dom
+   */
+  containerSizeChanged(chartElm: ElementRef): boolean {
+    if (this.lastContainerWidth === null) {
+      return true;
+    }
+    const containerWidth = chartElm.nativeElement.parentNode.clientWidth;
+    return containerWidth > 0 && containerWidth !== this.lastContainerWidth;
   }
 
   /**

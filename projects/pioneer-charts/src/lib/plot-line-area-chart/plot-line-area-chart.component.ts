@@ -1,10 +1,9 @@
-import { Component, ElementRef, ViewEncapsulation, SimpleChanges, viewChild, input } from '@angular/core';
-import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { fromEvent, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Component, ElementRef, OnChanges, ViewEncapsulation, SimpleChanges, inject, viewChild, input } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
+import { PcacChartResizeService } from '../core/resize.service';
 
 @Component({
   selector: 'pcac-line-area-chart',
@@ -12,27 +11,24 @@ import { PlaChartBuilder } from './core/builders/chart.builder';
   styleUrls: ['./plot-line-area-chart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PcacLineAreaChartComponent {
+export class PcacLineAreaChartComponent implements OnChanges {
   private chartBuilder = new PlaChartBuilder();
 
   readonly config = input.required<PcacLineAreaChartConfig>();
   readonly type = input.required<PcacLineAreaPlotChartConfigType>();
 
-
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly dotClicked = outputFromObservable(this.chartBuilder.dotClicked$);
 
-  private resize = new Subject<void>();
-
   constructor() {
-    this.resize.pipe(
-      debounceTime(300),
-      takeUntilDestroyed()
-    ).subscribe(() => this.buildChart());
-
-    fromEvent(window, 'resize').pipe(
-      takeUntilDestroyed()
-    ).subscribe(() => this.resize.next());
+    inject(PcacChartResizeService).observe(this.chartElm, () => {
+      // Skip the ResizeObserver's routine initial callback when it lands after ngOnChanges
+      // already built successfully at this same width — only a real size change (or a build
+      // that never happened, e.g. the 0-width mount race) should trigger a rebuild here.
+      if (this.chartBuilder.containerSizeChanged(this.chartElm())) {
+        this.buildChart();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -46,9 +42,5 @@ export class PcacLineAreaChartComponent {
     if (config && config.data && config.data.length > 0) {
       this.chartBuilder.buildChart(this.chartElm(), config, this.type());
     }
-  }
-
-  onResize(): void {
-    this.resize.next();
   }
 }

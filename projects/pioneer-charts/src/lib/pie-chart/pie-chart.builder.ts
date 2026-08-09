@@ -39,7 +39,9 @@ export class PieChartBuilder extends PcacChart {
       return;
     }
 
-    this.initializeChartState(chartElm, config);
+    if (!this.initializeChartState(chartElm, config)) {
+      return;
+    }
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
     this.buildShapes(config);
     this.drawChart(chartElm, config);

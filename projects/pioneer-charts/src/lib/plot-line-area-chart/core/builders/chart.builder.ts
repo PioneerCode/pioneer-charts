@@ -50,7 +50,9 @@ export class PlaChartBuilder extends PcacChart {
       this.margin.right = 8;
     }
 
-    this.initializeChartState(chartElm, this.config);
+    if (!this.initializeChartState(chartElm, this.config)) {
+      return;
+    }
     if (this.config.colorOverride) {
       this.colors = this.config.colorOverride;
     }

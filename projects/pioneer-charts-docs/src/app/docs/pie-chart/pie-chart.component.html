@@ -3,7 +3,7 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-pie-chart [config]="pcService.pieChartConfig()"
+        <pcac-pie-chart [config]="pcService.pieChartConfig.value()"
           (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
       </mat-card>
     </div>
@@ -43,7 +43,7 @@
   <section class="pc-doc-section">
     <h3 id="contract">Contract</h3>
     <div class="pc-config-container">
-      <app-layout-code language="json" [code]="pcService.pieChartConfig() | stringify"></app-layout-code>
+      <app-layout-code language="json" [code]="pcService.pieChartConfig.value() | stringify"></app-layout-code>
     </div>
   </section>
 </app-layout-page-docs>

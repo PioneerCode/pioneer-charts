@@ -18,7 +18,7 @@ export class App {
   protected readonly title = signal('Pioneer Charts');
 
   constructor() {
-    // Eagerly instantiate the root-scoped AppService here so its toSignal()-backed
+    // Eagerly instantiate the root-scoped AppService here so its httpResource()-backed
     // chart configs start loading at app bootstrap instead of on first use.
     inject(AppService);
   }

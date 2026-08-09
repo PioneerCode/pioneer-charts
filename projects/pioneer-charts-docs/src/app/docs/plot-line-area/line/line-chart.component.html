@@ -1,14 +1,14 @@
 <app-plot-line-area-base [title]="'Line Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig() | stringify">
+  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig.value() | stringify">
   <div class="grid grid-cols-2 gap-4 mb-6">
     <mat-card class="p-3">
-      <pcac-line-chart [config]="pcService.lineChartConfig()" (dotClicked)="pcService.onClicked($event)" />
+      <pcac-line-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </mat-card>
     <mat-card class="p-3">
-      <pcac-line-chart [config]="pcService.areaChartConfig()" (dotClicked)="pcService.onClicked($event)" />
+      <pcac-line-chart [config]="pcService.areaChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </mat-card>
   </div>
   <mat-card class="p-3 ">
-    <pcac-line-chart [config]="pcService.areaChartHideConfig()" (dotClicked)="pcService.onClicked($event)" />
+    <pcac-line-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
   </mat-card>
 </app-plot-line-area-base>

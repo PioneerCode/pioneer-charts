@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { httpResource } from '@angular/common/http';
 import { AppRepository } from './app.repository';
 import { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig, PcacPlotChartConfig } from '@pioneer-code/pioneer-charts';
 
@@ -19,25 +19,25 @@ export class AppService {
 
   mainRoute = signal<MainRoutes>(MainRoutes.HOME);
 
-  pieChartConfig = toSignal(this.repository.getPieChartConfig(), { initialValue: new PcacPieChartConfig() });
-  sharedConfig = toSignal(this.repository.getShareConfig(), { initialValue: [] as PcacData[] });
+  pieChartConfig = httpResource<PcacPieChartConfig>(() => this.repository.getPieChartConfigUrl(), { defaultValue: new PcacPieChartConfig() });
+  sharedConfig = httpResource<PcacData[]>(() => this.repository.getShareConfigUrl(), { defaultValue: [] });
 
-  barVerticalChartConfig = toSignal(this.repository.getBarVerticalChart(), { initialValue: new PcacBarVerticalChartConfig() });
-  barVerticalChartSingleConfig = toSignal(this.repository.getBarVerticalChartSingle(), { initialValue: new PcacBarVerticalChartConfig() });
-  barVerticalChartGroupConfig = toSignal(this.repository.getBarVerticalChartGroup(), { initialValue: new PcacBarVerticalChartConfig() });
-  barVerticalChartStackedConfig = toSignal(this.repository.getBarVerticalChartStacked(), { initialValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartSingleConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartSingleUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartGroupConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartGroupUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartStackedConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartStackedUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
 
-  barHorizontalChartConfig = toSignal(this.repository.getBarHorizontalChart(), { initialValue: new PcacBarHorizontalChartConfig() });
-  barHorizontalChartSingleConfig = toSignal(this.repository.getBarHorizontalChartSingle(), { initialValue: new PcacBarHorizontalChartConfig() });
-  barHorizontalChartGroupConfig = toSignal(this.repository.getBarHorizontalChartGroup(), { initialValue: new PcacBarHorizontalChartConfig() });
-  barHorizontalChartStackedConfig = toSignal(this.repository.getBarHorizontalChartStacked(), { initialValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartSingleConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartSingleUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartGroupConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartGroupUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartStackedConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartStackedUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
 
-  lineChartConfig = toSignal(this.repository.getLineChart(), { initialValue: new PcacLineChartConfig() });
-  areaChartConfig = toSignal(this.repository.getAreaChart(), { initialValue: new PcacAreaChartConfig() });
-  areaChartHideConfig = toSignal(this.repository.getAreaHideChart(), { initialValue: new PcacAreaChartConfig() });
-  plotConfig = toSignal(this.repository.getPlotChart(), { initialValue: new PcacPlotChartConfig() });
+  lineChartConfig = httpResource<PcacLineChartConfig>(() => this.repository.getLineChartUrl(), { defaultValue: new PcacLineChartConfig() });
+  areaChartConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaChartUrl(), { defaultValue: new PcacAreaChartConfig() });
+  areaChartHideConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaHideChartUrl(), { defaultValue: new PcacAreaChartConfig() });
+  plotConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartUrl(), { defaultValue: new PcacPlotChartConfig() });
 
-  legendConfig = toSignal(this.repository.getLegendConfig(), { initialValue: new PcacLegendConfig() });
+  legendConfig = httpResource<PcacLegendConfig>(() => this.repository.getLegendConfigUrl(), { defaultValue: new PcacLegendConfig() });
 
   onClicked(data: PcacData) {
     alert(`Key: ${data.key} - Value: ${data.value}`);

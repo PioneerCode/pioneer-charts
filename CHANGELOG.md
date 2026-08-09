@@ -1,3 +1,29 @@
+<a name="unreleased"></a>
+# Unreleased
+
+### Fixed
+  - A chart that mounted already holding data (e.g. behind an async/loading gate) could
+    silently render nothing: its first build could run before the browser had committed layout
+    for the chart's own just-created container, measuring a 0-width and giving up with no way to
+    retry. Charts now observe their container via `ResizeObserver` and retry once real layout is
+    available.
+  - Charts on a normal page load were drawing twice — the fix above's `ResizeObserver` fires once
+    routinely as soon as it starts observing, which was landing moments after the chart's first,
+    already-successful draw and restarting its enter transition mid-animation. The retry now
+    checks the container's actual measured size against the last successful build before
+    triggering a rebuild, so it only fires when something has genuinely changed.
+
+### Changed
+  - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,
+    `PcacBarHorizontalChartComponent`, `PcacPieChartComponent`, `PcacLineAreaChartComponent`,
+    `PcacLineChart`, `PcacAreaChart`, and `PcacPlotChart`. It was undocumented and unused by any
+    known consumer; it's superseded by the automatic `ResizeObserver`-based handling above, which
+    also covers layout-driven container resizes (a sidebar collapsing, a tab activating) that
+    `window` resize events alone never did.
+
+### Added
+  - `PcacChartResizeService` (new, exported from the library's public API).
+
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)
 

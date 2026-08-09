@@ -49,10 +49,11 @@ export class PcacChart {
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     select(chartElm.nativeElement).select('g').remove();
     const containerWidth = chartElm.nativeElement.parentNode.clientWidth;
-    this.width = containerWidth - this.margin.left - this.margin.right;
-    if (this.width <= 0) {
+    const measuredWidth = containerWidth - this.margin.left - this.margin.right;
+    if (measuredWidth <= 0) {
       return false;
     }
+    this.width = measuredWidth;
     this.height = config.height;
     this.colors = this.colorService.getColorScale(Math.max(config.data.length, config.data[0]?.data ? config.data[0].data.length : 0));
     this.lastContainerWidth = containerWidth;

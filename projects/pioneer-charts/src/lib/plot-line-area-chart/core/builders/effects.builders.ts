@@ -20,13 +20,15 @@ export interface IPlaChartEffectsBuilderConfig {
 })
 export class PlaChartEffectsBuilder {
   private config!: IPlaChartEffectsBuilderConfig;
-  private lines = [] as any[];
+  // .getTotalLength()/.getPointAtLength() below are SVGGeometryElement methods - the '.line'
+  // paths this collects are always <path> elements (see PlaChartBuilder.drawLine).
+  private lines: SVGGeometryElement[] = [];
 
   buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
-    this.lines = [] as any[];
+    this.lines = [];
     this.config.svg.selectAll('.line').each((d, i, n) => {
-      this.lines.push(n[i]);
+      this.lines.push(n[i] as SVGGeometryElement);
     });
     this.buildCollection();
     this.buildCanvas();
@@ -117,7 +119,7 @@ export class PlaChartEffectsBuilder {
 
   private updateEffects(mousePos: [number, number]) {
     this.config.svg.selectAll('.effect-group')
-      .attr('transform', (data, index: number, nodes: any) => {
+      .attr('transform', (data, index: number, nodes) => {
         let beginning = 0;
         let end = this.lines[index].getTotalLength();
         let target = 0;

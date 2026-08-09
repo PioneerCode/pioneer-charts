@@ -15,7 +15,7 @@ export class PcacLegendConfig {
 @Component({
   selector: 'pcac-legend',
   templateUrl: './legend.component.html',
-  styleUrls: ['./legend.component.scss'],
+  styleUrl: './legend.component.scss',
 })
 export class PcacLegend {
   readonly colorService = inject(PcacColorService);

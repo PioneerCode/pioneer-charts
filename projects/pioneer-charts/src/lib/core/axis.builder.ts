@@ -81,7 +81,7 @@ export class PcacAxisBuilder {
           });
           break;
         case PcacFormatEnum.Decimal:
-          xAxis.tickFormat((d: any, i: number) => format(".2s")(d));
+          xAxis.tickFormat((d) => format(".2s")(d as number));
           break;
       }
     }

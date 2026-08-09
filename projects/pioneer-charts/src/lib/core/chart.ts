@@ -1,4 +1,4 @@
-import { axisLeft } from 'd3-axis';
+import { axisLeft, AxisDomain, AxisScale } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
 import { PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
@@ -11,6 +11,13 @@ import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 
 
+export interface PcacChartMargin {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
 export class PcacChart {
   axisBuilder = inject(PcacAxisBuilder);
   gridBuilder = inject(PcacGridBuilder);
@@ -18,7 +25,7 @@ export class PcacChart {
   tooltipBuilder = inject(PcacTooltipBuilder);
   colorService = inject(PcacColorService);
 
-  margin = { top: 8, right: 16, bottom: 20, left: 40 };
+  margin: PcacChartMargin = { top: 8, right: 16, bottom: 20, left: 40 };
   svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
   width = 400;
   height = 400;
@@ -112,14 +119,15 @@ export class PcacChart {
    * @param data Generic multi-dimensional PcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
-  setHorizontalMarginsBasedOnContent(chartElm: ElementRef, data: PcacData[], yScale: any): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, data: PcacData[], yScale: AxisScale<Domain>): void {
     const axisY = axisLeft(yScale).ticks(5);
     let max = 0;
     select(chartElm.nativeElement).append('g')
       .call(axisY)
-      .each((d, i, n: any) => {
-        if (n[i].getBBox().width > max) {
-          max = n[i].getBBox().width;
+      .each((d, i, n) => {
+        const width = (n[i] as SVGGraphicsElement).getBBox().width;
+        if (width > max) {
+          max = width;
         }
       })
       .remove();

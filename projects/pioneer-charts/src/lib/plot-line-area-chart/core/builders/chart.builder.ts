@@ -211,7 +211,7 @@ export class PlaChartBuilder extends PcacChart {
       .attr('class', 'area')
       .style('opacity', 0.5)
       .style('fill', () => {
-        return this.colors[index];  // TODO: strongly type
+        return this.colors[index];
       })
       .attr('d', this.areaGenerator(this.startData))
       .transition()

@@ -24,6 +24,14 @@
 ### Added
   - `PcacChartResizeService` (new, exported from the library's public API).
 
+### Internal
+  - The four chart components (`bar-vertical-chart`, `bar-horizontal-chart`, `pie-chart`,
+    `plot-line-area-chart`) no longer implement `OnChanges`; they react to their `config` (and,
+    for `plot-line-area-chart`, `type`) signal inputs via `effect()` instead. No behavior change
+    for existing consumers.
+  - Assorted `any` types removed in favor of real ones (`PcacChartMargin`, `SVGGeometryElement`,
+    a generic `AxisScale<Domain>`, and the D3 tooltip selection's inferred type).
+
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)
 

@@ -47,8 +47,14 @@
   - `pioneer-charts-docs` now runs under `provideZonelessChangeDetection()` instead of
     `provideZoneChangeDetection()`; `zone.js` has been removed from its polyfills and
     `package.json` entirely (confirmed gone from the shipped production bundle — the ~35kB
-    polyfills chunk no longer exists in the build output). The library itself required **no code
-    changes** — its `OnPush` + signal-input + `outputFromObservable()` architecture (see
+    polyfills chunk no longer exists in the build output). Worth knowing: as of this Angular
+    version, zoneless is actually already the framework's own default (`bootstrapApplication` and
+    `TestBed` both include zoneless providers unconditionally at baseline; `provideZoneChangeDetection()`
+    is what opts *out* of that default). `provideZonelessChangeDetection()` is kept explicit
+    anyway because it's the only thing that installs the dev-mode `NG0914` warning for zone.js
+    accidentally being reintroduced later, not because it's what made this migration work. The
+    library itself required **no code changes** — its `OnPush` + signal-input +
+    `outputFromObservable()` architecture (see
     CLAUDE.md) was already zoneless-compatible by construction, not by luck: Angular's own
     compiled output-listener wrapping notifies the change-detection scheduler whenever a bound
     `(output)="..."` fires, regardless of what triggered the underlying emission — including a

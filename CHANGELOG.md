@@ -2,152 +2,38 @@
 # Unreleased
 
 ### Fixed
-  - `pioneer-charts-docs`'s "ON THIS PAGE" jump-nav links (`LayoutJumpNav`) updated the URL's
-    `#fragment` on click but never actually scrolled anywhere — nothing was listening for the
-    fragment change. Turning on Angular Router's built-in anchor-scrolling wouldn't have been
-    enough either: `ViewportScroller` only knows how to `window.scrollTo(...)` against the document
-    viewport, but this layout's actual scrolling element is a nested `overflow: scroll` div
-    (`LayoutPageDocsContent`'s host, per `content.scss`) — the window itself never scrolls here.
-    Fixed by scrolling with `Element.scrollIntoView({ behavior: 'smooth', block: 'start' })`
-    instead, which walks every scrollable ancestor rather than assuming the window is the one that
-    scrolls, so it works regardless of the layout. Also added deep-link support: opening a doc page
-    URL directly with a fragment already attached (e.g. `.../introduction#step-3-import-styles`)
-    now scrolls to that section on load too, via a one-time `route.snapshot.fragment` check in
-    `LayoutPageDocsContent` after its projected content has painted (`afterNextRender`) — this
-    component is re-created fresh on every route navigation, so a one-time check on init is
-    sufficient without subscribing to the fragment observable.
-  - Clicking a jump-nav link could scroll the "ON THIS PAGE" sidebar (`LayoutJumpNav`) itself
-    partly out of view, behind the app's fixed 64px header: `scrollIntoView()` (added for the fix
-    above) scrolls every scrollable ancestor needed to reveal its target, including the outer
-    document — and unlike the content pane next to it, the jump-nav sidebar has no scroll container
-    of its own, so it just moves up with the rest of the page's normal flow when that happens.
-    `LayoutJumpNav`'s host is now `position: sticky; top: 64px;` (matching the header height) with
-    `align-self: flex-start` (so the parent flex row's default stretch doesn't pre-expand it to the
-    container's full height, which would leave `sticky` nothing to do) and its own
-    `max-height`/`overflow-y: auto` in case the link list itself is ever taller than the viewport.
-    Verified by clicking through every jump-nav link on the deepest doc page at a deliberately short
-    (500px) viewport: the sidebar stayed pinned at `y: 64` for every single link.
-  - A chart that mounted already holding data (e.g. behind an async/loading gate) could
-    silently render nothing: its first build could run before the browser had committed layout
-    for the chart's own just-created container, measuring a 0-width and giving up with no way to
-    retry. Charts now observe their container via `ResizeObserver` and retry once real layout is
-    available.
-  - Charts on a normal page load were drawing twice — the fix above's `ResizeObserver` fires once
-    routinely as soon as it starts observing, which was landing moments after the chart's first,
-    already-successful draw and restarting its enter transition mid-animation. The retry now
-    checks the container's actual measured size against the last successful build before
-    triggering a rebuild, so it only fires when something has genuinely changed.
-  - Multiple `<pcac-line-chart>`/`<pcac-area-chart>`/`<pcac-plot-chart>` instances with
-    `enableEffects: true` on the same page shared one `PlaChartEffectsBuilder`, so hovering any of
-    them could animate a *different* instance's crosshair/tooltip effect (whichever chart had
-    built most recently) instead of the one actually under the cursor. `PlaChartEffectsBuilder`
-    is now scoped per chart instance, like every other per-chart builder in the library.
-  - Hovering a `<pcac-area-chart>` (`type: 'area'`) with `enableEffects: true` threw
-    `TypeError: Cannot read properties of undefined (reading 'getTotalLength')` on every
-    mousemove: the crosshair effect always looked for `<path class="line">` to measure positions
-    along, but area-type charts draw `<path class="area">` instead, so it never found anything to
-    measure. It now recognizes both, and no longer throws at all for chart types (e.g. `plot`)
-    that draw neither.
-  - `<pcac-bar-horizontal-chart>`'s `(barClicked)` output always emitted `{ key: undefined, value:
-    undefined, ... }`. D3 v6+ passes `.on('click', ...)` callbacks `(event, datum)`, but the handler
-    only declared one parameter (named `d`), so it was actually receiving the click's `MouseEvent`
-    as `d` — the real datum was silently dropped. Every sibling chart's click handler
-    (`bar-vertical-chart`, `pie-chart`, `plot-line-area-chart`) already declared both parameters
-    correctly; only `bar-horizontal-chart` had the mismatch. Fixed by adding the missing `_event`
-    parameter, matching the other three.
-  - Hovering any bar in `<pcac-bar-horizontal-chart>` threw `TypeError: this.transition is not a
-    function` (mouseover) followed by `TypeError: Cannot read properties of undefined (reading
-    'getTransitionDuration')` (mouseout): both handlers confused the raw DOM element (`this`,
-    inside D3's `function (this: any, ...)` callback convention) with the builder instance
-    (captured separately as `self`) — mouseover called `.transition()` directly on the element
-    outside its `select(...)` wrapper, and both read `.transitionService` off the element instead
-    of the builder. The hover-darken effect these were meant to drive had never actually worked.
-  - In `plot-line-area-chart`, a dot sitting exactly at the x-domain's minimum or maximum value
-    (a very common case — e.g. the first/last point of any line) was rendered half-clipped: its
-    clip-path `<rect>` spanned exactly `[0, width]` with no horizontal buffer, so half of a dot's
-    radius fell outside it right at either edge (left half missing at the minimum, right half at
-    the maximum). The vertical dimension already carried a 10px buffer on each side for the
-    identical reason; the horizontal dimension now gets the same treatment.
-  - `pioneer-charts-docs`'s `footer.scss` set `border-top: 1px solid theme-color-level("primary", 2)`
-    — `theme-color-level()` is a Bootstrap Sass function, and `bootstrap` was never `@use`d/`@import`ed
-    anywhere the compiler could see it (only `colors.scss`, which doesn't define it either). Dart
-    Sass passed the unrecognized function call through verbatim as invalid CSS rather than erroring
-    (confirmed against the actual built bundle:
-    `border-top:1px solid theme-color-level("primary",2)`), which the browser then silently dropped,
-    leaving the footer with no border at all — this had never actually rendered a border since it
-    was written. Removed the declaration outright (and the footer's now-unused `colors.scss`
-    import) rather than substituting a real color; see "Changed" below for the `bootstrap`
-    dependency itself, which had no other use anywhere in the project.
-  - The published `README.md` (copied verbatim into the npm package by `build/readme.js`) and the
-    docs site's Introduction page (`introduction.component.ts`/`.html`) both showed a Quick Start
-    that doesn't work against the current library: an `@NgModule`-based
-    `PcacBarVerticalChartModule`/`PcacLineAreaChartModule` import (no `NgModule` wrappers exist in
-    the library — components are standalone) and a `@import "~@pioneer-code/pioneer-charts/pcac.css"`
-    styles snippet (the built file is `dist/pioneer-charts/themes/pioneer-charts.css`; no file named
-    `pcac.css` is ever produced, and the `~`-prefixed webpack-alias import syntax doesn't apply to
-    the Vite-based build this project uses). Both now show the standalone-component import pattern
-    (`import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts'`
-    used directly in a component's own `imports: [...]`) and the real theme CSS path.
+  - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when
+    opening a link directly (deep-linking). The sidebar itself also stays visible on screen while
+    scrolling instead of disappearing behind the header.
+  - Charts that mount while already holding data (e.g. behind a loading spinner) now render
+    correctly instead of staying blank.
+  - Fixed a rare double-draw on initial page load that could restart a chart's entry animation.
+  - Fixed hover effects on line/area/plot charts bleeding between multiple charts on the same page.
+  - Fixed a crash when hovering an area chart with hover effects enabled.
+  - Fixed horizontal bar chart click events always reporting empty data.
+  - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
+  - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
+  - Removed an invisible, broken border style in the docs site footer (leftover from an unused
+    dependency).
+  - Updated the published README and docs site quick-start example, which were out of date and no
+    longer matched how the library is actually used.
 
 ### Changed
-  - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,
-    `PcacBarHorizontalChartComponent`, `PcacPieChartComponent`, `PcacLineAreaChartComponent`,
-    `PcacLineChart`, `PcacAreaChart`, and `PcacPlotChart`. It was undocumented and unused by any
-    known consumer; it's superseded by the automatic `ResizeObserver`-based handling above, which
-    also covers layout-driven container resizes (a sidebar collapsing, a tab activating) that
-    `window` resize events alone never did.
-  - `pioneer-charts-docs` now runs under `provideZonelessChangeDetection()` instead of
-    `provideZoneChangeDetection()`; `zone.js` has been removed from its polyfills and
-    `package.json` entirely (confirmed gone from the shipped production bundle — the ~35kB
-    polyfills chunk no longer exists in the build output). Worth knowing: as of this Angular
-    version, zoneless is actually already the framework's own default (`bootstrapApplication` and
-    `TestBed` both include zoneless providers unconditionally at baseline; `provideZoneChangeDetection()`
-    is what opts *out* of that default). `provideZonelessChangeDetection()` is kept explicit
-    anyway because it's the only thing that installs the dev-mode `NG0914` warning for zone.js
-    accidentally being reintroduced later, not because it's what made this migration work. The
-    library itself required **no code changes** — its `OnPush` + signal-input +
-    `outputFromObservable()` architecture (see
-    CLAUDE.md) was already zoneless-compatible by construction, not by luck: Angular's own
-    compiled output-listener wrapping notifies the change-detection scheduler whenever a bound
-    `(output)="..."` fires, regardless of what triggered the underlying emission — including a
-    D3-native `.on('click', ...)` DOM listener, which is how every chart's click output
-    (`barClicked`/`sliceClicked`/`dotClicked`) originates. This was verified directly, not just
-    argued: a plain, non-signal component field updated only inside a `(barClicked)` handler was
-    confirmed to correctly re-render, live, against a build with `zone.js` genuinely absent (not
-    just DI-overridden) — a signal-backed field wouldn't have proven the same thing, since a
-    signal re-renders via its own reactivity regardless of whether the output itself notified
-    anything. Also added `provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 })` as a
-    standing (dev-only) regression guard against any future OnPush binding silently going stale.
-
-  - Removed the `bootstrap` devDependency entirely. Its only reference anywhere in the project was
-    the broken `footer.scss` declaration fixed above; nothing else in either project's source used
-    it (grepped for `bootstrap`/`theme-color-level`/any Bootstrap Sass `@use`/`@import` — the only
-    matches left after the fix are `bootstrapApplication` calls and an unrelated "app bootstrap"
-    comment in `main.ts`/`app.ts`, both just naming collisions with Angular's own vocabulary).
-  - Added `stylePreprocessorOptions.includePaths: ["projects/pioneer-charts"]` to
-    `pioneer-charts-docs`'s build options in `angular.json`, so any docs-app SCSS file can import
-    the library's `colors.scss` as `@use "colors";` instead of a deep relative path — one file
-    (`jump-nav.scss`) needed `../../../../../../pioneer-charts/colors.scss` to reach it. Updated
-    `styles.scss`, `app.scss`, `home.scss`, `jump-nav.scss`, and `navigation.scss` to the shortened
-    form; the namespace (`colors.$primary`, `colors.$accent`, etc.) is unchanged since Sass derives
-    it from the filename either way.
-  - `navigation.scss`: removed a dead `::ng-deep .pcac-navigation-active-link
-    span.mdc-list-item__primary-text { }` rule that contained only a commented-out `!important`
-    declaration and compiled to nothing.
+  - **Breaking:** removed the unused, undocumented `onResize()` method from all chart components —
+    charts now handle resizing automatically on their own.
+  - The docs site no longer depends on zone.js, in line with modern Angular; no changes were needed
+    in the chart library itself.
+  - Removed an unused dependency (Bootstrap) from the project.
+  - Simplified how the docs site's styles reference the library's shared theme colors, and removed
+    some dead CSS.
 
 ### Added
-  - `PcacChartResizeService` (new, exported from the library's public API).
+  - Charts now automatically resize themselves when their container's size changes, not just on
+    browser window resize.
 
 ### Internal
-  - The four chart components (`bar-vertical-chart`, `bar-horizontal-chart`, `pie-chart`,
-    `plot-line-area-chart`) no longer implement `OnChanges`; they react to their `config` (and,
-    for `plot-line-area-chart`, `type`) signal inputs via `effect()` instead. No behavior change
-    for existing consumers.
-  - Assorted `any` types removed in favor of real ones (`PcacChartMargin`, `SVGGeometryElement`,
-    a generic `AxisScale<Domain>`, and the D3 tooltip selection's inferred type).
-  - `PlaChartBuilder` is now `@Injectable()` + provided per-component like the other three chart
-    builders, instead of `new PlaChartBuilder()`'d manually — see the `PlaChartEffectsBuilder` fix
-    above, which this made possible to catch and fix correctly.
+  - General code cleanup: stronger typing across chart builders, simplified change-detection
+    handling, and more consistent internal structure between chart types.
 
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)

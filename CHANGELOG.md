@@ -44,6 +44,22 @@
     known consumer; it's superseded by the automatic `ResizeObserver`-based handling above, which
     also covers layout-driven container resizes (a sidebar collapsing, a tab activating) that
     `window` resize events alone never did.
+  - `pioneer-charts-docs` now runs under `provideZonelessChangeDetection()` instead of
+    `provideZoneChangeDetection()`; `zone.js` has been removed from its polyfills and
+    `package.json` entirely (confirmed gone from the shipped production bundle — the ~35kB
+    polyfills chunk no longer exists in the build output). The library itself required **no code
+    changes** — its `OnPush` + signal-input + `outputFromObservable()` architecture (see
+    CLAUDE.md) was already zoneless-compatible by construction, not by luck: Angular's own
+    compiled output-listener wrapping notifies the change-detection scheduler whenever a bound
+    `(output)="..."` fires, regardless of what triggered the underlying emission — including a
+    D3-native `.on('click', ...)` DOM listener, which is how every chart's click output
+    (`barClicked`/`sliceClicked`/`dotClicked`) originates. This was verified directly, not just
+    argued: a plain, non-signal component field updated only inside a `(barClicked)` handler was
+    confirmed to correctly re-render, live, against a build with `zone.js` genuinely absent (not
+    just DI-overridden) — a signal-backed field wouldn't have proven the same thing, since a
+    signal re-renders via its own reactivity regardless of whether the output itself notified
+    anything. Also added `provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 })` as a
+    standing (dev-only) regression guard against any future OnPush binding silently going stale.
 
 ### Added
   - `PcacChartResizeService` (new, exported from the library's public API).

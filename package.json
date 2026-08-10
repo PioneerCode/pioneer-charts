@@ -38,8 +38,7 @@
     "postcss": "^8.5.6",
     "rxjs": "~7.5.0",
     "tailwindcss": "^4.1.18",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular/build": "^22.0.3",

@@ -64,15 +64,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.margin.right = 0;
   }
 
-  private setStartState(data: PcacData): void {
-    if (data && data.data) {
-      for (let i = 0, l = data.data.length; i < l; ++i) {
-        data.data[i].value = 0;
-        this.setStartState(data.data[i]);
-      }
-    }
-  }
-
   private buildScales(chartElm: ElementRef, config: PcacBarHorizontalChartConfig) {
     config.data[0].data.map((d) => {
       return d.value;

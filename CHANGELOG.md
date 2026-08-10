@@ -2,6 +2,8 @@
 # Unreleased
 
 ### Fixed
+  - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
+    header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when
     opening a link directly (deep-linking). The sidebar itself also stays visible on screen while
     scrolling instead of disappearing behind the header.
@@ -33,7 +35,8 @@
 
 ### Internal
   - General code cleanup: stronger typing across chart builders, simplified change-detection
-    handling, and more consistent internal structure between chart types.
+    handling, more consistent internal structure between chart types, and removal of some unused
+    code.
 
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)

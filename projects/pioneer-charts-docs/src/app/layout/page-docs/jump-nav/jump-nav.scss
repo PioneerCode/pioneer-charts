@@ -14,10 +14,19 @@
 :host {
     display: block;
     position: sticky;
-    top: 64px;
+    top: 16px;
     align-self: flex-start;
+    // A flex item's default min-width normally floors it at its content's
+    // natural size (here, the <nav>'s own `min-w-[300px]`) - but per the
+    // flexbox spec, non-`visible` overflow (below) resets that automatic
+    // minimum to 0 instead. Without flex-shrink: 0, the parent flex row
+    // (page-docs.html) could then squeeze this element narrower than 300px,
+    // which is what caused the horizontal scrollbar `overflow-x: hidden`
+    // below is otherwise just hiding rather than fixing.
+    flex-shrink: 0;
     max-height: calc(100vh - 64px);
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: #fff;
 }
 

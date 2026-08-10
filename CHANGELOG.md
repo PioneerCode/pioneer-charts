@@ -5,8 +5,7 @@
   - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
     header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when
-    opening a link directly (deep-linking). The sidebar itself also stays visible on screen while
-    scrolling instead of disappearing behind the header.
+    opening a link directly (deep-linking) - and only the page content scrolls, not the whole page.
   - Charts that mount while already holding data (e.g. behind a loading spinner) now render
     correctly instead of staying blank.
   - Fixed a rare double-draw on initial page load that could restart a chart's entry animation.

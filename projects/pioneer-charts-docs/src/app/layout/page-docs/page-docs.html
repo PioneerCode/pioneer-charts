@@ -11,11 +11,11 @@
           <mat-icon>menu</mat-icon>
         </button>
       }
-      <app-layout-page-docs-content [pageTitle]="pageTitle()">
+      <app-layout-page-docs-content #pageContent [pageTitle]="pageTitle()">
         <ng-content />
       </app-layout-page-docs-content>
       @if (!isMobile()) {
-        <app-layout-jump-nav [jumpNav]="jumpNav()" />
+        <app-layout-jump-nav [jumpNav]="jumpNav()" (jump)="pageContent.scrollToSection($event)" />
       }
     </div>
   </mat-sidenav-content>

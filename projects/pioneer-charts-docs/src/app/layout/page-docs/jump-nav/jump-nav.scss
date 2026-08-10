@@ -1,9 +1,24 @@
 @use "colors";
 
+// Keeps "ON THIS PAGE" pinned in the viewport regardless of how far the page
+// scrolls. It's needed because this element scrolls with the outer document,
+// not with the content pane next to it (that pane has its own independent
+// `overflow: scroll`, see content.scss) - without this, jumping to a heading
+// via LayoutJumpNav.onJump()'s scrollIntoView() carries this sidebar's normal
+// document-flow position up under the app's fixed 64px header along with it.
+// `top` matches that header's height (see app.html's `mt-[64px]`) so this
+// sticks directly below it rather than under it. `align-self: flex-start`
+// stops the parent flex row's default `align-items: stretch` from forcing
+// this to the height of its tallest sibling, which would otherwise make it
+// as tall as the container up front and leave nothing for `sticky` to do.
 :host {
+    display: block;
+    position: sticky;
+    top: 64px;
+    align-self: flex-start;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
     background-color: #fff;
-
-
 }
 
 nav {

@@ -2,6 +2,31 @@
 # Unreleased
 
 ### Fixed
+  - `pioneer-charts-docs`'s "ON THIS PAGE" jump-nav links (`LayoutJumpNav`) updated the URL's
+    `#fragment` on click but never actually scrolled anywhere — nothing was listening for the
+    fragment change. Turning on Angular Router's built-in anchor-scrolling wouldn't have been
+    enough either: `ViewportScroller` only knows how to `window.scrollTo(...)` against the document
+    viewport, but this layout's actual scrolling element is a nested `overflow: scroll` div
+    (`LayoutPageDocsContent`'s host, per `content.scss`) — the window itself never scrolls here.
+    Fixed by scrolling with `Element.scrollIntoView({ behavior: 'smooth', block: 'start' })`
+    instead, which walks every scrollable ancestor rather than assuming the window is the one that
+    scrolls, so it works regardless of the layout. Also added deep-link support: opening a doc page
+    URL directly with a fragment already attached (e.g. `.../introduction#step-3-import-styles`)
+    now scrolls to that section on load too, via a one-time `route.snapshot.fragment` check in
+    `LayoutPageDocsContent` after its projected content has painted (`afterNextRender`) — this
+    component is re-created fresh on every route navigation, so a one-time check on init is
+    sufficient without subscribing to the fragment observable.
+  - Clicking a jump-nav link could scroll the "ON THIS PAGE" sidebar (`LayoutJumpNav`) itself
+    partly out of view, behind the app's fixed 64px header: `scrollIntoView()` (added for the fix
+    above) scrolls every scrollable ancestor needed to reveal its target, including the outer
+    document — and unlike the content pane next to it, the jump-nav sidebar has no scroll container
+    of its own, so it just moves up with the rest of the page's normal flow when that happens.
+    `LayoutJumpNav`'s host is now `position: sticky; top: 64px;` (matching the header height) with
+    `align-self: flex-start` (so the parent flex row's default stretch doesn't pre-expand it to the
+    container's full height, which would leave `sticky` nothing to do) and its own
+    `max-height`/`overflow-y: auto` in case the link list itself is ever taller than the viewport.
+    Verified by clicking through every jump-nav link on the deepest doc page at a deliberately short
+    (500px) viewport: the sidebar stayed pinned at `y: 64` for every single link.
   - A chart that mounted already holding data (e.g. behind an async/loading gate) could
     silently render nothing: its first build could run before the browser had committed layout
     for the chart's own just-created container, measuring a 0-width and giving up with no way to

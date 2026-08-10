@@ -217,7 +217,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
             return self.colors[groupIndex];
           });
       })
-      .on('click', (d: PcacData) => {
+      .on('click', (_event: MouseEvent, d: PcacData) => {
         this.barClickedSource.next(d);
       })
       .transition()

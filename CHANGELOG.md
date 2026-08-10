@@ -23,6 +23,13 @@
     along, but area-type charts draw `<path class="area">` instead, so it never found anything to
     measure. It now recognizes both, and no longer throws at all for chart types (e.g. `plot`)
     that draw neither.
+  - `<pcac-bar-horizontal-chart>`'s `(barClicked)` output always emitted `{ key: undefined, value:
+    undefined, ... }`. D3 v6+ passes `.on('click', ...)` callbacks `(event, datum)`, but the handler
+    only declared one parameter (named `d`), so it was actually receiving the click's `MouseEvent`
+    as `d` — the real datum was silently dropped. Every sibling chart's click handler
+    (`bar-vertical-chart`, `pie-chart`, `plot-line-area-chart`) already declared both parameters
+    correctly; only `bar-horizontal-chart` had the mismatch. Fixed by adding the missing `_event`
+    parameter, matching the other three.
   - Hovering any bar in `<pcac-bar-horizontal-chart>` threw `TypeError: this.transition is not a
     function` (mouseover) followed by `TypeError: Cannot read properties of undefined (reading
     'getTransitionDuration')` (mouseout): both handlers confused the raw DOM element (`this`,

@@ -74,18 +74,30 @@ describe('PcacChartResizeService', () => {
     expect(host.rebuildCalls).toBe(0);
   });
 
-  it('debounces a single observer callback into one rebuild, after 300ms', () => {
+  it('rebuilds immediately on the observer\'s first (guaranteed-initial) callback', () => {
     FakeResizeObserver.instances[0].trigger();
 
-    expect(host.rebuildCalls).toBe(0); // still debouncing
-    vi.advanceTimersByTime(299);
-    expect(host.rebuildCalls).toBe(0);
-    vi.advanceTimersByTime(1);
-    expect(host.rebuildCalls).toBe(1);
+    expect(host.rebuildCalls).toBe(1); // no debounce for the first callback
   });
 
-  it('debounces several rapid callbacks (e.g. a drag-resize) into exactly one rebuild', () => {
+  it('debounces a callback after the first into one rebuild, 300ms after it fires', () => {
     const observer = FakeResizeObserver.instances[0];
+    observer.trigger(); // first: immediate, consumes the "first callback" case
+    expect(host.rebuildCalls).toBe(1);
+
+    observer.trigger(); // second: debounced like any live resize
+    expect(host.rebuildCalls).toBe(1);
+    vi.advanceTimersByTime(299);
+    expect(host.rebuildCalls).toBe(1);
+    vi.advanceTimersByTime(1);
+    expect(host.rebuildCalls).toBe(2);
+  });
+
+  it('debounces several rapid callbacks after the first (e.g. a drag-resize) into exactly one more rebuild', () => {
+    const observer = FakeResizeObserver.instances[0];
+    observer.trigger(); // first: immediate
+    expect(host.rebuildCalls).toBe(1);
+
     observer.trigger();
     vi.advanceTimersByTime(100);
     observer.trigger();
@@ -93,16 +105,15 @@ describe('PcacChartResizeService', () => {
     observer.trigger();
 
     vi.advanceTimersByTime(300);
-    expect(host.rebuildCalls).toBe(1);
+    expect(host.rebuildCalls).toBe(2); // one immediate (first) + one debounced (the burst)
   });
 
   it('rebuilds again on a later, separate resize', () => {
     const observer = FakeResizeObserver.instances[0];
-    observer.trigger();
-    vi.advanceTimersByTime(300);
+    observer.trigger(); // first: immediate
     expect(host.rebuildCalls).toBe(1);
 
-    observer.trigger();
+    observer.trigger(); // second: debounced
     vi.advanceTimersByTime(300);
     expect(host.rebuildCalls).toBe(2);
   });
@@ -113,11 +124,14 @@ describe('PcacChartResizeService', () => {
     expect(observer.disconnected).toBe(true);
   });
 
-  it('does not call rebuild for a callback that fires after destroy', () => {
+  it('does not call rebuild for a debounced callback that fires after destroy', () => {
     const observer = FakeResizeObserver.instances[0];
-    observer.trigger();
+    observer.trigger(); // first: immediate, consumes the "first callback" case
+    expect(host.rebuildCalls).toBe(1);
+
+    observer.trigger(); // second: debounced, still pending when destroyed below
     fixture.destroy();
     vi.advanceTimersByTime(300);
-    expect(host.rebuildCalls).toBe(0);
+    expect(host.rebuildCalls).toBe(1); // the pending debounced rebuild never fires
   });
 });

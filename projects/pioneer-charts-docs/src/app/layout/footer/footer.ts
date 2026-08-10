@@ -16,6 +16,6 @@ export class LayoutFooter {
   readonly service = inject(AppService)
 
   // Kept in sync with projects/pioneer-charts/package.json's published version.
-  version = signal<string>('22.0.2');
+  version = signal<string>('22.0.3');
   MainRoutes = MainRoutes;
 }

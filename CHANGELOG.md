@@ -18,6 +18,10 @@
     dependency).
   - Updated the published README and docs site quick-start example, which were out of date and no
     longer matched how the library is actually used.
+  - Deep imports of the library's theme (e.g. `@pioneer-code/pioneer-charts/themes/pioneer-charts.css`
+    or `.../scss/pioneer-charts`) failed to resolve under some build tools even though the files
+    existed in the published package, because the package's module resolution metadata never
+    listed them.
   - Updated the docs site's Theme page, which showed a broken Sass import path and a color-override
     example that didn't actually work (see Added).
   - The docs site's footer no longer highlights the wrong section (e.g. showing "Home" as active

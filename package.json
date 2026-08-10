@@ -6,12 +6,13 @@
     "start": "ng serve pioneer-charts-docs",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-docs ",
-    "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme  && npm run build:lib:readme",
+    "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme && npm run build:lib:exports && npm run build:lib:readme",
     "build:lib:publish": "npm run build:lib && npm publish ./dist/pioneer-charts --access public",
     "build:lib:readme": "node ./build/readme.js",
     "build:lib:package": "ng build @pioneer-code/pioneer-charts",
     "build:lib:theme": "node ./build/theme.js",
-    "build:lib:sass": "node ./build/sass.js"
+    "build:lib:sass": "node ./build/sass.js",
+    "build:lib:exports": "node ./build/exports.js"
   },
   "prettier": {
     "overrides": [

@@ -1,8 +1,8 @@
 @use "tailwindcss";
 @use 'theme';
 
-@use "../../pioneer-charts/colors.scss";
-@use "../../pioneer-charts/src/lib/pioneer-charts.scss";
+@use "colors";
+@use "src/lib/pioneer-charts.scss";
 
 
 @layer base {

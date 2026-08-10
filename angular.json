@@ -56,7 +56,12 @@
             ],
             "styles": [
               "projects/pioneer-charts-docs/src/styles.scss"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/pioneer-charts"
+              ]
+            }
           },
           "configurations": {
             "production": {

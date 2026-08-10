@@ -31,7 +31,7 @@ export class IntroductionComponent {
       value: 'step-1-install-pioneer-charts',
     },
     {
-      key: 'Import Modules',
+      key: 'Import Components',
       value: 'step-2-import-modules',
     },
     {
@@ -41,14 +41,14 @@ export class IntroductionComponent {
   ])
 
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
-  appModuleCode = `import {PcacLineChart} from '@pioneer-code/pioneer-charts';
+  appModuleCode = `import { PcacLineChart } from '@pioneer-code/pioneer-charts';
 
-@NgModule({
+@Component({
   ...
   imports: [PcacLineChart],
   ...
 })
-export class YourAppModule { }`;
+export class YourComponent { }`;
 
-  importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac.css";`;
+  importStylesCode = `@import "@pioneer-code/pioneer-charts/themes/pioneer-charts.css";`;
 }

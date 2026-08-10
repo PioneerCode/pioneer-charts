@@ -36,6 +36,26 @@
     radius fell outside it right at either edge (left half missing at the minimum, right half at
     the maximum). The vertical dimension already carried a 10px buffer on each side for the
     identical reason; the horizontal dimension now gets the same treatment.
+  - `pioneer-charts-docs`'s `footer.scss` set `border-top: 1px solid theme-color-level("primary", 2)`
+    — `theme-color-level()` is a Bootstrap Sass function, and `bootstrap` was never `@use`d/`@import`ed
+    anywhere the compiler could see it (only `colors.scss`, which doesn't define it either). Dart
+    Sass passed the unrecognized function call through verbatim as invalid CSS rather than erroring
+    (confirmed against the actual built bundle:
+    `border-top:1px solid theme-color-level("primary",2)`), which the browser then silently dropped,
+    leaving the footer with no border at all — this had never actually rendered a border since it
+    was written. Removed the declaration outright (and the footer's now-unused `colors.scss`
+    import) rather than substituting a real color; see "Changed" below for the `bootstrap`
+    dependency itself, which had no other use anywhere in the project.
+  - The published `README.md` (copied verbatim into the npm package by `build/readme.js`) and the
+    docs site's Introduction page (`introduction.component.ts`/`.html`) both showed a Quick Start
+    that doesn't work against the current library: an `@NgModule`-based
+    `PcacBarVerticalChartModule`/`PcacLineAreaChartModule` import (no `NgModule` wrappers exist in
+    the library — components are standalone) and a `@import "~@pioneer-code/pioneer-charts/pcac.css"`
+    styles snippet (the built file is `dist/pioneer-charts/themes/pioneer-charts.css`; no file named
+    `pcac.css` is ever produced, and the `~`-prefixed webpack-alias import syntax doesn't apply to
+    the Vite-based build this project uses). Both now show the standalone-component import pattern
+    (`import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts'`
+    used directly in a component's own `imports: [...]`) and the real theme CSS path.
 
 ### Changed
   - **Breaking:** removed the public `onResize()` method from `PcacBarVerticalChartComponent`,
@@ -66,6 +86,22 @@
     signal re-renders via its own reactivity regardless of whether the output itself notified
     anything. Also added `provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 })` as a
     standing (dev-only) regression guard against any future OnPush binding silently going stale.
+
+  - Removed the `bootstrap` devDependency entirely. Its only reference anywhere in the project was
+    the broken `footer.scss` declaration fixed above; nothing else in either project's source used
+    it (grepped for `bootstrap`/`theme-color-level`/any Bootstrap Sass `@use`/`@import` — the only
+    matches left after the fix are `bootstrapApplication` calls and an unrelated "app bootstrap"
+    comment in `main.ts`/`app.ts`, both just naming collisions with Angular's own vocabulary).
+  - Added `stylePreprocessorOptions.includePaths: ["projects/pioneer-charts"]` to
+    `pioneer-charts-docs`'s build options in `angular.json`, so any docs-app SCSS file can import
+    the library's `colors.scss` as `@use "colors";` instead of a deep relative path — one file
+    (`jump-nav.scss`) needed `../../../../../../pioneer-charts/colors.scss` to reach it. Updated
+    `styles.scss`, `app.scss`, `home.scss`, `jump-nav.scss`, and `navigation.scss` to the shortened
+    form; the namespace (`colors.$primary`, `colors.$accent`, etc.) is unchanged since Sass derives
+    it from the filename either way.
+  - `navigation.scss`: removed a dead `::ng-deep .pcac-navigation-active-link
+    span.mdc-list-item__primary-text { }` rule that contained only a commented-out `!important`
+    declaration and compiled to nothing.
 
 ### Added
   - `PcacChartResizeService` (new, exported from the library's public API).

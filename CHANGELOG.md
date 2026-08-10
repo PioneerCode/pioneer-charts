@@ -2,6 +2,9 @@
 # Unreleased
 
 ### Fixed
+  - The home page's dark hero section (title, tagline, "Get Started" button) had turned invisible
+    — a shared wrapper picked up a white background intended only for other pages, hiding the
+    hero's white text against it.
   - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
     header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when

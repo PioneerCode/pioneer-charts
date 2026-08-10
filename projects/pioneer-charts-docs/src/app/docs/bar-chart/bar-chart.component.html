@@ -5,38 +5,54 @@
   <section class="pc-doc-section">
     <div class="grid grid-cols-3 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        <app-layout-resource-state [resource]="service.barVerticalChartStackedConfig">
+          <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-vertical-chart>
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <div class="grid grid-cols-2 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        </app-layout-resource-state>
       </mat-card>
       <mat-card class="p-3">
-        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig()"
-          (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        <app-layout-resource-state [resource]="service.barHorizontalChartGroupConfig">
+          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
+            (barClicked)="service.onClicked($event)"></pcac-bar-horizontal-chart>
+        </app-layout-resource-state>
       </mat-card>
     </div>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig()"
-        (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barHorizontalChartStackedConfig">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
+          (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig()"
-        (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
+        <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
+          (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
     <mat-card class="p-3 mb-6">
-      <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig()" (barClicked)="service.onClicked($event)" />
+      <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+        <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()" (barClicked)="service.onClicked($event)" />
+      </app-layout-resource-state>
     </mat-card>
   </section>
   <section class="pc-doc-section">
@@ -123,44 +139,44 @@
       <div>
         <h5>Vertical Single</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barVerticalChartSingleConfig()| stringify"></app-layout-code>
+          [code]="service.barVerticalChartSingleConfig.value()| stringify"></app-layout-code>
       </div>
       <div>
         <h5>Vertical Grouped</h5>
         <app-layout-code [setMax]="true" [setMax]="true" language="json"
-          [code]="service.barVerticalChartGroupConfig() | stringify"></app-layout-code>
+          [code]="service.barVerticalChartGroupConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
         <h5>Vertical Stacked</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barVerticalChartStackedConfig() | stringify"></app-layout-code>
+          [code]="service.barVerticalChartStackedConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
         <h5>Vertical Multi</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barVerticalChartConfig() | stringify"></app-layout-code>
+          [code]="service.barVerticalChartConfig.value() | stringify"></app-layout-code>
       </div>
     </div>
     <div class="grid grid-cols-4 gap-4">
       <div>
         <h5>Horizontal Single</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barHorizontalChartSingleConfig() | stringify"></app-layout-code>
+          [code]="service.barHorizontalChartSingleConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
         <h5>Horizontal Grouped</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barHorizontalChartGroupConfig() | stringify"></app-layout-code>
+          [code]="service.barHorizontalChartGroupConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
         <h5>Horizontal Stacked</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barHorizontalChartStackedConfig() | stringify"></app-layout-code>
+          [code]="service.barHorizontalChartStackedConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
         <h5>Horizontal Multi</h5>
         <app-layout-code [setMax]="true" language="json"
-          [code]="service.barHorizontalChartConfig() | stringify"></app-layout-code>
+          [code]="service.barHorizontalChartConfig.value() | stringify"></app-layout-code>
       </div>
     </div>
   </section>

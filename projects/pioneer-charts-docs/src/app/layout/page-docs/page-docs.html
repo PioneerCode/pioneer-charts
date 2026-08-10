@@ -1,27 +1,22 @@
-<!-- @if(isMobile()) {
-<mat-sidenav-container [style.marginTop.px]="isMobile() ? 56 : 0">
-  <mat-sidenav class="sidenav-container" [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()"
-    fixedTopGap="56" [opened]="true">
+<mat-sidenav-container class="max-h-screen w-[100%]">
+  <mat-sidenav class="sidenav-container" [mode]="isMobile() ? 'over' : 'side'" [opened]="sidenavOpened()"
+    (openedChange)="sidenavOpened.set($event)" [fixedInViewport]="isMobile()" fixedTopGap="64">
     <app-layout-page-docs-navigation />
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-layout-page-docs-content [pageTitle]="pageTitle()">
-      <ng-content />
-    </app-layout-page-docs-content>
+    <div class="flex max-h-screen w-[100%]">
+      @if (isMobile()) {
+        <button mat-icon-button type="button" class="m-2 self-start" aria-label="Toggle navigation"
+          (click)="sidenavOpened.set(!sidenavOpened())">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <app-layout-page-docs-content #pageContent [pageTitle]="pageTitle()">
+        <ng-content />
+      </app-layout-page-docs-content>
+      @if (!isMobile()) {
+        <app-layout-jump-nav [jumpNav]="jumpNav()" (jump)="pageContent.scrollToSection($event)" />
+      }
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-} @else{
-<div class="flex max-h-screen w-[100%]">
-  <app-layout-page-docs-navigation />
-  <app-layout-page-docs-content [pageTitle]="pageTitle()">
-    <ng-content />
-  </app-layout-page-docs-content>
-</div>
-} -->
-<div class="flex max-h-screen w-[100%]">
-  <app-layout-page-docs-navigation />
-  <app-layout-page-docs-content [pageTitle]="pageTitle()">
-    <ng-content />
-  </app-layout-page-docs-content>
-  <app-layout-jump-nav [jumpNav]="jumpNav()" />
-</div>

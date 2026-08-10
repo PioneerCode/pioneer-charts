@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -6,8 +6,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-theme',
   templateUrl: './theme.component.html',
-  styleUrls: ['./theme.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './theme.component.scss',
   imports: [
     LayoutCode,
     LayoutPageDocs
@@ -40,12 +39,11 @@ export class ThemeComponent {
       value: 'color-service',
     }
   ]);
-  importStylesCode = `@import "node_modules/@pioneer-code/pioneer-charts/scss/pcac";`;
-  importStylesCodeOverride = `// Your variable overrides
-$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
-
-// Pioneer Charts and its default variables
-@import "node_modules/@pioneer-code/pioneer-charts/scss/pcac";`;
+  importStylesCode = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts";`;
+  importStylesCodeOverride = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (
+  $gray-800: #1a1a2e, // tooltip background
+  $white: #f4f4f8,    // tooltip text
+);`;
   colorServiceExample = `...
 this.colors = this.colorService.getColorScale(config.data.length);
 ...
@@ -55,16 +53,19 @@ this.colors = this.colorService.getColorScale(config.data.length);
   return this.colors[i];
 })
 ...`;
-  importColorService = `import { Component, OnInit } from '@angular/core';
-import { PcacColorService } from '@pioneer-code/pioneer-charts';;
+  importColorService = `import { Component, inject } from '@angular/core';
+import { PcacColorService } from '@pioneer-code/pioneer-charts';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  constructor(public colorService: PcacColorService) { }
-  this.colorService.setScale([...]);
+export class AppComponent {
+  colorService = inject(PcacColorService);
+
+  constructor() {
+    this.colorService.setScale([...]);
+  }
 }`;
 }

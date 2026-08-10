@@ -8,7 +8,7 @@ import { select } from 'd3';
 export class PcacTooltipBuilder {
   public tooltip = select('body')
     .append('div')
-    .attr('class', 'pcac-d3-tooltip') as any; // TODO: Strongly type
+    .attr('class', 'pcac-d3-tooltip');
 
   showBarTooltip(event: MouseEvent, data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
     this.tooltip.style('left', event.pageX - 60 + 'px')

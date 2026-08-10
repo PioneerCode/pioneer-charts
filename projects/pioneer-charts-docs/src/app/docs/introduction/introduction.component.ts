@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutCode } from '../../layout/code/code';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -6,8 +6,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 @Component({
   selector: 'pc-introduction',
   templateUrl: './introduction.component.html',
-  styleUrls: ['./introduction.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './introduction.component.scss',
   imports: [
     LayoutCode,
     LayoutPageDocs,
@@ -32,7 +31,7 @@ export class IntroductionComponent {
       value: 'step-1-install-pioneer-charts',
     },
     {
-      key: 'Import Modules',
+      key: 'Import Components',
       value: 'step-2-import-modules',
     },
     {
@@ -42,14 +41,14 @@ export class IntroductionComponent {
   ])
 
   npmInstallCode = `npm install --save @pioneer-code/pioneer-charts`;
-  appModuleCode = `import {PcacLineChart} from '@pioneer-code/pioneer-charts';
+  appModuleCode = `import { PcacLineChart } from '@pioneer-code/pioneer-charts';
 
-@NgModule({
+@Component({
   ...
   imports: [PcacLineChart],
   ...
 })
-export class YourAppModule { }`;
+export class YourComponent { }`;
 
-  importStylesCode = `@import "~@pioneer-code/pioneer-charts/pcac.css";`;
+  importStylesCode = `@import "@pioneer-code/pioneer-charts/themes/pioneer-charts.css";`;
 }

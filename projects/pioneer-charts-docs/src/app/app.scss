@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use "../../../pioneer-charts/colors.scss";
+@use "colors";
 
 // Customize the entire app. Change :root to your selector if you want to scope the styles.
 :host {
@@ -7,4 +7,8 @@
     container-background-color: colors.$primary,
     container-text-color: #fff,
   ));
+}
+
+.bg-white {
+  background-color: #fff;
 }

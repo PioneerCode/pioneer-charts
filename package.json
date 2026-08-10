@@ -4,15 +4,15 @@
   "type": "module",
   "scripts": {
     "start": "ng serve pioneer-charts-docs",
-    "start-web": "ng serve pioneer-charts-web",
     "start-components": "ng build @pioneer-code/pioneer-charts --watch",
     "build:docs": "ng build pioneer-charts-docs ",
-    "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme  && npm run build:lib:readme",
+    "build:lib": "npm run build:lib:package && npm run build:lib:sass && npm run build:lib:theme && npm run build:lib:exports && npm run build:lib:readme",
     "build:lib:publish": "npm run build:lib && npm publish ./dist/pioneer-charts --access public",
     "build:lib:readme": "node ./build/readme.js",
     "build:lib:package": "ng build @pioneer-code/pioneer-charts",
     "build:lib:theme": "node ./build/theme.js",
-    "build:lib:sass": "node ./build/sass.js"
+    "build:lib:sass": "node ./build/sass.js",
+    "build:lib:exports": "node ./build/exports.js"
   },
   "prettier": {
     "overrides": [
@@ -39,26 +39,18 @@
     "postcss": "^8.5.6",
     "rxjs": "~7.5.0",
     "tailwindcss": "^4.1.18",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular/build": "^22.0.3",
     "@angular/cli": "~22.0.3",
     "@angular/compiler-cli": "^22.0.2",
     "@types/d3": "^7.4.3",
-    "@types/jasmine": "~4.0.0",
     "@types/node": "^24.5.2",
-    "bootstrap": "^5.3.8",
     "cpy": "^12.0.1",
     "d3": "^7.9.0",
     "istanbul-lib-instrument": "^6.0.3",
-    "jasmine-core": "~5.7.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "jsdom": "^30.0.1",
     "ng-packagr": "^22.0.0",
     "postcss": "^8.5.3",
     "sass": "^1.97.3",

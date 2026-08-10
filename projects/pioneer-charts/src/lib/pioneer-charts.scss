@@ -1,3 +1,8 @@
+// Forwards imports.scss's color variables as this module's own configurable public API (so a
+// consumer can `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with ($gray-800: ...);`),
+// in addition to `@use`-ing it normally below for this file's own internal `imports.$...` access -
+// a module can be both forwarded and used at once, they serve different purposes.
+@forward "core/theme/imports";
 @use "core/theme/imports";
 
 .pcac-d3-tooltip {

@@ -1,9 +1,13 @@
 <app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [contract]="pcService.plotConfig() | stringify">
+  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.plotConfig.value() | stringify">
   <mat-card class="p-3">
-    <pcac-plot-chart [config]="pcService.plotConfig()" (dotClicked)="pcService.onClicked($event)" />
+    <app-layout-resource-state [resource]="pcService.plotConfig">
+      <pcac-plot-chart [config]="pcService.plotConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
   </mat-card>
   <mat-card class="p-3 mt-3">
-    <pcac-plot-chart [config]="pcService.plotConfig()" (dotClicked)="pcService.onClicked($event)" />
+    <app-layout-resource-state [resource]="pcService.plotConfig">
+      <pcac-plot-chart [config]="pcService.plotConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
   </mat-card>
 </app-plot-line-area-base>

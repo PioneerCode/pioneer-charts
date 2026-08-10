@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { AppService } from '../../../app.service';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
@@ -12,13 +12,13 @@ import { LayoutPageDocs } from '../../../layout/page-docs/page-docs';
     LayoutBaseConfig,
     LayoutPageDocs,
   ],
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './base.component.html',
 })
 export class PlotLineAreaBaseComponent {
   readonly title = input.required<string>();
   readonly lead = input.required<string>();
   readonly markup = input.required<string>();
+  readonly importCode = input.required<string>();
   readonly contract = input.required<string>();
 
   pcService = inject(AppService);
@@ -48,6 +48,4 @@ export class PlotLineAreaBaseComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-line-area-chart [config]="config" (dotClicked)="onClicked($event)"></pcac-line-area-chart>`;
-  importCode = `import { PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';`;
 }

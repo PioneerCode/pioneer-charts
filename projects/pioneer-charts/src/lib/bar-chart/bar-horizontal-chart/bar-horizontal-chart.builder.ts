@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
-import { select, Selection, EnterElement } from 'd3-selection';
+import { select, Selection } from 'd3-selection';
 import { BaseType } from 'd3-selection';
 import { Subject } from 'rxjs';
 
@@ -9,42 +9,40 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { IPcacGridBuilderConfig } from '../../core/grid.builder';
-import { PcacChart } from '../../core/chart';
+import { PcacChart, PcacChartMargin } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
-type GroupType = Selection<Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData,
-  Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData>;
+// `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
+// actually matched what `.selectAll()`'s default generics resolve to).
+type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacBarHorizontalChartComponent's `providers`), not root-scoped:
+ * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-bar-horizontal-chart> rendered at once.
+ */
+@Injectable()
 export class BarHorizontalChartBuilder extends PcacChart {
   private xScale!: ScaleLinear<number, number>;
   private yScaleStacked!: ScaleBand<string>;
   private yScaleGrouped!: ScaleBand<string>;
   private barClickedSource = new Subject<PcacData>();
   private config!: PcacBarHorizontalChartConfig;
-  private cachedMargins: any;
+  private cachedMargins: PcacChartMargin | undefined;
   barClicked$ = this.barClickedSource.asObservable();
 
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     this.config = JSON.parse(JSON.stringify(config));
     if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
-    this.initializeChartState(chartElm, this.config);
-
-    if(this.width <= 0) {
-      return; // TODO: Figure out why this is happening on initial load sometimes
+    if (!this.initializeChartState(chartElm, this.config)) {
+      return;
     }
 
     if (config.colorOverride && config.colorOverride.colors) {
@@ -64,15 +62,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.margin.bottom = 0;
     this.margin.left = 0;
     this.margin.right = 0;
-  }
-
-  private setStartState(data: PcacData): void {
-    if (data && data.data) {
-      for (let i = 0, l = data.data.length; i < l; ++i) {
-        data.data[i].value = 0;
-        this.setStartState(data.data[i]);
-      }
-    }
   }
 
   private buildScales(chartElm: ElementRef, config: PcacBarHorizontalChartConfig) {
@@ -115,10 +104,11 @@ export class BarHorizontalChartBuilder extends PcacChart {
       this.gridBuilder.drawVerticalGrid({
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
+        width: this.width,
         height: this.height,
         xScale: this.xScale,
         yScale: this.yScaleStacked
-      } as IPcacGridBuilderConfig);
+      });
     }
     this.addGroups(config);
   }
@@ -185,9 +175,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', 0)
       .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
-        select(this
+        select(this)
           .transition()
-          .duration(this.transitionService.getTransitionDuration() / 7.5))
+          .duration(self.transitionService.getTransitionDuration() / 7.5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -208,7 +198,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.tooltipBuilder.hideTooltip();
         select(this)
           .transition()
-          .duration(this.transitionService.getTransitionDuration() / 5)
+          .duration(self.transitionService.getTransitionDuration() / 5)
           .style('fill', () => {
             if (config.spreadColorsPerGroup) {
               const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
@@ -218,7 +208,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
             return self.colors[groupIndex];
           });
       })
-      .on('click', (d: PcacData) => {
+      .on('click', (_event: MouseEvent, d: PcacData) => {
         this.barClickedSource.next(d);
       })
       .transition()
@@ -231,15 +221,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private drawThresholdAcrossChart(config: PcacBarHorizontalChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('height', this.height)
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', (event: MouseEvent, _: PcacData) => {
+      .on('mousemove', (event: MouseEvent, _: unknown) => {
         this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('x', (d: PcacData, i: number) => {
+      .attr('x', (_: unknown, i: number) => {
         return this.xScale(config.thresholds[i].value as number);
       });
   }
@@ -248,10 +238,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
     const self = this
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('height', this.yScaleStacked.bandwidth())
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', function (this: any, event: MouseEvent, d: PcacData, i: number) {
+      .on('mousemove', function (this: any, event: MouseEvent) {
         const index = Number(this.parentElement.dataset['groupId'])
         self.tooltipBuilder.showBarTooltip(event,
           config.isStacked ?
@@ -262,7 +252,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('x', (_: PcacData, i: number) => {
+      .attr('x', (_: unknown, i: number) => {
         return this.xScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
   }
@@ -274,7 +264,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return i;
       })
       .attr('height', this.yScaleGrouped.bandwidth())
-      .on('mousemove', function (this: any, event: MouseEvent, d: PcacData, i: number, n: any) {
+      .on('mousemove', function (this: any, event: MouseEvent) {
         const target = event.target as Element
         const index = Number(target.getAttribute("data-group-threshold-id"))
         self.tooltipBuilder.showBarTooltip(event,
@@ -285,14 +275,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .transition()
       .duration(this.transitionService.getTransitionDuration())
       .attr('y', (d: PcacData) => {
-        return this.yScaleGrouped(d.key as string);
+        // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
+        return this.yScaleGrouped(d.key as string) ?? null;
       })
       .attr('x', (d: PcacData, i: number, n: any) => {
         return this.xScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: PcacBarHorizontalChartConfig) {
+  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S, config: PcacBarHorizontalChartConfig): S {
     return elm.attr('class', 'pcac-threshold')
       .style('fill', () => {
         return this.colorService.getAlert();

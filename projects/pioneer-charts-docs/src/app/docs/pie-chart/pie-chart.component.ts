@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 import { PcacPieChartComponent } from '@pioneer-code/pioneer-charts';
@@ -8,12 +8,11 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { StringifyPipe } from '../../stringify.pipe';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
-
+import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 
 @Component({
   selector: 'pc-pie-chart',
   templateUrl: './pie-chart.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LayoutCode,
     LayoutBaseConfig,
@@ -21,6 +20,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
     MatCardModule,
     PcacPieChartComponent,
     StringifyPipe,
+    LayoutResourceState,
   ]
 })
 export class PieChartComponent {
@@ -53,5 +53,5 @@ export class PieChartComponent {
     }
   ])
   markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)"></pcac-pie-chart>`;
-  importCode = `import { PcacPieChartModule } from '@pioneer-code/pioneer-charts';`;
+  importCode = `import { PcacPieChartComponent } from '@pioneer-code/pioneer-charts';`;
 }

@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
-import { axisBottom, axisLeft } from 'd3-axis';
+import { axisBottom, axisLeft, AxisScale, AxisDomain } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
 import { PcacFormatEnum } from './chart.model';
 import { format } from 'd3-format';
 
-export interface IPcacAxisBuilderConfig {
-  svg: Selection<BaseType, {}, HTMLElement, any>;
+/**
+ * Generic over each axis's own domain type (e.g. `number` for a value axis's `ScaleLinear`,
+ * `string` for a category axis's `ScaleBand`) rather than `any`, since the two axes on a chart
+ * routinely have different domain types and each real D3 scale already satisfies `AxisScale`
+ * structurally - no widening needed at the type level.
+ */
+export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain, YDomain extends AxisDomain = AxisDomain> {
+  svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   height: number;
-  xScale: any;
-  yScale: any;
+  xScale: AxisScale<XDomain>;
+  yScale: AxisScale<YDomain>;
   numberOfTicks: number;
   yFormat?: PcacFormatEnum;
   xFormat?: PcacFormatEnum;
@@ -20,12 +26,12 @@ export interface IPcacAxisBuilderConfig {
   providedIn: 'root',
 })
 export class PcacAxisBuilder {
-  drawAxis(config: IPcacAxisBuilderConfig): void {
+  drawAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>): void {
     this.drawXAxis(config);
     this.drawYAxis(config);
   }
 
-  drawYAxis(config: IPcacAxisBuilderConfig) {
+  drawYAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>) {
     if (config.hideYAxis) return;
 
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
@@ -49,8 +55,8 @@ export class PcacAxisBuilder {
       .call(yAxis);
   }
 
-  drawXAxis(config: IPcacAxisBuilderConfig) {
-    if (config.hideYAxis) return;
+  drawXAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>) {
+    if (config.hideXAxis) return;
     config.svg.selectAll('.pcac-x-axis').remove();
 
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
@@ -75,7 +81,7 @@ export class PcacAxisBuilder {
           });
           break;
         case PcacFormatEnum.Decimal:
-          xAxis.tickFormat((d: any, i: number) => format(".2s")(d));
+          xAxis.tickFormat((d) => format(".2s")(d as number));
           break;
       }
     }

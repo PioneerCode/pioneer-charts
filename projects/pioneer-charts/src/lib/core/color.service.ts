@@ -70,7 +70,7 @@ export class PcacColorService {
     this.blue = color;
   }
 
-  setAlert(): string {
-    return this.alert;
+  setAlert(color: string): void {
+    this.alert = color;
   }
 }

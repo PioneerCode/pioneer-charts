@@ -1,3 +1,54 @@
+<a name="unreleased"></a>
+# Unreleased
+
+### Fixed
+  - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
+    header no longer overlaps at narrow widths.
+  - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when
+    opening a link directly (deep-linking) - and only the page content scrolls, not the whole page.
+  - Charts that mount while already holding data (e.g. behind a loading spinner) now render
+    correctly instead of staying blank.
+  - Fixed a rare double-draw on initial page load that could restart a chart's entry animation.
+  - Fixed hover effects on line/area/plot charts bleeding between multiple charts on the same page.
+  - Fixed a crash when hovering an area chart with hover effects enabled.
+  - Fixed horizontal bar chart click events always reporting empty data.
+  - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
+  - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
+  - Removed an invisible, broken border style in the docs site footer (leftover from an unused
+    dependency).
+  - Updated the published README and docs site quick-start example, which were out of date and no
+    longer matched how the library is actually used.
+  - Deep imports of the library's theme (e.g. `@pioneer-code/pioneer-charts/themes/pioneer-charts.css`
+    or `.../scss/pioneer-charts`) failed to resolve under some build tools even though the files
+    existed in the published package, because the package's module resolution metadata never
+    listed them.
+  - Updated the docs site's Theme page, which showed a broken Sass import path and a color-override
+    example that didn't actually work (see Added).
+  - The docs site's footer no longer highlights the wrong section (e.g. showing "Home" as active
+    while on a documentation page) after navigating by any means other than clicking a footer link
+    itself.
+
+### Changed
+  - **Breaking:** removed the unused, undocumented `onResize()` method from all chart components —
+    charts now handle resizing automatically on their own.
+  - The docs site no longer depends on zone.js, in line with modern Angular; no changes were needed
+    in the chart library itself.
+  - Removed an unused dependency (Bootstrap) from the project.
+  - Simplified how the docs site's styles reference the library's shared theme colors, and removed
+    some dead CSS, including an unused color-map variable that was left over from the same
+    abandoned Bootstrap integration.
+
+### Added
+  - Charts now automatically resize themselves when their container's size changes, not just on
+    browser window resize.
+  - The library's theme colors can now actually be overridden from a consuming app's own Sass, as
+    the docs already claimed but didn't fully support.
+
+### Internal
+  - General code cleanup: stronger typing across chart builders, simplified change-detection
+    handling, more consistent internal structure between chart types, and removal of some unused
+    code.
+
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)
 

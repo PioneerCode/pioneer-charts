@@ -1,4 +1,4 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { ElementRef, Injectable, inject } from '@angular/core';
 import { select } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
@@ -9,8 +9,6 @@ import { Subject } from 'rxjs';
  */
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
-import { IPcacAxisBuilderConfig } from '../../../core/axis.builder';
-import { IPcacGridBuilderConfig } from '../../../core/grid.builder';
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
 import { PlaChartScalesBuilder, PlaChartScales } from './scales.builder';
@@ -19,11 +17,18 @@ import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
 
-
+/**
+ * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
+ * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-line-area-chart> rendered at once.
+ */
+@Injectable()
 export class PlaChartBuilder extends PcacChart {
+  private effectsBuilder = inject(PlaChartEffectsBuilder);
   private scales!: PlaChartScales;
-  private lineGenerator!: Line<[number, number]>;
-  private areaGenerator!: Area<[number, number]>;
+  private lineGenerator!: Line<PcacData>;
+  private areaGenerator!: Area<PcacData>;
   private zoomBehavior!: d3.ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
@@ -32,13 +37,17 @@ export class PlaChartBuilder extends PcacChart {
 
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     this.config = JSON.parse(JSON.stringify(config));
-    this.startData = range(this.config.data[0].data.length).map(() => {
-      return {
-        value: 0,
-        key: ''
-      };
-    });
+    this.startData = range(this.config.data[0].data.length).map((): PcacData => ({
+      key: '',
+      value: 0,
+      hide: false,
+      data: []
+    }));
 
     if (this.config.hideAxis) {
       this.config.height = this.config.height + 12;
@@ -48,7 +57,9 @@ export class PlaChartBuilder extends PcacChart {
       this.margin.right = 8;
     }
 
-    this.initializeChartState(chartElm, this.config);
+    if (!this.initializeChartState(chartElm, this.config)) {
+      return;
+    }
     if (this.config.colorOverride) {
       this.colors = this.config.colorOverride;
     }
@@ -59,7 +70,6 @@ export class PlaChartBuilder extends PcacChart {
 
     if (this.config.enableZoom) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
-        console.log('Zoom Event', event);
         // Rescale x
         const newX = event.transform.rescaleX(this.scales.x);
 
@@ -72,17 +82,17 @@ export class PlaChartBuilder extends PcacChart {
           yScale: this.scales.y,
           yFormat: this.config.yFormat,
           xFormat: this.config.xFormat
-        } as IPcacAxisBuilderConfig);
+        });
 
         // Update lines/areas
-        this.svg.selectAll('.line')
-          .attr('d', (d: any) => this.lineGenerator.x((_: any, i: number) => newX(i))(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.line')
+          .attr('d', (d: PcacData[]) => this.lineGenerator.x((_: PcacData, i: number) => newX(i))(d));
 
-        this.svg.selectAll('.area')
-          .attr('d', (d: any) => this.areaGenerator.x((_: any, i: number) => newX(i))(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.area')
+          .attr('d', (d: PcacData[]) => this.areaGenerator.x((_: PcacData, i: number) => newX(i))(d));
 
         // Update dots
-        this.svg.selectAll('.dot')
+        this.svg.selectAll<Element, PcacData>('.dot')
           .attr('cx', (d: PcacData, i: number) => getXFormat(this.config.xFormat, d, i, newX));
       });
     }
@@ -104,7 +114,7 @@ export class PlaChartBuilder extends PcacChart {
         yScale: this.scales.y,
         yFormat: config.yFormat,
         xFormat: config.xFormat
-      } as IPcacAxisBuilderConfig);
+      });
     }
 
     if (!config.hideGrid) {
@@ -112,15 +122,16 @@ export class PlaChartBuilder extends PcacChart {
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
         width: this.width,
+        height: this.height,
         xScale: this.scales.x,
         yScale: this.scales.y
-      } as IPcacGridBuilderConfig);
+      });
     }
 
     this.drawLineArea(config, type);
 
     if (config.enableEffects) {
-      new PlaChartEffectsBuilder().buildEffects({
+      this.effectsBuilder.buildEffects({
         svg: this.svg,
         height: this.height,
         width: this.width,
@@ -141,9 +152,9 @@ export class PlaChartBuilder extends PcacChart {
       .append('clipPath')
       .attr('id', this.clipPathId)
       .append('rect')
-      .attr('x', 0)
+      .attr('x', -10) // extend clip-path a bit left to avoid cutting off a dot at the x-domain's minimum
       .attr('y', -10) // extend clip-path a bit above to avoid cutting off top of line
-      .attr('width', this.width)
+      .attr('width', this.width + 20) // +20 to also cover a dot at the x-domain's maximum
       .attr('height', this.height + 20); // +20 to ensure dots at bottom are not clipped
   }
 
@@ -151,16 +162,21 @@ export class PlaChartBuilder extends PcacChart {
     if (!this.config.enableZoom) return;
 
     // Add a transparent rect to capture zoom events
+    //
+    // d3's `ZoomBehavior<Element, unknown>` vs. our concretely-typed `Selection<SVGRectElement|SVGGElement, ...>`
+    // is a known D3+TS typings friction point: `.call()` structurally compares nested generic Selection
+    // methods (`.merge()`, `.select()`, ...) and those never line up across two different concrete element
+    // types, even though a zoom behavior works on any element at runtime. Narrow, local `any` escape hatch.
     this.svg.insert('rect', ':first-child')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
-      .call(this.zoomBehavior)
+      .call(this.zoomBehavior as any)
       .transition()
       .duration(750)
 
-    this.svg.call(this.zoomBehavior)
+    this.svg.call(this.zoomBehavior as any)
       .transition()
       .duration(750)
   }
@@ -185,7 +201,7 @@ export class PlaChartBuilder extends PcacChart {
       .attr('d', this.lineGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.lineGenerator as any) // TODO: strongly type
+      .attr('d', this.lineGenerator)
       .attr('stroke', () => {
         return this.colors[index];
       })
@@ -202,12 +218,12 @@ export class PlaChartBuilder extends PcacChart {
       .attr('class', 'area')
       .style('opacity', 0.5)
       .style('fill', () => {
-        return this.colors[index];  // TODO: strongly type
+        return this.colors[index];
       })
-      .attr('d', this.lineGenerator(this.startData))
+      .attr('d', this.areaGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.areaGenerator as any);  // TODO: strongly type
+      .attr('d', this.areaGenerator);
   }
 
   private drawDots(config: PcacLineAreaChartConfig): void {
@@ -226,7 +242,7 @@ export class PlaChartBuilder extends PcacChart {
         .attr('cx', (d: PcacData, i: number) => {
           return getXFormat(config.xFormat, d, i, this.scales.x);
         })
-        .attr('cy', (d: PcacData) => {
+        .attr('cy', (_: PcacData) => {
           return this.scales.y(0);
         })
         .attr('fill', '#fff')
@@ -246,7 +262,7 @@ export class PlaChartBuilder extends PcacChart {
             .attr('r', 4)
             .attr('fill', '#fff');
         })
-        .on('click', (d: PcacData, i: number) => {
+        .on('click', (_event: MouseEvent, d: PcacData) => {
           this.dotClickedSource.next(d);
         })
         .transition()

@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppService } from './app.service';
 import { LayoutHeader } from './layout/header/header';
@@ -12,14 +12,14 @@ import { LayoutFooter } from './layout/footer/footer';
     LayoutFooter
   ],
   templateUrl: './app.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('Pioneer Charts');
-  private readonly service = inject(AppService)
 
-  ngOnInit() {
-    this.service.getData();
+  constructor() {
+    // Eagerly instantiate the root-scoped AppService here so its httpResource()-backed
+    // chart configs start loading at app bootstrap instead of on first use.
+    inject(AppService);
   }
 }

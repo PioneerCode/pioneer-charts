@@ -1,11 +1,14 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
+import { httpResource } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
 import { AppRepository } from './app.repository';
 import { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig, PcacPlotChartConfig } from '@pioneer-code/pioneer-charts';
 
 
 export enum MainRoutes {
   HOME = 'home',
-  GET_STARTED = 'get-started',
   CHARTS = 'charts',
   API = 'api'
 }
@@ -15,83 +18,55 @@ export enum MainRoutes {
 })
 export class AppService {
   private readonly repository = inject(AppRepository);
+  private readonly router = inject(Router);
 
-  mainRoute = signal<MainRoutes>(MainRoutes.HOME);
+  // Derived from the Router's own navigation events rather than set manually by individual
+  // (click) handlers - correctly reflects whichever top-level section (home / docs / charts) the
+  // current URL belongs to regardless of how the user got there (a direct/deep link, the header's
+  // nav buttons, the docs sidebar, browser back/forward - not just a click on one of the footer's
+  // own three links, which is all the previous manually-set version ever actually covered).
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => event.urlAfterRedirects)
+    ),
+    { initialValue: this.router.url }
+  );
 
-  pieChartConfig = signal<PcacPieChartConfig>(new PcacPieChartConfig());
-  sharedConfig = signal<PcacData[]>([]);
+  mainRoute = computed<MainRoutes | null>(() => {
+    const url = this.currentUrl();
+    if (url === '/') {
+      return MainRoutes.HOME;
+    }
+    if (url.startsWith('/docs')) {
+      return MainRoutes.API;
+    }
+    if (url.startsWith('/charts')) {
+      return MainRoutes.CHARTS;
+    }
+    return null;
+  });
 
-  barVerticalChartConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartSingleConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartGroupConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
-  barVerticalChartStackedConfig = signal<PcacBarVerticalChartConfig>(new PcacBarVerticalChartConfig());
+  pieChartConfig = httpResource<PcacPieChartConfig>(() => this.repository.getPieChartConfigUrl(), { defaultValue: new PcacPieChartConfig() });
 
-  barHorizontalChartConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartSingleConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartGroupConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
-  barHorizontalChartStackedConfig = signal<PcacBarHorizontalChartConfig>(new PcacBarHorizontalChartConfig());
+  barVerticalChartConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartSingleConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartSingleUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartGroupConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartGroupUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
+  barVerticalChartStackedConfig = httpResource<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartStackedUrl(), { defaultValue: new PcacBarVerticalChartConfig() });
 
-  lineChartConfig = signal<PcacLineChartConfig>(new PcacLineChartConfig());
-  areaChartConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
-  areaChartHideConfig = signal<PcacAreaChartConfig>(new PcacAreaChartConfig());
-  plotConfig = signal<PcacPlotChartConfig>(new PcacPlotChartConfig());
+  barHorizontalChartConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartSingleConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartSingleUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartGroupConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartGroupUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
+  barHorizontalChartStackedConfig = httpResource<PcacBarHorizontalChartConfig>(() => this.repository.getBarHorizontalChartStackedUrl(), { defaultValue: new PcacBarHorizontalChartConfig() });
 
-  legendConfig = signal<PcacLegendConfig>(new PcacLegendConfig());
+  lineChartConfig = httpResource<PcacLineChartConfig>(() => this.repository.getLineChartUrl(), { defaultValue: new PcacLineChartConfig() });
+  areaChartConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaChartUrl(), { defaultValue: new PcacAreaChartConfig() });
+  areaChartHideConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaHideChartUrl(), { defaultValue: new PcacAreaChartConfig() });
+  plotConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartUrl(), { defaultValue: new PcacPlotChartConfig() });
 
-  getData() {
-    this.getBarCharts();
-    this.getLineAreaCharts();
-
-    this.repository.getPlotChart()
-      .subscribe(data => this.plotConfig.set(data));
-
-    this.repository.getPieChartConfig()
-      .subscribe(data => this.pieChartConfig.set(data));
-
-    this.repository.getShareConfig()
-      .subscribe(data => this.sharedConfig.set(data));
-
-    this.repository.getLegendConfig()
-      .subscribe(data =>  this.legendConfig.set(data));
-  }
+  legendConfig = httpResource<PcacLegendConfig>(() => this.repository.getLegendConfigUrl(), { defaultValue: new PcacLegendConfig() });
 
   onClicked(data: PcacData) {
     alert(`Key: ${data.key} - Value: ${data.value}`);
-  }
-
-  private getLineAreaCharts() {
-    this.repository.getLineChart()
-      .subscribe(data => this.lineChartConfig.set(data));
-    this.repository.getAreaChart()
-      .subscribe(data => this.areaChartConfig.set(data));
-    this.repository.getAreaHideChart()
-      .subscribe(data => this.areaChartHideConfig.set(data));
-  }
-
-  private getBarCharts() {
-    this.getBarChartsVertical();
-    this.getBarChartsHorizontal();
-  }
-
-  private getBarChartsHorizontal() {
-    this.repository.getBarHorizontalChart()
-      .subscribe(data => this.barHorizontalChartConfig.set(data));
-    this.repository.getBarHorizontalChartSingle()
-      .subscribe(data => this.barHorizontalChartSingleConfig.set(data));
-    this.repository.getBarHorizontalChartGroup()
-      .subscribe(data => this.barHorizontalChartGroupConfig.set(data));
-    this.repository.getBarHorizontalChartStacked()
-      .subscribe(data => this.barHorizontalChartStackedConfig.set(data));
-  }
-
-  private getBarChartsVertical() {
-    this.repository.getBarVerticalChart()
-      .subscribe(data => this.barVerticalChartConfig.set(data));
-    this.repository.getBarVerticalChartSingle()
-      .subscribe(data => this.barVerticalChartSingleConfig.set(data));
-    this.repository.getBarVerticalChartGroup()
-      .subscribe(data => this.barVerticalChartGroupConfig.set(data));
-    this.repository.getBarVerticalChartStacked()
-      .subscribe(data => this.barVerticalChartStackedConfig.set(data));
   }
 }

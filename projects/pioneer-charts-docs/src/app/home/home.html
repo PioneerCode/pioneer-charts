@@ -11,8 +11,7 @@
   <div class=" z-1 relative">
     <h1>Pioneer Charts</h1>
     <p class="mb-16">Data Visualizations in Angular, beautiful & simple.</p>
-    <button type="button" routerLink="/docs/guides/introduction" matButton="elevated" color="accent"
-      (click)="appService.mainRoute.set(MainRoutes.GET_STARTED)" class="mb-5">Get
+    <button type="button" routerLink="/docs/guides/introduction" matButton="elevated" color="accent" class="mb-5">Get
       Started</button>
   </div>
 </header>
@@ -37,7 +36,7 @@
       <mat-icon class="large-icon">checklist</mat-icon>
       <h3>Battle Tested Code</h3>
       <p>Pioneer Charts is built on top of
-        <a href="angular.io" title="Angular">Angular</a> and backed by
+        <a href="https://angular.io" title="Angular">Angular</a> and backed by
         <a href="https://d3js.org/" title="D3">D3</a>. Of which produces performant and consistent rendering
         across modern browser.
       </p>
@@ -53,8 +52,10 @@
   <div class="container grid grid-cols-1 mx-auto">
     <div class="col">
       <mat-card class="p-3">
-        <pcac-area-chart [config]="appService.areaChartConfig()"
-          (dotClicked)="appService.onClicked($event)" />
+        <app-layout-resource-state [resource]="appService.areaChartConfig">
+          <pcac-area-chart [config]="appService.areaChartConfig.value()"
+            (dotClicked)="appService.onClicked($event)" />
+        </app-layout-resource-state>
       </mat-card>
     </div>
   </div>
@@ -62,8 +63,8 @@
     <div class="col pt-5 pb-5">
       <h4>Standing on the shoulders of giants</h4>
       <p>Pioneer Charts utilizes
-        <a href="angular.io" title="Angular">Angular</a> as its delivery method. Meaning, if you are familiar with
-        <a href="angular.io" title="Angular">Angular</a> then you are familiar with how the charts inside of
+        <a href="https://angular.io" title="Angular">Angular</a> as its delivery method. Meaning, if you are familiar with
+        <a href="https://angular.io" title="Angular">Angular</a> then you are familiar with how the charts inside of
         Pioneer Charts are added to your project!
       </p>
       <p>Charts are built with the popular data-driven document manipulation library,
@@ -75,11 +76,9 @@
   </div>
   <div class="container grid grid-cols-1 mx-auto">
     <div class="text-center">
-      <button type="button" routerLink="/docs/guides/introduction" matButton="filled"
-        (click)="appService.mainRoute.set(MainRoutes.GET_STARTED)" class="me-2">Get
+      <button type="button" routerLink="/docs/guides/introduction" matButton="filled" class="me-2">Get
         Started</button>
-      <button type="button" class="ms-2" routerLink="/charts" matButton="filled"
-        (click)="appService.mainRoute.set(MainRoutes.CHARTS)">
+      <button type="button" class="ms-2" routerLink="/charts" matButton="filled">
         Charts</button>
     </div>
   </div>

@@ -1,38 +1,48 @@
-import { Component, ElementRef, HostListener, ViewEncapsulation, SimpleChanges, inject, viewChild, output, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, ViewEncapsulation, effect, inject, viewChild, input } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from './plot-line-area-chart.model';
 import { PlaChartBuilder } from './core/builders/chart.builder';
-import { PcacData } from '../core';
+import { PlaChartEffectsBuilder } from './core/builders/effects.builders';
+import { PcacChartResizeService } from '../core/resize.service';
 
 @Component({
   selector: 'pcac-line-area-chart',
   templateUrl: './plot-line-area-chart.component.html',
-  styleUrls: ['./plot-line-area-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  encapsulation: ViewEncapsulation.None
+  styleUrl: './plot-line-area-chart.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  // PlaChartEffectsBuilder must be listed here too, not just PlaChartBuilder: it's injected
+  // *inside* PlaChartBuilder, but its own per-instance state (see its class doc) still needs
+  // this component's injector to shadow its (default) root scope, or every <pcac-line-area-chart>
+  // on the page would share one PlaChartEffectsBuilder instance.
+  providers: [PlaChartBuilder, PlaChartEffectsBuilder]
 })
 export class PcacLineAreaChartComponent {
-  private chartBuilder = new PlaChartBuilder();
+  private chartBuilder = inject(PlaChartBuilder);
 
   readonly config = input.required<PcacLineAreaChartConfig>();
   readonly type = input.required<PcacLineAreaPlotChartConfigType>();
 
-
   readonly chartElm = viewChild.required<ElementRef>('chart');
-  readonly dotClicked = output<PcacData>();
-
-  private resizeWindowTimeout: any;
+  readonly dotClicked = outputFromObservable(this.chartBuilder.dotClicked$);
 
   constructor() {
-    this.chartBuilder.dotClicked$.subscribe(data => {
-      this.dotClicked.emit(data);
-    });
-  }
+    // Reacts to config()/type() the same way ngOnChanges used to — reading them here (rather
+    // than a lifecycle hook) is what makes this an effect: it tracks whichever signals
+    // buildChart() reads and reruns whenever either changes. That includes type(), which the old
+    // ngOnChanges deliberately ignored (it only compared changes['config']) — in practice type()
+    // is always bound to a constant per wrapper (PcacLineChart/PcacAreaChart/PcacPlotChart), so
+    // this is unreachable today, but reacting to it is the more correct behavior regardless.
+    effect(() => this.buildChart());
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['config'].currentValue !== changes['config'].previousValue) {
-      this.buildChart()
-    }
+    inject(PcacChartResizeService).observe(this.chartElm, () => {
+      // Skip the ResizeObserver's routine initial callback when it lands after the effect above
+      // already built successfully at this same width — only a real size change (or a build
+      // that never happened, e.g. the 0-width mount race) should trigger a rebuild here.
+      if (this.chartBuilder.containerSizeChanged(this.chartElm())) {
+        this.buildChart();
+      }
+    });
   }
 
   buildChart(): void {
@@ -40,17 +50,5 @@ export class PcacLineAreaChartComponent {
     if (config && config.data && config.data.length > 0) {
       this.chartBuilder.buildChart(this.chartElm(), config, this.type());
     }
-  }
-
-  /**
-   * Opting against fromEvent due to incompatibility with rxjs 5 => 6
-   */
-  @HostListener('window:resize')
-  onResize() {
-    const self = this;
-    clearTimeout(this.resizeWindowTimeout);
-    this.resizeWindowTimeout = setTimeout(() => {
-      self.buildChart();
-    }, 300);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 
-import { select, Selection, EnterElement, BaseType } from 'd3-selection';
+import { select, Selection, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
 import { transition } from 'd3-transition';
@@ -9,30 +9,26 @@ import { transition } from 'd3-transition';
  * Lib
  */
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { IPcacGridBuilderConfig } from '../../core/grid.builder';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
 import { Subject } from 'rxjs';
 
-type GroupType = Selection<Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData,
-  Element |
-  EnterElement |
-  Document |
-  Window,
-  PcacData>;
+// `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
+// actually matched what `.selectAll()`'s default generics resolve to).
+type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
 export interface IBarVerticalChartBuilder {
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Provided per-component (see PcacBarVerticalChartComponent's `providers`), not root-scoped:
+ * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-bar-vertical-chart> rendered at once.
+ */
+@Injectable()
 export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked!: ScaleBand<string>;
   private xScaleGrouped!: ScaleBand<string>;
@@ -43,16 +39,18 @@ export class BarVerticalChartBuilder extends PcacChart {
 
 
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
+    if (!config?.data?.length) {
+      return;
+    }
+
     if (config.colorOverride && config.colorOverride.colors) {
       this.colors = config.colorOverride.colors;
     }
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
-    this.initializeChartState(chartElm, config);
-
-    if(this.width <= 0) {
-      return; // TODO: Figure out why this is happening on initial load sometimes
+    if (!this.initializeChartState(chartElm, config)) {
+      return;
     }
 
     if (config.colorOverride && config.colorOverride.colors) {
@@ -118,9 +116,10 @@ export class BarVerticalChartBuilder extends PcacChart {
         svg: this.svg,
         numberOfTicks: config.numberOfTicks || 5,
         width: this.width,
+        height: this.height,
         xScale: this.xScaleStacked,
         yScale: this.yScale
-      } as IPcacGridBuilderConfig);
+      });
     }
     this.addGroups(config);
   }
@@ -243,15 +242,15 @@ export class BarVerticalChartBuilder extends PcacChart {
   private drawThresholdAcrossChart(config: PcacBarVerticalChartConfig) {
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
       .attr('width', this.width)
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', (event: MouseEvent, d: PcacData, i: number) => {
+      .on('mousemove', (event: MouseEvent) => {
         this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (d: PcacData, i: number) => {
+      .attr('y', (_: unknown, i: number) => {
         return this.yScale(config.thresholds[i].value as number);
       });
   }
@@ -260,7 +259,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this
     this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
       .attr('width', this.xScaleStacked.bandwidth())
-      .attr('data-group-threshold-id', (_: PcacData, i: number) => {
+      .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
       .on('mousemove', function (this: any, event: MouseEvent) {
@@ -273,7 +272,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (d: PcacData, i: number) => {
+      .attr('y', (_: unknown, i: number) => {
         return this.yScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
       });
   }
@@ -301,10 +300,14 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private applyPreTransitionThresholdStyles(elm: Selection<BaseType, {}, HTMLElement, any> | any, config: PcacBarVerticalChartConfig) {
+  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S, config: PcacBarVerticalChartConfig): S {
     return elm.attr('class', 'pcac-threshold')
-      .attr('x', (d: PcacData) => {
-        return this.xScaleGrouped(d ? d.key as string : '');
+      .attr('x', (d: any) => {
+        // Not every caller's selection has a per-item PcacData bound (the whole-chart threshold
+        // rect has none), hence the defensive fallback rather than assuming `d` is always present.
+        const datum = d as PcacData | undefined;
+        // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
+        return this.xScaleGrouped(datum ? datum.key as string : '') ?? null;
       })
       .attr('y', () => {
         return this.height;

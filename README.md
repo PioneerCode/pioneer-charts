@@ -14,7 +14,15 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 - Supports Bar, Line/Area, Pie charts, and Legends.
 - Event emitters for user interaction.
 - Strongly typed configuration contracts.
+- Standalone components — no `NgModule`s required.
+- Automatic chart resizing as its container's size changes.
+- Zoneless-compatible.
 - Open source and actively maintained.
+
+## Requirements
+
+- Angular ^22.0.0
+- D3 ^7.9.0
 
 ## Quick Start
 
@@ -24,21 +32,23 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 npm install --save @pioneer-code/pioneer-charts
 ```
 
-### 2. Import Component Modules
+### 2. Import Components
 
-Import the modules you need in your `AppModule`:
+Pioneer Charts components are standalone — import the ones you need directly in your component:
 
 ```typescript
-import { PcacBarVerticalChartModule, PcacLineAreaChartModule } from '@pioneer-code/pioneer-charts';
+import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
-@NgModule({
+@Component({
+  selector: 'app-dashboard',
   imports: [
-    PcacBarVerticalChartModule,
-    PcacLineAreaChartModule,
-    // ...other modules
+    PcacBarVerticalChartComponent,
+    PcacLineChart,
+    // ...other components
   ],
+  templateUrl: './dashboard.component.html',
 })
-export class AppModule { }
+export class DashboardComponent { }
 ```
 
 ### 3. Import Styles
@@ -46,8 +56,21 @@ export class AppModule { }
 Add the Pioneer Charts CSS to your global styles:
 
 ```scss
-@import "~@pioneer-code/pioneer-charts/pcac.css";
+@import "@pioneer-code/pioneer-charts/themes/pioneer-charts.css";
 ```
+
+#### Customizing the theme
+
+Prefer a Sass build instead? Import the source directly and override any of its color variables:
+
+```scss
+@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (
+  $gray-800: #1a1a2e, // tooltip background
+  $white: #f4f4f8,    // tooltip text
+);
+```
+
+See `@pioneer-code/pioneer-charts/scss/core/theme/imports.scss` for the full list of overridable variables.
 
 ## Usage Example
 

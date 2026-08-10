@@ -1,0 +1,10 @@
+<ng-content />
+@if (resource().isLoading()) {
+  <div class="pc-resource-state-overlay">
+    <mat-spinner diameter="32" />
+  </div>
+} @else if (resource().error()) {
+  <div class="pc-resource-state-overlay text-center text-sm text-red-600">
+    Couldn't load chart data.
+  </div>
+}

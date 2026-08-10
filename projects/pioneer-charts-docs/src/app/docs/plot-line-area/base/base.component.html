@@ -6,14 +6,14 @@
     </ng-content>
     <!-- <div class="grid grid-cols-2 gap-4 mb-6">
       <mat-card class="p-3">
-        <pcac-plot-chart [config]="pcService.lineChartConfig()" (dotClicked)="pcService.onClicked($event)" />
+        <pcac-plot-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
       </mat-card>
       <mat-card class="p-3">
-        <pcac-plot-chart [config]="pcService.areaChartConfig()" (dotClicked)="pcService.onClicked($event)" />
+        <pcac-plot-chart [config]="pcService.areaChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
       </mat-card>
     </div>
     <mat-card class="p-3 ">
-      <pcac-plot-chart [config]="pcService.areaChartHideConfig()" (dotClicked)="pcService.onClicked($event)" />
+      <pcac-plot-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </mat-card> -->
   </section>
   <section class="pc-doc-section">
@@ -22,7 +22,7 @@
   </section>
   <section class="pc-doc-section">
     <h3>API</h3>
-    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-code language="javascript" [code]="importCode()"></app-layout-code>
     <app-layout-base-config [includeHideAxisAndGrid]="true">
       <tbody style="border-top: none;">
         <tr>

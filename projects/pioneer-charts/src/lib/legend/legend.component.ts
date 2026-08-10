@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, model, output } from '@angular/core';
 import { PcacColorService } from '../core';
 
 export class PcacLegendConfigItem {
@@ -15,8 +15,7 @@ export class PcacLegendConfig {
 @Component({
   selector: 'pcac-legend',
   templateUrl: './legend.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./legend.component.scss'],
+  styleUrl: './legend.component.scss',
 })
 export class PcacLegend {
   readonly colorService = inject(PcacColorService);
@@ -28,9 +27,10 @@ export class PcacLegend {
   );
 
   onItemClicked(index: number) {
-    const data = this.config();
-    data.items[index].checked = !data.items[index].checked;
-    this.config.set(data);
-    this.itemClicked.emit(data.items);
+    const items = this.config().items.map((item, i) =>
+      i === index ? { ...item, checked: !item.checked } : item
+    );
+    this.config.set({ ...this.config(), items });
+    this.itemClicked.emit(items);
   }
 }

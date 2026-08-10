@@ -1,5 +1,3 @@
-@use "../../../../../pioneer-charts/colors.scss";
-
 footer {
 	color: #fff;
 
@@ -9,7 +7,6 @@ footer {
 
 	.meta-bottom {
 		font-size: 12px;
-		border-top: 1px solid theme-color-level("primary", 2);
 
 		a {
 			&:hover {

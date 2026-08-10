@@ -1,20 +1,34 @@
 @use "colors";
 
-// Keeps "ON THIS PAGE" pinned in the viewport regardless of how far the page
-// scrolls. It's needed because this element scrolls with the outer document,
-// not with the content pane next to it (that pane has its own independent
-// `overflow: scroll`, see content.scss) - without this, jumping to a heading
-// via LayoutJumpNav.onJump()'s scrollIntoView() carries this sidebar's normal
-// document-flow position up under the app's fixed 64px header along with it.
-// `top` matches that header's height (see app.html's `mt-[64px]`) so this
-// sticks directly below it rather than under it. `align-self: flex-start`
-// stops the parent flex row's default `align-items: stretch` from forcing
-// this to the height of its tallest sibling, which would otherwise make it
-// as tall as the container up front and leave nothing for `sticky` to do.
+// Keeps "ON THIS PAGE" pinned in the viewport rather than scrolling away with
+// the outer document. Clicking a jump-nav link itself no longer scrolls the
+// document at all (LayoutJumpNav emits to LayoutPageDocsContent.scrollToSection(),
+// which scrolls only its own host - see that component), so `position: sticky`
+// here is a general safeguard for the other ways the document can still
+// scroll: the page has more content below this layout than one viewport (the
+// footer, rendered after <router-outlet> in app.html), so e.g. a keyboard
+// Page Down can still scroll it. `top: 16px` is a small offset from the
+// viewport top for whenever that sticking actually engages; `align-self:
+// flex-start` stops the parent flex row's default `align-items: stretch`
+// from forcing this to the height of its tallest sibling, which would
+// otherwise make it as tall as the container up front and leave nothing for
+// `sticky` to do.
 :host {
     display: block;
     position: sticky;
     top: 16px;
+    // Sticky positioning only counteracts scrolling of this element's own
+    // nearest scrolling ancestor (mat-sidenav-content) - it does nothing if
+    // some other ancestor (the window) scrolls instead, which is exactly
+    // what happens if the user scrolls while their cursor is directly over
+    // this sidebar rather than the main content: this element's own overflow
+    // has nothing to consume the scroll (nowhere to go, see max-height/
+    // overflow-y below), so the browser chains it up past mat-sidenav-content
+    // (which has no real overflow of its own in this app) straight to the
+    // window, dragging this sidebar along uncorrected. overscroll-behavior:
+    // contain stops that chaining at this element's own boundary instead of
+    // letting it reach the window.
+    overscroll-behavior: contain;
     align-self: flex-start;
     // A flex item's default min-width normally floors it at its content's
     // natural size (here, the <nav>'s own `min-w-[300px]`) - but per the

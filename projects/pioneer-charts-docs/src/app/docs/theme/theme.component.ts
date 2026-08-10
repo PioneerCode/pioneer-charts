@@ -39,12 +39,11 @@ export class ThemeComponent {
       value: 'color-service',
     }
   ]);
-  importStylesCode = `@import "node_modules/@pioneer-code/pioneer-charts/scss/pcac";`;
-  importStylesCodeOverride = `// Your variable overrides
-$theme-colors: ( "primary": #24282e, "primary-light": #a3a1fb, "success": #5ee2a0, "danger": #ff6565, "warning": #fec163);
-
-// Pioneer Charts and its default variables
-@import "node_modules/@pioneer-code/pioneer-charts/scss/pcac";`;
+  importStylesCode = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts";`;
+  importStylesCodeOverride = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (
+  $gray-800: #1a1a2e, // tooltip background
+  $white: #f4f4f8,    // tooltip text
+);`;
   colorServiceExample = `...
 this.colors = this.colorService.getColorScale(config.data.length);
 ...

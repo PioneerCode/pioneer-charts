@@ -18,6 +18,11 @@
     dependency).
   - Updated the published README and docs site quick-start example, which were out of date and no
     longer matched how the library is actually used.
+  - Updated the docs site's Theme page, which showed a broken Sass import path and a color-override
+    example that didn't actually work (see Added).
+  - The docs site's footer no longer highlights the wrong section (e.g. showing "Home" as active
+    while on a documentation page) after navigating by any means other than clicking a footer link
+    itself.
 
 ### Changed
   - **Breaking:** removed the unused, undocumented `onResize()` method from all chart components —
@@ -26,11 +31,14 @@
     in the chart library itself.
   - Removed an unused dependency (Bootstrap) from the project.
   - Simplified how the docs site's styles reference the library's shared theme colors, and removed
-    some dead CSS.
+    some dead CSS, including an unused color-map variable that was left over from the same
+    abandoned Bootstrap integration.
 
 ### Added
   - Charts now automatically resize themselves when their container's size changes, not just on
     browser window resize.
+  - The library's theme colors can now actually be overridden from a consuming app's own Sass, as
+    the docs already claimed but didn't fully support.
 
 ### Internal
   - General code cleanup: stronger typing across chart builders, simplified change-detection

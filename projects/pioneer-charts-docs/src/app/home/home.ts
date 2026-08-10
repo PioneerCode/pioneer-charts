@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { AppService, MainRoutes } from '../app.service';
+import { AppService } from '../app.service';
 import { LayoutResourceState } from '../layout/resource-state/resource-state';
 
 @Component({
@@ -22,5 +22,4 @@ import { LayoutResourceState } from '../layout/resource-state/resource-state';
 })
 export class Home {
   readonly appService = inject(AppService);
-  MainRoutes = MainRoutes;
 }

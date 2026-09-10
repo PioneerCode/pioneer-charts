@@ -1,0 +1,49 @@
+@use "colors";
+
+// The demo containers hand their height down to the chart. `app-layout-resource-state` sits
+// between the two (it wraps the chart to overlay its loading state) and is a plain `display: block`
+// with no height of its own, so without this the chain breaks and the chart sees an auto-height
+// container - the exact fallback case the page is trying not to demonstrate here.
+.pc-height-full-container {
+  box-sizing: border-box;
+  overflow: hidden;
+
+  app-layout-resource-state {
+    height: 100%;
+  }
+}
+
+// Same height-passthrough problem as above, for the flex-layout demo: here the definite height
+// comes from the flex track rather than an explicit pixel value, but it still has to reach the
+// chart through the resource-state wrapper.
+.pc-height-full-flex-body {
+  app-layout-resource-state {
+    height: 100%;
+  }
+}
+
+.pc-height-full-caption {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+
+  code {
+    font-weight: 600;
+  }
+}
+
+.pc-height-full-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  input[type="range"] {
+    flex: 1;
+    max-width: 20rem;
+    accent-color: colors.$primary;
+  }
+}
+
+.pc-height-full-readout {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}

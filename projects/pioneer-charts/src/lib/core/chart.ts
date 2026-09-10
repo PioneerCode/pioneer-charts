@@ -42,6 +42,15 @@ export class PcacChart {
   private lastContainerWidth: number | null = null;
 
   /**
+   * Raw container height measured by the last successful `initializeChartState()` call, and
+   * whether that build was running with `heightFull` on. Only consulted by `containerSizeChanged`
+   * when it was: without `heightFull` the container's height is driven *by* the chart's own SVG
+   * height, so comparing it would report "changed" every time the chart itself grew or shrank.
+   */
+  private lastContainerHeight: number | null = null;
+  private lastHeightFull = false;
+
+  /**
    * Prior to building a chart, we need to initialize the state of the chart.
    *
    * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
@@ -55,21 +64,46 @@ export class PcacChart {
    */
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     select(chartElm.nativeElement).select('g').remove();
-    const containerWidth = chartElm.nativeElement.parentNode.clientWidth;
+    const container = chartElm.nativeElement.parentNode as HTMLElement;
+    const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
     if (measuredWidth <= 0) {
       return false;
     }
     this.width = measuredWidth;
-    this.height = config.height;
+    this.height = this.resolveHeight(container, config);
     this.colors = this.colorService.getColorScale(Math.max(config.data.length, config.data[0]?.data ? config.data[0].data.length : 0));
     this.lastContainerWidth = containerWidth;
+    this.lastContainerHeight = container.clientHeight;
+    this.lastHeightFull = config.heightFull === true;
     return true;
   }
 
   /**
+   * `config.height` normally *is* the height of the drawing area. With `config.heightFull` on it
+   * becomes a floor instead: the chart fills its container, and only falls back to `config.height`
+   * when the container is shorter than that (or has no definite height of its own to fill - see
+   * `PcacChartConfig.heightFull`, where an auto-height container measures ~0 here and the
+   * `Math.max` keeps the configured height).
+   *
+   * Note this deliberately subtracts the margins, so it's the *total* SVG that ends up matching
+   * the container: `buildContainer()` adds `margin.top`/`margin.bottom` back on top of `height`
+   * when sizing the `<svg>`, so filling without this would overflow the container by exactly the
+   * vertical margins.
+   * @param container The chart's container element (the `<svg>`'s parent)
+   * @param config Chart specific configuration
+   */
+  private resolveHeight(container: HTMLElement, config: PcacChartConfig): number {
+    if (!config.heightFull) {
+      return config.height;
+    }
+    return Math.max(config.height, container.clientHeight - this.margin.top - this.margin.bottom);
+  }
+
+  /**
    * True if the container's current raw layout width differs from the one measured by the last
-   * successful build, or if no successful build has happened yet.
+   * successful build, or if no successful build has happened yet. For a `heightFull` chart, a
+   * change in the container's height counts too - that's the whole size the chart is tracking.
    *
    * `PcacChartResizeService`'s `ResizeObserver` is guaranteed to fire once as soon as it starts
    * observing — that's what lets a chart recover from the 0-width race described on
@@ -83,8 +117,19 @@ export class PcacChart {
     if (this.lastContainerWidth === null) {
       return true;
     }
-    const containerWidth = chartElm.nativeElement.parentNode.clientWidth;
-    return containerWidth > 0 && containerWidth !== this.lastContainerWidth;
+    const container = chartElm.nativeElement.parentNode as HTMLElement;
+    const containerWidth = container.clientWidth;
+    if (containerWidth > 0 && containerWidth !== this.lastContainerWidth) {
+      return true;
+    }
+    if (!this.lastHeightFull) {
+      return false;
+    }
+    // Height only matters for a `heightFull` chart, and only there is it safe to compare: the
+    // container's height is definite (see `resolveHeight`), so it changes when the *layout*
+    // changes, not in response to the height this chart just drew itself at.
+    const containerHeight = container.clientHeight;
+    return containerHeight > 0 && containerHeight !== this.lastContainerHeight;
   }
 
   /**

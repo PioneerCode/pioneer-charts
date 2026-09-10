@@ -39,6 +39,10 @@
     abandoned Bootstrap integration.
 
 ### Added
+  - New `heightFull` chart config option: when true, `height` becomes a *minimum* height and the
+    chart grows to fill its container whenever that container is taller, staying filled as the
+    container resizes. Give the element wrapping the chart a definite height and turn it on. Not
+    supported on the pie chart, where `height` sizes the radius rather than a drawing area.
   - Charts now automatically resize themselves when their container's size changes, not just on
     browser window resize.
   - The library's theme colors can now actually be overridden from a consuming app's own Sass, as

@@ -39,7 +39,12 @@ export class PieChartBuilder extends PcacChart {
       return;
     }
 
-    if (!this.initializeChartState(chartElm, config)) {
+    // The pie deliberately opts out of `heightFull`: `height` here feeds the radius rather than a
+    // drawing area, so growing into a tall container would silently change the size of the pie
+    // itself. `PcacPieChartConfig` inherits the property from PcacChartConfig, so it's neutralized
+    // here rather than being absent from the type. (`<pcac-pie-chart>` also never gets the
+    // `pcac-height-full` class the other charts use to stretch their host.)
+    if (!this.initializeChartState(chartElm, { ...config, heightFull: false })) {
       return;
     }
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;

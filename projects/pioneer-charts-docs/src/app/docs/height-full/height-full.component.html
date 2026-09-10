@@ -1,0 +1,89 @@
+<app-layout-page-docs pageTitle="Full Height" [jumpNav]="jumpNav()">
+  <p class="lead" id="height-full">Every chart except the pie chart accepts <b>heightFull</b>. Turn it on and
+    <b>height</b> stops being a fixed size and becomes a <i>minimum height value</i>: the chart grows to fill its container
+    whenever that container is taller, and keeps filling it as the container resizes.
+  </p>
+
+  <section class="pc-doc-section">
+    <h3 id="try-it">Try It</h3>
+    <p>Both charts below use the same config &mdash; <b>height: 200</b> &mdash; and the same container. The only
+      difference is <b>heightFull</b>. Drag the slider to resize the containers.</p>
+
+    <div class="pc-height-full-controls mb-4">
+      <label for="pc-height-full-range">Container height</label>
+      <input id="pc-height-full-range" type="range" min="120" max="640" step="10" [value]="containerHeight()"
+        (input)="onContainerHeight($event)" />
+      <span class="pc-height-full-readout">{{ containerHeight() }}px</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-2">
+      <div>
+        <p class="pc-height-full-caption"><code>heightFull: false</code> &mdash; stays 200px tall</p>
+        <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">
+          <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+            <pcac-bar-vertical-chart [config]="fixedConfig()" />
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+      <div>
+        <p class="pc-height-full-caption"><code>heightFull: true</code> &mdash; fills the container</p>
+        <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">
+          <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+            <pcac-bar-vertical-chart [config]="fullConfig()" />
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+    </div>
+    <p class="text-sm">Drag below 200px and the two panels converge: there is nothing left to fill, so
+      <b>heightFull</b> falls back to the <b>height</b> minimum. Both charts stay 200px tall and get clipped by the
+      container rather than squashing into it.</p>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="flex-layout">Fill A Flex Layout</h3>
+    <p>The container does not have to carry an explicit height &mdash; any definite height works, including one
+      handed down by a flex or grid track. That covers the common case: a tile with a header on top and a chart
+      taking whatever is left.</p>
+
+    <mat-card class="p-3 flex flex-col mb-4" [style.height.px]="containerHeight()">
+      <h5 class="m-0">Requests Per Minute</h5>
+      <p class="text-sm mb-2">Last 24 hours</p>
+      <div class="flex-1 min-h-0 pc-height-full-flex-body">
+        <app-layout-resource-state [resource]="service.lineChartConfig">
+          <pcac-line-chart [config]="lineFullConfig()" />
+        </app-layout-resource-state>
+      </div>
+    </mat-card>
+
+    <app-layout-code language="markup" [code]="flexCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="markup">Markup</h3>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+    <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="notes">Notes</h3>
+    <ul>
+      <li>
+        <b>Give the wrapper a definite height.</b> An explicit height, or a flex/grid track that resolves to one. If
+        the wrapper is auto-height there is nothing to fill, and the chart falls back to <b>height</b>.
+      </li>
+      <li>
+        <b>height is a floor, not a target.</b> A container shorter than <b>height</b> leaves the chart at
+        <b>height</b>; it is never drawn smaller than you asked for.
+      </li>
+      <li>
+        <b>Resizing keeps working.</b> Charts already rebuild when their container's width changes; with
+        <b>heightFull</b> on they watch its height too, so collapsing sidebars, tab switches and window resizes all
+        stay filled.
+      </li>
+      <li>
+        <b>The pie chart does not support it.</b> There, <b>height</b> feeds the radius rather than a drawing area,
+        so filling a tall container would silently resize the pie itself. The option is ignored.
+      </li>
+    </ul>
+  </section>
+</app-layout-page-docs>

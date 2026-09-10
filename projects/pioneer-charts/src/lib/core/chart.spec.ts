@@ -4,14 +4,15 @@ import { PcacChart } from './chart';
 import { PcacChartConfig } from './chart.model';
 
 /**
- * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth` reports
- * `width`. Needs to be a real node, not a bare stub object: `initializeChartState` runs it
- * through `d3.select(...).select('g').remove()` before ever measuring anything. jsdom doesn't
- * do layout, so `clientWidth` is stubbed directly rather than produced by real box metrics.
+ * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth`/`clientHeight`
+ * report `width`/`height`. Needs to be a real node, not a bare stub object: `initializeChartState`
+ * runs it through `d3.select(...).select('g').remove()` before ever measuring anything. jsdom
+ * doesn't do layout, so the metrics are stubbed directly rather than produced by real box metrics.
  */
-function chartElm(width: number): ElementRef {
+function chartElm(width: number, height = 0): ElementRef {
   const parent = document.createElement('div');
   Object.defineProperty(parent, 'clientWidth', { value: width, configurable: true });
+  Object.defineProperty(parent, 'clientHeight', { value: height, configurable: true });
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   parent.appendChild(svg);
   return { nativeElement: svg } as ElementRef;
@@ -19,6 +20,10 @@ function chartElm(width: number): ElementRef {
 
 function config(height = 200): PcacChartConfig {
   return { height, data: [{ key: 'a', value: 1, hide: false, data: [] }] };
+}
+
+function heightFullConfig(height = 200): PcacChartConfig {
+  return { ...config(height), heightFull: true };
 }
 
 describe('PcacChart', () => {
@@ -93,6 +98,51 @@ describe('PcacChart', () => {
 
       expect(chart.width).not.toBe(widthAfterInit);
       expect(chart.containerSizeChanged(chartElm(800))).toBe(false);
+    });
+
+    it('ignores a container height change when the chart is not heightFull', () => {
+      // Without heightFull the container's height is driven by the <svg> the chart just drew, so
+      // reacting to it would mean rebuilding every time the chart's own height changed.
+      chart.initializeChartState(chartElm(800, 400), config());
+      expect(chart.containerSizeChanged(chartElm(800, 900))).toBe(false);
+    });
+
+    it('returns true when a heightFull chart\'s container has grown taller', () => {
+      chart.initializeChartState(chartElm(800, 400), heightFullConfig());
+      expect(chart.containerSizeChanged(chartElm(800, 900))).toBe(true);
+    });
+
+    it('returns false when a heightFull chart\'s container is unchanged in both dimensions', () => {
+      chart.initializeChartState(chartElm(800, 400), heightFullConfig());
+      expect(chart.containerSizeChanged(chartElm(800, 400))).toBe(false);
+    });
+  });
+
+  describe('initializeChartState with heightFull', () => {
+    it('fills the container, leaving room for the vertical margins', () => {
+      // buildContainer() adds margin.top/bottom back on top of `height` when sizing the <svg>, so
+      // the *total* SVG - not the drawing area - is what should match the container.
+      chart.initializeChartState(chartElm(800, 500), heightFullConfig(200));
+
+      expect(chart.height).toBe(500 - chart.margin.top - chart.margin.bottom);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(500);
+    });
+
+    it('treats height as a minimum when the container is shorter than it', () => {
+      chart.initializeChartState(chartElm(800, 100), heightFullConfig(200));
+      expect(chart.height).toBe(200);
+    });
+
+    it('falls back to height when the container has no definite height to fill', () => {
+      // An auto-height wrapper leaves nothing for the host's `height: 100%` to resolve against,
+      // so the container measures 0 here.
+      chart.initializeChartState(chartElm(800, 0), heightFullConfig(200));
+      expect(chart.height).toBe(200);
+    });
+
+    it('still uses height verbatim when heightFull is off, however tall the container is', () => {
+      chart.initializeChartState(chartElm(800, 900), config(200));
+      expect(chart.height).toBe(200);
     });
   });
 });

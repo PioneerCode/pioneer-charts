@@ -17,6 +17,29 @@
       <td>height</td>
       <td>Height of chart component. Default is 200px.</td>
     </tr>
+    @if(includeHeightFull()) {
+    <tr>
+      <td>heightFull</td>
+      <td>If true, <b>height</b> is treated as a <i>minimum</i> height and the chart grows to fill
+        its container whenever that container is taller. Default is false.
+        <ul>
+          <li>
+            Give the element you wrap the chart in a definite height &mdash; an explicit
+            <b>height</b>, or a flex/grid track that resolves to one. The chart stretches itself to
+            fill it.
+          </li>
+          <li>
+            If that wrapper is auto-height, there is nothing to fill and the chart falls back to
+            <b>height</b>.
+          </li>
+          <li>
+            The chart keeps filling as the container resizes, so this works with collapsing
+            sidebars, tabs and window resizes.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    }
     @if(includeTickFormat()) {
     <tr>
       <td>tickFormat</td>

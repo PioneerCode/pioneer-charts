@@ -8,6 +8,22 @@ export class PcacChartConfig {
    */
   data: PcacData[] = []
   height: number = 200
+
+  /**
+   * When true, `height` becomes a *minimum* height: if the container the chart is placed in is
+   * taller than `height`, the chart grows to fill it instead.
+   *
+   * The chart fills its own host element (`<pcac-bar-vertical-chart>` etc.), which it stretches
+   * to `height: 100%` while this is on - so the consumer just needs to give the element wrapping
+   * the chart a definite height (an explicit height, or a flex/grid track that resolves to one).
+   * If that wrapper turns out to be auto-height, there's nothing definite to fill and the chart
+   * falls back to `height`.
+   *
+   * Optional (rather than defaulted like the properties above) so that adding it doesn't force
+   * every existing consumer that builds a config as an object literal to declare it; the `= false`
+   * initializer still applies to anything constructed via `new`.
+   */
+  heightFull?: boolean = false
 }
 
 export class PcacData {

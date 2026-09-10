@@ -4,3 +4,16 @@
     display: block;
   }
 }
+
+// `heightFull` support (see PcacChartConfig.heightFull). The host and the container section are
+// what the chart measures to decide how tall to draw, so both need a height handed down from the
+// consumer's wrapper - otherwise the section is sized by the <svg> inside it and measuring it
+// would just report back whatever height the chart already drew.
+pcac-bar-vertical-chart.pcac-height-full {
+  display: block;
+  height: 100%;
+
+  .pcac-bar-vertical-chart {
+    height: 100%;
+  }
+}

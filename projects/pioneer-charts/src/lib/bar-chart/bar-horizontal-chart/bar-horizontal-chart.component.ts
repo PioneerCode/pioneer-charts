@@ -6,6 +6,11 @@ import { PcacChartResizeService } from '../../core/resize.service';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
+  // While `config().heightFull` is on, the chart fills its container instead of using a fixed
+  // height (see PcacChartConfig.heightFull). That only works if this host element itself has a
+  // height to hand down, so the class stretches it to `height: 100%`; the styling lives in CSS
+  // rather than being measured/set in JS so the browser resolves it as part of normal layout.
+  host: { '[class.pcac-height-full]': 'config().heightFull' },
   templateUrl: './bar-horizontal-chart.component.html',
   styleUrl: './bar-horizontal-chart.component.scss',
   encapsulation: ViewEncapsulation.None,

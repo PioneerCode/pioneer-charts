@@ -28,6 +28,16 @@
             "buildTarget": ":build:development",
             "runner": "vitest"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/pioneer-charts/**/*.ts",
+              "projects/pioneer-charts/**/*.html"
+            ],
+            "eslintConfig": "projects/pioneer-charts/eslint.config.mjs"
+          }
         }
       }
     },
@@ -113,6 +123,16 @@
             "tsConfig": "projects/pioneer-charts-docs/tsconfig.spec.json",
             "buildTarget": ":build:testing",
             "runner": "vitest"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/pioneer-charts-docs/**/*.ts",
+              "projects/pioneer-charts-docs/**/*.html"
+            ],
+            "eslintConfig": "projects/pioneer-charts-docs/eslint.config.js"
           }
         }
       }

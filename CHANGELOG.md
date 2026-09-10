@@ -14,6 +14,8 @@
   - Fixed horizontal bar chart click events always reporting empty data.
   - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
   - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
+  - The legend is now keyboard accessible: items can be focused and toggled with Enter or Space,
+    and report their checked state to screen readers. Previously they responded only to a mouse.
   - Removed an invisible, broken border style in the docs site footer (leftover from an unused
     dependency).
   - Updated the published README and docs site quick-start example, which were out of date and no
@@ -49,6 +51,9 @@
     the docs already claimed but didn't fully support.
 
 ### Internal
+  - Added linting (angular-eslint) with a config tuned for this codebase's D3 usage, plus a CI
+    workflow that runs lint, tests and both builds on every push and pull request - previously
+    nothing was enforced automatically.
   - General code cleanup: stronger typing across chart builders, simplified change-detection
     handling, more consistent internal structure between chart types, and removal of some unused
     code.

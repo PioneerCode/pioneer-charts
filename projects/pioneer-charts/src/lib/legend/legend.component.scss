@@ -38,3 +38,10 @@
 .pcac-legend-item-last {
   margin-right: 0;
 }
+// Legend items are keyboard-operable (role="switch" + tabindex), so they need a visible focus
+// ring - the default outline is drawn against the host app's background, not ours, so it's left
+// as the browser's own rather than themed.
+.pcac-legend-item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}

@@ -3,7 +3,9 @@ import { Injectable, ElementRef } from '@angular/core';
 import { select, Selection, BaseType } from 'd3-selection';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { color } from 'd3-color';
-import { transition } from 'd3-transition';
+// Imported for its side effect only: this is what adds .transition() to d3-selection's
+// Selection prototype, which this builder leans on throughout.
+import 'd3-transition';
 
 /**
  * Lib
@@ -134,12 +136,12 @@ export class BarVerticalChartBuilder extends PcacChart {
       .attr('data-group-id', (d: PcacData, i: number) => {
         return i;
       })
-      .attr('transform', (d: PcacData, i: number) => {
+      .attr('transform', (d: PcacData) => {
         return 'translate(' + this.xScaleStacked(d.key as string) + ',0)';
       });
 
     const group = groupsContainer.selectAll('rect')
-      .data((d: PcacData, i: number) => {
+      .data((d: PcacData) => {
         return d.data;
       });
 
@@ -170,8 +172,8 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this;
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
-      .attr('x', (d: PcacData, i: number) => {
-        let value = !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string)
+      .attr('x', (d: PcacData) => {
+        const value = !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string)
         return value ? value : 0;
       })
       .attr('data-group-bar-id', (_: PcacData, i: number) => {
@@ -188,7 +190,7 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
-      .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
+      .on('mouseover', function (this: any) {
         select(this)
           .transition()
           .duration(self.transitionService.getTransitionDuration() / 5)
@@ -208,7 +210,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       .on('mousemove', (event: MouseEvent, d: PcacData) => {
         self.tooltipBuilder.showBarTooltip(event, d, config.tickFormat || PcacFormatEnum.None);
       })
-      .on('mouseout', function (this: any, d: PcacData) {
+      .on('mouseout', function (this: any) {
         self.tooltipBuilder.hideTooltip();
         select(this)
           .transition()
@@ -240,7 +242,7 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdAcrossChart(config: PcacBarVerticalChartConfig) {
-    this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
+    this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'))
       .attr('width', this.width)
       .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
@@ -257,7 +259,7 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawThresholdsPerGroup(group: GroupType, config: PcacBarVerticalChartConfig) {
     const self = this
-    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
+    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'))
       .attr('width', this.xScaleStacked.bandwidth())
       .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
@@ -279,7 +281,7 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: PcacBarVerticalChartConfig) {
     const self = this
-    this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
+    this.applyPreTransitionThresholdStyles(group.enter().append('rect'))
       .attr('data-group-threshold-id', (_: PcacData, i: number) => {
         return i;
       })
@@ -300,7 +302,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       });
   }
 
-  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S, config: PcacBarVerticalChartConfig): S {
+  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S): S {
     return elm.attr('class', 'pcac-threshold')
       .attr('x', (d: any) => {
         // Not every caller's selection has a per-item PcacData bound (the whole-chart threshold

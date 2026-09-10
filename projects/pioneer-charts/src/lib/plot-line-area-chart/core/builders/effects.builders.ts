@@ -138,11 +138,10 @@ export class PlaChartEffectsBuilder {
 
         let beginning = 0;
         let end = line.getTotalLength();
-        let target = 0;
         let pos;
 
         while (true) {
-          target = Math.floor((beginning + end) / 2);
+          const target = Math.floor((beginning + end) / 2);
           pos = line.getPointAtLength(target);
           if ((target === end || target === beginning) && pos.x !== mousePos[0]) {
             break;
@@ -157,7 +156,7 @@ export class PlaChartEffectsBuilder {
           }
         }
 
-        let textTarget = this.config.y.invert(pos.y) as number
+        const textTarget = this.config.y.invert(pos.y) as number
         select(nodes[index]).select('text')
           .text(textTarget.toFixed(0));
 

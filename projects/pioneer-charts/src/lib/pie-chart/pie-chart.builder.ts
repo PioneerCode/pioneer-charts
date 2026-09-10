@@ -48,11 +48,11 @@ export class PieChartBuilder extends PcacChart {
       return;
     }
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
-    this.buildShapes(config);
+    this.buildShapes();
     this.drawChart(chartElm, config);
   }
 
-  private buildShapes(config: PcacPieChartConfig): void {
+  private buildShapes(): void {
     const radiusOffset = 10;
 
     this.arcShape = arc<any, PieArcDatum<PcacData>>()

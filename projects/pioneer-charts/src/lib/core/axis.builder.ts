@@ -73,7 +73,7 @@ export class PcacAxisBuilder {
           xAxis.tickFormat((d) => d + 'f');
           break;
         case PcacFormatEnum.OneDayHours:
-          xAxis.tickFormat((d, i) => {
+          xAxis.tickFormat((d) => {
             const h = d as number;
             const hour = h % 12 === 0 ? 12 : h % 12;
             const period = h < 12 ? 'am' : 'pm';

@@ -159,7 +159,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('class', 'pcac-bar')
       .attr('x', 0)
       .attr('y', (d: PcacData) => {
-        let value = !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string)
+        const value = !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string)
         return value ? value : 0;
       })
       .attr('data-group-bar-id', (_: PcacData, i: number) => {
@@ -174,7 +174,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return this.colors[i];
       })
       .attr('width', 0)
-      .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
+      .on('mouseover', function (this: any) {
         select(this)
           .transition()
           .duration(self.transitionService.getTransitionDuration() / 7.5)
@@ -194,7 +194,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .on('mousemove', (event: MouseEvent, d: PcacData) => {
         self.tooltipBuilder.showBarTooltip(event, d, config.tickFormat || PcacFormatEnum.None);
       })
-      .on('mouseout', function (this: any, event: MouseEvent, d: PcacData) {
+      .on('mouseout', function (this: any) {
         self.tooltipBuilder.hideTooltip();
         select(this)
           .transition()
@@ -219,7 +219,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private drawThresholdAcrossChart(config: PcacBarHorizontalChartConfig) {
-    this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'), config)
+    this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'))
       .attr('height', this.height)
       .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
@@ -236,7 +236,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawThresholdsPerGroup(group: GroupType, config: PcacBarHorizontalChartConfig) {
     const self = this
-    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'), config)
+    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'))
       .attr('height', this.yScaleStacked.bandwidth())
       .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
@@ -259,7 +259,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawThresholdsPerBarInGroup(group: GroupType, config: PcacBarHorizontalChartConfig) {
     const self = this
-    this.applyPreTransitionThresholdStyles(group.enter().append('rect'), config)
+    this.applyPreTransitionThresholdStyles(group.enter().append('rect'))
       .attr('data-group-threshold-id', (_: PcacData, i: number) => {
         return i;
       })
@@ -283,7 +283,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
   }
 
-  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S, config: PcacBarHorizontalChartConfig): S {
+  private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S): S {
     return elm.attr('class', 'pcac-threshold')
       .style('fill', () => {
         return this.colorService.getAlert();

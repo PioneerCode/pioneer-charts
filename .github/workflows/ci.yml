@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # Only the library has specs. `ng test pioneer-charts-docs` exits 1 on "no tests found",
+      # so it stays out of CI until that project actually has a spec file.
+      - name: Test
+        run: npm run test
+
+      # The docs app resolves '@pioneer-code/pioneer-charts' through tsconfig paths to
+      # ./dist/pioneer-charts, so the library has to be built first.
+      - name: Build library
+        run: npm run build:lib
+
+      - name: Build docs
+        run: npm run build:docs

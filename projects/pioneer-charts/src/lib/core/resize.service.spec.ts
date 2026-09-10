@@ -32,7 +32,7 @@ class FakeResizeObserver {
 }
 
 @Component({
-  selector: 'pc-resize-service-test-host',
+  selector: 'pcac-resize-service-test-host',
   template: `<div><svg #chart></svg></div>`,
 })
 class TestHostComponent {

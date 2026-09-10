@@ -13,7 +13,7 @@ export class PlaChartScales {
 
 export class PlaChartScalesBuilder {
   build(config: PcacLineAreaChartConfig, chartWidth: number, chartHeight: number): PlaChartScales {
-    let resp = new PlaChartScales();
+    const resp = new PlaChartScales();
     resp.x = this.buildXScale(config, chartWidth);
     resp.y = this.buildYScale(config, chartHeight);
     return resp;

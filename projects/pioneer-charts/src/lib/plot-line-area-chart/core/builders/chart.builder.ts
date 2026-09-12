@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PlaChartEffectsBuilder } from './effects.builders';
-import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig } from '../../plot-line-area-chart.model';
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
 import { PlaChartScalesBuilder, PlaChartScales } from './scales.builder';
@@ -33,6 +33,14 @@ export class PlaChartBuilder extends PcacChart {
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
   private clipPathId!: string; // <-- added
+  /**
+   * How far the clip-path rect extends past the drawable [0, width] x [0, height] area on every
+   * side, so a point sitting exactly on the domain's edge isn't cut in half. 10px comfortably
+   * clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that, so
+   * buildChart() widens this to half the largest image dimension whenever any point has one.
+   */
+  private clipBuffer = 10;
+  private pointImage!: PcacPointImageConfig;
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -64,6 +72,11 @@ export class PlaChartBuilder extends PcacChart {
       this.colors = this.config.colorOverride;
     }
 
+    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
+    this.clipBuffer = this.config.data.some((series) => series.data.some((point) => !!point.image))
+      ? Math.max(10, Math.ceil(this.pointImage.maxWidth / 2), Math.ceil(this.pointImage.maxHeight / 2))
+      : 10;
+
     this.scales = new PlaChartScalesBuilder().build(config, this.width, this.height);
     this.lineGenerator = buildLineGenerator(config.xFormat, this.scales);
     this.areaGenerator = buildAreaGenerator(config.xFormat, this.scales, this.height);
@@ -91,9 +104,12 @@ export class PlaChartBuilder extends PcacChart {
         this.svg.selectAll<SVGPathElement, PcacData[]>('.area')
           .attr('d', (d: PcacData[]) => this.areaGenerator.x((_: PcacData, i: number) => newX(i))(d));
 
-        // Update dots
-        this.svg.selectAll<Element, PcacData>('.dot')
-          .attr('cx', (d: PcacData, i: number) => getXFormat(this.config.xFormat, d, i, newX));
+        // Update dots / point images. Nested selectAll (not a flat svg.selectAll('.point')) so
+        // that `i` is the point's index *within its own series* - the xFormat default
+        // (DatasetLength) positions by index, and a flat selection would number every series'
+        // points consecutively, shoving the second series' points off to the right on zoom.
+        this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
+          .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, newX));
       });
     }
 
@@ -152,10 +168,12 @@ export class PlaChartBuilder extends PcacChart {
       .append('clipPath')
       .attr('id', this.clipPathId)
       .append('rect')
-      .attr('x', -10) // extend clip-path a bit left to avoid cutting off a dot at the x-domain's minimum
-      .attr('y', -10) // extend clip-path a bit above to avoid cutting off top of line
-      .attr('width', this.width + 20) // +20 to also cover a dot at the x-domain's maximum
-      .attr('height', this.height + 20); // +20 to ensure dots at bottom are not clipped
+      // Extend the clip-path past the drawable area on every side so a dot (or point image) at
+      // the x-domain's min/max, or the top/bottom of the y range, isn't cut in half. See clipBuffer.
+      .attr('x', -this.clipBuffer)
+      .attr('y', -this.clipBuffer)
+      .attr('width', this.width + this.clipBuffer * 2)
+      .attr('height', this.height + this.clipBuffer * 2);
   }
 
   private attachZoomBehavior(): void {
@@ -226,52 +244,82 @@ export class PlaChartBuilder extends PcacChart {
       .attr('d', this.areaGenerator);
   }
 
+  /**
+   * Draws one `<g class="dots">` per series holding a `<g class="point">` per data point. The
+   * point group carries the x position (as a translate) so that zoom only has to touch that one
+   * attribute regardless of what's inside; the child is either the regular `<circle class="dot">`
+   * or, when the point has a `PcacData.image`, an `<image class="dot-image">` in its place. Both
+   * animate in from the baseline the same way, and the tooltip / click handlers sit on the group
+   * so they behave identically for either.
+   */
   private drawDots(config: PcacLineAreaChartConfig): void {
     const self = this;
+    const duration = this.transitionService.getTransitionDuration();
+    const { maxWidth, maxHeight } = this.pointImage;
+
     for (let index = 0; index < config.data.length; index++) {
-      this.svg.append('g')
+      const series = config.data[index];
+      const points = this.svg.append('g')
         .attr('class', 'dots')
         .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
-        .selectAll('.dot')
-        .data(config.data[index].data)
-        .enter().append('circle')
-        .attr('class', 'dot')
-        .attr('stroke', (_: PcacData) => {
-          return this.colors[index];
-        })
-        .attr('cx', (d: PcacData, i: number) => {
-          return getXFormat(config.xFormat, d, i, this.scales.x);
-        })
-        .attr('cy', (_: PcacData) => {
-          return this.scales.y(0);
-        })
-        .attr('fill', '#fff')
-        .on('mouseover', function (this: any, event: MouseEvent, d: PcacData) {
+        .attr('style', series.hide ? 'display: none' : null)
+        .selectAll('.point')
+        .data(series.data)
+        .enter().append('g')
+        .attr('class', 'point')
+        .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales.x))
+        .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
           self.tooltipBuilder.showBarTooltip(event, d, self.config.yFormat, self.config.xFormat);
-          select(this)
+          // No-op for an image point (no circle inside to grow).
+          select(this).select('.dot')
             .transition()
-            .duration(self.transitionService.getTransitionDuration() / 3)
+            .duration(duration / 3)
             .attr('r', 6)
             .attr('fill', self.colors[index]);
         })
-        .on('mouseout', function (this: any) {
+        .on('mouseout', function (this: SVGGElement) {
           self.tooltipBuilder.hideTooltip();
-          select(this)
+          select(this).select('.dot')
             .transition()
-            .duration(self.transitionService.getTransitionDuration() / 3)
+            .duration(duration / 3)
             .attr('r', 4)
             .attr('fill', '#fff');
         })
         .on('click', (_event: MouseEvent, d: PcacData) => {
           this.dotClickedSource.next(d);
-        })
+        });
+
+      points.filter((d: PcacData) => !d.image)
+        .append('circle')
+        .attr('class', 'dot')
+        .attr('stroke', this.colors[index])
+        .attr('cy', this.scales.y(0))
+        .attr('fill', '#fff')
         .transition()
-        .duration(this.transitionService.getTransitionDuration())
-        .attr('cy', (d: PcacData) => {
-          return this.scales.y(d.value as number);
-        })
-        .attr('r', 4)
-        .attr('style', () => config.data[index].hide ? 'display: none' : null);
+        .duration(duration)
+        .attr('cy', (d: PcacData) => this.scales.y(d.value as number))
+        .attr('r', 4);
+
+      // `preserveAspectRatio="xMidYMid meet"` is what does the "resize to fit" - the image is
+      // scaled uniformly to fit inside the maxWidth x maxHeight box and centered within it, so
+      // a non-square image still lands centered on the point. x/y offset by half the box so the
+      // box (not its top-left corner) is centered on the data point, matching where a dot sits.
+      points.filter((d: PcacData) => !!d.image)
+        .append('image')
+        .attr('class', 'dot-image')
+        .attr('href', (d: PcacData) => d.image as string)
+        .attr('width', maxWidth)
+        .attr('height', maxHeight)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('x', -maxWidth / 2)
+        .attr('y', this.scales.y(0) - maxHeight / 2)
+        .transition()
+        .duration(duration)
+        .attr('y', (d: PcacData) => this.scales.y(d.value as number) - maxHeight / 2);
     }
+  }
+
+  private pointTransform(d: PcacData, i: number, xScale: PlaChartScales['x']): string {
+    return `translate(${getXFormat(this.config.xFormat, d, i, xScale)}, 0)`;
   }
 }

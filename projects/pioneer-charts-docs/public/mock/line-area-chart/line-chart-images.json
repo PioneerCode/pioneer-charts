@@ -1,0 +1,40 @@
+{
+  "height": 200,
+  "yDomainMax": 100,
+  "enableEffects": false,
+  "enableZoom": true,
+  "pointImage": {
+    "maxWidth": 28,
+    "maxHeight": 28
+  },
+  "data": [
+    {
+      "key": "Forecast",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": "Mon", "value": 72, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": "Tue", "value": 68, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": "Wed", "value": 61, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": "Thu", "value": 55, "hide": false, "data": [], "image": "./mock/line-area-chart/images/rain.svg"},
+        {"key": "Fri", "value": 58, "hide": false, "data": [], "image": "./mock/line-area-chart/images/rain.svg"},
+        {"key": "Sat", "value": 64, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": "Sun", "value": 70, "hide": false, "data": []}
+      ]
+    },
+    {
+      "key": "Last year",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": "Mon", "value": 60, "hide": false, "data": []},
+        {"key": "Tue", "value": 63, "hide": false, "data": []},
+        {"key": "Wed", "value": 66, "hide": false, "data": []},
+        {"key": "Thu", "value": 62, "hide": false, "data": []},
+        {"key": "Fri", "value": 57, "hide": false, "data": []},
+        {"key": "Sat", "value": 59, "hide": false, "data": []},
+        {"key": "Sun", "value": 65, "hide": false, "data": []}
+      ]
+    }
+  ]
+}

@@ -60,8 +60,16 @@ export class AppRepository {
     return './mock/line-area-chart/area-chart-hide.json';
   }
 
+  getLineChartImagesUrl() {
+    return './mock/line-area-chart/line-chart-images.json';
+  }
+
   getPlotChartUrl() {
     return './mock/line-area-chart/plot-chart.json';
+  }
+
+  getPlotChartImagesUrl() {
+    return './mock/line-area-chart/plot-chart-images.json';
   }
 
   getPieChartConfigUrl() {

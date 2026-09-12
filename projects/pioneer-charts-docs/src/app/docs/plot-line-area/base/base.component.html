@@ -59,6 +59,13 @@
           <td>enableEffects</td>
           <td>If true, on hover, ui will display continuous values of all lines to the user.</td>
         </tr>
+        <tr>
+          <td>pointImage</td>
+          <td>Bounding box for point images: <code>{{ '{' }} maxWidth: number, maxHeight: number {{ '}' }}</code>,
+            both defaulting to 16. A data point with an <code>image</code> (a URL or data URI) is drawn as that
+            image instead of a dot, scaled to fit inside this box with its aspect ratio preserved and centered on
+            the point. It gets the same tooltip and <code>(dotClicked)</code> behavior as a dot.</td>
+        </tr>
       </tbody>
     </app-layout-base-config>
   </section>

@@ -31,6 +31,17 @@ export class PcacData {
   value: string | number| null = null
   hide: boolean = false
   data: PcacData[] = []
+
+  /**
+   * URL (or data URI) of an image to draw at this point *in place of* its dot. Currently honored
+   * by the line/area/plot charts only, on the innermost (point-level) `PcacData`; sized by the
+   * chart config's `pointImage` (see `PcacLineAreaChartConfig.pointImage`). Points without one
+   * keep their regular dot, so the two can be mixed within a single series.
+   *
+   * Optional (rather than defaulted) for the same reason as `PcacChartConfig.heightFull`: so
+   * existing object-literal / JSON data doesn't have to declare it.
+   */
+  image?: string
 }
 
 export enum PcacFormatEnum {

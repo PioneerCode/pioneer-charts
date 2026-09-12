@@ -1,0 +1,60 @@
+{
+  "height": 200,
+  "xFormat": "decimal",
+  "xDomainMin": 0,
+  "xDomainMax": 24,
+  "yDomainMax": 100,
+  "numberOfTicks": 6,
+  "enableEffects": false,
+  "enableZoom": true,
+  "pointImage": {
+    "maxWidth": 24,
+    "maxHeight": 24
+  },
+  "data": [
+    {
+      "key": "Sunny",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": 6.5, "value": 58, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": 9, "value": 66, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": 12.5, "value": 74, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": 15, "value": 78, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"},
+        {"key": 18.25, "value": 71, "hide": false, "data": [], "image": "./mock/line-area-chart/images/sun.svg"}
+      ]
+    },
+    {
+      "key": "Cloudy",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": 2, "value": 52, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": 7.75, "value": 55, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": 11, "value": 63, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": 20.5, "value": 60, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"},
+        {"key": 23, "value": 54, "hide": false, "data": [], "image": "./mock/line-area-chart/images/cloud.svg"}
+      ]
+    },
+    {
+      "key": "Rain",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": 4.25, "value": 48, "hide": false, "data": [], "image": "./mock/line-area-chart/images/rain.svg"},
+        {"key": 16.75, "value": 45, "hide": false, "data": [], "image": "./mock/line-area-chart/images/rain.svg"},
+        {"key": 21.5, "value": 41, "hide": false, "data": [], "image": "./mock/line-area-chart/images/rain.svg"}
+      ]
+    },
+    {
+      "key": "Unknown",
+      "value": null,
+      "hide": false,
+      "data": [
+        {"key": 1, "value": 30, "hide": false, "data": []},
+        {"key": 13.5, "value": 35, "hide": false, "data": []},
+        {"key": 19, "value": 28, "hide": false, "data": []}
+      ]
+    }
+  ]
+}

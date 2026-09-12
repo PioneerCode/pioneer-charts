@@ -14,6 +14,8 @@
   - Fixed horizontal bar chart click events always reporting empty data.
   - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
   - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
+  - Fixed line/area/plot chart dots on every series after the first jumping to the wrong x
+    position when zooming a chart with the default (index-based) x-axis format.
   - The legend is now keyboard accessible: items can be focused and toggled with Enter or Space,
     and report their checked state to screen readers. Previously they responded only to a mouse.
   - Removed an invisible, broken border style in the docs site footer (leftover from an unused
@@ -41,6 +43,12 @@
     abandoned Bootstrap integration.
 
 ### Added
+  - Line, area and plot charts can now draw an image at a data point instead of its dot: set
+    `image` (a URL or data URI) on the point's `PcacData`, and optionally `pointImage: { maxWidth,
+    maxHeight }` on the chart config to size it (defaults to 16 x 16). The image is scaled to fit
+    that box with its aspect ratio preserved, is centered on the point, animates in with the other
+    points, follows zoom, and gets the same tooltip and `(dotClicked)` behavior as a dot. Points
+    without an `image` keep their dot, so the two can be mixed within a series.
   - New `heightFull` chart config option: when true, `height` becomes a *minimum* height and the
     chart grows to fill its container whenever that container is taller, staying filled as the
     container resizes. Give the element wrapping the chart a definite height and turn it on. Not

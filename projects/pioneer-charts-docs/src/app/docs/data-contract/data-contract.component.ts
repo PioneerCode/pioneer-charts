@@ -39,6 +39,11 @@ export class DataContractComponent {
   key: string | number;
   value: string | number;
   data: PcacData[];
+  /**
+   * Line/area/plot charts only: URL of an image to draw
+   * at this point in place of its dot.
+   */
+  image?: string;
 }`;
 
   baseConfig = `export interface IPcacChartConfig {

@@ -109,4 +109,22 @@ describe('PlaChartBuilder point images', () => {
     const plain = build(config([point(0, 10)], { maxWidth: 60, maxHeight: 20 }));
     expect(Number(plain.svg.querySelector('clipPath rect')!.getAttribute('x'))).toBe(-10);
   });
+
+  it('keeps the theme palette when colorOverride is the class default (an empty array)', () => {
+    const cfg = config([point(0, 10)]);
+    cfg.colorOverride = [];
+    const { svg } = build(cfg);
+
+    // The dot's stroke is set synchronously (the line's is set inside its enter transition,
+    // which doesn't run in jsdom), so it's the observable here.
+    expect(svg.querySelector('circle.dot')!.getAttribute('stroke')).toMatch(/^#/);
+  });
+
+  it('uses colorOverride entries, in series order, when given', () => {
+    const cfg = config([point(0, 10)]);
+    cfg.colorOverride = ['#123456'];
+    const { svg } = build(cfg);
+
+    expect(svg.querySelector('circle.dot')!.getAttribute('stroke')).toBe('#123456');
+  });
 });

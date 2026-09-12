@@ -14,6 +14,8 @@
   - Fixed horizontal bar chart click events always reporting empty data.
   - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
   - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
+  - Fixed line/area/plot charts rendering every series with no color when their config was
+    created with `new` (the default empty `colorOverride` was replacing the theme palette).
   - Fixed line/area/plot chart dots on every series after the first jumping to the wrong x
     position when zooming a chart with the default (index-based) x-axis format.
   - The legend is now keyboard accessible: items can be focused and toggled with Enter or Space,

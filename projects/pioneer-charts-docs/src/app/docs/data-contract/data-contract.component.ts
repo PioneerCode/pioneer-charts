@@ -35,13 +35,14 @@ export class DataContractComponent {
     }
   ])
 
-  data = `export interface PcacData {
-  key: string | number;
-  value: string | number;
+  data = `export class PcacData {
+  key: string | number | null;
+  value: string | number | null;
+  hide: boolean;
   data: PcacData[];
   /**
-   * Line/area/plot charts only: URL of an image to draw
-   * at this point in place of its dot.
+   * Line/area/plot charts only: URL (or data URI) of an
+   * image to draw at this point in place of its dot.
    */
   image?: string;
 }`;

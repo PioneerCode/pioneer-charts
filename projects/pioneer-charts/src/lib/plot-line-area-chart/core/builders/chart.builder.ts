@@ -68,7 +68,10 @@ export class PlaChartBuilder extends PcacChart {
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
     }
-    if (this.config.colorOverride) {
+    // `?.length`, not a bare truthiness check: PcacLineAreaChartConfig defaults colorOverride to
+    // `[]`, and an empty array is truthy - a config built with `new` would otherwise replace the
+    // theme palette with nothing and every series would render with no color at all.
+    if (this.config.colorOverride?.length) {
       this.colors = this.config.colorOverride;
     }
 

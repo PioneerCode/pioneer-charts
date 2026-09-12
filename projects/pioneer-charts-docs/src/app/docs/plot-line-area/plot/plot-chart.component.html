@@ -1,4 +1,4 @@
-<app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Configurable to display an area or line chart.'"
+<app-plot-line-area-base [title]="'Plot Chart'" [lead]="'Displays each series as standalone points, with no connecting line or fill.'"
   [markup]="markupCode" [importCode]="importCode" [contract]="pcService.plotConfig.value() | stringify">
   <mat-card class="p-3">
     <app-layout-resource-state [resource]="pcService.plotConfig">

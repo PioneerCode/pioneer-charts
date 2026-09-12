@@ -26,45 +26,101 @@
     <app-layout-base-config [includeHideAxisAndGrid]="true">
       <tbody style="border-top: none;">
         <tr>
+          <td>yDomainMin</td>
+          <td>Floor of the y-axis domain. Default is 0.</td>
+        </tr>
+        <tr>
           <td>yDomainMax</td>
-          <td>Put a ceiling on y-axis domain. Default is 100.</td>
+          <td>Ceiling of the y-axis domain. Default is 100.</td>
+        </tr>
+        <tr>
+          <td>yFormat</td>
+          <td>Formats the y-axis tick labels and the value shown in a point's tooltip.
+            <ul>
+              <li><b>Percentage</b> &mdash; ticks get a <code>%</code> suffix; the tooltip shows
+                <code>value * 100</code> followed by <code>%</code> (so supply values as fractions, e.g.
+                <code>0.25</code>).</li>
+              <li><b>Minutes</b> &mdash; ticks get an <code>m</code> suffix.</li>
+              <li><b>Fahrenheit</b> &mdash; ticks and the tooltip get an <code>F</code> suffix.</li>
+              <li>Anything else leaves the ticks and tooltip unformatted.</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td>xFormat</td>
-          <td>Set this value to change the formatting of the the x-axis labels.
+          <td>Controls both how each point's <code>key</code> is mapped to an x position and how the x-axis
+            tick labels are formatted.
             <ul>
               <li>
-                <b>OneDayHours</b>
-                <ul>
-                  <li>Expectation is we will be given a range of data from 0-23 and we will map that
-                    to a 12 hour clock with am/pm
-                  </li>
-                  <li>
-                    e.g. 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm
-                  </li>
-                </ul>
+                <b>DatasetLength</b> (default, and the fallback for any value not listed here) &mdash; points are
+                positioned by their index within their series, spaced evenly across the width; <code>key</code>
+                is only used for the tooltip. The axis runs from 0 to the length of the <i>first</i> series
+                minus one, with plain numeric tick labels.
+              </li>
+              <li>
+                <b>Decimal</b> &mdash; each point's <code>key</code> is a number used directly as its x value,
+                on an axis running from <b>xDomainMin</b> to <b>xDomainMax</b>. Tick labels are shortened to
+                two significant digits with an SI suffix (e.g. <code>1500</code> &rarr; <code>1.5k</code>).
+              </li>
+              <li>
+                <b>DateTime</b> &mdash; each point's <code>key</code> is parsed with <code>new Date(key)</code>
+                (an ISO string or a timestamp) and plotted on a time axis running from <b>xDomainMin</b> to
+                <b>xDomainMax</b>, which are required. Tick labels use D3's default date/time formatting, and
+                the tooltip shows the key as a localized date and time.
+              </li>
+              <li>
+                <b>OneDayHours</b> &mdash; positions points by index like <b>DatasetLength</b>, but labels the
+                ticks as a 12 hour clock: 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm. The data is expected to be one
+                point per hour, in order from hour 0.
+              </li>
+              <li>
+                <b>Percentage</b>, <b>Minutes</b>, <b>Fahrenheit</b> &mdash; position by index like
+                <b>DatasetLength</b>, with a <code>%</code>, <code>m</code> or <code>f</code> suffix on the tick
+                labels.
               </li>
             </ul>
           </td>
         </tr>
         <tr>
-          <td>numberOfTicks</td>
-          <td>Number of ui intersects in the domain.</td>
+          <td>xDomainMin</td>
+          <td>Start of the x-axis domain. Only used when <b>xFormat</b> is <b>Decimal</b> (a number, default 0)
+            or <b>DateTime</b> (anything <code>new Date()</code> accepts; required). Ignored by the index-based
+            formats, which size the axis from the data.</td>
         </tr>
         <tr>
-          <td>type</td>
-          <td>If "line", ui will display a line chart. If "area", ui will display an area chart.</td>
+          <td>xDomainMax</td>
+          <td>End of the x-axis domain. Same rules as <b>xDomainMin</b>; the <b>Decimal</b> default is 100.</td>
+        </tr>
+        <tr>
+          <td>numberOfTicks</td>
+          <td>Number of ticks (and horizontal grid lines) on each axis. Default is 5.</td>
         </tr>
         <tr>
           <td>enableEffects</td>
-          <td>If true, on hover, ui will display continuous values of all lines to the user.</td>
+          <td>If true, hovering the chart shows a vertical crosshair with the interpolated value of every line
+            or area at that x position. Default is true when the config is created with <code>new</code>; an
+            object literal (or JSON) that omits it gets no effects.</td>
+        </tr>
+        <tr>
+          <td>enableZoom</td>
+          <td>If true, the chart can be zoomed along the x-axis with the mouse wheel (1x to 10x) and panned by
+            dragging, staying within the original domain; lines, areas, points and the x-axis all follow. Default
+            is true when the config is created with <code>new</code>; an object literal (or JSON) that omits it
+            gets no zoom.</td>
+        </tr>
+        <tr>
+          <td>colorOverride</td>
+          <td>Array of hex color codes, one per series in order, used instead of the theme palette for that
+            series' line/area and dots. Series beyond the array's length get no color, so supply one entry per
+            series when using it. Omitted or empty, the theme palette is used.</td>
         </tr>
         <tr>
           <td>pointImage</td>
           <td>Bounding box for point images: <code>{{ '{' }} maxWidth: number, maxHeight: number {{ '}' }}</code>,
             both defaulting to 16. A data point with an <code>image</code> (a URL or data URI) is drawn as that
             image instead of a dot, scaled to fit inside this box with its aspect ratio preserved and centered on
-            the point. It gets the same tooltip and <code>(dotClicked)</code> behavior as a dot.</td>
+            the point. It gets the same tooltip and <code>(dotClicked)</code> behavior as a dot (only the
+            hover enlarge effect is dot-only).</td>
         </tr>
       </tbody>
     </app-layout-base-config>

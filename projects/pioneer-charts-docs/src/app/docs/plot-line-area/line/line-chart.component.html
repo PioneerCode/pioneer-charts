@@ -1,5 +1,5 @@
 <app-plot-line-area-base [title]="'Line Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig.value() | stringify">
+  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.lineChartConfig.value() | stringify">
   <div class="grid grid-cols-2 gap-4 mb-6">
     <mat-card class="p-3">
       <app-layout-resource-state [resource]="pcService.lineChartConfig">

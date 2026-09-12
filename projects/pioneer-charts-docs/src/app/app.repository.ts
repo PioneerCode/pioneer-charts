@@ -64,6 +64,10 @@ export class AppRepository {
     return './mock/line-area-chart/line-chart-images.json';
   }
 
+  getAreaChartImagesUrl() {
+    return './mock/line-area-chart/area-chart-images.json';
+  }
+
   getPlotChartUrl() {
     return './mock/line-area-chart/plot-chart.json';
   }

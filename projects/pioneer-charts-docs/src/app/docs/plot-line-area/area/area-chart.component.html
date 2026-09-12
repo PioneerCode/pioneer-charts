@@ -16,4 +16,12 @@
       <pcac-area-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
+  <h4 class="mt-6 mb-2">Point images</h4>
+  <p class="mb-3">Set <code>image</code> on a data point to draw it in place of the dot, sized by the
+    config's <code>pointImage</code> box. Points without an <code>image</code> keep their dot.</p>
+  <mat-card class="p-3">
+    <app-layout-resource-state [resource]="pcService.areaChartImagesConfig">
+      <pcac-area-chart [config]="pcService.areaChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
+  </mat-card>
 </app-plot-line-area-base>

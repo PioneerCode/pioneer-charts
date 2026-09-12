@@ -63,6 +63,7 @@ export class AppService {
   areaChartConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaChartUrl(), { defaultValue: new PcacAreaChartConfig() });
   areaChartHideConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaHideChartUrl(), { defaultValue: new PcacAreaChartConfig() });
   lineChartImagesConfig = httpResource<PcacLineChartConfig>(() => this.repository.getLineChartImagesUrl(), { defaultValue: new PcacLineChartConfig() });
+  areaChartImagesConfig = httpResource<PcacAreaChartConfig>(() => this.repository.getAreaChartImagesUrl(), { defaultValue: new PcacAreaChartConfig() });
   plotConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartUrl(), { defaultValue: new PcacPlotChartConfig() });
   plotImagesConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartImagesUrl(), { defaultValue: new PcacPlotChartConfig() });
 

@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# Manual docs-only deploy. Releases deploy the docs automatically (see publish.yml's deploy-docs
+# job); use this for docs changes that don't warrant a new package version.
+
 on:
   workflow_dispatch:
 

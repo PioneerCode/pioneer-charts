@@ -192,9 +192,12 @@ published from a local machine.
 2. Commit and push to `main`. The workflow lints, tests, builds the library and dry-runs the publish.
 3. If that version isn't already on npm, the `publish` job pauses for approval — open the run under
    **Actions → Publish** and click **Review deployments → Approve**. Reject it and nothing ships.
-4. On success the package is on npm and a `v<version>` tag + GitHub Release are created
-   automatically. A version containing `-` (e.g. `22.2.0-beta.1`) is published under the `next`
-   dist-tag instead of `latest`.
+4. On success the package is on npm, a `v<version>` tag + GitHub Release are created, and the docs
+   site is deployed to GitHub Pages — all automatically. A version containing `-` (e.g.
+   `22.2.0-beta.1`) is published under the `next` dist-tag instead of `latest`.
+
+To redeploy the docs site without cutting a release (typo fixes, new guides), run the
+[Deploy to GitHub Pages](workflows/deploy-angular.yml) workflow manually from the Actions tab.
 
 ## License
 

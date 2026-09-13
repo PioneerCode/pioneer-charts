@@ -55,7 +55,7 @@ Every push and pull request to `main` is verified by [GitHub Actions](https://gi
 
 ### Releasing
 
-Releases are published to npm by the [Publish workflow](.github/workflows/publish.yml), never from a local machine. Bumping `version` in `projects/pioneer-charts/package.json` on `main` runs the full test suite and then waits for a maintainer to approve the deployment; once approved, the tested build is published to npm and a matching `v<version>` tag and GitHub Release are created.
+Releases are published to npm by the [Publish workflow](.github/workflows/publish.yml), never from a local machine. Bumping `version` in `projects/pioneer-charts/package.json` on `main` runs the full test suite and then waits for a maintainer to approve the deployment; once approved, the tested build is published to npm, a matching `v<version>` tag and GitHub Release are created, and the docs site is deployed.
 
 ## License
 

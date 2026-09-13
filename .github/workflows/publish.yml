@@ -10,6 +10,10 @@ name: Publish
 #           otherwise waits for approval on the `npm` environment (Settings -> Environments), then
 #           publishes via npm Trusted Publishing (OIDC) - no NPM_TOKEN secret involved.
 #   release tags the commit `v<version>` and creates a GitHub Release with generated notes.
+#   deploy-docs
+#           deploys the docs site (built in `test` against the same dist) to GitHub Pages, so the
+#           site never gets ahead of what's on npm. deploy-angular.yml is the manual fallback for
+#           docs-only changes that don't warrant a release.
 
 on:
   push:
@@ -91,6 +95,16 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      # The docs app resolves '@pioneer-code/pioneer-charts' to ./dist/pioneer-charts via tsconfig
+      # paths, so this is built against the exact package that `publish` ships.
+      - name: Build docs
+        run: npm run build:docs
+
+      - name: Upload docs
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/pioneer-charts-docs/browser
+
   publish:
     needs: test
     if: needs.test.outputs.should_publish == 'true'
@@ -154,3 +168,21 @@ jobs:
           --title "v${VERSION}"
           --generate-notes
           ${{ needs.test.outputs.prerelease == 'true' && '--prerelease' || '' }}
+
+  deploy-docs:
+    needs: [test, publish]
+    runs-on: ubuntu-latest
+    # Same group as deploy-angular.yml so a manual docs deploy and a release never race.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

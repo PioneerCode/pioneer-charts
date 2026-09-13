@@ -90,6 +90,12 @@
     `isThreshold` flag for bar chart threshold markers. The template owns the whole box: the
     library only positions it and applies none of its own styling. Import `PcacTooltipDirective`
     to use it; see the docs site's new "Custom Tooltip" guide.
+  - The tooltip template context now also carries `index` (the hovered datum's position in
+    `parent.data`, or in the top-level `data` for a pie slice) and `parentIndex` (the parent's
+    position in `data`, `null` when there is no parent). Since charts never reorder `data`, a
+    template can use them to reach back into whatever collection the `PcacData` was built from
+    (`items[parentIndex][index]`) and show fields the chart itself knows nothing about. For
+    builders, `PcacTooltipOptions.index` is required and `parentIndex` is optional.
   - Line, area and plot charts can now draw an image at a data point instead of its dot: set
     `image` (a URL or data URI) on the point's `PcacData`, and optionally `pointImage: { maxWidth,
     maxHeight }` on the chart config to size it (defaults to 16 x 16). The image is scaled to fit

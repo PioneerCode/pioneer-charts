@@ -96,6 +96,23 @@
   </section>
 
   <section class="pc-doc-section">
+    <h3 id="your-own-data">Your Own Data</h3>
+    <p>A <b>PcacData</b> only carries a key and a value, but the tooltip often wants more &mdash; the customer
+      behind an order, the unit a reading was taken in. The context's <b>index</b> and <b>parentIndex</b> give
+      the hovered datum's position in <code>data</code>, and charts never reorder <code>data</code>, so if the
+      collection you built it from is parallel (same order, nothing filtered out) those two indexes reach
+      straight back into it:</p>
+    <app-layout-code language="typescript" [code]="ownDataTsCode"></app-layout-code>
+    <app-layout-code language="markup" [code]="ownDataMarkupCode"></app-layout-code>
+    <p class="text-sm"><b>parentIndex</b> is <code>null</code> when there is no enclosing level (a pie slice, or a
+      chart-wide threshold), so for a pie use <code>items[index]</code> directly. For a threshold, <b>index</b> is its
+      position in <code>thresholds</code> (or in <code>thresholds[parentIndex].data</code> for a per-bar
+      threshold). If your collection <i>isn't</i> parallel to <code>data</code> &mdash; you filter, sort or
+      group on the way in &mdash; look the item up by key instead, or keep a map from key to item; a positional
+      link would silently point at the wrong row.</p>
+  </section>
+
+  <section class="pc-doc-section">
     <h3 id="styling">Styling</h3>
     <p>With a template present the library applies <i>none</i> of its own tooltip styling &mdash; no background,
       padding, font or color. It only positions the rendered template (centered above the cursor) and keeps it

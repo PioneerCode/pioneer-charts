@@ -24,6 +24,24 @@ export interface PcacTooltipContext {
    * In that case `$implicit` is the threshold's own `PcacData`.
    */
   isThreshold: boolean;
+
+  /**
+   * Position of `$implicit` in the array it was taken from: `parent.data` when there is a parent
+   * (a bar within its group, a point within its series), or the chart's top-level `data` when
+   * there isn't (a pie slice). For a threshold it's the position in `config.thresholds`, or in
+   * `config.thresholds[parentIndex].data` for a per-bar threshold.
+   *
+   * Together with `parentIndex` this lets a template reach back into whatever collection the
+   * `PcacData` was built from, as long as that collection is parallel to `data` (same order, no
+   * filtering): `items[parentIndex][index]` for a two-level chart, `items[index]` for a pie.
+   * Charts never reorder `data`, so the correspondence is stable across builds and resizes.
+   */
+  index: number;
+
+  /**
+   * Position of `parent` in the chart's top-level `data`; `null` whenever `parent` is.
+   */
+  parentIndex: number | null;
 }
 
 /**
@@ -41,7 +59,15 @@ export interface PcacTooltipContext {
  * ```
  *
  * The template is rendered with full Angular semantics (pipes, directives, components, DI from
- * the declaring component), so anything a normal template can do works here too.
+ * the declaring component), so anything a normal template can do works here too. `index` and
+ * `parentIndex` locate the hovered datum within `data`, so a template can pull extra fields from
+ * the consumer's own source collection when that collection is parallel to `data`:
+ *
+ * ```html
+ * <ng-template pcacTooltip let-point let-i="index" let-g="parentIndex">
+ *   <div class="my-tooltip">{{ orders[g!][i].customer }}: {{ point.value | number }}</div>
+ * </ng-template>
+ * ```
  */
 @Directive({
   selector: 'ng-template[pcacTooltip]'

@@ -106,6 +106,18 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.width).toBe(800 - 40 - 16);
   });
 
+  // Margins persist on the builder between builds, so a hideAxis build must not leave the next
+  // (hideAxis: false) one drawing axes into zeroed margins.
+  it('restores the default margins when a later build turns hideAxis back off', () => {
+    // hideAxis here hides only the x axis; the y labels stay, so `left` is always re-measured
+    // from them (40px, per the getBBox stub) - it's the other three sides that must come back.
+    builder.buildChart(elm, { ...config(), hideAxis: true });
+    expect(builder.margin).toEqual({ top: 0, right: 0, bottom: 0, left: 40 });
+
+    builder.buildChart(elm, config());
+    expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+  });
+
   // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
   // every rebuild (every container resize) flipped their palette back and forth.
   it('applies colorOverride reversed without mutating the consumer array, on repeated builds', () => {

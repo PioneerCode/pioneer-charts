@@ -62,6 +62,26 @@ describe('BarVerticalChartBuilder', () => {
     });
   });
 
+  // Regression test: adjustForHiddenAxis() added the margins onto the consumer's own
+  // `config.height`, and zeroed the builder's margins for good - so once a chart had rendered
+  // with hideAxis on, turning it back off drew the axes with no room for them.
+  describe('hideAxis', () => {
+    it('does not mutate the consumer config', () => {
+      const cfg = config({ hideAxis: true });
+      builder.buildChart(chartElm(), cfg);
+      expect(cfg.height).toBe(200);
+    });
+
+    it('restores the default margins when a later build turns hideAxis back off', () => {
+      builder.buildChart(chartElm(), config({ hideAxis: true }));
+      expect(builder.margin.top).toBe(0);
+      expect(builder.margin.left).toBe(0);
+
+      builder.buildChart(chartElm(), config());
+      expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+  });
+
   // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
   // every rebuild (every container resize) flipped their palette back and forth.
   describe('colorOverride', () => {

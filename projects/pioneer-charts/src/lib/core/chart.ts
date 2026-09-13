@@ -37,6 +37,7 @@ export class PcacChart {
   colorService = inject(PcacColorService);
 
   margin: PcacChartMargin = { top: 8, right: 16, bottom: 20, left: 40 };
+  private readonly defaultMargin: PcacChartMargin = { ...this.margin };
   svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
   width = 400;
   height = 400;
@@ -69,6 +70,17 @@ export class PcacChart {
    * rebuild the whole chart (restarting its entry animation) whenever the query resolves.
    */
   tooltipTemplate: () => TemplateRef<PcacTooltipContext> | undefined = () => undefined;
+
+  /**
+   * Puts `margin` back to its defaults. Builders must call this at the top of `buildChart()`,
+   * before any per-build adjustment (`hideAxis` zeroing sides, label widths measured into
+   * `margin.left`): `margin` lives on this per-chart instance and so persists between builds,
+   * and without a reset an adjustment made for one config silently carries into the next -
+   * e.g. axes drawn with no room after `hideAxis` flips back to false.
+   */
+  resetMargin(): void {
+    this.margin = { ...this.defaultMargin };
+  }
 
   /**
    * Shows the tooltip for a hovered datum, through the chart's `pcacTooltip` template when one is

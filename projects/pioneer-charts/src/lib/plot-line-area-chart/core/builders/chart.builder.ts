@@ -57,6 +57,7 @@ export class PlaChartBuilder extends PcacChart {
       data: []
     }));
 
+    this.resetMargin();
     if (this.config.hideAxis) {
       this.config.height = this.config.height + 12;
       this.margin.top = 8;
@@ -205,7 +206,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawLineArea(config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     for (let i = 0; i < config.data.length; i++) {
       if (type === PcacLineAreaPlotChartConfigType.Area) {
-        this.drawArea(config.data[i].data, i);
+        this.drawArea(config.data[i].data, i, config.data[i].hide);
       } else if (type === PcacLineAreaPlotChartConfigType.Line) {
         this.drawLine(config.data[i].data, i, config.data[i].hide);
       }
@@ -230,13 +231,16 @@ export class PlaChartBuilder extends PcacChart {
       .attr('style', () => hide ? 'display: none' : null);
   }
 
-  private drawArea(lineData: PcacData[], index: number) {
+  private drawArea(lineData: PcacData[], index: number, hide = false) {
     this.svg.append('g')
       .attr('class', 'areas')
       .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
       .append('path')
       .datum(lineData)
       .attr('class', 'area')
+      // Same `hide` handling as drawLine()/drawDots(); the area used to ignore it and paint
+      // a hidden series' fill anyway.
+      .style('display', () => hide ? 'none' : null)
       .style('opacity', 0.5)
       .style('fill', () => {
         return this.colors[index];

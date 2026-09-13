@@ -38,7 +38,7 @@ export class PcacGridBuilder {
     config.svg.append('g')
       .attr('class', 'pcac-grid')
       .selectAll('g.rule')
-      .data(xScale.ticks(5))
+      .data(xScale.ticks(config.numberOfTicks))
       .enter().append('svg:g')
       .attr('class', 'pcac-grid-rule')
       .attr('transform', (d): string => (`translate(${xScale(d)}, 0)`))

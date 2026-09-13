@@ -8,6 +8,16 @@
     build, so the palette flipped back and forth on each resize.
   - Horizontal bar charts double-counted their measured label margin, leaving the plot area
     narrower than the container allowed, and narrower still after the first resize.
+  - Area charts now honor a series' `hide` flag; previously the dots disappeared but the fill
+    stayed painted.
+  - Vertical bar charts with `hideAxis` no longer modify the consumer's `config.height`, and all
+    charts restore their default margins on every build - so turning `hideAxis` back off no
+    longer draws the axes into zero-width margins.
+  - The legend keeps keyboard focus on an item after toggling it with Enter/Space.
+  - `(dotClicked)` now fires on `<pcac-line-chart>` and `<pcac-area-chart>`; only the plot chart
+    was forwarding it.
+  - Horizontal bar chart grid lines follow `numberOfTicks` like the axis does, instead of a fixed
+    five.
   - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
     header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when

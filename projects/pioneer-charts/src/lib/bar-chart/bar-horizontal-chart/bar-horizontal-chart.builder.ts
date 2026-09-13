@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
-import { PcacChart, PcacChartMargin } from '../../core/chart';
+import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
@@ -29,7 +29,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private yScaleGrouped!: ScaleBand<string>;
   private barClickedSource = new Subject<PcacData>();
   private config!: PcacBarHorizontalChartConfig;
-  private cachedMargins: PcacChartMargin | undefined;
   barClicked$ = this.barClickedSource.asObservable();
 
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
@@ -38,6 +37,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     this.config = JSON.parse(JSON.stringify(config));
+    this.resetMargin();
     if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
@@ -55,10 +55,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
   }
 
   private adjustForHiddenAxis() {
-    if (!this.cachedMargins) {
-      this.cachedMargins = JSON.parse(JSON.stringify(this.margin));
-    }
-    this.margin = JSON.parse(JSON.stringify(this.cachedMargins));
     this.config.height = this.config.height + this.margin.top + this.margin.bottom;
     this.margin.top = 0;
     this.margin.bottom = 0;

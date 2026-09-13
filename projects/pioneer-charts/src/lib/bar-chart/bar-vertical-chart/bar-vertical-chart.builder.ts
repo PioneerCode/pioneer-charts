@@ -45,6 +45,10 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
+    // Shallow copy: adjustForHiddenAxis() rewrites `height`, and that must not land on the
+    // consumer's own config object (it previously did, growing it by the margins on first build).
+    config = { ...config };
+    this.resetMargin();
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }

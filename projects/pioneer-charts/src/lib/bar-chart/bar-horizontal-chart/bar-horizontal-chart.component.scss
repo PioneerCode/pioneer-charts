@@ -6,18 +6,6 @@
     }
 }
 
-.pcac-d3-tooltip {
-  position: absolute;
-  text-align: center;
-  font-size: 14px;
-  padding: 0.5rem;
-  pointer-events: none;
-  display: none;
-  background-color: rgba(0,0,0, 0.75);
-  color: white;
-  border-radius: 5px;
-}
-
 // `heightFull` support (see PcacChartConfig.heightFull). The host and the container section are
 // what the chart measures to decide how tall to draw, so both need a height handed down from the
 // consumer's wrapper - otherwise the section is sized by the <svg> inside it and measuring it

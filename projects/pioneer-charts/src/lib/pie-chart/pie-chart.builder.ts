@@ -88,10 +88,10 @@ export class PieChartBuilder extends PcacChart {
           .style('fill', ct);
       })
       .on('mousemove', (event: MouseEvent, d: PieArcDatum<PcacData>) => {
-        self.tooltipBuilder.showBarTooltip(event, d.data);
+        self.showTooltip(event, d.data);
       })
       .on('mouseout', function (this: SVGPathElement, _: MouseEvent, d: PieArcDatum<PcacData>) {
-        self.tooltipBuilder.hideTooltip();
+        self.hideTooltip();
         select<SVGPathElement, PieArcDatum<PcacData>>(this)
           .transition()
           .duration(self.transitionService.getTransitionDuration() / 3)

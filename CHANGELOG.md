@@ -35,6 +35,14 @@
     itself.
 
 ### Changed
+  - Tooltips are now centered above the cursor based on their rendered size, instead of at a fixed
+    offset that assumed the default content's dimensions. The default tooltip's styling moved from
+    `.pcac-d3-tooltip` (now just the positioning shell) to a new `.pcac-d3-tooltip-default` class,
+    so that a custom `pcacTooltip` template inherits none of it - a consumer overriding the default
+    look in CSS should target the new class. Two chart components (horizontal bar and line/area/plot)
+    also carried their own copy of the tooltip rule in their global styles, which overrode the
+    theme's - and any `$gray-800`/`$white` override of it - whenever one of those charts was on the
+    page; those copies are gone, so the theme's tooltip style now applies consistently.
   - **Breaking:** removed the unused, undocumented `onResize()` method from all chart components —
     charts now handle resizing automatically on their own.
   - The docs site no longer depends on zone.js, in line with modern Angular; no changes were needed
@@ -45,6 +53,12 @@
     abandoned Bootstrap integration.
 
 ### Added
+  - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
+    pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
+    with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an
+    `isThreshold` flag for bar chart threshold markers. The template owns the whole box: the
+    library only positions it and applies none of its own styling. Import `PcacTooltipDirective`
+    to use it; see the docs site's new "Custom Tooltip" guide.
   - Line, area and plot charts can now draw an image at a data point instead of its dot: set
     `image` (a URL or data URI) on the point's `PcacData`, and optionally `pointImage: { maxWidth,
     maxHeight }` on the chart config to size it (defaults to 16 x 16). The image is scaled to fit

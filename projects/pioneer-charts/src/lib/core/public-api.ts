@@ -6,3 +6,4 @@ export * from './grid.builder';
 export * from './tooltip.builder';
 export * from './transition.service';
 export * from './resize.service';
+export * from './tooltip.directive';

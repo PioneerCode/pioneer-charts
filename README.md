@@ -13,6 +13,7 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 - Beautiful default theme, easily customizable via SCSS.
 - Supports Bar, Line/Area, Pie charts, and Legends.
 - Event emitters for user interaction.
+- Custom tooltips via a projected `<ng-template pcacTooltip>`.
 - Strongly typed configuration contracts.
 - Standalone components — no `NgModule`s required.
 - Automatic chart resizing as its container's size changes.
@@ -76,6 +77,18 @@ See `@pioneer-code/pioneer-charts/scss/core/theme/imports.scss` for the full lis
 
 ```html
 <pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onBarClicked($event)"></pcac-bar-vertical-chart>
+```
+
+### Custom tooltip
+
+Project an `<ng-template pcacTooltip>` into any chart to replace its default tooltip with your own template (import `PcacTooltipDirective` alongside the chart component). The hovered `PcacData` is the implicit value; `parent` is its group/series and `isThreshold` flags bar chart threshold markers. The template owns the whole box - the library only positions it.
+
+```html
+<pcac-bar-vertical-chart [config]="barVerticalChartConfig">
+  <ng-template pcacTooltip let-point let-group="parent">
+    <div class="my-tooltip">{{ group?.key }} / {{ point.key }}: {{ point.value | number }}</div>
+  </ng-template>
+</pcac-bar-vertical-chart>
 ```
 
 

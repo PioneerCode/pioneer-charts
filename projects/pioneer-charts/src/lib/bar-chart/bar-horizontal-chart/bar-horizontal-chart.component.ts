@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewEncapsulation, effect, inject, viewChild, input } from '@angular/core';
+import { Component, ElementRef, ViewEncapsulation, contentChild, effect, inject, viewChild, input } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacChartResizeService } from '../../core/resize.service';
+import { PcacTooltipDirective } from '../../core/tooltip.directive';
 
 @Component({
   selector: 'pcac-bar-horizontal-chart',
@@ -23,11 +24,21 @@ export class PcacBarHorizontalChartComponent {
   readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly barClicked = outputFromObservable(this.chartBuilder.barClicked$);
 
+  /**
+   * Optional consumer `<ng-template pcacTooltip>` projected into this element; replaces the
+   * default tooltip when present (see PcacTooltipDirective).
+   */
+  readonly tooltipTemplate = contentChild(PcacTooltipDirective);
+
   constructor() {
     // Reacts to config() the same way ngOnChanges used to — reading it here (rather than a
     // lifecycle hook) is what makes this an effect: it tracks config() as its dependency and
     // reruns whenever a new value comes in, signal-input-changes-drive-behavior all the way down.
     effect(() => this.buildChart());
+
+    // Handed over as a getter so the builder reads the query at hover time, not in the effect
+    // above (see PcacChart.tooltipTemplate).
+    this.chartBuilder.tooltipTemplate = () => this.tooltipTemplate()?.templateRef;
 
     inject(PcacChartResizeService).observe(this.chartElm, () => {
       // Skip the ResizeObserver's routine initial callback when it lands after the effect above

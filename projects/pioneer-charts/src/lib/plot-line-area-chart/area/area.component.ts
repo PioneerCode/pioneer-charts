@@ -1,8 +1,9 @@
-import { Component, input, output } from "@angular/core";
+import { Component, contentChild, input, output } from "@angular/core";
 import { PcacAreaChartConfig } from "./area.model";
 import { PcacLineAreaChartComponent } from "../plot-line-area-chart.component";
 import { PcacLineAreaPlotChartConfigType } from "../plot-line-area-chart.model";
 import { PcacData } from "../../core";
+import { PcacTooltipDirective } from "../../core/tooltip.directive";
 
 @Component({
   selector: 'pcac-area-chart',
@@ -16,4 +17,10 @@ export class PcacAreaChart {
   readonly config = input.required<PcacAreaChartConfig>();
   readonly types = PcacLineAreaPlotChartConfigType;
   readonly dotClicked = output<PcacData>()
+
+  /**
+   * Optional consumer `<ng-template pcacTooltip>` projected into this element, forwarded to the
+   * inner chart (see PcacLineAreaChartComponent.tooltipTemplate for why it can't query it itself).
+   */
+  readonly tooltipTemplate = contentChild(PcacTooltipDirective);
 }

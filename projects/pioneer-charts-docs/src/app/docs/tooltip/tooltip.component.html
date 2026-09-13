@@ -1,0 +1,129 @@
+<app-layout-page-docs pageTitle="Custom Tooltip" [jumpNav]="jumpNav()">
+  <p class="lead" id="custom-tooltip">Every chart shows a tooltip when a data point is hovered. By default it is the
+    point's <b>key</b> and <b>value</b>. Project an <b>&lt;ng-template pcacTooltip&gt;</b> into a chart and that
+    template is rendered instead &mdash; a real Angular template with the hovered data bound into it, so pipes,
+    control flow, your own components and styles all work as they would anywhere else.
+  </p>
+
+  <section class="pc-doc-section">
+    <h3 id="try-it">Try It</h3>
+    <p>Hover the charts below. Each one has its own template; the bar and line tooltips use <b>parent</b> to
+      show the point's share of its group / series, and the bar chart's thresholds are flagged via
+      <b>isThreshold</b>.</p>
+
+    <div class="grid grid-cols-3 gap-4 mb-2">
+      <div>
+        <p class="pc-tooltip-caption">Grouped bar &mdash; <code>parent</code> is the group</p>
+        <mat-card class="p-3">
+          <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+            <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()">
+              <ng-template pcacTooltip let-point let-group="parent" let-threshold="isThreshold">
+                <div class="pc-tooltip" [class.pc-tooltip-threshold]="threshold">
+                  @if (threshold) {
+                    <span class="pc-tooltip-title">Threshold</span>
+                    <div class="pc-tooltip-row">
+                      <span>{{ group?.key ?? 'Chart-wide' }}</span>
+                      <span class="pc-tooltip-value">{{ point.value | number }}</span>
+                    </div>
+                  } @else {
+                    <span class="pc-tooltip-title">{{ group?.key }}</span>
+                    <div class="pc-tooltip-row">
+                      <span>{{ point.key }}</span>
+                      <span class="pc-tooltip-value">{{ point.value | number }}</span>
+                    </div>
+                    <span class="pc-tooltip-muted">{{ share(point, group?.data) | percent:'1.0-0' }} of {{ group?.key }}</span>
+                  }
+                </div>
+              </ng-template>
+            </pcac-bar-vertical-chart>
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+      <div>
+        <p class="pc-tooltip-caption">Line &mdash; <code>parent</code> is the series</p>
+        <mat-card class="p-3">
+          <app-layout-resource-state [resource]="service.lineChartConfig">
+            <pcac-line-chart [config]="service.lineChartConfig.value()">
+              <ng-template pcacTooltip let-point let-series="parent">
+                <div class="pc-tooltip">
+                  <span class="pc-tooltip-title">{{ point.key }}</span>
+                  <div class="pc-tooltip-row">
+                    <span>Value</span>
+                    <span class="pc-tooltip-value">{{ point.value | number }}</span>
+                  </div>
+                  <span class="pc-tooltip-muted">{{ share(point, series?.data) | percent:'1.0-0' }} of this series</span>
+                </div>
+              </ng-template>
+            </pcac-line-chart>
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+      <div>
+        <p class="pc-tooltip-caption">Pie &mdash; no <code>parent</code>; slices are top level</p>
+        <mat-card class="p-3">
+          <app-layout-resource-state [resource]="service.pieChartConfig">
+            <pcac-pie-chart [config]="service.pieChartConfig.value()">
+              <ng-template pcacTooltip let-slice>
+                <div class="pc-tooltip">
+                  <span class="pc-tooltip-title">{{ slice.key }}</span>
+                  <div class="pc-tooltip-row">
+                    <span>{{ slice.value | number }}</span>
+                    <span class="pc-tooltip-value">{{ share(slice, service.pieChartConfig.value().data) | percent:'1.0-0' }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </pcac-pie-chart>
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="markup">Markup</h3>
+    <p>Import <b>PcacTooltipDirective</b> alongside the chart component, then put an
+      <b>&lt;ng-template pcacTooltip&gt;</b> inside the chart element. The hovered datum is the template's implicit
+      value (<b>let-point</b>, or whatever name you like); the rest of the context is picked up by name.</p>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="context">Template Context</h3>
+    <p>The template is type-checked against <b>PcacTooltipContext</b> under <code>strictTemplates</code>, so
+      <code>point.value</code> and friends are checked as <b>PcacData</b>.</p>
+    <app-layout-code language="typescript" [code]="contextCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="styling">Styling</h3>
+    <p>With a template present the library applies <i>none</i> of its own tooltip styling &mdash; no background,
+      padding, font or color. It only positions the rendered template (centered above the cursor) and keeps it
+      from intercepting the mouse. The template owns the whole box.</p>
+    <app-layout-code language="css" [code]="styleCode"></app-layout-code>
+    <p class="text-sm">The tooltip is rendered into <code>&lt;body&gt;</code> so it can float over anything, but
+      its nodes are still stamped with your component's style scope, so component styles like the one above reach
+      it without <code>::ng-deep</code> or global CSS.</p>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="notes">Notes</h3>
+    <ul>
+      <li>
+        <b>Every chart supports it.</b> Bar (vertical and horizontal, including thresholds), line, area, plot
+        and pie. Leave the template out and the default key/value tooltip is used, formatted per the chart's
+        <code>tickFormat</code> / <code>xFormat</code> / <code>yFormat</code> as before; those formats are not
+        applied to a custom template, which gets the raw <b>PcacData</b>.
+      </li>
+      <li>
+        <b>It's a live view.</b> The template is created when a hover starts, updated in place as the mouse
+        moves, and destroyed when the hover ends. While shown it takes part in change detection like any other
+        view, so a signal read inside it keeps updating.
+      </li>
+      <li>
+        <b>One template per chart.</b> Only the first <code>pcacTooltip</code> template inside a chart element is
+        used.
+      </li>
+    </ul>
+  </section>
+</app-layout-page-docs>

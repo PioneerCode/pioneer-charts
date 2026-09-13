@@ -191,11 +191,12 @@ export class BarHorizontalChartBuilder extends PcacChart {
             return ct
           });
       })
-      .on('mousemove', (event: MouseEvent, d: PcacData) => {
-        self.tooltipBuilder.showBarTooltip(event, d, config.tickFormat || PcacFormatEnum.None);
+      .on('mousemove', function (this: SVGRectElement, event: MouseEvent, d: PcacData) {
+        const groupIndex = Number((this.parentNode as Element).getAttribute('data-group-id'));
+        self.showTooltip(event, d, { parent: config.data[groupIndex], valueFormat: config.tickFormat || PcacFormatEnum.None });
       })
       .on('mouseout', function (this: any) {
-        self.tooltipBuilder.hideTooltip();
+        self.hideTooltip();
         select(this)
           .transition()
           .duration(self.transitionService.getTransitionDuration() / 5)
@@ -224,8 +225,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('data-group-threshold-id', (_: unknown, i: number) => {
         return i;
       })
-      .on('mousemove', (event: MouseEvent, _: unknown) => {
-        this.tooltipBuilder.showBarTooltip(event, config.thresholds[0], config.tickFormat || PcacFormatEnum.None);
+      .on('mousemove', (event: MouseEvent) => {
+        this.showTooltip(event, config.thresholds[0], { isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None });
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
@@ -243,11 +244,13 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .on('mousemove', function (this: any, event: MouseEvent) {
         const index = Number(this.parentElement.dataset['groupId'])
-        self.tooltipBuilder.showBarTooltip(event,
-          config.isStacked ?
-            config.thresholds[index].data[0] :
-            config.thresholds[index],
-          config.tickFormat || PcacFormatEnum.None
+        const threshold = config.thresholds[index];
+        // A threshold's own PcacData is typically just a value, so its parent is the *data* group
+        // it's drawn against (which has the key) rather than the threshold entry it came from.
+        self.showTooltip(
+          event,
+          config.isStacked ? threshold.data[0] : threshold,
+          { parent: config.data[index], isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
         );
       })
       .transition()
@@ -267,9 +270,12 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .on('mousemove', function (this: any, event: MouseEvent) {
         const target = event.target as Element
         const index = Number(target.getAttribute("data-group-threshold-id"))
-        self.tooltipBuilder.showBarTooltip(event,
-          config.thresholds[Number(this.parentElement.dataset['groupId'])].data[index],
-          config.tickFormat || PcacFormatEnum.None
+        const groupIndex = Number(this.parentElement.dataset['groupId'])
+        // Parent is the data group (see drawThresholdsPerGroup), not the threshold entry itself.
+        self.showTooltip(
+          event,
+          config.thresholds[groupIndex].data[index],
+          { parent: config.data[groupIndex], isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
         );
       })
       .transition()
@@ -296,7 +302,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .attr('width', '3px')
       .on('mouseout', () => {
-        this.tooltipBuilder.hideTooltip();
+        this.hideTooltip();
       });
   }
 }

@@ -272,7 +272,7 @@ export class PlaChartBuilder extends PcacChart {
         .attr('class', 'point')
         .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales.x))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
-          self.tooltipBuilder.showBarTooltip(event, d, self.config.yFormat, self.config.xFormat);
+          self.showTooltip(event, d, { parent: series, valueFormat: self.config.yFormat, keyFormat: self.config.xFormat });
           // No-op for an image point (no circle inside to grow).
           select(this).select('.dot')
             .transition()
@@ -281,7 +281,7 @@ export class PlaChartBuilder extends PcacChart {
             .attr('fill', self.colors[index]);
         })
         .on('mouseout', function (this: SVGGElement) {
-          self.tooltipBuilder.hideTooltip();
+          self.hideTooltip();
           select(this).select('.dot')
             .transition()
             .duration(duration / 3)

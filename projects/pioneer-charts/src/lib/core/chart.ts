@@ -2,13 +2,24 @@ import { axisLeft, AxisDomain, AxisScale } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
 import { PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
-import { PcacChartConfig } from './chart.model';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
-import { ElementRef, inject } from '@angular/core';
-import { PcacData } from '.';
+import { ElementRef, TemplateRef, inject } from '@angular/core';
+import { PcacChartConfig, PcacData, PcacFormatEnum } from './chart.model';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
+import { PcacTooltipContext } from './tooltip.directive';
+
+/**
+ * Everything `showTooltip()` needs beyond the hovered datum itself. `parent`/`isThreshold` feed
+ * the consumer template's context; the formats only apply to the default (no template) content.
+ */
+export interface PcacTooltipOptions {
+  parent?: PcacData | null;
+  isThreshold?: boolean;
+  valueFormat?: PcacFormatEnum;
+  keyFormat?: PcacFormatEnum;
+}
 
 
 export interface PcacChartMargin {
@@ -49,6 +60,34 @@ export class PcacChart {
    */
   private lastContainerHeight: number | null = null;
   private lastHeightFull = false;
+
+  /**
+   * Resolves the consumer's projected `<ng-template pcacTooltip>`, if any. Each chart component
+   * points this at its own `contentChild(PcacTooltipDirective)` query. It's a getter rather than
+   * a captured value so it's read lazily, at hover time, from inside a D3 listener: reading the
+   * query signal in the component's build effect instead would make the effect depend on it and
+   * rebuild the whole chart (restarting its entry animation) whenever the query resolves.
+   */
+  tooltipTemplate: () => TemplateRef<PcacTooltipContext> | undefined = () => undefined;
+
+  /**
+   * Shows the tooltip for a hovered datum, through the chart's `pcacTooltip` template when one is
+   * projected and the default key/value content otherwise. Every builder's hover handler should
+   * go through here rather than `tooltipBuilder` directly so the template is honored everywhere.
+   */
+  showTooltip(event: MouseEvent, data: PcacData, options: PcacTooltipOptions = {}): void {
+    this.tooltipBuilder.showTooltip(
+      event,
+      this.tooltipTemplate(),
+      { $implicit: data, parent: options.parent ?? null, isThreshold: options.isThreshold ?? false },
+      options.valueFormat,
+      options.keyFormat
+    );
+  }
+
+  hideTooltip(): void {
+    this.tooltipBuilder.hideTooltip();
+  }
 
   /**
    * Prior to building a chart, we need to initialize the state of the chart.

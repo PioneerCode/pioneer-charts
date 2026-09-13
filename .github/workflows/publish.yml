@@ -2,8 +2,10 @@ name: Publish
 
 # Publishes @pioneer-code/pioneer-charts to npm.
 #
-# Flow: bump `version` in projects/pioneer-charts/package.json -> commit to main -> this runs.
-#   test    lint + unit tests + full library build + `npm publish --dry-run`, then checks whether
+# Flow: bump `version` in projects/pioneer-charts/package.json on a branch -> PR -> merge -> this runs.
+#   test    first confirms the pushed commit landed via a merged PR (direct pushes to main fail here;
+#           the `main` ruleset should already reject those, this is the backstop for bypassers),
+#           then lint + unit tests + full library build + `npm publish --dry-run`, then checks whether
 #           that version is already on npm. The built dist is handed to `publish` as an artifact so
 #           what ships is exactly what was tested.
 #   publish skipped entirely if the version is already published (so no spurious approval requests);
@@ -36,11 +38,28 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       version: ${{ steps.version.outputs.version }}
       prerelease: ${{ steps.version.outputs.prerelease }}
       should_publish: ${{ steps.version.outputs.should_publish }}
     steps:
+      # A squash, merge-commit, or rebase merge all associate the resulting commit(s) on main with
+      # the PR; a commit pushed straight to main is associated with nothing.
+      - name: Require a merged pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
+            --jq '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty')
+          if [[ -z "$pr" ]]; then
+            echo "::error::${GITHUB_SHA} was not merged into main through a pull request; refusing to publish."
+            exit 1
+          fi
+          echo "::notice::Publishing from PR #${pr} (${GITHUB_SHA})."
+
       - name: Checkout
         uses: actions/checkout@v4
 

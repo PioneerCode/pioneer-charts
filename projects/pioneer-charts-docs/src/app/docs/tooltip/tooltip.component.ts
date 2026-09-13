@@ -63,6 +63,10 @@ export class TooltipComponent {
       value: 'context',
     },
     {
+      key: 'Your Own Data',
+      value: 'your-own-data',
+    },
+    {
       key: 'Styling',
       value: 'styling',
     },
@@ -103,7 +107,40 @@ export class TooltipComponent {
 
   // True when a bar chart threshold marker is hovered rather than a data point.
   isThreshold: boolean;
+
+  // Position of the hovered datum in parent.data (or in the top-level data when there is no
+  // parent, e.g. a pie slice). For a threshold, its position in thresholds.
+  index: number;
+
+  // Position of parent in the top-level data; null whenever parent is.
+  parentIndex: number | null;
 }`;
+
+  ownDataTsCode = `// Your source collection, grouped the same way the chart is: one entry per group,
+// one item per bar. Build the chart's data from it without reordering or filtering.
+regions: Region[] = [
+  { name: 'North', orders: [{ customer: 'Acme', total: 1200 }, { customer: 'Globex', total: 800 }] },
+  { name: 'South', orders: [{ customer: 'Initech', total: 950 }] },
+];
+
+config: PcacBarVerticalChartConfig = {
+  ...new PcacBarVerticalChartConfig(),
+  data: this.regions.map(region => ({
+    key: region.name, value: null, hide: false,
+    data: region.orders.map(order => ({ key: order.customer, value: order.total, hide: false, data: [] })),
+  })),
+};`;
+
+  ownDataMarkupCode = `<!-- parentIndex picks the region, index picks the order within it. -->
+<pcac-bar-vertical-chart [config]="config">
+  <ng-template pcacTooltip let-point let-i="index" let-g="parentIndex">
+    @let order = regions[g!].orders[i];
+    <div class="my-tooltip">
+      <strong>{{ order.customer }}</strong>
+      <span>{{ order.total | currency }}</span>
+    </div>
+  </ng-template>
+</pcac-bar-vertical-chart>`;
 
   styleCode = `/* The template owns the whole box; give it whatever look you want. */
 .my-tooltip {

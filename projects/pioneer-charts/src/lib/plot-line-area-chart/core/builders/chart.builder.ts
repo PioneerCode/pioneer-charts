@@ -280,7 +280,14 @@ export class PlaChartBuilder extends PcacChart {
         .attr('class', 'point')
         .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales.x))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
-          self.showTooltip(event, d, { parent: series, valueFormat: self.config.yFormat, keyFormat: self.config.xFormat });
+          // `d` is the very element bound from `series.data` above, so identity lookup is exact.
+          self.showTooltip(event, d, {
+            index: series.data.indexOf(d),
+            parent: series,
+            parentIndex: index,
+            valueFormat: self.config.yFormat,
+            keyFormat: self.config.xFormat,
+          });
           // No-op for an image point (no circle inside to grow).
           select(this).select('.dot')
             .transition()

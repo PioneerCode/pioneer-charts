@@ -197,7 +197,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .on('mousemove', function (this: SVGRectElement, event: MouseEvent, d: PcacData) {
         const groupIndex = Number((this.parentNode as Element).getAttribute('data-group-id'));
-        self.showTooltip(event, d, { parent: config.data[groupIndex], valueFormat: config.tickFormat || PcacFormatEnum.None });
+        const index = Number(this.getAttribute('data-group-bar-id'));
+        self.showTooltip(event, d, { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: config.tickFormat || PcacFormatEnum.None });
       })
       .on('mouseout', function (this: any) {
         self.hideTooltip();
@@ -230,7 +231,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return i;
       })
       .on('mousemove', (event: MouseEvent) => {
-        this.showTooltip(event, config.thresholds[0], { isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None });
+        this.showTooltip(event, config.thresholds[0], { index: 0, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None });
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
@@ -254,7 +255,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.showTooltip(
           event,
           config.isStacked ? threshold.data[0] : threshold,
-          { parent: config.data[index], isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
+          { index, parent: config.data[index], parentIndex: index, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
         );
       })
       .transition()
@@ -279,7 +280,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.showTooltip(
           event,
           config.thresholds[groupIndex].data[index],
-          { parent: config.data[groupIndex], isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
+          { index, parent: config.data[groupIndex], parentIndex: groupIndex, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
         );
       })
       .transition()

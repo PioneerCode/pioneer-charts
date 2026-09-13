@@ -15,7 +15,11 @@ import { PcacTooltipContext } from './tooltip.directive';
  * the consumer template's context; the formats only apply to the default (no template) content.
  */
 export interface PcacTooltipOptions {
+  /** See `PcacTooltipContext.index`. Required so no hover site can forget to supply it. */
+  index: number;
   parent?: PcacData | null;
+  /** See `PcacTooltipContext.parentIndex`. Defaults to `null`, matching `parent`'s default. */
+  parentIndex?: number | null;
   isThreshold?: boolean;
   valueFormat?: PcacFormatEnum;
   keyFormat?: PcacFormatEnum;
@@ -87,11 +91,17 @@ export class PcacChart {
    * projected and the default key/value content otherwise. Every builder's hover handler should
    * go through here rather than `tooltipBuilder` directly so the template is honored everywhere.
    */
-  showTooltip(event: MouseEvent, data: PcacData, options: PcacTooltipOptions = {}): void {
+  showTooltip(event: MouseEvent, data: PcacData, options: PcacTooltipOptions): void {
     this.tooltipBuilder.showTooltip(
       event,
       this.tooltipTemplate(),
-      { $implicit: data, parent: options.parent ?? null, isThreshold: options.isThreshold ?? false },
+      {
+        $implicit: data,
+        parent: options.parent ?? null,
+        isThreshold: options.isThreshold ?? false,
+        index: options.index,
+        parentIndex: options.parentIndex ?? null,
+      },
       options.valueFormat,
       options.keyFormat
     );

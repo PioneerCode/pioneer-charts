@@ -32,7 +32,7 @@ function datum(key: string, value: number): PcacData {
 }
 
 function context(data: PcacData, parent: PcacData | null = null, isThreshold = false): PcacTooltipContext {
-  return { $implicit: data, parent, isThreshold };
+  return { $implicit: data, parent, isThreshold, index: 0, parentIndex: parent ? 0 : null };
 }
 
 function mouse(pageX = 200, pageY = 300): MouseEvent {

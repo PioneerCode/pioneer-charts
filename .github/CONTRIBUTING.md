@@ -182,6 +182,20 @@ TODO: Add
 
 Run `npm run lint` before committing to ensure your changes follow our coding standards.
 
+## Releasing (maintainers)
+
+Publishing to npm is automated by the [Publish workflow](workflows/publish.yml); nothing is
+published from a local machine.
+
+1. Bump `version` in `projects/pioneer-charts/package.json` (and move the `Unreleased` notes in
+   `CHANGELOG.md` under that version).
+2. Commit and push to `main`. The workflow lints, tests, builds the library and dry-runs the publish.
+3. If that version isn't already on npm, the `publish` job pauses for approval — open the run under
+   **Actions → Publish** and click **Review deployments → Approve**. Reject it and nothing ships.
+4. On success the package is on npm and a `v<version>` tag + GitHub Release are created
+   automatically. A version containing `-` (e.g. `22.2.0-beta.1`) is published under the `next`
+   dist-tag instead of `latest`.
+
 ## License
 
 By contributing your code, you agree to license your contribution under the [MIT License](LICENSE).

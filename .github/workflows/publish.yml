@@ -1,0 +1,156 @@
+name: Publish
+
+# Publishes @pioneer-code/pioneer-charts to npm.
+#
+# Flow: bump `version` in projects/pioneer-charts/package.json -> commit to main -> this runs.
+#   test    lint + unit tests + full library build + `npm publish --dry-run`, then checks whether
+#           that version is already on npm. The built dist is handed to `publish` as an artifact so
+#           what ships is exactly what was tested.
+#   publish skipped entirely if the version is already published (so no spurious approval requests);
+#           otherwise waits for approval on the `npm` environment (Settings -> Environments), then
+#           publishes via npm Trusted Publishing (OIDC) - no NPM_TOKEN secret involved.
+#   release tags the commit `v<version>` and creates a GitHub Release with generated notes.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - projects/pioneer-charts/package.json
+
+# Never cancel a publish mid-flight; queue a second bump behind the first instead.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PACKAGE_NAME: '@pioneer-code/pioneer-charts'
+  PACKAGE_DIR: dist/pioneer-charts
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      should_publish: ${{ steps.version.outputs.should_publish }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build library
+        run: npm run build:lib
+
+      # Packs the tarball and prints its contents without uploading - catches a broken
+      # `exports` map or a missing themes/scss directory before anything irreversible.
+      - name: Publish (dry run)
+        run: npm publish ./${{ env.PACKAGE_DIR }} --access public --dry-run
+
+      - name: Resolve version
+        id: version
+        run: |
+          version=$(node -p "require('./${PACKAGE_DIR}/package.json').version")
+          published=$(npm view "${PACKAGE_NAME}" versions --json | node -e "
+            const versions = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+            process.stdout.write(String([].concat(versions).includes(process.argv[1])));
+          " "$version")
+          prerelease=$([[ "$version" == *-* ]] && echo true || echo false)
+
+          echo "version=$version"           >> "$GITHUB_OUTPUT"
+          echo "prerelease=$prerelease"     >> "$GITHUB_OUTPUT"
+          echo "should_publish=$([[ "$published" == true ]] && echo false || echo true)" >> "$GITHUB_OUTPUT"
+
+          if [[ "$published" == true ]]; then
+            echo "::notice::${PACKAGE_NAME}@${version} is already on npm - nothing to publish."
+          else
+            echo "::notice::${PACKAGE_NAME}@${version} is new - publish will request approval."
+          fi
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: ${{ env.PACKAGE_DIR }}
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: test
+    if: needs.test.outputs.should_publish == 'true'
+    runs-on: ubuntu-latest
+    # The manual approval gate: this environment has required reviewers configured in
+    # Settings -> Environments -> npm. It must also be the environment name registered as the
+    # package's Trusted Publisher on npmjs.com.
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@pioneer-code/pioneer-charts/v/${{ needs.test.outputs.version }}
+    permissions:
+      contents: read
+      id-token: write # lets npm mint a short-lived OIDC credential for this run
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Trusted Publishing needs npm >= 11.5.1; Node 24 bundles npm 11 but pin the floor explicitly
+      # so an older runner image fails here with a clear message rather than an opaque 401.
+      - name: Check npm version
+        run: |
+          required=11.5.1
+          actual=$(npm --version)
+          if [[ "$(printf '%s\n' "$required" "$actual" | sort -V | head -n1)" != "$required" ]]; then
+            echo "::error::npm $actual is too old for Trusted Publishing (need >= $required)"
+            exit 1
+          fi
+
+      - name: Download package
+        uses: actions/download-artifact@v4
+        with:
+          name: package
+          path: ${{ env.PACKAGE_DIR }}
+
+      # Prereleases (22.2.0-beta.1) go under the `next` dist-tag so they never become `latest`.
+      - name: Publish to npm
+        run: >
+          npm publish ./${{ env.PACKAGE_DIR }} --access public
+          ${{ needs.test.outputs.prerelease == 'true' && '--tag next' || '' }}
+
+  release:
+    needs: [test, publish]
+    runs-on: ubuntu-latest
+    # Kept separate from `publish` so `contents: write` never sits on the job that talks to npm.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create tag and GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.test.outputs.version }}
+        run: >
+          gh release create "v${VERSION}"
+          --target "${GITHUB_SHA}"
+          --title "v${VERSION}"
+          --generate-notes
+          ${{ needs.test.outputs.prerelease == 'true' && '--prerelease' || '' }}

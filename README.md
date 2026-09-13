@@ -1,22 +1,26 @@
 # Pioneer Charts
 
+[![CI](https://github.com/PioneerCode/pioneer-charts/actions/workflows/ci.yml/badge.svg)](https://github.com/PioneerCode/pioneer-charts/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@pioneer-code/pioneer-charts)](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Pioneer Charts is an Angular library for building beautiful, customizable, and responsive data visualizations. It leverages [D3.js](https://d3js.org/) for rendering and provides bar, line/area, and pie charts, plus a legend component.
+
 ## Documentation
 
-See the [docs site](https://charts.pioneercode.com) for guides, API reference, and examples.
+Guides, the API reference, live examples, and theming instructions all live on the docs site:
 
-## Overview
-
-Pioneer Charts is an Angular library for building beautiful, customizable, and responsive data visualizations. It leverages [D3.js](https://d3js.org/) for rendering and supports a variety of chart types including bar, line/area, pie, and more.
+**https://charts.pioneercode.com**
 
 ## Features
 
-- Beautiful default theme, easily customizable via SCSS.
-- Supports Bar, Line/Area, Pie charts, and Legends.
-- Event emitters for user interaction.
-- Custom tooltips via a projected `<ng-template pcacTooltip>`.
+- Bar (vertical and horizontal), line, area, plot, and pie charts, plus a legend.
+- Beautiful default theme, customizable via CSS or by overriding the source Sass variables.
 - Strongly typed configuration contracts.
+- Outputs for user interaction (bar, slice, dot, and legend clicks).
+- Custom tooltips via a projected template.
 - Standalone components — no `NgModule`s required.
-- Automatic chart resizing as its container's size changes.
+- Charts automatically re-render when their container resizes.
 - Zoneless-compatible.
 - Open source and actively maintained.
 
@@ -25,72 +29,33 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 - Angular ^22.0.0
 - D3 ^7.9.0
 
-## Quick Start
-
-### 1. Install Pioneer Charts
+## Installation
 
 ```bash
 npm install --save @pioneer-code/pioneer-charts
 ```
 
-### 2. Import Components
+Then follow the [Introduction](https://charts.pioneercode.com) on the docs site to import the components and theme into your app.
 
-Pioneer Charts components are standalone — import the ones you need directly in your component:
+## Contributing
 
-```typescript
-import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
+Bug reports, feature requests, and pull requests are welcome — see [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the guidelines.
 
-@Component({
-  selector: 'app-dashboard',
-  imports: [
-    PcacBarVerticalChartComponent,
-    PcacLineChart,
-    // ...other components
-  ],
-  templateUrl: './dashboard.component.html',
-})
-export class DashboardComponent { }
+This repository is an Angular workspace containing the library (`projects/pioneer-charts`) and the docs site (`projects/pioneer-charts-docs`). To work on it locally:
+
+```bash
+npm ci
+npm start              # serve the docs site, which consumes the library
+npm run lint
+npm test               # library unit tests (vitest)
+npm run build:lib      # build the publishable package into dist/pioneer-charts
 ```
 
-### 3. Import Styles
+Every push and pull request to `main` is verified by [GitHub Actions](https://github.com/PioneerCode/pioneer-charts/actions) (lint, tests, and both builds).
 
-Add the Pioneer Charts CSS to your global styles:
+### Releasing
 
-```scss
-@import "@pioneer-code/pioneer-charts/themes/pioneer-charts.css";
-```
-
-#### Customizing the theme
-
-Prefer a Sass build instead? Import the source directly and override any of its color variables:
-
-```scss
-@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (
-  $gray-800: #1a1a2e, // tooltip background
-  $white: #f4f4f8,    // tooltip text
-);
-```
-
-See `@pioneer-code/pioneer-charts/scss/core/theme/imports.scss` for the full list of overridable variables.
-
-## Usage Example
-
-```html
-<pcac-bar-vertical-chart [config]="barVerticalChartConfig" (barClicked)="onBarClicked($event)"></pcac-bar-vertical-chart>
-```
-
-### Custom tooltip
-
-Project an `<ng-template pcacTooltip>` into any chart to replace its default tooltip with your own template (import `PcacTooltipDirective` alongside the chart component). The hovered `PcacData` is the implicit value; `parent` is its group/series and `isThreshold` flags bar chart threshold markers. The template owns the whole box - the library only positions it.
-
-```html
-<pcac-bar-vertical-chart [config]="barVerticalChartConfig">
-  <ng-template pcacTooltip let-point let-group="parent">
-    <div class="my-tooltip">{{ group?.key }} / {{ point.key }}: {{ point.value | number }}</div>
-  </ng-template>
-</pcac-bar-vertical-chart>
-```
-
+Releases are published to npm by the [Publish workflow](.github/workflows/publish.yml), never from a local machine. Bumping `version` in `projects/pioneer-charts/package.json` on `main` runs the full test suite and then waits for a maintainer to approve the deployment; once approved, the tested build is published to npm and a matching `v<version>` tag and GitHub Release are created.
 
 ## License
 

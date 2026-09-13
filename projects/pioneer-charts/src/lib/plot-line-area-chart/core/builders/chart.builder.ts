@@ -81,9 +81,9 @@ export class PlaChartBuilder extends PcacChart {
       ? Math.max(10, Math.ceil(this.pointImage.maxWidth / 2), Math.ceil(this.pointImage.maxHeight / 2))
       : 10;
 
-    this.scales = new PlaChartScalesBuilder().build(config, this.width, this.height);
-    this.lineGenerator = buildLineGenerator(config.xFormat, this.scales);
-    this.areaGenerator = buildAreaGenerator(config.xFormat, this.scales, this.height);
+    this.scales = new PlaChartScalesBuilder().build(this.config, this.width, this.height);
+    this.lineGenerator = buildLineGenerator(this.config.xFormat, this.scales);
+    this.areaGenerator = buildAreaGenerator(this.config.xFormat, this.scales, this.height);
 
     if (this.config.enableZoom) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
@@ -101,12 +101,16 @@ export class PlaChartBuilder extends PcacChart {
           xFormat: this.config.xFormat
         });
 
-        // Update lines/areas
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.line')
-          .attr('d', (d: PcacData[]) => this.lineGenerator.x((_: PcacData, i: number) => newX(i))(d));
-
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.area')
-          .attr('d', (d: PcacData[]) => this.areaGenerator.x((_: PcacData, i: number) => newX(i))(d));
+        // Update lines/areas. Fresh generators against the rescaled x, so they go through the
+        // same getXFormat() as the dots below - positioning by bare index here (which this used
+        // to do, and which also overwrote the original generators' x accessor for good) is only
+        // right for the default DatasetLength format; a DateTime/Decimal chart's lines drifted
+        // away from its dots as soon as it was zoomed.
+        const zoomedScales: PlaChartScales = { x: newX, y: this.scales.y };
+        const zoomedLine = buildLineGenerator(this.config.xFormat, zoomedScales);
+        const zoomedArea = buildAreaGenerator(this.config.xFormat, zoomedScales, this.height);
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.line').attr('d', (d: PcacData[]) => zoomedLine(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.area').attr('d', (d: PcacData[]) => zoomedArea(d));
 
         // Update dots / point images. Nested selectAll (not a flat svg.selectAll('.point')) so
         // that `i` is the point's index *within its own series* - the xFormat default

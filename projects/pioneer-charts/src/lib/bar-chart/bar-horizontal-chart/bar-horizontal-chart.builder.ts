@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
+import { stackStarts } from '../../core/stack';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
 // actually matched what `.selectAll()`'s default generics resolve to).
@@ -153,9 +154,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawBarsPerGroup(groups: GroupType, config: PcacBarHorizontalChartConfig) {
     const self = this;
+    // Stacked bars start where the previous bar in their group ends; every other layout draws
+    // from the baseline (start 0).
+    const starts = config.isStacked ? stackStarts(config.data) : new Map<PcacData, number>();
+    const startOf = (d: PcacData) => starts.get(d) ?? 0;
+    const endOf = (d: PcacData) => startOf(d) + Number(d.value ?? 0);
     groups.enter().append('rect')
       .attr('class', 'pcac-bar')
-      .attr('x', 0)
+      .attr('x', (d: PcacData) => this.xScale(startOf(d)))
       .attr('y', (d: PcacData) => {
         const value = !config.isStacked ? this.yScaleGrouped(d.key as string) : this.yScaleStacked(d.key as string)
         return value ? value : 0;
@@ -213,7 +219,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .transition()
       .duration(this.transitionService.getTransitionDuration())
       .attr('width', (d: PcacData) => {
-        return this.xScale(d.value as number);
+        return this.xScale(endOf(d)) - this.xScale(startOf(d));
       });
   }
 

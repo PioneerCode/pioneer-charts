@@ -1,5 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 
@@ -79,6 +80,36 @@ describe('BarVerticalChartBuilder', () => {
 
       builder.buildChart(chartElm(), config());
       expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+  });
+
+  // `isStacked` used to draw every bar from the baseline at its own value, so a "stack" was
+  // really overlapping bars that only looked right with pre-accumulated, descending data. Bars
+  // now stack: each starts where the previous one in its group ends, in data order.
+  describe('isStacked', () => {
+    it('stacks each bar on top of the previous one in its group', async () => {
+      // Let the enter transition finish instantly so the final geometry can be read back.
+      vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
+      const elm = chartElm(800, 0);
+      builder.buildChart(elm, config({
+        isStacked: true,
+        domainMax: 100,
+        data: [{ key: 'G', value: null, hide: false, data: [
+          { key: 'a', value: 10, hide: false, data: [] },
+          { key: 'b', value: 20, hide: false, data: [] },
+          { key: 'c', value: 30, hide: false, data: [] },
+        ] }],
+      }));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // height 200 / domain 100 -> 2px per unit, y measured from the top.
+      const bars = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar') as NodeListOf<SVGRectElement>)
+        .map((r) => ({ y: Number(r.getAttribute('y')), h: Number(r.getAttribute('height')) }));
+      expect(bars).toEqual([
+        { y: 200 - 20, h: 20 },        // a: 0..10
+        { y: 200 - 60, h: 40 },        // b: 10..30
+        { y: 200 - 120, h: 60 },       // c: 30..60
+      ]);
     });
   });
 

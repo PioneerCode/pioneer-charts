@@ -1,5 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 
@@ -116,6 +117,32 @@ describe('BarHorizontalChartBuilder', () => {
 
     builder.buildChart(elm, config());
     expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+  });
+
+  // See the matching test in bar-vertical-chart.builder.spec.ts: stacked bars now start where
+  // the previous bar in their group ends instead of all starting at 0.
+  it('stacks each bar after the previous one in its group', async () => {
+    vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
+    builder.buildChart(elm, {
+      ...config(),
+      isStacked: true,
+      domainMax: 100,
+      data: [{ key: 'G', value: null, hide: false, data: [
+        { key: 'a', value: 10, hide: false, data: [] },
+        { key: 'b', value: 20, hide: false, data: [] },
+        { key: 'c', value: 30, hide: false, data: [] },
+      ] }],
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    const unit = builder.width / 100;
+    const bars = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar') as NodeListOf<SVGRectElement>)
+      .map((r) => ({ x: Number(r.getAttribute('x')) / unit, w: Number(r.getAttribute('width')) / unit }));
+    expect(bars.map((b) => ({ x: Math.round(b.x), w: Math.round(b.w) }))).toEqual([
+      { x: 0, w: 10 },
+      { x: 10, w: 20 },
+      { x: 30, w: 30 },
+    ]);
   });
 
   // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so

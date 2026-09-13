@@ -13,6 +13,7 @@ import 'd3-transition';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacChart } from '../../core/chart';
 import { PcacData, PcacFormatEnum } from '../../core/chart.model';
+import { stackStarts } from '../../core/stack';
 
 import { Subject } from 'rxjs';
 
@@ -171,6 +172,11 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawBarsPerGroup(group: GroupType, config: PcacBarVerticalChartConfig) {
     const self = this;
+    // Stacked bars sit on top of the ones before them in their group; every other layout draws
+    // from the baseline (start 0).
+    const starts = config.isStacked ? stackStarts(config.data) : new Map<PcacData, number>();
+    const startOf = (d: PcacData) => starts.get(d) ?? 0;
+    const endOf = (d: PcacData) => startOf(d) + Number(d.value ?? 0);
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', (d: PcacData) => {
@@ -236,10 +242,10 @@ export class BarVerticalChartBuilder extends PcacChart {
       // )
       .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', (d: PcacData) => {
-        return this.yScale(d.value as number);
+        return this.yScale(endOf(d));
       })
       .attr('height', (d: PcacData) => {
-        return this.height - this.yScale(d.value as number);
+        return this.yScale(startOf(d)) - this.yScale(endOf(d));
       });
   }
 

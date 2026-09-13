@@ -72,12 +72,11 @@
           <td>Highest value in domain of data.</td>
         </tr>
         <tr>
-          <td>isGroup</td>
-          <td>If set to true, 2-dimensional data sets will be displayed as a group in n of the first dimension. If
-            false,
-            the group will produce a stack bar set. It is recommended in that when configured in the false state, your
-            data is ordered highest to lowest so a bar does not get covered on the UI due to a back to front stack
-            order.
+          <td>isStacked</td>
+          <td>If false (the default), each group's bars are drawn side by side. If true, they are stacked: each
+            bar's <b>value</b> is its own segment size, and segments are placed on top of one another in data
+            order, so a group's total height is the sum of its values. Keep <b>domainMax</b> at or above the
+            largest group total.
           </td>
         </tr>
         <tr>

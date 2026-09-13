@@ -56,6 +56,16 @@
     itself.
 
 ### Changed
+  - **Breaking:** `isStacked` bar charts now actually stack. Each bar's `value` is its own segment
+    and segments are placed end to end in data order, so a group's total is the sum of its values
+    and each bar's tooltip reports that bar's own value. Previously every bar was drawn from the
+    baseline at its own value and merely overlapped, which only looked stacked if the data was
+    pre-accumulated and sorted highest-to-lowest - consumers doing that should switch to passing
+    per-segment values (the docs site's stacked mock data has been converted the same way). The
+    docs also described this option under the wrong name, `isGroup`.
+  - Line/area charts with `enableZoom` now keep their lines on their dots when zoomed on a
+    `DateTime` or `Decimal` x axis; the lines used to be repositioned by index regardless of the
+    x format.
   - Tooltips are now centered above the cursor based on their rendered size, instead of at a fixed
     offset that assumed the default content's dimensions. The default tooltip's styling moved from
     `.pcac-d3-tooltip` (now just the positioning shell) to a new `.pcac-d3-tooltip-default` class,

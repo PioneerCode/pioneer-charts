@@ -215,7 +215,12 @@ export class PcacChart {
         }
       })
       .remove();
+    // `width` was already computed net of the current `margin.left` by initializeChartState(),
+    // so only the *change* in margin comes out of it. Subtracting the whole measured margin
+    // double-counted it, and since `margin` persists on the builder between builds, the amount
+    // double-counted grew on the next rebuild - the plot area came out narrower than the
+    // container allowed and then shrank further after the first resize.
+    this.width = this.width + this.margin.left - max;
     this.margin.left = max;
-    this.width = this.width - this.margin.left;
   }
 }

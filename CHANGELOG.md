@@ -2,6 +2,12 @@
 # Unreleased
 
 ### Fixed
+  - Vertical bar charts with `heightFull` drew their y axis and grid at the configured `height`
+    while the bars stretched to the filled height, leaving every bar hanging below the zero line.
+  - Bar charts with a `colorOverride` reversed the consumer's own `colors` array in place on every
+    build, so the palette flipped back and forth on each resize.
+  - Horizontal bar charts double-counted their measured label margin, leaving the plot area
+    narrower than the container allowed, and narrower still after the first resize.
   - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
     header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when

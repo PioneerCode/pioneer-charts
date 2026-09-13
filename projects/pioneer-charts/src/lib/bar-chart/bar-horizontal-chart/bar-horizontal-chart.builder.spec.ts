@@ -90,4 +90,32 @@ describe('BarHorizontalChartBuilder', () => {
     dispatchAndCaptureError(bar, 'mouseover');
     expect(dispatchAndCaptureError(bar, 'mouseout')).toBeUndefined();
   });
+
+  // Regression test: the measured label margin was subtracted from a width that
+  // initializeChartState had already reduced by margin.left, and because `margin` persists on
+  // the builder the double-count grew on the next build - the plot area was too narrow and got
+  // narrower after the first resize. With the 40px getBBox stub above and the default 16px right
+  // margin, an 800px container must leave exactly 800 - 40 - 16 for the bars, every build.
+  it('sizes the plot area from the measured label margin, stably across rebuilds', () => {
+    expect(builder.margin.left).toBe(40);
+    expect(builder.width).toBe(800 - 40 - 16);
+
+    builder.buildChart(elm, config());
+
+    expect(builder.margin.left).toBe(40);
+    expect(builder.width).toBe(800 - 40 - 16);
+  });
+
+  // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
+  // every rebuild (every container resize) flipped their palette back and forth.
+  it('applies colorOverride reversed without mutating the consumer array, on repeated builds', () => {
+    const colors = ['#111', '#222', '#333'];
+    const cfg = { ...config(), colorOverride: { colors } };
+
+    builder.buildChart(elm, cfg);
+    builder.buildChart(elm, cfg);
+
+    expect(colors).toEqual(['#111', '#222', '#333']);
+    expect(builder.colors).toEqual(['#333', '#222', '#111']);
+  });
 });

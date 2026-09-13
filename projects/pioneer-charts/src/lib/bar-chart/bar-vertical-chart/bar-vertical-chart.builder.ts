@@ -45,9 +45,6 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
-    if (config.colorOverride && config.colorOverride.colors) {
-      this.colors = config.colorOverride.colors;
-    }
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
@@ -55,8 +52,10 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
+    // Copy before reversing: `.reverse()` is in place, and this is the consumer's own array -
+    // reversing it directly flipped their palette on every rebuild (i.e. every resize).
     if (config.colorOverride && config.colorOverride.colors) {
-      this.colors = config.colorOverride.colors.reverse();
+      this.colors = [...config.colorOverride.colors].reverse();
     }
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -86,8 +85,10 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private buildScales(config: PcacBarVerticalChartConfig) {
+    // `this.height`, not `config.height`: with `heightFull` on they differ (see
+    // PcacChart.resolveHeight), and the axis, grid and bar baselines all use the resolved one.
     this.yScale = scaleLinear()
-      .rangeRound([0, config.height])
+      .rangeRound([0, this.height])
       .domain([config.domainMax, 0]);
 
     this.xScaleStacked = scaleBand()

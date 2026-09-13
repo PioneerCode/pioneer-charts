@@ -18,6 +18,11 @@
     was forwarding it.
   - Horizontal bar chart grid lines follow `numberOfTicks` like the axis does, instead of a fixed
     five.
+  - Line/area chart hover effects no longer read the wrong series' path when an empty series
+    precedes a non-empty one.
+  - Fahrenheit tick labels on the x axis now read ` F`, matching the y axis, instead of `f`.
+  - The docs site footer now reads the library version from its package.json instead of a
+    hand-maintained (and already stale) literal.
   - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
     header no longer overlaps at narrow widths.
   - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when

@@ -4,10 +4,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 /**
  * Overlays the loading/error state of an `httpResource` on top of its projected content.
  *
- * The projected chart is always rendered (never gated behind `@if`), because pioneer-charts'
- * chart components rely on mounting early with their default config and re-rendering once real
- * data arrives via a second `ngOnChanges` — gating creation on `resource().isLoading()` would
- * mount them for the first time already holding real data, racing their own view-child init.
+ * The projected chart is always rendered (never gated behind `@if`): it mounts with the
+ * resource's default config and its build effect re-runs once real data arrives. (The charts
+ * can also cope with mounting already holding data - see PcacChartResizeService - but there's no
+ * reason to exercise that path here.)
  */
 @Component({
   selector: 'app-layout-resource-state',

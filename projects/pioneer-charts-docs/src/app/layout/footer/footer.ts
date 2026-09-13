@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { AppService, MainRoutes } from '../../app.service';
+import { version } from '../../../../../pioneer-charts/package.json';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink } from '@angular/router';
 
@@ -15,7 +16,8 @@ import { RouterLink } from '@angular/router';
 export class LayoutFooter {
   readonly service = inject(AppService)
 
-  // Kept in sync with projects/pioneer-charts/package.json's published version.
-  version = signal<string>('22.0.4');
+  // Read straight from the library's package.json so it can't drift from the published version
+  // (the hand-maintained literal this replaced had already fallen a release behind).
+  version = signal<string>(version);
   MainRoutes = MainRoutes;
 }

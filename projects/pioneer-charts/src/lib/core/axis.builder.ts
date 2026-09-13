@@ -37,7 +37,7 @@ export class PcacAxisBuilder {
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
 
     if (config.yFormat) {
-      switch (config.yFormat.toLocaleLowerCase()) {
+      switch (config.yFormat) {
         case PcacFormatEnum.Percentage:
           yAxis.tickFormat(d => d + "%");
           break;
@@ -70,7 +70,7 @@ export class PcacAxisBuilder {
           xAxis.tickFormat((d) => d + 'm');
           break;
         case PcacFormatEnum.Fahrenheit:
-          xAxis.tickFormat((d) => d + 'f');
+          xAxis.tickFormat((d) => d + ' F');
           break;
         case PcacFormatEnum.OneDayHours:
           xAxis.tickFormat((d) => {

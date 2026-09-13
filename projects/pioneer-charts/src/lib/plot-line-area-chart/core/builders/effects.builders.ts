@@ -35,9 +35,15 @@ export class PlaChartEffectsBuilder {
   buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
     this.lines = [];
-    this.config.svg.selectAll('.line, .area').each((d, i, n) => {
-      this.lines.push(n[i] as SVGGeometryElement);
-    });
+    // Filtered on the same predicate buildCollection() applies to the effect groups (each path's
+    // datum is its series' point array), so `lines[i]` always belongs to the i-th group - an
+    // empty series in the middle of the data would otherwise shift every later group onto the
+    // wrong path.
+    this.config.svg.selectAll<SVGGeometryElement, PcacData[]>('.line, .area')
+      .filter((d) => d?.length !== 0)
+      .each((d, i, n) => {
+        this.lines.push(n[i]);
+      });
     this.buildCollection();
     this.buildCanvas();
   }

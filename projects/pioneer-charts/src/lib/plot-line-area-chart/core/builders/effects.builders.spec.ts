@@ -104,4 +104,44 @@ describe('PlaChartEffectsBuilder', () => {
     const effectGroup = svgRoot.querySelector('.effect-group')!;
     expect(effectGroup.getAttribute('transform')).toMatch(/^translate\(/);
   });
+
+  // Regression test: the effect groups are built from series with data, but the path list was
+  // collected from every .line/.area path - so an empty series in the middle shifted each later
+  // group onto the previous series' path.
+  it('pairs each effect group with its own series\' path when an empty series sits between them', () => {
+    const point = (y: number): PcacData => ({ key: 0, value: y, hide: false, data: [] });
+    const withDatum = (path: SVGPathElement, data: PcacData[], y: number) => {
+      select(path).datum(data);
+      Object.defineProperty(path, 'getPointAtLength', { value: (l: number) => ({ x: l, y }), configurable: true });
+      return path;
+    };
+    const first = [point(1)];
+    const empty: PcacData[] = [];
+    const third = [point(3)];
+    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), first, 10));
+    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), empty, 20));
+    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), third, 30));
+
+    const builder = new PlaChartEffectsBuilder();
+    const scale = scaleLinear().domain([0, 100]).range([0, 100]);
+    builder.buildEffects({
+      svg: select(svgRoot),
+      height: 100,
+      width: 100,
+      data: [
+        { key: 'a', value: 0, hide: false, data: first },
+        { key: 'b', value: 0, hide: false, data: empty },
+        { key: 'c', value: 0, hide: false, data: third },
+      ],
+      colors: ['red', 'green', 'blue'],
+      x: scale,
+      y: scale,
+    });
+    svgRoot.querySelector('.effects-canvas')!.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+
+    const groups = Array.from(svgRoot.querySelectorAll('.effect-group')).map((g) => g.getAttribute('transform'));
+    expect(groups.length).toBe(2);
+    expect(groups[0]).toMatch(/,10\)$/);
+    expect(groups[1]).toMatch(/,30\)$/);
+  });
 });

@@ -20,10 +20,6 @@ import { Subject } from 'rxjs';
 // actually matched what `.selectAll()`'s default generics resolve to).
 type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
-export interface IBarVerticalChartBuilder {
-  buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void;
-}
-
 /**
  * Provided per-component (see PcacBarVerticalChartComponent's `providers`), not root-scoped:
  * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,

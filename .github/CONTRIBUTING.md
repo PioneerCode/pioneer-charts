@@ -187,9 +187,11 @@ Run `npm run lint` before committing to ensure your changes follow our coding st
 Publishing to npm is automated by the [Publish workflow](workflows/publish.yml); nothing is
 published from a local machine.
 
-1. Bump `version` in `projects/pioneer-charts/package.json` (and move the `Unreleased` notes in
-   `CHANGELOG.md` under that version).
-2. Commit and push to `main`. The workflow lints, tests, builds the library and dry-runs the publish.
+1. On a branch, bump `version` in `projects/pioneer-charts/package.json` (and move the `Unreleased`
+   notes in `CHANGELOG.md` under that version).
+2. Open a pull request against `main` and merge it once CI is green. `main` only accepts changes
+   through pull requests, and the publish workflow refuses to run on a commit that didn't arrive
+   that way. The workflow then lints, tests, builds the library and dry-runs the publish.
 3. If that version isn't already on npm, the `publish` job pauses for approval — open the run under
    **Actions → Publish** and click **Review deployments → Approve**. Reject it and nothing ships.
 4. On success the package is on npm, a `v<version>` tag + GitHub Release are created, and the docs

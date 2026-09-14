@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { PcacAxisConfig, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
+import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
 import { LayoutCode } from '../../layout/code/code';
@@ -35,8 +35,11 @@ export class AxisStylingComponent {
    * own default (6px) so the initial render matches a chart that only set the size; the lines
    * start on so there's something to see.
    */
-  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: false, label: 'Product' });
-  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: true, label: 'Units sold' });
+  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: false, label: 'Product', subLabels: {} });
+  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: true, label: 'Units sold', subLabels: { min: 'Low', mid: 'Medium', max: 'High' } });
+
+  /** The three sub label slots, for the template's inputs */
+  protected readonly subLabelKeys: readonly (keyof PcacAxisSubLabels)[] = ['min', 'mid', 'max'];
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
@@ -67,6 +70,11 @@ export class AxisStylingComponent {
   protected onLabel(axis: 'x' | 'y', event: Event): void {
     const label = (event.target as HTMLInputElement).value || undefined;
     this.axisSignal(axis).update(a => ({ ...a, label }));
+  }
+
+  protected onSubLabel(axis: 'x' | 'y', key: keyof PcacAxisSubLabels, event: Event): void {
+    const value = (event.target as HTMLInputElement).value || undefined;
+    this.axisSignal(axis).update(a => ({ ...a, subLabels: { ...a.subLabels, [key]: value } }));
   }
 
   protected onToggle(axis: 'x' | 'y', field: AxisToggle, event: Event): void {
@@ -109,6 +117,7 @@ export class AxisStylingComponent {
   },
   yAxis: {
     label: 'Units sold',
+    subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // by position along the axis
     ticks: 4,         // requested tick (and grid line) count
     showGrid: false   // no horizontal grid lines
   }

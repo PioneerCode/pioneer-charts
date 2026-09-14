@@ -27,6 +27,16 @@ export class PcacChartConfig {
 }
 
 /**
+ * Up to three short labels placed along an axis by position rather than by value: `min` at its
+ * start, `mid` at its center, `max` at its end. Any subset can be given.
+ */
+export class PcacAxisSubLabels {
+  min?: string
+  mid?: string
+  max?: string
+}
+
+/**
  * Everything configurable about one axis. Used twice per chart, as `xAxis` and `yAxis` on
  * `PcacAxisChartConfig`, so the two never drift apart and a new per-axis option lands in one place.
  *
@@ -86,6 +96,16 @@ export class PcacAxisConfig {
    * by the theme's `.pcac-axis-label` rule.
    */
   label?: string
+
+  /**
+   * Min / mid / max sub labels (e.g. "Low" / "Medium" / "High") in their own row just outside the
+   * tick labels, and inside the `label` if there is one: `min` left-aligned at the axis's start,
+   * `mid` centered, `max` right-aligned at its end, so they never spill past the axis. On the
+   * y axis they run bottom-to-top like the label, `min` at the bottom. The margin grows by
+   * `PcacChart.AXIS_SUB_LABEL_SPACE` when any is set, shrinking the plot area. Not drawn on a
+   * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
+   */
+  subLabels?: PcacAxisSubLabels
 }
 
 /**
@@ -101,10 +121,34 @@ export interface PcacChartMargin {
 
 /**
  * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
- * null-check. `tickSize` and `label` stay optional: "not set" is itself the meaningful default
- * (no marks, no label).
+ * null-check. `tickSize`, `label` and `subLabels` stay optional: "not set" is itself the meaningful
+ * default (no marks, no labels).
  */
-export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize' | 'label'>> & Pick<PcacAxisConfig, 'tickSize' | 'label'>;
+export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>> & Pick<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>;
+
+/** True if `axis` has at least one sub label to draw (an empty `subLabels` object counts as none). */
+export function hasAxisSubLabels(axis: PcacAxisConfig | undefined): boolean {
+  const sub = axis?.subLabels;
+  return !!sub && (!!sub.min || !!sub.mid || !!sub.max);
+}
+
+/**
+ * Room reserved in a margin for an axis `label`: the theme's 12px label plus a gap from the tick
+ * labels. Reserved on the side the label sits on (`bottom` for x, `left` for y), and taken out
+ * of the plot area, the same way a longer tick is. Change together with `.pcac-axis-label`.
+ */
+export const PCAC_AXIS_LABEL_SPACE = 18;
+
+/** Likewise for a row of `subLabels`: the theme's 11px text plus a gap (`.pcac-axis-sub-label`). */
+export const PCAC_AXIS_SUB_LABEL_SPACE = 16;
+
+/**
+ * Total margin an axis's `label` and `subLabels` take on its side. `PcacChart` reserves it and
+ * the axis builder places the text by it, so the two stay in step.
+ */
+export function axisLabelSpace(axis: PcacAxisConfig | undefined): number {
+  return (axis?.label ? PCAC_AXIS_LABEL_SPACE : 0) + (hasAxisSubLabels(axis) ? PCAC_AXIS_SUB_LABEL_SPACE : 0);
+}
 
 /**
  * @param showGridDefault what `showGrid` resolves to when the consumer left it unset - each chart
@@ -119,6 +163,7 @@ export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false
     tickSize: axis?.tickSize,
     showLine: axis?.showLine ?? defaults.showLine!,
     label: axis?.label,
+    subLabels: axis?.subLabels,
   };
 }
 

@@ -292,6 +292,17 @@ describe('PcacChart', () => {
       expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(228);
     });
 
+    it('reserves AXIS_SUB_LABEL_SPACE for sub labels, on top of a label\'s space', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { subLabels: { min: 'Low' } }, yAxis: { label: 'Y', subLabels: { max: 'High' } } }), 'y');
+      expect(chart.margin.bottom).toBe(20 + 16);
+      expect(chart.margin.left).toBe(40 + 18 + 16);
+    });
+
+    it('reserves nothing for an empty subLabels object', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { subLabels: {} } }), 'y');
+      expect(chart.margin.bottom).toBe(20);
+    });
+
     it('reserves nothing for a label on a hidden axis', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { hide: true, label: 'Day' } }), 'y');
       expect(chart.margin.bottom).toBe(0);

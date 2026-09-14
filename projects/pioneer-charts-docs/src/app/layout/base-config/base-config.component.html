@@ -102,6 +102,14 @@
             margin grows by 18px to make room, shrinking the plot area. Not drawn on a hidden axis. Styled by the
             theme's <code>.pcac-axis-label</code> rule.
           </li>
+          <li>
+            <b>subLabels</b> &mdash; <code>{{ '{' }} min?, mid?, max? {{ '}' }}</code>: up to three short labels placed
+            by position along the axis, in their own row just outside the tick labels (and inside the <b>label</b>,
+            if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
+            so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
+            bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
+            <code>.pcac-axis-sub-label</code> rule.
+          </li>
         </ul>
       </td>
     </tr>

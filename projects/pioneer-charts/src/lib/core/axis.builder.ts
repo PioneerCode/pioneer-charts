@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft, AxisScale, AxisDomain } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PcacChartMargin, PcacFormatEnum, PcacResolvedAxisConfig } from './chart.model';
+import { PCAC_AXIS_LABEL_SPACE, PcacChartMargin, PcacFormatEnum, PcacResolvedAxisConfig } from './chart.model';
 import { format } from 'd3-format';
 
 /**
@@ -29,7 +29,10 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
    * bare rule; that's D3's standard look and is left as-is. `label` is drawn inside the axis group
    * (so it's raised and non-interactive along with it), centered along the axis and hugging the
-   * chart's outer edge: `margin.bottom` below the x axis, `margin.left` left of the y axis.
+   * chart's outer edge: `margin.bottom` below the x axis, `margin.left` left of the y axis. Any
+   * `subLabels` take the row just inside that (`PCAC_AXIS_LABEL_SPACE` in from the edge when
+   * there's a label, the edge itself otherwise), `min` at the axis's start, `mid` centered and
+   * `max` at its end, anchored so they stay within the axis's span.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
@@ -89,9 +92,9 @@ export class PcacAxisBuilder {
       .classed('pcac-axis-line', config.yAxis.showLine)
       .call(yAxis);
 
+    // Rotated to read bottom-to-top; after the rotation x runs up the axis (so the bottom of the
+    // axis is x = -height) and y runs left, so `y` here is a distance in from the SVG's left edge.
     if (config.yAxis.label) {
-      // Rotated to read bottom-to-top; after the rotation x runs up the axis and y runs left,
-      // so this is centered on the axis with its top edge at the SVG's left edge.
       group.append('text')
         .attr('class', 'pcac-axis-label')
         .attr('transform', 'rotate(-90)')
@@ -100,6 +103,24 @@ export class PcacAxisBuilder {
         .attr('dy', '1em')
         .attr('text-anchor', 'middle')
         .text(config.yAxis.label);
+    }
+    const ySub = config.yAxis.subLabels;
+    if (ySub) {
+      const edge = -(config.margin.left - (config.yAxis.label ? PCAC_AXIS_LABEL_SPACE : 0));
+      const place = (text: string | undefined, x: number, anchor: string) => {
+        if (!text) return;
+        group.append('text')
+          .attr('class', 'pcac-axis-sub-label')
+          .attr('transform', 'rotate(-90)')
+          .attr('x', x)
+          .attr('y', edge)
+          .attr('dy', '1em')
+          .attr('text-anchor', anchor)
+          .text(text);
+      };
+      place(ySub.min, -config.height, 'start');
+      place(ySub.mid, -config.height / 2, 'middle');
+      place(ySub.max, 0, 'end');
     }
   }
 
@@ -154,6 +175,23 @@ export class PcacAxisBuilder {
         .attr('dy', '-0.35em')
         .attr('text-anchor', 'middle')
         .text(config.xAxis.label);
+    }
+    const xSub = config.xAxis.subLabels;
+    if (xSub) {
+      const edge = config.margin.bottom - (config.xAxis.label ? PCAC_AXIS_LABEL_SPACE : 0);
+      const place = (text: string | undefined, x: number, anchor: string) => {
+        if (!text) return;
+        group.append('text')
+          .attr('class', 'pcac-axis-sub-label')
+          .attr('x', x)
+          .attr('y', edge)
+          .attr('dy', '-0.35em')
+          .attr('text-anchor', anchor)
+          .text(text);
+      };
+      place(xSub.min, 0, 'start');
+      place(xSub.mid, config.width / 2, 'middle');
+      place(xSub.max, config.width, 'end');
     }
   }
 }

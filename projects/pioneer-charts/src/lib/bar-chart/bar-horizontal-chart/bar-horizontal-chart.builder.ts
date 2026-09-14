@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacChart } from '../../core/chart';
-import { PcacData, PcacFormatEnum } from '../../core/chart.model';
+import { PcacData, PcacFormatEnum, axisLabelSpace } from '../../core/chart.model';
 import { stackStarts } from '../../core/stack';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
@@ -74,7 +74,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
     if (!this.yAxis.hide) {
       this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, this.yAxis.tickSize,
-        this.yAxis.label ? PcacChart.AXIS_LABEL_SPACE : 0);
+        axisLabelSpace(this.yAxis));
     }
 
     this.xScale.range([0, this.width]);

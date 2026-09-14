@@ -54,4 +54,10 @@
     font-weight: 600;
     fill: imports.$gray-700;
   }
+
+  // Min / mid / max `subLabels`; `PcacChart.AXIS_SUB_LABEL_SPACE` is sized to this.
+  .pcac-axis-sub-label {
+    font-size: 11px;
+    fill: imports.$gray-600;
+  }
 }

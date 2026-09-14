@@ -120,10 +120,34 @@ describe('PcacAxisBuilder tick size', () => {
     expect(Number(y.attr('y'))).toBe(-58);   // -margin.left
   });
 
-  it('does not draw a label for a hidden axis', () => {
-    const config = axisConfig({ hide: true, label: 'Day' });
+  it('places sub labels at the start, middle and end of each axis, anchored inside its span', () => {
+    // margin.bottom 38 = 20 + label 18; no sub-label space in the fixture margin, but placement
+    // only depends on where the row's outer edge is
+    const config = axisConfig({ subLabels: { min: 'Low', mid: 'Med', max: 'High' } }, { subLabels: { min: 'Cold', max: 'Hot' } });
     builder.drawAxis(config);
-    expect(config.svg.selectAll('.pcac-axis-label').size()).toBe(0);
+
+    const x = config.svg.selectAll<SVGTextElement, unknown>('.pcac-x-axis .pcac-axis-sub-label').nodes()
+      .map(n => [n.textContent, Number(n.getAttribute('x')), n.getAttribute('text-anchor'), Number(n.getAttribute('y'))]);
+    // no label on x, so the row sits at the margin edge
+    expect(x).toEqual([['Low', 0, 'start', 38], ['Med', 100, 'middle', 38], ['High', 200, 'end', 38]]);
+
+    const y = config.svg.selectAll<SVGTextElement, unknown>('.pcac-y-axis .pcac-axis-sub-label').nodes()
+      .map(n => [n.textContent, Number(n.getAttribute('x')), n.getAttribute('text-anchor'), Number(n.getAttribute('y')), n.getAttribute('transform')]);
+    // rotated: min at the bottom (x = -height), max at the top (x = 0); only the two given
+    expect(y).toEqual([['Cold', -100, 'start', -58, 'rotate(-90)'], ['Hot', 0, 'end', -58, 'rotate(-90)']]);
+  });
+
+  it('moves the sub label row inside the axis label when both are set', () => {
+    const config = axisConfig({ label: 'Day', subLabels: { mid: 'Med' } });
+    builder.drawAxis(config);
+    expect(Number(config.svg.select('.pcac-x-axis .pcac-axis-label').attr('y'))).toBe(38);
+    expect(Number(config.svg.select('.pcac-x-axis .pcac-axis-sub-label').attr('y'))).toBe(38 - 18);
+  });
+
+  it('does not draw a label or sub labels for a hidden axis', () => {
+    const config = axisConfig({ hide: true, label: 'Day', subLabels: { min: 'Low' } });
+    builder.drawAxis(config);
+    expect(config.svg.selectAll('.pcac-axis-label, .pcac-axis-sub-label').size()).toBe(0);
   });
 
   it('raiseAxes moves both axes after content drawn later, without taking mouse events', () => {

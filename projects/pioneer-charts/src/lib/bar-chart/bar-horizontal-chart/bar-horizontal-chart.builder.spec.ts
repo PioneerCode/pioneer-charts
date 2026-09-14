@@ -181,6 +181,12 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.svg.select('.pcac-y-axis .pcac-axis-label').text()).toBe('Product');
   });
 
+  it('adds the y sub labels\' space on top of the measured label width too', () => {
+    builder.buildChart(elm, { ...config(), yAxis: { label: 'Product', subLabels: { min: 'A', max: 'Z' } } });
+    expect(builder.margin.left).toBe(40 + 18 + 16);
+    expect(builder.svg.selectAll('.pcac-y-axis .pcac-axis-sub-label').size()).toBe(2);
+  });
+
   it('reserves a longer x tick in the bottom margin', () => {
     builder.buildChart(elm, { ...config(), xAxis: { tickSize: 16 } });
     expect(builder.margin.bottom).toBe(30);

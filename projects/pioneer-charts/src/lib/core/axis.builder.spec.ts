@@ -118,6 +118,9 @@ describe('PcacAxisBuilder tick size', () => {
     expect(y.attr('transform')).toBe('rotate(-90)');
     expect(Number(y.attr('x'))).toBe(-50);   // -height / 2
     expect(Number(y.attr('y'))).toBe(-58);   // -margin.left
+    // d3-axis puts fill="none" on the group, so the text has to bring its own
+    expect(x.attr('fill')).toBe('currentColor');
+    expect(y.attr('fill')).toBe('currentColor');
   });
 
   it('places sub labels at the start, middle and end of each axis, anchored inside its span', () => {

@@ -80,38 +80,8 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      width: this.width,
-      height: this.height,
-      margin: this.margin,
-      xScale: this.xScaleStacked,
-      yScale: this.yScale,
-      xAxis: this.xAxis,
-      yAxis: this.yAxis,
-      xFormat: PcacFormatEnum.None,
-      yFormat: config.tickFormat || PcacFormatEnum.None
-    });
-    if (this.xAxis.showGrid) {
-      this.gridBuilder.drawVerticalGrid({
-        svg: this.svg,
-        numberOfTicks: this.xAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.xScaleStacked,
-        yScale: this.yScale
-      });
-    }
-    if (this.yAxis.showGrid) {
-      this.gridBuilder.drawHorizontalGrid({
-        svg: this.svg,
-        numberOfTicks: this.yAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.xScaleStacked,
-        yScale: this.yScale
-      });
-    }
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScaleStacked, this.yScale, PcacFormatEnum.None, config.tickFormat || PcacFormatEnum.None));
+    this.drawGrids(this.xScaleStacked, this.yScale);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
   }

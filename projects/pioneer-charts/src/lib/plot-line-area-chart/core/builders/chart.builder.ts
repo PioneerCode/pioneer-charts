@@ -85,18 +85,7 @@ export class PlaChartBuilder extends PcacChart {
         const newX = event.transform.rescaleX(this.scales.x);
 
         // Update axis
-        this.axisBuilder.drawXAxis({
-          svg: this.svg,
-          width: this.width,
-          height: this.height,
-          margin: this.margin,
-          xScale: newX,
-          yScale: this.scales.y,
-          xAxis: this.xAxis,
-          yAxis: this.yAxis,
-          yFormat: this.config.yFormat,
-          xFormat: this.config.xFormat
-        });
+        this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, this.scales.y, this.config.xFormat, this.config.yFormat));
 
         // Update lines/areas. Fresh generators against the rescaled x, so they go through the
         // same getXFormat() as the dots below - positioning by bare index here (which this used
@@ -118,18 +107,9 @@ export class PlaChartBuilder extends PcacChart {
 
         // The vertical grid hangs off the x ticks too, so redraw it against the rescaled x and
         // drop it back underneath everything (append puts it on top).
-        if (this.xAxis.showGrid) {
-          this.svg.selectAll('.pcac-grid-vertical').remove();
-          this.gridBuilder.drawVerticalGrid({
-            svg: this.svg,
-            numberOfTicks: this.xAxis.ticks,
-            width: this.width,
-            height: this.height,
-            xScale: newX,
-            yScale: this.scales.y
-          });
-          this.svg.selectAll('.pcac-grid-vertical').lower();
-        }
+        this.svg.selectAll('.pcac-grid-vertical').remove();
+        this.drawGrids(newX, this.scales.y, 'x');
+        this.svg.selectAll('.pcac-grid-vertical').lower();
 
         // drawXAxis re-appends the x axis at the end of the group, above the dots; put them back
         // on top so a point on the baseline isn't covered (see drawChart's draw order).
@@ -145,39 +125,9 @@ export class PlaChartBuilder extends PcacChart {
     this.attachZoomBehavior();
     this.createReusableClipPath(); 
 
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      width: this.width,
-      height: this.height,
-      margin: this.margin,
-      xScale: this.scales.x,
-      yScale: this.scales.y,
-      xAxis: this.xAxis,
-      yAxis: this.yAxis,
-      yFormat: config.yFormat,
-      xFormat: config.xFormat
-    });
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y, config.xFormat, config.yFormat));
 
-    if (this.xAxis.showGrid) {
-      this.gridBuilder.drawVerticalGrid({
-        svg: this.svg,
-        numberOfTicks: this.xAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.scales.x,
-        yScale: this.scales.y
-      });
-    }
-    if (this.yAxis.showGrid) {
-      this.gridBuilder.drawHorizontalGrid({
-        svg: this.svg,
-        numberOfTicks: this.yAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.scales.x,
-        yScale: this.scales.y
-      });
-    }
+    this.drawGrids(this.scales.x, this.scales.y);
 
     this.drawLineArea(config, type);
 

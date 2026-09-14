@@ -1,6 +1,6 @@
 import { axisLeft, AxisDomain, AxisScale } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PcacAxisBuilder } from './axis.builder';
+import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
@@ -150,6 +150,43 @@ export class PcacChart {
       config.height = config.height + this.margin.bottom - hiddenAxisMargin;
       this.margin.bottom = hiddenAxisMargin;
       this.margin.right = hiddenAxisMargin;
+    }
+  }
+
+  /**
+   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales and
+   * formats is already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()`
+   * with a rescaled x, on zoom).
+   */
+  axisBuilderConfig<XDomain extends AxisDomain, YDomain extends AxisDomain>(
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, xFormat?: PcacFormatEnum, yFormat?: PcacFormatEnum
+  ): IPcacAxisBuilderConfig<XDomain, YDomain> {
+    return {
+      svg: this.svg,
+      width: this.width,
+      height: this.height,
+      margin: this.margin,
+      xScale,
+      yScale,
+      xAxis: this.xAxis,
+      yAxis: this.yAxis,
+      xFormat,
+      yFormat
+    };
+  }
+
+  /**
+   * Draws whichever grids the resolved axes ask for: vertical lines from the x axis's ticks,
+   * horizontal from the y's (`PcacAxisConfig.showGrid`). `which` restricts it to one axis - the
+   * line/area/plot charts redraw just the x grid against the rescaled x on zoom.
+   */
+  drawGrids<XDomain extends AxisDomain, YDomain extends AxisDomain>(xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, which: 'x' | 'y' | 'both' = 'both'): void {
+    const base = { svg: this.svg, width: this.width, height: this.height, xScale, yScale };
+    if (which !== 'y' && this.xAxis.showGrid) {
+      this.gridBuilder.drawVerticalGrid({ ...base, numberOfTicks: this.xAxis.ticks });
+    }
+    if (which !== 'x' && this.yAxis.showGrid) {
+      this.gridBuilder.drawHorizontalGrid({ ...base, numberOfTicks: this.yAxis.ticks });
     }
   }
 
@@ -323,19 +360,18 @@ export class PcacChart {
    * In some cases, that state needs to be calculated based on the content that resides in that margin.
    * For example, labels on a horizontal bar chart are dynamic and such the margin needs to be calculated ahead of
    * chart axis construction.
+   *
+   * Measures with the y axis's own `tickSize` (the measured box spans the tick line as well as
+   * the label, so measuring at a different length would put the labels off by the difference)
+   * and adds its `axisLabelSpace()` back on top, since the measurement replaces whatever
+   * `initializeAxisState()` reserved for the label / sub labels.
    * @param chartElm Reference to SVG on dom
-   * @param data Generic multi-dimensional PcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
-   * @param yTickSize The `tickSizeInner` the real y axis will be drawn with, if not D3's default.
-   * The measured box spans the tick line as well as the label, so measuring with a different tick
-   * length than the axis ends up drawn with would put the labels off by the difference.
-   * @param extraLeft Added on top of the measured width - the y axis's `axisLabelSpace()`, since the
-   * measurement replaces whatever `initializeAxisState()` reserved for it.
    */
-  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, data: PcacData[], yScale: AxisScale<Domain>, yTickSize?: number, extraLeft = 0): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): void {
     const axisY = axisLeft(yScale).ticks(5);
-    if (yTickSize !== undefined) {
-      axisY.tickSizeInner(yTickSize);
+    if (this.yAxis.tickSize !== undefined) {
+      axisY.tickSizeInner(this.yAxis.tickSize);
     }
     let max = 0;
     select(chartElm.nativeElement).append('g')
@@ -352,7 +388,8 @@ export class PcacChart {
     // double-counted it, and since `margin` persists on the builder between builds, the amount
     // double-counted grew on the next rebuild - the plot area came out narrower than the
     // container allowed and then shrank further after the first resize.
-    this.width = this.width + this.margin.left - max - extraLeft;
-    this.margin.left = max + extraLeft;
+    const left = max + axisLabelSpace(this.yAxis);
+    this.width = this.width + this.margin.left - left;
+    this.margin.left = left;
   }
 }

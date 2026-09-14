@@ -38,9 +38,8 @@
   }
 
   // Tick marks and the axis line are hidden by default (above) and always have been, so they
-  // only appear on a chart that asks for them - `xTickSize` / `yTickSize` for the marks,
-  // `showXAxisLine` / `showYAxisLine` for the line - via a class the axis builder adds for that
-  // axis. Nothing changes for charts that don't. Both share one color so a mark reads as part of
+  // only appear on a chart that asks for them - `PcacAxisConfig.tickSize` for the marks,
+  // `showLine` for the line - via a class the axis builder adds for that axis. Nothing changes for charts that don't. Both share one color so a mark reads as part of
   // its axis rather than a separate, fainter element.
   &.pcac-axis-tick-marks .tick line,
   &.pcac-axis-line .domain {

@@ -27,12 +27,8 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * marks, labels hugging the axis), hence the `!== undefined` checks below. `showLine` adds
    * `pcac-axis-line`, which un-hides D3's `.domain` path the same way. The domain path keeps
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
-   * bare rule; that's D3's standard look and is left as-is. `label` is drawn inside the axis group
-   * (so it's raised and non-interactive along with it), centered along the axis and hugging the
-   * chart's outer edge: `margin.bottom` below the x axis, `margin.left` left of the y axis. Any
-   * `subLabels` take the row just inside that (`PCAC_AXIS_LABEL_SPACE` in from the edge when
-   * there's a label, the edge itself otherwise), `min` at the axis's start, `mid` centered and
-   * `max` at its end, anchored so they stay within the axis's span.
+   * bare rule; that's D3's standard look and is left as-is. `label` and `subLabels` are drawn
+   * inside the axis group (so they're raised and non-interactive along with it) - see `drawLabels`.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
@@ -92,36 +88,7 @@ export class PcacAxisBuilder {
       .classed('pcac-axis-line', config.yAxis.showLine)
       .call(yAxis);
 
-    // Rotated to read bottom-to-top; after the rotation x runs up the axis (so the bottom of the
-    // axis is x = -height) and y runs left, so `y` here is a distance in from the SVG's left edge.
-    if (config.yAxis.label) {
-      group.append('text')
-        .attr('class', 'pcac-axis-label')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -config.height / 2)
-        .attr('y', -config.margin.left)
-        .attr('dy', '1em')
-        .attr('text-anchor', 'middle')
-        .text(config.yAxis.label);
-    }
-    const ySub = config.yAxis.subLabels;
-    if (ySub) {
-      const edge = -(config.margin.left - (config.yAxis.label ? PCAC_AXIS_LABEL_SPACE : 0));
-      const place = (text: string | undefined, x: number, anchor: string) => {
-        if (!text) return;
-        group.append('text')
-          .attr('class', 'pcac-axis-sub-label')
-          .attr('transform', 'rotate(-90)')
-          .attr('x', x)
-          .attr('y', edge)
-          .attr('dy', '1em')
-          .attr('text-anchor', anchor)
-          .text(text);
-      };
-      place(ySub.min, -config.height, 'start');
-      place(ySub.mid, -config.height / 2, 'middle');
-      place(ySub.max, 0, 'end');
-    }
+    this.drawLabels(group, config.yAxis, { length: config.height, outer: config.margin.left, vertical: true });
   }
 
   drawXAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>) {
@@ -166,32 +133,44 @@ export class PcacAxisBuilder {
       .attr('transform', 'translate(0,' + config.height + ')')
       .call(xAxis);
 
-    if (config.xAxis.label) {
-      // Centered on the axis, baseline just above the SVG's bottom edge
+    this.drawLabels(group, config.xAxis, { length: config.width, outer: config.margin.bottom, vertical: false });
+  }
+
+  /**
+   * The axis `label` and `subLabels`. Both are placed by two distances: along the axis (0 at its
+   * start, `length` at its end - for the y axis, 0 is the bottom) and out from it, toward the
+   * chart's edge. The label goes at the very edge (`outer`, i.e. the margin), the sub-label row
+   * `PCAC_AXIS_LABEL_SPACE` inside that when there's a label. For the y axis the text is rotated
+   * to read bottom-to-top, which swaps the two: after `rotate(-90)` x runs up the axis (so the
+   * bottom is x = -length) and y runs left. `fill` is set explicitly because d3-axis puts
+   * `fill="none"` on the group; its own tick text does the same.
+   */
+  private drawLabels(
+    group: Selection<SVGGElement, unknown, BaseType, unknown>,
+    axis: PcacResolvedAxisConfig,
+    layout: { length: number; outer: number; vertical: boolean }
+  ): void {
+    const text = (cls: string, along: number, out: number, anchor: string, content: string) => {
       group.append('text')
-        .attr('class', 'pcac-axis-label')
-        .attr('x', config.width / 2)
-        .attr('y', config.margin.bottom)
-        .attr('dy', '-0.35em')
-        .attr('text-anchor', 'middle')
-        .text(config.xAxis.label);
+        .attr('class', cls)
+        .attr('fill', 'currentColor')
+        .attr('text-anchor', anchor)
+        .attr('transform', layout.vertical ? 'rotate(-90)' : null)
+        .attr('x', layout.vertical ? along - layout.length : along)
+        .attr('y', layout.vertical ? -out : out)
+        .attr('dy', layout.vertical ? '1em' : '-0.35em')
+        .text(content);
+    };
+
+    if (axis.label) {
+      text('pcac-axis-label', layout.length / 2, layout.outer, 'middle', axis.label);
     }
-    const xSub = config.xAxis.subLabels;
-    if (xSub) {
-      const edge = config.margin.bottom - (config.xAxis.label ? PCAC_AXIS_LABEL_SPACE : 0);
-      const place = (text: string | undefined, x: number, anchor: string) => {
-        if (!text) return;
-        group.append('text')
-          .attr('class', 'pcac-axis-sub-label')
-          .attr('x', x)
-          .attr('y', edge)
-          .attr('dy', '-0.35em')
-          .attr('text-anchor', anchor)
-          .text(text);
-      };
-      place(xSub.min, 0, 'start');
-      place(xSub.mid, config.width / 2, 'middle');
-      place(xSub.max, config.width, 'end');
+    const sub = axis.subLabels;
+    if (sub) {
+      const edge = layout.outer - (axis.label ? PCAC_AXIS_LABEL_SPACE : 0);
+      if (sub.min) text('pcac-axis-sub-label', 0, edge, 'start', sub.min);
+      if (sub.mid) text('pcac-axis-sub-label', layout.length / 2, edge, 'middle', sub.mid);
+      if (sub.max) text('pcac-axis-sub-label', layout.length, edge, 'end', sub.max);
     }
   }
 }

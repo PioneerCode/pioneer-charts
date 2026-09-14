@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacChart } from '../../core/chart';
-import { PcacData, PcacFormatEnum, axisLabelSpace } from '../../core/chart.model';
+import { PcacData, PcacFormatEnum } from '../../core/chart.model';
 import { stackStarts } from '../../core/stack';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
@@ -73,8 +73,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
     if (!this.yAxis.hide) {
-      this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, this.yAxis.tickSize,
-        axisLabelSpace(this.yAxis));
+      this.setHorizontalMarginsBasedOnContent(chartElm, this.yScaleStacked);
     }
 
     this.xScale.range([0, this.width]);
@@ -82,38 +81,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      width: this.width,
-      height: this.height,
-      margin: this.margin,
-      xScale: this.xScale,
-      yScale: this.yScaleStacked,
-      xAxis: this.xAxis,
-      yAxis: this.yAxis,
-      xFormat: config.tickFormat || PcacFormatEnum.None,
-      yFormat: PcacFormatEnum.None
-    });
-    if (this.xAxis.showGrid) {
-      this.gridBuilder.drawVerticalGrid({
-        svg: this.svg,
-        numberOfTicks: this.xAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.xScale,
-        yScale: this.yScaleStacked
-      });
-    }
-    if (this.yAxis.showGrid) {
-      this.gridBuilder.drawHorizontalGrid({
-        svg: this.svg,
-        numberOfTicks: this.yAxis.ticks,
-        width: this.width,
-        height: this.height,
-        xScale: this.xScale,
-        yScale: this.yScaleStacked
-      });
-    }
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScale, this.yScaleStacked, config.tickFormat || PcacFormatEnum.None, PcacFormatEnum.None));
+    this.drawGrids(this.xScale, this.yScaleStacked);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
   }

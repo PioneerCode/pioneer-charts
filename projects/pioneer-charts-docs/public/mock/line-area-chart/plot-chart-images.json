@@ -4,7 +4,8 @@
   "xDomainMin": 0,
   "xDomainMax": 24,
   "yDomainMax": 100,
-  "numberOfTicks": 6,
+  "xAxis": { "ticks": 6 },
+  "yAxis": { "ticks": 6 },
   "enableEffects": false,
   "enableZoom": true,
   "pointImage": {

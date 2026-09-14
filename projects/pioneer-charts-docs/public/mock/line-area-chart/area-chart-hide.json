@@ -3,8 +3,6 @@
   "height": 100,
   "type": "area",
   "enableEffects": true,
-  "hideGrid": true,
-  "hideAxis": true,
   "data": [
     {
       "data": [
@@ -78,5 +76,12 @@
         }
       ]
     }
-  ]
+  ],
+  "xAxis": {
+    "hide": true
+  },
+  "yAxis": {
+    "hide": true,
+    "hideGrid": true
+  }
 }

@@ -26,6 +26,82 @@ export class PcacChartConfig {
   heightFull?: boolean = false
 }
 
+/**
+ * Everything configurable about one axis. Used twice per chart, as `xAxis` and `yAxis` on
+ * `PcacAxisChartConfig`, so the two never drift apart and a new per-axis option lands in one place.
+ *
+ * Every field is optional so an object-literal / JSON config can give just the ones it cares
+ * about (or omit the axis entirely); the initializers apply to anything built with `new`, and
+ * `resolveAxisConfig()` fills the rest in for builders.
+ */
+export class PcacAxisConfig {
+  /**
+   * Don't draw this axis at all (labels, tick marks, line), and give the margins it would have
+   * occupied back to the plot area. Hiding the y axis reclaims the left and top margins; hiding
+   * the x axis reclaims the bottom and right. The chart's total footprint doesn't change.
+   */
+  hide?: boolean = false
+
+  /**
+   * Don't draw the grid lines that run from this axis's ticks across the plot. Each chart draws
+   * the grid for one axis only - the y axis on vertical bar and line/area/plot charts (horizontal
+   * lines), the x axis on the horizontal bar chart (vertical lines) - so this is a no-op on the
+   * other axis.
+   */
+  hideGrid?: boolean = false
+
+  /**
+   * Requested number of ticks (D3's `ticks()` hint, so the actual count can differ slightly) -
+   * also the number of grid lines for this axis. Ignored by a category (band) axis, which has one
+   * tick per category. Default 5.
+   */
+  ticks?: number = 5
+
+  /**
+   * Length in pixels of the small tick marks. Tick marks are not drawn at all unless this is set
+   * (the theme hides them, as it always has), so setting a size is also what turns them on; D3's
+   * default 6px is a sensible first value. `0` keeps them off but still pulls the labels in to
+   * the axis. Labels follow the marks (D3 places them at tick length + 3px), and the chart's
+   * margins grow or shrink by the same amount so the plot area makes room for them - a longer
+   * tick means a slightly smaller plot, never labels pushed off the edge. Only the per-tick marks
+   * change; the axis line's two end-caps keep their default length. Color comes from the theme
+   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line).
+   */
+  tickSize?: number
+
+  /**
+   * Draw a solid line along the axis itself (the full length of the axis, with D3's short
+   * end-caps). Off by default, as the theme has always hidden it. Color comes from the theme
+   * (`.pcac-axis-line .domain`, `$gray-900`).
+   */
+  showLine?: boolean = false
+}
+
+/**
+ * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
+ * null-check. `tickSize` stays optional: "not set" is itself the meaningful default (no marks).
+ */
+export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize'>> & Pick<PcacAxisConfig, 'tickSize'>;
+
+export function resolveAxisConfig(axis?: PcacAxisConfig): PcacResolvedAxisConfig {
+  const defaults = new PcacAxisConfig();
+  return {
+    hide: axis?.hide ?? defaults.hide!,
+    hideGrid: axis?.hideGrid ?? defaults.hideGrid!,
+    ticks: axis?.ticks ?? defaults.ticks!,
+    tickSize: axis?.tickSize,
+    showLine: axis?.showLine ?? defaults.showLine!,
+  };
+}
+
+/**
+ * Base configuration for every chart that has an x and y axis (bar, line, area, plot - not pie).
+ */
+export class PcacAxisChartConfig extends PcacChartConfig {
+  xAxis?: PcacAxisConfig = new PcacAxisConfig()
+  yAxis?: PcacAxisConfig = new PcacAxisConfig()
+}
+
 export class PcacData {
   key: string | number | null = null
   value: string | number| null = null

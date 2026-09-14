@@ -62,36 +62,38 @@
       </td>
     </tr>
     }
-    @if(includeHideAxisAndGrid()) {
+    @if(includeAxes()) {
     <tr>
-      <td>hideAxis</td>
-      <td>If true, hide chart axis.</td>
-    </tr>
-    }
-    @if(includeHideAxisAndGrid()) {
-    <tr>
-      <td>hideGrid</td>
-      <td>If true, hide chart grid.</td>
-    </tr>
-    }
-    @if(includeHideAxisAndGrid()) {
-    <tr>
-      <td>xTickSize / yTickSize</td>
-      <td>Length in pixels of the small tick marks along the x and y axis, set independently. Tick marks are not
-        drawn unless one of these is set, so setting a size is also what turns them on for that axis (6 is D3's
-        usual length). <code>0</code> keeps them off but pulls the labels in to the axis.
+      <td>xAxis / yAxis</td>
+      <td>Per-axis settings, one <code>PcacAxisConfig</code> for each axis. Every field is optional; omit the
+        whole object for a default axis. See the <a routerLink="/docs/guides/axis-styling">Axis Styling</a>
+        guide for a live demo.
         <ul>
           <li>
-            Tick labels follow the marks (D3 places them at tick length + 3px), and the chart's margins grow or
-            shrink by the same amount, so the plot area shrinks to make room for a longer tick rather than
-            pushing its labels off the edge.
+            <b>hide</b> &mdash; if true, the axis isn't drawn at all and the margins it would have occupied go
+            to the plot (left and top for the y axis, bottom and right for the x axis); the chart's overall size
+            doesn't change. Default false.
           </li>
           <li>
-            Only the per-tick marks change; the two end-caps of the axis line keep their default length.
+            <b>hideGrid</b> &mdash; if true, the grid lines running from this axis's ticks across the plot are not
+            drawn. Each chart draws one axis's grid: the y axis's on vertical bar and line/area/plot charts, the
+            x axis's on the horizontal bar chart. Default false.
           </li>
           <li>
-            Their color is the theme's <code>.pcac-axis-tick-marks .tick line</code> stroke (<code>$gray-400</code>
-            by default), overridable like any other theme rule.
+            <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the
+            number of grid lines. Ignored by a category axis, which has one tick per category. Default 5.
+          </li>
+          <li>
+            <b>tickSize</b> &mdash; length in pixels of the small tick marks. Marks are not drawn unless this is
+            set, so setting a size is also what turns them on (6 is D3's usual length); <code>0</code> keeps them
+            off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
+            by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
+            Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>.
+          </li>
+          <li>
+            <b>showLine</b> &mdash; if true, draw a solid line along the axis itself (with D3's short end-caps).
+            Independent of the tick marks. Default false. Stroked with the theme's <code>$gray-900</code> via
+            <code>.pcac-axis-line .domain</code>.
           </li>
         </ul>
       </td>

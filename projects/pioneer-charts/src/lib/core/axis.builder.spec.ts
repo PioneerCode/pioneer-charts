@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { scaleLinear } from 'd3-scale';
 import { BaseType, select, Selection } from 'd3-selection';
 import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
+import { PcacAxisConfig, resolveAxisConfig } from './chart.model';
 
 /**
  * d3-axis needs nothing jsdom lacks - it only appends <g>/<path>/<line>/<text> and sets
@@ -16,14 +17,14 @@ function svgGroup(): AxisSvg {
   return select(g);
 }
 
-function axisConfig(overrides: Partial<IPcacAxisBuilderConfig<number, number>> = {}): IPcacAxisBuilderConfig<number, number> {
+function axisConfig(xAxis: PcacAxisConfig = {}, yAxis: PcacAxisConfig = {}): IPcacAxisBuilderConfig<number, number> {
   return {
     svg: svgGroup(),
     height: 100,
     xScale: scaleLinear().domain([0, 100]).range([0, 200]),
     yScale: scaleLinear().domain([0, 100]).range([100, 0]),
-    numberOfTicks: 5,
-    ...overrides,
+    xAxis: resolveAxisConfig(xAxis),
+    yAxis: resolveAxisConfig(yAxis),
   };
 }
 
@@ -64,14 +65,57 @@ describe('PcacAxisBuilder tick size', () => {
     expect(none.svg.select('.pcac-x-axis').classed('pcac-axis-tick-marks')).toBe(false);
     expect(none.svg.select('.pcac-y-axis').classed('pcac-axis-tick-marks')).toBe(false);
 
-    const xOnly = axisConfig({ xTickSize: 6 });
+    const xOnly = axisConfig({ tickSize: 6 });
     builder.drawAxis(xOnly);
     expect(xOnly.svg.select('.pcac-x-axis').classed('pcac-axis-tick-marks')).toBe(true);
     expect(xOnly.svg.select('.pcac-y-axis').classed('pcac-axis-tick-marks')).toBe(false);
   });
 
-  it('applies xTickSize and yTickSize independently', () => {
-    const config = axisConfig({ xTickSize: 12, yTickSize: 3 });
+  it('marks an axis as showing its line only when asked, independently per axis', () => {
+    const none = axisConfig();
+    builder.drawAxis(none);
+    expect(none.svg.select('.pcac-x-axis').classed('pcac-axis-line')).toBe(false);
+    expect(none.svg.select('.pcac-y-axis').classed('pcac-axis-line')).toBe(false);
+
+    const yOnly = axisConfig({ showLine: false }, { showLine: true });
+    builder.drawAxis(yOnly);
+    expect(yOnly.svg.select('.pcac-x-axis').classed('pcac-axis-line')).toBe(false);
+    expect(yOnly.svg.select('.pcac-y-axis').classed('pcac-axis-line')).toBe(true);
+    // the line is D3's domain path, which is always drawn; the class is what un-hides it
+    expect(yOnly.svg.select('.pcac-y-axis .domain').empty()).toBe(false);
+  });
+
+  it('skips a hidden axis entirely, per axis', () => {
+    const config = axisConfig({ hide: true }, {});
+    builder.drawAxis(config);
+    expect(config.svg.select('.pcac-x-axis').empty()).toBe(true);
+    expect(config.svg.select('.pcac-y-axis').empty()).toBe(false);
+  });
+
+  it('uses each axis\'s own tick count', () => {
+    const config = axisConfig({ ticks: 2 }, { ticks: 10 });
+    builder.drawAxis(config);
+    // D3 treats the count as a hint; a [0,100] domain gives exactly these
+    expect(config.svg.selectAll('.pcac-x-axis .tick').size()).toBe(3);
+    expect(config.svg.selectAll('.pcac-y-axis .tick').size()).toBe(11);
+  });
+
+  it('raiseAxes moves both axes after content drawn later, without taking mouse events', () => {
+    const config = axisConfig();
+    builder.drawAxis(config);
+    config.svg.append('path').attr('class', 'line');
+    config.svg.append('rect').attr('class', 'overlay');
+
+    builder.raiseAxes(config.svg);
+
+    const order = config.svg.selectAll<SVGElement, unknown>(':scope > *').nodes().map(n => n.getAttribute('class'));
+    expect(order).toEqual(['line', 'overlay', 'pcac-x-axis', 'pcac-y-axis']);
+    expect(config.svg.select('.pcac-x-axis').attr('pointer-events')).toBe('none');
+    expect(config.svg.select('.pcac-y-axis').attr('pointer-events')).toBe('none');
+  });
+
+  it('applies each axis\'s tickSize independently', () => {
+    const config = axisConfig({ tickSize: 12 }, { tickSize: 3 });
     builder.drawAxis(config);
 
     expect(new Set(tickLineLengths(config.svg, 'pcac-x-axis', 'y2'))).toEqual(new Set([12]));
@@ -80,7 +124,7 @@ describe('PcacAxisBuilder tick size', () => {
 
   // `0` is meaningful (no tick marks), so the builder must not treat it as "unset" via `||`.
   it('honors a 0 tick size rather than falling back to the default', () => {
-    const config = axisConfig({ xTickSize: 0, yTickSize: 0 });
+    const config = axisConfig({ tickSize: 0 }, { tickSize: 0 });
     builder.drawAxis(config);
 
     expect(new Set(tickLineLengths(config.svg, 'pcac-x-axis', 'y2'))).toEqual(new Set([0]));
@@ -89,7 +133,7 @@ describe('PcacAxisBuilder tick size', () => {
 
   it('leaves the outer end-caps of the domain line at their default', () => {
     const defaults = axisConfig();
-    const custom = axisConfig({ xTickSize: 20, yTickSize: 20 });
+    const custom = axisConfig({ tickSize: 20 }, { tickSize: 20 });
     builder.drawAxis(defaults);
     builder.drawAxis(custom);
 
@@ -98,7 +142,7 @@ describe('PcacAxisBuilder tick size', () => {
   });
 
   it('keeps the tick size on a zoom-driven x-axis redraw', () => {
-    const config = axisConfig({ xTickSize: 10 });
+    const config = axisConfig({ tickSize: 10 });
     builder.drawAxis(config);
     builder.drawXAxis({ ...config, xScale: scaleLinear().domain([20, 60]).range([0, 200]) });
 

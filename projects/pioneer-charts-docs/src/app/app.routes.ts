@@ -5,7 +5,7 @@ export const routes: Routes = [
     { path: 'docs/guides/theme', loadComponent: () => import('./docs/theme/theme.component').then(m => m.ThemeComponent) },
     { path: 'docs/guides/height-full', loadComponent: () => import('./docs/height-full/height-full.component').then(m => m.HeightFullComponent) },
     { path: 'docs/guides/tooltip', loadComponent: () => import('./docs/tooltip/tooltip.component').then(m => m.TooltipComponent) },
-    { path: 'docs/guides/tick-size', loadComponent: () => import('./docs/tick-size/tick-size.component').then(m => m.TickSizeComponent) },
+    { path: 'docs/guides/axis-styling', loadComponent: () => import('./docs/axis-styling/axis-styling.component').then(m => m.AxisStylingComponent) },
     { path: 'docs/guides/data-contract', loadComponent: () => import('./docs/data-contract/data-contract.component').then(m => m.DataContractComponent) },
     { path: 'docs/components/charts/legend', loadComponent: () => import('./docs/legend/legend.component').then(m => m.LegendComponent) },
     { path: 'docs/components/charts/bar-chart', loadComponent: () => import('./docs/bar-chart/bar-chart.component').then(m => m.BarChartComponent) },

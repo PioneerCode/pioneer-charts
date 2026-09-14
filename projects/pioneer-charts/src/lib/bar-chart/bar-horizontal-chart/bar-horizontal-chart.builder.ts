@@ -38,11 +38,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     this.config = JSON.parse(JSON.stringify(config));
-    this.resetMargin();
-    this.reserveTickSizeMargins(this.config.xTickSize, this.config.yTickSize);
-    if (this.config.hideAxis) {
-      this.adjustForHiddenAxis();
-    }
+    this.initializeAxisState(this.config);
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
     }
@@ -54,14 +50,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
     this.buildScales(chartElm, this.config);
     this.drawChart(chartElm, this.config);
-  }
-
-  private adjustForHiddenAxis() {
-    this.config.height = this.config.height + this.margin.top + this.margin.bottom;
-    this.margin.top = 0;
-    this.margin.bottom = 0;
-    this.margin.left = 0;
-    this.margin.right = 0;
   }
 
   private buildScales(chartElm: ElementRef, config: PcacBarHorizontalChartConfig) {
@@ -83,7 +71,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .rangeRound([0, this.yScaleStacked.bandwidth()])
       .domain(config.data[0].data.map((d) => d.key as string));
 
-    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, config.yTickSize);
+    // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
+    if (!this.yAxis.hide) {
+      this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, this.yAxis.tickSize);
+    }
 
     this.xScale.range([0, this.width]);
   }
@@ -92,20 +83,19 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
       height: this.height,
       xScale: this.xScale,
       yScale: this.yScaleStacked,
+      xAxis: this.xAxis,
+      yAxis: this.yAxis,
       xFormat: config.tickFormat || PcacFormatEnum.None,
-      yFormat: PcacFormatEnum.None,
-      hideXAxis: config.hideAxis,
-      xTickSize: config.xTickSize,
-      yTickSize: config.yTickSize
+      yFormat: PcacFormatEnum.None
     });
-    if (!config.hideGrid) {
+    // Vertical grid lines run from the x axis's ticks
+    if (!this.xAxis.hideGrid) {
       this.gridBuilder.drawVerticalGrid({
         svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
+        numberOfTicks: this.xAxis.ticks,
         width: this.width,
         height: this.height,
         xScale: this.xScale,
@@ -113,6 +103,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       });
     }
     this.addGroups(config);
+    this.axisBuilder.raiseAxes(this.svg);
   }
 
   private addGroups(config: PcacBarHorizontalChartConfig) {

@@ -5,7 +5,7 @@ import { PcacGridBuilder } from './grid.builder';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, TemplateRef, inject } from '@angular/core';
-import { PcacChartConfig, PcacData, PcacFormatEnum } from './chart.model';
+import { PcacAxisChartConfig, PcacChartConfig, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacTooltipContext } from './tooltip.directive';
@@ -45,6 +45,14 @@ export class PcacChart {
 
   margin: PcacChartMargin = { top: 8, right: 16, bottom: 20, left: 40 };
   private readonly defaultMargin: PcacChartMargin = { ...this.margin };
+
+  /**
+   * The current build's per-axis settings with defaults applied, set by `initializeAxisState()`.
+   * Builders read these (not the raw `config.xAxis`) everywhere: drawing the axes, choosing
+   * whether to draw a grid, how many grid lines, and so on. Pie has no axes and never sets them.
+   */
+  xAxis: PcacResolvedAxisConfig = resolveAxisConfig();
+  yAxis: PcacResolvedAxisConfig = resolveAxisConfig();
   svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
   width = 400;
   height = 400;
@@ -86,15 +94,53 @@ export class PcacChart {
   tooltipTemplate: () => TemplateRef<PcacTooltipContext> | undefined = () => undefined;
 
   /**
-   * Puts `margin` back to its defaults. Builders must call this at the top of `buildChart()`,
-   * before any per-build adjustment (`hideAxis` zeroing sides, label widths measured into
-   * `margin.left`): `margin` lives on this per-chart instance and so persists between builds,
-   * and without a reset an adjustment made for one config silently carries into the next -
-   * e.g. axes drawn with no room after `hideAxis` flips back to false.
+   * Puts `margin` back to its defaults. `initializeAxisState()` calls this first thing, before any
+   * per-build adjustment (hidden axes giving sides back, tick sizes growing them, label widths
+   * measured into `margin.left`): `margin` lives on this per-chart instance and so persists
+   * between builds, and without a reset an adjustment made for one config silently carries into
+   * the next - e.g. axes drawn with no room after `hide` flips back to false.
    */
   resetMargin(): void {
     this.margin = { ...this.defaultMargin };
     this.reservedTickHeight = 0;
+  }
+
+  /**
+   * Resolves the config's `xAxis`/`yAxis` onto this chart and sets the margins up for them. Axis
+   * charts call this at the top of `buildChart()`, on their own copy of the config (it rewrites
+   * `config.height` for hidden axes), before `initializeChartState()` measures the plot area.
+   * In order:
+   *
+   * 1. `resetMargin()`.
+   * 2. Tick marks: room for a non-default `tickSize` is reserved on each axis that will actually
+   *    be drawn (`reserveTickSizeMargins`).
+   * 3. Hidden axes: an axis with `hide` gives its margins back to the plot. The y axis owns
+   *    `left` and `top` (the top margin is only there so the topmost y label isn't clipped), the
+   *    x axis `bottom` and `right` (likewise for the rightmost x label). Each reclaimed vertical
+   *    margin is added onto `config.height` so the SVG's total height stays what the consumer
+   *    configured; horizontally `initializeChartState()` picks the change up on its own.
+   *
+   * @param hiddenAxisMargin what a hidden axis's sides shrink to, rather than 0. The
+   * line/area/plot charts keep 8px so a dot on the edge of the plot isn't clipped by the SVG.
+   */
+  initializeAxisState(config: PcacAxisChartConfig, hiddenAxisMargin = 0): void {
+    this.xAxis = resolveAxisConfig(config.xAxis);
+    this.yAxis = resolveAxisConfig(config.yAxis);
+    this.resetMargin();
+    this.reserveTickSizeMargins(
+      this.xAxis.hide ? undefined : this.xAxis.tickSize,
+      this.yAxis.hide ? undefined : this.yAxis.tickSize
+    );
+    if (this.yAxis.hide) {
+      config.height = config.height + this.margin.top - hiddenAxisMargin;
+      this.margin.top = hiddenAxisMargin;
+      this.margin.left = hiddenAxisMargin;
+    }
+    if (this.xAxis.hide) {
+      config.height = config.height + this.margin.bottom - hiddenAxisMargin;
+      this.margin.bottom = hiddenAxisMargin;
+      this.margin.right = hiddenAxisMargin;
+    }
   }
 
   /**
@@ -112,10 +158,9 @@ export class PcacChart {
    * delta is therefore also remembered in `reservedTickHeight` and taken back out of the plot
    * height by `resolveHeight()`, keeping the chart's total footprint where the consumer put it.
    *
-   * Builders call this right after `resetMargin()` and before any `hideAxis` adjustment, so that
-   * a hidden axis still zeroes (or keeps, for bar-vertical's group labels) the margin *including*
-   * this delta. Only the axis a tick size is given for is affected; `undefined` leaves that
-   * margin alone.
+   * Called by `initializeAxisState()` right after `resetMargin()`, for the axes that will be
+   * drawn. Only the axis a tick size is given for is affected; `undefined` leaves that margin
+   * alone.
    * @param xTickSize `tickSizeInner` for the bottom (x) axis, which lives in `margin.bottom`
    * @param yTickSize `tickSizeInner` for the left (y) axis, which lives in `margin.left`
    */

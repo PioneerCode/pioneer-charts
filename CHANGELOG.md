@@ -55,6 +55,26 @@
     while on a documentation page) after navigating by any means other than clicking a footer link
     itself.
 
+### Breaking
+  - The chart-wide `numberOfTicks`, `hideAxis` and `hideGrid` config fields on the bar and
+    line/area/plot charts are gone, replaced by the per-axis `xAxis` / `yAxis` objects (see Added).
+    Migration:
+
+    | Before | After |
+    | --- | --- |
+    | `numberOfTicks: n` | `xAxis: { ticks: n }, yAxis: { ticks: n }` (or just the axis that needs it) |
+    | `hideGrid: true` | `yAxis: { hideGrid: true }` on vertical bar and line/area/plot charts; `xAxis: { hideGrid: true }` on the horizontal bar chart |
+    | `hideAxis: true` on a vertical bar chart | `yAxis: { hide: true }` (it only ever hid the y axis); add `xAxis: { hide: true }` if there were no group labels to keep |
+    | `hideAxis: true` on a horizontal bar chart | `xAxis: { hide: true }` (it only ever hid the x axis) |
+    | `hideAxis: true` on a line/area/plot chart | `xAxis: { hide: true }, yAxis: { hide: true }` |
+
+    Hiding is now per axis and works the same way on every chart: the hidden axis's margins (left
+    and top for the y axis, bottom and right for the x axis) go to the plot area, so the chart's
+    overall size is unchanged. The chart configs now extend a new `PcacAxisChartConfig` base
+    (`PcacChartConfig` + `xAxis`/`yAxis`); `IPcacAxisBuilderConfig` takes resolved `xAxis`/`yAxis`
+    in place of its old per-field inputs, for anyone calling `PcacAxisBuilder` directly.
+  - `PcacPieChartConfig.numberOfTicks` was removed; the pie chart has no axes and never read it.
+
 ### Changed
   - **Breaking:** `isStacked` bar charts now actually stack. Each bar's `value` is its own segment
     and segments are placed end to end in data order, so a group's total is the sum of its values
@@ -84,14 +104,22 @@
     abandoned Bootstrap integration.
 
 ### Added
-  - New `xTickSize` / `yTickSize` config options on the bar (vertical and horizontal) and
-    line/area/plot charts draw tick marks along that axis at the given length in pixels. Charts
-    have never shown tick marks (the theme hides them), and still don't unless one of these is
-    set - so existing charts are unaffected; `0` keeps them off but pulls the labels in. Tick
-    labels follow the marks and the chart's margins grow to match, so the plot area shrinks to fit
-    them; the axis line's end-caps are unaffected. The marks take the theme's `$gray-400` via a new
-    `.pcac-axis-tick-marks .tick line` rule. The docs site has a new "Tick Size" guide with a live
-    demo.
+  - Per-axis configuration: the bar (vertical and horizontal) and line/area/plot chart configs now
+    take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, hideGrid, ticks, tickSize,
+    showLine }`, every field optional). Two of those are new:
+    - `tickSize` draws tick marks along that axis at the given length in pixels. Charts have never
+      shown tick marks (the theme hides them), and still don't unless this is set - so existing
+      charts are unaffected; `0` keeps them off but pulls the labels in. Labels follow the marks
+      and the chart's margins grow to match, so the plot area shrinks to fit them; the axis line's
+      end-caps are unaffected.
+    - `showLine` draws a solid line along that axis (D3's domain path). Off by default; independent
+      of the tick marks. Axes are now drawn above the chart's content (bars, lines, areas) so the
+      line isn't covered by anything sitting at the axis, with the line/area/plot charts' dots
+      kept above the axes so a point on the axis stays whole.
+
+    Both take the theme's `$gray-900` via new `.pcac-axis-tick-marks .tick line` and
+    `.pcac-axis-line .domain` rules. The docs site has a new "Axis Styling" guide with a live demo.
+    The other three fields replace `numberOfTicks`, `hideAxis` and `hideGrid` - see Breaking.
   - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
     pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
     with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an

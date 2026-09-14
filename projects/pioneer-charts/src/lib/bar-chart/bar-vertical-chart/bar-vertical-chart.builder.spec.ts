@@ -63,23 +63,45 @@ describe('BarVerticalChartBuilder', () => {
     });
   });
 
-  // Regression test: adjustForHiddenAxis() added the margins onto the consumer's own
-  // `config.height`, and zeroed the builder's margins for good - so once a chart had rendered
-  // with hideAxis on, turning it back off drew the axes with no room for them.
-  describe('hideAxis', () => {
+  // Regression test: hiding an axis used to add the margins onto the consumer's own
+  // `config.height`, and zero the builder's margins for good - so once a chart had rendered
+  // with the axis hidden, turning it back on drew the axes with no room for them.
+  describe('axis hide', () => {
     it('does not mutate the consumer config', () => {
-      const cfg = config({ hideAxis: true });
+      const cfg = config({ yAxis: { hide: true } });
       builder.buildChart(chartElm(), cfg);
       expect(cfg.height).toBe(200);
     });
 
-    it('restores the default margins when a later build turns hideAxis back off', () => {
-      builder.buildChart(chartElm(), config({ hideAxis: true }));
-      expect(builder.margin.top).toBe(0);
-      expect(builder.margin.left).toBe(0);
+    it('hiding the y axis gives back the left and top margins, keeping the x axis and its margin', () => {
+      builder.buildChart(chartElm(), config({ yAxis: { hide: true } }));
+      expect(builder.margin).toEqual({ top: 0, right: 16, bottom: 20, left: 0 });
+      // the reclaimed top margin goes to the plot, so the SVG's total height is unchanged
+      expect(builder.height).toBe(208);
+      expect(builder.svg.select('.pcac-y-axis').empty()).toBe(true);
+      expect(builder.svg.select('.pcac-x-axis').empty()).toBe(false);
+    });
 
+    it('hiding both axes zeroes every margin and hands them all to the plot', () => {
+      builder.buildChart(chartElm(), config({ xAxis: { hide: true }, yAxis: { hide: true } }));
+      expect(builder.margin).toEqual({ top: 0, right: 0, bottom: 0, left: 0 });
+      expect(builder.height).toBe(228);
+    });
+
+    it('restores the default margins when a later build turns the axis back on', () => {
+      builder.buildChart(chartElm(), config({ xAxis: { hide: true }, yAxis: { hide: true } }));
       builder.buildChart(chartElm(), config());
       expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+  });
+
+  describe('grid', () => {
+    it('draws the y axis grid by default and hides it with yAxis.hideGrid', () => {
+      builder.buildChart(chartElm(), config());
+      expect(builder.svg.select('.pcac-grid').empty()).toBe(false);
+
+      builder.buildChart(chartElm(), config({ yAxis: { hideGrid: true } }));
+      expect(builder.svg.select('.pcac-grid').empty()).toBe(true);
     });
   });
 
@@ -135,7 +157,7 @@ describe('BarVerticalChartBuilder', () => {
       builder.buildChart(chartElm(800, 500), config());
       const defaultWidth = builder.width;
 
-      builder.buildChart(chartElm(800, 500), config({ xTickSize: 16, yTickSize: 26 }));
+      builder.buildChart(chartElm(800, 500), config({ xAxis: { tickSize: 16 }, yAxis: { tickSize: 26 } }));
 
       expect(builder.margin.bottom).toBe(30);
       expect(builder.margin.left).toBe(60);
@@ -144,7 +166,7 @@ describe('BarVerticalChartBuilder', () => {
     });
 
     it('does not carry the reserved margin into a later build without a tick size', () => {
-      builder.buildChart(chartElm(800, 500), config({ xTickSize: 16, yTickSize: 26 }));
+      builder.buildChart(chartElm(800, 500), config({ xAxis: { tickSize: 16 }, yAxis: { tickSize: 26 } }));
       builder.buildChart(chartElm(800, 500), config());
 
       expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });

@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacChart } from './chart';
-import { PcacChartConfig } from './chart.model';
+import { PcacAxisChartConfig, PcacChartConfig } from './chart.model';
 
 /**
  * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth`/`clientHeight`
@@ -224,6 +224,59 @@ describe('PcacChart', () => {
       chart.initializeChartState(chartElm(800), config(200));
 
       expect(chart.height).toBe(200);
+    });
+  });
+
+  describe('initializeAxisState', () => {
+    function axisConfig(overrides: Partial<PcacAxisChartConfig> = {}): PcacAxisChartConfig {
+      return { ...config(200), ...overrides };
+    }
+
+    it('resolves missing axes to defaults, so an object-literal config needs neither', () => {
+      chart.initializeAxisState(axisConfig());
+      expect(chart.xAxis).toEqual({ hide: false, hideGrid: false, ticks: 5, tickSize: undefined, showLine: false });
+      expect(chart.yAxis).toEqual(chart.xAxis);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('fills in only what an axis leaves out', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { ticks: 3, showLine: true } }));
+      expect(chart.xAxis).toEqual({ hide: false, hideGrid: false, ticks: 3, tickSize: undefined, showLine: true });
+    });
+
+    it('a hidden y axis gives left and top to the plot; a hidden x axis gives bottom and right', () => {
+      const cfg = axisConfig({ yAxis: { hide: true } });
+      chart.initializeAxisState(cfg);
+      expect(chart.margin).toEqual({ top: 0, right: 16, bottom: 20, left: 0 });
+      expect(cfg.height).toBe(208);
+
+      const cfg2 = axisConfig({ xAxis: { hide: true } });
+      chart.initializeAxisState(cfg2);
+      expect(chart.margin).toEqual({ top: 8, right: 0, bottom: 0, left: 40 });
+      expect(cfg2.height).toBe(220);
+    });
+
+    it('keeps hiddenAxisMargin on a hidden axis\'s sides instead of 0', () => {
+      const cfg = axisConfig({ xAxis: { hide: true }, yAxis: { hide: true } });
+      chart.initializeAxisState(cfg, 8);
+      expect(chart.margin).toEqual({ top: 8, right: 8, bottom: 8, left: 8 });
+      // top was already 8, so only bottom's 12 moves into the plot
+      expect(cfg.height).toBe(212);
+    });
+
+    it('does not reserve tick-size room for an axis that is hidden', () => {
+      const cfg = axisConfig({ xAxis: { hide: true, tickSize: 30 }, yAxis: { tickSize: 30 } });
+      chart.initializeAxisState(cfg);
+      expect(chart.margin.bottom).toBe(0);
+      expect(chart.margin.left).toBe(40 + 24);
+      // and no reserved height either: the hidden x axis's bottom margin went wholly to the plot
+      expect(cfg.height).toBe(220);
+    });
+
+    it('starts each build from the default margins', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { hide: true }, yAxis: { hide: true, tickSize: 30 } }));
+      chart.initializeAxisState(axisConfig());
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
     });
   });
 });

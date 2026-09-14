@@ -3353,11 +3353,8 @@
             ]
         }
     ],
-    "hideAxis": false,
-    "hideGrid": false,
     "yDomainMax": 132,
     "xDomainMax": 148.756,
-    "numberOfTicks": 5,
     "enableEffects": false,
     "enableZoom": true,
     "xFormat": "decimal",

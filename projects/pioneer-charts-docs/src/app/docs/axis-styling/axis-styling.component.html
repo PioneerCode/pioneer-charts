@@ -1,0 +1,120 @@
+<app-layout-page-docs pageTitle="Axis Styling" [jumpNav]="jumpNav()">
+  <p class="lead" id="axis-styling">The bar, line, area and plot charts take one <code>PcacAxisConfig</code> per
+    axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks and its grid,
+    no tick marks and no axis line &mdash; and each of those is a field on the object: <b>hide</b>, <b>hideGrid</b>,
+    <b>ticks</b>, <b>tickSize</b> and <b>showLine</b>.
+  </p>
+
+  <section class="pc-doc-section">
+    <h3 id="try-it">Try It</h3>
+    <p>Both charts below share the same two axis configs. Each column is one <code>PcacAxisConfig</code>.</p>
+
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      @for (axis of axes; track axis) {
+      <div class="pc-axis-styling-controls">
+        <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
+        @let a = axis === 'x' ? xAxis() : yAxis();
+
+        <label [for]="'pc-axis-' + axis + '-ticks'">ticks</label>
+        <input [id]="'pc-axis-' + axis + '-ticks'" type="range" min="0" max="12" step="1" [value]="a.ticks"
+          (input)="onTicks(axis, $event)" />
+        <span class="pc-axis-styling-readout">{{ a.ticks }}</span>
+
+        <label [for]="'pc-axis-' + axis + '-size'">tickSize</label>
+        <input [id]="'pc-axis-' + axis + '-size'" type="range" min="0" max="30" step="1" [value]="a.tickSize"
+          (input)="onTickSize(axis, $event)" />
+        <span class="pc-axis-styling-readout">{{ a.tickSize }}px</span>
+
+        <label [for]="'pc-axis-' + axis + '-line'">showLine</label>
+        <input [id]="'pc-axis-' + axis + '-line'" type="checkbox" [checked]="a.showLine"
+          (change)="onToggle(axis, 'showLine', $event)" />
+        <span></span>
+
+        <label [for]="'pc-axis-' + axis + '-grid'">hideGrid</label>
+        <input [id]="'pc-axis-' + axis + '-grid'" type="checkbox" [checked]="a.hideGrid"
+          (change)="onToggle(axis, 'hideGrid', $event)" />
+        <span></span>
+
+        <label [for]="'pc-axis-' + axis + '-hide'">hide</label>
+        <input [id]="'pc-axis-' + axis + '-hide'" type="checkbox" [checked]="a.hide"
+          (change)="onToggle(axis, 'hide', $event)" />
+        <span></span>
+      </div>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-2">
+      <div>
+        <p class="pc-axis-styling-caption"><code>&lt;pcac-bar-vertical-chart&gt;</code></p>
+        <mat-card class="p-3">
+          <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+            <pcac-bar-vertical-chart [config]="barConfig()" />
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+      <div>
+        <p class="pc-axis-styling-caption"><code>&lt;pcac-line-chart&gt;</code></p>
+        <mat-card class="p-3">
+          <app-layout-resource-state [resource]="service.lineChartConfig">
+            <pcac-line-chart [config]="lineConfig()" />
+          </app-layout-resource-state>
+        </mat-card>
+      </div>
+    </div>
+    <p class="text-sm">A few things to notice: the bar chart's x axis is a category axis, so <b>ticks</b> does
+      nothing there (one tick per bar); the labels move with <b>tickSize</b> and the plot area gives up exactly that
+      much room; <b>hideGrid</b> only acts on the axis whose grid the chart draws (the y axis, for both of these);
+      and hiding an axis hands its margins to the plot rather than leaving a gap.
+    </p>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="markup">Markup</h3>
+    <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="notes">Notes</h3>
+    <ul>
+      <li>
+        <b>Everything is optional.</b> Omit a field to get its default, or omit <b>xAxis</b> / <b>yAxis</b>
+        altogether for a default axis. A config built with <code>new</code> gets both axes pre-filled.
+      </li>
+      <li>
+        <b>Tick marks are off until sized.</b> Setting <b>tickSize</b> is what turns them on for that axis; an axis
+        without one draws no marks and its labels stay where they have always been. <code>0</code> keeps them off
+        but pulls the labels in to the axis.
+      </li>
+      <li>
+        <b>The chart makes room.</b> The left margin grows with the y axis's <b>tickSize</b> and the bottom margin
+        with the x axis's (by the difference from 6px), so the plot area shrinks to keep the labels inside the
+        chart. A shorter tick hands that room back.
+      </li>
+      <li>
+        <b>Hiding an axis reclaims its margins.</b> The y axis owns the left and top margins, the x axis the bottom
+        and right; hide one and the plot grows into them, so the chart's overall size doesn't change.
+      </li>
+      <li>
+        <b>Grids belong to an axis.</b> Horizontal grid lines run from the y axis's ticks, vertical ones from the
+        x axis's, and <b>ticks</b> on that axis sets how many there are. Each chart draws one axis's grid: the
+        y axis's on vertical bar and line/area/plot charts, the x axis's on the horizontal bar chart.
+      </li>
+      <li>
+        <b>Axis lines are separate from tick marks.</b> <b>showLine</b> draws the line along the axis with or without
+        tick marks, and vice versa. The line carries D3's short end-caps at either end.
+      </li>
+      <li>
+        <b>Zoom keeps it all.</b> On line, area and plot charts the x axis is redrawn as you zoom and pan, with the
+        same settings.
+      </li>
+      <li>
+        <b>Color comes from the theme.</b> Marks and axis lines are both stroked with <code>$gray-900</code>, via
+        <code>.pcac-axis-tick-marks .tick line</code> and <code>.pcac-axis-line .domain</code> respectively;
+        override those rules (or the variable) to restyle them.
+      </li>
+      <li>
+        <b>The pie chart has no axes</b>, so it takes neither.
+      </li>
+    </ul>
+  </section>
+</app-layout-page-docs>

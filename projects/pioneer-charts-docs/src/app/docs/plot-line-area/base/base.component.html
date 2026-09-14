@@ -23,7 +23,7 @@
   <section class="pc-doc-section">
     <h3>API</h3>
     <app-layout-code language="javascript" [code]="importCode()"></app-layout-code>
-    <app-layout-base-config [includeHideAxisAndGrid]="true">
+    <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">
         <tr>
           <td>yDomainMin</td>
@@ -90,10 +90,6 @@
         <tr>
           <td>xDomainMax</td>
           <td>End of the x-axis domain. Same rules as <b>xDomainMin</b>; the <b>Decimal</b> default is 100.</td>
-        </tr>
-        <tr>
-          <td>numberOfTicks</td>
-          <td>Number of ticks (and horizontal grid lines) on each axis. Default is 5.</td>
         </tr>
         <tr>
           <td>enableEffects</td>

@@ -9,7 +9,7 @@ import { LayoutResourceState } from '../../layout/resource-state/resource-state'
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
 /** The `PcacAxisConfig` fields the demo lets you toggle; `tickSize` is the slider's. */
-type AxisToggle = 'hide' | 'hideGrid' | 'showLine';
+type AxisToggle = 'hide' | 'showGrid' | 'showLine';
 
 @Component({
   selector: 'pc-axis-styling',
@@ -35,8 +35,8 @@ export class AxisStylingComponent {
    * own default (6px) so the initial render matches a chart that only set the size; the lines
    * start on so there's something to see.
    */
-  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, hideGrid: false });
-  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, hideGrid: false });
+  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: false });
+  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: true });
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
@@ -103,14 +103,20 @@ export class AxisStylingComponent {
   },
   yAxis: {
     ticks: 4,         // requested tick (and grid line) count
-    hideGrid: true    // no horizontal grid lines
+    showGrid: false   // no horizontal grid lines
   }
 } as PcacBarVerticalChartConfig;
+
+// Grids on both axes: the x axis's is off by default on this chart, so ask for it.
+const gridded = {
+  data: [ ... ],
+  xAxis: { showGrid: true }
+} as PcacLineChartConfig;
 
 // Or hide an axis entirely: the space it took goes back to the plot.
 const sparkline = {
   data: [ ... ],
   xAxis: { hide: true },
-  yAxis: { hide: true, hideGrid: true }
+  yAxis: { hide: true, showGrid: false }
 } as PcacLineChartConfig;`;
 }

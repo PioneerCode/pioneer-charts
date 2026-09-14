@@ -58,7 +58,7 @@ export class PlaChartBuilder extends PcacChart {
     }));
 
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
-    this.initializeAxisState(this.config, 8);
+    this.initializeAxisState(this.config, 'y', 8);
 
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
@@ -114,6 +114,21 @@ export class PlaChartBuilder extends PcacChart {
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
           .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, newX));
 
+        // The vertical grid hangs off the x ticks too, so redraw it against the rescaled x and
+        // drop it back underneath everything (append puts it on top).
+        if (this.xAxis.showGrid) {
+          this.svg.selectAll('.pcac-grid-vertical').remove();
+          this.gridBuilder.drawVerticalGrid({
+            svg: this.svg,
+            numberOfTicks: this.xAxis.ticks,
+            width: this.width,
+            height: this.height,
+            xScale: newX,
+            yScale: this.scales.y
+          });
+          this.svg.selectAll('.pcac-grid-vertical').lower();
+        }
+
         // drawXAxis re-appends the x axis at the end of the group, above the dots; put them back
         // on top so a point on the baseline isn't covered (see drawChart's draw order).
         this.svg.selectAll('.dots').raise();
@@ -139,8 +154,17 @@ export class PlaChartBuilder extends PcacChart {
       xFormat: config.xFormat
     });
 
-    // Horizontal grid lines run from the y axis's ticks
-    if (!this.yAxis.hideGrid) {
+    if (this.xAxis.showGrid) {
+      this.gridBuilder.drawVerticalGrid({
+        svg: this.svg,
+        numberOfTicks: this.xAxis.ticks,
+        width: this.width,
+        height: this.height,
+        xScale: this.scales.x,
+        yScale: this.scales.y
+      });
+    }
+    if (this.yAxis.showGrid) {
       this.gridBuilder.drawHorizontalGrid({
         svg: this.svg,
         numberOfTicks: this.yAxis.ticks,

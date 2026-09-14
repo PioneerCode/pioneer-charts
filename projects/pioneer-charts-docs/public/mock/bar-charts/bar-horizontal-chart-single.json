@@ -21,6 +21,6 @@
   ],
   "xAxis": {
     "hide": true,
-    "hideGrid": true
+    "showGrid": false
   }
 }

@@ -82,6 +82,6 @@
   },
   "yAxis": {
     "hide": true,
-    "hideGrid": true
+    "showGrid": false
   }
 }

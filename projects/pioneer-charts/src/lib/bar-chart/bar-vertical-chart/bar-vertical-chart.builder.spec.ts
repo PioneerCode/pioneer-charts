@@ -96,12 +96,24 @@ describe('BarVerticalChartBuilder', () => {
   });
 
   describe('grid', () => {
-    it('draws the y axis grid by default and hides it with yAxis.hideGrid', () => {
+    it('draws only the y axis grid by default', () => {
       builder.buildChart(chartElm(), config());
-      expect(builder.svg.select('.pcac-grid').empty()).toBe(false);
+      expect(builder.svg.select('.pcac-grid-horizontal').empty()).toBe(false);
+      expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(true);
+    });
 
-      builder.buildChart(chartElm(), config({ yAxis: { hideGrid: true } }));
-      expect(builder.svg.select('.pcac-grid').empty()).toBe(true);
+    it('turns either grid on or off with showGrid', () => {
+      builder.buildChart(chartElm(), config({ xAxis: { showGrid: true }, yAxis: { showGrid: false } }));
+      expect(builder.svg.select('.pcac-grid-horizontal').empty()).toBe(true);
+      expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(false);
+    });
+
+    it('puts the x axis grid through the middle of each category', () => {
+      builder.buildChart(chartElm(), config({ xAxis: { showGrid: true } }));
+      const xScale = (builder as unknown as { xScaleStacked: { (v: string): number; bandwidth(): number } }).xScaleStacked;
+      const rules = builder.svg.selectAll<SVGGElement, unknown>('.pcac-grid-vertical .pcac-grid-rule').nodes()
+        .map(n => n.getAttribute('transform'));
+      expect(rules).toEqual([`translate(${xScale('Group A') + xScale.bandwidth() / 2}, 0)`]);
     });
   });
 

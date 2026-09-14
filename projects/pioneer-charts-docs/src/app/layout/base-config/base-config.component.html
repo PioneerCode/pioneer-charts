@@ -75,9 +75,10 @@
             doesn't change. Default false.
           </li>
           <li>
-            <b>hideGrid</b> &mdash; if true, the grid lines running from this axis's ticks across the plot are not
-            drawn. Each chart draws one axis's grid: the y axis's on vertical bar and line/area/plot charts, the
-            x axis's on the horizontal bar chart. Default false.
+            <b>showGrid</b> &mdash; draw grid lines from this axis's ticks (or, on a category axis, from each
+            category) across the plot: horizontal lines for the y axis, vertical for the x. Left unset, each chart
+            keeps the grid it has always drawn &mdash; the y axis's on vertical bar and line/area/plot charts, the
+            x axis's on the horizontal bar chart &mdash; and no other. Set it to turn either grid on or off.
           </li>
           <li>
             <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the

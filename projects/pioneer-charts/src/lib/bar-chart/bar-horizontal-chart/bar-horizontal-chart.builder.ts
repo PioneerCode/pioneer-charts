@@ -38,7 +38,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     this.config = JSON.parse(JSON.stringify(config));
-    this.initializeAxisState(this.config);
+    this.initializeAxisState(this.config, 'x');
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
     }
@@ -91,11 +91,20 @@ export class BarHorizontalChartBuilder extends PcacChart {
       xFormat: config.tickFormat || PcacFormatEnum.None,
       yFormat: PcacFormatEnum.None
     });
-    // Vertical grid lines run from the x axis's ticks
-    if (!this.xAxis.hideGrid) {
+    if (this.xAxis.showGrid) {
       this.gridBuilder.drawVerticalGrid({
         svg: this.svg,
         numberOfTicks: this.xAxis.ticks,
+        width: this.width,
+        height: this.height,
+        xScale: this.xScale,
+        yScale: this.yScaleStacked
+      });
+    }
+    if (this.yAxis.showGrid) {
+      this.gridBuilder.drawHorizontalGrid({
+        svg: this.svg,
+        numberOfTicks: this.yAxis.ticks,
         width: this.width,
         height: this.height,
         xScale: this.xScale,

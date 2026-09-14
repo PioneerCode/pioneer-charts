@@ -63,7 +63,7 @@
     | Before | After |
     | --- | --- |
     | `numberOfTicks: n` | `xAxis: { ticks: n }, yAxis: { ticks: n }` (or just the axis that needs it) |
-    | `hideGrid: true` | `yAxis: { hideGrid: true }` on vertical bar and line/area/plot charts; `xAxis: { hideGrid: true }` on the horizontal bar chart |
+    | `hideGrid: true` | `yAxis: { showGrid: false }` on vertical bar and line/area/plot charts; `xAxis: { showGrid: false }` on the horizontal bar chart |
     | `hideAxis: true` on a vertical bar chart | `yAxis: { hide: true }` (it only ever hid the y axis); add `xAxis: { hide: true }` if there were no group labels to keep |
     | `hideAxis: true` on a horizontal bar chart | `xAxis: { hide: true }` (it only ever hid the x axis) |
     | `hideAxis: true` on a line/area/plot chart | `xAxis: { hide: true }, yAxis: { hide: true }` |
@@ -105,8 +105,12 @@
 
 ### Added
   - Per-axis configuration: the bar (vertical and horizontal) and line/area/plot chart configs now
-    take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, hideGrid, ticks, tickSize,
-    showLine }`, every field optional). Two of those are new:
+    take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, showGrid, ticks, tickSize,
+    showLine }`, every field optional). Three of those are new:
+    - `showGrid` turns the grid lines from that axis's ticks on or off - so every chart can now
+      draw a grid on both axes (vertical lines from the x axis, horizontal from the y), including
+      through each category of a category axis. Left unset, a chart draws the one grid it always
+      has, and no other. On line/area/plot charts the x axis's grid follows zoom.
     - `tickSize` draws tick marks along that axis at the given length in pixels. Charts have never
       shown tick marks (the theme hides them), and still don't unless this is set - so existing
       charts are unaffected; `0` keeps them off but pulls the labels in. Labels follow the marks

@@ -1,8 +1,8 @@
 <app-layout-page-docs pageTitle="Axis Styling" [jumpNav]="jumpNav()">
   <p class="lead" id="axis-styling">The bar, line, area and plot charts take one <code>PcacAxisConfig</code> per
-    axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks and its grid,
-    no tick marks and no axis line &mdash; and each of those is a field on the object: <b>hide</b>, <b>hideGrid</b>,
-    <b>ticks</b>, <b>tickSize</b> and <b>showLine</b>.
+    axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks, no tick marks,
+    no axis line, and a grid on one axis only &mdash; and each of those is a field on the object: <b>hide</b>,
+    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b> and <b>showLine</b>.
   </p>
 
   <section class="pc-doc-section">
@@ -30,9 +30,9 @@
           (change)="onToggle(axis, 'showLine', $event)" />
         <span></span>
 
-        <label [for]="'pc-axis-' + axis + '-grid'">hideGrid</label>
-        <input [id]="'pc-axis-' + axis + '-grid'" type="checkbox" [checked]="a.hideGrid"
-          (change)="onToggle(axis, 'hideGrid', $event)" />
+        <label [for]="'pc-axis-' + axis + '-grid'">showGrid</label>
+        <input [id]="'pc-axis-' + axis + '-grid'" type="checkbox" [checked]="a.showGrid"
+          (change)="onToggle(axis, 'showGrid', $event)" />
         <span></span>
 
         <label [for]="'pc-axis-' + axis + '-hide'">hide</label>
@@ -63,8 +63,8 @@
     </div>
     <p class="text-sm">A few things to notice: the bar chart's x axis is a category axis, so <b>ticks</b> does
       nothing there (one tick per bar); the labels move with <b>tickSize</b> and the plot area gives up exactly that
-      much room; <b>hideGrid</b> only acts on the axis whose grid the chart draws (the y axis, for both of these);
-      and hiding an axis hands its margins to the plot rather than leaving a gap.
+      much room; the x axis's grid runs through the middle of each bar on the bar chart and through each tick on
+      the line chart; and hiding an axis hands its margins to the plot rather than leaving a gap.
     </p>
   </section>
 
@@ -96,8 +96,10 @@
       </li>
       <li>
         <b>Grids belong to an axis.</b> Horizontal grid lines run from the y axis's ticks, vertical ones from the
-        x axis's, and <b>ticks</b> on that axis sets how many there are. Each chart draws one axis's grid: the
-        y axis's on vertical bar and line/area/plot charts, the x axis's on the horizontal bar chart.
+        x axis's (or through each category, on a category axis), and <b>ticks</b> on that axis sets how many
+        there are. With <b>showGrid</b> unset a chart draws the one grid it always has &mdash; the y axis's on
+        vertical bar and line/area/plot charts, the x axis's on the horizontal bar chart; set it on either axis
+        to turn that grid on or off. On line, area and plot charts the x axis's grid follows zoom and pan.
       </li>
       <li>
         <b>Axis lines are separate from tick marks.</b> <b>showLine</b> draws the line along the axis with or without

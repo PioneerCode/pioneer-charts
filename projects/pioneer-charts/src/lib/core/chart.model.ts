@@ -43,12 +43,14 @@ export class PcacAxisConfig {
   hide?: boolean = false
 
   /**
-   * Don't draw the grid lines that run from this axis's ticks across the plot. Each chart draws
-   * the grid for one axis only - the y axis on vertical bar and line/area/plot charts (horizontal
-   * lines), the x axis on the horizontal bar chart (vertical lines) - so this is a no-op on the
-   * other axis.
+   * Draw grid lines from this axis's ticks (or, on a category axis, from each category) across
+   * the plot: horizontal lines for the y axis, vertical for the x. Left unset, each chart keeps
+   * the grid it has always drawn - the y axis's on vertical bar and line/area/plot charts, the
+   * x axis's on the horizontal bar chart - and no other; set it to turn either grid on or off
+   * explicitly. Deliberately has no initializer, since "unset" is what carries the per-chart
+   * default.
    */
-  hideGrid?: boolean = false
+  showGrid?: boolean
 
   /**
    * Requested number of ticks (D3's `ticks()` hint, so the actual count can differ slightly) -
@@ -83,11 +85,15 @@ export class PcacAxisConfig {
  */
 export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize'>> & Pick<PcacAxisConfig, 'tickSize'>;
 
-export function resolveAxisConfig(axis?: PcacAxisConfig): PcacResolvedAxisConfig {
+/**
+ * @param showGridDefault what `showGrid` resolves to when the consumer left it unset - each chart
+ * passes `true` for the axis whose grid it has always drawn and `false` for the other.
+ */
+export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false): PcacResolvedAxisConfig {
   const defaults = new PcacAxisConfig();
   return {
     hide: axis?.hide ?? defaults.hide!,
-    hideGrid: axis?.hideGrid ?? defaults.hideGrid!,
+    showGrid: axis?.showGrid ?? showGridDefault,
     ticks: axis?.ticks ?? defaults.ticks!,
     tickSize: axis?.tickSize,
     showLine: axis?.showLine ?? defaults.showLine!,

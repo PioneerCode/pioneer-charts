@@ -46,7 +46,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     // land on the consumer's own config object (it previously did, growing it by the margins on
     // first build).
     config = { ...config };
-    this.initializeAxisState(config);
+    this.initializeAxisState(config, 'y');
     if (!this.initializeChartState(chartElm, config)) {
       return;
     }
@@ -90,8 +90,17 @@ export class BarVerticalChartBuilder extends PcacChart {
       xFormat: PcacFormatEnum.None,
       yFormat: config.tickFormat || PcacFormatEnum.None
     });
-    // Horizontal grid lines run from the y axis's ticks
-    if (!this.yAxis.hideGrid) {
+    if (this.xAxis.showGrid) {
+      this.gridBuilder.drawVerticalGrid({
+        svg: this.svg,
+        numberOfTicks: this.xAxis.ticks,
+        width: this.width,
+        height: this.height,
+        xScale: this.xScaleStacked,
+        yScale: this.yScale
+      });
+    }
+    if (this.yAxis.showGrid) {
       this.gridBuilder.drawHorizontalGrid({
         svg: this.svg,
         numberOfTicks: this.yAxis.ticks,

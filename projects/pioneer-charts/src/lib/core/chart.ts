@@ -120,12 +120,14 @@ export class PcacChart {
    *    margin is added onto `config.height` so the SVG's total height stays what the consumer
    *    configured; horizontally `initializeChartState()` picks the change up on its own.
    *
+   * @param defaultGrid the axis whose grid this chart draws when the consumer hasn't said
+   * (`PcacAxisConfig.showGrid`): `'y'` for horizontal lines, `'x'` for vertical.
    * @param hiddenAxisMargin what a hidden axis's sides shrink to, rather than 0. The
    * line/area/plot charts keep 8px so a dot on the edge of the plot isn't clipped by the SVG.
    */
-  initializeAxisState(config: PcacAxisChartConfig, hiddenAxisMargin = 0): void {
-    this.xAxis = resolveAxisConfig(config.xAxis);
-    this.yAxis = resolveAxisConfig(config.yAxis);
+  initializeAxisState(config: PcacAxisChartConfig, defaultGrid: 'x' | 'y', hiddenAxisMargin = 0): void {
+    this.xAxis = resolveAxisConfig(config.xAxis, defaultGrid === 'x');
+    this.yAxis = resolveAxisConfig(config.yAxis, defaultGrid === 'y');
     this.resetMargin();
     this.reserveTickSizeMargins(
       this.xAxis.hide ? undefined : this.xAxis.tickSize,

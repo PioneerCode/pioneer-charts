@@ -4,7 +4,7 @@
   "xDomainMin": 0,
   "xDomainMax": 24,
   "yDomainMax": 100,
-  "xAxis": { "ticks": 6 },
+  "xAxis": { "ticks": 6, "showGrid": true },
   "yAxis": { "ticks": 6 },
   "enableEffects": false,
   "enableZoom": true,

@@ -123,11 +123,14 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.svg.select('.pcac-y-axis').empty()).toBe(true);
   });
 
-  it('draws the x axis grid by default and hides it with xAxis.hideGrid', () => {
-    expect(builder.svg.select('.pcac-grid').empty()).toBe(false);
+  it('draws only the x axis grid by default, and either on request', () => {
+    expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(false);
+    expect(builder.svg.select('.pcac-grid-horizontal').empty()).toBe(true);
 
-    builder.buildChart(elm, { ...config(), xAxis: { hideGrid: true } });
-    expect(builder.svg.select('.pcac-grid').empty()).toBe(true);
+    builder.buildChart(elm, { ...config(), xAxis: { showGrid: false }, yAxis: { showGrid: true } });
+    expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(true);
+    // one horizontal line per category (the y axis is a band scale)
+    expect(builder.svg.selectAll('.pcac-grid-horizontal .pcac-grid-rule').size()).toBe(config().data.length);
   });
 
   // See the matching test in bar-vertical-chart.builder.spec.ts: stacked bars now start where

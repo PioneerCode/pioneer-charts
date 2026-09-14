@@ -20,6 +20,17 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
   xFormat?: PcacFormatEnum;
   hideYAxis?: boolean;
   hideXAxis?: boolean;
+  /**
+   * Length in pixels of each axis's per-tick marks (D3's `tickSizeInner`). Left undefined, D3's
+   * default of 6 applies to the geometry - but the theme hides tick marks unless the axis group
+   * carries `pcac-axis-tick-marks`, which is added exactly when a size is given here, so an
+   * undefined size means "no visible marks, labels where they've always been". `0` is a
+   * legitimate value (no tick marks, labels hugging the axis), so callers must check
+   * `!== undefined` rather than truthiness. The two outer end-caps of the domain line
+   * (`tickSizeOuter`) are deliberately left alone.
+   */
+  xTickSize?: number;
+  yTickSize?: number;
 }
 
 @Injectable({
@@ -35,6 +46,9 @@ export class PcacAxisBuilder {
     if (config.hideYAxis) return;
 
     const yAxis = axisLeft(config.yScale).ticks(config.numberOfTicks);
+    if (config.yTickSize !== undefined) {
+      yAxis.tickSizeInner(config.yTickSize);
+    }
 
     if (config.yFormat) {
       switch (config.yFormat) {
@@ -52,6 +66,7 @@ export class PcacAxisBuilder {
 
     config.svg.append('g')
       .attr('class', 'pcac-y-axis')
+      .classed('pcac-axis-tick-marks', config.yTickSize !== undefined)
       .call(yAxis);
   }
 
@@ -60,6 +75,9 @@ export class PcacAxisBuilder {
     config.svg.selectAll('.pcac-x-axis').remove();
 
     const xAxis = axisBottom(config.xScale).ticks(config.numberOfTicks);
+    if (config.xTickSize !== undefined) {
+      xAxis.tickSizeInner(config.xTickSize);
+    }
 
     if (config.xFormat) {
       switch (config.xFormat) {
@@ -88,6 +106,7 @@ export class PcacAxisBuilder {
 
     config.svg.append('g')
       .attr('class', 'pcac-x-axis')
+      .classed('pcac-axis-tick-marks', config.xTickSize !== undefined)
       .attr('transform', 'translate(0,' + config.height + ')')
       .call(xAxis);
   }

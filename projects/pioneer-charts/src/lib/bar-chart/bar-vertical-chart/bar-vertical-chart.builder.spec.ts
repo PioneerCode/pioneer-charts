@@ -127,4 +127,27 @@ describe('BarVerticalChartBuilder', () => {
       expect(builder.colors).toEqual(['#333', '#222', '#111']);
     });
   });
+
+  // A longer tick pushes its labels outward by the extra length; the margin has to grow by the same
+  // amount (and the plot area shrink) or they land outside the SVG.
+  describe('tick size margins', () => {
+    it('reserves the extra tick length in the margins and shrinks the plot area to match', () => {
+      builder.buildChart(chartElm(800, 500), config());
+      const defaultWidth = builder.width;
+
+      builder.buildChart(chartElm(800, 500), config({ xTickSize: 16, yTickSize: 26 }));
+
+      expect(builder.margin.bottom).toBe(30);
+      expect(builder.margin.left).toBe(60);
+      expect(builder.width).toBe(defaultWidth - 20);
+      expect(builder.height).toBe(200 - 10);
+    });
+
+    it('does not carry the reserved margin into a later build without a tick size', () => {
+      builder.buildChart(chartElm(800, 500), config({ xTickSize: 16, yTickSize: 26 }));
+      builder.buildChart(chartElm(800, 500), config());
+
+      expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+  });
 });

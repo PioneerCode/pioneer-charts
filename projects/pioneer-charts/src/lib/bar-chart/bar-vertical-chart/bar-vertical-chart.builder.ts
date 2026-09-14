@@ -46,6 +46,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     // consumer's own config object (it previously did, growing it by the margins on first build).
     config = { ...config };
     this.resetMargin();
+    this.reserveTickSizeMargins(config.xTickSize, config.yTickSize);
     if (config.hideAxis) {
       this.adjustForHiddenAxis(config);
     }
@@ -113,7 +114,9 @@ export class BarVerticalChartBuilder extends PcacChart {
       yScale: this.yScale,
       xFormat: PcacFormatEnum.None,
       yFormat: config.tickFormat || PcacFormatEnum.None,
-      hideYAxis: config.hideAxis
+      hideYAxis: config.hideAxis,
+      xTickSize: config.xTickSize,
+      yTickSize: config.yTickSize
     });
     if (!config.hideGrid) {
       this.gridBuilder.drawHorizontalGrid({

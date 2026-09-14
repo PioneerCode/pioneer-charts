@@ -84,6 +84,14 @@
     abandoned Bootstrap integration.
 
 ### Added
+  - New `xTickSize` / `yTickSize` config options on the bar (vertical and horizontal) and
+    line/area/plot charts draw tick marks along that axis at the given length in pixels. Charts
+    have never shown tick marks (the theme hides them), and still don't unless one of these is
+    set - so existing charts are unaffected; `0` keeps them off but pulls the labels in. Tick
+    labels follow the marks and the chart's margins grow to match, so the plot area shrinks to fit
+    them; the axis line's end-caps are unaffected. The marks take the theme's `$gray-400` via a new
+    `.pcac-axis-tick-marks .tick line` rule. The docs site has a new "Tick Size" guide with a live
+    demo.
   - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
     pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
     with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an

@@ -39,6 +39,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     this.config = JSON.parse(JSON.stringify(config));
     this.resetMargin();
+    this.reserveTickSizeMargins(this.config.xTickSize, this.config.yTickSize);
     if (this.config.hideAxis) {
       this.adjustForHiddenAxis();
     }
@@ -82,7 +83,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .rangeRound([0, this.yScaleStacked.bandwidth()])
       .domain(config.data[0].data.map((d) => d.key as string));
 
-    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked);
+    this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, config.yTickSize);
 
     this.xScale.range([0, this.width]);
   }
@@ -97,7 +98,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       yScale: this.yScaleStacked,
       xFormat: config.tickFormat || PcacFormatEnum.None,
       yFormat: PcacFormatEnum.None,
-      hideXAxis: config.hideAxis
+      hideXAxis: config.hideAxis,
+      xTickSize: config.xTickSize,
+      yTickSize: config.yTickSize
     });
     if (!config.hideGrid) {
       this.gridBuilder.drawVerticalGrid({

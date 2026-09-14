@@ -40,6 +40,9 @@ export class PcacChart {
   tooltipBuilder = inject(PcacTooltipBuilder);
   colorService = inject(PcacColorService);
 
+  /** D3's own `tickSizeInner` default, which the default `margin` below is sized around. */
+  static readonly DEFAULT_TICK_SIZE = 6;
+
   margin: PcacChartMargin = { top: 8, right: 16, bottom: 20, left: 40 };
   private readonly defaultMargin: PcacChartMargin = { ...this.margin };
   svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
@@ -67,6 +70,13 @@ export class PcacChart {
   private lastHeightFull = false;
 
   /**
+   * How much `reserveTickSizeMargins()` last added to `margin.bottom` (negative when it took some
+   * away). `resolveHeight()` subtracts it from the plot height so the SVG's total height doesn't
+   * change with the tick size. Reset alongside the margins.
+   */
+  private reservedTickHeight = 0;
+
+  /**
    * Resolves the consumer's projected `<ng-template pcacTooltip>`, if any. Each chart component
    * points this at its own `contentChild(PcacTooltipDirective)` query. It's a getter rather than
    * a captured value so it's read lazily, at hover time, from inside a D3 listener: reading the
@@ -84,6 +94,40 @@ export class PcacChart {
    */
   resetMargin(): void {
     this.margin = { ...this.defaultMargin };
+    this.reservedTickHeight = 0;
+  }
+
+  /**
+   * Makes room in the margins for tick marks longer (or shorter) than D3's default. The default
+   * margins are sized around that default (`DEFAULT_TICK_SIZE`), and D3 places each tick label at
+   * tick length + padding, so a longer tick pushes its labels outward by exactly the difference -
+   * into space the margin doesn't have unless it grows by the same amount. Growing the margin here,
+   * *before* `initializeChartState()` measures the plot area, is what makes the chart shrink to fit
+   * its labels rather than pushing them off the edge of the SVG. A shorter tick hands the
+   * difference back to the plot area the same way.
+   *
+   * Horizontally that happens on its own: `initializeChartState()` derives `width` from the
+   * container minus the margins. Vertically it doesn't - `config.height` is the plot area, and
+   * the SVG is that plus the margins - so a taller bottom margin would grow the SVG instead. The
+   * delta is therefore also remembered in `reservedTickHeight` and taken back out of the plot
+   * height by `resolveHeight()`, keeping the chart's total footprint where the consumer put it.
+   *
+   * Builders call this right after `resetMargin()` and before any `hideAxis` adjustment, so that
+   * a hidden axis still zeroes (or keeps, for bar-vertical's group labels) the margin *including*
+   * this delta. Only the axis a tick size is given for is affected; `undefined` leaves that
+   * margin alone.
+   * @param xTickSize `tickSizeInner` for the bottom (x) axis, which lives in `margin.bottom`
+   * @param yTickSize `tickSizeInner` for the left (y) axis, which lives in `margin.left`
+   */
+  reserveTickSizeMargins(xTickSize?: number, yTickSize?: number): void {
+    if (xTickSize !== undefined) {
+      const bottom = Math.max(0, this.margin.bottom + xTickSize - PcacChart.DEFAULT_TICK_SIZE);
+      this.reservedTickHeight = bottom - this.margin.bottom;
+      this.margin.bottom = bottom;
+    }
+    if (yTickSize !== undefined) {
+      this.margin.left = Math.max(0, this.margin.left + yTickSize - PcacChart.DEFAULT_TICK_SIZE);
+    }
   }
 
   /**
@@ -155,10 +199,13 @@ export class PcacChart {
    * @param config Chart specific configuration
    */
   private resolveHeight(container: HTMLElement, config: PcacChartConfig): number {
+    // See `reserveTickSizeMargins()`: room made for longer ticks comes out of the plot area, not
+    // added on to the SVG. Applies to the floor in the `heightFull` case too, for the same reason.
+    const height = Math.max(0, config.height - this.reservedTickHeight);
     if (!config.heightFull) {
-      return config.height;
+      return height;
     }
-    return Math.max(config.height, container.clientHeight - this.margin.top - this.margin.bottom);
+    return Math.max(height, container.clientHeight - this.margin.top - this.margin.bottom);
   }
 
   /**
@@ -224,9 +271,15 @@ export class PcacChart {
    * @param chartElm Reference to SVG on dom
    * @param data Generic multi-dimensional PcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
+   * @param yTickSize The `tickSizeInner` the real y axis will be drawn with, if not D3's default.
+   * The measured box spans the tick line as well as the label, so measuring with a different tick
+   * length than the axis ends up drawn with would put the labels off by the difference.
    */
-  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, data: PcacData[], yScale: AxisScale<Domain>): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, data: PcacData[], yScale: AxisScale<Domain>, yTickSize?: number): void {
     const axisY = axisLeft(yScale).ticks(5);
+    if (yTickSize !== undefined) {
+      axisY.tickSizeInner(yTickSize);
+    }
     let max = 0;
     select(chartElm.nativeElement).append('g')
       .call(axisY)

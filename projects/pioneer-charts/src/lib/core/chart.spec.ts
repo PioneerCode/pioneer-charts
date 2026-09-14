@@ -145,4 +145,85 @@ describe('PcacChart', () => {
       expect(chart.height).toBe(200);
     });
   });
+
+  describe('reserveTickSizeMargins', () => {
+    it('leaves the default margins alone when no tick size is given', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, undefined);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('is a no-op at D3\'s own default tick size', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(PcacChart.DEFAULT_TICK_SIZE, PcacChart.DEFAULT_TICK_SIZE);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('grows bottom for a longer x tick and left for a longer y tick, by the delta from the default', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, 26);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 30, left: 60 });
+    });
+
+    it('hands the difference back to the plot area for a shorter tick', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(0, 0);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 14, left: 34 });
+    });
+
+    it('only touches the axis a size was given for', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, 20);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 54 });
+    });
+
+    it('shrinks the measured plot area, so the labels stay inside the SVG', () => {
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+      const defaultWidth = chart.width;
+
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, 26);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.width).toBe(defaultWidth - 20);
+    });
+
+    it('takes a taller bottom margin out of the plot height, so the SVG does not grow', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(30);
+      expect(chart.height).toBe(190);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(200 + 8 + 20);
+    });
+
+    it('gives a shorter x tick\'s room back to the plot height', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(0, undefined);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(14);
+      expect(chart.height).toBe(206);
+    });
+
+    it('applies the same reduction to the heightFull floor', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      // auto-height container: nothing to fill, so the floor is what comes back
+      chart.initializeChartState(chartElm(800, 0), heightFullConfig(200));
+
+      expect(chart.height).toBe(190);
+    });
+
+    it('forgets the reserved height on resetMargin', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.height).toBe(200);
+    });
+  });
 });

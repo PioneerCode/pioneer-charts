@@ -59,11 +59,14 @@ export class PlaChartBuilder extends PcacChart {
 
     this.resetMargin();
     if (this.config.hideAxis) {
+      // No axes, so no tick marks to reserve room for - the fixed 8px margins below stand as-is.
       this.config.height = this.config.height + 12;
       this.margin.top = 8;
       this.margin.bottom = 8;
       this.margin.left = 8;
       this.margin.right = 8;
+    } else {
+      this.reserveTickSizeMargins(this.config.xTickSize, this.config.yTickSize);
     }
 
     if (!this.initializeChartState(chartElm, this.config)) {
@@ -98,7 +101,9 @@ export class PlaChartBuilder extends PcacChart {
           xScale: newX,
           yScale: this.scales.y,
           yFormat: this.config.yFormat,
-          xFormat: this.config.xFormat
+          xFormat: this.config.xFormat,
+          xTickSize: this.config.xTickSize,
+          yTickSize: this.config.yTickSize
         });
 
         // Update lines/areas. Fresh generators against the rescaled x, so they go through the
@@ -137,7 +142,9 @@ export class PlaChartBuilder extends PcacChart {
         xScale: this.scales.x,
         yScale: this.scales.y,
         yFormat: config.yFormat,
-        xFormat: config.xFormat
+        xFormat: config.xFormat,
+        xTickSize: config.xTickSize,
+        yTickSize: config.yTickSize
       });
     }
 

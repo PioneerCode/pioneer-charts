@@ -157,4 +157,14 @@ describe('BarHorizontalChartBuilder', () => {
     expect(colors).toEqual(['#111', '#222', '#333']);
     expect(builder.colors).toEqual(['#333', '#222', '#111']);
   });
+
+  // `left` is measured from the y axis's bounding box (a constant 40 under the getBBox stub, so it
+  // can't show the tick line growing here); `bottom` is the x axis's and must carry the extra length.
+  it('reserves a longer x tick in the bottom margin', () => {
+    builder.buildChart(elm, { ...config(), xTickSize: 16 });
+    expect(builder.margin.bottom).toBe(30);
+
+    builder.buildChart(elm, config());
+    expect(builder.margin.bottom).toBe(20);
+  });
 });

@@ -74,6 +74,29 @@
       <td>If true, hide chart grid.</td>
     </tr>
     }
+    @if(includeHideAxisAndGrid()) {
+    <tr>
+      <td>xTickSize / yTickSize</td>
+      <td>Length in pixels of the small tick marks along the x and y axis, set independently. Tick marks are not
+        drawn unless one of these is set, so setting a size is also what turns them on for that axis (6 is D3's
+        usual length). <code>0</code> keeps them off but pulls the labels in to the axis.
+        <ul>
+          <li>
+            Tick labels follow the marks (D3 places them at tick length + 3px), and the chart's margins grow or
+            shrink by the same amount, so the plot area shrinks to make room for a longer tick rather than
+            pushing its labels off the edge.
+          </li>
+          <li>
+            Only the per-tick marks change; the two end-caps of the axis line keep their default length.
+          </li>
+          <li>
+            Their color is the theme's <code>.pcac-axis-tick-marks .tick line</code> stroke (<code>$gray-400</code>
+            by default), overridable like any other theme rule.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    }
   </tbody>
   <ng-content></ng-content>
 </table>

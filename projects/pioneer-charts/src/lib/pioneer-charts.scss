@@ -36,4 +36,12 @@
   line {
     stroke: none;
   }
+
+  // Tick marks are hidden by default (above) and always have been, so they only appear on a chart
+  // that asks for them by setting `xTickSize` / `yTickSize` - the axis builder adds this class
+  // for that axis, and nothing else changes for charts that don't. A shade darker than the grid,
+  // since a 6px mark at $gray-200 all but vanishes on a light card.
+  &.pcac-axis-tick-marks .tick line {
+    stroke: imports.$gray-400;
+  }
 }

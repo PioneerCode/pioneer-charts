@@ -1,5 +1,5 @@
-<a name="unreleased"></a>
-# Unreleased
+<a name="22.2.0"></a>
+# [v22.2.0]
 
 ### Fixed
   - Vertical bar charts with `heightFull` drew their y axis and grid at the configured `height`

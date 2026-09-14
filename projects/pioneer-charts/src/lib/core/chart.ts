@@ -180,7 +180,9 @@ export class PcacChart {
    * horizontal from the y's (`PcacAxisConfig.showGrid`). `which` restricts it to one axis - the
    * line/area/plot charts redraw just the x grid against the rescaled x on zoom.
    */
-  drawGrids<XDomain extends AxisDomain, YDomain extends AxisDomain>(xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, which: 'x' | 'y' | 'both' = 'both'): void {
+  drawGrids<XDomain extends AxisDomain, YDomain extends AxisDomain>(
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, which: 'x' | 'y' | 'both' = 'both'
+  ): void {
     const base = { svg: this.svg, width: this.width, height: this.height, xScale, yScale };
     if (which !== 'y' && this.xAxis.showGrid) {
       this.gridBuilder.drawVerticalGrid({ ...base, numberOfTicks: this.xAxis.ticks });

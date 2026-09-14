@@ -283,6 +283,20 @@ describe('PcacChart', () => {
       expect(cfg.height).toBe(220);
     });
 
+    it('reserves AXIS_LABEL_SPACE for a label, taking the x label\'s share out of the plot height', () => {
+      const cfg = axisConfig({ xAxis: { label: 'Day' }, yAxis: { label: 'Revenue' } });
+      chart.initializeAxisState(cfg, 'y');
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20 + 18, left: 40 + 18 });
+      chart.initializeChartState(chartElm(800), cfg);
+      expect(chart.height).toBe(200 - 18);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(228);
+    });
+
+    it('reserves nothing for a label on a hidden axis', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { hide: true, label: 'Day' } }), 'y');
+      expect(chart.margin.bottom).toBe(0);
+    });
+
     it('starts each build from the default margins', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { hide: true }, yAxis: { hide: true, tickSize: 30 } }), 'y');
       chart.initializeAxisState(axisConfig(), 'y');

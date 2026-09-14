@@ -46,4 +46,12 @@
   &.pcac-axis-line .domain {
     stroke: imports.$gray-900;
   }
+
+  // The axis `label` (its title). `PcacChart.AXIS_LABEL_SPACE` reserves room for this size plus
+  // a gap, so change both together.
+  .pcac-axis-label {
+    font-size: 12px;
+    font-weight: 600;
+    fill: imports.$gray-700;
+  }
 }

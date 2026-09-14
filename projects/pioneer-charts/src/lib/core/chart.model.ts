@@ -77,13 +77,34 @@ export class PcacAxisConfig {
    * (`.pcac-axis-line .domain`, `$gray-900`).
    */
   showLine?: boolean = false
+
+  /**
+   * A title for the whole axis (e.g. "Revenue ($)"), drawn centered along it just inside the
+   * chart's edge: below the tick labels for the x axis, rotated to read bottom-to-top left of
+   * them for the y axis. The chart's margin grows by `PcacChart.AXIS_LABEL_SPACE` to make room,
+   * shrinking the plot area the same way a longer tick does. Not drawn on a hidden axis. Styled
+   * by the theme's `.pcac-axis-label` rule.
+   */
+  label?: string
+}
+
+/**
+ * The `PcacChartMargin` type lives here rather than in chart.ts so the axis builder can take
+ * one without importing the class module that imports it back.
+ */
+export interface PcacChartMargin {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
 }
 
 /**
  * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
- * null-check. `tickSize` stays optional: "not set" is itself the meaningful default (no marks).
+ * null-check. `tickSize` and `label` stay optional: "not set" is itself the meaningful default
+ * (no marks, no label).
  */
-export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize'>> & Pick<PcacAxisConfig, 'tickSize'>;
+export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize' | 'label'>> & Pick<PcacAxisConfig, 'tickSize' | 'label'>;
 
 /**
  * @param showGridDefault what `showGrid` resolves to when the consumer left it unset - each chart
@@ -97,6 +118,7 @@ export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false
     ticks: axis?.ticks ?? defaults.ticks!,
     tickSize: axis?.tickSize,
     showLine: axis?.showLine ?? defaults.showLine!,
+    label: axis?.label,
   };
 }
 

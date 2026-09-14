@@ -106,7 +106,7 @@
 ### Added
   - Per-axis configuration: the bar (vertical and horizontal) and line/area/plot chart configs now
     take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, showGrid, ticks, tickSize,
-    showLine }`, every field optional). Three of those are new:
+    showLine, label }`, every field optional). Four of those are new:
     - `showGrid` turns the grid lines from that axis's ticks on or off - so every chart can now
       draw a grid on both axes (vertical lines from the x axis, horizontal from the y), including
       through each category of a category axis. Left unset, a chart draws the one grid it always
@@ -120,6 +120,9 @@
       of the tick marks. Axes are now drawn above the chart's content (bars, lines, areas) so the
       line isn't covered by anything sitting at the axis, with the line/area/plot charts' dots
       kept above the axes so a point on the axis stays whole.
+    - `label` titles the axis: drawn centered along it at the chart's edge (below the x axis's
+      tick labels; rotated to read bottom-to-top left of the y axis's), with the margin growing
+      18px to fit it. Styled by a new `.pcac-axis-label` theme rule.
 
     Both take the theme's `$gray-900` via new `.pcac-axis-tick-marks .tick line` and
     `.pcac-axis-line .domain` rules. The docs site has a new "Axis Styling" guide with a live demo.

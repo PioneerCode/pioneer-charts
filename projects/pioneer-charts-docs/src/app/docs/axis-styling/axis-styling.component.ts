@@ -35,8 +35,8 @@ export class AxisStylingComponent {
    * own default (6px) so the initial render matches a chart that only set the size; the lines
    * start on so there's something to see.
    */
-  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: false });
-  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: true });
+  protected readonly xAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: false, label: 'Product' });
+  protected readonly yAxis = signal<PcacAxisConfig>({ ticks: 5, tickSize: 6, showLine: true, hide: false, showGrid: true, label: 'Units sold' });
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
@@ -62,6 +62,11 @@ export class AxisStylingComponent {
   protected onTicks(axis: 'x' | 'y', event: Event): void {
     const ticks = (event.target as HTMLInputElement).valueAsNumber;
     this.axisSignal(axis).update(a => ({ ...a, ticks }));
+  }
+
+  protected onLabel(axis: 'x' | 'y', event: Event): void {
+    const label = (event.target as HTMLInputElement).value || undefined;
+    this.axisSignal(axis).update(a => ({ ...a, label }));
   }
 
   protected onToggle(axis: 'x' | 'y', field: AxisToggle, event: Event): void {
@@ -98,10 +103,12 @@ export class AxisStylingComponent {
   // One PcacAxisConfig per axis. Every field is optional; leave the whole
   // object out for a default axis (labels only, 5 ticks, grid on).
   xAxis: {
+    label: 'Product', // axis title, centered below the tick labels
     tickSize: 12,     // tick mark length in px - setting it is what turns the marks on
     showLine: true    // solid line along the axis
   },
   yAxis: {
+    label: 'Units sold',
     ticks: 4,         // requested tick (and grid line) count
     showGrid: false   // no horizontal grid lines
   }

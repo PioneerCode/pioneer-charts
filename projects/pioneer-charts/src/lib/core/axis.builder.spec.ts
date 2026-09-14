@@ -20,7 +20,9 @@ function svgGroup(): AxisSvg {
 function axisConfig(xAxis: PcacAxisConfig = {}, yAxis: PcacAxisConfig = {}): IPcacAxisBuilderConfig<number, number> {
   return {
     svg: svgGroup(),
+    width: 200,
     height: 100,
+    margin: { top: 8, right: 16, bottom: 38, left: 58 },
     xScale: scaleLinear().domain([0, 100]).range([0, 200]),
     yScale: scaleLinear().domain([0, 100]).range([100, 0]),
     xAxis: resolveAxisConfig(xAxis),
@@ -98,6 +100,30 @@ describe('PcacAxisBuilder tick size', () => {
     // D3 treats the count as a hint; a [0,100] domain gives exactly these
     expect(config.svg.selectAll('.pcac-x-axis .tick').size()).toBe(3);
     expect(config.svg.selectAll('.pcac-y-axis .tick').size()).toBe(11);
+  });
+
+  it('draws a label centered along each axis, hugging the chart edge, only when given', () => {
+    const none = axisConfig();
+    builder.drawAxis(none);
+    expect(none.svg.selectAll('.pcac-axis-label').size()).toBe(0);
+
+    const config = axisConfig({ label: 'Day' }, { label: 'Revenue' });
+    builder.drawAxis(config);
+    const x = config.svg.select('.pcac-x-axis .pcac-axis-label');
+    expect(x.text()).toBe('Day');
+    expect(Number(x.attr('x'))).toBe(100);   // width / 2
+    expect(Number(x.attr('y'))).toBe(38);    // margin.bottom, baseline pulled up by dy
+    const y = config.svg.select('.pcac-y-axis .pcac-axis-label');
+    expect(y.text()).toBe('Revenue');
+    expect(y.attr('transform')).toBe('rotate(-90)');
+    expect(Number(y.attr('x'))).toBe(-50);   // -height / 2
+    expect(Number(y.attr('y'))).toBe(-58);   // -margin.left
+  });
+
+  it('does not draw a label for a hidden axis', () => {
+    const config = axisConfig({ hide: true, label: 'Day' });
+    builder.drawAxis(config);
+    expect(config.svg.selectAll('.pcac-axis-label').size()).toBe(0);
   });
 
   it('raiseAxes moves both axes after content drawn later, without taking mouse events', () => {

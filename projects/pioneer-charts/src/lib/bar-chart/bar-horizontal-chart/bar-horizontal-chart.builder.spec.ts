@@ -174,6 +174,13 @@ describe('BarHorizontalChartBuilder', () => {
 
   // `left` is measured from the y axis's bounding box (a constant 40 under the getBBox stub, so it
   // can't show the tick line growing here); `bottom` is the x axis's and must carry the extra length.
+  it('adds the y label\'s space on top of the measured label width', () => {
+    builder.buildChart(elm, { ...config(), yAxis: { label: 'Product' } });
+    expect(builder.margin.left).toBe(40 + 18);
+    expect(builder.width).toBe(800 - 58 - 16);
+    expect(builder.svg.select('.pcac-y-axis .pcac-axis-label').text()).toBe('Product');
+  });
+
   it('reserves a longer x tick in the bottom margin', () => {
     builder.buildChart(elm, { ...config(), xAxis: { tickSize: 16 } });
     expect(builder.margin.bottom).toBe(30);

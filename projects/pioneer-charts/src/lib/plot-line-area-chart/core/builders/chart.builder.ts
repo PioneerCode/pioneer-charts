@@ -87,7 +87,9 @@ export class PlaChartBuilder extends PcacChart {
         // Update axis
         this.axisBuilder.drawXAxis({
           svg: this.svg,
+          width: this.width,
           height: this.height,
+          margin: this.margin,
           xScale: newX,
           yScale: this.scales.y,
           xAxis: this.xAxis,
@@ -145,7 +147,9 @@ export class PlaChartBuilder extends PcacChart {
 
     this.axisBuilder.drawAxis({
       svg: this.svg,
+      width: this.width,
       height: this.height,
+      margin: this.margin,
       xScale: this.scales.x,
       yScale: this.scales.y,
       xAxis: this.xAxis,

@@ -82,7 +82,9 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
+      width: this.width,
       height: this.height,
+      margin: this.margin,
       xScale: this.xScaleStacked,
       yScale: this.yScale,
       xAxis: this.xAxis,

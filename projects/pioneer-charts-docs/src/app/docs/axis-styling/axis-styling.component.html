@@ -2,7 +2,7 @@
   <p class="lead" id="axis-styling">The bar, line, area and plot charts take one <code>PcacAxisConfig</code> per
     axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks, no tick marks,
     no axis line, and a grid on one axis only &mdash; and each of those is a field on the object: <b>hide</b>,
-    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b> and <b>showLine</b>.
+    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b>, <b>showLine</b> and <b>label</b>.
   </p>
 
   <section class="pc-doc-section">
@@ -14,6 +14,11 @@
       <div class="pc-axis-styling-controls">
         <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
         @let a = axis === 'x' ? xAxis() : yAxis();
+
+        <label [for]="'pc-axis-' + axis + '-label'">label</label>
+        <input [id]="'pc-axis-' + axis + '-label'" type="text" [value]="a.label ?? ''" (input)="onLabel(axis, $event)"
+          placeholder="none" />
+        <span></span>
 
         <label [for]="'pc-axis-' + axis + '-ticks'">ticks</label>
         <input [id]="'pc-axis-' + axis + '-ticks'" type="range" min="0" max="12" step="1" [value]="a.ticks"
@@ -100,6 +105,11 @@
         there are. With <b>showGrid</b> unset a chart draws the one grid it always has &mdash; the y axis's on
         vertical bar and line/area/plot charts, the x axis's on the horizontal bar chart; set it on either axis
         to turn that grid on or off. On line, area and plot charts the x axis's grid follows zoom and pan.
+      </li>
+      <li>
+        <b>A label titles the axis.</b> It sits centered along the axis at the chart's edge (rotated for the
+        y axis), and the margin grows by 18px to fit it, so the plot shrinks by that much. Clear it to get the
+        room back.
       </li>
       <li>
         <b>Axis lines are separate from tick marks.</b> <b>showLine</b> draws the line along the axis with or without

@@ -17,6 +17,13 @@
   input[type="checkbox"] {
     justify-self: start;
   }
+
+  input[type="text"] {
+    font: inherit;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid rgba(colors.$primary, 0.3);
+    border-radius: 3px;
+  }
 }
 
 .pc-axis-styling-heading {

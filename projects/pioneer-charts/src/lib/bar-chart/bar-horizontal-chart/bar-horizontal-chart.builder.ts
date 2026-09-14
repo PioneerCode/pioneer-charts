@@ -73,7 +73,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
     if (!this.yAxis.hide) {
-      this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, this.yAxis.tickSize);
+      this.setHorizontalMarginsBasedOnContent(chartElm, config.data, this.yScaleStacked, this.yAxis.tickSize,
+        this.yAxis.label ? PcacChart.AXIS_LABEL_SPACE : 0);
     }
 
     this.xScale.range([0, this.width]);
@@ -83,7 +84,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis({
       svg: this.svg,
+      width: this.width,
       height: this.height,
+      margin: this.margin,
       xScale: this.xScale,
       yScale: this.yScaleStacked,
       xAxis: this.xAxis,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft, AxisScale, AxisDomain } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PcacFormatEnum, PcacResolvedAxisConfig } from './chart.model';
+import { PcacChartMargin, PcacFormatEnum, PcacResolvedAxisConfig } from './chart.model';
 import { format } from 'd3-format';
 
 /**
@@ -12,7 +12,10 @@ import { format } from 'd3-format';
  */
 export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain, YDomain extends AxisDomain = AxisDomain> {
   svg: Selection<SVGGElement, unknown, BaseType, unknown>;
+  /** Plot area size - the axes' own lengths - and the chart's margins, which position a `label`. */
+  width: number;
   height: number;
+  margin: PcacChartMargin;
   xScale: AxisScale<XDomain>;
   yScale: AxisScale<YDomain>;
   /**
@@ -24,7 +27,9 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * marks, labels hugging the axis), hence the `!== undefined` checks below. `showLine` adds
    * `pcac-axis-line`, which un-hides D3's `.domain` path the same way. The domain path keeps
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
-   * bare rule; that's D3's standard look and is left as-is.
+   * bare rule; that's D3's standard look and is left as-is. `label` is drawn inside the axis group
+   * (so it's raised and non-interactive along with it), centered along the axis and hugging the
+   * chart's outer edge: `margin.bottom` below the x axis, `margin.left` left of the y axis.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
@@ -76,13 +81,26 @@ export class PcacAxisBuilder {
       }
     }
 
-    config.svg.append('g')
+    const group = config.svg.append('g')
       .attr('class', 'pcac-y-axis')
       // Axes are raised above the interactive overlays (see raiseAxes) and take no mouse events
       .attr('pointer-events', 'none')
       .classed('pcac-axis-tick-marks', config.yAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.yAxis.showLine)
       .call(yAxis);
+
+    if (config.yAxis.label) {
+      // Rotated to read bottom-to-top; after the rotation x runs up the axis and y runs left,
+      // so this is centered on the axis with its top edge at the SVG's left edge.
+      group.append('text')
+        .attr('class', 'pcac-axis-label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -config.height / 2)
+        .attr('y', -config.margin.left)
+        .attr('dy', '1em')
+        .attr('text-anchor', 'middle')
+        .text(config.yAxis.label);
+    }
   }
 
   drawXAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>) {
@@ -119,12 +137,23 @@ export class PcacAxisBuilder {
       }
     }
 
-    config.svg.append('g')
+    const group = config.svg.append('g')
       .attr('class', 'pcac-x-axis')
       .attr('pointer-events', 'none')
       .classed('pcac-axis-tick-marks', config.xAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.xAxis.showLine)
       .attr('transform', 'translate(0,' + config.height + ')')
       .call(xAxis);
+
+    if (config.xAxis.label) {
+      // Centered on the axis, baseline just above the SVG's bottom edge
+      group.append('text')
+        .attr('class', 'pcac-axis-label')
+        .attr('x', config.width / 2)
+        .attr('y', config.margin.bottom)
+        .attr('dy', '-0.35em')
+        .attr('text-anchor', 'middle')
+        .text(config.xAxis.label);
+    }
   }
 }

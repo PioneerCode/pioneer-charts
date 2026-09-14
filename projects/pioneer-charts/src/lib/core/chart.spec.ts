@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacChart } from './chart';
-import { PcacChartConfig } from './chart.model';
+import { PcacAxisChartConfig, PcacChartConfig } from './chart.model';
 
 /**
  * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth`/`clientHeight`
@@ -143,6 +143,175 @@ describe('PcacChart', () => {
     it('still uses height verbatim when heightFull is off, however tall the container is', () => {
       chart.initializeChartState(chartElm(800, 900), config(200));
       expect(chart.height).toBe(200);
+    });
+  });
+
+  describe('reserveTickSizeMargins', () => {
+    it('leaves the default margins alone when no tick size is given', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, undefined);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('is a no-op at D3\'s own default tick size', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(PcacChart.DEFAULT_TICK_SIZE, PcacChart.DEFAULT_TICK_SIZE);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('grows bottom for a longer x tick and left for a longer y tick, by the delta from the default', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, 26);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 30, left: 60 });
+    });
+
+    it('hands the difference back to the plot area for a shorter tick', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(0, 0);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 14, left: 34 });
+    });
+
+    it('only touches the axis a size was given for', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, 20);
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 54 });
+    });
+
+    it('shrinks the measured plot area, so the labels stay inside the SVG', () => {
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+      const defaultWidth = chart.width;
+
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(undefined, 26);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.width).toBe(defaultWidth - 20);
+    });
+
+    it('takes a taller bottom margin out of the plot height, so the SVG does not grow', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(30);
+      expect(chart.height).toBe(190);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(200 + 8 + 20);
+    });
+
+    it('gives a shorter x tick\'s room back to the plot height', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(0, undefined);
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(14);
+      expect(chart.height).toBe(206);
+    });
+
+    it('applies the same reduction to the heightFull floor', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      // auto-height container: nothing to fill, so the floor is what comes back
+      chart.initializeChartState(chartElm(800, 0), heightFullConfig(200));
+
+      expect(chart.height).toBe(190);
+    });
+
+    it('forgets the reserved height on resetMargin', () => {
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.height).toBe(200);
+    });
+  });
+
+  describe('initializeAxisState', () => {
+    function axisConfig(overrides: Partial<PcacAxisChartConfig> = {}): PcacAxisChartConfig {
+      return { ...config(200), ...overrides };
+    }
+
+    it('resolves missing axes to defaults, so an object-literal config needs neither', () => {
+      chart.initializeAxisState(axisConfig(), 'y');
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false });
+      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false });
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('showGrid defaults on for the chart\'s own grid axis and off for the other, unless set', () => {
+      chart.initializeAxisState(axisConfig(), 'x');
+      expect(chart.xAxis.showGrid).toBe(true);
+      expect(chart.yAxis.showGrid).toBe(false);
+
+      chart.initializeAxisState(axisConfig({ xAxis: { showGrid: false }, yAxis: { showGrid: true } }), 'x');
+      expect(chart.xAxis.showGrid).toBe(false);
+      expect(chart.yAxis.showGrid).toBe(true);
+    });
+
+    it('fills in only what an axis leaves out', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { ticks: 3, showLine: true } }), 'y');
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true });
+    });
+
+    it('a hidden y axis gives left and top to the plot; a hidden x axis gives bottom and right', () => {
+      const cfg = axisConfig({ yAxis: { hide: true } });
+      chart.initializeAxisState(cfg, 'y');
+      expect(chart.margin).toEqual({ top: 0, right: 16, bottom: 20, left: 0 });
+      expect(cfg.height).toBe(208);
+
+      const cfg2 = axisConfig({ xAxis: { hide: true } });
+      chart.initializeAxisState(cfg2, 'y');
+      expect(chart.margin).toEqual({ top: 8, right: 0, bottom: 0, left: 40 });
+      expect(cfg2.height).toBe(220);
+    });
+
+    it('keeps hiddenAxisMargin on a hidden axis\'s sides instead of 0', () => {
+      const cfg = axisConfig({ xAxis: { hide: true }, yAxis: { hide: true } });
+      chart.initializeAxisState(cfg, 'y', 8);
+      expect(chart.margin).toEqual({ top: 8, right: 8, bottom: 8, left: 8 });
+      // top was already 8, so only bottom's 12 moves into the plot
+      expect(cfg.height).toBe(212);
+    });
+
+    it('does not reserve tick-size room for an axis that is hidden', () => {
+      const cfg = axisConfig({ xAxis: { hide: true, tickSize: 30 }, yAxis: { tickSize: 30 } });
+      chart.initializeAxisState(cfg, 'y');
+      expect(chart.margin.bottom).toBe(0);
+      expect(chart.margin.left).toBe(40 + 24);
+      // and no reserved height either: the hidden x axis's bottom margin went wholly to the plot
+      expect(cfg.height).toBe(220);
+    });
+
+    it('reserves AXIS_LABEL_SPACE for a label, taking the x label\'s share out of the plot height', () => {
+      const cfg = axisConfig({ xAxis: { label: 'Day' }, yAxis: { label: 'Revenue' } });
+      chart.initializeAxisState(cfg, 'y');
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20 + 18, left: 40 + 18 });
+      chart.initializeChartState(chartElm(800), cfg);
+      expect(chart.height).toBe(200 - 18);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(228);
+    });
+
+    it('reserves AXIS_SUB_LABEL_SPACE for sub labels, on top of a label\'s space', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { subLabels: { min: 'Low' } }, yAxis: { label: 'Y', subLabels: { max: 'High' } } }), 'y');
+      expect(chart.margin.bottom).toBe(20 + 16);
+      expect(chart.margin.left).toBe(40 + 18 + 16);
+    });
+
+    it('reserves nothing for an empty subLabels object', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { subLabels: {} } }), 'y');
+      expect(chart.margin.bottom).toBe(20);
+    });
+
+    it('reserves nothing for a label on a hidden axis', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { hide: true, label: 'Day' } }), 'y');
+      expect(chart.margin.bottom).toBe(0);
+    });
+
+    it('starts each build from the default margins', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { hide: true }, yAxis: { hide: true, tickSize: 30 } }), 'y');
+      chart.initializeAxisState(axisConfig(), 'y');
+      expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
     });
   });
 });

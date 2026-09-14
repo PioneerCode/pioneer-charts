@@ -57,14 +57,8 @@ export class PlaChartBuilder extends PcacChart {
       data: []
     }));
 
-    this.resetMargin();
-    if (this.config.hideAxis) {
-      this.config.height = this.config.height + 12;
-      this.margin.top = 8;
-      this.margin.bottom = 8;
-      this.margin.left = 8;
-      this.margin.right = 8;
-    }
+    // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
+    this.initializeAxisState(this.config, 'y', 8);
 
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
@@ -91,15 +85,7 @@ export class PlaChartBuilder extends PcacChart {
         const newX = event.transform.rescaleX(this.scales.x);
 
         // Update axis
-        this.axisBuilder.drawXAxis({
-          svg: this.svg,
-          numberOfTicks: this.config.numberOfTicks || 5,
-          height: this.height,
-          xScale: newX,
-          yScale: this.scales.y,
-          yFormat: this.config.yFormat,
-          xFormat: this.config.xFormat
-        });
+        this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, this.scales.y, this.config.xFormat, this.config.yFormat));
 
         // Update lines/areas. Fresh generators against the rescaled x, so they go through the
         // same getXFormat() as the dots below - positioning by bare index here (which this used
@@ -118,6 +104,16 @@ export class PlaChartBuilder extends PcacChart {
         // points consecutively, shoving the second series' points off to the right on zoom.
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
           .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, newX));
+
+        // The vertical grid hangs off the x ticks too, so redraw it against the rescaled x and
+        // drop it back underneath everything (append puts it on top).
+        this.svg.selectAll('.pcac-grid-vertical').remove();
+        this.drawGrids(newX, this.scales.y, 'x');
+        this.svg.selectAll('.pcac-grid-vertical').lower();
+
+        // drawXAxis re-appends the x axis at the end of the group, above the dots; put them back
+        // on top so a point on the baseline isn't covered (see drawChart's draw order).
+        this.svg.selectAll('.dots').raise();
       });
     }
 
@@ -129,28 +125,9 @@ export class PlaChartBuilder extends PcacChart {
     this.attachZoomBehavior();
     this.createReusableClipPath(); 
 
-    if (!config.hideAxis) {
-      this.axisBuilder.drawAxis({
-        svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
-        height: this.height,
-        xScale: this.scales.x,
-        yScale: this.scales.y,
-        yFormat: config.yFormat,
-        xFormat: config.xFormat
-      });
-    }
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y, config.xFormat, config.yFormat));
 
-    if (!config.hideGrid) {
-      this.gridBuilder.drawHorizontalGrid({
-        svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
-        width: this.width,
-        height: this.height,
-        xScale: this.scales.x,
-        yScale: this.scales.y
-      });
-    }
+    this.drawGrids(this.scales.x, this.scales.y);
 
     this.drawLineArea(config, type);
 
@@ -166,6 +143,9 @@ export class PlaChartBuilder extends PcacChart {
       });
     }
 
+    // Axes above the lines/areas (so an axis line isn't covered by a series sitting at x = 0),
+    // but the dots above the axes: a point on the baseline or the y axis stays whole.
+    this.axisBuilder.raiseAxes(this.svg);
     this.drawDots(config);
   }
 

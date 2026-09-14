@@ -17,48 +17,68 @@ export interface IPcacGridBuilderConfig<XDomain extends AxisDomain = AxisDomain,
   height: number;
   xScale: AxisScale<XDomain>;
   yScale: AxisScale<YDomain>;
+  /**
+   * Tick count hint for a continuous scale (D3's `ticks(n)`); a category (band) scale ignores it
+   * and gets one line per category.
+   */
   numberOfTicks: number;
 }
 
 /**
  * `AxisScale` (the shape shared by every D3 scale usable here) doesn't declare `.ticks()` -
- * band scales don't have one. The grid, unlike the axis builder, always calls `.ticks()`
- * directly on whichever scale is driving its grid lines, so we assert that narrower shape
- * locally at the one call site that needs it rather than widening the whole config type -
- * by convention the scale actually driving grid lines is always a continuous one.
+ * band scales don't have one - nor `.bandwidth()`, which only band scales have. Either kind can
+ * drive a grid: a continuous scale puts a line at each tick, a band scale one through the middle
+ * of each category, so `gridLines()` sniffs for `.ticks` and handles both.
  */
 type TickableAxisScale<Domain extends AxisDomain> = AxisScale<Domain> & { ticks(count?: number): Domain[] };
+type BandAxisScale<Domain extends AxisDomain> = AxisScale<Domain> & { bandwidth(): number };
+
+/** Where along its axis each grid line sits, in pixels. */
+function gridLines<Domain extends AxisDomain>(scale: AxisScale<Domain>, numberOfTicks: number): number[] {
+  if (typeof (scale as TickableAxisScale<Domain>).ticks === 'function') {
+    return (scale as TickableAxisScale<Domain>).ticks(numberOfTicks).map(d => scale(d) ?? 0);
+  }
+  const band = scale as BandAxisScale<Domain>;
+  const half = typeof band.bandwidth === 'function' ? band.bandwidth() / 2 : 0;
+  return scale.domain().map(d => (scale(d) ?? 0) + half);
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class PcacGridBuilder {
+  /**
+   * Vertical lines, one per x-axis tick (or category), running the plot's full height. The group
+   * is classed `pcac-grid-vertical` so a chart can find and redraw just this grid - the
+   * line/area/plot charts do on zoom, when the x ticks move.
+   */
   drawVerticalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
-    const xScale = config.xScale as TickableAxisScale<XDomain>;
     config.svg.append('g')
-      .attr('class', 'pcac-grid')
+      .attr('class', 'pcac-grid pcac-grid-vertical')
       .selectAll('g.rule')
-      .data(xScale.ticks(config.numberOfTicks))
+      .data(gridLines(config.xScale, config.numberOfTicks))
       .enter().append('svg:g')
       .attr('class', 'pcac-grid-rule')
-      .attr('transform', (d): string => (`translate(${xScale(d)}, 0)`))
+      .attr('transform', (x): string => (`translate(${x}, 0)`))
       .append('svg:line')
       .attr('y1', 0)
       .attr('y2', config.height)
       .attr('class', (d, i: number) => (i === 0 ? 'pcac-grid-rule-last' : ''));
   }
 
+  /**
+   * Horizontal lines, one per y-axis tick (or category), running the plot's full width.
+   */
   drawHorizontalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
-    const yScale = config.yScale as TickableAxisScale<YDomain>;
     config.svg.append('g')
-      .attr('class', 'pcac-grid')
+      .attr('class', 'pcac-grid pcac-grid-horizontal')
       .selectAll('g.pcac-grid-rule')
-      .data(yScale.ticks(config.numberOfTicks))
+      .data(gridLines(config.yScale, config.numberOfTicks))
       .enter().append('svg:g')
       .attr('class', 'pcac-grid-rule')
       .append('svg:line')
-      .attr('y1', (d) => yScale(d) ?? null)
-      .attr('y2', (d) => yScale(d) ?? null)
+      .attr('y1', (y) => y)
+      .attr('y2', (y) => y)
       .attr('x1', 0)
       .attr('x2', config.width)
       .attr('class', (_, i) => (i === 0 ? 'pcac-grid-rule-last' : ''));

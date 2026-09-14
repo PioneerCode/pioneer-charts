@@ -42,13 +42,11 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
-    // Shallow copy: adjustForHiddenAxis() rewrites `height`, and that must not land on the
-    // consumer's own config object (it previously did, growing it by the margins on first build).
+    // Shallow copy: initializeAxisState() rewrites `height` for hidden axes, and that must not
+    // land on the consumer's own config object (it previously did, growing it by the margins on
+    // first build).
     config = { ...config };
-    this.resetMargin();
-    if (config.hideAxis) {
-      this.adjustForHiddenAxis(config);
-    }
+    this.initializeAxisState(config, 'y');
     if (!this.initializeChartState(chartElm, config)) {
       return;
     }
@@ -60,29 +58,6 @@ export class BarVerticalChartBuilder extends PcacChart {
     }
     this.buildScales(config);
     this.drawChart(chartElm, config);
-  }
-
-  private adjustForHiddenAxis(config: PcacBarVerticalChartConfig) {
-    const hasGroupLabel = this.hasGroupLabel(config);
-
-    config.height = config.height + this.margin.top;
-    if (!hasGroupLabel) {
-      config.height = config.height + this.margin.bottom;
-    }
-    this.margin.top = 0;
-    this.margin.bottom = hasGroupLabel ? this.margin.bottom : 0;
-    this.margin.left = 0;
-    this.margin.right = 0;
-  }
-
-  private hasGroupLabel(config: PcacBarVerticalChartConfig) {
-    let hasGroupLabel = false;
-    config.data.forEach(node => {
-      if (node.key) {
-        hasGroupLabel = true;
-      }
-    });
-    return hasGroupLabel;
   }
 
   private buildScales(config: PcacBarVerticalChartConfig) {
@@ -105,27 +80,10 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis({
-      svg: this.svg,
-      numberOfTicks: config.numberOfTicks || 5,
-      height: this.height,
-      xScale: this.xScaleStacked,
-      yScale: this.yScale,
-      xFormat: PcacFormatEnum.None,
-      yFormat: config.tickFormat || PcacFormatEnum.None,
-      hideYAxis: config.hideAxis
-    });
-    if (!config.hideGrid) {
-      this.gridBuilder.drawHorizontalGrid({
-        svg: this.svg,
-        numberOfTicks: config.numberOfTicks || 5,
-        width: this.width,
-        height: this.height,
-        xScale: this.xScaleStacked,
-        yScale: this.yScale
-      });
-    }
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScaleStacked, this.yScale, PcacFormatEnum.None, config.tickFormat || PcacFormatEnum.None));
+    this.drawGrids(this.xScaleStacked, this.yScale);
     this.addGroups(config);
+    this.axisBuilder.raiseAxes(this.svg);
   }
 
   private addGroups(config: PcacBarVerticalChartConfig) {

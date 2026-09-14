@@ -36,4 +36,28 @@
   line {
     stroke: none;
   }
+
+  // Tick marks and the axis line are hidden by default (above) and always have been, so they
+  // only appear on a chart that asks for them - `PcacAxisConfig.tickSize` for the marks,
+  // `showLine` for the line - via a class the axis builder adds for that axis. Nothing changes
+  // for charts that don't. Both share one color so a mark reads as part of its axis rather than a
+  // separate, fainter element.
+  &.pcac-axis-tick-marks .tick line,
+  &.pcac-axis-line .domain {
+    stroke: imports.$gray-900;
+  }
+
+  // The axis `label` (its title). `PcacChart.AXIS_LABEL_SPACE` reserves room for this size plus
+  // a gap, so change both together.
+  .pcac-axis-label {
+    font-size: 12px;
+    font-weight: 600;
+    fill: imports.$gray-700;
+  }
+
+  // Min / mid / max `subLabels`; `PcacChart.AXIS_SUB_LABEL_SPACE` is sized to this.
+  .pcac-axis-sub-label {
+    font-size: 11px;
+    fill: imports.$gray-600;
+  }
 }

@@ -58,9 +58,8 @@ export class DataContractComponent {
 
   barChartConfig = `import { IPcacChartConfig } from '../core/chart.model';
 
-export interface IPcacBarVerticalChartConfig extends IPcacChartConfig {
+export interface IPcacBarVerticalChartConfig extends IPcacAxisChartConfig {
   domainMax: number;
-  numberOfTicks: number;
   ...
 }`;
 

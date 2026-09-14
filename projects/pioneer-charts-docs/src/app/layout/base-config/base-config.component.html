@@ -62,16 +62,56 @@
       </td>
     </tr>
     }
-    @if(includeHideAxisAndGrid()) {
+    @if(includeAxes()) {
     <tr>
-      <td>hideAxis</td>
-      <td>If true, hide chart axis.</td>
-    </tr>
-    }
-    @if(includeHideAxisAndGrid()) {
-    <tr>
-      <td>hideGrid</td>
-      <td>If true, hide chart grid.</td>
+      <td>xAxis / yAxis</td>
+      <td>Per-axis settings, one <code>PcacAxisConfig</code> for each axis. Every field is optional; omit the
+        whole object for a default axis. See the <a routerLink="/docs/guides/axis-styling">Axis Styling</a>
+        guide for a live demo.
+        <ul>
+          <li>
+            <b>hide</b> &mdash; if true, the axis isn't drawn at all and the margins it would have occupied go
+            to the plot (left and top for the y axis, bottom and right for the x axis); the chart's overall size
+            doesn't change. Default false.
+          </li>
+          <li>
+            <b>showGrid</b> &mdash; draw grid lines from this axis's ticks (or, on a category axis, from each
+            category) across the plot: horizontal lines for the y axis, vertical for the x. Left unset, each chart
+            keeps the grid it has always drawn &mdash; the y axis's on vertical bar and line/area/plot charts, the
+            x axis's on the horizontal bar chart &mdash; and no other. Set it to turn either grid on or off.
+          </li>
+          <li>
+            <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the
+            number of grid lines. Ignored by a category axis, which has one tick per category. Default 5.
+          </li>
+          <li>
+            <b>tickSize</b> &mdash; length in pixels of the small tick marks. Marks are not drawn unless this is
+            set, so setting a size is also what turns them on (6 is D3's usual length); <code>0</code> keeps them
+            off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
+            by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
+            Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>.
+          </li>
+          <li>
+            <b>showLine</b> &mdash; if true, draw a solid line along the axis itself (with D3's short end-caps).
+            Independent of the tick marks. Default false. Stroked with the theme's <code>$gray-900</code> via
+            <code>.pcac-axis-line .domain</code>.
+          </li>
+          <li>
+            <b>label</b> &mdash; a title for the axis, drawn centered along it just inside the chart's edge (below
+            the tick labels for the x axis; rotated to read bottom-to-top, left of them, for the y axis). The
+            margin grows by 18px to make room, shrinking the plot area. Not drawn on a hidden axis. Styled by the
+            theme's <code>.pcac-axis-label</code> rule.
+          </li>
+          <li>
+            <b>subLabels</b> &mdash; <code>{{ '{' }} min?, mid?, max? {{ '}' }}</code>: up to three short labels placed
+            by position along the axis, in their own row just outside the tick labels (and inside the <b>label</b>,
+            if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
+            so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
+            bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
+            <code>.pcac-axis-sub-label</code> rule.
+          </li>
+        </ul>
+      </td>
     </tr>
     }
   </tbody>

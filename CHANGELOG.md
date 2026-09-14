@@ -55,6 +55,26 @@
     while on a documentation page) after navigating by any means other than clicking a footer link
     itself.
 
+### Breaking
+  - The chart-wide `numberOfTicks`, `hideAxis` and `hideGrid` config fields on the bar and
+    line/area/plot charts are gone, replaced by the per-axis `xAxis` / `yAxis` objects (see Added).
+    Migration:
+
+    | Before | After |
+    | --- | --- |
+    | `numberOfTicks: n` | `xAxis: { ticks: n }, yAxis: { ticks: n }` (or just the axis that needs it) |
+    | `hideGrid: true` | `yAxis: { showGrid: false }` on vertical bar and line/area/plot charts; `xAxis: { showGrid: false }` on the horizontal bar chart |
+    | `hideAxis: true` on a vertical bar chart | `yAxis: { hide: true }` (it only ever hid the y axis); add `xAxis: { hide: true }` if there were no group labels to keep |
+    | `hideAxis: true` on a horizontal bar chart | `xAxis: { hide: true }` (it only ever hid the x axis) |
+    | `hideAxis: true` on a line/area/plot chart | `xAxis: { hide: true }, yAxis: { hide: true }` |
+
+    Hiding is now per axis and works the same way on every chart: the hidden axis's margins (left
+    and top for the y axis, bottom and right for the x axis) go to the plot area, so the chart's
+    overall size is unchanged. The chart configs now extend a new `PcacAxisChartConfig` base
+    (`PcacChartConfig` + `xAxis`/`yAxis`); `IPcacAxisBuilderConfig` takes resolved `xAxis`/`yAxis`
+    in place of its old per-field inputs, for anyone calling `PcacAxisBuilder` directly.
+  - `PcacPieChartConfig.numberOfTicks` was removed; the pie chart has no axes and never read it.
+
 ### Changed
   - **Breaking:** `isStacked` bar charts now actually stack. Each bar's `value` is its own segment
     and segments are placed end to end in data order, so a group's total is the sum of its values
@@ -84,6 +104,33 @@
     abandoned Bootstrap integration.
 
 ### Added
+  - Per-axis configuration: the bar (vertical and horizontal) and line/area/plot chart configs now
+    take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, showGrid, ticks, tickSize,
+    showLine, label, subLabels }`, every field optional). Five of those are new:
+    - `showGrid` turns the grid lines from that axis's ticks on or off - so every chart can now
+      draw a grid on both axes (vertical lines from the x axis, horizontal from the y), including
+      through each category of a category axis. Left unset, a chart draws the one grid it always
+      has, and no other. On line/area/plot charts the x axis's grid follows zoom.
+    - `tickSize` draws tick marks along that axis at the given length in pixels. Charts have never
+      shown tick marks (the theme hides them), and still don't unless this is set - so existing
+      charts are unaffected; `0` keeps them off but pulls the labels in. Labels follow the marks
+      and the chart's margins grow to match, so the plot area shrinks to fit them; the axis line's
+      end-caps are unaffected.
+    - `showLine` draws a solid line along that axis (D3's domain path). Off by default; independent
+      of the tick marks. Axes are now drawn above the chart's content (bars, lines, areas) so the
+      line isn't covered by anything sitting at the axis, with the line/area/plot charts' dots
+      kept above the axes so a point on the axis stays whole.
+    - `label` titles the axis: drawn centered along it at the chart's edge (below the x axis's
+      tick labels; rotated to read bottom-to-top left of the y axis's), with the margin growing
+      18px to fit it. Styled by a new `.pcac-axis-label` theme rule.
+    - `subLabels: { min?, mid?, max? }` places up to three short labels by position along the
+      axis - start, center, end - in their own row between the tick labels and the `label`,
+      anchored inside the axis's span (rotated along the y axis). The margin grows 16px while any
+      is set. Styled by a new `.pcac-axis-sub-label` theme rule.
+
+    Both take the theme's `$gray-900` via new `.pcac-axis-tick-marks .tick line` and
+    `.pcac-axis-line .domain` rules. The docs site has a new "Axis Styling" guide with a live demo.
+    The other three fields replace `numberOfTicks`, `hideAxis` and `hideGrid` - see Breaking.
   - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
     pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
     with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an

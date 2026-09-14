@@ -1,11 +1,11 @@
 import { axisLeft, AxisDomain, AxisScale } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PcacAxisBuilder } from './axis.builder';
+import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
 import { ElementRef, TemplateRef, inject } from '@angular/core';
-import { PcacChartConfig, PcacData, PcacFormatEnum } from './chart.model';
+import { PCAC_AXIS_LABEL_SPACE, PCAC_AXIS_SUB_LABEL_SPACE, PcacAxisChartConfig, PcacChartConfig, PcacChartMargin, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, axisLabelSpace, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacTooltipContext } from './tooltip.directive';
@@ -26,13 +26,6 @@ export interface PcacTooltipOptions {
 }
 
 
-export interface PcacChartMargin {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-}
-
 export class PcacChart {
   axisBuilder = inject(PcacAxisBuilder);
   gridBuilder = inject(PcacGridBuilder);
@@ -40,8 +33,23 @@ export class PcacChart {
   tooltipBuilder = inject(PcacTooltipBuilder);
   colorService = inject(PcacColorService);
 
+  /** D3's own `tickSizeInner` default, which the default `margin` below is sized around. */
+  static readonly DEFAULT_TICK_SIZE = 6;
+
+  /** See `PCAC_AXIS_LABEL_SPACE` / `PCAC_AXIS_SUB_LABEL_SPACE` in chart.model.ts. */
+  static readonly AXIS_LABEL_SPACE = PCAC_AXIS_LABEL_SPACE;
+  static readonly AXIS_SUB_LABEL_SPACE = PCAC_AXIS_SUB_LABEL_SPACE;
+
   margin: PcacChartMargin = { top: 8, right: 16, bottom: 20, left: 40 };
   private readonly defaultMargin: PcacChartMargin = { ...this.margin };
+
+  /**
+   * The current build's per-axis settings with defaults applied, set by `initializeAxisState()`.
+   * Builders read these (not the raw `config.xAxis`) everywhere: drawing the axes, choosing
+   * whether to draw a grid, how many grid lines, and so on. Pie has no axes and never sets them.
+   */
+  xAxis: PcacResolvedAxisConfig = resolveAxisConfig();
+  yAxis: PcacResolvedAxisConfig = resolveAxisConfig();
   svg!: Selection<SVGGElement, unknown, BaseType, unknown>;
   width = 400;
   height = 400;
@@ -67,6 +75,13 @@ export class PcacChart {
   private lastHeightFull = false;
 
   /**
+   * How much `initializeAxisState()` last added to `margin.bottom` for tick marks and axis
+   * labels (negative when a short tick took some away). `resolveHeight()` subtracts it from the
+   * plot height so the SVG's total height doesn't change with either. Reset alongside the margins.
+   */
+  private reservedTickHeight = 0;
+
+  /**
    * Resolves the consumer's projected `<ng-template pcacTooltip>`, if any. Each chart component
    * points this at its own `contentChild(PcacTooltipDirective)` query. It's a getter rather than
    * a captured value so it's read lazily, at hover time, from inside a D3 listener: reading the
@@ -76,14 +91,137 @@ export class PcacChart {
   tooltipTemplate: () => TemplateRef<PcacTooltipContext> | undefined = () => undefined;
 
   /**
-   * Puts `margin` back to its defaults. Builders must call this at the top of `buildChart()`,
-   * before any per-build adjustment (`hideAxis` zeroing sides, label widths measured into
-   * `margin.left`): `margin` lives on this per-chart instance and so persists between builds,
-   * and without a reset an adjustment made for one config silently carries into the next -
-   * e.g. axes drawn with no room after `hideAxis` flips back to false.
+   * Puts `margin` back to its defaults. `initializeAxisState()` calls this first thing, before any
+   * per-build adjustment (hidden axes giving sides back, tick sizes growing them, label widths
+   * measured into `margin.left`): `margin` lives on this per-chart instance and so persists
+   * between builds, and without a reset an adjustment made for one config silently carries into
+   * the next - e.g. axes drawn with no room after `hide` flips back to false.
    */
   resetMargin(): void {
     this.margin = { ...this.defaultMargin };
+    this.reservedTickHeight = 0;
+  }
+
+  /**
+   * Resolves the config's `xAxis`/`yAxis` onto this chart and sets the margins up for them. Axis
+   * charts call this at the top of `buildChart()`, on their own copy of the config (it rewrites
+   * `config.height` for hidden axes), before `initializeChartState()` measures the plot area.
+   * In order:
+   *
+   * 1. `resetMargin()`.
+   * 2. Tick marks: room for a non-default `tickSize` is reserved on each axis that will actually
+   *    be drawn (`reserveTickSizeMargins`).
+   * 3. Labels: `AXIS_LABEL_SPACE` is added to `bottom` / `left` for an axis with a `label`, and
+   *    `AXIS_SUB_LABEL_SPACE` for one with any `subLabels` (see `axisLabelSpace`), again only if
+   *    the axis will be drawn.
+   * 4. Hidden axes: an axis with `hide` gives its margins back to the plot. The y axis owns
+   *    `left` and `top` (the top margin is only there so the topmost y label isn't clipped), the
+   *    x axis `bottom` and `right` (likewise for the rightmost x label). Each reclaimed vertical
+   *    margin is added onto `config.height` so the SVG's total height stays what the consumer
+   *    configured; horizontally `initializeChartState()` picks the change up on its own.
+   *
+   * @param defaultGrid the axis whose grid this chart draws when the consumer hasn't said
+   * (`PcacAxisConfig.showGrid`): `'y'` for horizontal lines, `'x'` for vertical.
+   * @param hiddenAxisMargin what a hidden axis's sides shrink to, rather than 0. The
+   * line/area/plot charts keep 8px so a dot on the edge of the plot isn't clipped by the SVG.
+   */
+  initializeAxisState(config: PcacAxisChartConfig, defaultGrid: 'x' | 'y', hiddenAxisMargin = 0): void {
+    this.xAxis = resolveAxisConfig(config.xAxis, defaultGrid === 'x');
+    this.yAxis = resolveAxisConfig(config.yAxis, defaultGrid === 'y');
+    this.resetMargin();
+    this.reserveTickSizeMargins(
+      this.xAxis.hide ? undefined : this.xAxis.tickSize,
+      this.yAxis.hide ? undefined : this.yAxis.tickSize
+    );
+    if (!this.xAxis.hide) {
+      const space = axisLabelSpace(this.xAxis);
+      this.margin.bottom += space;
+      this.reservedTickHeight += space;
+    }
+    if (!this.yAxis.hide) {
+      this.margin.left += axisLabelSpace(this.yAxis);
+    }
+    if (this.yAxis.hide) {
+      config.height = config.height + this.margin.top - hiddenAxisMargin;
+      this.margin.top = hiddenAxisMargin;
+      this.margin.left = hiddenAxisMargin;
+    }
+    if (this.xAxis.hide) {
+      config.height = config.height + this.margin.bottom - hiddenAxisMargin;
+      this.margin.bottom = hiddenAxisMargin;
+      this.margin.right = hiddenAxisMargin;
+    }
+  }
+
+  /**
+   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales and
+   * formats is already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()`
+   * with a rescaled x, on zoom).
+   */
+  axisBuilderConfig<XDomain extends AxisDomain, YDomain extends AxisDomain>(
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, xFormat?: PcacFormatEnum, yFormat?: PcacFormatEnum
+  ): IPcacAxisBuilderConfig<XDomain, YDomain> {
+    return {
+      svg: this.svg,
+      width: this.width,
+      height: this.height,
+      margin: this.margin,
+      xScale,
+      yScale,
+      xAxis: this.xAxis,
+      yAxis: this.yAxis,
+      xFormat,
+      yFormat
+    };
+  }
+
+  /**
+   * Draws whichever grids the resolved axes ask for: vertical lines from the x axis's ticks,
+   * horizontal from the y's (`PcacAxisConfig.showGrid`). `which` restricts it to one axis - the
+   * line/area/plot charts redraw just the x grid against the rescaled x on zoom.
+   */
+  drawGrids<XDomain extends AxisDomain, YDomain extends AxisDomain>(
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, which: 'x' | 'y' | 'both' = 'both'
+  ): void {
+    const base = { svg: this.svg, width: this.width, height: this.height, xScale, yScale };
+    if (which !== 'y' && this.xAxis.showGrid) {
+      this.gridBuilder.drawVerticalGrid({ ...base, numberOfTicks: this.xAxis.ticks });
+    }
+    if (which !== 'x' && this.yAxis.showGrid) {
+      this.gridBuilder.drawHorizontalGrid({ ...base, numberOfTicks: this.yAxis.ticks });
+    }
+  }
+
+  /**
+   * Makes room in the margins for tick marks longer (or shorter) than D3's default. The default
+   * margins are sized around that default (`DEFAULT_TICK_SIZE`), and D3 places each tick label at
+   * tick length + padding, so a longer tick pushes its labels outward by exactly the difference -
+   * into space the margin doesn't have unless it grows by the same amount. Growing the margin here,
+   * *before* `initializeChartState()` measures the plot area, is what makes the chart shrink to fit
+   * its labels rather than pushing them off the edge of the SVG. A shorter tick hands the
+   * difference back to the plot area the same way.
+   *
+   * Horizontally that happens on its own: `initializeChartState()` derives `width` from the
+   * container minus the margins. Vertically it doesn't - `config.height` is the plot area, and
+   * the SVG is that plus the margins - so a taller bottom margin would grow the SVG instead. The
+   * delta is therefore also remembered in `reservedTickHeight` and taken back out of the plot
+   * height by `resolveHeight()`, keeping the chart's total footprint where the consumer put it.
+   *
+   * Called by `initializeAxisState()` right after `resetMargin()`, for the axes that will be
+   * drawn. Only the axis a tick size is given for is affected; `undefined` leaves that margin
+   * alone.
+   * @param xTickSize `tickSizeInner` for the bottom (x) axis, which lives in `margin.bottom`
+   * @param yTickSize `tickSizeInner` for the left (y) axis, which lives in `margin.left`
+   */
+  reserveTickSizeMargins(xTickSize?: number, yTickSize?: number): void {
+    if (xTickSize !== undefined) {
+      const bottom = Math.max(0, this.margin.bottom + xTickSize - PcacChart.DEFAULT_TICK_SIZE);
+      this.reservedTickHeight = bottom - this.margin.bottom;
+      this.margin.bottom = bottom;
+    }
+    if (yTickSize !== undefined) {
+      this.margin.left = Math.max(0, this.margin.left + yTickSize - PcacChart.DEFAULT_TICK_SIZE);
+    }
   }
 
   /**
@@ -155,10 +293,13 @@ export class PcacChart {
    * @param config Chart specific configuration
    */
   private resolveHeight(container: HTMLElement, config: PcacChartConfig): number {
+    // See `reserveTickSizeMargins()`: room made for longer ticks comes out of the plot area, not
+    // added on to the SVG. Applies to the floor in the `heightFull` case too, for the same reason.
+    const height = Math.max(0, config.height - this.reservedTickHeight);
     if (!config.heightFull) {
-      return config.height;
+      return height;
     }
-    return Math.max(config.height, container.clientHeight - this.margin.top - this.margin.bottom);
+    return Math.max(height, container.clientHeight - this.margin.top - this.margin.bottom);
   }
 
   /**
@@ -221,12 +362,19 @@ export class PcacChart {
    * In some cases, that state needs to be calculated based on the content that resides in that margin.
    * For example, labels on a horizontal bar chart are dynamic and such the margin needs to be calculated ahead of
    * chart axis construction.
+   *
+   * Measures with the y axis's own `tickSize` (the measured box spans the tick line as well as
+   * the label, so measuring at a different length would put the labels off by the difference)
+   * and adds its `axisLabelSpace()` back on top, since the measurement replaces whatever
+   * `initializeAxisState()` reserved for the label / sub labels.
    * @param chartElm Reference to SVG on dom
-   * @param data Generic multi-dimensional PcacData structure
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
-  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, data: PcacData[], yScale: AxisScale<Domain>): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): void {
     const axisY = axisLeft(yScale).ticks(5);
+    if (this.yAxis.tickSize !== undefined) {
+      axisY.tickSizeInner(this.yAxis.tickSize);
+    }
     let max = 0;
     select(chartElm.nativeElement).append('g')
       .call(axisY)
@@ -242,7 +390,8 @@ export class PcacChart {
     // double-counted it, and since `margin` persists on the builder between builds, the amount
     // double-counted grew on the next rebuild - the plot area came out narrower than the
     // container allowed and then shrank further after the first resize.
-    this.width = this.width + this.margin.left - max;
-    this.margin.left = max;
+    const left = max + axisLabelSpace(this.yAxis);
+    this.width = this.width + this.margin.left - left;
+    this.margin.left = left;
   }
 }

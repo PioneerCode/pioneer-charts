@@ -1,4 +1,4 @@
-import { PcacChartConfig, PcacFormatEnum } from '../core/chart.model';
+import { PcacAxisChartConfig, PcacFormatEnum } from '../core/chart.model';
 
 export enum PcacLineAreaPlotChartConfigType {
   Line = 'line',
@@ -16,12 +16,9 @@ export class PcacPointImageConfig {
   maxHeight: number = 16
 }
 
-export class PcacLineAreaChartConfig extends PcacChartConfig {
+export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   enableEffects: boolean = true
   enableZoom: boolean = true
-  numberOfTicks: number = 5
-  hideGrid: boolean = false
-  hideAxis: boolean = false
   yFormat: PcacFormatEnum = PcacFormatEnum.DatasetLength
   xFormat: PcacFormatEnum = PcacFormatEnum.DatasetLength
   yDomainMax!: number | string

@@ -21,12 +21,9 @@ function config(): PcacBarHorizontalChartConfig {
   return {
     height: 200,
     domainMax: 100,
-    numberOfTicks: 5,
     isStacked: false,
     thresholds: [],
     tickFormat: undefined as unknown as PcacBarHorizontalChartConfig['tickFormat'],
-    hideGrid: false,
-    hideAxis: false,
     spreadColorsPerGroup: false,
     colorOverride: { colors: [] },
     data: [
@@ -107,16 +104,33 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.width).toBe(800 - 40 - 16);
   });
 
-  // Margins persist on the builder between builds, so a hideAxis build must not leave the next
-  // (hideAxis: false) one drawing axes into zeroed margins.
-  it('restores the default margins when a later build turns hideAxis back off', () => {
-    // hideAxis here hides only the x axis; the y labels stay, so `left` is always re-measured
-    // from them (40px, per the getBBox stub) - it's the other three sides that must come back.
-    builder.buildChart(elm, { ...config(), hideAxis: true });
-    expect(builder.margin).toEqual({ top: 0, right: 0, bottom: 0, left: 40 });
+  // Margins persist on the builder between builds, so a build with a hidden axis must not leave
+  // the next one drawing axes into zeroed margins.
+  it('restores the default margins when a later build turns a hidden axis back on', () => {
+    // Hiding the x axis gives back bottom and right; the y labels stay, so `left` is still
+    // measured from them (40px, per the getBBox stub).
+    builder.buildChart(elm, { ...config(), xAxis: { hide: true } });
+    expect(builder.margin).toEqual({ top: 8, right: 0, bottom: 0, left: 40 });
 
     builder.buildChart(elm, config());
     expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+  });
+
+  it('hiding the y axis skips the label measurement, so left is 0 rather than the label width', () => {
+    builder.buildChart(elm, { ...config(), yAxis: { hide: true } });
+    expect(builder.margin).toEqual({ top: 0, right: 16, bottom: 20, left: 0 });
+    expect(builder.width).toBe(800 - 16);
+    expect(builder.svg.select('.pcac-y-axis').empty()).toBe(true);
+  });
+
+  it('draws only the x axis grid by default, and either on request', () => {
+    expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(false);
+    expect(builder.svg.select('.pcac-grid-horizontal').empty()).toBe(true);
+
+    builder.buildChart(elm, { ...config(), xAxis: { showGrid: false }, yAxis: { showGrid: true } });
+    expect(builder.svg.select('.pcac-grid-vertical').empty()).toBe(true);
+    // one horizontal line per category (the y axis is a band scale)
+    expect(builder.svg.selectAll('.pcac-grid-horizontal .pcac-grid-rule').size()).toBe(config().data.length);
   });
 
   // See the matching test in bar-vertical-chart.builder.spec.ts: stacked bars now start where
@@ -156,5 +170,28 @@ describe('BarHorizontalChartBuilder', () => {
 
     expect(colors).toEqual(['#111', '#222', '#333']);
     expect(builder.colors).toEqual(['#333', '#222', '#111']);
+  });
+
+  // `left` is measured from the y axis's bounding box (a constant 40 under the getBBox stub, so it
+  // can't show the tick line growing here); `bottom` is the x axis's and must carry the extra length.
+  it('adds the y label\'s space on top of the measured label width', () => {
+    builder.buildChart(elm, { ...config(), yAxis: { label: 'Product' } });
+    expect(builder.margin.left).toBe(40 + 18);
+    expect(builder.width).toBe(800 - 58 - 16);
+    expect(builder.svg.select('.pcac-y-axis .pcac-axis-label').text()).toBe('Product');
+  });
+
+  it('adds the y sub labels\' space on top of the measured label width too', () => {
+    builder.buildChart(elm, { ...config(), yAxis: { label: 'Product', subLabels: { min: 'A', max: 'Z' } } });
+    expect(builder.margin.left).toBe(40 + 18 + 16);
+    expect(builder.svg.selectAll('.pcac-y-axis .pcac-axis-sub-label').size()).toBe(2);
+  });
+
+  it('reserves a longer x tick in the bottom margin', () => {
+    builder.buildChart(elm, { ...config(), xAxis: { tickSize: 16 } });
+    expect(builder.margin.bottom).toBe(30);
+
+    builder.buildChart(elm, config());
+    expect(builder.margin.bottom).toBe(20);
   });
 });

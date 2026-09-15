@@ -1,3 +1,14 @@
+<a name="22.2.1"></a>
+# [v22.2.1]
+
+### Fixed
+  - Line, area and plot chart point images at the edge of the domain (the top of the y range, or
+    either end of the x range) were cut off by the `<svg>` whenever the image box was bigger than
+    the chart's default margins. The margins now grow to at least half the `pointImage` box on
+    every side when any point has an `image`, with the vertical growth taken out of the plot area
+    so the chart's total height stays what `height` configured. `PcacChart` gains a
+    `reserveEdgeSpace()` helper for this.
+
 <a name="22.2.0"></a>
 # [v22.2.0]
 

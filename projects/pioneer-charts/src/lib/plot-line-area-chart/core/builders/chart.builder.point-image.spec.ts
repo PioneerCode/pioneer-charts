@@ -103,6 +103,46 @@ describe('PlaChartBuilder point images', () => {
     expect(Number(plain.svg.querySelector('clipPath rect')!.getAttribute('x'))).toBe(-10);
   });
 
+  it('grows the margins to half the image box so an image at the domain edge is inside the SVG, not just the clip-path', () => {
+    const { builder, svg } = build(config([point(0, 100, 'a.png')], { maxWidth: 60, maxHeight: 40 }));
+
+    expect(builder.margin.top).toBe(20);
+    expect(builder.margin.right).toBe(30);
+    expect(builder.margin.bottom).toBe(20);
+    // 40 by default already covers half of 60, so it's left as is rather than grown to 70.
+    expect(builder.margin.left).toBe(40);
+
+    // The image sits at y = 0 in the plot group, its top edge 20px above that - exactly at the
+    // SVG's top edge once the group is translated down by margin.top.
+    const image = svg.querySelector('image.dot-image')!;
+    expect(Number(image.getAttribute('height'))).toBe(40);
+    expect(svg.querySelector('g')!.getAttribute('transform')).toBe('translate(40,20)');
+  });
+
+  it('keeps the SVG height the consumer configured when images grow the vertical margins', () => {
+    const plain = build(config([point(0, 100)], { maxWidth: 60, maxHeight: 40 }));
+    const withImage = build(config([point(0, 100, 'a.png')], { maxWidth: 60, maxHeight: 40 }));
+
+    expect(plain.builder.margin.top).toBe(8);
+    expect(withImage.svg.getAttribute('height')).toBe(plain.svg.getAttribute('height'));
+    expect(withImage.builder.height).toBe(plain.builder.height - 12);
+  });
+
+  it('does not grow the margins for a pointImage config when no point has an image', () => {
+    const { builder } = build(config([point(0, 100)], { maxWidth: 60, maxHeight: 40 }));
+
+    expect(builder.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+  });
+
+  it('grows a hidden axis\'s 8px margins too, since an image there is just as easily cut off', () => {
+    const cfg = config([point(0, 100, 'a.png')], { maxWidth: 30, maxHeight: 30 });
+    cfg.yAxis = { ...cfg.yAxis, hide: true };
+    const { builder } = build(cfg);
+
+    expect(builder.margin.top).toBe(15);
+    expect(builder.margin.left).toBe(15);
+  });
+
   it('keeps the theme palette when colorOverride is the class default (an empty array)', () => {
     const cfg = config([point(0, 10)]);
     cfg.colorOverride = [];

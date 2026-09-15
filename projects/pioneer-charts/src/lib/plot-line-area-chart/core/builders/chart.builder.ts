@@ -37,7 +37,9 @@ export class PlaChartBuilder extends PcacChart {
    * How far the clip-path rect extends past the drawable [0, width] x [0, height] area on every
    * side, so a point sitting exactly on the domain's edge isn't cut in half. 10px comfortably
    * clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that, so
-   * buildChart() widens this to half the largest image dimension whenever any point has one.
+   * buildChart() widens this to half the largest image dimension whenever any point has one
+   * (and grows the margins to match - see `reservePointImageSpace()` - since the clip-path only
+   * matters up to the edge of the SVG).
    */
   private clipBuffer = 10;
   private pointImage!: PcacPointImageConfig;
@@ -59,6 +61,7 @@ export class PlaChartBuilder extends PcacChart {
 
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8);
+    this.reservePointImageSpace();
 
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
@@ -69,11 +72,6 @@ export class PlaChartBuilder extends PcacChart {
     if (this.config.colorOverride?.length) {
       this.colors = this.config.colorOverride;
     }
-
-    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
-    this.clipBuffer = this.config.data.some((series) => series.data.some((point) => !!point.image))
-      ? Math.max(10, Math.ceil(this.pointImage.maxWidth / 2), Math.ceil(this.pointImage.maxHeight / 2))
-      : 10;
 
     this.scales = new PlaChartScalesBuilder().build(this.xAxis, this.yAxis, this.config.data, this.width, this.height);
     this.lineGenerator = buildLineGenerator(this.xAxis.format, this.scales);
@@ -147,6 +145,27 @@ export class PlaChartBuilder extends PcacChart {
     // but the dots above the axes: a point on the baseline or the y axis stays whole.
     this.axisBuilder.raiseAxes(this.svg);
     this.drawDots(config);
+  }
+
+  /**
+   * Resolves `pointImage` and, when any point actually has an `image`, makes room for one at the
+   * edge of the domain: the clip-path buffer grows to half the box so the `.dots` group lets it
+   * through, and the margins grow to at least that same half so the `<svg>` doesn't cut off what
+   * the clip-path let through (an image box is centered on its point, so at the top of the y
+   * domain half of it sits above the plot area - in `margin.top`, which is only 8px by default).
+   * Must run between `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
+   */
+  private reservePointImageSpace(): void {
+    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
+    const hasImages = this.config.data.some((series) => series.data.some((point) => !!point.image));
+    if (!hasImages) {
+      this.clipBuffer = 10;
+      return;
+    }
+    const halfWidth = Math.ceil(this.pointImage.maxWidth / 2);
+    const halfHeight = Math.ceil(this.pointImage.maxHeight / 2);
+    this.clipBuffer = Math.max(10, halfWidth, halfHeight);
+    this.reserveEdgeSpace({ top: halfHeight, bottom: halfHeight, left: halfWidth, right: halfWidth });
   }
 
   private createReusableClipPath(): void {

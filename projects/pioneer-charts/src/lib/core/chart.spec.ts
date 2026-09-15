@@ -227,6 +227,79 @@ describe('PcacChart', () => {
     });
   });
 
+  describe('reserveEdgeSpace', () => {
+    it('raises a margin that is too small to the given size', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, right: 30 });
+
+      expect(chart.margin.top).toBe(20);
+      expect(chart.margin.right).toBe(30);
+    });
+
+    it('leaves a margin alone that already covers it - "at least", not "add"', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ left: 20, bottom: 20 });
+
+      expect(chart.margin.left).toBe(40);
+      expect(chart.margin.bottom).toBe(20);
+    });
+
+    it('only touches the sides it is given', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20 });
+
+      expect(chart.margin).toEqual({ top: 20, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('takes vertical growth out of the plot height, so the SVG does not grow', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, bottom: 30 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.height).toBe(200 - 12 - 10);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(200 + 8 + 20);
+    });
+
+    it('shrinks the measured plot width for horizontal growth', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ left: 50, right: 50 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.width).toBe(800 - 100);
+    });
+
+    it('stacks on top of room already reserved for ticks and labels, without double-counting', () => {
+      chart.resetMargin();
+      // bottom: 20 + (16 - 6) = 30, height 190
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.reserveEdgeSpace({ bottom: 25, top: 20 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(30);
+      expect(chart.margin.top).toBe(20);
+      expect(chart.height).toBe(200 - 10 - 12);
+    });
+
+    it('applies the same reduction to the heightFull floor', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20 });
+      chart.initializeChartState(chartElm(800, 0), heightFullConfig(200));
+
+      expect(chart.height).toBe(188);
+    });
+
+    it('forgets the reserved space on resetMargin', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, left: 60 });
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.top).toBe(8);
+      expect(chart.margin.left).toBe(40);
+      expect(chart.height).toBe(200);
+    });
+  });
+
   describe('initializeAxisState', () => {
     function axisConfig(overrides: Partial<PcacAxisChartConfig> = {}): PcacAxisChartConfig {
       return { ...config(200), ...overrides };

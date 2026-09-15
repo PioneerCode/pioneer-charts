@@ -66,4 +66,27 @@ describe('PlaChartBuilder zoom', () => {
     expect(after.dot).not.toBeCloseTo(before.dot, 5);
     expect(after.line).toBeCloseTo(after.dot, 5);
   });
+
+  // Regression test: d3's default zoom `extent` is the owning <svg>'s size (plot + margins),
+  // wider than the plot-sized `translateExtent`, so its constraint centered the plot in that
+  // wider viewport - after any gesture, even back at k = 1, the chart sat shifted right/down by
+  // half the margins. The constraint is what d3 runs on every gesture, so drive it directly.
+  it('constrains a fully zoomed-out transform back to identity, not to a margin-centered offset', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+    const zoom = (builder as unknown as { zoomBehavior: ZoomBehavior<Element, unknown> }).zoomBehavior;
+    const rect = elm.nativeElement.querySelector('rect')!;
+    const extent = (zoom.extent() as (this: Element) => [[number, number], [number, number]]).call(rect);
+    const translateExtent = zoom.translateExtent();
+
+    expect(extent).toEqual([[0, 0], [builder.width, builder.height]]);
+    expect(extent).toEqual(translateExtent);
+
+    // Simulate d3 nudging the transform off identity and then a gesture zooming all the way out.
+    const constrained = zoom.constrain()(zoomIdentity.translate(32, 24), extent, translateExtent);
+    expect(constrained.k).toBe(1);
+    expect(constrained.x).toBe(0);
+    expect(constrained.y).toBe(0);
+  });
 });

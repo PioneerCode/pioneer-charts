@@ -8,6 +8,11 @@
     every side when any point has an `image`, with the vertical growth taken out of the plot area
     so the chart's total height stays what `height` configured. `PcacChart` gains a
     `reserveEdgeSpace()` helper for this.
+  - Zooming a line, area or plot chart and then zooming all the way back out left the chart
+    shifted right and down by half its margins - the x domain's min no longer met the y axis and
+    its max sat past the right edge. D3's zoom viewport defaulted to the whole `<svg>` (plot plus
+    margins) while the translatable area was the plot, so the first gesture centered one inside
+    the other; the viewport is now the plot area too.
 
 <a name="22.2.0"></a>
 # [v22.2.0]

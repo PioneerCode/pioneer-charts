@@ -65,18 +65,33 @@
   <section class="pc-doc-section">
     <h3 id="api">API</h3>
     <app-layout-code language="typescript" [code]="importCode"></app-layout-code>
-    <app-layout-base-config [includeTickFormat]="true" [includeAxes]="true">
+    <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">
         <tr>
-          <td>domainMax</td>
-          <td>Highest value in domain of data.</td>
+          <td>yAxis.domainMax<br>xAxis.domainMax</td>
+          <td>Top of the value axis (<b>yAxis</b> on the vertical chart, <b>xAxis</b> on the horizontal one), which
+            always starts at 0 - <b>domainMin</b> is ignored on the bar charts. Default 100. The category axis
+            ignores both.</td>
+        </tr>
+        <tr>
+          <td>yAxis.format<br>xAxis.format</td>
+          <td>Formats the value axis's tick labels and the value in the default tooltip (same axis as above).
+            <ul>
+              <li><b>Percentage</b> &mdash; ticks get a <code>%</code> suffix; the tooltip shows
+                <code>value * 100</code> followed by <code>%</code> (so supply values as fractions, e.g.
+                <code>0.25</code> with a <b>domainMax</b> of 1).</li>
+              <li><b>Minutes</b> &mdash; ticks get an <code>m</code> suffix.</li>
+              <li><b>Fahrenheit</b> &mdash; ticks and the tooltip get an <code>F</code> suffix.</li>
+              <li>Anything else (the default) leaves the ticks and tooltip unformatted.</li>
+            </ul>
+          </td>
         </tr>
         <tr>
           <td>isStacked</td>
           <td>If false (the default), each group's bars are drawn side by side. If true, they are stacked: each
             bar's <b>value</b> is its own segment size, and segments are placed on top of one another in data
-            order, so a group's total height is the sum of its values. Keep <b>domainMax</b> at or above the
-            largest group total.
+            order, so a group's total height is the sum of its values. Keep the value axis's <b>domainMax</b> at
+            or above the largest group total.
           </td>
         </tr>
         <tr>

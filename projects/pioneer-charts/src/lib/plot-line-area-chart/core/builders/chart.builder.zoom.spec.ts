@@ -21,11 +21,8 @@ function config(xFormat: PcacFormatEnum): PcacLineAreaChartConfig {
     ...new PcacLineAreaChartConfig(),
     enableEffects: false,
     enableZoom: true,
-    xFormat,
-    yDomainMin: 0,
-    yDomainMax: 100,
-    xDomainMin: '2024-01-01T00:00:00Z',
-    xDomainMax: '2024-01-31T00:00:00Z',
+    xAxis: { format: xFormat, domainMin: '2024-01-01T00:00:00Z', domainMax: '2024-01-31T00:00:00Z' },
+    yAxis: { domainMin: 0, domainMax: 100 },
     // Deliberately not evenly spaced, so index-based and date-based x positions differ.
     data: [{ key: 's', value: null, hide: false, data: [
       { key: '2024-01-02T00:00:00Z', value: 10, hide: false, data: [] },
@@ -68,5 +65,28 @@ describe('PlaChartBuilder zoom', () => {
     const after = firstXs(elm.nativeElement);
     expect(after.dot).not.toBeCloseTo(before.dot, 5);
     expect(after.line).toBeCloseTo(after.dot, 5);
+  });
+
+  // Regression test: d3's default zoom `extent` is the owning <svg>'s size (plot + margins),
+  // wider than the plot-sized `translateExtent`, so its constraint centered the plot in that
+  // wider viewport - after any gesture, even back at k = 1, the chart sat shifted right/down by
+  // half the margins. The constraint is what d3 runs on every gesture, so drive it directly.
+  it('constrains a fully zoomed-out transform back to identity, not to a margin-centered offset', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+    const zoom = (builder as unknown as { zoomBehavior: ZoomBehavior<Element, unknown> }).zoomBehavior;
+    const rect = elm.nativeElement.querySelector('rect')!;
+    const extent = (zoom.extent() as (this: Element) => [[number, number], [number, number]]).call(rect);
+    const translateExtent = zoom.translateExtent();
+
+    expect(extent).toEqual([[0, 0], [builder.width, builder.height]]);
+    expect(extent).toEqual(translateExtent);
+
+    // Simulate d3 nudging the transform off identity and then a gesture zooming all the way out.
+    const constrained = zoom.constrain()(zoomIdentity.translate(32, 24), extent, translateExtent);
+    expect(constrained.k).toBe(1);
+    expect(constrained.x).toBe(0);
+    expect(constrained.y).toBe(0);
   });
 });

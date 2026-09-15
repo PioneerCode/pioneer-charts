@@ -22,7 +22,7 @@ function config(overrides: Partial<PcacBarVerticalChartConfig> = {}): PcacBarVer
   return {
     ...new PcacBarVerticalChartConfig(),
     height: 200,
-    domainMax: 100,
+    yAxis: { domainMax: 100 },
     data: [
       { key: 'Group A', value: null, hide: false, data: [
         { key: 'zero', value: 0, hide: false, data: [] },
@@ -127,7 +127,7 @@ describe('BarVerticalChartBuilder', () => {
       const elm = chartElm(800, 0);
       builder.buildChart(elm, config({
         isStacked: true,
-        domainMax: 100,
+        yAxis: { domainMax: 100 },
         data: [{ key: 'G', value: null, hide: false, data: [
           { key: 'a', value: 10, hide: false, data: [] },
           { key: 'b', value: 20, hide: false, data: [] },

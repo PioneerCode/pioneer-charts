@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
 })
 export class LayoutBaseConfig {
-  readonly includeTickFormat = input(false);
   // The pie chart deliberately doesn't support heightFull (its `height` sizes the radius, not a
   // drawing area), so its page turns this row off.
   readonly includeHeightFull = input(true);

@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacChart } from './chart';
-import { PcacAxisChartConfig, PcacChartConfig } from './chart.model';
+import { PcacAxisChartConfig, PcacChartConfig, PcacFormatEnum } from './chart.model';
 
 /**
  * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth`/`clientHeight`
@@ -227,6 +227,79 @@ describe('PcacChart', () => {
     });
   });
 
+  describe('reserveEdgeSpace', () => {
+    it('raises a margin that is too small to the given size', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, right: 30 });
+
+      expect(chart.margin.top).toBe(20);
+      expect(chart.margin.right).toBe(30);
+    });
+
+    it('leaves a margin alone that already covers it - "at least", not "add"', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ left: 20, bottom: 20 });
+
+      expect(chart.margin.left).toBe(40);
+      expect(chart.margin.bottom).toBe(20);
+    });
+
+    it('only touches the sides it is given', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20 });
+
+      expect(chart.margin).toEqual({ top: 20, right: 16, bottom: 20, left: 40 });
+    });
+
+    it('takes vertical growth out of the plot height, so the SVG does not grow', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, bottom: 30 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.height).toBe(200 - 12 - 10);
+      expect(chart.height + chart.margin.top + chart.margin.bottom).toBe(200 + 8 + 20);
+    });
+
+    it('shrinks the measured plot width for horizontal growth', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ left: 50, right: 50 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.width).toBe(800 - 100);
+    });
+
+    it('stacks on top of room already reserved for ticks and labels, without double-counting', () => {
+      chart.resetMargin();
+      // bottom: 20 + (16 - 6) = 30, height 190
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.reserveEdgeSpace({ bottom: 25, top: 20 });
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.bottom).toBe(30);
+      expect(chart.margin.top).toBe(20);
+      expect(chart.height).toBe(200 - 10 - 12);
+    });
+
+    it('applies the same reduction to the heightFull floor', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20 });
+      chart.initializeChartState(chartElm(800, 0), heightFullConfig(200));
+
+      expect(chart.height).toBe(188);
+    });
+
+    it('forgets the reserved space on resetMargin', () => {
+      chart.resetMargin();
+      chart.reserveEdgeSpace({ top: 20, left: 60 });
+      chart.resetMargin();
+      chart.initializeChartState(chartElm(800), config(200));
+
+      expect(chart.margin.top).toBe(8);
+      expect(chart.margin.left).toBe(40);
+      expect(chart.height).toBe(200);
+    });
+  });
+
   describe('initializeAxisState', () => {
     function axisConfig(overrides: Partial<PcacAxisChartConfig> = {}): PcacAxisChartConfig {
       return { ...config(200), ...overrides };
@@ -234,8 +307,8 @@ describe('PcacChart', () => {
 
     it('resolves missing axes to defaults, so an object-literal config needs neither', () => {
       chart.initializeAxisState(axisConfig(), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false });
-      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
       expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
     });
 
@@ -251,7 +324,16 @@ describe('PcacChart', () => {
 
     it('fills in only what an axis leaves out', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { ticks: 3, showLine: true } }), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+    });
+
+    it('keeps a given format and domain, including a 0 and a DateTime string', () => {
+      chart.initializeAxisState(axisConfig({
+        xAxis: { format: PcacFormatEnum.DateTime, domainMin: '2024-01-01', domainMax: '2024-01-31' },
+        yAxis: { format: PcacFormatEnum.Percentage, domainMin: 0, domainMax: 1 },
+      }), 'y');
+      expect(chart.xAxis).toMatchObject({ format: PcacFormatEnum.DateTime, domainMin: '2024-01-01', domainMax: '2024-01-31' });
+      expect(chart.yAxis).toMatchObject({ format: PcacFormatEnum.Percentage, domainMin: 0, domainMax: 1 });
     });
 
     it('a hidden y axis gives left and top to the plot; a hidden x axis gives bottom and right', () => {

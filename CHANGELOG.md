@@ -1,3 +1,19 @@
+<a name="22.2.1"></a>
+# [v22.2.1]
+
+### Fixed
+  - Line, area and plot chart point images at the edge of the domain (the top of the y range, or
+    either end of the x range) were cut off by the `<svg>` whenever the image box was bigger than
+    the chart's default margins. The margins now grow to at least half the `pointImage` box on
+    every side when any point has an `image`, with the vertical growth taken out of the plot area
+    so the chart's total height stays what `height` configured. `PcacChart` gains a
+    `reserveEdgeSpace()` helper for this.
+  - Zooming a line, area or plot chart and then zooming all the way back out left the chart
+    shifted right and down by half its margins - the x domain's min no longer met the y axis and
+    its max sat past the right edge. D3's zoom viewport defaulted to the whole `<svg>` (plot plus
+    margins) while the translatable area was the plot, so the first gesture centered one inside
+    the other; the viewport is now the plot area too.
+
 <a name="22.2.0"></a>
 # [v22.2.0]
 
@@ -51,6 +67,9 @@
     listed them.
   - Updated the docs site's Theme page, which showed a broken Sass import path and a color-override
     example that didn't actually work (see Added).
+  - The docs site's single-bar demo configs asked for a `"Percentage"` format, which never matched
+    the enum's lowercase `'percentage'` value; they now do, so those demos show `%` ticks and
+    tooltip values as intended.
   - The docs site's footer no longer highlights the wrong section (e.g. showing "Home" as active
     while on a documentation page) after navigating by any means other than clicking a footer link
     itself.
@@ -73,6 +92,25 @@
     overall size is unchanged. The chart configs now extend a new `PcacAxisChartConfig` base
     (`PcacChartConfig` + `xAxis`/`yAxis`); `IPcacAxisBuilderConfig` takes resolved `xAxis`/`yAxis`
     in place of its old per-field inputs, for anyone calling `PcacAxisBuilder` directly.
+  - Likewise, the chart-level format and domain fields moved into the same per-axis objects, so
+    every axis chart now spells them the same way: `PcacAxisConfig` gained `format`, `domainMin`
+    and `domainMax` (see Added). Migration:
+
+    | Before | After |
+    | --- | --- |
+    | `domainMax: n` on a vertical bar chart | `yAxis: { domainMax: n }` |
+    | `domainMax: n` on a horizontal bar chart | `xAxis: { domainMax: n }` |
+    | `tickFormat: f` on a vertical bar chart | `yAxis: { format: f }` |
+    | `tickFormat: f` on a horizontal bar chart | `xAxis: { format: f }` |
+    | `xFormat: f`, `xDomainMin: a`, `xDomainMax: b` on a line/area/plot chart | `xAxis: { format: f, domainMin: a, domainMax: b }` |
+    | `yFormat: f`, `yDomainMin: a`, `yDomainMax: b` on a line/area/plot chart | `yAxis: { format: f, domainMin: a, domainMax: b }` |
+
+    Two defaults changed shape but not effect: the bar charts' `domainMax` (previously required
+    on an object literal) now defaults to 100 when omitted, and the line/area/plot charts'
+    formats default to `None` rather than `DatasetLength`, which those charts treat identically
+    (index-based x positions, unformatted ticks). `PcacAxisBuilder`'s config lost its
+    `xFormat`/`yFormat` fields (it reads `xAxis.format`/`yAxis.format`), and
+    `PlaChartScalesBuilder.build()` now takes the resolved axes and data instead of a config.
   - `PcacPieChartConfig.numberOfTicks` was removed; the pie chart has no axes and never read it.
 
 ### Changed
@@ -131,6 +169,13 @@
     Both take the theme's `$gray-900` via new `.pcac-axis-tick-marks .tick line` and
     `.pcac-axis-line .domain` rules. The docs site has a new "Axis Styling" guide with a live demo.
     The other three fields replace `numberOfTicks`, `hideAxis` and `hideGrid` - see Breaking.
+  - `PcacAxisConfig` also carries the axis's `format` (a `PcacFormatEnum`, default `None`) and
+    `domainMin`/`domainMax` (defaults 0 and 100), replacing the bar charts' `domainMax`/`tickFormat`
+    and the line/area/plot charts' `xFormat`/`yFormat`/`xDomainMin`/`xDomainMax`/`yDomainMin`/
+    `yDomainMax` - see Breaking for the mapping. Each does what its chart-level predecessor did:
+    on a bar chart only the value axis reads them, and only `domainMax` (bars grow from 0); on the
+    line/area/plot charts `xAxis.format` still decides how a point's `key` becomes an x position,
+    with `domainMin`/`domainMax` read under `Decimal` and `DateTime`.
   - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
     pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
     with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an

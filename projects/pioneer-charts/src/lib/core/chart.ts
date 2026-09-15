@@ -75,11 +75,13 @@ export class PcacChart {
   private lastHeightFull = false;
 
   /**
-   * How much `initializeAxisState()` last added to `margin.bottom` for tick marks and axis
-   * labels (negative when a short tick took some away). `resolveHeight()` subtracts it from the
-   * plot height so the SVG's total height doesn't change with either. Reset alongside the margins.
+   * How much the vertical margins have grown this build beyond their defaults - for tick marks
+   * and axis labels (`initializeAxisState()`; negative when a short tick took some away) and for
+   * content that hangs past the plot's edge (`reserveEdgeSpace()`). `resolveHeight()` subtracts
+   * it from the plot height so the SVG's total height doesn't change with any of them. Reset
+   * alongside the margins.
    */
-  private reservedTickHeight = 0;
+  private reservedHeight = 0;
 
   /**
    * Resolves the consumer's projected `<ng-template pcacTooltip>`, if any. Each chart component
@@ -99,7 +101,7 @@ export class PcacChart {
    */
   resetMargin(): void {
     this.margin = { ...this.defaultMargin };
-    this.reservedTickHeight = 0;
+    this.reservedHeight = 0;
   }
 
   /**
@@ -136,7 +138,7 @@ export class PcacChart {
     if (!this.xAxis.hide) {
       const space = axisLabelSpace(this.xAxis);
       this.margin.bottom += space;
-      this.reservedTickHeight += space;
+      this.reservedHeight += space;
     }
     if (!this.yAxis.hide) {
       this.margin.left += axisLabelSpace(this.yAxis);
@@ -154,12 +156,12 @@ export class PcacChart {
   }
 
   /**
-   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales and
-   * formats is already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()`
-   * with a rescaled x, on zoom).
+   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales is
+   * already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()` with a
+   * rescaled x, on zoom).
    */
   axisBuilderConfig<XDomain extends AxisDomain, YDomain extends AxisDomain>(
-    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, xFormat?: PcacFormatEnum, yFormat?: PcacFormatEnum
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>
   ): IPcacAxisBuilderConfig<XDomain, YDomain> {
     return {
       svg: this.svg,
@@ -169,9 +171,7 @@ export class PcacChart {
       xScale,
       yScale,
       xAxis: this.xAxis,
-      yAxis: this.yAxis,
-      xFormat,
-      yFormat
+      yAxis: this.yAxis
     };
   }
 
@@ -204,7 +204,7 @@ export class PcacChart {
    * Horizontally that happens on its own: `initializeChartState()` derives `width` from the
    * container minus the margins. Vertically it doesn't - `config.height` is the plot area, and
    * the SVG is that plus the margins - so a taller bottom margin would grow the SVG instead. The
-   * delta is therefore also remembered in `reservedTickHeight` and taken back out of the plot
+   * delta is therefore also remembered in `reservedHeight` and taken back out of the plot
    * height by `resolveHeight()`, keeping the chart's total footprint where the consumer put it.
    *
    * Called by `initializeAxisState()` right after `resetMargin()`, for the axes that will be
@@ -216,11 +216,41 @@ export class PcacChart {
   reserveTickSizeMargins(xTickSize?: number, yTickSize?: number): void {
     if (xTickSize !== undefined) {
       const bottom = Math.max(0, this.margin.bottom + xTickSize - PcacChart.DEFAULT_TICK_SIZE);
-      this.reservedTickHeight = bottom - this.margin.bottom;
+      this.reservedHeight = bottom - this.margin.bottom;
       this.margin.bottom = bottom;
     }
     if (yTickSize !== undefined) {
       this.margin.left = Math.max(0, this.margin.left + yTickSize - PcacChart.DEFAULT_TICK_SIZE);
+    }
+  }
+
+  /**
+   * Makes sure each given margin is at least that big, for content drawn at the very edge of the
+   * plot area that reaches past it - a point image on the line/area/plot charts, say, whose box
+   * is centered on a point at the top of the y domain and so hangs half of itself above the plot.
+   * Those charts already widen their clip-path to let such a point through; this is what stops
+   * the `<svg>` itself from cutting it off, the SVG being only the plot area plus the margins.
+   *
+   * "At least", not "add": the default margins, and any tick / label room already reserved in
+   * them, may well cover it already (`margin.left` is 40 by default), and adding on top of that
+   * would give up plot area for nothing. Vertical growth is taken out of the plot height the same
+   * way `reserveTickSizeMargins()`'s is, so the SVG's total height stays what the consumer
+   * configured; horizontally `initializeChartState()` picks the change up on its own. A side
+   * left `undefined` is untouched.
+   *
+   * Call after `initializeAxisState()` (which resets the margins) and before
+   * `initializeChartState()` (which measures the plot area against them).
+   */
+  reserveEdgeSpace(space: Partial<PcacChartMargin>): void {
+    for (const side of ['top', 'right', 'bottom', 'left'] as const) {
+      const wanted = space[side];
+      if (wanted === undefined || wanted <= this.margin[side]) {
+        continue;
+      }
+      if (side === 'top' || side === 'bottom') {
+        this.reservedHeight += wanted - this.margin[side];
+      }
+      this.margin[side] = wanted;
     }
   }
 
@@ -293,9 +323,10 @@ export class PcacChart {
    * @param config Chart specific configuration
    */
   private resolveHeight(container: HTMLElement, config: PcacChartConfig): number {
-    // See `reserveTickSizeMargins()`: room made for longer ticks comes out of the plot area, not
-    // added on to the SVG. Applies to the floor in the `heightFull` case too, for the same reason.
-    const height = Math.max(0, config.height - this.reservedTickHeight);
+    // See `reserveTickSizeMargins()` / `reserveEdgeSpace()`: room made in the vertical margins
+    // comes out of the plot area, not added on to the SVG. Applies to the floor in the `heightFull`
+    // case too, for the same reason.
+    const height = Math.max(0, config.height - this.reservedHeight);
     if (!config.heightFull) {
       return height;
     }

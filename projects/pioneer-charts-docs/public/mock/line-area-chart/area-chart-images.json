@@ -1,6 +1,6 @@
 {
   "height": 200,
-  "yDomainMax": 100,
+  "yAxis": { "domainMax": 100 },
   "enableEffects": false,
   "enableZoom": true,
   "pointImage": {

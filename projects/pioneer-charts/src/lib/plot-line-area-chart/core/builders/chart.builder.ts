@@ -37,7 +37,9 @@ export class PlaChartBuilder extends PcacChart {
    * How far the clip-path rect extends past the drawable [0, width] x [0, height] area on every
    * side, so a point sitting exactly on the domain's edge isn't cut in half. 10px comfortably
    * clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that, so
-   * buildChart() widens this to half the largest image dimension whenever any point has one.
+   * buildChart() widens this to half the largest image dimension whenever any point has one
+   * (and grows the margins to match - see `reservePointImageSpace()` - since the clip-path only
+   * matters up to the edge of the SVG).
    */
   private clipBuffer = 10;
   private pointImage!: PcacPointImageConfig;
@@ -59,6 +61,7 @@ export class PlaChartBuilder extends PcacChart {
 
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8);
+    this.reservePointImageSpace();
 
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
@@ -70,14 +73,9 @@ export class PlaChartBuilder extends PcacChart {
       this.colors = this.config.colorOverride;
     }
 
-    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
-    this.clipBuffer = this.config.data.some((series) => series.data.some((point) => !!point.image))
-      ? Math.max(10, Math.ceil(this.pointImage.maxWidth / 2), Math.ceil(this.pointImage.maxHeight / 2))
-      : 10;
-
-    this.scales = new PlaChartScalesBuilder().build(this.config, this.width, this.height);
-    this.lineGenerator = buildLineGenerator(this.config.xFormat, this.scales);
-    this.areaGenerator = buildAreaGenerator(this.config.xFormat, this.scales, this.height);
+    this.scales = new PlaChartScalesBuilder().build(this.xAxis, this.yAxis, this.config.data, this.width, this.height);
+    this.lineGenerator = buildLineGenerator(this.xAxis.format, this.scales);
+    this.areaGenerator = buildAreaGenerator(this.xAxis.format, this.scales, this.height);
 
     if (this.config.enableZoom) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
@@ -85,7 +83,7 @@ export class PlaChartBuilder extends PcacChart {
         const newX = event.transform.rescaleX(this.scales.x);
 
         // Update axis
-        this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, this.scales.y, this.config.xFormat, this.config.yFormat));
+        this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, this.scales.y));
 
         // Update lines/areas. Fresh generators against the rescaled x, so they go through the
         // same getXFormat() as the dots below - positioning by bare index here (which this used
@@ -93,13 +91,13 @@ export class PlaChartBuilder extends PcacChart {
         // right for the default DatasetLength format; a DateTime/Decimal chart's lines drifted
         // away from its dots as soon as it was zoomed.
         const zoomedScales: PlaChartScales = { x: newX, y: this.scales.y };
-        const zoomedLine = buildLineGenerator(this.config.xFormat, zoomedScales);
-        const zoomedArea = buildAreaGenerator(this.config.xFormat, zoomedScales, this.height);
+        const zoomedLine = buildLineGenerator(this.xAxis.format, zoomedScales);
+        const zoomedArea = buildAreaGenerator(this.xAxis.format, zoomedScales, this.height);
         this.svg.selectAll<SVGPathElement, PcacData[]>('.line').attr('d', (d: PcacData[]) => zoomedLine(d));
         this.svg.selectAll<SVGPathElement, PcacData[]>('.area').attr('d', (d: PcacData[]) => zoomedArea(d));
 
         // Update dots / point images. Nested selectAll (not a flat svg.selectAll('.point')) so
-        // that `i` is the point's index *within its own series* - the xFormat default
+        // that `i` is the point's index *within its own series* - the x format default
         // (DatasetLength) positions by index, and a flat selection would number every series'
         // points consecutively, shoving the second series' points off to the right on zoom.
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
@@ -125,7 +123,7 @@ export class PlaChartBuilder extends PcacChart {
     this.attachZoomBehavior();
     this.createReusableClipPath(); 
 
-    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y, config.xFormat, config.yFormat));
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y));
 
     this.drawGrids(this.scales.x, this.scales.y);
 
@@ -147,6 +145,27 @@ export class PlaChartBuilder extends PcacChart {
     // but the dots above the axes: a point on the baseline or the y axis stays whole.
     this.axisBuilder.raiseAxes(this.svg);
     this.drawDots(config);
+  }
+
+  /**
+   * Resolves `pointImage` and, when any point actually has an `image`, makes room for one at the
+   * edge of the domain: the clip-path buffer grows to half the box so the `.dots` group lets it
+   * through, and the margins grow to at least that same half so the `<svg>` doesn't cut off what
+   * the clip-path let through (an image box is centered on its point, so at the top of the y
+   * domain half of it sits above the plot area - in `margin.top`, which is only 8px by default).
+   * Must run between `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
+   */
+  private reservePointImageSpace(): void {
+    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
+    const hasImages = this.config.data.some((series) => series.data.some((point) => !!point.image));
+    if (!hasImages) {
+      this.clipBuffer = 10;
+      return;
+    }
+    const halfWidth = Math.ceil(this.pointImage.maxWidth / 2);
+    const halfHeight = Math.ceil(this.pointImage.maxHeight / 2);
+    this.clipBuffer = Math.max(10, halfWidth, halfHeight);
+    this.reserveEdgeSpace({ top: halfHeight, bottom: halfHeight, left: halfWidth, right: halfWidth });
   }
 
   private createReusableClipPath(): void {
@@ -265,8 +284,8 @@ export class PlaChartBuilder extends PcacChart {
             index: series.data.indexOf(d),
             parent: series,
             parentIndex: index,
-            valueFormat: self.config.yFormat,
-            keyFormat: self.config.xFormat,
+            valueFormat: self.yAxis.format,
+            keyFormat: self.xAxis.format,
           });
           // No-op for an image point (no circle inside to grow).
           select(this).select('.dot')
@@ -318,6 +337,6 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   private pointTransform(d: PcacData, i: number, xScale: PlaChartScales['x']): string {
-    return `translate(${getXFormat(this.config.xFormat, d, i, xScale)}, 0)`;
+    return `translate(${getXFormat(this.xAxis.format, d, i, xScale)}, 0)`;
   }
 }

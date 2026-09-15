@@ -1,5 +1,4 @@
 {
-  "domainMax": 1000,
   "height": 200,
   "isStacked": false,
   "thresholds": [
@@ -53,5 +52,8 @@
         }
       ]
     }
-  ]
+  ],
+  "xAxis": {
+    "domainMax": 1000
+  }
 }

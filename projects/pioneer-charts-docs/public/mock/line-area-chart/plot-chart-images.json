@@ -1,11 +1,7 @@
 {
   "height": 200,
-  "xFormat": "decimal",
-  "xDomainMin": 0,
-  "xDomainMax": 24,
-  "yDomainMax": 100,
-  "xAxis": { "ticks": 6, "showGrid": true },
-  "yAxis": { "ticks": 6 },
+  "xAxis": { "ticks": 6, "showGrid": true, "format": "decimal", "domainMin": 0, "domainMax": 24 },
+  "yAxis": { "ticks": 6, "domainMax": 100 },
   "enableEffects": false,
   "enableZoom": true,
   "pointImage": {

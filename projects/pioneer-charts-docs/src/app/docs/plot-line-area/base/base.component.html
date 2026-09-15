@@ -26,15 +26,15 @@
     <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">
         <tr>
-          <td>yDomainMin</td>
+          <td>yAxis.domainMin</td>
           <td>Floor of the y-axis domain. Default is 0.</td>
         </tr>
         <tr>
-          <td>yDomainMax</td>
+          <td>yAxis.domainMax</td>
           <td>Ceiling of the y-axis domain. Default is 100.</td>
         </tr>
         <tr>
-          <td>yFormat</td>
+          <td>yAxis.format</td>
           <td>Formats the y-axis tick labels and the value shown in a point's tooltip.
             <ul>
               <li><b>Percentage</b> &mdash; ticks get a <code>%</code> suffix; the tooltip shows
@@ -42,31 +42,32 @@
                 <code>0.25</code>).</li>
               <li><b>Minutes</b> &mdash; ticks get an <code>m</code> suffix.</li>
               <li><b>Fahrenheit</b> &mdash; ticks and the tooltip get an <code>F</code> suffix.</li>
-              <li>Anything else leaves the ticks and tooltip unformatted.</li>
+              <li>Anything else (the default) leaves the ticks and tooltip unformatted.</li>
             </ul>
           </td>
         </tr>
         <tr>
-          <td>xFormat</td>
+          <td>xAxis.format</td>
           <td>Controls both how each point's <code>key</code> is mapped to an x position and how the x-axis
             tick labels are formatted.
             <ul>
               <li>
-                <b>DatasetLength</b> (default, and the fallback for any value not listed here) &mdash; points are
-                positioned by their index within their series, spaced evenly across the width; <code>key</code>
-                is only used for the tooltip. The axis runs from 0 to the length of the <i>first</i> series
-                minus one, with plain numeric tick labels.
+                <b>None</b> / <b>DatasetLength</b> (the default, and the fallback for any value not listed here)
+                &mdash; points are positioned by their index within their series, spaced evenly across the width;
+                <code>key</code> is only used for the tooltip. The axis runs from 0 to the length of the
+                <i>first</i> series minus one, with plain numeric tick labels.
               </li>
               <li>
                 <b>Decimal</b> &mdash; each point's <code>key</code> is a number used directly as its x value,
-                on an axis running from <b>xDomainMin</b> to <b>xDomainMax</b>. Tick labels are shortened to
-                two significant digits with an SI suffix (e.g. <code>1500</code> &rarr; <code>1.5k</code>).
+                on an axis running from <b>xAxis.domainMin</b> to <b>xAxis.domainMax</b>. Tick labels are
+                shortened to two significant digits with an SI suffix (e.g. <code>1500</code> &rarr;
+                <code>1.5k</code>).
               </li>
               <li>
                 <b>DateTime</b> &mdash; each point's <code>key</code> is parsed with <code>new Date(key)</code>
-                (an ISO string or a timestamp) and plotted on a time axis running from <b>xDomainMin</b> to
-                <b>xDomainMax</b>, which are required. Tick labels use D3's default date/time formatting, and
-                the tooltip shows the key as a localized date and time.
+                (an ISO string or a timestamp) and plotted on a time axis running from <b>xAxis.domainMin</b> to
+                <b>xAxis.domainMax</b>, which are required. Tick labels use D3's default date/time formatting,
+                and the tooltip shows the key as a localized date and time.
               </li>
               <li>
                 <b>OneDayHours</b> &mdash; positions points by index like <b>DatasetLength</b>, but labels the
@@ -75,21 +76,21 @@
               </li>
               <li>
                 <b>Percentage</b>, <b>Minutes</b>, <b>Fahrenheit</b> &mdash; position by index like
-                <b>DatasetLength</b>, with a <code>%</code>, <code>m</code> or <code>f</code> suffix on the tick
+                <b>DatasetLength</b>, with a <code>%</code>, <code>m</code> or <code>F</code> suffix on the tick
                 labels.
               </li>
             </ul>
           </td>
         </tr>
         <tr>
-          <td>xDomainMin</td>
-          <td>Start of the x-axis domain. Only used when <b>xFormat</b> is <b>Decimal</b> (a number, default 0)
-            or <b>DateTime</b> (anything <code>new Date()</code> accepts; required). Ignored by the index-based
+          <td>xAxis.domainMin</td>
+          <td>Start of the x-axis domain. Only used when <b>xAxis.format</b> is <b>Decimal</b> (a number, default
+            0) or <b>DateTime</b> (anything <code>new Date()</code> accepts; required). Ignored by the index-based
             formats, which size the axis from the data.</td>
         </tr>
         <tr>
-          <td>xDomainMax</td>
-          <td>End of the x-axis domain. Same rules as <b>xDomainMin</b>; the <b>Decimal</b> default is 100.</td>
+          <td>xAxis.domainMax</td>
+          <td>End of the x-axis domain. Same rules as <b>xAxis.domainMin</b>; the <b>Decimal</b> default is 100.</td>
         </tr>
         <tr>
           <td>enableEffects</td>

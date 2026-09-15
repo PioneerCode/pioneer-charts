@@ -3,54 +3,51 @@ import { scaleTime } from 'd3';
 import { ScaleLinear, scaleLinear, ScaleTime } from 'd3-scale';
 
 
-import { PcacLineAreaChartConfig } from '../../plot-line-area-chart.model';
-import { PcacFormatEnum } from '../../../core/chart.model';
+import { PcacData, PcacFormatEnum, PcacResolvedAxisConfig } from '../../../core/chart.model';
 
 export class PlaChartScales {
   x!: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   y!: ScaleLinear<number, number>;
 }
 
+/**
+ * Takes the chart's *resolved* axes (`PcacChart.xAxis`/`yAxis`), not the raw config, so the
+ * `format`/`domainMin`/`domainMax` defaults are already applied - see `PcacLineAreaChartConfig`
+ * for what each format does with them.
+ */
 export class PlaChartScalesBuilder {
-  build(config: PcacLineAreaChartConfig, chartWidth: number, chartHeight: number): PlaChartScales {
+  build(
+    xAxis: PcacResolvedAxisConfig, yAxis: PcacResolvedAxisConfig, data: PcacData[], chartWidth: number, chartHeight: number
+  ): PlaChartScales {
     const resp = new PlaChartScales();
-    resp.x = this.buildXScale(config, chartWidth);
-    resp.y = this.buildYScale(config, chartHeight);
+    resp.x = this.buildXScale(xAxis, data, chartWidth);
+    resp.y = this.buildYScale(yAxis, chartHeight);
     return resp;
   }
 
-  private buildXScale(config: PcacLineAreaChartConfig, chartWidth: number): ScaleLinear<number, number> | ScaleTime<number, number, never> {
-    let resp: ScaleLinear<number, number> | ScaleTime<number, number, never>;
-
-    switch (config.xFormat) {
+  private buildXScale(
+    xAxis: PcacResolvedAxisConfig, data: PcacData[], chartWidth: number
+  ): ScaleLinear<number, number> | ScaleTime<number, number, never> {
+    switch (xAxis.format) {
       case PcacFormatEnum.DateTime:
-        resp = scaleTime()
-          .domain([new Date(config.xDomainMin), new Date(config.xDomainMax)])
+        return scaleTime()
+          .domain([new Date(xAxis.domainMin), new Date(xAxis.domainMax)])
           .range([0, chartWidth]);
-        break;
       case PcacFormatEnum.Decimal:
-        resp = scaleLinear()
-          .domain([config.xDomainMin as number || 0, config.xDomainMax as number || 100])
+        return scaleLinear()
+          .domain([xAxis.domainMin as number, xAxis.domainMax as number])
           .range([0, chartWidth]);
-        break;
-      case PcacFormatEnum.DatasetLength:
-        resp = scaleLinear()
-          .domain([0, config.data[0].data.length - 1])
-          .range([0, chartWidth]);
-        break;
       default:
-        resp = scaleLinear()
-          .domain([0, config.data[0].data.length - 1])
+        // DatasetLength and every other format position points by index
+        return scaleLinear()
+          .domain([0, data[0].data.length - 1])
           .range([0, chartWidth]);
-        break;
     }
-
-    return resp;
   }
 
-  private buildYScale(config: PcacLineAreaChartConfig, chartHeight: number): ScaleLinear<number, number> {
+  private buildYScale(yAxis: PcacResolvedAxisConfig, chartHeight: number): ScaleLinear<number, number> {
     return scaleLinear()
-      .domain([config.yDomainMin as number || 0, config.yDomainMax as number || 100])
+      .domain([yAxis.domainMin as number, yAxis.domainMax as number])
       .range([chartHeight, 0]);
   }
 }

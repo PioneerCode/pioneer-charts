@@ -43,19 +43,18 @@ export class AxisStylingComponent {
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
-   * off a fresh `config` reference (see the Full Height page for the same pattern).
+   * off a fresh `config` reference (see the Full Height page for the same pattern). The axes are
+   * merged over the mock's own, not swapped in, so its `domainMax` (and `format`) survive.
    */
-  protected readonly barConfig = computed(() => ({
-    ...this.service.barVerticalChartConfig.value(),
-    xAxis: this.xAxis(),
-    yAxis: this.yAxis()
-  }));
+  protected readonly barConfig = computed(() => {
+    const config = this.service.barVerticalChartConfig.value();
+    return { ...config, xAxis: { ...config?.xAxis, ...this.xAxis() }, yAxis: { ...config?.yAxis, ...this.yAxis() } };
+  });
 
-  protected readonly lineConfig = computed(() => ({
-    ...this.service.lineChartConfig.value(),
-    xAxis: this.xAxis(),
-    yAxis: this.yAxis()
-  }));
+  protected readonly lineConfig = computed(() => {
+    const config = this.service.lineChartConfig.value();
+    return { ...config, xAxis: { ...config?.xAxis, ...this.xAxis() }, yAxis: { ...config?.yAxis, ...this.yAxis() } };
+  });
 
   protected onTickSize(axis: 'x' | 'y', event: Event): void {
     const tickSize = (event.target as HTMLInputElement).valueAsNumber;
@@ -109,13 +108,14 @@ export class AxisStylingComponent {
   data: [ ... ],
 
   // One PcacAxisConfig per axis. Every field is optional; leave the whole
-  // object out for a default axis (labels only, 5 ticks, grid on).
+  // object out for a default axis (labels only, 5 ticks, grid on, 0-100).
   xAxis: {
     label: 'Product', // axis title, centered below the tick labels
     tickSize: 12,     // tick mark length in px - setting it is what turns the marks on
     showLine: true    // solid line along the axis
   },
   yAxis: {
+    domainMax: 1000,  // the value axis runs 0..domainMax (format: a PcacFormatEnum, e.g. Percentage)
     label: 'Units sold',
     subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // by position along the axis
     ticks: 4,         // requested tick (and grid line) count

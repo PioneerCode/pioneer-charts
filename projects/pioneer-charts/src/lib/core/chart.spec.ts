@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacChart } from './chart';
-import { PcacAxisChartConfig, PcacChartConfig } from './chart.model';
+import { PcacAxisChartConfig, PcacChartConfig, PcacFormatEnum } from './chart.model';
 
 /**
  * Builds an `ElementRef` around a real (jsdom) `<svg>` whose parent's `clientWidth`/`clientHeight`
@@ -234,8 +234,8 @@ describe('PcacChart', () => {
 
     it('resolves missing axes to defaults, so an object-literal config needs neither', () => {
       chart.initializeAxisState(axisConfig(), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false });
-      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
       expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
     });
 
@@ -251,7 +251,16 @@ describe('PcacChart', () => {
 
     it('fills in only what an axis leaves out', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { ticks: 3, showLine: true } }), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+    });
+
+    it('keeps a given format and domain, including a 0 and a DateTime string', () => {
+      chart.initializeAxisState(axisConfig({
+        xAxis: { format: PcacFormatEnum.DateTime, domainMin: '2024-01-01', domainMax: '2024-01-31' },
+        yAxis: { format: PcacFormatEnum.Percentage, domainMin: 0, domainMax: 1 },
+      }), 'y');
+      expect(chart.xAxis).toMatchObject({ format: PcacFormatEnum.DateTime, domainMin: '2024-01-01', domainMax: '2024-01-31' });
+      expect(chart.yAxis).toMatchObject({ format: PcacFormatEnum.Percentage, domainMin: 0, domainMax: 1 });
     });
 
     it('a hidden y axis gives left and top to the plot; a hidden x axis gives bottom and right', () => {

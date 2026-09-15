@@ -106,6 +106,27 @@ export class PcacAxisConfig {
    * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
    */
   subLabels?: PcacAxisSubLabels
+
+  /**
+   * How the values along this axis are interpreted and shown - the tick labels, and the value
+   * (`yAxis`) or key (`xAxis`) in the default tooltip. On the line/area/plot charts the x axis's
+   * format is also what decides how a point's `key` maps to an x position (by index for the
+   * default, `Decimal` and `DateTime` by the key's own value on a linear/time scale - see
+   * `PcacLineAreaChartConfig`); a bar chart's category axis ignores it. Default `None`, which
+   * on those charts behaves as `DatasetLength`.
+   */
+  format?: PcacFormatEnum = PcacFormatEnum.None
+
+  /**
+   * The value axis's domain: it runs from `domainMin` to `domainMax`, ignoring the data. Defaults
+   * 0 and 100. Only the type of axis that has a domain to set reads them - a bar chart's category
+   * axis ignores both, its value axis reads `domainMax` only (bars always grow from 0), and a
+   * line/area/plot chart's x axis reads them only under the `Decimal` (numbers) and `DateTime`
+   * (anything `new Date()` accepts, and required) formats - the index-based formats size the
+   * axis from the data.
+   */
+  domainMin?: number | string = 0
+  domainMax?: number | string = 100
 }
 
 /**
@@ -164,6 +185,9 @@ export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false
     showLine: axis?.showLine ?? defaults.showLine!,
     label: axis?.label,
     subLabels: axis?.subLabels,
+    format: axis?.format ?? defaults.format!,
+    domainMin: axis?.domainMin ?? defaults.domainMin!,
+    domainMax: axis?.domainMax ?? defaults.domainMax!,
   };
 }
 

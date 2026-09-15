@@ -24,10 +24,8 @@ function config(): PcacLineAreaChartConfig {
     ...new PcacLineAreaChartConfig(),
     enableEffects: false,
     enableZoom: false,
-    yDomainMax: 100,
-    yDomainMin: 0,
-    xDomainMin: 0,
-    xDomainMax: 100,
+    xAxis: { domainMin: 0, domainMax: 100 },
+    yAxis: { domainMin: 0, domainMax: 100 },
     data: [series('shown', false), series('hidden', true)],
   };
 }

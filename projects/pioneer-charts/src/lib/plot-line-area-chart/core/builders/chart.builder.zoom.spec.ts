@@ -21,11 +21,8 @@ function config(xFormat: PcacFormatEnum): PcacLineAreaChartConfig {
     ...new PcacLineAreaChartConfig(),
     enableEffects: false,
     enableZoom: true,
-    xFormat,
-    yDomainMin: 0,
-    yDomainMax: 100,
-    xDomainMin: '2024-01-01T00:00:00Z',
-    xDomainMax: '2024-01-31T00:00:00Z',
+    xAxis: { format: xFormat, domainMin: '2024-01-01T00:00:00Z', domainMax: '2024-01-31T00:00:00Z' },
+    yAxis: { domainMin: 0, domainMax: 100 },
     // Deliberately not evenly spaced, so index-based and date-based x positions differ.
     data: [{ key: 's', value: null, hide: false, data: [
       { key: '2024-01-02T00:00:00Z', value: 10, hide: false, data: [] },

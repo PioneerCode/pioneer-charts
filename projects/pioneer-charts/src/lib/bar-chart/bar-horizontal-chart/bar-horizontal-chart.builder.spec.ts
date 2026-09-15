@@ -20,10 +20,9 @@ function chartElm(width = 800): ElementRef {
 function config(): PcacBarHorizontalChartConfig {
   return {
     height: 200,
-    domainMax: 100,
+    xAxis: { domainMax: 100 },
     isStacked: false,
     thresholds: [],
-    tickFormat: undefined as unknown as PcacBarHorizontalChartConfig['tickFormat'],
     spreadColorsPerGroup: false,
     colorOverride: { colors: [] },
     data: [
@@ -140,7 +139,7 @@ describe('BarHorizontalChartBuilder', () => {
     builder.buildChart(elm, {
       ...config(),
       isStacked: true,
-      domainMax: 100,
+      xAxis: { domainMax: 100 },
       data: [{ key: 'G', value: null, hide: false, data: [
         { key: 'a', value: 10, hide: false, data: [] },
         { key: 'b', value: 20, hide: false, data: [] },

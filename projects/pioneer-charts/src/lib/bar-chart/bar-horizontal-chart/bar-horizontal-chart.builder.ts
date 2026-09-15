@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
  */
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
 import { PcacChart } from '../../core/chart';
-import { PcacData, PcacFormatEnum } from '../../core/chart.model';
+import { PcacData } from '../../core/chart.model';
 import { stackStarts } from '../../core/stack';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
@@ -57,8 +57,9 @@ export class BarHorizontalChartBuilder extends PcacChart {
       return d.value;
     });
 
+    // Bars grow from 0, so only `domainMax` is read; `xAxis.domainMin` is ignored.
     this.xScale = scaleLinear()
-      .domain([0, config.domainMax]);
+      .domain([0, this.xAxis.domainMax as number]);
 
 
     this.yScaleStacked = scaleBand()
@@ -81,7 +82,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
   private drawChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
     this.buildContainer(chartElm);
-    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScale, this.yScaleStacked, config.tickFormat || PcacFormatEnum.None, PcacFormatEnum.None));
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScale, this.yScaleStacked));
     this.drawGrids(this.xScale, this.yScaleStacked);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
@@ -173,7 +174,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .on('mousemove', function (this: SVGRectElement, event: MouseEvent, d: PcacData) {
         const groupIndex = Number((this.parentNode as Element).getAttribute('data-group-id'));
         const index = Number(this.getAttribute('data-group-bar-id'));
-        self.showTooltip(event, d, { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: config.tickFormat || PcacFormatEnum.None });
+        self.showTooltip(event, d, { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: self.xAxis.format });
       })
       .on('mouseout', function (this: any) {
         self.hideTooltip();
@@ -206,7 +207,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         return i;
       })
       .on('mousemove', (event: MouseEvent) => {
-        this.showTooltip(event, config.thresholds[0], { index: 0, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None });
+        this.showTooltip(event, config.thresholds[0], { index: 0, isThreshold: true, valueFormat: this.xAxis.format });
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
@@ -230,7 +231,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.showTooltip(
           event,
           config.isStacked ? threshold.data[0] : threshold,
-          { index, parent: config.data[index], parentIndex: index, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
+          { index, parent: config.data[index], parentIndex: index, isThreshold: true, valueFormat: self.xAxis.format }
         );
       })
       .transition()
@@ -255,7 +256,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
         self.showTooltip(
           event,
           config.thresholds[groupIndex].data[index],
-          { index, parent: config.data[groupIndex], parentIndex: groupIndex, isThreshold: true, valueFormat: config.tickFormat || PcacFormatEnum.None }
+          { index, parent: config.data[groupIndex], parentIndex: groupIndex, isThreshold: true, valueFormat: self.xAxis.format }
         );
       })
       .transition()

@@ -29,11 +29,10 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
    * bare rule; that's D3's standard look and is left as-is. `label` and `subLabels` are drawn
    * inside the axis group (so they're raised and non-interactive along with it) - see `drawLabels`.
+   * `format` picks the tick label format; `None` leaves D3's default.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
-  yFormat?: PcacFormatEnum;
-  xFormat?: PcacFormatEnum;
 }
 
 @Injectable({
@@ -66,18 +65,16 @@ export class PcacAxisBuilder {
       yAxis.tickSizeInner(config.yAxis.tickSize);
     }
 
-    if (config.yFormat) {
-      switch (config.yFormat) {
-        case PcacFormatEnum.Percentage:
-          yAxis.tickFormat(d => d + "%");
-          break;
-        case PcacFormatEnum.Minutes:
-          yAxis.tickFormat((d) => d + 'm');
-          break;
-        case PcacFormatEnum.Fahrenheit:
-          yAxis.tickFormat((d) => d + ' F');
-          break;
-      }
+    switch (config.yAxis.format) {
+      case PcacFormatEnum.Percentage:
+        yAxis.tickFormat(d => d + "%");
+        break;
+      case PcacFormatEnum.Minutes:
+        yAxis.tickFormat((d) => d + 'm');
+        break;
+      case PcacFormatEnum.Fahrenheit:
+        yAxis.tickFormat((d) => d + ' F');
+        break;
     }
 
     const group = config.svg.append('g')
@@ -100,29 +97,27 @@ export class PcacAxisBuilder {
       xAxis.tickSizeInner(config.xAxis.tickSize);
     }
 
-    if (config.xFormat) {
-      switch (config.xFormat) {
-        case PcacFormatEnum.Percentage:
-          xAxis.tickFormat(d => d + "%");
-          break;
-        case PcacFormatEnum.Minutes:
-          xAxis.tickFormat((d) => d + 'm');
-          break;
-        case PcacFormatEnum.Fahrenheit:
-          xAxis.tickFormat((d) => d + ' F');
-          break;
-        case PcacFormatEnum.OneDayHours:
-          xAxis.tickFormat((d) => {
-            const h = d as number;
-            const hour = h % 12 === 0 ? 12 : h % 12;
-            const period = h < 12 ? 'am' : 'pm';
-            return `${hour}${period}`;
-          });
-          break;
-        case PcacFormatEnum.Decimal:
-          xAxis.tickFormat((d) => format(".2s")(d as number));
-          break;
-      }
+    switch (config.xAxis.format) {
+      case PcacFormatEnum.Percentage:
+        xAxis.tickFormat(d => d + "%");
+        break;
+      case PcacFormatEnum.Minutes:
+        xAxis.tickFormat((d) => d + 'm');
+        break;
+      case PcacFormatEnum.Fahrenheit:
+        xAxis.tickFormat((d) => d + ' F');
+        break;
+      case PcacFormatEnum.OneDayHours:
+        xAxis.tickFormat((d) => {
+          const h = d as number;
+          const hour = h % 12 === 0 ? 12 : h % 12;
+          const period = h < 12 ? 'am' : 'pm';
+          return `${hour}${period}`;
+        });
+        break;
+      case PcacFormatEnum.Decimal:
+        xAxis.tickFormat((d) => format(".2s")(d as number));
+        break;
     }
 
     const group = config.svg.append('g')

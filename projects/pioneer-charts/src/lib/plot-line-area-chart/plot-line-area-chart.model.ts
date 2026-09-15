@@ -1,4 +1,4 @@
-import { PcacAxisChartConfig, PcacFormatEnum } from '../core/chart.model';
+import { PcacAxisChartConfig } from '../core/chart.model';
 
 export enum PcacLineAreaPlotChartConfigType {
   Line = 'line',
@@ -16,15 +16,18 @@ export class PcacPointImageConfig {
   maxHeight: number = 16
 }
 
+/**
+ * The axes' `format` and `domainMin`/`domainMax` (`PcacAxisConfig`) do more here than on the bar
+ * charts. `yAxis.domainMin`/`domainMax` are the y scale's domain (default 0..100). `xAxis.format`
+ * decides how each point's `key` becomes an x position: `Decimal` reads it as a number on a
+ * linear scale from `xAxis.domainMin` to `domainMax`, `DateTime` parses it with `new Date()` on
+ * a time scale between the two (both required), and every other format - including the default -
+ * places points by their index within their series, sizing the axis from the first series'
+ * length and ignoring the domain fields.
+ */
 export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   enableEffects: boolean = true
   enableZoom: boolean = true
-  yFormat: PcacFormatEnum = PcacFormatEnum.DatasetLength
-  xFormat: PcacFormatEnum = PcacFormatEnum.DatasetLength
-  yDomainMax!: number | string
-  yDomainMin!: number | string
-  xDomainMin!: number | string
-  xDomainMax!: number | string
 
   /**
    * Hex color codes to override the default colors

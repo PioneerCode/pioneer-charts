@@ -3353,15 +3353,19 @@
             ]
         }
     ],
-    "yDomainMax": 132,
-    "xDomainMax": 148.756,
     "enableEffects": false,
     "enableZoom": true,
-    "xFormat": "decimal",
     "colorOverride": [
         "#000000",
         "#4CAF50",
         "#f1c40f",
         "#f44336"
-    ]
+    ],
+    "xAxis": {
+        "format": "decimal",
+        "domainMax": 148.756
+    },
+    "yAxis": {
+        "domainMax": 132
+    }
 }

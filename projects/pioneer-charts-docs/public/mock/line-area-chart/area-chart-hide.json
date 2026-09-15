@@ -1,5 +1,4 @@
 {
-  "yDomainMax": 1000,
   "height": 100,
   "type": "area",
   "enableEffects": true,
@@ -82,6 +81,7 @@
   },
   "yAxis": {
     "hide": true,
-    "showGrid": false
+    "showGrid": false,
+    "domainMax": 1000
   }
 }

@@ -1,5 +1,4 @@
 {
-  "domainMax": 1000,
   "height": 200,
   "isStacked": true,
   "thresholds": [
@@ -125,5 +124,8 @@
         }
       ]
     }
-  ]
+  ],
+  "yAxis": {
+    "domainMax": 1000
+  }
 }

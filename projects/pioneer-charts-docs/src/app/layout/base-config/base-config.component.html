@@ -40,28 +40,6 @@
       </td>
     </tr>
     }
-    @if(includeTickFormat()) {
-    <tr>
-      <td>tickFormat</td>
-      <td>Set this value to change the formatting of the domain axis of your chart and the tooltip value formatting.
-        <ul>
-          <li>
-            <b>Percentage</b>
-            <ul>
-              <li>
-                All values will be shifted by 100, and a percentage symbol will be added to your domain access and value
-                displayed in the
-                tooltip.
-              </li>
-              <li>
-                1.0 = 100%
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </td>
-    </tr>
-    }
     @if(includeAxes()) {
     <tr>
       <td>xAxis / yAxis</td>
@@ -109,6 +87,18 @@
             so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
             bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
             <code>.pcac-axis-sub-label</code> rule.
+          </li>
+          <li>
+            <b>format</b> &mdash; a <code>PcacFormatEnum</code>: how this axis's values are shown in its tick
+            labels and in the default tooltip, and on the line/area/plot charts' x axis also how a point's
+            <b>key</b> maps to an x position. What each value does is chart-specific; see the rows below. Default
+            <b>None</b>. Ignored by a category axis.
+          </li>
+          <li>
+            <b>domainMin</b> / <b>domainMax</b> &mdash; the axis's domain, independent of the data. Defaults 0 and
+            100. Which axes read them is chart-specific (see the rows below): a bar chart's value axis reads only
+            <b>domainMax</b>, and the line/area/plot charts' x axis reads them only under the <b>Decimal</b> and
+            <b>DateTime</b> formats.
           </li>
         </ul>
       </td>

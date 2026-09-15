@@ -154,12 +154,12 @@ export class PcacChart {
   }
 
   /**
-   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales and
-   * formats is already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()`
-   * with a rescaled x, on zoom).
+   * The `PcacAxisBuilder` config for this chart's current state - everything but the scales is
+   * already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()` with a
+   * rescaled x, on zoom).
    */
   axisBuilderConfig<XDomain extends AxisDomain, YDomain extends AxisDomain>(
-    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, xFormat?: PcacFormatEnum, yFormat?: PcacFormatEnum
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>
   ): IPcacAxisBuilderConfig<XDomain, YDomain> {
     return {
       svg: this.svg,
@@ -169,9 +169,7 @@ export class PcacChart {
       xScale,
       yScale,
       xAxis: this.xAxis,
-      yAxis: this.yAxis,
-      xFormat,
-      yFormat
+      yAxis: this.yAxis
     };
   }
 

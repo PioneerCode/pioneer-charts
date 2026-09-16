@@ -8,7 +8,7 @@ import { ElementRef, TemplateRef, inject } from '@angular/core';
 import { PCAC_AXIS_LABEL_SPACE, PCAC_AXIS_SUB_LABEL_SPACE, PcacAxisChartConfig, PcacChartConfig, PcacChartMargin, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, axisLabelSpace, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
-import { PcacTooltipContext } from './tooltip.directive';
+import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 
 /**
  * Everything `showTooltip()` needs beyond the hovered datum itself. `parent`/`isThreshold` feed
@@ -21,6 +21,8 @@ export interface PcacTooltipOptions {
   /** See `PcacTooltipContext.parentIndex`. Defaults to `null`, matching `parent`'s default. */
   parentIndex?: number | null;
   isThreshold?: boolean;
+  /** See `PcacTooltipContext.coincident`. Defaults to none. */
+  coincident?: PcacTooltipCoincident[];
   valueFormat?: PcacFormatEnum;
   keyFormat?: PcacFormatEnum;
 }
@@ -269,6 +271,7 @@ export class PcacChart {
         isThreshold: options.isThreshold ?? false,
         index: options.index,
         parentIndex: options.parentIndex ?? null,
+        coincident: options.coincident ?? [],
       },
       options.valueFormat,
       options.keyFormat

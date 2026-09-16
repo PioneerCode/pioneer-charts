@@ -76,6 +76,10 @@ export class AppRepository {
     return './mock/line-area-chart/plot-chart-images.json';
   }
 
+  getPlotChartFanOutUrl() {
+    return './mock/line-area-chart/plot-chart-fan-out.json';
+  }
+
   getPieChartConfigUrl() {
     return './mock/pie-chart.json';
   }

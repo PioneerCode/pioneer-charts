@@ -10,6 +10,18 @@
     stroke-width: 2px;
   }
 
+  // The plot chart's `pointFanOut` anchors (see PcacPointFanOutConfig.showAnchor): a spoke from
+  // the shared coordinate to each fanned-out point, and a dot on the coordinate itself. Quiet
+  // grays, like the grid, so they read as guides rather than data.
+  .fan-out-spoke {
+    stroke: imports.$gray-400;
+    stroke-width: 1px;
+  }
+
+  .fan-out-anchor {
+    fill: imports.$gray-600;
+  }
+
   .effects-canvas {
     fill: none;
   }

@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -7,6 +8,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   selector: 'pc-data-contract',
   templateUrl: './data-contract.component.html',
   imports: [
+    RouterLink,
     LayoutCode,
     LayoutPageDocs
   ]
@@ -22,7 +24,7 @@ export class DataContractComponent {
       value: 'data',
     },
     {
-      key: 'IPcacChartConfig',
+      key: 'PcacChartConfig',
       value: 'chart-config',
     },
     {
@@ -36,34 +38,49 @@ export class DataContractComponent {
   ])
 
   data = `export class PcacData {
-  key: string | number | null;
-  value: string | number | null;
-  hide: boolean;
-  data: PcacData[];
+  key: string | number | null = null;
+  value: string | number | null = null;
   /**
-   * Line/area/plot charts only: URL (or data URI) of an
-   * image to draw at this point in place of its dot.
+   * Line/area/plot charts only, on a series: a hidden series isn't drawn
+   * (its line/area, points and hover effects), though it keeps its place
+   * in the color order. The bar and pie charts ignore it.
+   */
+  hide: boolean = false;
+  data: PcacData[] = [];
+  /**
+   * Line/area/plot charts only, on a point: URL (or data URI) of an
+   * image to draw in place of its dot, sized by the config's pointImage.
    */
   image?: string;
 }`;
 
-  baseConfig = `export interface IPcacChartConfig {
-  /**
-   * Height in pixels
-   */
-  height: number;
-  ...
-  data: PcacData[];
+  baseConfig = `export class PcacChartConfig {
+  data: PcacData[] = [];
+  /** Height in pixels. */
+  height: number = 200;
+  /** If true, height is a minimum and the chart fills a taller container. */
+  heightFull?: boolean = false;
+}
+
+/** Every chart with axes (bar, line, area, plot - not pie) extends this instead. */
+export class PcacAxisChartConfig extends PcacChartConfig {
+  xAxis?: PcacAxisConfig = new PcacAxisConfig();
+  yAxis?: PcacAxisConfig = new PcacAxisConfig();
 }`;
 
-  barChartConfig = `import { IPcacChartConfig } from '../core/chart.model';
-
-export interface IPcacBarVerticalChartConfig extends IPcacAxisChartConfig {
-  isStacked: boolean;
-  ...
+  barChartConfig = `export class PcacBarVerticalChartConfig extends PcacAxisChartConfig {
+  isStacked: boolean = false;
+  thresholds: PcacData[] = [];
+  spreadColorsPerGroup: boolean = false;
+  colorOverride: PcacBarVerticalChartColorOverrideConfig = new PcacBarVerticalChartColorOverrideConfig();
 }`;
 
-  bindConfig = `<pcac-bar-vertical-chart [config]="config"></pcac-bar-vertical-chart>`;
+  bindConfig = `<pcac-bar-vertical-chart [config]="config" />`;
 
-  typing = `const barVerticalChartConfig = { ... }  as IPcacBarVerticalChartConfig;`;
+  typing = `// Spread the class's defaults so an object literal only has to name what it changes.
+const config: PcacBarVerticalChartConfig = { ...new PcacBarVerticalChartConfig(), data, isStacked: true };
+
+// Or build one with new and assign to it.
+const config = new PcacBarVerticalChartConfig();
+config.data = data;`;
 }

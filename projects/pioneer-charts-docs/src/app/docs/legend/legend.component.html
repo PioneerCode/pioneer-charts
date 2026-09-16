@@ -36,11 +36,25 @@
         </tr>
         <tr>
           <td>items</td>
-          <td>Collection of legend items to display.</td>
+          <td>Collection of legend items to display, in order. Each is a <code>PcacLegendConfigItem</code>:
+            <ul>
+              <li><b>label</b> &mdash; the text shown next to the item's color swatch. Required.</li>
+              <li><b>checked</b> &mdash; whether the item is on. An unchecked item is drawn dimmed. Clicking an
+                item (or pressing Enter / Space on it) flips this. Default true.</li>
+              <li><b>colorOverride</b> &mdash; a hex color for the swatch. Left <code>null</code>, the item gets
+                the theme palette's color for its position, the same one a chart gives its series at that index
+                &mdash; so a legend whose items are in series order matches the chart without any override.</li>
+            </ul>
+          </td>
           <td><code>PcacLegendConfigItem[]</code></td>
           <td><code>[]</code></td>
+        </tr>
       </tbody>
     </table>
+    <p class="text-sm mt-2"><b>config</b> is a two-way model: when an item is clicked the legend replaces its
+      config with one whose item has <b>checked</b> flipped, and writes it back through
+      <code>[(config)]</code> if you bind that way. With a one-way <code>[config]</code> the change only reaches
+      you through the <b>(itemClicked)</b> event.</p>
   </section>
   <section class="pc-doc-section">
     <h3 id="events" class="mb-0">Events</h3>
@@ -55,9 +69,11 @@
       <tbody>
         <tr>
           <td>
-            (sliceClicked)="onClicked($event)"
+            (itemClicked)="onItemClicked($event)"
           </td>
-          <td>Emitted when a legend item is clicked. Will include the updated legend item data.</td>
+          <td>Emitted when a legend item is clicked or toggled from the keyboard, with every item's updated state
+            &mdash; the clicked one's <b>checked</b> flipped. Typically used to set <b>hide</b> on the matching
+            chart series.</td>
           <td>
             <code>PcacLegendConfigItem[]</code>
           </td>

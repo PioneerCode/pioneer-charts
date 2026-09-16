@@ -141,6 +141,12 @@
         <b>One template per chart.</b> Only the first <code>pcacTooltip</code> template inside a chart element is
         used.
       </li>
+      <li>
+        <b>Points that share a coordinate.</b> On the line, area and plot charts the context's <b>coincident</b>
+        lists every other point at the hovered one's coordinate, so a template can say who else is there &mdash;
+        the <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a> page's last demo does this alongside
+        <b>pointFanOut</b>, which spreads such points apart so each can be hovered in the first place.
+      </li>
     </ul>
   </section>
 </app-layout-page-docs>

@@ -49,8 +49,8 @@ export class LegendComponent {
       value: 'contract',
     }
   ])
-  markupCode = `<pcac-legend [config]="config()"/>`;
-  importCode = `import { PcacLegend } from '@pioneer-code/pioneer-charts';`;
+  markupCode = `<pcac-legend [(config)]="config" (itemClicked)="onItemClicked($event)" />`;
+  importCode = `import { PcacLegend, PcacLegendConfig, PcacLegendConfigItem } from '@pioneer-code/pioneer-charts';`;
 
   onItemClicked(_: PcacLegendConfigItem[]) {
     alert('Legend item clicked.');

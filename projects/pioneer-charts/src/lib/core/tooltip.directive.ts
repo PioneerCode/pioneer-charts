@@ -2,6 +2,18 @@ import { Directive, TemplateRef, inject } from '@angular/core';
 import { PcacData } from './chart.model';
 
 /**
+ * A datum drawn at the same coordinate as the hovered one (see `PcacTooltipContext.coincident`),
+ * located the same way the context locates `$implicit`: `parent` is the series it belongs to,
+ * `index` its position in `parent.data`, `parentIndex` the series' position in the chart's `data`.
+ */
+export interface PcacTooltipCoincident {
+  data: PcacData;
+  parent: PcacData;
+  index: number;
+  parentIndex: number;
+}
+
+/**
  * Template context handed to a consumer's `<ng-template pcacTooltip>` each time a tooltip is shown.
  */
 export interface PcacTooltipContext {
@@ -42,6 +54,15 @@ export interface PcacTooltipContext {
    * Position of `parent` in the chart's top-level `data`; `null` whenever `parent` is.
    */
   parentIndex: number | null;
+
+  /**
+   * Every *other* datum drawn at exactly the same coordinate as `$implicit`, in data order, so a
+   * template can list who else is at the hovered point. Set by the line, area and plot charts,
+   * whether or not the plot chart's `pointFanOut` has spread the points apart (without it, the
+   * hovered point is the only one of them visible, which makes this list all the more useful).
+   * Empty on the other charts and whenever nothing shares the point.
+   */
+  coincident: PcacTooltipCoincident[];
 }
 
 /**
@@ -66,6 +87,17 @@ export interface PcacTooltipContext {
  * ```html
  * <ng-template pcacTooltip let-point let-i="index" let-g="parentIndex">
  *   <div class="my-tooltip">{{ orders[g!][i].customer }}: {{ point.value | number }}</div>
+ * </ng-template>
+ * ```
+ *
+ * `coincident` lists the other points at the hovered coordinate, each located the same way:
+ *
+ * ```html
+ * <ng-template pcacTooltip let-point let-others="coincident">
+ *   <div class="my-tooltip">
+ *     {{ point.key }}, {{ point.value }}
+ *     @for (other of others; track other.parentIndex) { <div>Also here: {{ other.parent.key }}</div> }
+ *   </div>
  * </ng-template>
  * ```
  */

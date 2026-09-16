@@ -64,6 +64,10 @@ export class AppRepository {
     return './mock/line-area-chart/line-chart-images.json';
   }
 
+  getLineChartZoomUrl() {
+    return './mock/line-area-chart/line-chart-zoom.json';
+  }
+
   getAreaChartImagesUrl() {
     return './mock/line-area-chart/area-chart-images.json';
   }

@@ -1,0 +1,705 @@
+{
+  "height": 240,
+  "enableEffects": false,
+  "enableZoom": true,
+  "xAxis": {
+    "format": "dateTime",
+    "ticks": 7,
+    "domainMin": 1717200000000,
+    "domainMax": 1718388000000
+  },
+  "yAxis": {
+    "format": "fahrenheit",
+    "domainMin": 40,
+    "domainMax": 100,
+    "ticks": 6
+  },
+  "data": [
+    {
+      "key": "Outdoor",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": 1717200000000,
+          "value": 54.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717221600000,
+          "value": 66.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717243200000,
+          "value": 81.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717264800000,
+          "value": 69.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717286400000,
+          "value": 57.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717308000000,
+          "value": 65.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717329600000,
+          "value": 84.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717351200000,
+          "value": 70.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717372800000,
+          "value": 52.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717394400000,
+          "value": 67.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717416000000,
+          "value": 81.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717437600000,
+          "value": 69.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717459200000,
+          "value": 56.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717480800000,
+          "value": 69.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717502400000,
+          "value": 79.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717524000000,
+          "value": 65.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717545600000,
+          "value": 53.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717567200000,
+          "value": 69.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717588800000,
+          "value": 82.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717610400000,
+          "value": 66.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717632000000,
+          "value": 51.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717653600000,
+          "value": 68.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717675200000,
+          "value": 79.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717696800000,
+          "value": 70.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717718400000,
+          "value": 54.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717740000000,
+          "value": 67.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717761600000,
+          "value": 84.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717783200000,
+          "value": 68.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717804800000,
+          "value": 55.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717826400000,
+          "value": 67.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717848000000,
+          "value": 81.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717869600000,
+          "value": 67.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717891200000,
+          "value": 55.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717912800000,
+          "value": 65.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717934400000,
+          "value": 84.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717956000000,
+          "value": 69.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717977600000,
+          "value": 54.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717999200000,
+          "value": 65.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718020800000,
+          "value": 80.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718042400000,
+          "value": 70.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718064000000,
+          "value": 54.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718085600000,
+          "value": 67.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718107200000,
+          "value": 79.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718128800000,
+          "value": 70.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718150400000,
+          "value": 51.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718172000000,
+          "value": 67.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718193600000,
+          "value": 81.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718215200000,
+          "value": 66.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718236800000,
+          "value": 52.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718258400000,
+          "value": 65.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718280000000,
+          "value": 80.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718301600000,
+          "value": 69.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718323200000,
+          "value": 52.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718344800000,
+          "value": 68.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718366400000,
+          "value": 82.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718388000000,
+          "value": 70.3,
+          "hide": false,
+          "data": []
+        }
+      ]
+    },
+    {
+      "key": "Greenhouse",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": 1717200000000,
+          "value": 72.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717221600000,
+          "value": 81.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717243200000,
+          "value": 84.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717264800000,
+          "value": 76.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717286400000,
+          "value": 68.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717308000000,
+          "value": 79.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717329600000,
+          "value": 83.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717351200000,
+          "value": 75.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717372800000,
+          "value": 74.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717394400000,
+          "value": 82.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717416000000,
+          "value": 85.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717437600000,
+          "value": 72.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717459200000,
+          "value": 71.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717480800000,
+          "value": 80.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717502400000,
+          "value": 82.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717524000000,
+          "value": 73.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717545600000,
+          "value": 68.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717567200000,
+          "value": 83.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717588800000,
+          "value": 84.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717610400000,
+          "value": 75.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717632000000,
+          "value": 69.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717653600000,
+          "value": 84.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717675200000,
+          "value": 86.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717696800000,
+          "value": 74.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717718400000,
+          "value": 72.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717740000000,
+          "value": 84.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717761600000,
+          "value": 84.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717783200000,
+          "value": 75.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717804800000,
+          "value": 68.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717826400000,
+          "value": 79.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717848000000,
+          "value": 87.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717869600000,
+          "value": 76.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717891200000,
+          "value": 72.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717912800000,
+          "value": 82.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717934400000,
+          "value": 87.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717956000000,
+          "value": 76.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717977600000,
+          "value": 73.3,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1717999200000,
+          "value": 84.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718020800000,
+          "value": 84.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718042400000,
+          "value": 77.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718064000000,
+          "value": 72.9,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718085600000,
+          "value": 81.2,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718107200000,
+          "value": 82.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718128800000,
+          "value": 74.8,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718150400000,
+          "value": 68.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718172000000,
+          "value": 79.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718193600000,
+          "value": 82.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718215200000,
+          "value": 71.1,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718236800000,
+          "value": 71.4,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718258400000,
+          "value": 81.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718280000000,
+          "value": 85.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718301600000,
+          "value": 74.6,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718323200000,
+          "value": 69.0,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718344800000,
+          "value": 81.5,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718366400000,
+          "value": 87.7,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 1718388000000,
+          "value": 72.0,
+          "hide": false,
+          "data": []
+        }
+      ]
+    }
+  ]
+}

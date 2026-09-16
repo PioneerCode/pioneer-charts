@@ -96,30 +96,30 @@
         </tr>
         <tr>
           <td>thresholds</td>
-          <td>Threshold are configure using the same structure as
-            <a routerLink="/docs/guides/data-contract">PcacData</a>.
+          <td>Threshold markers, configured with the same
+            <a routerLink="/docs/guides/data-contract">PcacData</a> structure as the data; each one's
+            <b>value</b> is where it's drawn on the value axis. How many levels you give decides what each
+            threshold spans:
             <ul style="margin: 0">
-              <li>If the thresholds variable is left empty, you will get no thresholds on the UI.</li>
-              <li>If there is one object in the first dimension with no objects in that "data" variable of that
-                object,
-                you will get a threshold that spans the entire chart.</li>
-              <li>If there is more then one object "value" in the first dimension with no objects in each "data"
-                variable,
-                you will get a threshold that spans the each group in the data set.</li>
-              <li>If there is more then one object "value" in the first dimension with in each "data" variable, you
-                will
-                get a threshold that spans the each bar of each group in the data set.</li>
+              <li>Empty (the default) &mdash; no thresholds.</li>
+              <li>One entry with an empty <b>data</b> &mdash; a single threshold across the whole chart.</li>
+              <li>One entry per group, each with an empty <b>data</b> &mdash; a threshold per group, spanning
+                that group's bars.</li>
+              <li>One entry per group, each with an entry per bar in its <b>data</b> &mdash; a threshold per bar.</li>
             </ul>
+            A hovered threshold shows its value in the tooltip, and a custom tooltip template can tell it from a
+            bar via <b>isThreshold</b>.
           </td>
         </tr>
         <tr>
           <td>spreadColorsPerGroup</td>
-          <td>If set to true spread current color collection across groups by index, instead of bars in a group.</td>
+          <td>If true, colors are assigned per group (every bar in a group shares its group's color) instead of
+            per bar within a group. Default false.</td>
         </tr>
         <tr>
           <td>colorOverride.colors</td>
-          <td>Add a collection of hex colors to override the color service per chart. "#" must be included in each
-            value of the collection.</td>
+          <td>Hex colors (with the leading <code>#</code>), used in order instead of the theme palette. Omitted or
+            empty, the theme palette is used.</td>
         </tr>
       </tbody>
     </app-layout-base-config>

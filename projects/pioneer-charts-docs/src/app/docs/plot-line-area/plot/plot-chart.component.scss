@@ -1,0 +1,38 @@
+@use "colors";
+
+// The fan-out demo's tooltip. Same look as the Custom Tooltip page's (see tooltip.component.scss
+// for why these rules reach a tooltip rendered into <body>).
+.pc-tooltip {
+  min-width: 10rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border-left: 4px solid colors.$primary-light;
+  background: colors.$body-bg;
+  color: colors.$primary;
+  box-shadow: 0 4px 16px rgba(colors.$black, 0.18);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.pc-tooltip-title {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.pc-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pc-tooltip-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.pc-tooltip-other {
+  color: rgba(colors.$primary, 0.6);
+  font-size: 0.75rem;
+}

@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { RouterLink } from '@angular/router';
 import {
   PcacBarVerticalChartComponent,
   PcacData,
@@ -22,6 +23,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   imports: [
     DecimalPipe,
     PercentPipe,
+    RouterLink,
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
@@ -114,6 +116,12 @@ export class TooltipComponent {
 
   // Position of parent in the top-level data; null whenever parent is.
   parentIndex: number | null;
+
+  // Every *other* datum drawn at exactly the same coordinate as the hovered one, in data order,
+  // each located the same way ({ data, parent, index, parentIndex }). Set by the line, area and
+  // plot charts - whether or not the plot chart's pointFanOut has spread them apart - and empty
+  // on the other charts and whenever nothing shares the point.
+  coincident: PcacTooltipCoincident[];
 }`;
 
   ownDataTsCode = `// Your source collection, grouped the same way the chart is: one entry per group,

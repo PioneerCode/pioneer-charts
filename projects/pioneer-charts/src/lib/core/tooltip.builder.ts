@@ -53,7 +53,7 @@ export class PcacTooltipBuilder {
    * projected `pcacTooltip` template. This only ever renders the default content.
    */
   showBarTooltip(event: MouseEvent, data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
-    this.showTooltip(event, undefined, { $implicit: data, parent: null, isThreshold: false, index: 0, parentIndex: null }, valueFormat, keyFormat);
+    this.showTooltip(event, undefined, { $implicit: data, parent: null, isThreshold: false, index: 0, parentIndex: null, coincident: [] }, valueFormat, keyFormat);
   }
 
   hideTooltip(): void {

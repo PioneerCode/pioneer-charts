@@ -17,25 +17,22 @@
           </p>
         </section>
         <section class="pc-doc-section">
-          <h3 id="chart-config">IPcacChartConfig</h3>
+          <h3 id="chart-config">PcacChartConfig</h3>
           <app-layout-code language="typescript" [code]="baseConfig"></app-layout-code>
-          <p>A lot of charts inside the Pioneer Charts library share basic configuration parameters. Of which are
-            represented
-            in this interface. We account for these shared parameters in this interface, of which has a property of the
-            type
-            <b>PcacData[]</b>.
+          <p>Every chart shares these basic configuration parameters, so they live on one base class whose
+            <b>data</b> is the <b>PcacData[]</b> above. Charts with axes add the per-axis <b>xAxis</b> /
+            <b>yAxis</b> objects through <b>PcacAxisChartConfig</b> (see the
+            <a routerLink="/docs/guides/axis-styling">Axis Styling</a> guide). Configs are classes rather than
+            interfaces so that <code>new</code> gives you every default; a plain object literal (or JSON) works
+            too, but then anything left out is simply unset.
           </p>
         </section>
         <section class="pc-doc-section">
           <h3 id="new-chart-config">New Chart Config</h3>
-          <p>Now that we have an interface that effectively represent shared aspects of most charts and defines a
-            repeatable
-            and familiar contract to represent raw data, we are in a position to make chart specif configuration. Each
-            chart
-            in the Pioneer Chart library typically extends
-            <b>IPcacChartConfig</b> to set a bases for configuration and provides additional chart specific
-            configuration alongside
-            of it. For example, in the case of a bar chart, the configure looks similar to the following.
+          <p>With a base that represents the shared aspects of every chart and a repeatable contract for raw data,
+            each chart's own config extends one of those bases and adds its chart-specific fields alongside. The
+            vertical bar chart's, for example, is the following; every chart's page documents its fields under
+            <i>API</i>.
           </p>
           <app-layout-code language="typescript" [code]="barChartConfig"></app-layout-code>
         </section>
@@ -45,8 +42,8 @@
             <b>[config]</b> input of that chart.
           </p>
           <app-layout-code language="html" [code]="bindConfig"></app-layout-code>
-          <p>To strongly type your config, you typically want to supply the specific charts config interface as the
-            typing.</p>
+          <p>Type the config as the specific chart's config class. Spreading a <code>new</code> instance is the
+            easy way to pick up every default while overriding only what you need:</p>
           <app-layout-code language="typescript" [code]="typing"></app-layout-code>
         </section>
       </div>

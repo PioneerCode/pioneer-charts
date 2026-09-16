@@ -18,4 +18,60 @@
       <pcac-plot-chart [config]="pcService.plotImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
+  <h4 class="mt-6 mb-2">Points that share a coordinate</h4>
+  <p class="mb-3">Set <code>pointFanOut</code> to spread points that would be drawn on top of one another
+    around their shared coordinate, so each stays visible and hoverable; <code>{{ '{}' }}</code> takes every
+    default. An anchor dot marks the true value. Whether or not it's on, a hovered point's tooltip context
+    lists the others at its coordinate in <code>coincident</code> - hover a fanned-out point below.</p>
+  <mat-card class="p-3 mb-3">
+    <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
+      <pcac-plot-chart [config]="pcService.plotFanOutConfig.value()" (dotClicked)="pcService.onClicked($event)">
+        <ng-template pcacTooltip let-point let-series="parent" let-others="coincident">
+          <div class="pc-tooltip">
+            <span class="pc-tooltip-title">{{ series?.key }}</span>
+            <div class="pc-tooltip-row">
+              <span>{{ point.key }}h</span>
+              <span class="pc-tooltip-value">{{ point.value }}&deg;</span>
+            </div>
+            @for (other of others; track other.parentIndex) {
+              <div class="pc-tooltip-row pc-tooltip-other">
+                <span>Also here</span>
+                <span>{{ other.parent.key }}</span>
+              </div>
+            }
+          </div>
+        </ng-template>
+      </pcac-plot-chart>
+    </app-layout-resource-state>
+  </mat-card>
+  <ng-container configRows>
+    <tr>
+      <td>pointFanOut</td>
+      <td>Plot chart only. Spread points that share a coordinate (same x position and <b>value</b>) around it
+        instead of drawing them on top of one another, where only the last series' point shows and only it can be
+        hovered. Off when omitted; <code>{{ '{}' }}</code> turns it on with the defaults below. Each group is placed
+        evenly around a ring on the shared coordinate &mdash; a pair straight up and down, larger groups clockwise
+        from the top, in series order &mdash; and the chart reserves edge space for the spread the same way it does
+        for <b>pointImage</b>. Zoom moves a fanned-out group as one. Every point keeps its true <b>key</b> /
+        <b>value</b> in the tooltip, whose context also lists the others at the coordinate in <b>coincident</b>
+        (see <a routerLink="/docs/guides/tooltip">Custom Tooltip</a>).
+        <ul>
+          <li>
+            <b>gap</b> &mdash; space in pixels between neighbouring points on the ring, measured between their image
+            boxes (or hovered dots). Each group gets the smallest ring at which its members sit this far apart.
+            Default 4.
+          </li>
+          <li>
+            <b>radius</b> &mdash; a fixed ring radius in pixels for every group, instead of sizing each by
+            <b>gap</b>. Unset by default.
+          </li>
+          <li>
+            <b>showAnchor</b> &mdash; draw a dot on the shared coordinate with a spoke to each fanned-out point, so
+            the true value stays marked. Default true. Styled by the theme's <code>.fan-out-anchor</code> and
+            <code>.fan-out-spoke</code> rules.
+          </li>
+        </ul>
+      </td>
+    </tr>
+  </ng-container>
 </app-plot-line-area-base>

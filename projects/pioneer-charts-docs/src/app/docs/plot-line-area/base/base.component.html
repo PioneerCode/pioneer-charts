@@ -119,6 +119,7 @@
             the point. It gets the same tooltip and <code>(dotClicked)</code> behavior as a dot (only the
             hover enlarge effect is dot-only).</td>
         </tr>
+        <ng-content select="[configRows]" />
       </tbody>
     </app-layout-base-config>
   </section>
@@ -137,7 +138,7 @@
           <td>
             (dotClicked)="onClicked($event)"
           </td>
-          <td>Emitted when a dot on a line is clicked.</td>
+          <td>Emitted when a point (its dot, or its image) is clicked.</td>
           <td>
             <a routerLink="/docs/guides/data-contract">PcacData</a>
           </td>

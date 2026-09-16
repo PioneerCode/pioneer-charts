@@ -1,3 +1,23 @@
+<a name="22.3.0"></a>
+# [v22.3.0]
+
+### Added
+  - Plot charts can spread out points that share a coordinate. Set `pointFanOut` on
+    `PcacPlotChartConfig` (`{}` for the defaults) and each group of coincident points is placed
+    evenly around a ring on their shared coordinate - a pair straight up and down, larger groups
+    clockwise from the top - sized so neighbours sit `gap` px apart (or at a fixed `radius`), with
+    an anchor dot and spokes marking the true value (`showAnchor`). Previously such points were
+    drawn on top of one another, leaving only the last series' visible and hoverable. The offset
+    is applied inside each point's group, so zoom is unaffected, and the chart reserves edge space
+    for the fan-out the same way it does for point images. See `PcacPointFanOutConfig`.
+  - The tooltip context (`PcacTooltipContext`) gains `coincident`: every other point drawn at the
+    hovered point's coordinate, each with its own `data` / `parent` / `index` / `parentIndex`, so a
+    template can list who else is there. Set by the line, area and plot charts whether or not
+    `pointFanOut` is on; empty elsewhere. `PcacTooltipOptions` takes it as an optional field, and
+    `PcacTooltipCoincident` is exported for typing.
+  - The docs site's Plot Chart page demonstrates both, with a tooltip template that lists the
+    other series at a fanned-out point.
+
 <a name="22.2.1"></a>
 # [v22.2.1]
 

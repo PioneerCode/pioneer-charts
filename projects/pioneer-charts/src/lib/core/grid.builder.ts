@@ -49,8 +49,8 @@ function gridLines<Domain extends AxisDomain>(scale: AxisScale<Domain>, numberOf
 export class PcacGridBuilder {
   /**
    * Vertical lines, one per x-axis tick (or category), running the plot's full height. The group
-   * is classed `pcac-grid-vertical` so a chart can find and redraw just this grid - the
-   * line/area/plot charts do on zoom, when the x ticks move.
+   * is classed `pcac-grid-vertical` (the horizontal one `pcac-grid-horizontal`) so a chart can
+   * find and redraw just one grid - the line/area/plot charts do on zoom, when an axis's ticks move.
    */
   drawVerticalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')

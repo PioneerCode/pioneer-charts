@@ -23,7 +23,8 @@ class TestHostComponent {
   readonly config = signal<PcacLineAreaChartConfig>({
     ...new PcacLineAreaChartConfig(),
     enableEffects: false,
-    enableZoom: false,
+    enableZoomX: false,
+    enableZoomY: false,
     data: [{ key: 's', value: null, hide: false, data: [{ key: 1, value: 5, hide: false, data: [] }, { key: 2, value: 8, hide: false, data: [] }] }],
   });
 }

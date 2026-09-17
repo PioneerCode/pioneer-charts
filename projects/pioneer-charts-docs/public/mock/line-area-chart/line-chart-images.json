@@ -2,7 +2,7 @@
   "height": 200,
   "yAxis": { "domainMax": 100 },
   "enableEffects": false,
-  "enableZoom": true,
+  "enableZoomX": true,
   "pointImage": {
     "maxWidth": 28,
     "maxHeight": 28

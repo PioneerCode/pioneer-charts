@@ -99,11 +99,16 @@
             object literal (or JSON) that omits it gets no effects.</td>
         </tr>
         <tr>
-          <td>enableZoom</td>
+          <td>enableZoomX</td>
           <td>If true, the chart can be zoomed along the x-axis with the mouse wheel (1x to 10x) and panned by
-            dragging, staying within the original domain; lines, areas, points and the x-axis all follow. Default
-            is true when the config is created with <code>new</code>; an object literal (or JSON) that omits it
-            gets no zoom.</td>
+            dragging, staying within the original domain; lines, areas, points, the x-axis and its grid all
+            follow. Default is false.</td>
+        </tr>
+        <tr>
+          <td>enableZoomY</td>
+          <td>The same along the y-axis: zoom (1x to 10x) and pan within the y domain, with the y-axis and its
+            grid following. Independent of <code>enableZoomX</code> &mdash; set either or both. With only one on,
+            the other axis just stays put during a gesture. Default is false.</td>
         </tr>
         <tr>
           <td>colorOverride</td>

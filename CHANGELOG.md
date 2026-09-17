@@ -1,7 +1,18 @@
-<a name="22.3.0"></a>
-# [v22.3.0]
+<a name="22.2.3"></a>
+# [v22.2.3]
+
+### Breaking
+  - `PcacLineAreaChartConfig.enableZoom` is renamed `enableZoomX`, now that it has a y-axis
+    counterpart (below), and now defaults to `false` like it. It still means x-axis zoom only. A
+    config that relied on the old `new`-built default of `true`, or a JSON/object-literal config
+    carrying `enableZoom`, gets no x zoom until it sets `enableZoomX: true`.
 
 ### Added
+  - Line, area and plot charts can zoom along the y axis: `enableZoomY` on `PcacLineAreaChartConfig`
+    (default `false`) zooms and pans the y axis the way `enableZoomX` does the x axis, with the y axis
+    and its horizontal grid redrawn to follow, and the hover crosshair's value read off the zoomed
+    scale. The two are independent - either or both can be on; with only one, the other axis stays
+    put during a gesture. The docs site's Line Chart zoom demo now has both enabled.
   - Plot charts can spread out points that share a coordinate. Set `pointFanOut` on
     `PcacPlotChartConfig` (`{}` for the defaults) and each group of coincident points is placed
     evenly around a ring on their shared coordinate - a pair straight up and down, larger groups

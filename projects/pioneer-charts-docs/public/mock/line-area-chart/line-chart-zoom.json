@@ -1,7 +1,8 @@
 {
   "height": 240,
   "enableEffects": false,
-  "enableZoom": true,
+  "enableZoomX": true,
+  "enableZoomY": true,
   "xAxis": {
     "format": "dateTime",
     "ticks": 7,

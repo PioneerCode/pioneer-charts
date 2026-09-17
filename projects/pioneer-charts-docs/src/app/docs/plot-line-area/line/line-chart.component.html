@@ -26,16 +26,17 @@
     </app-layout-resource-state>
   </mat-card>
   <h4 class="mt-6 mb-2">Zoom</h4>
-  <p class="mb-3">With <code>enableZoom</code> on, the x axis can be zoomed and panned in place: scroll (or pinch)
+  <p class="mb-3">With <code>enableZoomX</code> on, the x axis can be zoomed and panned in place: scroll (or pinch)
     over the chart to zoom from 1&times; up to 10&times; around the cursor, then drag to pan. The view never leaves
-    the original domain, and the lines, points, x axis and vertical grid all follow. Two weeks of readings every
-    six hours, two series &mdash; crowded at 1&times;, so zoom in on a day or two.</p>
+    the original domain, and the lines, points, x axis and vertical grid all follow. <code>enableZoomY</code> does
+    the same for the y axis, with the y axis and horizontal grid following; turn on either or both. This demo has
+    both: two weeks of readings every six hours, two series &mdash; crowded at 1&times;, so zoom in on a day or
+    two, and on the 50&ndash;90&deg; band the readings actually occupy within the 40&ndash;100&deg; axis.</p>
   <mat-card class="p-3">
     <app-layout-resource-state [resource]="pcService.lineChartZoomConfig">
       <pcac-line-chart [config]="pcService.lineChartZoomConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <p class="text-sm mt-2">Zoom works the same on the area and plot charts. It's on by default for a config built
-    with <code>new</code>; an object literal or JSON config has to set it. This demo leaves the hover effects
-    (<code>enableEffects</code>) off so the gesture is the only thing happening.</p>
+  <p class="text-sm mt-2">Zoom works the same on the area and plot charts. Both options are off by default. This
+    demo leaves the hover effects (<code>enableEffects</code>) off so the gesture is the only thing happening.</p>
 </app-plot-line-area-base>

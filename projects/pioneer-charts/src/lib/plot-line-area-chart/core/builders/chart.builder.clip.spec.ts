@@ -18,7 +18,8 @@ function config(): PcacLineAreaChartConfig {
   return {
     height: 200,
     enableEffects: false,
-    enableZoom: false,
+    enableZoomX: false,
+    enableZoomY: false,
     xAxis: { domainMin: 0, domainMax: 100 },
     yAxis: { domainMin: 0, domainMax: 100 },
     colorOverride: [],

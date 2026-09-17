@@ -111,7 +111,7 @@
         x axis's (or through each category, on a category axis), and <b>ticks</b> on that axis sets how many
         there are. With <b>showGrid</b> unset a chart draws the one grid it always has &mdash; the y axis's on
         vertical bar and line/area/plot charts, the x axis's on the horizontal bar chart; set it on either axis
-        to turn that grid on or off. On line, area and plot charts the x axis's grid follows zoom and pan.
+        to turn that grid on or off. On line, area and plot charts a zoomable axis's grid follows zoom and pan.
       </li>
       <li>
         <b>A label titles the axis.</b> It sits centered along the axis at the chart's edge (rotated for the
@@ -128,8 +128,8 @@
         tick marks, and vice versa. The line carries D3's short end-caps at either end.
       </li>
       <li>
-        <b>Zoom keeps it all.</b> On line, area and plot charts the x axis is redrawn as you zoom and pan, with the
-        same settings.
+        <b>Zoom keeps it all.</b> On line, area and plot charts a zoomable axis (<code>enableZoomX</code> for x,
+        <code>enableZoomY</code> for y) is redrawn as you zoom and pan, with the same settings.
       </li>
       <li>
         <b>Color comes from the theme.</b> Marks and axis lines are both stroked with <code>$gray-900</code>, via

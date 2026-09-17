@@ -12,7 +12,7 @@
     "domainMax": 100
   },
   "enableEffects": false,
-  "enableZoom": true,
+  "enableZoomX": true,
   "pointImage": {
     "maxWidth": 24,
     "maxHeight": 24

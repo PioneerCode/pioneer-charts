@@ -92,20 +92,34 @@ export class PlaChartBuilder extends PcacChart {
     this.lineGenerator = buildLineGenerator(this.xAxis.format, this.scales);
     this.areaGenerator = buildAreaGenerator(this.xAxis.format, this.scales, this.height);
 
-    if (this.config.enableZoom) {
+    if (this.zoomEnabled) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
-        // Rescale x
-        const newX = event.transform.rescaleX(this.scales.x);
+        // A d3 zoom transform is always two-dimensional; only the enabled axes follow it and the
+        // other keeps its original scale, so that component of the gesture is simply ignored.
+        const newX = this.config.enableZoomX ? event.transform.rescaleX(this.scales.x) : this.scales.x;
+        const newY = this.config.enableZoomY ? event.transform.rescaleY(this.scales.y) : this.scales.y;
+        const zoomedScales: PlaChartScales = { x: newX, y: newY };
 
-        // Update axis
-        this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, this.scales.y));
+        // Update the zoomed axes, each with its grid: the grid hangs off the axis's ticks, so it
+        // is redrawn against the rescaled scale and dropped back underneath everything (append
+        // puts it on top).
+        if (this.config.enableZoomX) {
+          this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, newY));
+          this.svg.selectAll('.pcac-grid-vertical').remove();
+          this.drawGrids(newX, newY, 'x');
+        }
+        if (this.config.enableZoomY) {
+          this.axisBuilder.drawYAxis(this.axisBuilderConfig(newX, newY));
+          this.svg.selectAll('.pcac-grid-horizontal').remove();
+          this.drawGrids(newX, newY, 'y');
+        }
+        this.svg.selectAll('.pcac-grid').lower();
 
-        // Update lines/areas. Fresh generators against the rescaled x, so they go through the
-        // same getXFormat() as the dots below - positioning by bare index here (which this used
-        // to do, and which also overwrote the original generators' x accessor for good) is only
-        // right for the default DatasetLength format; a DateTime/Decimal chart's lines drifted
-        // away from its dots as soon as it was zoomed.
-        const zoomedScales: PlaChartScales = { x: newX, y: this.scales.y };
+        // Update lines/areas. Fresh generators against the rescaled scales, so they go through
+        // the same getXFormat() as the dots below - positioning by bare index here (which this
+        // used to do, and which also overwrote the original generators' x accessor for good) is
+        // only right for the default DatasetLength format; a DateTime/Decimal chart's lines
+        // drifted away from its dots as soon as it was zoomed.
         const zoomedLine = buildLineGenerator(this.xAxis.format, zoomedScales);
         const zoomedArea = buildAreaGenerator(this.xAxis.format, zoomedScales, this.height);
         this.svg.selectAll<SVGPathElement, PcacData[]>('.line').attr('d', (d: PcacData[]) => zoomedLine(d));
@@ -116,18 +130,18 @@ export class PlaChartBuilder extends PcacChart {
         // (DatasetLength) positions by index, and a flat selection would number every series'
         // points consecutively, shoving the second series' points off to the right on zoom.
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
-          .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, newX));
+          .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, zoomedScales));
         // A fan-out's anchor is positioned like the points it belongs to, so it moves the same way.
         this.svg.selectAll<SVGGElement, PlaCoincidentGroup>('.fan-out')
-          .attr('transform', (g: PlaCoincidentGroup) => this.fanOutTransform(g, newX));
+          .attr('transform', (g: PlaCoincidentGroup) => this.fanOutTransform(g, zoomedScales));
 
-        // The vertical grid hangs off the x ticks too, so redraw it against the rescaled x and
-        // drop it back underneath everything (append puts it on top).
-        this.svg.selectAll('.pcac-grid-vertical').remove();
-        this.drawGrids(newX, this.scales.y, 'x');
-        this.svg.selectAll('.pcac-grid-vertical').lower();
+        // The hover crosshair walks the (already updated) line geometry, but reads its value back
+        // off the y scale - which must be the zoomed one or the label is wrong.
+        if (this.config.enableEffects) {
+          this.effectsBuilder.updateScales(newX, newY);
+        }
 
-        // drawXAxis re-appends the x axis at the end of the group, above the dots; put them back
+        // Redrawing an axis appends it at the end of the group, above the dots; put them back
         // on top so a point on the baseline isn't covered (see drawChart's draw order).
         this.svg.selectAll('.fan-outs').raise();
         this.svg.selectAll('.dots').raise();
@@ -240,8 +254,12 @@ export class PlaChartBuilder extends PcacChart {
       .attr('height', this.height + this.clipBuffer * 2);
   }
 
+  private get zoomEnabled(): boolean {
+    return !!(this.config.enableZoomX || this.config.enableZoomY);
+  }
+
   private attachZoomBehavior(): void {
-    if (!this.config.enableZoom) return;
+    if (!this.zoomEnabled) return;
 
     // Add a transparent rect to capture zoom events
     //
@@ -315,14 +333,14 @@ export class PlaChartBuilder extends PcacChart {
    * Draws one `<g class="fan-outs">` holding a `<g class="fan-out">` per group of coincident
    * points: a spoke from the shared coordinate to where each member is drawn, and an anchor dot
    * on the coordinate itself. Only when the fan-out is on and asks for anchors. The group is
-   * positioned by the same x translate as a point (see `drawDots`), so zoom moves it the same
-   * way, and fades in over the points' own entry transition.
+   * positioned by the same translate as a point (see `drawDots`), so zoom moves it the same
+   * way and everything inside is relative to the coordinate; it fades in over the points' own
+   * entry transition.
    */
   private drawFanOuts(): void {
     if (!this.fanOut?.showAnchor || this.coincidentGroups.length === 0) {
       return;
     }
-    const y = (group: PlaCoincidentGroup) => this.scales.y(group.members[0].data.value as number);
     const groups = this.svg.append('g')
       .attr('class', 'fan-outs')
       .attr('clip-path', `url(#${this.clipPathId})`)
@@ -330,20 +348,19 @@ export class PlaChartBuilder extends PcacChart {
       .data(this.coincidentGroups)
       .enter().append('g')
       .attr('class', 'fan-out')
-      .attr('transform', (group: PlaCoincidentGroup) => this.fanOutTransform(group, this.scales.x));
+      .attr('transform', (group: PlaCoincidentGroup) => this.fanOutTransform(group, this.scales));
 
     groups.selectAll('.fan-out-spoke')
-      .data((group: PlaCoincidentGroup) => group.members.map((member) => ({ y: y(group), ...this.offsetOf(member.data) })))
+      .data((group: PlaCoincidentGroup) => group.members.map((member) => this.offsetOf(member.data)))
       .enter().append('line')
       .attr('class', 'fan-out-spoke')
       .attr('x1', 0)
-      .attr('y1', (spoke) => spoke.y)
+      .attr('y1', 0)
       .attr('x2', (spoke) => spoke.dx)
-      .attr('y2', (spoke) => spoke.y + spoke.dy);
+      .attr('y2', (spoke) => spoke.dy);
 
     groups.append('circle')
       .attr('class', 'fan-out-anchor')
-      .attr('cy', y)
       .attr('r', 3);
 
     groups.attr('opacity', 0)
@@ -354,17 +371,20 @@ export class PlaChartBuilder extends PcacChart {
 
   /**
    * Draws one `<g class="dots">` per series holding a `<g class="point">` per data point. The
-   * point group carries the x position (as a translate) so that zoom only has to touch that one
-   * attribute regardless of what's inside; the child is either the regular `<circle class="dot">`
-   * or, when the point has a `PcacData.image`, an `<image class="dot-image">` in its place. Both
-   * animate in from the baseline the same way, and the tooltip / click handlers sit on the group
-   * so they behave identically for either. A fanned-out point's offset is applied to the child,
-   * inside the group, so it too is untouched by zoom.
+   * point group carries the position (as a translate) so that zoom, on either axis, only has to
+   * touch that one attribute regardless of what's inside; the child is either the regular
+   * `<circle class="dot">` or, when the point has a `PcacData.image`, an `<image class="dot-image">`
+   * in its place, and sits at the group's origin. Both animate in from the baseline the same way
+   * - the start is the baseline expressed relative to the point, since the group is already on
+   * the point - and the tooltip / click handlers sit on the group so they behave identically for
+   * either. A fanned-out point's offset is applied to the child, inside the group, so it too is
+   * untouched by zoom.
    */
   private drawDots(config: PcacLineAreaChartConfig): void {
     const self = this;
     const duration = this.transitionService.getTransitionDuration();
     const { maxWidth, maxHeight } = this.pointImage;
+    const rise = (d: PcacData) => this.scales.y(0) - this.scales.y(d.value as number);
 
     for (let index = 0; index < config.data.length; index++) {
       const series = config.data[index];
@@ -376,7 +396,7 @@ export class PlaChartBuilder extends PcacChart {
         .data(series.data)
         .enter().append('g')
         .attr('class', 'point')
-        .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales.x))
+        .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
           // `d` is the very element bound from `series.data` above, so identity lookup is exact.
           self.showTooltip(event, d, {
@@ -411,17 +431,18 @@ export class PlaChartBuilder extends PcacChart {
         .attr('class', 'dot')
         .attr('stroke', this.colors[index])
         .attr('cx', (d: PcacData) => this.offsetOf(d).dx)
-        .attr('cy', this.scales.y(0))
+        .attr('cy', rise)
         .attr('fill', '#fff')
         .transition()
         .duration(duration)
-        .attr('cy', (d: PcacData) => this.scales.y(d.value as number) + this.offsetOf(d).dy)
+        .attr('cy', (d: PcacData) => this.offsetOf(d).dy)
         .attr('r', 4);
 
       // `preserveAspectRatio="xMidYMid meet"` is what does the "resize to fit" - the image is
       // scaled uniformly to fit inside the maxWidth x maxHeight box and centered within it, so
       // a non-square image still lands centered on the point. x/y offset by half the box so the
-      // box (not its top-left corner) is centered on the data point, matching where a dot sits.
+      // box (not its top-left corner) is centered on the point group's origin, matching where a
+      // dot sits.
       points.filter((d: PcacData) => !!d.image)
         .append('image')
         .attr('class', 'dot-image')
@@ -430,21 +451,21 @@ export class PlaChartBuilder extends PcacChart {
         .attr('height', maxHeight)
         .attr('preserveAspectRatio', 'xMidYMid meet')
         .attr('x', (d: PcacData) => -maxWidth / 2 + this.offsetOf(d).dx)
-        .attr('y', this.scales.y(0) - maxHeight / 2)
+        .attr('y', (d: PcacData) => rise(d) - maxHeight / 2)
         .transition()
         .duration(duration)
-        .attr('y', (d: PcacData) => this.scales.y(d.value as number) - maxHeight / 2 + this.offsetOf(d).dy);
+        .attr('y', (d: PcacData) => -maxHeight / 2 + this.offsetOf(d).dy);
     }
   }
 
-  private pointTransform(d: PcacData, i: number, xScale: PlaChartScales['x']): string {
-    return `translate(${getXFormat(this.xAxis.format, d, i, xScale)}, 0)`;
+  private pointTransform(d: PcacData, i: number, scales: PlaChartScales): string {
+    return `translate(${getXFormat(this.xAxis.format, d, i, scales.x)}, ${scales.y(d.value as number)})`;
   }
 
   /** A fan-out sits where its members would have been drawn; any member locates it. */
-  private fanOutTransform(group: PlaCoincidentGroup, xScale: PlaChartScales['x']): string {
+  private fanOutTransform(group: PlaCoincidentGroup, scales: PlaChartScales): string {
     const { data, index } = group.members[0];
-    return this.pointTransform(data, index, xScale);
+    return this.pointTransform(data, index, scales);
   }
 
   private offsetOf(d: PcacData): PlaPointOffset {

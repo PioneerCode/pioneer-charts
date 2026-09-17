@@ -48,6 +48,17 @@ export class PlaChartEffectsBuilder {
     this.buildCanvas();
   }
 
+  /**
+   * Swaps in the scales a zoom has rescaled. The crosshair finds its point by walking the line
+   * geometry, which the chart already redraws on zoom, but the value it labels comes from
+   * inverting `y` - so a y-axis zoom has to hand the zoomed scale over here or the label reads
+   * the pixel against the original domain.
+   */
+  updateScales(x: IPlaChartEffectsBuilderConfig['x'], y: IPlaChartEffectsBuilderConfig['y']): void {
+    this.config.x = x;
+    this.config.y = y;
+  }
+
   private buildCollection() {
     const collection = this.config.svg.append('g')
       .attr('class', 'effects');

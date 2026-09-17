@@ -3354,7 +3354,7 @@
         }
     ],
     "enableEffects": false,
-    "enableZoom": true,
+    "enableZoomX": true,
     "colorOverride": [
         "#000000",
         "#4CAF50",

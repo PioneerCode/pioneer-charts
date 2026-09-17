@@ -59,6 +59,7 @@ export class PcacAxisBuilder {
 
   drawYAxis<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacAxisBuilderConfig<XDomain, YDomain>) {
     if (config.yAxis.hide) return;
+    config.svg.selectAll('.pcac-y-axis').remove();
 
     const yAxis = axisLeft(config.yScale).ticks(config.yAxis.ticks);
     if (config.yAxis.tickSize !== undefined) {

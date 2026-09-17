@@ -180,7 +180,7 @@ export class PcacChart {
   /**
    * Draws whichever grids the resolved axes ask for: vertical lines from the x axis's ticks,
    * horizontal from the y's (`PcacAxisConfig.showGrid`). `which` restricts it to one axis - the
-   * line/area/plot charts redraw just the x grid against the rescaled x on zoom.
+   * line/area/plot charts redraw just a zoomed axis's grid against its rescaled scale on zoom.
    */
   drawGrids<XDomain extends AxisDomain, YDomain extends AxisDomain>(
     xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>, which: 'x' | 'y' | 'both' = 'both'

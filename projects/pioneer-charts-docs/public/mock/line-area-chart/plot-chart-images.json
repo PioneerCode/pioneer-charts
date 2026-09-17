@@ -3,7 +3,7 @@
   "xAxis": { "ticks": 6, "showGrid": true, "format": "decimal", "domainMin": 0, "domainMax": 24 },
   "yAxis": { "ticks": 6, "domainMax": 100 },
   "enableEffects": false,
-  "enableZoom": true,
+  "enableZoomX": true,
   "pointImage": {
     "maxWidth": 24,
     "maxHeight": 24

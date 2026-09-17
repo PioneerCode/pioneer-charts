@@ -27,7 +27,13 @@ export class PcacPointImageConfig {
  */
 export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   enableEffects: boolean = true
-  enableZoom: boolean = true
+  /**
+   * Zoom and pan along the x / y axis (scroll / pinch to zoom 1x-10x, drag to pan, never leaving
+   * the original domain). Either, or both, can be on. A gesture is always two-dimensional, so with
+   * only one enabled the other axis simply stays put. Both off by default.
+   */
+  enableZoomX: boolean = false
+  enableZoomY: boolean = false
 
   /**
    * Hex color codes to override the default colors

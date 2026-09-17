@@ -1,5 +1,5 @@
-<a name="22.3.0"></a>
-# [v22.3.0]
+<a name="22.2.3"></a>
+# [v22.2.3]
 
 ### Breaking
   - `PcacLineAreaChartConfig.enableZoom` is renamed `enableZoomX`, now that it has a y-axis

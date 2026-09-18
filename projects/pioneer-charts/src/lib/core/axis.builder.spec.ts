@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { scaleLinear } from 'd3-scale';
 import { BaseType, select, Selection } from 'd3-selection';
 import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
-import { PcacAxisConfig, resolveAxisConfig } from './chart.model';
+import { PcacAxisConfig, PcacFormatEnum, resolveAxisConfig } from './chart.model';
 
 /**
  * d3-axis needs nothing jsdom lacks - it only appends <g>/<path>/<line>/<text> and sets
@@ -92,6 +92,31 @@ describe('PcacAxisBuilder tick size', () => {
     builder.drawAxis(config);
     expect(config.svg.select('.pcac-x-axis').empty()).toBe(true);
     expect(config.svg.select('.pcac-y-axis').empty()).toBe(false);
+  });
+
+  // Regression test: a Decimal x axis used a fixed `.2s` (two significant digits), so once zoom
+  // narrowed the domain to a few units the ticks rounded onto one another - `10 11 12 12`.
+  describe('Decimal tick labels', () => {
+    const labels = (config: IPcacAxisBuilderConfig<number, number>) =>
+      config.svg.selectAll<SVGTextElement, unknown>('.pcac-x-axis .tick text').nodes().map((t) => t.textContent);
+
+    it('take their precision from the tick step, so a zoomed-in axis has no repeated labels', () => {
+      const config = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
+      config.xScale = scaleLinear().domain([9.1, 12.4]).range([0, 200]);
+      builder.drawXAxis(config);
+      expect(labels(config)).toEqual(['9.5', '10', '10.5', '11', '11.5', '12']);
+    });
+
+    it('stay compact on a whole domain, with an SI prefix for thousands', () => {
+      const config = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
+      builder.drawXAxis(config);
+      expect(labels(config)).toEqual(['0', '20', '40', '60', '80', '100']);
+
+      const big = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
+      big.xScale = scaleLinear().domain([0, 2000]).range([0, 200]);
+      builder.drawXAxis(big);
+      expect(labels(big)).toEqual(['0', '0.5k', '1k', '1.5k', '2k']);
+    });
   });
 
   it('uses each axis\'s own tick count', () => {

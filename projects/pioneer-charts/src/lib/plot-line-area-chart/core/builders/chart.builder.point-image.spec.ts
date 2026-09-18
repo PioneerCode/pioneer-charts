@@ -1,9 +1,10 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { zoomIdentity, ZoomBehavior } from 'd3-zoom';
 import { PlaChartBuilder } from './chart.builder';
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig } from '../../plot-line-area-chart.model';
-import { PcacData } from '../../../core/chart.model';
+import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
 
 /** Same technique as chart.builder.clip.spec.ts: a real jsdom `<svg>` with a stubbed parent `clientWidth`. */
 function chartElm(width = 800): ElementRef {
@@ -33,11 +34,23 @@ function config(points: PcacData[], pointImage?: Partial<PcacPointImageConfig>):
   };
 }
 
-function build(cfg: PcacLineAreaChartConfig): { builder: PlaChartBuilder; svg: SVGSVGElement } {
+function build(cfg: PcacLineAreaChartConfig, type = PcacLineAreaPlotChartConfigType.Line): { builder: PlaChartBuilder; svg: SVGSVGElement } {
   const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
   const elm = chartElm(800);
-  builder.buildChart(elm, cfg, PcacLineAreaPlotChartConfigType.Line);
+  builder.buildChart(elm, cfg, type);
   return { builder, svg: elm.nativeElement };
+}
+
+/** Same technique as chart.builder.zoom.spec.ts: drive the zoom callback directly with a real transform. */
+function zoomTo(builder: PlaChartBuilder, transform: typeof zoomIdentity): void {
+  const zoom = (builder as unknown as { zoomBehavior: ZoomBehavior<Element, unknown> }).zoomBehavior;
+  const onZoom = zoom.on('zoom') as (event: { transform: typeof zoomIdentity }) => void;
+  onZoom({ transform });
+}
+
+/** Each `.point` group's `display` attribute - `null` when shown, `'none'` when hidden. */
+function displays(svg: SVGSVGElement): (string | null)[] {
+  return Array.from(svg.querySelectorAll('.dots .point')).map((p) => p.getAttribute('display'));
 }
 
 describe('PlaChartBuilder point images', () => {
@@ -160,5 +173,107 @@ describe('PlaChartBuilder point images', () => {
     const { svg } = build(cfg);
 
     expect(svg.querySelector('circle.dot')!.getAttribute('stroke')).toBe('#123456');
+  });
+
+  // The clip-path's half-box buffer exists so an image centered on an axis is drawn whole, but on
+  // its own it also let an image whose center zoom had carried *past* the axis keep showing - up
+  // to a whole half-image sitting entirely outside the plot, on any side. A point is now hidden
+  // the moment its center leaves the plot area, so half a mark over the axis is the most that
+  // ever shows.
+  describe('at the edge of the plot under zoom', () => {
+    // A decimal x axis so points sit where their keys say; images 40px, plot 0..100 on both axes.
+    const zoomable = (points: PcacData[]) => ({
+      ...config(points, { maxWidth: 40, maxHeight: 40 }),
+      xAxis: { format: PcacFormatEnum.Decimal, domainMin: 0, domainMax: 100 },
+      enableZoomX: true,
+      enableZoomY: true,
+    });
+
+    it('shows every point, including ones on the domain edge, before any zoom', () => {
+      const { svg } = build(zoomable([point(0, 0, 'a.png'), point(50, 50, 'b.png'), point(100, 100, 'c.png')]), PcacLineAreaPlotChartConfigType.Plot);
+
+      expect(displays(svg)).toEqual([null, null, null]);
+    });
+
+    it('hides a point once its center is carried past the left or top edge, and shows it again on the way back', () => {
+      const { svg, builder } = build(zoomable([point(0, 100, 'a.png'), point(50, 50, 'b.png')]), PcacLineAreaPlotChartConfigType.Plot);
+
+      // Pan the plot 1px left and 1px up: the corner point's center is now just outside on both axes.
+      zoomTo(builder, zoomIdentity.translate(-1, -1));
+      expect(displays(svg)).toEqual(['none', null]);
+
+      zoomTo(builder, zoomIdentity);
+      expect(displays(svg)).toEqual([null, null]);
+    });
+
+    it('hides a point carried past the right or bottom edge', () => {
+      const { svg, builder } = build(zoomable([point(100, 0, 'a.png'), point(50, 50, 'b.png')]), PcacLineAreaPlotChartConfigType.Plot);
+
+      zoomTo(builder, zoomIdentity.translate(1, 0));
+      expect(displays(svg)).toEqual(['none', null]);
+      zoomTo(builder, zoomIdentity.translate(0, 1));
+      expect(displays(svg)).toEqual(['none', null]);
+      zoomTo(builder, zoomIdentity.translate(-1, -1));
+      expect(displays(svg)).toEqual([null, null]);
+    });
+
+    it('keeps a point whose center is still inside, however little, even with most of its image outside', () => {
+      const { svg, builder } = build(zoomable([point(0, 50, 'a.png')]), PcacLineAreaPlotChartConfigType.Plot);
+
+      // Zooming in about the far right corner drags x = 0 left; a scale of 1 keeps it at 0. Panning
+      // right instead keeps it inside, drawn whole with half over the axis, as the clip-path allows.
+      zoomTo(builder, zoomIdentity.translate(0.25, 0));
+      expect(displays(svg)).toEqual([null]);
+    });
+
+    it('clips lines and areas to the plot area rather than the points\' image-sized buffer', () => {
+      const line = build(config([point(0, 10, 'a.png'), point(1, 20)], { maxWidth: 40, maxHeight: 40 }), PcacLineAreaPlotChartConfigType.Line);
+      const area = build(config([point(0, 10, 'a.png'), point(1, 20)], { maxWidth: 40, maxHeight: 40 }), PcacLineAreaPlotChartConfigType.Area);
+
+      for (const { svg, builder } of [line, area]) {
+        const [buffered, plot] = Array.from(svg.querySelectorAll('clipPath'));
+        expect(Number(buffered.querySelector('rect')!.getAttribute('x'))).toBe(-20);
+        expect(Number(plot.querySelector('rect')!.getAttribute('x'))).toBe(-1);
+        expect(Number(plot.querySelector('rect')!.getAttribute('width'))).toBe(builder.width + 2);
+        const clipOf = (el: Element) => /#([\w-]+)/.exec(el.getAttribute('clip-path')!)![1];
+        expect(clipOf(svg.querySelector('.lines, .areas')!)).toBe(plot.getAttribute('id'));
+        expect(clipOf(svg.querySelector('.dots')!)).toBe(buffered.getAttribute('id'));
+      }
+    });
+
+    it('applies to plain dots as well as images', () => {
+      const { svg, builder } = build(zoomable([point(0, 50), point(50, 50)]), PcacLineAreaPlotChartConfigType.Plot);
+
+      zoomTo(builder, zoomIdentity.translate(-1, 0));
+      expect(displays(svg)).toEqual(['none', null]);
+    });
+
+    it('clips fan-out anchors and spokes to the plot area (plus a stroke), not the buffered clip-path', () => {
+      const cfg = {
+        ...zoomable([point(50, 0, 'a.png')]),
+        pointFanOut: {},
+        data: [
+          { key: 'a', value: null, hide: false, data: [point(50, 0, 'a.png')] },
+          { key: 'b', value: null, hide: false, data: [point(50, 0, 'b.png')] },
+        ],
+      };
+      const { svg, builder } = build(cfg, PcacLineAreaPlotChartConfigType.Plot);
+
+      const rects = Array.from(svg.querySelectorAll('clipPath rect'));
+      expect(rects.length).toBe(2);
+      const plotRect = rects[1];
+      expect([plotRect.getAttribute('x'), plotRect.getAttribute('y')]).toEqual(['-1', '-1']);
+      expect(Number(plotRect.getAttribute('width'))).toBe(builder.width + 2);
+      expect(Number(plotRect.getAttribute('height'))).toBe(builder.height + 2);
+      const clipOf = (el: Element) => /#([\w-]+)/.exec(el.getAttribute('clip-path')!)![1];
+      expect(clipOf(svg.querySelector('.fan-outs')!)).toBe(plotRect.parentElement!.getAttribute('id'));
+      expect(clipOf(svg.querySelector('.dots')!)).toBe(rects[0].parentElement!.getAttribute('id'));
+
+      // Pan the pair on the baseline down by 30: the anchor and lower member (following it out at
+      // the same pace) are past the axis and the lower member is hidden; the upper member, 44px
+      // above the lower one, is still inside and shown.
+      zoomTo(builder, zoomIdentity.translate(0, 30));
+      expect(displays(svg)).toEqual([null, 'none']);
+    });
   });
 });

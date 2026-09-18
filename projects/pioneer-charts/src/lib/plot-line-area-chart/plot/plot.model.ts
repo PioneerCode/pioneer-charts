@@ -4,7 +4,9 @@ import { PcacLineAreaChartConfig } from "../plot-line-area-chart.model";
  * How the plot chart spreads out points that share a coordinate (see
  * `PcacPlotChartConfig.pointFanOut`). Each group of coincident points is placed evenly around
  * a ring centered on the shared coordinate, starting at 12 o'clock and going clockwise in data
- * order (series order, then point order), so every point stays visible and hoverable.
+ * order (series order, then point order), so every point stays visible and hoverable. A ring at
+ * the edge of the domain is moved back inside the plot area as one, so no member hangs over an
+ * axis by more than half its mark - the same as a lone point there; the anchor stays put.
  */
 export class PcacPointFanOutConfig {
   /**

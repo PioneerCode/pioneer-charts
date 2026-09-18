@@ -186,6 +186,25 @@ describe('PlaChartBuilder zoom', () => {
   // wider than the plot-sized `translateExtent`, so its constraint centered the plot in that
   // wider viewport - after any gesture, even back at k = 1, the chart sat shifted right/down by
   // half the margins. The constraint is what d3 runs on every gesture, so drive it directly.
+  // Regression test: getXFormat() checked the key for truthiness, so a Decimal key of 0 read as
+  // "no key" and was drawn at pixel 0 regardless of the domain or the zoom - a point on the left
+  // edge of a `domainMin: 0` axis stayed pinned to the y axis while everything else panned.
+  it('moves a Decimal point with a key of 0 under zoom like any other', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, {
+      ...config(PcacFormatEnum.Decimal),
+      xAxis: { format: PcacFormatEnum.Decimal, domainMin: -10, domainMax: 10 },
+      data: [{ key: 's', value: null, hide: false, data: [{ key: 0, value: 10, hide: false, data: [] }, { key: 5, value: 20, hide: false, data: [] }] }],
+    }, PcacLineAreaPlotChartConfigType.Line);
+    // Key 0 sits in the middle of a -10..10 domain, not on the axis.
+    expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(builder.width / 2, 5);
+
+    zoomTo(builder, zoomIdentity.translate(-50, 0));
+
+    expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(builder.width / 2 - 50, 5);
+  });
+
   it('constrains a fully zoomed-out transform back to identity, not to a margin-centered offset', () => {
     const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
     const elm = chartElm();

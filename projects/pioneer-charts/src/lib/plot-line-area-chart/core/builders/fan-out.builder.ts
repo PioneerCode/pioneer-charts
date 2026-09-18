@@ -1,4 +1,5 @@
 import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
+import { hasKey } from '../x-format';
 
 /** A point along with where it sits in the chart's `data`, the way a tooltip context reports it. */
 export interface PlaCoincidentPoint {
@@ -58,9 +59,9 @@ export function findCoincidentGroups(series: PcacData[], xFormat: PcacFormatEnum
 function xPositionKey(xFormat: PcacFormatEnum, data: PcacData, index: number): string | number {
   switch (xFormat) {
     case PcacFormatEnum.DateTime:
-      return data.key ? new Date(data.key).getTime() : 'none';
+      return hasKey(data) ? new Date(data.key as string | number).getTime() : 'none';
     case PcacFormatEnum.Decimal:
-      return data.key ? Number(data.key) : 'none';
+      return hasKey(data) ? Number(data.key) : 'none';
     default:
       return index;
   }
@@ -97,4 +98,47 @@ export function fanOutOffsets(groups: PlaCoincidentGroup[], radius: (group: PlaC
 /** Two decimal places is plenty for an SVG coordinate and keeps `cos(π/2)` from reading as `6e-17`. */
 function round(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+/** A pixel position within the plot area, the way the scales report one. */
+export interface PlaPoint {
+  x: number;
+  y: number;
+}
+
+/**
+ * How far to move a whole fanned-out ring so that none of its members' centers leave the plot
+ * area - so a member at the edge of the domain hangs over the axis by at most half its mark,
+ * exactly as a lone point at that coordinate would, rather than by half its mark plus the ring's
+ * radius. The ring moves as one (its members keep their spacing) and the anchor stays put, so the
+ * spokes simply get longer on the side that was pushed back. Per axis: if the ring pokes out past
+ * 0 it comes back by that much, else if it pokes out past the far edge it comes back by that; a
+ * ring too big to fit is kept in at the axis end, where the origin is.
+ *
+ * `anchor` is clamped to the plot area first, so once zoom carries a group's coordinate out of the
+ * domain its members follow it out at the same pace instead of staying pinned to the edge (or
+ * snapping the ring's radius the moment the anchor crosses): at the edge the correction is exactly
+ * the outermost member's offset, and stays so beyond it.
+ */
+export function fanOutShift(anchor: PlaPoint, offsets: PlaPointOffset[], plot: { width: number; height: number }): PlaPointOffset {
+  const dxs = offsets.map((o) => o.dx);
+  const dys = offsets.map((o) => o.dy);
+  return {
+    dx: axisShift(clamp(anchor.x, 0, plot.width), Math.min(...dxs), Math.max(...dxs), plot.width),
+    dy: axisShift(clamp(anchor.y, 0, plot.height), Math.min(...dys), Math.max(...dys), plot.height),
+  };
+}
+
+function axisShift(anchor: number, min: number, max: number, size: number): number {
+  if (anchor + min < 0) {
+    return round(-(anchor + min));
+  }
+  if (anchor + max > size) {
+    return round(size - (anchor + max));
+  }
+  return 0;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
 }

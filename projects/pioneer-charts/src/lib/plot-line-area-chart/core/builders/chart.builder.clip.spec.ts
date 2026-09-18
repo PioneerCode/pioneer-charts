@@ -34,7 +34,8 @@ function config(): PcacLineAreaChartConfig {
 // it (left half at the minimum, right half at the maximum) used to fall outside that boundary
 // and get clipped away. The vertical dimension already carries a 10px buffer on each side for
 // the identical reason (see the .attr('y', -10)/.attr('height', height + 20) below it); the
-// horizontal dimension needs the same treatment.
+// horizontal dimension needs the same treatment. (This is the points' clip-path, the first one
+// in the SVG; the second, for lines/areas/fan-outs, hugs the plot - see the point-image spec.)
 describe('PlaChartBuilder clip-path', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [PlaChartEffectsBuilder] });

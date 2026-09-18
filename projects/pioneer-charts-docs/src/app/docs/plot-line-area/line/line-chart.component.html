@@ -28,7 +28,9 @@
   <h4 class="mt-6 mb-2">Zoom</h4>
   <p class="mb-3">With <code>enableZoomX</code> on, the x axis can be zoomed and panned in place: scroll (or pinch)
     over the chart to zoom from 1&times; up to 10&times; around the cursor, then drag to pan. The view never leaves
-    the original domain, and the lines, points, x axis and vertical grid all follow. <code>enableZoomY</code> does
+    the original domain, and the lines, points, x axis and vertical grid all follow. A point (dot or image) is
+    shown while its center is inside the plot and hidden once zoom carries it past an axis, so at most half of it
+    ever hangs over an edge. <code>enableZoomY</code> does
     the same for the y axis, with the y axis and horizontal grid following; turn on either or both. This demo has
     both: two weeks of readings every six hours, two series &mdash; crowded at 1&times;, so zoom in on a day or
     two, and on the 50&ndash;90&deg; band the readings actually occupy within the 40&ndash;100&deg; axis.</p>

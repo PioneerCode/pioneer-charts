@@ -18,7 +18,7 @@ import { getXFormat } from '../x-format';
 import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
-import { PlaCoincidentGroup, PlaPointOffset, fanOutOffsets, fanOutRadius, findCoincidentGroups } from './fan-out.builder';
+import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
 /**
  * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
@@ -26,6 +26,9 @@ import { PlaCoincidentGroup, PlaPointOffset, fanOutOffsets, fanOutRadius, findCo
  * height, colors, svg). A root singleton would be shared and clobbered by every
  * <pcac-line-area-chart> rendered at once.
  */
+/** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
+const PLOT_CLIP_ALLOWANCE = 1;
+
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
   private effectsBuilder = inject(PlaChartEffectsBuilder);
@@ -37,26 +40,34 @@ export class PlaChartBuilder extends PcacChart {
   private config!: PcacLineAreaChartConfig;
   private clipPathId!: string; // <-- added
   /**
-   * How far the clip-path rect extends past the drawable [0, width] x [0, height] area on every
-   * side, so a point sitting exactly on the domain's edge isn't cut in half. 10px comfortably
-   * clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that, so
-   * buildChart() widens this to half the largest image dimension whenever any point has one
-   * (and grows the margins to match - see `reservePointImageSpace()` - since the clip-path only
-   * matters up to the edge of the SVG).
+   * A second clip-path for everything that isn't a point - lines, areas, fan-out anchors and
+   * spokes: the plot area plus `PLOT_CLIP_ALLOWANCE`. These have no business past the axes; the
+   * points' buffer below used to apply to them too, so a line chart with big point images had
+   * its lines run on half an image past the axes once zoomed.
+   */
+  private plotClipPathId!: string;
+  /**
+   * How far the points' clip-path rect extends past the drawable [0, width] x [0, height] area on
+   * every side, so a point sitting exactly on the domain's edge isn't cut in half. 10px
+   * comfortably clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that,
+   * so buildChart() widens this to half the largest image dimension whenever any point has one
+   * (and grows the margins to match - see `reservePointSpace()` - since the clip-path only
+   * matters up to the edge of the SVG). The buffer is only there for points whose center is
+   * inside the plot; one whose center zoom has carried past an edge is hidden outright (see
+   * `pointVisible`), rather than left showing up to a whole half-mark beyond the axis.
    */
   private clipBuffer = 10;
   private pointImage!: PcacPointImageConfig;
   /**
    * Points that share a coordinate, found by `resolvePointLayout()`. `coincidentOf` looks a
-   * point's group up for its tooltip; the rest only matter when `fanOut` is on (plot chart with
-   * `pointFanOut`): `fanOutOffsets` is where each member is drawn relative to its true position,
-   * and `fanOutReach` how far the farthest one sits from it, for the edge space to reserve.
+   * point's group up for its tooltip and for its ring's shift (see `fanOutShift`); `fanOutOffsets`
+   * only matters when `fanOut` is on (plot chart with `pointFanOut`) and is where each member sits
+   * on its ring relative to the shared coordinate, before that shift.
    */
   private coincidentGroups: PlaCoincidentGroup[] = [];
   private coincidentOf = new Map<PcacData, PlaCoincidentGroup>();
   private fanOut: PcacPointFanOutConfig | null = null;
   private fanOutOffsets = new Map<PcacData, PlaPointOffset>();
-  private fanOutReach = 0;
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -130,10 +141,16 @@ export class PlaChartBuilder extends PcacChart {
         // (DatasetLength) positions by index, and a flat selection would number every series'
         // points consecutively, shoving the second series' points off to the right on zoom.
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
-          .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, zoomedScales));
-        // A fan-out's anchor is positioned like the points it belongs to, so it moves the same way.
+          .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, zoomedScales))
+          .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, zoomedScales));
+        // A fan-out's anchor is positioned like the points it belongs to, so it moves the same way;
+        // its spokes are re-aimed because the ring's shift back into the plot (`fanOutShift`)
+        // depends on where the anchor now is.
         this.svg.selectAll<SVGGElement, PlaCoincidentGroup>('.fan-out')
-          .attr('transform', (g: PlaCoincidentGroup) => this.fanOutTransform(g, zoomedScales));
+          .attr('transform', (g: PlaCoincidentGroup) => this.fanOutTransform(g, zoomedScales))
+          .selectAll<SVGLineElement, PlaCoincidentPoint>('.fan-out-spoke')
+          .attr('x2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dx)
+          .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dy);
 
         // The hover crosshair walks the (already updated) line geometry, but reads its value back
         // off the y scale - which must be the zoomed one or the label is wrong.
@@ -185,8 +202,7 @@ export class PlaChartBuilder extends PcacChart {
   /**
    * Resolves `pointImage`, finds the points that share a coordinate and, on a plot chart with
    * `pointFanOut`, works out where to draw each of them instead. Coincidence is found from the
-   * data (see `findCoincidentGroups`) so this can run before the scales exist - it has to, as
-   * `reservePointSpace()` needs the fan-out's reach before the plot area is sized. Line and area
+   * data (see `findCoincidentGroups`) so this can run before the scales exist. Line and area
    * charts still get the groups, for the tooltip's `coincident` list, but never an offset.
    */
   private resolvePointLayout(type: PcacLineAreaPlotChartConfigType): void {
@@ -202,7 +218,6 @@ export class PlaChartBuilder extends PcacChart {
     if (!fanOut) {
       this.fanOut = null;
       this.fanOutOffsets = new Map();
-      this.fanOutReach = 0;
       return;
     }
     this.fanOut = { ...new PcacPointFanOutConfig(), ...fanOut };
@@ -214,36 +229,37 @@ export class PlaChartBuilder extends PcacChart {
     const radius = (group: PlaCoincidentGroup) =>
       this.fanOut!.radius ?? fanOutRadius(group.members.length, markSize(group), this.fanOut!.gap);
     this.fanOutOffsets = fanOutOffsets(this.coincidentGroups, radius);
-    this.fanOutReach = Math.ceil(Math.max(0, ...this.coincidentGroups.map(radius)));
   }
 
   /**
-   * When any point has an `image`, or a fan-out has moved points off their coordinate, makes
-   * room for them at the edge of the domain: the clip-path buffer grows to half the box (plus
-   * the fan-out's reach) so the `.dots` group lets it through, and the margins grow to at least
-   * that same amount so the `<svg>` doesn't cut off what the clip-path let through (an image box
-   * is centered on its point, so at the top of the y domain half of it sits above the plot area
-   * - in `margin.top`, which is only 8px by default). A fanned-out plain dot needs the same
-   * treatment, its hovered radius plus the reach. Must run after `resolvePointLayout()` and
-   * between `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
+   * When any point has an `image`, makes room for it at the edge of the domain: the clip-path
+   * buffer grows to half the box so the `.dots` group lets it through, and the margins grow to at
+   * least that same amount so the `<svg>` doesn't cut off what the clip-path let through (an image
+   * box is centered on its point, so at the top of the y domain half of it sits above the plot
+   * area - in `margin.top`, which is only 8px by default). Half the box is all a fan-out needs
+   * too: a fanned-out ring is shifted back inside the plot area (`fanOutShift`), so no member's
+   * center ever sits past the edge either. Must run after `resolvePointLayout()` and between
+   * `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
    */
   private reservePointSpace(): void {
     const hasImages = this.config.data.some((series) => series.data.some((point) => !!point.image));
-    if (!hasImages && this.fanOutReach === 0) {
+    if (!hasImages) {
       this.clipBuffer = 10;
       return;
     }
-    const halfWidth = (hasImages ? Math.ceil(this.pointImage.maxWidth / 2) : 6) + this.fanOutReach;
-    const halfHeight = (hasImages ? Math.ceil(this.pointImage.maxHeight / 2) : 6) + this.fanOutReach;
+    const halfWidth = Math.ceil(this.pointImage.maxWidth / 2);
+    const halfHeight = Math.ceil(this.pointImage.maxHeight / 2);
     this.clipBuffer = Math.max(10, halfWidth, halfHeight);
     this.reserveEdgeSpace({ top: halfHeight, bottom: halfHeight, left: halfWidth, right: halfWidth });
   }
 
   private createReusableClipPath(): void {
-    this.clipPathId = `pcac-clip-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-    this.svg.selectAll(`defs #${this.clipPathId}`).remove();
-    this.svg.append('defs')
-      .append('clipPath')
+    const stamp = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    this.clipPathId = `pcac-clip-${stamp}`;
+    this.plotClipPathId = `pcac-clip-plot-${stamp}`;
+    this.svg.selectAll(`defs #${this.clipPathId}, defs #${this.plotClipPathId}`).remove();
+    const defs = this.svg.append('defs');
+    defs.append('clipPath')
       .attr('id', this.clipPathId)
       .append('rect')
       // Extend the clip-path past the drawable area on every side so a dot (or point image) at
@@ -252,6 +268,17 @@ export class PlaChartBuilder extends PcacChart {
       .attr('y', -this.clipBuffer)
       .attr('width', this.width + this.clipBuffer * 2)
       .attr('height', this.height + this.clipBuffer * 2);
+    // Lines, areas and the fan-out anchors and spokes get the plot area itself, give or take a
+    // stroke: a line along the domain's max keeps its full width rather than being halved at
+    // the edge, but nothing runs on into the points' buffer - a spoke to a member that zoom has
+    // carried out of the plot (and hidden, see `pointVisible`) stops at the axis.
+    defs.append('clipPath')
+      .attr('id', this.plotClipPathId)
+      .append('rect')
+      .attr('x', -PLOT_CLIP_ALLOWANCE)
+      .attr('y', -PLOT_CLIP_ALLOWANCE)
+      .attr('width', this.width + PLOT_CLIP_ALLOWANCE * 2)
+      .attr('height', this.height + PLOT_CLIP_ALLOWANCE * 2);
   }
 
   private get zoomEnabled(): boolean {
@@ -294,7 +321,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawLine(lineData: PcacData[], index: number, hide = false): void {
     this.svg.append('g')
       .attr('class', 'lines')
-      .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip-path to line group
+      .attr('clip-path', `url(#${this.plotClipPathId})`)
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
@@ -312,7 +339,7 @@ export class PlaChartBuilder extends PcacChart {
   private drawArea(lineData: PcacData[], index: number, hide = false) {
     this.svg.append('g')
       .attr('class', 'areas')
-      .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
+      .attr('clip-path', `url(#${this.plotClipPathId})`)
       .append('path')
       .datum(lineData)
       .attr('class', 'area')
@@ -332,10 +359,11 @@ export class PlaChartBuilder extends PcacChart {
   /**
    * Draws one `<g class="fan-outs">` holding a `<g class="fan-out">` per group of coincident
    * points: a spoke from the shared coordinate to where each member is drawn, and an anchor dot
-   * on the coordinate itself. Only when the fan-out is on and asks for anchors. The group is
-   * positioned by the same translate as a point (see `drawDots`), so zoom moves it the same
-   * way and everything inside is relative to the coordinate; it fades in over the points' own
-   * entry transition.
+   * on the coordinate itself. Only when the fan-out is on and asks for anchors. The group sits on
+   * the true coordinate (unlike a point group, which also carries its ring's shift - see
+   * `pointTransform`), so zoom moves it the same way and everything inside is relative to the
+   * coordinate; each spoke ends where its member is actually drawn, ring offset plus shift. It
+   * fades in over the points' own entry transition.
    */
   private drawFanOuts(): void {
     if (!this.fanOut?.showAnchor || this.coincidentGroups.length === 0) {
@@ -343,7 +371,7 @@ export class PlaChartBuilder extends PcacChart {
     }
     const groups = this.svg.append('g')
       .attr('class', 'fan-outs')
-      .attr('clip-path', `url(#${this.clipPathId})`)
+      .attr('clip-path', `url(#${this.plotClipPathId})`)
       .selectAll('.fan-out')
       .data(this.coincidentGroups)
       .enter().append('g')
@@ -351,13 +379,13 @@ export class PlaChartBuilder extends PcacChart {
       .attr('transform', (group: PlaCoincidentGroup) => this.fanOutTransform(group, this.scales));
 
     groups.selectAll('.fan-out-spoke')
-      .data((group: PlaCoincidentGroup) => group.members.map((member) => this.offsetOf(member.data)))
+      .data((group: PlaCoincidentGroup) => group.members)
       .enter().append('line')
       .attr('class', 'fan-out-spoke')
       .attr('x1', 0)
       .attr('y1', 0)
-      .attr('x2', (spoke) => spoke.dx)
-      .attr('y2', (spoke) => spoke.dy);
+      .attr('x2', (member: PlaCoincidentPoint) => this.spokeEnd(member, this.scales).dx)
+      .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, this.scales).dy);
 
     groups.append('circle')
       .attr('class', 'fan-out-anchor')
@@ -377,8 +405,9 @@ export class PlaChartBuilder extends PcacChart {
    * in its place, and sits at the group's origin. Both animate in from the baseline the same way
    * - the start is the baseline expressed relative to the point, since the group is already on
    * the point - and the tooltip / click handlers sit on the group so they behave identically for
-   * either. A fanned-out point's offset is applied to the child, inside the group, so it too is
-   * untouched by zoom.
+   * either. A fanned-out point's ring offset is applied to the child, inside the group, so it too
+   * is untouched by zoom; only its ring's shift back into the plot area, which depends on where
+   * the coordinate is, rides along in the group's translate (see `pointTransform`).
    */
   private drawDots(config: PcacLineAreaChartConfig): void {
     const self = this;
@@ -397,6 +426,7 @@ export class PlaChartBuilder extends PcacChart {
         .enter().append('g')
         .attr('class', 'point')
         .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales))
+        .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, this.scales))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
           // `d` is the very element bound from `series.data` above, so identity lookup is exact.
           self.showTooltip(event, d, {
@@ -458,18 +488,84 @@ export class PlaChartBuilder extends PcacChart {
     }
   }
 
+  /**
+   * Where a point's group goes: its true coordinate, plus - for a fanned-out point - however far
+   * its ring had to be shifted to stay inside the plot area at these scales. The shift is on the
+   * group rather than the child because it changes as zoom moves the coordinate (the ring offset,
+   * on the child, doesn't), and this is the one attribute zoom already updates.
+   */
   private pointTransform(d: PcacData, i: number, scales: PlaChartScales): string {
-    return `translate(${getXFormat(this.xAxis.format, d, i, scales.x)}, ${scales.y(d.value as number)})`;
+    const { x, y } = this.pointPlacement(d, i, scales);
+    return `translate(${x}, ${y})`;
   }
 
-  /** A fan-out sits where its members would have been drawn; any member locates it. */
+  /**
+   * The `display` of a point's group at these scales: shown while its center is inside the plot
+   * area, `none` once zoom has carried it past an edge. Together with the clip-path's buffer this
+   * is what bounds how far a mark may hang over an axis: a point on the edge is drawn whole, half
+   * of it outside the plot, and that half is the most that ever shows - the alternative, letting
+   * the clip-path's buffer do the work, showed a point up to a whole half-mark beyond the axis
+   * with its center already outside. Also takes it out of hover's reach, as a hidden group
+   * receives no pointer events.
+   */
+  private pointDisplay(d: PcacData, i: number, scales: PlaChartScales): string | null {
+    return this.pointVisible(d, i, scales) ? null : 'none';
+  }
+
+  private pointVisible(d: PcacData, i: number, scales: PlaChartScales): boolean {
+    const { x, y } = this.markCenter(d, i, scales);
+    // A hair of slack, so a point on the domain's edge isn't lost to a rescaled scale landing on
+    // -0.0000001 instead of 0.
+    const slack = 0.5;
+    return x >= -slack && x <= this.width + slack && y >= -slack && y <= this.height + slack;
+  }
+
+  /** Where the point's group is drawn: its coordinate plus its ring's shift, if it's fanned out. */
+  private pointPlacement(d: PcacData, i: number, scales: PlaChartScales): PlaPoint {
+    const { x, y } = this.pointPosition(d, i, scales);
+    const shift = this.shiftOf(d, scales);
+    return { x: x + shift.dx, y: y + shift.dy };
+  }
+
+  /** Where the mark itself is centered: the group's placement plus the ring offset on the child. */
+  private markCenter(d: PcacData, i: number, scales: PlaChartScales): PlaPoint {
+    const { x, y } = this.pointPlacement(d, i, scales);
+    const offset = this.offsetOf(d);
+    return { x: x + offset.dx, y: y + offset.dy };
+  }
+
+  /** A fan-out sits on its members' true coordinate, unshifted; any member locates it. */
   private fanOutTransform(group: PlaCoincidentGroup, scales: PlaChartScales): string {
     const { data, index } = group.members[0];
-    return this.pointTransform(data, index, scales);
+    const { x, y } = this.pointPosition(data, index, scales);
+    return `translate(${x}, ${y})`;
   }
 
+  private pointPosition(d: PcacData, i: number, scales: PlaChartScales): PlaPoint {
+    return { x: getXFormat(this.xAxis.format, d, i, scales.x), y: scales.y(d.value as number) };
+  }
+
+  /** A member's ring offset from the shared coordinate, `0` for a point that isn't fanned out. */
   private offsetOf(d: PcacData): PlaPointOffset {
     return this.fanOutOffsets.get(d) ?? { dx: 0, dy: 0 };
+  }
+
+  /** How far `d`'s ring is moved back into the plot area at these scales (see `fanOutShift`). */
+  private shiftOf(d: PcacData, scales: PlaChartScales): PlaPointOffset {
+    const group = this.coincidentOf.get(d);
+    if (!group || !this.fanOutOffsets.has(d)) {
+      return { dx: 0, dy: 0 };
+    }
+    const { data, index } = group.members[0];
+    const offsets = group.members.map((member) => this.offsetOf(member.data));
+    return fanOutShift(this.pointPosition(data, index, scales), offsets, { width: this.width, height: this.height });
+  }
+
+  /** Where a spoke ends, relative to its anchor: where the member is drawn, ring offset plus shift. */
+  private spokeEnd(member: PlaCoincidentPoint, scales: PlaChartScales): PlaPointOffset {
+    const offset = this.offsetOf(member.data);
+    const shift = this.shiftOf(member.data, scales);
+    return { dx: offset.dx + shift.dx, dy: offset.dy + shift.dy };
   }
 
   /** The other points at `d`'s coordinate, for the tooltip context (see `PcacTooltipContext.coincident`). */

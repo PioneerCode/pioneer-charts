@@ -1,3 +1,38 @@
+<a name="22.2.4"></a>
+# [v22.2.4]
+
+### Fixed
+  - A plot chart's `pointFanOut` ring at the edge of the domain pushed its outermost member a whole
+    ring radius past the axis - e.g. a pair at the bottom-left corner drew its lower point well
+    below the x axis - and the chart grew its margins to make room for it. A ring is now shifted
+    back inside the plot area, as one (members keep their spacing), so no member's center ever
+    sits past an axis: a fanned-out point at the edge hangs over by at most half its image box or
+    dot, exactly as a lone point at that coordinate does. The anchor dot stays on the true
+    coordinate and the spokes reach the moved members; the shift follows the coordinate under
+    zoom, and a group zoomed out of the domain drifts out with it rather than pinning to the edge.
+    The margins now grow for the `pointImage` box only, as before the fan-out existed.
+  - Zooming or panning a line, area or plot chart let a point that had left the plot keep showing
+    past the axis, on any side: the clip-path extends half a `pointImage` box (10px for dots) past
+    the plot so a point centered on an axis is drawn whole, but that same buffer also showed a
+    point whose center was already outside - up to a whole half-image floating beyond the axis,
+    and further still with a fan-out. A point's group is now hidden (`display: none`, so it can't
+    be hovered either) the moment its center leaves the plot area and shown again when it comes
+    back, so half a mark over an axis is the most that ever shows. Fan-out anchors and spokes are
+    clipped to the plot area exactly so a spoke to a hidden member stops at the axis.
+  - A Decimal-format point with a `key` of `0` was positioned as if it had no key at all: drawn at
+    pixel 0 whatever `domainMin` was, and left pinned to the y axis under zoom while everything
+    else panned (`getXFormat()` tested the key for truthiness). `0` is now a coordinate like any
+    other, for positioning and for `pointFanOut`'s coincidence grouping alike.
+  - A `Decimal` x axis's tick labels used a fixed two significant digits, so once zoom narrowed
+    the domain to a few units the ticks rounded onto one another (`10 11 12 12`). The precision
+    now follows the scale's own tick step - `9.5 10 10.5 11` zoomed in, still `0 20 40` or
+    `0.5k 1k 1.5k` on a whole domain, with trailing zeros trimmed.
+  - Lines and areas were clipped with the points' clip-path, whose buffer grows to half the
+    `pointImage` box, so on a line or area chart with images the line itself could run that far
+    past the axes once zoomed. They're now clipped to the plot area (plus 1px, half the line
+    stroke, so a line along the domain's max keeps its full width), as are the fan-out anchors
+    and spokes; only the points keep the buffer.
+
 <a name="22.2.3"></a>
 # [v22.2.3]
 

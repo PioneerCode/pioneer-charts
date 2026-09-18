@@ -1,5 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { zoomIdentity, ZoomBehavior } from 'd3-zoom';
 import { PlaChartBuilder } from './chart.builder';
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
@@ -37,11 +38,18 @@ function config(points: PcacData[], pointFanOut?: Partial<PcacPointFanOutConfig>
   };
 }
 
-function build(cfg: PcacPlotChartConfig, type = PcacLineAreaPlotChartConfigType.Plot): { builder: PlaChartBuilder; svg: SVGSVGElement } {
+function build(cfg: PcacPlotChartConfig, type = PcacLineAreaPlotChartConfigType.Plot, extra: Partial<PcacPlotChartConfig> = {}): { builder: PlaChartBuilder; svg: SVGSVGElement } {
   const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
   const elm = chartElm(800);
-  builder.buildChart(elm, cfg, type);
+  builder.buildChart(elm, { ...cfg, ...extra }, type);
   return { builder, svg: elm.nativeElement };
+}
+
+/** Same technique as chart.builder.zoom.spec.ts: drive the zoom callback directly with a real transform. */
+function zoomTo(builder: PlaChartBuilder, transform: typeof zoomIdentity): void {
+  const zoom = (builder as unknown as { zoomBehavior: ZoomBehavior<Element, unknown> }).zoomBehavior;
+  const onZoom = zoom.on('zoom') as (event: { transform: typeof zoomIdentity }) => void;
+  onZoom({ transform });
 }
 
 /**
@@ -60,7 +68,15 @@ function spokeDeltas(svg: SVGSVGElement): { dx: number; dy: number }[] {
   }));
 }
 
-const four = (image = true) => [1, 2, 3, 4].map((i) => point(50, 50, image ? `${i}.png` : undefined));
+const four = (image = true, key = 50, value = 50) => [1, 2, 3, 4].map((i) => point(key, value, image ? `${i}.png` : undefined));
+
+/** The `translate(x, y)` of every `.point` group, and of every `.fan-out` group. */
+function translates(svg: SVGSVGElement, selector: string): { x: number; y: number }[] {
+  return Array.from(svg.querySelectorAll(selector)).map((g) => {
+    const [, x, y] = /translate\(([-\d.]+), ?([-\d.]+)\)/.exec(g.getAttribute('transform')!)!;
+    return { x: Number(x), y: Number(y) };
+  });
+}
 
 function hover(svg: SVGSVGElement, pointIndex: number): void {
   svg.querySelectorAll('.point')[pointIndex].dispatchEvent(new MouseEvent('mouseover'));
@@ -159,20 +175,87 @@ describe('PlaChartBuilder point fan-out', () => {
     expect(children.indexOf('fan-outs')).toBeLessThan(children.indexOf('dots'));
   });
 
-  it('reserves edge space for the fan-out\'s reach on top of the image box', () => {
-    const plain = build(config([point(50, 50, 'a.png'), point(50, 50, 'b.png')]));
-    const fanned = build(config([point(50, 50, 'a.png'), point(50, 50, 'b.png')], {}));
+  // A fanned-out point at the edge of the domain must hang over the axis by no more than a lone
+  // point there would - half its mark - so the ring is shifted back inside the plot rather than
+  // the chart reserving margin for its reach. Regression: a pair at the bottom-left corner put
+  // its lower member a whole radius below the x axis.
+  describe('at the edge of the domain', () => {
+    it('shifts a pair on the baseline up so its lower member sits centered on the axis', () => {
+      const { svg, builder } = build(config([point(50, 0, 'a.png'), point(50, 0, 'b.png')], {}));
 
-    // Half the 40px box (20), plus the pair's 22px radius.
-    expect(plain.builder.margin.top).toBe(20);
-    expect(fanned.builder.margin.top).toBe(42);
-    expect(Number(fanned.svg.querySelector('clipPath rect')!.getAttribute('x'))).toBe(-42);
+      const [anchor] = translates(svg, '.fan-out');
+      expect(anchor.y).toBe(builder.height);
+      // Both point groups carry the same shift (the ring moves as one) - the pair's 22px radius.
+      const points = translates(svg, '.point');
+      expect(points.map((p) => p.y)).toEqual([anchor.y - 22, anchor.y - 22]);
+      expect(points.map((p) => p.x)).toEqual([anchor.x, anchor.x]);
+      // Ring offsets on the images are unchanged: lower member at group + 22 = the baseline.
+      expect(spokeDeltas(svg)).toEqual([{ dx: 0, dy: -44 }, { dx: 0, dy: 0 }]);
+    });
+
+    it('shifts a ring on the y axis across so its leftmost member sits centered on the axis', () => {
+      const { svg } = build(config(four(true, 0), {}));
+
+      const r = 44 / (2 * Math.sin(Math.PI / 4));
+      const [anchor] = translates(svg, '.fan-out');
+      expect(anchor.x).toBe(0);
+      const points = translates(svg, '.point');
+      expect(points.map((p) => p.x)).toEqual(points.map(() => expect.closeTo(r, 1)));
+      // The leftmost member (dx = -r) lands on x = 0; the others keep their spacing to its right.
+      expect(imageXs(svg).map((x, i) => x + 20 + points[i].x)).toEqual([r, 2 * r, r, 0].map((x) => expect.closeTo(x, 1)));
+      const deltas = spokeDeltas(svg);
+      expect(deltas[3].dx).toBeCloseTo(0, 1);
+      expect(deltas[1].dx).toBeCloseTo(2 * r, 1);
+    });
+
+    it('shifts on both axes at a corner', () => {
+      const { svg, builder } = build(config(four(true, 0, 0), {}));
+
+      const r = 44 / (2 * Math.sin(Math.PI / 4));
+      const [anchor] = translates(svg, '.fan-out');
+      expect(anchor).toEqual({ x: 0, y: builder.height });
+      const [p] = translates(svg, '.point');
+      expect(p.x).toBeCloseTo(r, 1);
+      expect(p.y).toBeCloseTo(builder.height - r, 1);
+    });
+
+    it('leaves a ring in the middle of the plot alone', () => {
+      const { svg } = build(config(four(), {}));
+
+      const [anchor] = translates(svg, '.fan-out');
+      expect(translates(svg, '.point')).toEqual([anchor, anchor, anchor, anchor]);
+    });
+
+    it('re-aims the spokes when zoom moves the ring against an edge', () => {
+      const { svg, builder } = build(config([point(50, 50, 'a.png'), point(50, 50, 'b.png')], {}), PcacLineAreaPlotChartConfigType.Plot, { enableZoomY: true });
+
+      expect(spokeDeltas(svg)).toEqual([{ dx: 0, dy: -22 }, { dx: 0, dy: 22 }]);
+      // Zoom in on the y axis so the pair's coordinate lands on the baseline.
+      const anchorY = translates(svg, '.fan-out')[0].y;
+      zoomTo(builder, zoomIdentity.translate(0, builder.height - anchorY));
+
+      expect(translates(svg, '.fan-out')[0].y).toBeCloseTo(builder.height, 5);
+      expect(spokeDeltas(svg)).toEqual([{ dx: 0, dy: -44 }, { dx: 0, dy: 0 }]);
+      expect(translates(svg, '.point').map((p) => p.y)).toEqual([builder.height - 22, builder.height - 22]);
+    });
   });
 
-  it('reserves nothing extra when pointFanOut is on but no points coincide', () => {
-    const { builder } = build(config([point(50, 50, 'a.png'), point(60, 50, 'b.png')], {}));
+  it('reserves edge space for the image box only, not the fan-out\'s reach, since the ring stays inside', () => {
+    const plain = build(config([point(50, 50, 'a.png'), point(50, 50, 'b.png')]));
+    const fanned = build(config([point(50, 0, 'a.png'), point(50, 0, 'b.png')], {}));
 
-    expect(builder.margin.top).toBe(20);
+    expect(plain.builder.margin.top).toBe(20);
+    expect(fanned.builder.margin.top).toBe(20);
+    expect(fanned.builder.margin.bottom).toBe(plain.builder.margin.bottom);
+    expect(Number(fanned.svg.querySelector('clipPath rect')!.getAttribute('x'))).toBe(-20);
+  });
+
+  it('reserves nothing at all for fanned-out plain dots', () => {
+    const plain = build(config(four(false)));
+    const fanned = build(config(four(false), {}));
+
+    expect(fanned.builder.margin).toEqual(plain.builder.margin);
+    expect(Number(fanned.svg.querySelector('clipPath rect')!.getAttribute('x'))).toBe(-10);
   });
 
   it('is ignored on line and area charts, whose points are joined in order', () => {

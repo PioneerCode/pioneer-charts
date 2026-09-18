@@ -22,7 +22,9 @@
   <p class="mb-3">Set <code>pointFanOut</code> to spread points that would be drawn on top of one another
     around their shared coordinate, so each stays visible and hoverable; <code>{{ '{}' }}</code> takes every
     default. An anchor dot marks the true value. Whether or not it's on, a hovered point's tooltip context
-    lists the others at its coordinate in <code>coincident</code> - hover a fanned-out point below.</p>
+    lists the others at its coordinate in <code>coincident</code> - hover a fanned-out point below. The pair
+    at the bottom-left corner shows a ring at the edge of the domain: it's moved back inside the plot so
+    neither point hangs over an axis by more than half its image, with the anchor still on the coordinate.</p>
   <mat-card class="p-3 mb-3">
     <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
       <pcac-plot-chart [config]="pcService.plotFanOutConfig.value()" (dotClicked)="pcService.onClicked($event)">
@@ -51,8 +53,10 @@
         instead of drawing them on top of one another, where only the last series' point shows and only it can be
         hovered. Off when omitted; <code>{{ '{}' }}</code> turns it on with the defaults below. Each group is placed
         evenly around a ring on the shared coordinate &mdash; a pair straight up and down, larger groups clockwise
-        from the top, in series order &mdash; and the chart reserves edge space for the spread the same way it does
-        for <b>pointImage</b>. Zoom moves a fanned-out group as one. Every point keeps its true <b>key</b> /
+        from the top, in series order. A ring at the edge of the domain is shifted back inside the plot area so
+        that no member hangs over an axis by more than half its image (or dot), the same as a lone point there;
+        the anchor stays on the true coordinate and its spokes reach the moved members. Zoom moves a fanned-out
+        group as one. Every point keeps its true <b>key</b> /
         <b>value</b> in the tooltip, whose context also lists the others at the coordinate in <b>coincident</b>
         (see <a routerLink="/docs/guides/tooltip">Custom Tooltip</a>).
         <ul>

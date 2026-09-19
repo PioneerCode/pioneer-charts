@@ -5,6 +5,7 @@ import { PlaChartBuilder } from './chart.builder';
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
 import { PcacFormatEnum } from '../../../core/chart.model';
+import { PcacTooltipBuilder } from '../../../core/tooltip.builder';
 
 /** Same technique as chart.builder.point-image.spec.ts: a real jsdom `<svg>` with a stubbed parent `clientWidth`. */
 function chartElm(width = 800): ElementRef {
@@ -203,6 +204,64 @@ describe('PlaChartBuilder zoom', () => {
     zoomTo(builder, zoomIdentity.translate(-50, 0));
 
     expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(builder.width / 2 - 50, 5);
+  });
+
+  // Regression test: the behavior was `.call()`ed on the capture rect as well as on the chart
+  // group, and d3-zoom keeps a transform per element. A wheel over a point (not an ancestor of
+  // the rect) advanced only the group's, so once the point had moved out from under the still
+  // cursor the next wheel hit the rect, and each tick redrew from the rect's stale transform and
+  // then the group's real one - the chart flickered between the two. Only the group carries it.
+  it('attaches the zoom behavior to the chart group only, never to the capture rect', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+    const svg: SVGSVGElement = elm.nativeElement;
+    const zoomed = (node: Element | null) => (node as unknown as { __zoom?: unknown })?.__zoom !== undefined;
+
+    expect(zoomed(svg.querySelector('g'))).toBe(true);
+    expect(zoomed(svg.querySelector('rect[pointer-events="all"]'))).toBe(false);
+  });
+
+  // Regression test: zoom moves the hovered point out from under a cursor that hasn't moved
+  // (or hides it, once it's carried past an edge), so the browser never sends it a mouseout -
+  // its tooltip stayed up, and its dot stayed grown, for good.
+  describe('hovered point', () => {
+    const shell = () => TestBed.inject(PcacTooltipBuilder).tooltip.node() as HTMLDivElement;
+    afterEach(() => TestBed.inject(PcacTooltipBuilder).hideTooltip());
+
+    function hovered(): { builder: PlaChartBuilder; elm: ElementRef; point: Element } {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      const elm = chartElm();
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      const point = elm.nativeElement.querySelector('.dots .point')!;
+      point.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+      expect(shell().style.display).toBe('inline-block');
+      return { builder, elm, point };
+    }
+
+    it('has its tooltip closed by a zoom', () => {
+      const { builder } = hovered();
+
+      zoomTo(builder, zoomIdentity.translate(-100, 0).scale(3));
+
+      expect(shell().style.display).toBe('none');
+    });
+
+    it('has its tooltip closed by a rebuild', () => {
+      const { builder, elm } = hovered();
+
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+      expect(shell().style.display).toBe('none');
+    });
+
+    it('still closes its tooltip on its own mouseout', () => {
+      const { point } = hovered();
+
+      point.dispatchEvent(new MouseEvent('mouseout', { bubbles: true }));
+
+      expect(shell().style.display).toBe('none');
+    });
   });
 
   it('constrains a fully zoomed-out transform back to identity, not to a margin-centered offset', () => {

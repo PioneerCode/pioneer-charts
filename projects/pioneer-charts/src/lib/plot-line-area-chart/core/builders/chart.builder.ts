@@ -68,6 +68,8 @@ export class PlaChartBuilder extends PcacChart {
   private coincidentOf = new Map<PcacData, PlaCoincidentGroup>();
   private fanOut: PcacPointFanOutConfig | null = null;
   private fanOutOffsets = new Map<PcacData, PlaPointOffset>();
+  /** The `.point` group under the cursor, between its mouseover and mouseout (see `leavePoint`). */
+  private hoveredPoint: SVGGElement | null = null;
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -76,6 +78,9 @@ export class PlaChartBuilder extends PcacChart {
       return;
     }
 
+    // A rebuild throws the hovered point away with everything else, and a removed element gets
+    // no mouseout, so its tooltip is closed here (see `leavePoint`).
+    this.leavePoint();
     this.config = JSON.parse(JSON.stringify(config));
     this.startData = range(this.config.data[0].data.length).map((): PcacData => ({
       key: '',
@@ -105,6 +110,12 @@ export class PlaChartBuilder extends PcacChart {
 
     if (this.zoomEnabled) {
       this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
+        // Zoom moves the points, not the mouse: the hovered one slides out from under a still
+        // cursor (or is hidden outright, see `pointDisplay`), and either way the browser never
+        // sends it a mouseout - its tooltip would stay up, and its dot stay grown, until the
+        // cursor happened to cross it again. So the hover is ended here, on every zoom event.
+        this.leavePoint();
+
         // A d3 zoom transform is always two-dimensional; only the enabled axes follow it and the
         // other keeps its original scale, so that component of the gesture is simply ignored.
         const newX = this.config.enableZoomX ? event.transform.rescaleX(this.scales.x) : this.scales.x;
@@ -288,9 +299,17 @@ export class PlaChartBuilder extends PcacChart {
   private attachZoomBehavior(): void {
     if (!this.zoomEnabled) return;
 
-    // Add a transparent rect to capture zoom events
+    // A transparent rect so the empty plot area is a hit target too: a `<g>` has no area of its
+    // own, so wheel/drag only reaches it through something painted. The rect is only ever that -
+    // the behavior is attached once, to the group, and the rect's events bubble up to it. It used
+    // to be `.call()`ed on both, and d3-zoom keeps its transform per element (`__zoom`): a wheel
+    // over a point never passes through the rect (a sibling of the `.dots`, not an ancestor), so
+    // only the group's transform advanced, and once the point had slid out from under the cursor
+    // the next tick hit the rect - whose handler redrew from its own stale, near-identity
+    // transform before the group's redrew from the real one, every tick, flickering the chart
+    // between the two.
     //
-    // d3's `ZoomBehavior<Element, unknown>` vs. our concretely-typed `Selection<SVGRectElement|SVGGElement, ...>`
+    // d3's `ZoomBehavior<Element, unknown>` vs. our concretely-typed `Selection<SVGGElement, ...>`
     // is a known D3+TS typings friction point: `.call()` structurally compares nested generic Selection
     // methods (`.merge()`, `.select()`, ...) and those never line up across two different concrete element
     // types, even though a zoom behavior works on any element at runtime. Narrow, local `any` escape hatch.
@@ -298,14 +317,9 @@ export class PlaChartBuilder extends PcacChart {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'none')
-      .attr('pointer-events', 'all')
-      .call(this.zoomBehavior as any)
-      .transition()
-      .duration(750)
+      .attr('pointer-events', 'all');
 
-    this.svg.call(this.zoomBehavior as any)
-      .transition()
-      .duration(750)
+    this.svg.call(this.zoomBehavior as any);
   }
 
   private drawLineArea(config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
@@ -428,6 +442,7 @@ export class PlaChartBuilder extends PcacChart {
         .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales))
         .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, this.scales))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
+          self.hoveredPoint = this;
           // `d` is the very element bound from `series.data` above, so identity lookup is exact.
           self.showTooltip(event, d, {
             index: series.data.indexOf(d),
@@ -444,14 +459,7 @@ export class PlaChartBuilder extends PcacChart {
             .attr('r', 6)
             .attr('fill', self.colors[index]);
         })
-        .on('mouseout', function (this: SVGGElement) {
-          self.hideTooltip();
-          select(this).select('.dot')
-            .transition()
-            .duration(duration / 3)
-            .attr('r', 4)
-            .attr('fill', '#fff');
-        })
+        .on('mouseout', () => this.leavePoint())
         .on('click', (_event: MouseEvent, d: PcacData) => {
           this.dotClickedSource.next(d);
         });
@@ -486,6 +494,25 @@ export class PlaChartBuilder extends PcacChart {
         .duration(duration)
         .attr('y', (d: PcacData) => -maxHeight / 2 + this.offsetOf(d).dy);
     }
+  }
+
+  /**
+   * Ends the current hover, if there is one: hides the tooltip and shrinks the dot back. Shared by
+   * the point's own mouseout and the zoom handler, which has to end a hover the browser won't
+   * (the point moves, the cursor doesn't - see `buildChart`'s zoom callback).
+   */
+  private leavePoint(): void {
+    if (!this.hoveredPoint) {
+      return;
+    }
+    const point = this.hoveredPoint;
+    this.hoveredPoint = null;
+    this.hideTooltip();
+    select(point).select('.dot')
+      .transition()
+      .duration(this.transitionService.getTransitionDuration() / 3)
+      .attr('r', 4)
+      .attr('fill', '#fff');
   }
 
   /**

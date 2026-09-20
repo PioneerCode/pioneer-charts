@@ -54,12 +54,6 @@
     stroke: var(--pcac-axis-line-color, #{imports.$gray-900});
   }
 
-  // Tick labels. d3-axis fills them `currentColor` by attribute; this rule outranks that, so it
-  // falls back to the same value and a chart without `tickLabelColor` looks as before.
-  .tick text {
-    fill: var(--pcac-axis-tick-label-color, currentColor);
-  }
-
   // The axis `label` (its title). `PcacChart.AXIS_LABEL_SPACE` reserves room for this size plus
   // a gap, so change both together.
   .pcac-axis-label {
@@ -73,4 +67,14 @@
     font-size: 11px;
     fill: var(--pcac-axis-sub-label-color, #{imports.$gray-600});
   }
+}
+
+// Tick labels. d3-axis fills them `currentColor` by attribute; any stylesheet rule outranks
+// that, so the fallback is the same value and a chart without `tickLabelColor` looks as before.
+// Wrapped in `:where()` (specificity 0,0,1) rather than nested in the axis block above (0,2,1)
+// so this rule still loses to a consumer's own `svg text { fill }` or `.dark-panel text { fill }`,
+// as the bare attribute always did - the theme never styled tick labels before this rule, so it
+// mustn't start beating CSS that consumers wrote against that.
+:where(.pcac-x-axis, .pcac-y-axis) :where(.tick) text {
+  fill: var(--pcac-axis-tick-label-color, currentColor);
 }

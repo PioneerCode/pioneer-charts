@@ -20,6 +20,19 @@
     color, being set on the group itself, still wins). The docs site's Axis Styling page has a
     picker per color.
 
+<a name="22.2.5"></a>
+# [v22.2.5]
+
+### Fixed
+  - Zooming a line, area or plot chart with the wheel over a point flickered the chart between
+    two transforms on every tick. The zoom behavior was attached to both the plot group and its
+    hit-target rect, and d3-zoom keeps a transform per element, so once a point slid out from under
+    the cursor the rect's stale transform redrew before the group's real one. It's now attached to
+    the group only; the rect's events bubble up to it.
+  - A point hovered when a zoom or pan begins is now un-hovered (tooltip hidden, dot shrunk back)
+    on the first zoom event. Zoom moves the point, not the cursor, so the browser never sent it a
+    mouseout and the tooltip stayed up until the cursor happened to cross it again.
+
 <a name="22.2.4"></a>
 # [v22.2.4]
 

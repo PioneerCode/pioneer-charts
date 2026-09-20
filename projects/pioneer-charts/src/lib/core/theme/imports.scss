@@ -1,10 +1,9 @@
 // `!default` lets a consumer override any of these by configuring the entry point module (see
 // pioneer-charts.scss's `@forward` of this file) via `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts"
 // with (...)`. These are the only Sass variables that actually drive rendered output in the
-// library (tooltip background/text, grid line color, plot-line-area styling). For the axis, grid
-// and fan-out colors they're the *fallback*: those rules read a `--pcac-*-color` custom property
-// first (see pioneer-charts.scss), which a chart's config or a consumer stylesheet may set, and
-// only fall through to the variable when nothing has. A `$theme-colors`
+// library (tooltip background/text, grid line color, plot-line-area styling); for the axis, grid
+// and fan-out colors they're the fallback behind a `--pcac-*-color` custom property (see
+// pioneer-charts.scss) that a chart's config or a stylesheet may set. A `$theme-colors`
 // Bootstrap-style map used to live here too, but nothing in the library ever read it (a leftover
 // from an abandoned Bootstrap integration, alongside the orphaned `bootstrap` devDependency and
 // footer.scss bug already removed elsewhere), so it was removed rather than wired up.

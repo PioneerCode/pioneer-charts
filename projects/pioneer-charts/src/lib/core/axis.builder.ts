@@ -29,8 +29,8 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
    * bare rule; that's D3's standard look and is left as-is. `label` and `subLabels` are drawn
    * inside the axis group (so they're raised and non-interactive along with it) - see `drawLabels`.
-   * `format` picks the tick label format; `None` leaves D3's default. The `*Color` fields become
-   * custom properties on the axis group - see `applyColors`.
+   * `format` picks the tick label format; `None` leaves D3's default. The `*Color` fields are
+   * applied by `applyColors`.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
@@ -175,13 +175,11 @@ export class PcacAxisBuilder {
 }
 
 /**
- * Puts the axis's color overrides on its group as CSS custom properties, one per field, which the
- * theme's rules for that axis's parts read with a `var(--..., <theme color>)` fallback. Custom
- * properties rather than inline `stroke`/`fill` on the elements themselves so the theme stays the
- * single place that decides *what* is colored (and keeps hiding marks/lines that weren't asked
- * for), the property inherits to everything d3-axis draws in the group without touching each
- * element, and a stylesheet can set the very same property on any ancestor to restyle a chart
- * without a config change. A field that's unset leaves its property unset, so the fallback applies.
+ * Sets the axis's `*Color` fields on its group as CSS custom properties, which the theme reads
+ * with its own color as the fallback (`var(--pcac-axis-tick-color, ...)`). Custom properties
+ * rather than inline `stroke`/`fill` on the elements: the theme still decides what is drawn (a
+ * color never un-hides marks or the line), the property reaches everything d3-axis draws in the
+ * group, and a stylesheet can set the same property on any ancestor. An unset field sets nothing.
  */
 function applyColors(group: Selection<SVGGElement, unknown, BaseType, unknown>, axis: PcacResolvedAxisConfig): void {
   group

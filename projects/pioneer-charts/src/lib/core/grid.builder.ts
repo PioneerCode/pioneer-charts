@@ -23,11 +23,9 @@ export interface IPcacGridBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    */
   numberOfTicks: number;
   /**
-   * Color for the lines, any CSS color (`PcacAxisConfig.gridColor`). Set on the grid group as the
-   * `--pcac-grid-color` custom property, which the theme's `.pcac-grid-rule line` stroke reads
-   * with its own color as the fallback - so unset means the theme's color, and a stylesheet can
-   * set the same property on an ancestor instead. Same reasoning as the axis builder's
-   * `applyColors`.
+   * Line color (`PcacAxisConfig.gridColor`), set on the grid group as `--pcac-grid-color` for the
+   * theme's `.pcac-grid-rule line` rule to read; unset means the theme's color. See the axis
+   * builder's `applyColors` for why a custom property.
    */
   color?: string;
 }

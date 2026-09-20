@@ -378,8 +378,8 @@ export class PlaChartBuilder extends PcacChart {
    * `pointTransform`), so zoom moves it the same way and everything inside is relative to the
    * coordinate; each spoke ends where its member is actually drawn, ring offset plus shift. It
    * fades in over the points' own entry transition. `spokeColor` / `anchorColor` go on the outer
-   * group as custom properties the theme's `.fan-out-spoke` / `.fan-out-anchor` rules read, with
-   * their own colors as the fallback (the same arrangement as the axis builder's `applyColors`).
+   * group as custom properties for the theme's `.fan-out-spoke` / `.fan-out-anchor` rules (see
+   * the axis builder's `applyColors`).
    */
   private drawFanOuts(): void {
     if (!this.fanOut?.showAnchor || this.coincidentGroups.length === 0) {

@@ -43,6 +43,11 @@ export class PcacAxisSubLabels {
  * Every field is optional so an object-literal / JSON config can give just the ones it cares
  * about (or omit the axis entirely); the initializers apply to anything built with `new`, and
  * `resolveAxisConfig()` fills the rest in for builders.
+ *
+ * The `*Color` fields each color one part of this axis, with any CSS color. Unset, the part keeps
+ * the theme's color. A color never turns a part on - it only shows once the part is drawn. Each
+ * is applied to the axis as the CSS custom property named on the field, so a stylesheet can set
+ * the same property on any ancestor instead; a config value wins.
  */
 export class PcacAxisConfig {
   /**
@@ -63,11 +68,8 @@ export class PcacAxisConfig {
   showGrid?: boolean
 
   /**
-   * Color of this axis's grid lines, any CSS color. Only visible while the grid is drawn (see
-   * `showGrid`); setting it doesn't turn the grid on by itself. Unset, the theme's
-   * `.pcac-grid-rule line` stroke applies (`$gray-200`). Applied as `--pcac-grid-color` on this
-   * axis's grid group, which a stylesheet can set instead - the two axes' grids are separate
-   * groups, so each can have its own color.
+   * Grid line color (`--pcac-grid-color`), shown while this axis's grid is drawn - see `showGrid`.
+   * Theme default `$gray-200`.
    */
   gridColor?: string
 
@@ -92,17 +94,14 @@ export class PcacAxisConfig {
   tickSize?: number
 
   /**
-   * Color of the tick marks, any CSS color. Only visible once `tickSize` has turned the marks on;
-   * setting it doesn't turn them on by itself. Unset, the theme's color applies (see `tickSize`).
-   * Applied as the `--pcac-axis-tick-color` custom property on this axis's group, which a
-   * stylesheet can set instead.
+   * Tick mark color (`--pcac-axis-tick-color`), shown once `tickSize` has turned the marks on.
+   * Theme default `$gray-900`.
    */
   tickColor?: string
 
   /**
-   * Color of the tick labels (the values along the axis), any CSS color. Unset, they take the
-   * page's text color, as they always have (d3-axis fills them `currentColor`). Applied as
-   * `--pcac-axis-tick-label-color` on this axis's group, which a stylesheet can set instead.
+   * Tick label color (`--pcac-axis-tick-label-color`) - the values along the axis. Default is the
+   * page's text color (`currentColor`), as d3-axis has always drawn them.
    */
   tickLabelColor?: string
 
@@ -114,9 +113,7 @@ export class PcacAxisConfig {
   showLine?: boolean = false
 
   /**
-   * Color of the axis line, any CSS color. Only visible with `showLine` on; setting it doesn't
-   * turn the line on by itself. Unset, the theme's color applies (see `showLine`). Applied as
-   * `--pcac-axis-line-color` on this axis's group, which a stylesheet can set instead.
+   * Axis line color (`--pcac-axis-line-color`), shown with `showLine` on. Theme default `$gray-900`.
    */
   lineColor?: string
 
@@ -129,11 +126,7 @@ export class PcacAxisConfig {
    */
   label?: string
 
-  /**
-   * Color of the `label`, any CSS color. Unset, the theme's `.pcac-axis-label` fill applies
-   * (`$gray-700`). Applied as `--pcac-axis-label-color` on this axis's group, which a stylesheet
-   * can set instead.
-   */
+  /** `label` color (`--pcac-axis-label-color`). Theme default `$gray-700`. */
   labelColor?: string
 
   /**
@@ -147,11 +140,7 @@ export class PcacAxisConfig {
    */
   subLabels?: PcacAxisSubLabels
 
-  /**
-   * Color of the `subLabels`, any CSS color - one color for all three. Unset, the theme's
-   * `.pcac-axis-sub-label` fill applies (`$gray-600`). Applied as `--pcac-axis-sub-label-color`
-   * on this axis's group, which a stylesheet can set instead.
-   */
+  /** `subLabels` color, all three (`--pcac-axis-sub-label-color`). Theme default `$gray-600`. */
   subLabelColor?: string
 
   /**

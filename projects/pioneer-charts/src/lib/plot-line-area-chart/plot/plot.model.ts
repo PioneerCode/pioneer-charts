@@ -30,18 +30,13 @@ export class PcacPointFanOutConfig {
   showAnchor: boolean = true
 
   /**
-   * Color of the spokes, any CSS color. Unset, the theme's `.fan-out-spoke` stroke applies
-   * (`$gray-400`). Applied as the `--pcac-fan-out-spoke-color` custom property on the chart's
-   * `.fan-outs` group, which a stylesheet can set instead. Nothing to color unless `showAnchor`
-   * is on.
+   * Spoke color, any CSS color; theme default `$gray-400`. Applied as `--pcac-fan-out-spoke-color`
+   * on the chart's `.fan-outs` group, so a stylesheet can set it on an ancestor instead (a config
+   * value wins). Needs `showAnchor`.
    */
   spokeColor?: string
 
-  /**
-   * Color of the anchor dot, any CSS color. Unset, the theme's `.fan-out-anchor` fill applies
-   * (`$gray-600`). Applied as `--pcac-fan-out-anchor-color` on the `.fan-outs` group, which a
-   * stylesheet can set instead. Nothing to color unless `showAnchor` is on.
-   */
+  /** Anchor dot color, likewise (`--pcac-fan-out-anchor-color`); theme default `$gray-600`. */
   anchorColor?: string
 }
 

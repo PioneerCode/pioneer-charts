@@ -47,11 +47,8 @@ export class AxisStylingComponent {
   protected readonly subLabelKeys: readonly (keyof PcacAxisSubLabels)[] = ['min', 'mid', 'max'];
 
   /**
-   * The color fields, each paired with the theme's own color for that part (`$gray-*` from
-   * `core/theme/imports.scss`) so an unset picker shows what the chart is actually drawing
-   * rather than black. Tick labels have no theme color - they're `currentColor`, i.e. this page's
-   * text color, read off the body at construction. Grid last, since it's the one that isn't part
-   * of the axis itself.
+   * The color fields, each with the part's default color (the theme's `$gray-*`; for tick labels
+   * the page's text color) so an unset picker shows what the chart is actually drawing.
    */
   protected readonly colorFields: readonly { field: AxisColor; theme: string }[] = [
     { field: 'labelColor', theme: '#495057' },
@@ -199,10 +196,7 @@ const sparkline = {
 } as PcacLineChartConfig;`;
 }
 
-/**
- * The page's text color as `#rrggbb`, for a color input (which accepts nothing else). Falls back
- * to black if the computed color isn't a plain `rgb(...)`, e.g. outside a browser.
- */
+/** The page's text color as `#rrggbb`, the only form a color input accepts; black if it can't be read. */
 function bodyTextColorHex(): string {
   const match = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(getComputedStyle(document.body).color);
   if (!match) {

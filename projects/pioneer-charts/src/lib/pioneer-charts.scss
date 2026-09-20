@@ -25,13 +25,10 @@
   border-radius: 2px;
 }
 
-// Every color below is read through a `--pcac-*-color` custom property with the theme's own color
-// as the fallback. The builders set a property on the relevant group only when the chart's config
-// gives that color (`PcacAxisConfig.gridColor` / `tickColor` / `tickLabelColor` / `lineColor` /
-// `labelColor` / `subLabelColor`, `PcacPointFanOutConfig.spokeColor` / `anchorColor`), so a chart that doesn't
-// looks exactly as before - and a stylesheet can set the same property on any ancestor to restyle
-// every chart under it without a config change (a config value, being set on the group itself,
-// still wins).
+// Each color below is `var(--pcac-*-color, <theme color>)`. A builder sets the property on a
+// part's group only when the chart's config gives that color (`PcacAxisConfig`'s `*Color` fields,
+// `PcacPointFanOutConfig.spokeColor` / `anchorColor`), so a chart without one looks as before. A
+// stylesheet can set the same property on any ancestor; a config value, on the group itself, wins.
 .pcac-grid-rule line {
   stroke: var(--pcac-grid-color, #{imports.$gray-200});
 }
@@ -57,9 +54,8 @@
     stroke: var(--pcac-axis-line-color, #{imports.$gray-900});
   }
 
-  // Tick labels. d3-axis fills them `currentColor` (an attribute, which this rule outranks), so
-  // the fallback is that same value: without `PcacAxisConfig.tickLabelColor` they keep following
-  // the page's text color exactly as before.
+  // Tick labels. d3-axis fills them `currentColor` by attribute; this rule outranks that, so it
+  // falls back to the same value and a chart without `tickLabelColor` looks as before.
   .tick text {
     fill: var(--pcac-axis-tick-label-color, currentColor);
   }

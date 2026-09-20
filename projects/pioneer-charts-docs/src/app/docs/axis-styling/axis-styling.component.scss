@@ -24,6 +24,36 @@
     border: 1px solid rgba(colors.$primary, 0.3);
     border-radius: 3px;
   }
+
+  // Color rows: the swatch sits in the slider's column, left-aligned like a checkbox.
+  input[type="color"] {
+    justify-self: start;
+    width: 3rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 1px solid rgba(colors.$primary, 0.3);
+    border-radius: 3px;
+    background: none;
+  }
+}
+
+// The readout column of a color row: "theme" as a button to unset a picked color, or as plain text
+// when it already is the theme's.
+.pc-axis-styling-clear {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0 0.4rem;
+  border: 1px solid rgba(colors.$primary, 0.3);
+  border-radius: 3px;
+  background: none;
+  color: colors.$primary;
+  cursor: pointer;
+}
+
+.pc-axis-styling-muted {
+  font-weight: 400;
+  font-size: 0.85rem;
+  opacity: 0.5;
 }
 
 .pc-axis-styling-heading {

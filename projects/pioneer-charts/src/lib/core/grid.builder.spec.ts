@@ -25,6 +25,21 @@ describe('PcacGridBuilder', () => {
     expect(ruleCount('drawHorizontalGrid', 10)).toBe(scaleLinear().domain([0, 100]).ticks(10).length);
   });
 
+  // `color` goes on the grid group as the custom property the theme's `.pcac-grid-rule line`
+  // stroke reads, and only when given - see the axis builder's spec for the same arrangement.
+  it('puts a given color on the grid group as --pcac-grid-color, else nothing', () => {
+    const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svg = select(svgEl).append('g');
+    const scale = scaleLinear().domain([0, 100]).range([0, 500]);
+    const builder = TestBed.inject(PcacGridBuilder);
+    builder.drawVerticalGrid({ svg, width: 500, height: 200, xScale: scale, yScale: scale, numberOfTicks: 5, color: 'red' });
+    builder.drawHorizontalGrid({ svg, width: 500, height: 200, xScale: scale, yScale: scale, numberOfTicks: 5 });
+
+    expect(svgEl.querySelector<SVGGElement>('.pcac-grid-vertical')!.style.getPropertyValue('--pcac-grid-color')).toBe('red');
+    expect(svgEl.querySelector('.pcac-grid-vertical line')!.getAttribute('style')).toBeNull();
+    expect(svgEl.querySelector('.pcac-grid-horizontal')!.getAttribute('style')).toBeNull();
+  });
+
   // A category axis has no ticks(); its grid is one line through the middle of each band.
   it('a band scale gets one rule per category, centered in the band', () => {
     const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

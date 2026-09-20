@@ -22,6 +22,14 @@ export interface IPcacGridBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * and gets one line per category.
    */
   numberOfTicks: number;
+  /**
+   * Color for the lines, any CSS color (`PcacAxisConfig.gridColor`). Set on the grid group as the
+   * `--pcac-grid-color` custom property, which the theme's `.pcac-grid-rule line` stroke reads
+   * with its own color as the fallback - so unset means the theme's color, and a stylesheet can
+   * set the same property on an ancestor instead. Same reasoning as the axis builder's
+   * `applyColors`.
+   */
+  color?: string;
 }
 
 /**
@@ -55,6 +63,7 @@ export class PcacGridBuilder {
   drawVerticalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-vertical')
+      .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.rule')
       .data(gridLines(config.xScale, config.numberOfTicks))
       .enter().append('svg:g')
@@ -72,6 +81,7 @@ export class PcacGridBuilder {
   drawHorizontalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-horizontal')
+      .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.pcac-grid-rule')
       .data(gridLines(config.yScale, config.numberOfTicks))
       .enter().append('svg:g')

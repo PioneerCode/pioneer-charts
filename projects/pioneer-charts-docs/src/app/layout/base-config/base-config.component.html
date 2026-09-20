@@ -59,6 +59,12 @@
             x axis's on the horizontal bar chart &mdash; and no other. Set it to turn either grid on or off.
           </li>
           <li>
+            <b>gridColor</b> &mdash; any CSS color for this axis's grid lines, in place of the theme's
+            <code>$gray-200</code>. Only shows while that grid is drawn (it doesn't turn the grid on). Applied as
+            the <code>--pcac-grid-color</code> custom property on the grid group; a stylesheet can set the same
+            property on an ancestor instead.
+          </li>
+          <li>
             <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the
             number of grid lines. Ignored by a category axis, which has one tick per category. Default 5.
           </li>
@@ -67,12 +73,26 @@
             set, so setting a size is also what turns them on (6 is D3's usual length); <code>0</code> keeps them
             off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
             by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
-            Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>.
+            Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>,
+            unless <b>tickColor</b> is set.
+          </li>
+          <li>
+            <b>tickColor</b> &mdash; any CSS color for the tick marks. Only shows once <b>tickSize</b> has turned
+            the marks on. Applied as <code>--pcac-axis-tick-color</code> on the axis group.
+          </li>
+          <li>
+            <b>tickLabelColor</b> &mdash; any CSS color for the tick labels (the values along the axis), which
+            otherwise follow the page's text color (<code>currentColor</code>). Applied as
+            <code>--pcac-axis-tick-label-color</code> on the axis group.
           </li>
           <li>
             <b>showLine</b> &mdash; if true, draw a solid line along the axis itself (with D3's short end-caps).
             Independent of the tick marks. Default false. Stroked with the theme's <code>$gray-900</code> via
-            <code>.pcac-axis-line .domain</code>.
+            <code>.pcac-axis-line .domain</code>, unless <b>lineColor</b> is set.
+          </li>
+          <li>
+            <b>lineColor</b> &mdash; any CSS color for the axis line. Only shows with <b>showLine</b> on. Applied
+            as <code>--pcac-axis-line-color</code> on the axis group.
           </li>
           <li>
             <b>label</b> &mdash; a title for the axis, drawn centered along it just inside the chart's edge (below
@@ -81,12 +101,20 @@
             theme's <code>.pcac-axis-label</code> rule.
           </li>
           <li>
+            <b>labelColor</b> &mdash; any CSS color for the <b>label</b>, in place of the theme's
+            <code>$gray-700</code>. Applied as <code>--pcac-axis-label-color</code> on the axis group.
+          </li>
+          <li>
             <b>subLabels</b> &mdash; <code>{{ '{' }} min?, mid?, max? {{ '}' }}</code>: up to three short labels placed
             by position along the axis, in their own row just outside the tick labels (and inside the <b>label</b>,
             if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
             so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
             bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
             <code>.pcac-axis-sub-label</code> rule.
+          </li>
+          <li>
+            <b>subLabelColor</b> &mdash; any CSS color for all of the <b>subLabels</b>, in place of the theme's
+            <code>$gray-600</code>. Applied as <code>--pcac-axis-sub-label-color</code> on the axis group.
           </li>
           <li>
             <b>format</b> &mdash; a <code>PcacFormatEnum</code>: how this axis's values are shown in its tick

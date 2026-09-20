@@ -113,7 +113,7 @@ describe('PlaChartBuilder point fan-out', () => {
     expect(spokeDeltas(svg)).toEqual([{ dx: 0, dy: -22 }, { dx: 0, dy: 22 }]);
   });
 
-  it('fans a larger group around a ring, first member at the top, sized so neighbours clear each other', () => {
+  it('fans a larger group around a ring, first member at the top, sized so neighbors clear each other', () => {
     const { svg } = build(config(four(), {}));
 
     // Four 40px marks 4px apart: chord 44, radius 44 / (2 sin 45) = 31.11.
@@ -159,6 +159,20 @@ describe('PlaChartBuilder point fan-out', () => {
     expect(spokes.length).toBe(2);
     expect(spokes.map((s) => s.getAttribute('x1'))).toEqual(['0', '0']);
     expect(spokes.map((s) => Number(s.getAttribute('y2')) - Number(s.getAttribute('y1')))).toEqual([-22, 22]);
+  });
+
+  // `spokeColor` / `anchorColor` go on the `.fan-outs` group as the custom properties the theme's
+  // `.fan-out-spoke` / `.fan-out-anchor` rules read, and only when given.
+  it('puts the spoke and anchor colors on the fan-outs group as custom properties, else nothing', () => {
+    const colored = build(config(four(), { spokeColor: 'red', anchorColor: 'blue' })).svg;
+    const group = colored.querySelector<SVGGElement>('.fan-outs')!;
+    expect(group.style.getPropertyValue('--pcac-fan-out-spoke-color')).toBe('red');
+    expect(group.style.getPropertyValue('--pcac-fan-out-anchor-color')).toBe('blue');
+    expect(colored.querySelector('.fan-out-spoke')!.getAttribute('style')).toBeNull();
+    expect(colored.querySelector('.fan-out-anchor')!.getAttribute('style')).toBeNull();
+
+    const plain = build(config(four(), {})).svg;
+    expect(plain.querySelector('.fan-outs')!.getAttribute('style')).toBeNull();
   });
 
   it('can leave the anchors out', () => {

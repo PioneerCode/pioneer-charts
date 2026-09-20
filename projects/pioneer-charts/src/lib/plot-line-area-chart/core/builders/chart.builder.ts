@@ -377,15 +377,20 @@ export class PlaChartBuilder extends PcacChart {
    * the true coordinate (unlike a point group, which also carries its ring's shift - see
    * `pointTransform`), so zoom moves it the same way and everything inside is relative to the
    * coordinate; each spoke ends where its member is actually drawn, ring offset plus shift. It
-   * fades in over the points' own entry transition.
+   * fades in over the points' own entry transition. `spokeColor` / `anchorColor` go on the outer
+   * group as custom properties the theme's `.fan-out-spoke` / `.fan-out-anchor` rules read, with
+   * their own colors as the fallback (the same arrangement as the axis builder's `applyColors`).
    */
   private drawFanOuts(): void {
     if (!this.fanOut?.showAnchor || this.coincidentGroups.length === 0) {
       return;
     }
+    const { spokeColor, anchorColor } = this.fanOut;
     const groups = this.svg.append('g')
       .attr('class', 'fan-outs')
       .attr('clip-path', `url(#${this.plotClipPathId})`)
+      .style('--pcac-fan-out-spoke-color', () => spokeColor ?? null)
+      .style('--pcac-fan-out-anchor-color', () => anchorColor ?? null)
       .selectAll('.fan-out')
       .data(this.coincidentGroups)
       .enter().append('g')
@@ -561,7 +566,7 @@ export class PlaChartBuilder extends PcacChart {
     return { x: x + offset.dx, y: y + offset.dy };
   }
 
-  /** A fan-out sits on its members' true coordinate, unshifted; any member locates it. */
+  /** A fan-out sits on its members' true coordinate, with no shift applied; any member locates it. */
   private fanOutTransform(group: PlaCoincidentGroup, scales: PlaChartScales): string {
     const { data, index } = group.members[0];
     const { x, y } = this.pointPosition(data, index, scales);

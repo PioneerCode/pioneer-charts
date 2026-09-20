@@ -12,14 +12,16 @@
 
   // The plot chart's `pointFanOut` anchors (see PcacPointFanOutConfig.showAnchor): a spoke from
   // the shared coordinate to each fanned-out point, and a dot on the coordinate itself. Quiet
-  // grays, like the grid, so they read as guides rather than data.
+  // grays, like the grid, so they read as guides rather than data. Overridable the same way as
+  // the theme's axis/grid colors (see pioneer-charts.scss): the builder sets the custom property
+  // on the `.fan-outs` group from `spokeColor` / `anchorColor`, else the fallback applies.
   .fan-out-spoke {
-    stroke: imports.$gray-400;
+    stroke: var(--pcac-fan-out-spoke-color, #{imports.$gray-400});
     stroke-width: 1px;
   }
 
   .fan-out-anchor {
-    fill: imports.$gray-600;
+    fill: var(--pcac-fan-out-anchor-color, #{imports.$gray-600});
   }
 
   .effects-canvas {

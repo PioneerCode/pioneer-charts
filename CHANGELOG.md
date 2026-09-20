@@ -1,3 +1,25 @@
+<a name="22.2.6"></a>
+# [v22.2.6]
+
+### Added
+  - Every axis part now has a color field on `PcacAxisConfig`, each taking any CSS color and
+    applying to that axis only: `labelColor` (the `label`), `subLabelColor` (all three
+    `subLabels`), `tickColor` (the tick marks), `tickLabelColor` (the tick labels, otherwise the
+    page's text color as before), `lineColor` (the axis line) and `gridColor` (that axis's grid
+    lines). Unset, each part keeps its previous color, so nothing changes for an existing config; setting a color never turns a part on - `tickColor` shows only with a
+    `tickSize`, `lineColor` with `showLine`, `gridColor` with the grid drawn. The line/area/plot
+    charts' zoomed axes and grids keep them.
+  - Likewise `spokeColor` and `anchorColor` on `PcacPointFanOutConfig`, for the plot chart's
+    fan-out spokes and anchor dot.
+  - The colors are applied as CSS custom properties on the part's group (`--pcac-axis-label-color`,
+    `--pcac-axis-sub-label-color`, `--pcac-axis-tick-color`, `--pcac-axis-tick-label-color`,
+    `--pcac-axis-line-color`,
+    `--pcac-grid-color`, `--pcac-fan-out-spoke-color`, `--pcac-fan-out-anchor-color`), and the
+    theme's rules read each with its own color as the fallback - so a stylesheet can set the same
+    properties on any ancestor to restyle every chart under it with no config change (a config
+    color, being set on the group itself, still wins). The docs site's Axis Styling page has a
+    picker per color.
+
 <a name="22.2.4"></a>
 # [v22.2.4]
 
@@ -51,7 +73,7 @@
   - Plot charts can spread out points that share a coordinate. Set `pointFanOut` on
     `PcacPlotChartConfig` (`{}` for the defaults) and each group of coincident points is placed
     evenly around a ring on their shared coordinate - a pair straight up and down, larger groups
-    clockwise from the top - sized so neighbours sit `gap` px apart (or at a fixed `radius`), with
+    clockwise from the top - sized so neighbors sit `gap` px apart (or at a fixed `radius`), with
     an anchor dot and spokes marking the true value (`showAnchor`). Previously such points were
     drawn on top of one another, leaving only the last series' visible and hoverable. The offset
     is applied inside each point's group, so zoom is unaffected, and the chart reserves edge space

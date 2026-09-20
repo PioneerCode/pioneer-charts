@@ -25,8 +25,15 @@
   border-radius: 2px;
 }
 
+// Every color below is read through a `--pcac-*-color` custom property with the theme's own color
+// as the fallback. The builders set a property on the relevant group only when the chart's config
+// gives that color (`PcacAxisConfig.gridColor` / `tickColor` / `tickLabelColor` / `lineColor` /
+// `labelColor` / `subLabelColor`, `PcacPointFanOutConfig.spokeColor` / `anchorColor`), so a chart that doesn't
+// looks exactly as before - and a stylesheet can set the same property on any ancestor to restyle
+// every chart under it without a config change (a config value, being set on the group itself,
+// still wins).
 .pcac-grid-rule line {
-  stroke: imports.$gray-200;
+  stroke: var(--pcac-grid-color, #{imports.$gray-200});
 }
 
 .pcac-x-axis,
@@ -40,11 +47,21 @@
   // Tick marks and the axis line are hidden by default (above) and always have been, so they
   // only appear on a chart that asks for them - `PcacAxisConfig.tickSize` for the marks,
   // `showLine` for the line - via a class the axis builder adds for that axis. Nothing changes
-  // for charts that don't. Both share one color so a mark reads as part of its axis rather than a
-  // separate, fainter element.
-  &.pcac-axis-tick-marks .tick line,
+  // for charts that don't. Both share one default color so a mark reads as part of its axis
+  // rather than a separate, fainter element, but each has its own override.
+  &.pcac-axis-tick-marks .tick line {
+    stroke: var(--pcac-axis-tick-color, #{imports.$gray-900});
+  }
+
   &.pcac-axis-line .domain {
-    stroke: imports.$gray-900;
+    stroke: var(--pcac-axis-line-color, #{imports.$gray-900});
+  }
+
+  // Tick labels. d3-axis fills them `currentColor` (an attribute, which this rule outranks), so
+  // the fallback is that same value: without `PcacAxisConfig.tickLabelColor` they keep following
+  // the page's text color exactly as before.
+  .tick text {
+    fill: var(--pcac-axis-tick-label-color, currentColor);
   }
 
   // The axis `label` (its title). `PcacChart.AXIS_LABEL_SPACE` reserves room for this size plus
@@ -52,12 +69,12 @@
   .pcac-axis-label {
     font-size: 12px;
     font-weight: 600;
-    fill: imports.$gray-700;
+    fill: var(--pcac-axis-label-color, #{imports.$gray-700});
   }
 
   // Min / mid / max `subLabels`; `PcacChart.AXIS_SUB_LABEL_SPACE` is sized to this.
   .pcac-axis-sub-label {
     font-size: 11px;
-    fill: imports.$gray-600;
+    fill: var(--pcac-axis-sub-label-color, #{imports.$gray-600});
   }
 }

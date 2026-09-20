@@ -2,7 +2,9 @@
   <p class="lead" id="axis-styling">The bar, line, area and plot charts take one <code>PcacAxisConfig</code> per
     axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks, no tick marks,
     no axis line, and a grid on one axis only &mdash; and each of those is a field on the object: <b>hide</b>,
-    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b>, <b>showLine</b>, <b>label</b> and <b>subLabels</b>.
+    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b>, <b>showLine</b>, <b>label</b> and <b>subLabels</b>. Each part
+    that's drawn also has a color field: <b>labelColor</b>, <b>subLabelColor</b>, <b>tickLabelColor</b>,
+    <b>tickColor</b>, <b>lineColor</b> and <b>gridColor</b>.
   </p>
 
   <section class="pc-doc-section">
@@ -51,6 +53,17 @@
         <input [id]="'pc-axis-' + axis + '-hide'" type="checkbox" [checked]="a.hide"
           (change)="onToggle(axis, 'hide', $event)" />
         <span></span>
+
+        @for (color of colorFields; track color.field) {
+        <label [for]="'pc-axis-' + axis + '-' + color.field">{{ color.field }}</label>
+        <input [id]="'pc-axis-' + axis + '-' + color.field" type="color" [value]="a[color.field] ?? color.theme"
+          (input)="onColor(axis, color.field, $event)" />
+        @if (a[color.field]) {
+        <button type="button" class="pc-axis-styling-clear" (click)="onClearColor(axis, color.field)">theme</button>
+        } @else {
+        <span class="pc-axis-styling-readout pc-axis-styling-muted">theme</span>
+        }
+        }
       </div>
       }
     </div>
@@ -76,7 +89,10 @@
     <p class="text-sm">A few things to notice: the bar chart's x axis is a category axis, so <b>ticks</b> does
       nothing there (one tick per bar); the labels move with <b>tickSize</b> and the plot area gives up exactly that
       much room; the x axis's grid runs through the middle of each bar on the bar chart and through each tick on
-      the line chart; and hiding an axis hands its margins to the plot rather than leaving a gap.
+      the line chart; and hiding an axis hands its margins to the plot rather than leaving a gap. Each color
+      picker starts on the theme's own color for that part; pick another and the chart takes it, or click
+      <i>theme</i> to unset it again. A color only shows on a part that's drawn &mdash; <b>tickColor</b> needs a
+      <b>tickSize</b>, <b>lineColor</b> needs <b>showLine</b>, <b>gridColor</b> needs the grid on.
     </p>
   </section>
 
@@ -132,9 +148,23 @@
         <code>enableZoomY</code> for y) is redrawn as you zoom and pan, with the same settings.
       </li>
       <li>
-        <b>Color comes from the theme.</b> Marks and axis lines are both stroked with <code>$gray-900</code>, via
-        <code>.pcac-axis-tick-marks .tick line</code> and <code>.pcac-axis-line .domain</code> respectively;
-        override those rules (or the variable) to restyle them.
+        <b>Colors come from the theme unless you say otherwise.</b> Marks and axis lines are stroked with
+        <code>$gray-900</code>, the label filled with <code>$gray-700</code>, sub labels <code>$gray-600</code>
+        and grid lines <code>$gray-200</code>; the tick labels are <code>currentColor</code>, i.e. the page's
+        text color. Each has a field on the axis &mdash; <b>tickColor</b>, <b>tickLabelColor</b>,
+        <b>lineColor</b>, <b>labelColor</b>, <b>subLabelColor</b>, <b>gridColor</b> &mdash; that takes any CSS
+        color and applies to that axis only, so the two axes can differ. Setting a color never turns a part on:
+        <b>tickColor</b> shows only with a <b>tickSize</b>, <b>lineColor</b> with <b>showLine</b>,
+        <b>gridColor</b> with that axis's grid drawn.
+      </li>
+      <li>
+        <b>The colors are CSS custom properties too.</b> A config color is applied as
+        <code>--pcac-axis-tick-color</code>, <code>--pcac-axis-tick-label-color</code>,
+        <code>--pcac-axis-line-color</code>,
+        <code>--pcac-axis-label-color</code>, <code>--pcac-axis-sub-label-color</code> or
+        <code>--pcac-grid-color</code> on the axis (or grid) group, and the theme reads each with its own color
+        as the fallback. So a stylesheet can set the same property on any ancestor to restyle every chart under
+        it &mdash; a dark panel, say &mdash; with no config change; a config color still wins where given.
       </li>
       <li>
         <b>The pie chart has no axes</b>, so it takes neither.

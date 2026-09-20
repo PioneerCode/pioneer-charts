@@ -11,22 +11,38 @@ import { PcacLineAreaChartConfig } from "../plot-line-area-chart.model";
 export class PcacPointFanOutConfig {
   /**
    * Ring radius in px, the same for every group. When not set, each group gets the smallest
-   * radius at which its neighbours sit `gap` px apart - so a pair barely moves while a group of
+   * radius at which its neighbors sit `gap` px apart - so a pair barely moves while a group of
    * five spreads as far as it has to.
    */
   radius?: number
 
   /**
-   * Space between neighbouring points on the ring, in px, when `radius` is not set. Measured
+   * Space between neighboring points on the ring, in px, when `radius` is not set. Measured
    * between their image boxes (or hovered dots), not their centers.
    */
   gap: number = 4
 
   /**
    * Draw a dot at the shared coordinate - the value the group's points actually have - with a
-   * spoke out to each of them. Styled by the theme's `.fan-out-anchor` / `.fan-out-spoke` rules.
+   * spoke out to each of them. Styled by the theme's `.fan-out-anchor` / `.fan-out-spoke` rules,
+   * whose colors `anchorColor` / `spokeColor` override.
    */
   showAnchor: boolean = true
+
+  /**
+   * Color of the spokes, any CSS color. Unset, the theme's `.fan-out-spoke` stroke applies
+   * (`$gray-400`). Applied as the `--pcac-fan-out-spoke-color` custom property on the chart's
+   * `.fan-outs` group, which a stylesheet can set instead. Nothing to color unless `showAnchor`
+   * is on.
+   */
+  spokeColor?: string
+
+  /**
+   * Color of the anchor dot, any CSS color. Unset, the theme's `.fan-out-anchor` fill applies
+   * (`$gray-600`). Applied as `--pcac-fan-out-anchor-color` on the `.fan-outs` group, which a
+   * stylesheet can set instead. Nothing to color unless `showAnchor` is on.
+   */
+  anchorColor?: string
 }
 
 export class PcacPlotChartConfig extends PcacLineAreaChartConfig {

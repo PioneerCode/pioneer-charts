@@ -63,6 +63,15 @@ export class PcacAxisConfig {
   showGrid?: boolean
 
   /**
+   * Color of this axis's grid lines, any CSS color. Only visible while the grid is drawn (see
+   * `showGrid`); setting it doesn't turn the grid on by itself. Unset, the theme's
+   * `.pcac-grid-rule line` stroke applies (`$gray-200`). Applied as `--pcac-grid-color` on this
+   * axis's grid group, which a stylesheet can set instead - the two axes' grids are separate
+   * groups, so each can have its own color.
+   */
+  gridColor?: string
+
+  /**
    * Requested number of ticks (D3's `ticks()` hint, so the actual count can differ slightly) -
    * also the number of grid lines for this axis. Ignored by a category (band) axis, which has one
    * tick per category. Default 5.
@@ -77,25 +86,55 @@ export class PcacAxisConfig {
    * margins grow or shrink by the same amount so the plot area makes room for them - a longer
    * tick means a slightly smaller plot, never labels pushed off the edge. Only the per-tick marks
    * change; the axis line's two end-caps keep their default length. Color comes from the theme
-   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line).
+   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line) unless
+   * `tickColor` is set.
    */
   tickSize?: number
 
   /**
+   * Color of the tick marks, any CSS color. Only visible once `tickSize` has turned the marks on;
+   * setting it doesn't turn them on by itself. Unset, the theme's color applies (see `tickSize`).
+   * Applied as the `--pcac-axis-tick-color` custom property on this axis's group, which a
+   * stylesheet can set instead.
+   */
+  tickColor?: string
+
+  /**
+   * Color of the tick labels (the values along the axis), any CSS color. Unset, they take the
+   * page's text color, as they always have (d3-axis fills them `currentColor`). Applied as
+   * `--pcac-axis-tick-label-color` on this axis's group, which a stylesheet can set instead.
+   */
+  tickLabelColor?: string
+
+  /**
    * Draw a solid line along the axis itself (the full length of the axis, with D3's short
    * end-caps). Off by default, as the theme has always hidden it. Color comes from the theme
-   * (`.pcac-axis-line .domain`, `$gray-900`).
+   * (`.pcac-axis-line .domain`, `$gray-900`) unless `lineColor` is set.
    */
   showLine?: boolean = false
+
+  /**
+   * Color of the axis line, any CSS color. Only visible with `showLine` on; setting it doesn't
+   * turn the line on by itself. Unset, the theme's color applies (see `showLine`). Applied as
+   * `--pcac-axis-line-color` on this axis's group, which a stylesheet can set instead.
+   */
+  lineColor?: string
 
   /**
    * A title for the whole axis (e.g. "Revenue ($)"), drawn centered along it just inside the
    * chart's edge: below the tick labels for the x axis, rotated to read bottom-to-top left of
    * them for the y axis. The chart's margin grows by `PcacChart.AXIS_LABEL_SPACE` to make room,
    * shrinking the plot area the same way a longer tick does. Not drawn on a hidden axis. Styled
-   * by the theme's `.pcac-axis-label` rule.
+   * by the theme's `.pcac-axis-label` rule; `labelColor` overrides its color.
    */
   label?: string
+
+  /**
+   * Color of the `label`, any CSS color. Unset, the theme's `.pcac-axis-label` fill applies
+   * (`$gray-700`). Applied as `--pcac-axis-label-color` on this axis's group, which a stylesheet
+   * can set instead.
+   */
+  labelColor?: string
 
   /**
    * Min / mid / max sub labels (e.g. "Low" / "Medium" / "High") in their own row just outside the
@@ -103,9 +142,17 @@ export class PcacAxisConfig {
    * `mid` centered, `max` right-aligned at its end, so they never spill past the axis. On the
    * y axis they run bottom-to-top like the label, `min` at the bottom. The margin grows by
    * `PcacChart.AXIS_SUB_LABEL_SPACE` when any is set, shrinking the plot area. Not drawn on a
-   * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
+   * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule; `subLabelColor` overrides
+   * its color.
    */
   subLabels?: PcacAxisSubLabels
+
+  /**
+   * Color of the `subLabels`, any CSS color - one color for all three. Unset, the theme's
+   * `.pcac-axis-sub-label` fill applies (`$gray-600`). Applied as `--pcac-axis-sub-label-color`
+   * on this axis's group, which a stylesheet can set instead.
+   */
+  subLabelColor?: string
 
   /**
    * How the values along this axis are interpreted and shown - the tick labels, and the value
@@ -142,10 +189,11 @@ export interface PcacChartMargin {
 
 /**
  * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
- * null-check. `tickSize`, `label` and `subLabels` stay optional: "not set" is itself the meaningful
- * default (no marks, no labels).
+ * null-check. `tickSize`, `label`, `subLabels` and the `*Color` fields stay optional: "not set"
+ * is itself the meaningful default (no marks, no labels, the theme's colors).
  */
-export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>> & Pick<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>;
+type PcacOptionalAxisFields = 'tickSize' | 'label' | 'subLabels' | 'tickColor' | 'tickLabelColor' | 'lineColor' | 'labelColor' | 'subLabelColor' | 'gridColor';
+export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, PcacOptionalAxisFields>> & Pick<PcacAxisConfig, PcacOptionalAxisFields>;
 
 /** True if `axis` has at least one sub label to draw (an empty `subLabels` object counts as none). */
 export function hasAxisSubLabels(axis: PcacAxisConfig | undefined): boolean {
@@ -182,9 +230,15 @@ export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false
     showGrid: axis?.showGrid ?? showGridDefault,
     ticks: axis?.ticks ?? defaults.ticks!,
     tickSize: axis?.tickSize,
+    tickColor: axis?.tickColor,
+    tickLabelColor: axis?.tickLabelColor,
     showLine: axis?.showLine ?? defaults.showLine!,
+    lineColor: axis?.lineColor,
     label: axis?.label,
+    labelColor: axis?.labelColor,
     subLabels: axis?.subLabels,
+    subLabelColor: axis?.subLabelColor,
+    gridColor: axis?.gridColor,
     format: axis?.format ?? defaults.format!,
     domainMin: axis?.domainMin ?? defaults.domainMin!,
     domainMax: axis?.domainMax ?? defaults.domainMax!,

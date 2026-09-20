@@ -11,6 +11,9 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 /** The `PcacAxisConfig` fields the demo lets you toggle; `tickSize` is the slider's. */
 type AxisToggle = 'hide' | 'showGrid' | 'showLine';
 
+/** The `PcacAxisConfig` color fields, each with its own picker. */
+type AxisColor = 'labelColor' | 'subLabelColor' | 'tickLabelColor' | 'tickColor' | 'lineColor' | 'gridColor';
+
 @Component({
   selector: 'pc-axis-styling',
   templateUrl: './axis-styling.component.html',
@@ -40,6 +43,22 @@ export class AxisStylingComponent {
 
   /** The three sub label slots, for the template's inputs */
   protected readonly subLabelKeys: readonly (keyof PcacAxisSubLabels)[] = ['min', 'mid', 'max'];
+
+  /**
+   * The color fields, each paired with the theme's own color for that part (`$gray-*` from
+   * `core/theme/imports.scss`) so an unset picker shows what the chart is actually drawing
+   * rather than black. Tick labels have no theme color - they're `currentColor`, i.e. this page's
+   * text color, read off the body at construction. Grid last, since it's the one that isn't part
+   * of the axis itself.
+   */
+  protected readonly colorFields: readonly { field: AxisColor; theme: string }[] = [
+    { field: 'labelColor', theme: '#495057' },
+    { field: 'subLabelColor', theme: '#6c757d' },
+    { field: 'tickLabelColor', theme: bodyTextColorHex() },
+    { field: 'tickColor', theme: '#212529' },
+    { field: 'lineColor', theme: '#212529' },
+    { field: 'gridColor', theme: '#e9ecef' },
+  ];
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
@@ -81,6 +100,16 @@ export class AxisStylingComponent {
     this.axisSignal(axis).update(a => ({ ...a, [field]: value }));
   }
 
+  protected onColor(axis: 'x' | 'y', field: AxisColor, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.axisSignal(axis).update(a => ({ ...a, [field]: value }));
+  }
+
+  /** Back to unset, i.e. the theme's color - a color input has no empty state of its own. */
+  protected onClearColor(axis: 'x' | 'y', field: AxisColor): void {
+    this.axisSignal(axis).update(a => ({ ...a, [field]: undefined }));
+  }
+
   private axisSignal(axis: 'x' | 'y') {
     return axis === 'x' ? this.xAxis : this.yAxis;
   }
@@ -112,16 +141,40 @@ export class AxisStylingComponent {
   xAxis: {
     label: 'Product', // axis title, centered below the tick labels
     tickSize: 12,     // tick mark length in px - setting it is what turns the marks on
-    showLine: true    // solid line along the axis
+    showLine: true,   // solid line along the axis
+    lineColor: '#0d6efd', // any CSS color; the theme's gray otherwise
+    tickColor: '#0d6efd',
+    tickLabelColor: '#495057' // the tick labels are the page's text color otherwise
   },
   yAxis: {
     domainMax: 1000,  // the value axis runs 0..domainMax (format: a PcacFormatEnum, e.g. Percentage)
     label: 'Units sold',
+    labelColor: '#0d6efd',
     subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // by position along the axis
+    subLabelColor: '#6ea8fe',
     ticks: 4,         // requested tick (and grid line) count
     showGrid: false   // no horizontal grid lines
   }
 } as PcacBarVerticalChartConfig;
+
+// Grid color belongs to the axis whose ticks the grid runs from.
+const tinted = {
+  data: [ ... ],
+  yAxis: { gridColor: '#cfe2ff' }
+} as PcacLineChartConfig;
+
+// The same colors are also CSS custom properties, read by the theme with its own color as
+// the fallback - set them in a stylesheet to restyle every chart under an element at once
+// (a color given in a config still wins, as it's set on the axis itself):
+//
+//   .dark-panel {
+//     --pcac-axis-label-color: #dee2e6;
+//     --pcac-axis-sub-label-color: #adb5bd;
+//     --pcac-axis-tick-label-color: #dee2e6;
+//     --pcac-axis-tick-color: #adb5bd;
+//     --pcac-axis-line-color: #adb5bd;
+//     --pcac-grid-color: #495057;
+//   }
 
 // Grids on both axes: the x axis's is off by default on this chart, so ask for it.
 const gridded = {
@@ -135,4 +188,16 @@ const sparkline = {
   xAxis: { hide: true },
   yAxis: { hide: true, showGrid: false }
 } as PcacLineChartConfig;`;
+}
+
+/**
+ * The page's text color as `#rrggbb`, for a color input (which accepts nothing else). Falls back
+ * to black if the computed color isn't a plain `rgb(...)`, e.g. outside a browser.
+ */
+function bodyTextColorHex(): string {
+  const match = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(getComputedStyle(document.body).color);
+  if (!match) {
+    return '#000000';
+  }
+  return '#' + match.slice(1, 4).map(c => Number(c).toString(16).padStart(2, '0')).join('');
 }

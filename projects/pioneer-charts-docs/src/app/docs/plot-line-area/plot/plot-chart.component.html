@@ -61,7 +61,7 @@
         (see <a routerLink="/docs/guides/tooltip">Custom Tooltip</a>).
         <ul>
           <li>
-            <b>gap</b> &mdash; space in pixels between neighbouring points on the ring, measured between their image
+            <b>gap</b> &mdash; space in pixels between neighboring points on the ring, measured between their image
             boxes (or hovered dots). Each group gets the smallest ring at which its members sit this far apart.
             Default 4.
           </li>
@@ -73,6 +73,13 @@
             <b>showAnchor</b> &mdash; draw a dot on the shared coordinate with a spoke to each fanned-out point, so
             the true value stays marked. Default true. Styled by the theme's <code>.fan-out-anchor</code> and
             <code>.fan-out-spoke</code> rules.
+          </li>
+          <li>
+            <b>spokeColor</b> / <b>anchorColor</b> &mdash; any CSS color for the spokes and the anchor dot, in
+            place of the theme's <code>$gray-400</code> and <code>$gray-600</code>. Applied as the
+            <code>--pcac-fan-out-spoke-color</code> / <code>--pcac-fan-out-anchor-color</code> custom properties
+            on the chart's <code>.fan-outs</code> group, which a stylesheet can set on an ancestor instead. Nothing
+            to color unless <b>showAnchor</b> is on.
           </li>
         </ul>
       </td>

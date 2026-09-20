@@ -24,10 +24,56 @@
     default. An anchor dot marks the true value. Whether or not it's on, a hovered point's tooltip context
     lists the others at its coordinate in <code>coincident</code> - hover a fanned-out point below. The pair
     at the bottom-left corner shows a ring at the edge of the domain: it's moved back inside the plot so
-    neither point hangs over an axis by more than half its image, with the anchor still on the coordinate.</p>
+    neither point hangs over an axis by more than half its image, with the anchor still on the coordinate.
+    The controls below edit the chart's <code>pointFanOut</code> live; each field is described in the table
+    further down.</p>
+  @let f = fanOut();
+  <div class="pc-fan-out-controls mb-3">
+    <label for="pc-fan-out-enabled">pointFanOut</label>
+    <input id="pc-fan-out-enabled" type="checkbox" [checked]="fanOutEnabled()" (change)="onFanOutEnabled($event)" />
+    <span class="pc-fan-out-muted">{{ fanOutEnabled() ? 'on' : 'off - points draw on top of one another' }}</span>
+
+    <label for="pc-fan-out-gap">gap</label>
+    <input id="pc-fan-out-gap" type="range" min="0" max="24" step="1" [value]="f.gap ?? 4"
+      [disabled]="!fanOutEnabled() || f.radius !== undefined" (input)="onFanOutNumber('gap', $event)" />
+    <span class="pc-fan-out-readout">{{ f.gap ?? 4 }}px</span>
+
+    <label for="pc-fan-out-radius">radius</label>
+    <input id="pc-fan-out-radius" type="range" min="0" max="40" step="1" [value]="f.radius ?? 20"
+      [disabled]="!fanOutEnabled()" (input)="onFanOutNumber('radius', $event)" />
+    @if (f.radius !== undefined) {
+    <span class="pc-fan-out-readout">{{ f.radius }}px
+      <button type="button" class="pc-fan-out-clear" (click)="onFanOutAutoRadius()">auto</button></span>
+    } @else {
+    <span class="pc-fan-out-readout pc-fan-out-muted">auto (from gap)</span>
+    }
+
+    <label for="pc-fan-out-anchor">showAnchor</label>
+    <input id="pc-fan-out-anchor" type="checkbox" [checked]="f.showAnchor ?? true" [disabled]="!fanOutEnabled()"
+      (change)="onFanOutToggle('showAnchor', $event)" />
+    <span></span>
+
+    <label for="pc-fan-out-spoke-color">spokeColor</label>
+    <input id="pc-fan-out-spoke-color" type="color" [value]="f.spokeColor ?? '#ced4da'"
+      [disabled]="!fanOutEnabled() || f.showAnchor === false" (input)="onFanOutColor('spokeColor', $event)" />
+    @if (f.spokeColor) {
+    <button type="button" class="pc-fan-out-clear" (click)="onFanOutClearColor('spokeColor')">theme</button>
+    } @else {
+    <span class="pc-fan-out-readout pc-fan-out-muted">theme</span>
+    }
+
+    <label for="pc-fan-out-anchor-color">anchorColor</label>
+    <input id="pc-fan-out-anchor-color" type="color" [value]="f.anchorColor ?? '#6c757d'"
+      [disabled]="!fanOutEnabled() || f.showAnchor === false" (input)="onFanOutColor('anchorColor', $event)" />
+    @if (f.anchorColor) {
+    <button type="button" class="pc-fan-out-clear" (click)="onFanOutClearColor('anchorColor')">theme</button>
+    } @else {
+    <span class="pc-fan-out-readout pc-fan-out-muted">theme</span>
+    }
+  </div>
   <mat-card class="p-3 mb-3">
     <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
-      <pcac-plot-chart [config]="pcService.plotFanOutConfig.value()" (dotClicked)="pcService.onClicked($event)">
+      <pcac-plot-chart [config]="fanOutConfig()" (dotClicked)="pcService.onClicked($event)">
         <ng-template pcacTooltip let-point let-series="parent" let-others="coincident">
           <div class="pc-tooltip">
             <span class="pc-tooltip-title">{{ series?.key }}</span>

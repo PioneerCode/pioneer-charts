@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { RouterLink } from '@angular/router';
 import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
@@ -25,6 +26,7 @@ type AxisColor = 'labelColor' | 'subLabelColor' | 'tickLabelColor' | 'tickColor'
     MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
+    RouterLink,
   ]
 })
 export class AxisStylingComponent {
@@ -128,10 +130,40 @@ export class AxisStylingComponent {
       value: 'markup',
     },
     {
+      key: 'Colors',
+      value: 'colors',
+    },
+    {
       key: 'Notes',
       value: 'notes',
     }
   ]);
+
+  colorConfigCode = `const config = {
+  data: [ ... ],
+  xAxis: {
+    showLine: true,
+    lineColor: '#0d6efd',   // blue axis line
+    tickSize: 6,
+    tickColor: '#0d6efd',   // blue tick marks
+    tickLabelColor: '#495057'
+  },
+  yAxis: {
+    label: 'Units sold',
+    labelColor: '#0d6efd',
+    gridColor: '#cfe2ff'    // pale blue grid; the y axis's grid is on by default
+  }
+} as PcacBarVerticalChartConfig;`;
+
+  colorCssCode = `/* Every chart inside .dark-panel */
+.dark-panel {
+  --pcac-axis-label-color: #dee2e6;
+  --pcac-axis-sub-label-color: #adb5bd;
+  --pcac-axis-tick-label-color: #dee2e6;
+  --pcac-axis-tick-color: #adb5bd;
+  --pcac-axis-line-color: #adb5bd;
+  --pcac-grid-color: #495057;
+}`;
 
   configCode = `const config = {
   data: [ ... ],
@@ -142,39 +174,16 @@ export class AxisStylingComponent {
     label: 'Product', // axis title, centered below the tick labels
     tickSize: 12,     // tick mark length in px - setting it is what turns the marks on
     showLine: true,   // solid line along the axis
-    lineColor: '#0d6efd', // any CSS color; the theme's gray otherwise
-    tickColor: '#0d6efd',
-    tickLabelColor: '#495057' // the tick labels are the page's text color otherwise
+    lineColor: '#0d6efd' // its color (see Colors below)
   },
   yAxis: {
     domainMax: 1000,  // the value axis runs 0..domainMax (format: a PcacFormatEnum, e.g. Percentage)
     label: 'Units sold',
-    labelColor: '#0d6efd',
     subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // by position along the axis
-    subLabelColor: '#6ea8fe',
     ticks: 4,         // requested tick (and grid line) count
     showGrid: false   // no horizontal grid lines
   }
 } as PcacBarVerticalChartConfig;
-
-// Grid color belongs to the axis whose ticks the grid runs from.
-const tinted = {
-  data: [ ... ],
-  yAxis: { gridColor: '#cfe2ff' }
-} as PcacLineChartConfig;
-
-// The same colors are also CSS custom properties, read by the theme with its own color as
-// the fallback - set them in a stylesheet to restyle every chart under an element at once
-// (a color given in a config still wins, as it's set on the axis itself):
-//
-//   .dark-panel {
-//     --pcac-axis-label-color: #dee2e6;
-//     --pcac-axis-sub-label-color: #adb5bd;
-//     --pcac-axis-tick-label-color: #dee2e6;
-//     --pcac-axis-tick-color: #adb5bd;
-//     --pcac-axis-line-color: #adb5bd;
-//     --pcac-grid-color: #495057;
-//   }
 
 // Grids on both axes: the x axis's is off by default on this chart, so ask for it.
 const gridded = {

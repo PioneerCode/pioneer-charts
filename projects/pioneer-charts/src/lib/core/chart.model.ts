@@ -88,8 +88,7 @@ export class PcacAxisConfig {
    * margins grow or shrink by the same amount so the plot area makes room for them - a longer
    * tick means a slightly smaller plot, never labels pushed off the edge. Only the per-tick marks
    * change; the axis line's two end-caps keep their default length. Color comes from the theme
-   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line) unless
-   * `tickColor` is set.
+   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line).
    */
   tickSize?: number
 
@@ -108,7 +107,7 @@ export class PcacAxisConfig {
   /**
    * Draw a solid line along the axis itself (the full length of the axis, with D3's short
    * end-caps). Off by default, as the theme has always hidden it. Color comes from the theme
-   * (`.pcac-axis-line .domain`, `$gray-900`) unless `lineColor` is set.
+   * (`.pcac-axis-line .domain`, `$gray-900`).
    */
   showLine?: boolean = false
 
@@ -122,7 +121,7 @@ export class PcacAxisConfig {
    * chart's edge: below the tick labels for the x axis, rotated to read bottom-to-top left of
    * them for the y axis. The chart's margin grows by `PcacChart.AXIS_LABEL_SPACE` to make room,
    * shrinking the plot area the same way a longer tick does. Not drawn on a hidden axis. Styled
-   * by the theme's `.pcac-axis-label` rule; `labelColor` overrides its color.
+   * by the theme's `.pcac-axis-label` rule.
    */
   label?: string
 
@@ -135,8 +134,7 @@ export class PcacAxisConfig {
    * `mid` centered, `max` right-aligned at its end, so they never spill past the axis. On the
    * y axis they run bottom-to-top like the label, `min` at the bottom. The margin grows by
    * `PcacChart.AXIS_SUB_LABEL_SPACE` when any is set, shrinking the plot area. Not drawn on a
-   * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule; `subLabelColor` overrides
-   * its color.
+   * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
    */
   subLabels?: PcacAxisSubLabels
 
@@ -179,9 +177,10 @@ export interface PcacChartMargin {
 /**
  * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
  * null-check. `tickSize`, `label`, `subLabels` and the `*Color` fields stay optional: "not set"
- * is itself the meaningful default (no marks, no labels, the theme's colors).
+ * is itself the meaningful default (no marks, no labels, the theme's colors). The color fields
+ * are picked up by name, so a new one needs only its declaration on the class.
  */
-type PcacOptionalAxisFields = 'tickSize' | 'label' | 'subLabels' | 'tickColor' | 'tickLabelColor' | 'lineColor' | 'labelColor' | 'subLabelColor' | 'gridColor';
+type PcacOptionalAxisFields = 'tickSize' | 'label' | 'subLabels' | Extract<keyof PcacAxisConfig, `${string}Color`>;
 export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, PcacOptionalAxisFields>> & Pick<PcacAxisConfig, PcacOptionalAxisFields>;
 
 /** True if `axis` has at least one sub label to draw (an empty `subLabels` object counts as none). */
@@ -214,20 +213,14 @@ export function axisLabelSpace(axis: PcacAxisConfig | undefined): number {
  */
 export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false): PcacResolvedAxisConfig {
   const defaults = new PcacAxisConfig();
+  // The optional fields (see `PcacOptionalAxisFields`) pass through as given; only the ones with
+  // a default are spelled out.
   return {
+    ...axis,
     hide: axis?.hide ?? defaults.hide!,
     showGrid: axis?.showGrid ?? showGridDefault,
     ticks: axis?.ticks ?? defaults.ticks!,
-    tickSize: axis?.tickSize,
-    tickColor: axis?.tickColor,
-    tickLabelColor: axis?.tickLabelColor,
     showLine: axis?.showLine ?? defaults.showLine!,
-    lineColor: axis?.lineColor,
-    label: axis?.label,
-    labelColor: axis?.labelColor,
-    subLabels: axis?.subLabels,
-    subLabelColor: axis?.subLabelColor,
-    gridColor: axis?.gridColor,
     format: axis?.format ?? defaults.format!,
     domainMin: axis?.domainMin ?? defaults.domainMin!,
     domainMax: axis?.domainMax ?? defaults.domainMax!,

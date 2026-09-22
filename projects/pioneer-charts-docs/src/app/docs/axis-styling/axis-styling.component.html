@@ -13,7 +13,7 @@
 
     <div class="grid grid-cols-2 gap-4 mb-4">
       @for (axis of axes; track axis) {
-      <div class="pc-axis-styling-controls">
+      <div class="pc-controls">
         <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
         @let a = axis === 'x' ? xAxis() : yAxis();
 
@@ -32,12 +32,12 @@
         <label [for]="'pc-axis-' + axis + '-ticks'">ticks</label>
         <input [id]="'pc-axis-' + axis + '-ticks'" type="range" min="0" max="12" step="1" [value]="a.ticks"
           (input)="onTicks(axis, $event)" />
-        <span class="pc-axis-styling-readout">{{ a.ticks }}</span>
+        <span class="pc-readout">{{ a.ticks }}</span>
 
         <label [for]="'pc-axis-' + axis + '-size'">tickSize</label>
         <input [id]="'pc-axis-' + axis + '-size'" type="range" min="0" max="30" step="1" [value]="a.tickSize"
           (input)="onTickSize(axis, $event)" />
-        <span class="pc-axis-styling-readout">{{ a.tickSize }}px</span>
+        <span class="pc-readout">{{ a.tickSize }}px</span>
 
         <label [for]="'pc-axis-' + axis + '-line'">showLine</label>
         <input [id]="'pc-axis-' + axis + '-line'" type="checkbox" [checked]="a.showLine"
@@ -58,11 +58,8 @@
         <label [for]="'pc-axis-' + axis + '-' + color.field">{{ color.field }}</label>
         <input [id]="'pc-axis-' + axis + '-' + color.field" type="color" [value]="a[color.field] ?? color.theme"
           (input)="onColor(axis, color.field, $event)" />
-        @if (a[color.field]) {
-        <button type="button" class="pc-axis-styling-clear" (click)="onClearColor(axis, color.field)">theme</button>
-        } @else {
-        <span class="pc-axis-styling-readout pc-axis-styling-muted">theme</span>
-        }
+        <button type="button" class="pc-clear" [disabled]="!a[color.field]"
+          (click)="onClearColor(axis, color.field)">theme</button>
         }
       </div>
       }

@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { color } from 'd3-color';
 import { RouterLink } from '@angular/router';
 import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
@@ -198,9 +199,5 @@ const sparkline = {
 
 /** The page's text color as `#rrggbb`, the only form a color input accepts; black if it can't be read. */
 function bodyTextColorHex(): string {
-  const match = /^rgb\((\d+), (\d+), (\d+)\)$/.exec(getComputedStyle(document.body).color);
-  if (!match) {
-    return '#000000';
-  }
-  return '#' + match.slice(1, 4).map(c => Number(c).toString(16).padStart(2, '0')).join('');
+  return color(getComputedStyle(document.body).color)?.formatHex() ?? '#000000';
 }

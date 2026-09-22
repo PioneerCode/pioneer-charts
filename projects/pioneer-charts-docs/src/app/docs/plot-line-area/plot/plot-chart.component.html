@@ -28,47 +28,39 @@
     The controls below edit the chart's <code>pointFanOut</code> live; each field is described in the table
     further down.</p>
   @let f = fanOut();
-  <div class="pc-fan-out-controls mb-3">
+  <div class="pc-controls pc-fan-out-controls mb-3">
     <label for="pc-fan-out-enabled">pointFanOut</label>
     <input id="pc-fan-out-enabled" type="checkbox" [checked]="fanOutEnabled()" (change)="onFanOutEnabled($event)" />
-    <span class="pc-fan-out-muted">{{ fanOutEnabled() ? 'on' : 'off - points draw on top of one another' }}</span>
+    <span class="pc-muted">{{ fanOutEnabled() ? 'on' : 'off - points draw on top of one another' }}</span>
 
     <label for="pc-fan-out-gap">gap</label>
     <input id="pc-fan-out-gap" type="range" min="0" max="24" step="1" [value]="f.gap ?? 4"
-      [disabled]="!fanOutEnabled() || f.radius !== undefined" (input)="onFanOutNumber('gap', $event)" />
-    <span class="pc-fan-out-readout">{{ f.gap ?? 4 }}px</span>
+      [disabled]="!fanOutEnabled() || f.radius !== undefined"
+      (input)="setFanOut('gap', $any($event.target).valueAsNumber)" />
+    <span class="pc-readout">{{ f.gap ?? 4 }}px</span>
 
     <label for="pc-fan-out-radius">radius</label>
     <input id="pc-fan-out-radius" type="range" min="0" max="40" step="1" [value]="f.radius ?? 20"
-      [disabled]="!fanOutEnabled()" (input)="onFanOutNumber('radius', $event)" />
+      [disabled]="!fanOutEnabled()" (input)="setFanOut('radius', $any($event.target).valueAsNumber)" />
     @if (f.radius !== undefined) {
-    <span class="pc-fan-out-readout">{{ f.radius }}px
-      <button type="button" class="pc-fan-out-clear" (click)="onFanOutAutoRadius()">auto</button></span>
+    <span class="pc-readout">{{ f.radius }}px
+      <button type="button" class="pc-clear" (click)="setFanOut('radius', undefined)">auto</button></span>
     } @else {
-    <span class="pc-fan-out-readout pc-fan-out-muted">auto (from gap)</span>
+    <span class="pc-readout pc-muted">auto (from gap)</span>
     }
 
     <label for="pc-fan-out-anchor">showAnchor</label>
     <input id="pc-fan-out-anchor" type="checkbox" [checked]="f.showAnchor ?? true" [disabled]="!fanOutEnabled()"
-      (change)="onFanOutToggle('showAnchor', $event)" />
+      (change)="setFanOut('showAnchor', $any($event.target).checked)" />
     <span></span>
 
-    <label for="pc-fan-out-spoke-color">spokeColor</label>
-    <input id="pc-fan-out-spoke-color" type="color" [value]="f.spokeColor ?? '#ced4da'"
-      [disabled]="!fanOutEnabled() || f.showAnchor === false" (input)="onFanOutColor('spokeColor', $event)" />
-    @if (f.spokeColor) {
-    <button type="button" class="pc-fan-out-clear" (click)="onFanOutClearColor('spokeColor')">theme</button>
-    } @else {
-    <span class="pc-fan-out-readout pc-fan-out-muted">theme</span>
-    }
-
-    <label for="pc-fan-out-anchor-color">anchorColor</label>
-    <input id="pc-fan-out-anchor-color" type="color" [value]="f.anchorColor ?? '#6c757d'"
-      [disabled]="!fanOutEnabled() || f.showAnchor === false" (input)="onFanOutColor('anchorColor', $event)" />
-    @if (f.anchorColor) {
-    <button type="button" class="pc-fan-out-clear" (click)="onFanOutClearColor('anchorColor')">theme</button>
-    } @else {
-    <span class="pc-fan-out-readout pc-fan-out-muted">theme</span>
+    @for (color of fanOutColors; track color.field) {
+    <label [for]="'pc-fan-out-' + color.field">{{ color.field }}</label>
+    <input [id]="'pc-fan-out-' + color.field" type="color" [value]="f[color.field] ?? color.theme"
+      [disabled]="!fanOutEnabled() || f.showAnchor === false"
+      (input)="setFanOut(color.field, $any($event.target).value)" />
+    <button type="button" class="pc-clear" [disabled]="!f[color.field]"
+      (click)="setFanOut(color.field, undefined)">theme</button>
     }
   </div>
   <mat-card class="p-3 mb-3">

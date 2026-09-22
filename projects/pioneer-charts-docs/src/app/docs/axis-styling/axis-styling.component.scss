@@ -1,69 +1,6 @@
-@use "colors";
-
-// One block per axis: label / control / readout rows
-.pc-axis-styling-controls {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  column-gap: 0.75rem;
-  row-gap: 0.5rem;
-
-  input[type="range"],
-  input[type="checkbox"] {
-    accent-color: colors.$primary;
-  }
-
-  // Checkbox rows: the box sits in the slider's column, left-aligned, with nothing in the readout column.
-  input[type="checkbox"] {
-    justify-self: start;
-  }
-
-  input[type="text"] {
-    font: inherit;
-    padding: 0.15rem 0.4rem;
-    border: 1px solid rgba(colors.$primary, 0.3);
-    border-radius: 3px;
-  }
-
-  // Color rows: the swatch sits in the slider's column, left-aligned like a checkbox.
-  input[type="color"] {
-    justify-self: start;
-    width: 3rem;
-    height: 1.5rem;
-    padding: 0;
-    border: 1px solid rgba(colors.$primary, 0.3);
-    border-radius: 3px;
-    background: none;
-  }
-}
-
-// The readout column of a color row: "theme" as a button to unset a picked color, or as plain text
-// when it already is the theme's.
-.pc-axis-styling-clear {
-  font: inherit;
-  font-size: 0.85rem;
-  padding: 0 0.4rem;
-  border: 1px solid rgba(colors.$primary, 0.3);
-  border-radius: 3px;
-  background: none;
-  color: colors.$primary;
-  cursor: pointer;
-}
-
-.pc-axis-styling-muted {
-  font-weight: 400;
-  font-size: 0.85rem;
-  opacity: 0.5;
-}
-
 .pc-axis-styling-heading {
   grid-column: 1 / -1;
   margin: 0;
-}
-
-.pc-axis-styling-readout {
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
 }
 
 .pc-axis-styling-caption {

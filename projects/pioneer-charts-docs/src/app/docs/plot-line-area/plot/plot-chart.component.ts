@@ -28,47 +28,30 @@ export class PlotChartComponent {
 
   /**
    * The fan-out demo's editable `pointFanOut`. Starts as `{}` - every default - to match the
-   * mock; `radius` unset means each group sizes its own ring from `gap`. `enabled` off drops
-   * `pointFanOut` from the config altogether, which is how a consumer turns the fan-out off.
+   * mock; `radius` unset means each group sizes its own ring from `gap`. With `fanOutEnabled`
+   * off the config gets no `pointFanOut` at all, which is how a consumer turns the fan-out off.
    */
   protected readonly fanOutEnabled = signal(true);
   protected readonly fanOut = signal<Partial<PcacPointFanOutConfig>>({});
 
+  /** The two color fields, with the theme's own color for each so an unset picker shows what's drawn. */
+  protected readonly fanOutColors = [
+    { field: 'spokeColor', theme: '#ced4da' },
+    { field: 'anchorColor', theme: '#6c757d' },
+  ] as const;
+
   /** Same pattern as the Axis Styling page: a fresh config object so the chart rebuilds. */
-  protected readonly fanOutConfig = computed(() => {
-    const config = this.pcService.plotFanOutConfig.value();
-    if (!this.fanOutEnabled()) {
-      const { pointFanOut: _, ...rest } = config;
-      return rest;
-    }
-    return { ...config, pointFanOut: this.fanOut() };
-  });
+  protected readonly fanOutConfig = computed(() => ({
+    ...this.pcService.plotFanOutConfig.value(),
+    pointFanOut: this.fanOutEnabled() ? this.fanOut() : undefined,
+  }));
 
   protected onFanOutEnabled(event: Event): void {
     this.fanOutEnabled.set((event.target as HTMLInputElement).checked);
   }
 
-  protected onFanOutNumber(field: 'radius' | 'gap', event: Event): void {
-    const value = (event.target as HTMLInputElement).valueAsNumber;
+  /** Sets one field; `undefined` puts it back to its default (auto `radius`, the theme's color). */
+  protected setFanOut<K extends keyof PcacPointFanOutConfig>(field: K, value: PcacPointFanOutConfig[K] | undefined): void {
     this.fanOut.update(f => ({ ...f, [field]: value }));
-  }
-
-  /** Back to `radius` unset, so rings size themselves from `gap` again. */
-  protected onFanOutAutoRadius(): void {
-    this.fanOut.update(({ radius: _, ...rest }) => rest);
-  }
-
-  protected onFanOutToggle(field: 'showAnchor', event: Event): void {
-    const value = (event.target as HTMLInputElement).checked;
-    this.fanOut.update(f => ({ ...f, [field]: value }));
-  }
-
-  protected onFanOutColor(field: 'spokeColor' | 'anchorColor', event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.fanOut.update(f => ({ ...f, [field]: value }));
-  }
-
-  protected onFanOutClearColor(field: 'spokeColor' | 'anchorColor'): void {
-    this.fanOut.update(f => ({ ...f, [field]: undefined }));
   }
 }

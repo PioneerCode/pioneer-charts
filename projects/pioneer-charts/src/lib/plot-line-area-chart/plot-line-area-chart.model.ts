@@ -16,6 +16,50 @@ export class PcacPointImageConfig {
   maxHeight: number = 16
 }
 
+/** How a point's `range` is drawn (see `PcacPointRangeConfig.style`). */
+export enum PcacPointRangeStyle {
+  /** Error bars: a line across each range, capped at both ends. */
+  Whiskers = 'whiskers',
+  /** A rectangle spanning the x range by the y range; a thin strip when only one is set. */
+  Box = 'box',
+  /**
+   * A fill strongest at the point's value and fading out to the range's edges: an oval glow
+   * with both ranges (brightest on the value, even off-center), a fading bar with one.
+   */
+  Fade = 'fade'
+}
+
+/** When a point's `range` shows (see `PcacPointRangeConfig.show`). */
+export enum PcacPointRangeShow {
+  /** Only the hovered point's range. */
+  Hover = 'hover',
+  /** Every range at `faintOpacity`, the hovered point's at full strength. */
+  Faint = 'faint',
+  /** Every range at full strength; the others dim while a point is hovered. */
+  Always = 'always'
+}
+
+/**
+ * Drawing for `PcacData.range` on the line/area/plot charts. Ranges sit above the lines/areas and
+ * below the points, on the point's true coordinate (a fanned-out point's range stays on its
+ * anchor), clipped to the plot area and following zoom. The chart draws no numbers for them; a
+ * custom tooltip gets the point, `range` included.
+ */
+export class PcacPointRangeConfig {
+  style: PcacPointRangeStyle = PcacPointRangeStyle.Whiskers
+  show: PcacPointRangeShow = PcacPointRangeShow.Faint
+
+  /** Opacity of the ranges at rest under `show: Faint`, 0 - 1. */
+  faintOpacity: number = 0.2
+
+  /**
+   * Any CSS color for every range on the chart. Unset, each takes its series' color. Applied as
+   * `--pcac-point-range-color` on the chart's `.point-ranges` group, so a stylesheet can set it
+   * on an ancestor instead (a config value wins).
+   */
+  color?: string
+}
+
 /**
  * The axes' `format` and `domainMin`/`domainMax` (`PcacAxisConfig`) do more here than on the bar
  * charts. `yAxis.domainMin`/`domainMax` are the y scale's domain (default 0..100). `xAxis.format`
@@ -46,4 +90,10 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
    * on their data still gets a sensibly-sized result.
    */
   pointImage?: Partial<PcacPointImageConfig>
+
+  /**
+   * Draw each point's `range` (see `PcacData.range`). Off when not set; `{}` turns it on with
+   * every `PcacPointRangeConfig` default. Points without a `range` draw nothing extra.
+   */
+  pointRange?: Partial<PcacPointRangeConfig>
 }

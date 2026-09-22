@@ -124,6 +124,30 @@
             the point. It gets the same tooltip and <code>(dotClicked)</code> behavior as a dot (only the
             hover enlarge effect is dot-only).</td>
         </tr>
+        <tr>
+          <td>pointRange</td>
+          <td>Draw each point's <b>range</b> (on the innermost data: <code>range: {{ '{ x?: { min, max }, y?: { min, max } }' }}</code>,
+            where <code>x</code> is read like the point's <b>key</b> for the x axis' format &mdash; a number, a date, or an
+            index for the index-based formats; a <code>min</code> above its <code>max</code> is read the other way round, and
+            one equal to it as no range on that axis). Plot, line and area charts. Off when omitted; <code>{{ '{}' }}</code> turns it
+            on with the defaults below. Ranges sit above the lines and areas and below the points, on the point's true
+            coordinate (a fanned-out point's range stays on its anchor), clipped to the plot and following zoom. Nothing is
+            labeled; a custom tooltip gets the point, <b>range</b> included. There's a live demo of every option, on all
+            three chart types, on the <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a> page.
+            <ul>
+              <li><b>style</b> &mdash; <code>whiskers</code> (error bars with caps, the default), <code>box</code> (a
+                rectangle over the x range by the y range; a thin strip with only one) or <code>fade</code> (strongest at
+                the value and fading to the range's edges: an oval glow with both ranges, a bar with one).</li>
+              <li><b>show</b> &mdash; <code>hover</code> (only the hovered point's range), <code>faint</code> (every range
+                at <b>faintOpacity</b>, the hovered one at full strength; the default) or <code>always</code> (every range
+                at full strength, the others dimmed while one is hovered).</li>
+              <li><b>faintOpacity</b> &mdash; resting opacity under <code>faint</code>, 0 &ndash; 1. Default 0.2.</li>
+              <li><b>color</b> &mdash; any CSS color for every range, in place of each series' own. Applied as the
+                <code>--pcac-point-range-color</code> custom property on the chart's <code>.point-ranges</code> group,
+                which a stylesheet can set on an ancestor instead.</li>
+            </ul>
+          </td>
+        </tr>
         <ng-content select="[configRows]" />
       </tbody>
     </app-layout-base-config>

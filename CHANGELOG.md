@@ -1,3 +1,31 @@
+<a name="22.2.10"></a>
+# [v22.2.10]
+
+### Added
+  - Point ranges on the line, area and plot charts. A point that stands for the middle of a range
+    can carry `range: { x?: { min, max }, y?: { min, max } }` on its `PcacData` (`x` is read like
+    the point's `key` for the x axis' format - a number, a date, or an index for the index-based
+    formats), and `pointRange` on the chart config draws it. Off when not set; `{}` takes every
+    default. `style` is `whiskers` (error bars with caps, the default), `box` (a rectangle over
+    both ranges, a thin strip with one) or `fade` (strongest at the value, fading to the edges);
+    `show` is `hover`, `faint` (every range at `faintOpacity`, the hovered one at full strength;
+    the default) or `always`. Ranges sit between the lines/areas and the points on the point's
+    true coordinate (a fanned-out point's stays on its anchor), are clipped to the plot and follow
+    zoom. Each takes its series' color unless `color` is set, applied as
+    `--pcac-point-range-color` so a stylesheet can set it on an ancestor instead. Nothing is
+    labeled on the chart: a custom tooltip reads `point.range`. The Plot Chart docs page has a
+    live demo of every option on all three chart types.
+
+### Fixed
+  - Hovering a line, area or plot chart's point while the chart was still animating in stopped
+    its dot partway up from the baseline, below its value, until the next rebuild. The hover's
+    grow/shrink ran as the same (unnamed) d3 transition as the entry's rise, so it cancelled it.
+    They now run under separate names; hover only takes over the entry's size tween.
+  - A plot chart's `pointFanOut` spokes and anchors faded in while the points were still rising in
+    from the baseline, so for the whole entry animation they pointed at where the points were
+    going to be. They now stay hidden until the points have landed, then fade in. Point ranges
+    appear the same way.
+
 <a name="22.2.6"></a>
 # [v22.2.6]
 

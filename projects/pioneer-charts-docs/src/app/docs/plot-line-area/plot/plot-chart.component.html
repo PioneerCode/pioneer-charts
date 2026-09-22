@@ -84,6 +84,92 @@
       </pcac-plot-chart>
     </app-layout-resource-state>
   </mat-card>
+  <h4 class="mt-6 mb-2">Point ranges</h4>
+  <p class="mb-3">When a point stands for the middle of a range, give it a <code>range</code> with an
+    <code>x</code> and / or <code>y</code> <code>{{ '{ min, max }' }}</code>, and set <code>pointRange</code> on the
+    config to draw it; <code>{{ '{}' }}</code> takes every default. Works the same on the plot, line and area charts.
+    Ranges follow zoom, and a hovered point's range comes forward. The chart draws no numbers for them - the
+    tooltip below reads <code>point.range</code> itself. Some points here have both ranges, some only one and
+    some none.</p>
+  @let r = pointRange();
+  <div class="pc-controls pc-range-controls mb-3">
+    <label for="pc-range-type">chart</label>
+    <select id="pc-range-type" [value]="rangeChartType()" (change)="rangeChartType.set($any($event.target).value)">
+      @for (t of rangeChartTypes; track t) {
+      <option [value]="t">{{ t }}</option>
+      }
+    </select>
+    <span></span>
+
+    <label for="pc-range-style">style</label>
+    <select id="pc-range-style" [value]="r.style ?? 'whiskers'" (change)="setPointRange('style', $any($event.target).value)">
+      @for (s of rangeStyles; track s) {
+      <option [value]="s">{{ s }}</option>
+      }
+    </select>
+    <span></span>
+
+    <label for="pc-range-show">show</label>
+    <select id="pc-range-show" [value]="r.show ?? 'faint'" (change)="setPointRange('show', $any($event.target).value)">
+      @for (s of rangeShows; track s) {
+      <option [value]="s">{{ s }}</option>
+      }
+    </select>
+    <span></span>
+
+    <label for="pc-range-faint">faintOpacity</label>
+    <input id="pc-range-faint" type="range" min="0" max="1" step="0.05" [value]="r.faintOpacity ?? 0.2"
+      [disabled]="(r.show ?? 'faint') !== 'faint'"
+      (input)="setPointRange('faintOpacity', $any($event.target).valueAsNumber)" />
+    <span class="pc-readout">{{ r.faintOpacity ?? 0.2 }}</span>
+
+    <label for="pc-range-color">color</label>
+    <input id="pc-range-color" type="color" [value]="r.color ?? '#43425d'"
+      (input)="setPointRange('color', $any($event.target).value)" />
+    <button type="button" class="pc-clear" [disabled]="!r.color" (click)="setPointRange('color', undefined)">series</button>
+  </div>
+  <ng-template #rangeTooltip let-point let-series="parent">
+    <div class="pc-tooltip">
+      <span class="pc-tooltip-title">{{ series?.key }}</span>
+      <div class="pc-tooltip-row">
+        <span>{{ point.key }}h</span>
+        <span class="pc-tooltip-value">{{ point.value }}&deg;</span>
+      </div>
+      @if (point.range?.x; as x) {
+        <div class="pc-tooltip-row pc-tooltip-other"><span>Hours</span><span>{{ x.min }} &ndash; {{ x.max }}</span></div>
+      }
+      @if (point.range?.y; as y) {
+        <div class="pc-tooltip-row pc-tooltip-other"><span>Temp</span><span>{{ y.min }} &ndash; {{ y.max }}&deg;</span></div>
+      }
+    </div>
+  </ng-template>
+  <mat-card class="p-3 mb-3">
+    <app-layout-resource-state [resource]="pcService.plotRangeConfig">
+      @switch (rangeChartType()) {
+        @case ('line') {
+          <pcac-line-chart [config]="rangeConfig()" (dotClicked)="pcService.onClicked($event)">
+            <ng-template pcacTooltip let-point let-series="parent">
+              <ng-container *ngTemplateOutlet="rangeTooltip; context: { $implicit: point, parent: series }" />
+            </ng-template>
+          </pcac-line-chart>
+        }
+        @case ('area') {
+          <pcac-area-chart [config]="rangeConfig()" (dotClicked)="pcService.onClicked($event)">
+            <ng-template pcacTooltip let-point let-series="parent">
+              <ng-container *ngTemplateOutlet="rangeTooltip; context: { $implicit: point, parent: series }" />
+            </ng-template>
+          </pcac-area-chart>
+        }
+        @default {
+          <pcac-plot-chart [config]="rangeConfig()" (dotClicked)="pcService.onClicked($event)">
+            <ng-template pcacTooltip let-point let-series="parent">
+              <ng-container *ngTemplateOutlet="rangeTooltip; context: { $implicit: point, parent: series }" />
+            </ng-template>
+          </pcac-plot-chart>
+        }
+      }
+    </app-layout-resource-state>
+  </mat-card>
   <ng-container configRows>
     <tr>
       <td>pointFanOut</td>

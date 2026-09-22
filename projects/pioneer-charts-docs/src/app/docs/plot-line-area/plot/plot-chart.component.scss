@@ -1,8 +1,17 @@
 @use "colors";
 
 // The fan-out demo's controls (`.pc-controls`, styles.scss): capped so the sliders stay short.
-.pc-fan-out-controls {
+.pc-fan-out-controls,
+.pc-range-controls {
   max-width: 28rem;
+}
+
+.pc-range-controls select {
+  font: inherit;
+  justify-self: start;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid rgba(colors.$primary, 0.3);
+  border-radius: 3px;
 }
 
 // The fan-out demo's tooltip. Same look as the Custom Tooltip page's (see tooltip.component.scss

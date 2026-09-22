@@ -1,0 +1,255 @@
+{
+  "height": 260,
+  "xAxis": {
+    "ticks": 6,
+    "showGrid": true,
+    "format": "decimal",
+    "domainMin": 0,
+    "domainMax": 24,
+    "label": "Hour of day"
+  },
+  "yAxis": {
+    "ticks": 5,
+    "domainMax": 100,
+    "label": "Temperature (°F)"
+  },
+  "enableEffects": false,
+  "enableZoomX": true,
+  "pointRange": {},
+  "data": [
+    {
+      "key": "Station A",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": 2,
+          "value": 38,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 1,
+              "max": 3
+            },
+            "y": {
+              "min": 31,
+              "max": 44
+            }
+          }
+        },
+        {
+          "key": 5,
+          "value": 42,
+          "hide": false,
+          "data": [],
+          "range": {
+            "y": {
+              "min": 36,
+              "max": 49
+            }
+          }
+        },
+        {
+          "key": 8,
+          "value": 51,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 7,
+              "max": 9.5
+            }
+          }
+        },
+        {
+          "key": 11,
+          "value": 63,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 10,
+              "max": 12.5
+            },
+            "y": {
+              "min": 55,
+              "max": 70
+            }
+          }
+        },
+        {
+          "key": 14,
+          "value": 72,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 13.5,
+              "max": 15
+            },
+            "y": {
+              "min": 64,
+              "max": 78
+            }
+          }
+        },
+        {
+          "key": 17,
+          "value": 68,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 20,
+          "value": 55,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 19,
+              "max": 21
+            },
+            "y": {
+              "min": 47,
+              "max": 61
+            }
+          }
+        },
+        {
+          "key": 23,
+          "value": 44,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 22.5,
+              "max": 23.5
+            },
+            "y": {
+              "min": 40,
+              "max": 52
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "Station B",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": 2,
+          "value": 28,
+          "hide": false,
+          "data": [],
+          "range": {
+            "y": {
+              "min": 22,
+              "max": 35
+            }
+          }
+        },
+        {
+          "key": 5,
+          "value": 31,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 4,
+              "max": 6
+            },
+            "y": {
+              "min": 26,
+              "max": 40
+            }
+          }
+        },
+        {
+          "key": 8,
+          "value": 40,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 7.5,
+              "max": 9
+            },
+            "y": {
+              "min": 33,
+              "max": 45
+            }
+          }
+        },
+        {
+          "key": 11,
+          "value": 52,
+          "hide": false,
+          "data": []
+        },
+        {
+          "key": 14,
+          "value": 60,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 13,
+              "max": 15.5
+            },
+            "y": {
+              "min": 51,
+              "max": 66
+            }
+          }
+        },
+        {
+          "key": 17,
+          "value": 58,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 16.5,
+              "max": 18
+            },
+            "y": {
+              "min": 50,
+              "max": 65
+            }
+          }
+        },
+        {
+          "key": 20,
+          "value": 46,
+          "hide": false,
+          "data": [],
+          "range": {
+            "y": {
+              "min": 39,
+              "max": 50
+            }
+          }
+        },
+        {
+          "key": 23,
+          "value": 34,
+          "hide": false,
+          "data": [],
+          "range": {
+            "x": {
+              "min": 22,
+              "max": 24
+            },
+            "y": {
+              "min": 28,
+              "max": 41
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

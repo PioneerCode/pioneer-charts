@@ -68,6 +68,7 @@ export class AppService {
   plotConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartUrl(), { defaultValue: new PcacPlotChartConfig() });
   plotImagesConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartImagesUrl(), { defaultValue: new PcacPlotChartConfig() });
   plotFanOutConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartFanOutUrl(), { defaultValue: new PcacPlotChartConfig() });
+  plotRangeConfig = httpResource<PcacPlotChartConfig>(() => this.repository.getPlotChartRangeUrl(), { defaultValue: new PcacPlotChartConfig() });
 
   legendConfig = httpResource<PcacLegendConfig>(() => this.repository.getLegendConfigUrl(), { defaultValue: new PcacLegendConfig() });
 

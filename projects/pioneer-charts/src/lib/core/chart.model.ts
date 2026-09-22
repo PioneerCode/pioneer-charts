@@ -251,6 +251,37 @@ export class PcacData {
    * existing object-literal / JSON data doesn't have to declare it.
    */
   image?: string
+
+  /**
+   * The span this point's `key` / `value` stands for, when the point is really the middle of a
+   * range: `x` for the key, `y` for the value, either or both. Currently honored by the
+   * line/area/plot charts only, on the innermost (point-level) `PcacData`, and only drawn when
+   * the chart config turns `pointRange` on (see `PcacPointRangeConfig`). Nothing is labeled on
+   * the chart; a custom tooltip can read it off the point.
+   *
+   * Optional for the same reason as `image`.
+   */
+  range?: PcacDataRange
+}
+
+/**
+ * One side of a `PcacDataRange`. `min` above `max` is read as the other way round; `min` equal to
+ * `max` (or either missing) as no range on that axis.
+ */
+export class PcacRangeBounds<T> {
+  min!: T
+  max!: T
+}
+
+/**
+ * `PcacData.range`. `x` is read the way the point's `key` is, per the chart's `xAxis.format`: a
+ * number for `Decimal`, anything `new Date()` accepts for `DateTime`, and for every index-based
+ * format a (possibly fractional) index - `{ min: 2.5, max: 3.5 }` is half a slot either side of
+ * the fourth point. `y` is on the value axis.
+ */
+export class PcacDataRange {
+  x?: PcacRangeBounds<number | string>
+  y?: PcacRangeBounds<number>
 }
 
 export enum PcacFormatEnum {

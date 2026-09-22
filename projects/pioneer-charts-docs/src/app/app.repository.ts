@@ -84,6 +84,10 @@ export class AppRepository {
     return './mock/line-area-chart/plot-chart-fan-out.json';
   }
 
+  getPlotChartRangeUrl() {
+    return './mock/line-area-chart/plot-chart-range.json';
+  }
+
   getPieChartConfigUrl() {
     return './mock/pie-chart.json';
   }

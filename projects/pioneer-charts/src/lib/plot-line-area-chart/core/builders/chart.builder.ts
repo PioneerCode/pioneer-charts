@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, inject } from '@angular/core';
-import { select } from 'd3-selection';
+import { select, Selection } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
 import { Subject } from 'rxjs';
@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PlaChartEffectsBuilder } from './effects.builders';
-import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig } from '../../plot-line-area-chart.model';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig, PcacPointRangeConfig } from '../../plot-line-area-chart.model';
 import { PcacPlotChartConfig, PcacPointFanOutConfig } from '../../plot/plot.model';
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
@@ -18,6 +18,7 @@ import { getXFormat } from '../x-format';
 import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
+import { drawRange, rangeExtent } from './point-range.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
 /**
@@ -28,6 +29,18 @@ import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOu
  */
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
 const PLOT_CLIP_ALLOWANCE = 1;
+
+/**
+ * Names for the dot's transitions. d3 lets only one transition *per name* run on an element: a
+ * new one cancels the old. The enter rise (`cy`) keeps the default name; the hover grow/shrink
+ * and the entry's size-in (`r`) each get their own, so hovering a dot while the chart is still
+ * animating in no longer cancels its rise and strands it short of its value. Hover interrupts
+ * the size-in explicitly instead, since both tween `r`.
+ */
+const DOT_GROW_TRANSITION = 'pcac-dot-grow';
+const DOT_HOVER_TRANSITION = 'pcac-dot-hover';
+/** See `revealAfterEntry`. */
+const REVEAL_TRANSITION = 'pcac-reveal';
 
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
@@ -70,6 +83,10 @@ export class PlaChartBuilder extends PcacChart {
   private fanOutOffsets = new Map<PcacData, PlaPointOffset>();
   /** The `.point` group under the cursor, between its mouseover and mouseout (see `leavePoint`). */
   private hoveredPoint: SVGGElement | null = null;
+  /** `config.pointRange` with its defaults applied, or `null` while ranges are off. */
+  private pointRange: PcacPointRangeConfig | null = null;
+  /** Each drawn range's `.point-range` group, by its point, so hover can find the one to focus. */
+  private rangeGroupOf = new Map<PcacData, SVGGElement>();
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -93,6 +110,7 @@ export class PlaChartBuilder extends PcacChart {
     this.initializeAxisState(this.config, 'y', 8);
     this.resolvePointLayout(type);
     this.reservePointSpace();
+    this.pointRange = this.config.pointRange ? { ...new PcacPointRangeConfig(), ...this.config.pointRange } : null;
 
     if (!this.initializeChartState(chartElm, this.config)) {
       return;
@@ -169,8 +187,13 @@ export class PlaChartBuilder extends PcacChart {
           this.effectsBuilder.updateScales(newX, newY);
         }
 
+        // Ranges are drawn in plot coordinates rather than hung off a translate, so every one is
+        // redrawn against the zoomed scales.
+        this.updatePointRanges(zoomedScales);
+
         // Redrawing an axis appends it at the end of the group, above the dots; put them back
         // on top so a point on the baseline isn't covered (see drawChart's draw order).
+        this.svg.selectAll('.point-ranges').raise();
         this.svg.selectAll('.fan-outs').raise();
         this.svg.selectAll('.dots').raise();
       });
@@ -204,8 +227,10 @@ export class PlaChartBuilder extends PcacChart {
 
     // Axes above the lines/areas (so an axis line isn't covered by a series sitting at x = 0),
     // but the dots above the axes: a point on the baseline or the y axis stays whole. Fan-out
-    // spokes go between the two so they run underneath the points they lead to.
+    // spokes go between the two so they run underneath the points they lead to, and point
+    // ranges under those.
     this.axisBuilder.raiseAxes(this.svg);
+    this.drawPointRanges();
     this.drawFanOuts();
     this.drawDots(config);
   }
@@ -371,6 +396,84 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   /**
+   * Draws one `<g class="point-ranges">` holding a group per series and, inside it, a
+   * `<g class="point-range">` per point that has a `range` - only while `pointRange` is on. Clipped
+   * to the plot area and deaf to the pointer, so it never gets in the way of hover or zoom. When
+   * each range shows is entirely the theme's business, driven by classes: `pcac-range-<show>` on
+   * the outer group sets the resting opacity, and hover (`focusPointRange`) marks the hovered
+   * point's range `is-focused` and the outer group `has-focus`. The colors are custom properties
+   * - the series' own on its group, `color` (when set) on the outer one, which wins - see
+   * plot-line-area-chart.component.scss.
+   */
+  private drawPointRanges(): void {
+    this.rangeGroupOf = new Map();
+    if (!this.pointRange) {
+      return;
+    }
+    const { show, faintOpacity, color } = this.pointRange;
+    const layer = this.svg.append('g')
+      .attr('class', `point-ranges pcac-range-${show}`)
+      .attr('clip-path', `url(#${this.plotClipPathId})`)
+      .attr('pointer-events', 'none')
+      .style('--pcac-point-range-color', () => color ?? null)
+      .style('--pcac-point-range-faint-opacity', () => faintOpacity);
+
+    this.config.data.forEach((series, seriesIndex) => {
+      const seriesGroup = layer.append('g')
+        .attr('class', 'point-range-series')
+        .style('--pcac-point-range-series-color', () => this.colors[seriesIndex])
+        .style('display', () => series.hide ? 'none' : null);
+      series.data.forEach((point) => {
+        if (point.range) {
+          this.rangeGroupOf.set(point, seriesGroup.append('g').attr('class', 'point-range').node()!);
+        }
+      });
+    });
+    this.updatePointRanges(this.scales);
+    this.revealAfterEntry(layer);
+  }
+
+  /**
+   * Draws every range against `scales`, around its point's true coordinate - a fanned-out point's
+   * range stays on the anchor, not on the ring. A range with nothing placeable is left empty.
+   */
+  private updatePointRanges(scales: PlaChartScales): void {
+    if (!this.pointRange) {
+      return;
+    }
+    const style = this.pointRange.style;
+    this.config.data.forEach((series, seriesIndex) => {
+      series.data.forEach((point, index) => {
+        const node = this.rangeGroupOf.get(point);
+        if (!node) {
+          return;
+        }
+        const group = select(node);
+        const { x, y } = this.pointPosition(point, index, scales);
+        const extent = rangeExtent(point, x, y, this.xAxis.format, scales);
+        if (!extent) {
+          group.selectAll('*').remove();
+          return;
+        }
+        drawRange(group, extent, style, `${this.plotClipPathId}-range-${seriesIndex}-${index}`);
+      });
+    });
+  }
+
+  /** Brings `d`'s range forward (see `drawPointRanges`), or with `null` puts every range back to rest. */
+  private focusPointRange(d: PcacData | null): void {
+    if (!this.pointRange || !this.svg) {
+      return;
+    }
+    this.svg.selectAll('.point-range.is-focused').classed('is-focused', false);
+    const node = d ? this.rangeGroupOf.get(d) : undefined;
+    if (node) {
+      select(node).classed('is-focused', true);
+    }
+    this.svg.select('.point-ranges').classed('has-focus', !!node);
+  }
+
+  /**
    * Draws one `<g class="fan-outs">` holding a `<g class="fan-out">` per group of coincident
    * points: a spoke from the shared coordinate to where each member is drawn, and an anchor dot
    * on the coordinate itself. Only when the fan-out is on and asks for anchors. The group sits on
@@ -410,9 +513,21 @@ export class PlaChartBuilder extends PcacChart {
       .attr('class', 'fan-out-anchor')
       .attr('r', 3);
 
-    groups.attr('opacity', 0)
-      .transition()
-      .duration(this.transitionService.getTransitionDuration())
+    this.revealAfterEntry(groups);
+  }
+
+  /**
+   * Keeps `selection` hidden while the points rise in from the baseline, then fades it in. For
+   * the guides drawn around the points (fan-out spokes and anchors, point ranges): they're drawn
+   * where the points end up, so showing them during the rise has them pointing at empty space.
+   * Its own transition name so that nothing else animating the same element cancels it.
+   */
+  private revealAfterEntry(selection: Selection<any, any, any, any>): void {
+    const duration = this.transitionService.getTransitionDuration();
+    selection.attr('opacity', 0)
+      .transition(REVEAL_TRANSITION)
+      .delay(duration)
+      .duration(duration / 3)
       .attr('opacity', 1);
   }
 
@@ -448,6 +563,7 @@ export class PlaChartBuilder extends PcacChart {
         .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, this.scales))
         .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
           self.hoveredPoint = this;
+          self.focusPointRange(d);
           // `d` is the very element bound from `series.data` above, so identity lookup is exact.
           self.showTooltip(event, d, {
             index: series.data.indexOf(d),
@@ -457,9 +573,12 @@ export class PlaChartBuilder extends PcacChart {
             valueFormat: self.yAxis.format,
             keyFormat: self.xAxis.format,
           });
-          // No-op for an image point (no circle inside to grow).
+          // No-op for an image point (no circle inside to grow). Its own transition name, so it
+          // runs alongside the enter rise rather than cancelling it (see DOT_HOVER_TRANSITION);
+          // it only takes over the entry's size tween, which it would otherwise fight over `r`.
           select(this).select('.dot')
-            .transition()
+            .interrupt(DOT_GROW_TRANSITION)
+            .transition(DOT_HOVER_TRANSITION)
             .duration(duration / 3)
             .attr('r', 6)
             .attr('fill', self.colors[index]);
@@ -476,9 +595,11 @@ export class PlaChartBuilder extends PcacChart {
         .attr('cx', (d: PcacData) => this.offsetOf(d).dx)
         .attr('cy', rise)
         .attr('fill', '#fff')
-        .transition()
+        .call((dots) => dots.transition()
+          .duration(duration)
+          .attr('cy', (d: PcacData) => this.offsetOf(d).dy))
+        .transition(DOT_GROW_TRANSITION)
         .duration(duration)
-        .attr('cy', (d: PcacData) => this.offsetOf(d).dy)
         .attr('r', 4);
 
       // `preserveAspectRatio="xMidYMid meet"` is what does the "resize to fit" - the image is
@@ -513,8 +634,10 @@ export class PlaChartBuilder extends PcacChart {
     const point = this.hoveredPoint;
     this.hoveredPoint = null;
     this.hideTooltip();
+    this.focusPointRange(null);
     select(point).select('.dot')
-      .transition()
+      .interrupt(DOT_GROW_TRANSITION)
+      .transition(DOT_HOVER_TRANSITION)
       .duration(this.transitionService.getTransitionDuration() / 3)
       .attr('r', 4)
       .attr('fill', '#fff');

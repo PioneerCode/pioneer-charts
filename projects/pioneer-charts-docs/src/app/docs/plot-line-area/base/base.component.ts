@@ -1,4 +1,5 @@
 import { Component, inject, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AppService } from '../../../app.service';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
@@ -11,6 +12,7 @@ import { LayoutPageDocs } from '../../../layout/page-docs/page-docs';
     LayoutCode,
     LayoutBaseConfig,
     LayoutPageDocs,
+    RouterLink,
   ],
   templateUrl: './base.component.html',
 })

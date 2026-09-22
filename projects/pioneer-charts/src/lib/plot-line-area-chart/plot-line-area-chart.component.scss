@@ -23,6 +23,78 @@
     fill: var(--pcac-fan-out-anchor-color, #{imports.$gray-600});
   }
 
+  // `pointRange` (see PcacPointRangeConfig): each point's `range`, drawn by the builder into a
+  // `.point-range` group per point, a `.point-range-series` group per series, and one
+  // `.point-ranges` group for the chart. Color is the config's `color` when set
+  // (`--pcac-point-range-color`, on `.point-ranges`, or a stylesheet's on any ancestor), else the
+  // series' own (`--pcac-point-range-series-color`, which the builder sets on each series group).
+  // The `pcac-range-<show>` class picks how strongly a range shows at rest; hover marks one
+  // `.is-focused` and the chart's `.point-ranges` `.has-focus`.
+  .point-ranges {
+    // Resolved on the series group, not here: a `var()` in a custom property is substituted where
+    // it's declared, and the series color only exists from the series group down.
+    .point-range-series {
+      --pcac-point-range-resolved-color: var(--pcac-point-range-color, var(--pcac-point-range-series-color));
+    }
+
+    .point-range {
+      opacity: var(--pcac-point-range-resting-opacity, 1);
+      transition: opacity 150ms ease-out;
+    }
+
+    .point-range.is-focused {
+      opacity: 1;
+    }
+
+    &.pcac-range-hover {
+      --pcac-point-range-resting-opacity: 0;
+    }
+
+    &.pcac-range-faint {
+      --pcac-point-range-resting-opacity: var(--pcac-point-range-faint-opacity, 0.2);
+    }
+
+    &.pcac-range-always.has-focus .point-range:not(.is-focused) {
+      opacity: 0.5;
+    }
+
+    .point-range-whisker,
+    .point-range-cap {
+      stroke: var(--pcac-point-range-resolved-color);
+      stroke-width: 1.25px;
+    }
+
+    .point-range-box {
+      fill: var(--pcac-point-range-resolved-color);
+      fill-opacity: 0.1;
+      stroke: var(--pcac-point-range-resolved-color);
+      stroke-opacity: 0.7;
+      stroke-width: 1.25px;
+    }
+
+    .point-range-stop {
+      stop-color: var(--pcac-point-range-resolved-color);
+    }
+
+    .is-focused {
+      .point-range-whisker,
+      .point-range-cap,
+      .point-range-box {
+        stroke-width: 1.75px;
+      }
+
+      .point-range-box {
+        fill-opacity: 0.18;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .point-range {
+        transition: none;
+      }
+    }
+  }
+
   .effects-canvas {
     fill: none;
   }

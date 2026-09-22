@@ -1,8 +1,8 @@
 <app-layout-page-docs pageTitle="Theme" [jumpNav]="jumpNav()">
   <section class="pc-doc-section">
     <p class="lead">Customizing the appearance of Pioneer Charts is managed via overriding Sass variables and combining
-      those overrides
-      in a set of service calls.</p>
+      those overrides in a set of service calls. The colors of a chart's guides &mdash; axes, grid, fan-out anchors
+      &mdash; can also be set on the chart's own config, or as CSS custom properties.</p>
   </section>
   <section class="pc-doc-section">
     <h3 id="default-theme">Default Theme</h3>
@@ -20,8 +20,9 @@
   </section>
   <section class="pc-doc-section">
     <h3 id="customize">Customize</h3>
-    <p>Styling for Pioneer Charts takes place at two different levels. The first being css and the second being through
-      code. The need to do align styling across css and javascript comes from the dynamic nature styles are applied
+    <p>Styling for Pioneer Charts takes place at three different levels: the theme's Sass variables, per-chart
+      color fields on a config (with a CSS custom property behind each), and the color service for the data
+      itself. The need to align styling across css and javascript comes from the dynamic nature styles are applied
       through
       <a href="https://d3js.org/" title="D3">D3</a>.
     </p>
@@ -33,6 +34,16 @@
     <p>For a full reference of variables, you can look at the default theme import file locate at the following:</p>
     <pre
       class="app-layout-code">./node_modules/&#64;pioneer-code/pioneer-charts/scss/core/theme/imports.scss</pre>
+    <h5 id="chart-colors">Chart Colors</h5>
+    <p>The colors of a chart's guides have a field each on its config, taking any CSS color and applying to that
+      chart alone: on each axis (<code>PcacAxisConfig</code>) <b>labelColor</b>, <b>subLabelColor</b>,
+      <b>tickLabelColor</b>, <b>tickColor</b>, <b>lineColor</b> and <b>gridColor</b>; on the plot chart's
+      <code>pointFanOut</code>, <b>spokeColor</b> and <b>anchorColor</b>. Unset, each keeps the theme's color.
+      See <a routerLink="/docs/guides/axis-styling">Axis Styling</a> to try them.</p>
+    <p>Each is applied as a CSS custom property on the part it colors, and the theme reads every one with its own
+      color as the fallback &mdash; so you can also set them in a stylesheet, on any ancestor, to restyle every
+      chart under it without touching a config (a config color still wins where given):</p>
+    <app-layout-code language="css" [code]="customPropertiesCode"></app-layout-code>
     <h5 id="color-service">Color Service</h5>
     <p>In some cases, the charts that utilize d3 apply styles dynamically. For example, in a bar chart, a d3 iteration
       over a collection of data that produces individual bars in the chart might require each bar to be a different

@@ -119,6 +119,50 @@ describe('PcacAxisBuilder tick size', () => {
     });
   });
 
+  // The theme reads each colored part through a `--pcac-axis-*-color` custom property with its own
+  // color as the fallback, so "override" means the property is on the axis group and "no override"
+  // means it isn't - an inline `stroke`/`fill` would instead be on the elements.
+  describe('color overrides', () => {
+    const prop = (config: IPcacAxisBuilderConfig<number, number>, axisClass: string, name: string) =>
+      (config.svg.select<SVGGElement>(`.${axisClass}`).node()!).style.getPropertyValue(name);
+
+    it('puts each given color on that axis\'s group as a custom property', () => {
+      const config = axisConfig(
+        { tickColor: 'red', tickLabelColor: 'pink', lineColor: 'blue', labelColor: 'green', subLabelColor: 'purple' },
+        { tickColor: 'orange' }
+      );
+      builder.drawAxis(config);
+      expect(prop(config, 'pcac-x-axis', '--pcac-axis-tick-color')).toBe('red');
+      expect(prop(config, 'pcac-x-axis', '--pcac-axis-tick-label-color')).toBe('pink');
+      expect(prop(config, 'pcac-x-axis', '--pcac-axis-line-color')).toBe('blue');
+      expect(prop(config, 'pcac-x-axis', '--pcac-axis-label-color')).toBe('green');
+      expect(prop(config, 'pcac-x-axis', '--pcac-axis-sub-label-color')).toBe('purple');
+      // per axis: the y axis only got a tick color
+      expect(prop(config, 'pcac-y-axis', '--pcac-axis-tick-color')).toBe('orange');
+      expect(prop(config, 'pcac-y-axis', '--pcac-axis-line-color')).toBe('');
+    });
+
+    it('sets nothing when no color is given, so the theme\'s fallbacks apply', () => {
+      const config = axisConfig();
+      builder.drawAxis(config);
+      expect(config.svg.select('.pcac-x-axis').attr('style')).toBeNull();
+      expect(config.svg.select('.pcac-y-axis').attr('style')).toBeNull();
+    });
+
+    it('leaves the elements themselves unstyled - the theme still decides what shows', () => {
+      const config = axisConfig({ tickColor: 'red', tickLabelColor: 'pink', lineColor: 'blue' });
+      builder.drawAxis(config);
+      expect(config.svg.select('.pcac-x-axis .tick line').attr('style')).toBeNull();
+      // d3-axis's own `fill="currentColor"` stays; the theme rule is what reads the property
+      expect(config.svg.select('.pcac-x-axis .tick text').attr('style')).toBeNull();
+      expect(config.svg.select('.pcac-x-axis .tick text').attr('fill')).toBe('currentColor');
+      expect(config.svg.select('.pcac-x-axis .domain').attr('style')).toBeNull();
+      // a color alone doesn't turn the marks / line on
+      expect(config.svg.select('.pcac-x-axis').classed('pcac-axis-tick-marks')).toBe(false);
+      expect(config.svg.select('.pcac-x-axis').classed('pcac-axis-line')).toBe(false);
+    });
+  });
+
   it('uses each axis\'s own tick count', () => {
     const config = axisConfig({ ticks: 2 }, { ticks: 10 });
     builder.drawAxis(config);

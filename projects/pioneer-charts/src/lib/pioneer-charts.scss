@@ -25,8 +25,12 @@
   border-radius: 2px;
 }
 
+// Each color below is `var(--pcac-*-color, <theme color>)`. A builder sets the property on a
+// part's group only when the chart's config gives that color (`PcacAxisConfig`'s `*Color` fields,
+// `PcacPointFanOutConfig.spokeColor` / `anchorColor`), so a chart without one looks as before. A
+// stylesheet can set the same property on any ancestor; a config value, on the group itself, wins.
 .pcac-grid-rule line {
-  stroke: imports.$gray-200;
+  stroke: var(--pcac-grid-color, #{imports.$gray-200});
 }
 
 .pcac-x-axis,
@@ -40,11 +44,14 @@
   // Tick marks and the axis line are hidden by default (above) and always have been, so they
   // only appear on a chart that asks for them - `PcacAxisConfig.tickSize` for the marks,
   // `showLine` for the line - via a class the axis builder adds for that axis. Nothing changes
-  // for charts that don't. Both share one color so a mark reads as part of its axis rather than a
-  // separate, fainter element.
-  &.pcac-axis-tick-marks .tick line,
+  // for charts that don't. Both share one default color so a mark reads as part of its axis
+  // rather than a separate, fainter element, but each has its own override.
+  &.pcac-axis-tick-marks .tick line {
+    stroke: var(--pcac-axis-tick-color, #{imports.$gray-900});
+  }
+
   &.pcac-axis-line .domain {
-    stroke: imports.$gray-900;
+    stroke: var(--pcac-axis-line-color, #{imports.$gray-900});
   }
 
   // The axis `label` (its title). `PcacChart.AXIS_LABEL_SPACE` reserves room for this size plus
@@ -52,12 +59,22 @@
   .pcac-axis-label {
     font-size: 12px;
     font-weight: 600;
-    fill: imports.$gray-700;
+    fill: var(--pcac-axis-label-color, #{imports.$gray-700});
   }
 
   // Min / mid / max `subLabels`; `PcacChart.AXIS_SUB_LABEL_SPACE` is sized to this.
   .pcac-axis-sub-label {
     font-size: 11px;
-    fill: imports.$gray-600;
+    fill: var(--pcac-axis-sub-label-color, #{imports.$gray-600});
   }
+}
+
+// Tick labels. d3-axis fills them `currentColor` by attribute; any stylesheet rule outranks
+// that, so the fallback is the same value and a chart without `tickLabelColor` looks as before.
+// Wrapped in `:where()` (specificity 0,0,1) rather than nested in the axis block above (0,2,1)
+// so this rule still loses to a consumer's own `svg text { fill }` or `.dark-panel text { fill }`,
+// as the bare attribute always did - the theme never styled tick labels before this rule, so it
+// mustn't start beating CSS that consumers wrote against that.
+:where(.pcac-x-axis, .pcac-y-axis) :where(.tick) text {
+  fill: var(--pcac-axis-tick-label-color, currentColor);
 }

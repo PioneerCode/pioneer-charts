@@ -2,7 +2,9 @@
   <p class="lead" id="axis-styling">The bar, line, area and plot charts take one <code>PcacAxisConfig</code> per
     axis, as <b>xAxis</b> and <b>yAxis</b>. Out of the box an axis is bare &mdash; labels, five ticks, no tick marks,
     no axis line, and a grid on one axis only &mdash; and each of those is a field on the object: <b>hide</b>,
-    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b>, <b>showLine</b>, <b>label</b> and <b>subLabels</b>.
+    <b>showGrid</b>, <b>ticks</b>, <b>tickSize</b>, <b>showLine</b>, <b>label</b> and <b>subLabels</b>. Each part
+    that's drawn also has a color field: <b>labelColor</b>, <b>subLabelColor</b>, <b>tickLabelColor</b>,
+    <b>tickColor</b>, <b>lineColor</b> and <b>gridColor</b>.
   </p>
 
   <section class="pc-doc-section">
@@ -11,7 +13,7 @@
 
     <div class="grid grid-cols-2 gap-4 mb-4">
       @for (axis of axes; track axis) {
-      <div class="pc-axis-styling-controls">
+      <div class="pc-controls">
         <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
         @let a = axis === 'x' ? xAxis() : yAxis();
 
@@ -30,12 +32,12 @@
         <label [for]="'pc-axis-' + axis + '-ticks'">ticks</label>
         <input [id]="'pc-axis-' + axis + '-ticks'" type="range" min="0" max="12" step="1" [value]="a.ticks"
           (input)="onTicks(axis, $event)" />
-        <span class="pc-axis-styling-readout">{{ a.ticks }}</span>
+        <span class="pc-readout">{{ a.ticks }}</span>
 
         <label [for]="'pc-axis-' + axis + '-size'">tickSize</label>
         <input [id]="'pc-axis-' + axis + '-size'" type="range" min="0" max="30" step="1" [value]="a.tickSize"
           (input)="onTickSize(axis, $event)" />
-        <span class="pc-axis-styling-readout">{{ a.tickSize }}px</span>
+        <span class="pc-readout">{{ a.tickSize }}px</span>
 
         <label [for]="'pc-axis-' + axis + '-line'">showLine</label>
         <input [id]="'pc-axis-' + axis + '-line'" type="checkbox" [checked]="a.showLine"
@@ -51,6 +53,14 @@
         <input [id]="'pc-axis-' + axis + '-hide'" type="checkbox" [checked]="a.hide"
           (change)="onToggle(axis, 'hide', $event)" />
         <span></span>
+
+        @for (color of colorFields; track color.field) {
+        <label [for]="'pc-axis-' + axis + '-' + color.field">{{ color.field }}</label>
+        <input [id]="'pc-axis-' + axis + '-' + color.field" type="color" [value]="a[color.field] ?? color.theme"
+          (input)="onColor(axis, color.field, $event)" />
+        <button type="button" class="pc-clear" [disabled]="!a[color.field]"
+          (click)="onClearColor(axis, color.field)">theme</button>
+        }
       </div>
       }
     </div>
@@ -76,13 +86,80 @@
     <p class="text-sm">A few things to notice: the bar chart's x axis is a category axis, so <b>ticks</b> does
       nothing there (one tick per bar); the labels move with <b>tickSize</b> and the plot area gives up exactly that
       much room; the x axis's grid runs through the middle of each bar on the bar chart and through each tick on
-      the line chart; and hiding an axis hands its margins to the plot rather than leaving a gap.
+      the line chart; and hiding an axis hands its margins to the plot rather than leaving a gap. The color
+      pickers start on each part's default; pick a color and the chart takes it, or click <i>theme</i> to go
+      back. See <a href="#colors">Colors</a> below for what each one does.
     </p>
   </section>
 
   <section class="pc-doc-section">
     <h3 id="markup">Markup</h3>
     <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h3 id="colors">Colors</h3>
+    <p>Each part of an axis has a color field. Give it any CSS color and only that part, on that axis, changes.
+      Leave it out and the part keeps its default.</p>
+
+    <table class="pc-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>What it colors</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>labelColor</b></td>
+          <td>The axis title (<b>label</b>)</td>
+          <td>Dark gray</td>
+        </tr>
+        <tr>
+          <td><b>subLabelColor</b></td>
+          <td>The <b>subLabels</b> row (all three)</td>
+          <td>Gray</td>
+        </tr>
+        <tr>
+          <td><b>tickLabelColor</b></td>
+          <td>The values along the axis</td>
+          <td>The page's text color</td>
+        </tr>
+        <tr>
+          <td><b>tickColor</b></td>
+          <td>The tick marks (needs <b>tickSize</b>)</td>
+          <td>Near black</td>
+        </tr>
+        <tr>
+          <td><b>lineColor</b></td>
+          <td>The axis line (needs <b>showLine</b>)</td>
+          <td>Near black</td>
+        </tr>
+        <tr>
+          <td><b>gridColor</b></td>
+          <td>This axis's grid lines (needs the grid on)</td>
+          <td>Light gray</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="mt-3">Three things to know:</p>
+    <ol>
+      <li><b>A color never turns a part on.</b> <b>tickColor</b> only shows once <b>tickSize</b> has drawn the
+        marks, <b>lineColor</b> once <b>showLine</b> is true, <b>gridColor</b> while that axis's grid is drawn.</li>
+      <li><b>Each axis is separate.</b> <b>xAxis</b> and <b>yAxis</b> can use different colors.</li>
+      <li><b>Any CSS color works.</b> Hex, <code>rgb()</code>, a named color, even <code>currentColor</code>.</li>
+    </ol>
+
+    <h5 class="mt-4">In the config</h5>
+    <app-layout-code language="typescript" [code]="colorConfigCode"></app-layout-code>
+
+    <h5 class="mt-4">Or in a stylesheet</h5>
+    <p>Every color is also a CSS custom property, so you can set the same thing in CSS instead &mdash; on the chart,
+      on a wrapper, or on <code>body</code> &mdash; and every chart inside picks it up. Handy for a dark panel.
+      If a chart's config also sets the color, the config wins.</p>
+    <app-layout-code language="css" [code]="colorCssCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
@@ -132,9 +209,10 @@
         <code>enableZoomY</code> for y) is redrawn as you zoom and pan, with the same settings.
       </li>
       <li>
-        <b>Color comes from the theme.</b> Marks and axis lines are both stroked with <code>$gray-900</code>, via
-        <code>.pcac-axis-tick-marks .tick line</code> and <code>.pcac-axis-line .domain</code> respectively;
-        override those rules (or the variable) to restyle them.
+        <b>Colors are per part, per axis.</b> See <a href="#colors">Colors</a> above. The defaults are the theme's
+        <code>$gray-*</code> variables (<code>$gray-900</code> marks and line, <code>$gray-700</code> label,
+        <code>$gray-600</code> sub labels, <code>$gray-200</code> grid), which the Sass override on the
+        <a routerLink="/docs/guides/theme">Theme</a> page can also change for every chart at once.
       </li>
       <li>
         <b>The pie chart has no axes</b>, so it takes neither.

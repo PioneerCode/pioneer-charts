@@ -187,10 +187,10 @@ export class PcacChart {
   ): void {
     const base = { svg: this.svg, width: this.width, height: this.height, xScale, yScale };
     if (which !== 'y' && this.xAxis.showGrid) {
-      this.gridBuilder.drawVerticalGrid({ ...base, numberOfTicks: this.xAxis.ticks });
+      this.gridBuilder.drawVerticalGrid({ ...base, numberOfTicks: this.xAxis.ticks, color: this.xAxis.gridColor });
     }
     if (which !== 'x' && this.yAxis.showGrid) {
-      this.gridBuilder.drawHorizontalGrid({ ...base, numberOfTicks: this.yAxis.ticks });
+      this.gridBuilder.drawHorizontalGrid({ ...base, numberOfTicks: this.yAxis.ticks, color: this.yAxis.gridColor });
     }
   }
 

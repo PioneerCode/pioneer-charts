@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -9,7 +10,8 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   styleUrl: './theme.component.scss',
   imports: [
     LayoutCode,
-    LayoutPageDocs
+    LayoutPageDocs,
+    RouterLink
   ]
 })
 export class ThemeComponent {
@@ -35,10 +37,24 @@ export class ThemeComponent {
       value: 'styles',
     },
     {
+      key: 'Chart Colors',
+      value: 'chart-colors',
+    },
+    {
       key: 'Color Service',
       value: 'color-service',
     }
   ]);
+  customPropertiesCode = `.dark-panel {
+  --pcac-axis-label-color: #dee2e6;
+  --pcac-axis-sub-label-color: #adb5bd;
+  --pcac-axis-tick-label-color: #dee2e6;
+  --pcac-axis-tick-color: #adb5bd;
+  --pcac-axis-line-color: #adb5bd;
+  --pcac-grid-color: #495057;
+  --pcac-fan-out-spoke-color: #6c757d;
+  --pcac-fan-out-anchor-color: #adb5bd;
+}`;
   importStylesCode = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts";`;
   importStylesCodeOverride = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (
   $gray-800: #1a1a2e, // tooltip background

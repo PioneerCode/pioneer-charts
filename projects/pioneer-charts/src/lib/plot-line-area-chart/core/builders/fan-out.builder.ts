@@ -69,7 +69,7 @@ function xPositionKey(xFormat: PcacFormatEnum, data: PcacData, index: number): s
 
 /**
  * The smallest ring radius at which `count` marks of `size` px sit `gap` px apart from their
- * neighbours: the chord between adjacent ring positions is `2r sin(π/n)`, so solve it for
+ * neighbors: the chord between adjacent ring positions is `2r sin(π/n)`, so solve it for
  * `size + gap`. A pair (n = 2) lands `size + gap` apart along a diameter, as expected.
  */
 export function fanOutRadius(count: number, size: number, gap: number): number {

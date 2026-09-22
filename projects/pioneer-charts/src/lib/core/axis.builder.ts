@@ -29,7 +29,8 @@ export interface IPcacAxisBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * D3's default 6px outer end-caps (`tickSizeOuter`), so it reads as a bracket rather than a
    * bare rule; that's D3's standard look and is left as-is. `label` and `subLabels` are drawn
    * inside the axis group (so they're raised and non-interactive along with it) - see `drawLabels`.
-   * `format` picks the tick label format; `None` leaves D3's default.
+   * `format` picks the tick label format; `None` leaves D3's default. The `*Color` fields are
+   * applied by `applyColors`.
    */
   xAxis: PcacResolvedAxisConfig;
   yAxis: PcacResolvedAxisConfig;
@@ -84,7 +85,8 @@ export class PcacAxisBuilder {
       .attr('pointer-events', 'none')
       .classed('pcac-axis-tick-marks', config.yAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.yAxis.showLine)
-      .call(yAxis);
+      .call(yAxis)
+      .call(applyColors, config.yAxis);
 
     this.drawLabels(group, config.yAxis, { length: config.height, outer: config.margin.left, vertical: true });
   }
@@ -127,7 +129,8 @@ export class PcacAxisBuilder {
       .classed('pcac-axis-tick-marks', config.xAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.xAxis.showLine)
       .attr('transform', 'translate(0,' + config.height + ')')
-      .call(xAxis);
+      .call(xAxis)
+      .call(applyColors, config.xAxis);
 
     this.drawLabels(group, config.xAxis, { length: config.width, outer: config.margin.bottom, vertical: false });
   }
@@ -169,6 +172,22 @@ export class PcacAxisBuilder {
       if (sub.max) text('pcac-axis-sub-label', layout.length, edge, 'end', sub.max);
     }
   }
+}
+
+/**
+ * Sets the axis's `*Color` fields on its group as CSS custom properties, which the theme reads
+ * with its own color as the fallback (`var(--pcac-axis-tick-color, ...)`). Custom properties
+ * rather than inline `stroke`/`fill` on the elements: the theme still decides what is drawn (a
+ * color never un-hides marks or the line), the property reaches everything d3-axis draws in the
+ * group, and a stylesheet can set the same property on any ancestor. An unset field sets nothing.
+ */
+function applyColors(group: Selection<SVGGElement, unknown, BaseType, unknown>, axis: PcacResolvedAxisConfig): void {
+  group
+    .style('--pcac-axis-tick-color', () => axis.tickColor ?? null)
+    .style('--pcac-axis-tick-label-color', () => axis.tickLabelColor ?? null)
+    .style('--pcac-axis-line-color', () => axis.lineColor ?? null)
+    .style('--pcac-axis-label-color', () => axis.labelColor ?? null)
+    .style('--pcac-axis-sub-label-color', () => axis.subLabelColor ?? null);
 }
 
 /**

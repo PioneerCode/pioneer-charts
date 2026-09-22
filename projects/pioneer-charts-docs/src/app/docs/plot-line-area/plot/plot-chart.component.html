@@ -24,10 +24,48 @@
     default. An anchor dot marks the true value. Whether or not it's on, a hovered point's tooltip context
     lists the others at its coordinate in <code>coincident</code> - hover a fanned-out point below. The pair
     at the bottom-left corner shows a ring at the edge of the domain: it's moved back inside the plot so
-    neither point hangs over an axis by more than half its image, with the anchor still on the coordinate.</p>
+    neither point hangs over an axis by more than half its image, with the anchor still on the coordinate.
+    The controls below edit the chart's <code>pointFanOut</code> live; each field is described in the table
+    further down.</p>
+  @let f = fanOut();
+  <div class="pc-controls pc-fan-out-controls mb-3">
+    <label for="pc-fan-out-enabled">pointFanOut</label>
+    <input id="pc-fan-out-enabled" type="checkbox" [checked]="fanOutEnabled()" (change)="onFanOutEnabled($event)" />
+    <span class="pc-muted">{{ fanOutEnabled() ? 'on' : 'off - points draw on top of one another' }}</span>
+
+    <label for="pc-fan-out-gap">gap</label>
+    <input id="pc-fan-out-gap" type="range" min="0" max="24" step="1" [value]="f.gap ?? 4"
+      [disabled]="!fanOutEnabled() || f.radius !== undefined"
+      (input)="setFanOut('gap', $any($event.target).valueAsNumber)" />
+    <span class="pc-readout">{{ f.gap ?? 4 }}px</span>
+
+    <label for="pc-fan-out-radius">radius</label>
+    <input id="pc-fan-out-radius" type="range" min="0" max="40" step="1" [value]="f.radius ?? 20"
+      [disabled]="!fanOutEnabled()" (input)="setFanOut('radius', $any($event.target).valueAsNumber)" />
+    @if (f.radius !== undefined) {
+    <span class="pc-readout">{{ f.radius }}px
+      <button type="button" class="pc-clear" (click)="setFanOut('radius', undefined)">auto</button></span>
+    } @else {
+    <span class="pc-readout pc-muted">auto (from gap)</span>
+    }
+
+    <label for="pc-fan-out-anchor">showAnchor</label>
+    <input id="pc-fan-out-anchor" type="checkbox" [checked]="f.showAnchor ?? true" [disabled]="!fanOutEnabled()"
+      (change)="setFanOut('showAnchor', $any($event.target).checked)" />
+    <span></span>
+
+    @for (color of fanOutColors; track color.field) {
+    <label [for]="'pc-fan-out-' + color.field">{{ color.field }}</label>
+    <input [id]="'pc-fan-out-' + color.field" type="color" [value]="f[color.field] ?? color.theme"
+      [disabled]="!fanOutEnabled() || f.showAnchor === false"
+      (input)="setFanOut(color.field, $any($event.target).value)" />
+    <button type="button" class="pc-clear" [disabled]="!f[color.field]"
+      (click)="setFanOut(color.field, undefined)">theme</button>
+    }
+  </div>
   <mat-card class="p-3 mb-3">
     <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
-      <pcac-plot-chart [config]="pcService.plotFanOutConfig.value()" (dotClicked)="pcService.onClicked($event)">
+      <pcac-plot-chart [config]="fanOutConfig()" (dotClicked)="pcService.onClicked($event)">
         <ng-template pcacTooltip let-point let-series="parent" let-others="coincident">
           <div class="pc-tooltip">
             <span class="pc-tooltip-title">{{ series?.key }}</span>
@@ -61,7 +99,7 @@
         (see <a routerLink="/docs/guides/tooltip">Custom Tooltip</a>).
         <ul>
           <li>
-            <b>gap</b> &mdash; space in pixels between neighbouring points on the ring, measured between their image
+            <b>gap</b> &mdash; space in pixels between neighboring points on the ring, measured between their image
             boxes (or hovered dots). Each group gets the smallest ring at which its members sit this far apart.
             Default 4.
           </li>
@@ -73,6 +111,13 @@
             <b>showAnchor</b> &mdash; draw a dot on the shared coordinate with a spoke to each fanned-out point, so
             the true value stays marked. Default true. Styled by the theme's <code>.fan-out-anchor</code> and
             <code>.fan-out-spoke</code> rules.
+          </li>
+          <li>
+            <b>spokeColor</b> / <b>anchorColor</b> &mdash; any CSS color for the spokes and the anchor dot, in
+            place of the theme's <code>$gray-400</code> and <code>$gray-600</code>. Applied as the
+            <code>--pcac-fan-out-spoke-color</code> / <code>--pcac-fan-out-anchor-color</code> custom properties
+            on the chart's <code>.fan-outs</code> group, which a stylesheet can set on an ancestor instead. Nothing
+            to color unless <b>showAnchor</b> is on.
           </li>
         </ul>
       </td>

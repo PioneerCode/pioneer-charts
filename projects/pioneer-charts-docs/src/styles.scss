@@ -84,6 +84,77 @@ body {
 
 
 
+// A demo page's live-control panel: label / control / readout rows. Shared by the Axis Styling
+// and Plot Chart pages; a page adds only its own extras (a heading row, say) on top.
+.pc-controls {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.5rem;
+
+  input[type="range"],
+  input[type="checkbox"] {
+    accent-color: colors.$primary;
+  }
+
+  // A checkbox or color swatch sits in the slider's column, left-aligned.
+  input[type="checkbox"],
+  input[type="color"] {
+    justify-self: start;
+  }
+
+  input[type="text"] {
+    font: inherit;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid rgba(colors.$primary, 0.3);
+    border-radius: 3px;
+  }
+
+  input[type="color"] {
+    width: 3rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 1px solid rgba(colors.$primary, 0.3);
+    border-radius: 3px;
+    background: none;
+  }
+
+  input:disabled {
+    opacity: 0.4;
+  }
+}
+
+.pc-readout {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.pc-muted {
+  font-weight: 400;
+  font-size: 0.85rem;
+  opacity: 0.5;
+}
+
+// A small "back to the default" button in the readout column; disabled (and quiet) while the
+// value already is the default, so the row reads the same either way.
+.pc-clear {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0 0.4rem;
+  border: 1px solid rgba(colors.$primary, 0.3);
+  border-radius: 3px;
+  background: none;
+  color: colors.$primary;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    border-color: transparent;
+    cursor: default;
+  }
+}
+
 .pc-table {
   min-width: 100%;
   border: 0;

@@ -26,12 +26,12 @@ export class PcacColorService {
    * @param numberOfNodes Number of items in dynamically build collection of colors
    */
   getColorScale(numberOfNodes: number): string[] {
-    const pallette = [] as string[];
+    const palette = [] as string[];
     for (let i = 0; i < numberOfNodes; i++) {
       const mark = i % this.scale.length;
-      pallette.push(this.scale[mark]);
+      palette.push(this.scale[mark]);
     }
-    return pallette;
+    return palette;
   }
 
   getAlert(): string {

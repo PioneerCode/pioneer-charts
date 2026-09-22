@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { color } from 'd3-color';
+import { RouterLink } from '@angular/router';
 import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
@@ -10,6 +12,9 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 
 /** The `PcacAxisConfig` fields the demo lets you toggle; `tickSize` is the slider's. */
 type AxisToggle = 'hide' | 'showGrid' | 'showLine';
+
+/** The `PcacAxisConfig` color fields, each with its own picker. */
+type AxisColor = 'labelColor' | 'subLabelColor' | 'tickLabelColor' | 'tickColor' | 'lineColor' | 'gridColor';
 
 @Component({
   selector: 'pc-axis-styling',
@@ -22,6 +27,7 @@ type AxisToggle = 'hide' | 'showGrid' | 'showLine';
     MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
+    RouterLink,
   ]
 })
 export class AxisStylingComponent {
@@ -40,6 +46,19 @@ export class AxisStylingComponent {
 
   /** The three sub label slots, for the template's inputs */
   protected readonly subLabelKeys: readonly (keyof PcacAxisSubLabels)[] = ['min', 'mid', 'max'];
+
+  /**
+   * The color fields, each with the part's default color (the theme's `$gray-*`; for tick labels
+   * the page's text color) so an unset picker shows what the chart is actually drawing.
+   */
+  protected readonly colorFields: readonly { field: AxisColor; theme: string }[] = [
+    { field: 'labelColor', theme: '#495057' },
+    { field: 'subLabelColor', theme: '#6c757d' },
+    { field: 'tickLabelColor', theme: bodyTextColorHex() },
+    { field: 'tickColor', theme: '#212529' },
+    { field: 'lineColor', theme: '#212529' },
+    { field: 'gridColor', theme: '#e9ecef' },
+  ];
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds
@@ -81,6 +100,16 @@ export class AxisStylingComponent {
     this.axisSignal(axis).update(a => ({ ...a, [field]: value }));
   }
 
+  protected onColor(axis: 'x' | 'y', field: AxisColor, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.axisSignal(axis).update(a => ({ ...a, [field]: value }));
+  }
+
+  /** Back to unset, i.e. the theme's color - a color input has no empty state of its own. */
+  protected onClearColor(axis: 'x' | 'y', field: AxisColor): void {
+    this.axisSignal(axis).update(a => ({ ...a, [field]: undefined }));
+  }
+
   private axisSignal(axis: 'x' | 'y') {
     return axis === 'x' ? this.xAxis : this.yAxis;
   }
@@ -99,10 +128,40 @@ export class AxisStylingComponent {
       value: 'markup',
     },
     {
+      key: 'Colors',
+      value: 'colors',
+    },
+    {
       key: 'Notes',
       value: 'notes',
     }
   ]);
+
+  colorConfigCode = `const config = {
+  data: [ ... ],
+  xAxis: {
+    showLine: true,
+    lineColor: '#0d6efd',   // blue axis line
+    tickSize: 6,
+    tickColor: '#0d6efd',   // blue tick marks
+    tickLabelColor: '#495057'
+  },
+  yAxis: {
+    label: 'Units sold',
+    labelColor: '#0d6efd',
+    gridColor: '#cfe2ff'    // pale blue grid; the y axis's grid is on by default
+  }
+} as PcacBarVerticalChartConfig;`;
+
+  colorCssCode = `/* Every chart inside .dark-panel */
+.dark-panel {
+  --pcac-axis-label-color: #dee2e6;
+  --pcac-axis-sub-label-color: #adb5bd;
+  --pcac-axis-tick-label-color: #dee2e6;
+  --pcac-axis-tick-color: #adb5bd;
+  --pcac-axis-line-color: #adb5bd;
+  --pcac-grid-color: #495057;
+}`;
 
   configCode = `const config = {
   data: [ ... ],
@@ -112,7 +171,8 @@ export class AxisStylingComponent {
   xAxis: {
     label: 'Product', // axis title, centered below the tick labels
     tickSize: 12,     // tick mark length in px - setting it is what turns the marks on
-    showLine: true    // solid line along the axis
+    showLine: true,   // solid line along the axis
+    lineColor: '#0d6efd' // its color (see Colors below)
   },
   yAxis: {
     domainMax: 1000,  // the value axis runs 0..domainMax (format: a PcacFormatEnum, e.g. Percentage)
@@ -135,4 +195,9 @@ const sparkline = {
   xAxis: { hide: true },
   yAxis: { hide: true, showGrid: false }
 } as PcacLineChartConfig;`;
+}
+
+/** The page's text color as `#rrggbb`, the only form a color input accepts; black if it can't be read. */
+function bodyTextColorHex(): string {
+  return color(getComputedStyle(document.body).color)?.formatHex() ?? '#000000';
 }

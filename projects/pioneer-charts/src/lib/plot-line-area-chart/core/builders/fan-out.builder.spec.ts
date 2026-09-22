@@ -63,7 +63,7 @@ describe('fanOutRadius', () => {
     expect(fanOutRadius(2, 40, 4) * 2).toBeCloseTo(44);
   });
 
-  it('grows with the group so neighbours on the ring stay size + gap apart', () => {
+  it('grows with the group so neighbors on the ring stay size + gap apart', () => {
     const r = fanOutRadius(5, 40, 4);
     const chord = 2 * r * Math.sin(Math.PI / 5);
     expect(chord).toBeCloseTo(44);

@@ -22,6 +22,12 @@ export interface IPcacGridBuilderConfig<XDomain extends AxisDomain = AxisDomain,
    * and gets one line per category.
    */
   numberOfTicks: number;
+  /**
+   * Line color (`PcacAxisConfig.gridColor`), set on the grid group as `--pcac-grid-color` for the
+   * theme's `.pcac-grid-rule line` rule to read; unset means the theme's color. See the axis
+   * builder's `applyColors` for why a custom property.
+   */
+  color?: string;
 }
 
 /**
@@ -55,6 +61,7 @@ export class PcacGridBuilder {
   drawVerticalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-vertical')
+      .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.rule')
       .data(gridLines(config.xScale, config.numberOfTicks))
       .enter().append('svg:g')
@@ -72,6 +79,7 @@ export class PcacGridBuilder {
   drawHorizontalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-horizontal')
+      .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.pcac-grid-rule')
       .data(gridLines(config.yScale, config.numberOfTicks))
       .enter().append('svg:g')

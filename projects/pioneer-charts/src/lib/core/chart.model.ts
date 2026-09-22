@@ -43,6 +43,11 @@ export class PcacAxisSubLabels {
  * Every field is optional so an object-literal / JSON config can give just the ones it cares
  * about (or omit the axis entirely); the initializers apply to anything built with `new`, and
  * `resolveAxisConfig()` fills the rest in for builders.
+ *
+ * The `*Color` fields each color one part of this axis, with any CSS color. Unset, the part keeps
+ * the theme's color. A color never turns a part on - it only shows once the part is drawn. Each
+ * is applied to the axis as the CSS custom property named on the field, so a stylesheet can set
+ * the same property on any ancestor instead; a config value wins.
  */
 export class PcacAxisConfig {
   /**
@@ -61,6 +66,12 @@ export class PcacAxisConfig {
    * default.
    */
   showGrid?: boolean
+
+  /**
+   * Grid line color (`--pcac-grid-color`), shown while this axis's grid is drawn - see `showGrid`.
+   * Theme default `$gray-200`.
+   */
+  gridColor?: string
 
   /**
    * Requested number of ticks (D3's `ticks()` hint, so the actual count can differ slightly) -
@@ -82,11 +93,28 @@ export class PcacAxisConfig {
   tickSize?: number
 
   /**
+   * Tick mark color (`--pcac-axis-tick-color`), shown once `tickSize` has turned the marks on.
+   * Theme default `$gray-900`.
+   */
+  tickColor?: string
+
+  /**
+   * Tick label color (`--pcac-axis-tick-label-color`) - the values along the axis. Default is the
+   * page's text color (`currentColor`), as d3-axis has always drawn them.
+   */
+  tickLabelColor?: string
+
+  /**
    * Draw a solid line along the axis itself (the full length of the axis, with D3's short
    * end-caps). Off by default, as the theme has always hidden it. Color comes from the theme
    * (`.pcac-axis-line .domain`, `$gray-900`).
    */
   showLine?: boolean = false
+
+  /**
+   * Axis line color (`--pcac-axis-line-color`), shown with `showLine` on. Theme default `$gray-900`.
+   */
+  lineColor?: string
 
   /**
    * A title for the whole axis (e.g. "Revenue ($)"), drawn centered along it just inside the
@@ -97,6 +125,9 @@ export class PcacAxisConfig {
    */
   label?: string
 
+  /** `label` color (`--pcac-axis-label-color`). Theme default `$gray-700`. */
+  labelColor?: string
+
   /**
    * Min / mid / max sub labels (e.g. "Low" / "Medium" / "High") in their own row just outside the
    * tick labels, and inside the `label` if there is one: `min` left-aligned at the axis's start,
@@ -106,6 +137,9 @@ export class PcacAxisConfig {
    * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
    */
   subLabels?: PcacAxisSubLabels
+
+  /** `subLabels` color, all three (`--pcac-axis-sub-label-color`). Theme default `$gray-600`. */
+  subLabelColor?: string
 
   /**
    * How the values along this axis are interpreted and shown - the tick labels, and the value
@@ -142,10 +176,12 @@ export interface PcacChartMargin {
 
 /**
  * `PcacAxisConfig` with every default applied - what builders work with, so they never have to
- * null-check. `tickSize`, `label` and `subLabels` stay optional: "not set" is itself the meaningful
- * default (no marks, no labels).
+ * null-check. `tickSize`, `label`, `subLabels` and the `*Color` fields stay optional: "not set"
+ * is itself the meaningful default (no marks, no labels, the theme's colors). The color fields
+ * are picked up by name, so a new one needs only its declaration on the class.
  */
-export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>> & Pick<PcacAxisConfig, 'tickSize' | 'label' | 'subLabels'>;
+type PcacOptionalAxisFields = 'tickSize' | 'label' | 'subLabels' | Extract<keyof PcacAxisConfig, `${string}Color`>;
+export type PcacResolvedAxisConfig = Required<Omit<PcacAxisConfig, PcacOptionalAxisFields>> & Pick<PcacAxisConfig, PcacOptionalAxisFields>;
 
 /** True if `axis` has at least one sub label to draw (an empty `subLabels` object counts as none). */
 export function hasAxisSubLabels(axis: PcacAxisConfig | undefined): boolean {
@@ -177,14 +213,14 @@ export function axisLabelSpace(axis: PcacAxisConfig | undefined): number {
  */
 export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false): PcacResolvedAxisConfig {
   const defaults = new PcacAxisConfig();
+  // The optional fields (see `PcacOptionalAxisFields`) pass through as given; only the ones with
+  // a default are spelled out.
   return {
+    ...axis,
     hide: axis?.hide ?? defaults.hide!,
     showGrid: axis?.showGrid ?? showGridDefault,
     ticks: axis?.ticks ?? defaults.ticks!,
-    tickSize: axis?.tickSize,
     showLine: axis?.showLine ?? defaults.showLine!,
-    label: axis?.label,
-    subLabels: axis?.subLabels,
     format: axis?.format ?? defaults.format!,
     domainMin: axis?.domainMin ?? defaults.domainMin!,
     domainMax: axis?.domainMax ?? defaults.domainMax!,

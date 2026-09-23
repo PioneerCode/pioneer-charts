@@ -171,5 +171,88 @@ describe('PcacTooltipBuilder', () => {
       expect(shell.style.left).toBe('150px');
       expect(shell.style.top).toBe('252px');
     });
+
+    describe('beside an anchor', () => {
+      const root = document.documentElement;
+
+      // A 1000x800 viewport and a 100x40 tooltip; each test places a 20x20 anchor somewhere in it.
+      beforeEach(() => {
+        Object.defineProperty(root, 'clientWidth', { value: 1000, configurable: true });
+        Object.defineProperty(root, 'clientHeight', { value: 800, configurable: true });
+        Object.defineProperty(shell, 'offsetWidth', { value: 100, configurable: true });
+        Object.defineProperty(shell, 'offsetHeight', { value: 40, configurable: true });
+      });
+
+      afterEach(() => {
+        delete (root as any).clientWidth;
+        delete (root as any).clientHeight;
+        delete (shell as any).offsetWidth;
+        delete (shell as any).offsetHeight;
+      });
+
+      function anchorAt(left: number, top: number, size = 20): Element {
+        const anchor = document.createElement('div');
+        anchor.getBoundingClientRect = () =>
+          ({ left, top, right: left + size, bottom: top + size, width: size, height: size }) as DOMRect;
+        return anchor;
+      }
+
+      function showBeside(anchor: Element): void {
+        // The cursor is deliberately far from the anchor: with one, only the anchor matters.
+        builder.showTooltip(mouse(0, 0), host.full(), context(datum('jan', 1)), undefined, undefined, anchor);
+      }
+
+      it('puts its bottom-left corner at the anchor\'s top-right by default', () => {
+        showBeside(anchorAt(100, 300));
+
+        expect(shell.style.left).toBe('128px'); // 120 + gap
+        expect(shell.style.top).toBe('252px'); // 300 - gap - 40
+      });
+
+      it('flips to the left when it would run off the right of the viewport', () => {
+        showBeside(anchorAt(900, 300)); // 1000 - 920 - gap = 72 < 100
+
+        expect(shell.style.left).toBe('792px'); // 900 - gap - 100
+        expect(shell.style.top).toBe('252px');
+      });
+
+      it('flips below when it would run off the top of the viewport', () => {
+        showBeside(anchorAt(100, 30)); // 30 - gap = 22 < 40
+
+        expect(shell.style.left).toBe('128px');
+        expect(shell.style.top).toBe('58px'); // 50 + gap
+      });
+
+      it('flips both ways at a top-right corner', () => {
+        showBeside(anchorAt(900, 30));
+
+        expect(shell.style.left).toBe('792px');
+        expect(shell.style.top).toBe('58px');
+      });
+
+      it('takes the side with more room when neither side fits', () => {
+        Object.defineProperty(shell, 'offsetWidth', { value: 600, configurable: true });
+
+        showBeside(anchorAt(300, 300)); // 672 on the right: fits, so no flip
+        expect(shell.style.left).toBe('328px');
+
+        showBeside(anchorAt(500, 300)); // 472 right vs 492 left: neither fits, left is roomier
+        expect(shell.style.left).toBe('-108px'); // 500 - gap - 600
+
+        showBeside(anchorAt(480, 300)); // 492 right vs 472 left: neither fits, right is roomier
+        expect(shell.style.left).toBe('508px');
+      });
+
+      it('offsets by the page scroll, since the anchor\'s box is viewport-relative', () => {
+        vi.spyOn(window, 'scrollX', 'get').mockReturnValue(15);
+        vi.spyOn(window, 'scrollY', 'get').mockReturnValue(400);
+
+        showBeside(anchorAt(100, 300));
+
+        expect(shell.style.left).toBe('143px');
+        expect(shell.style.top).toBe('652px');
+        vi.restoreAllMocks();
+      });
+    });
   });
 });

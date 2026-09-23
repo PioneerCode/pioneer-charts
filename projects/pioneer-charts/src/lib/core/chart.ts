@@ -25,6 +25,11 @@ export interface PcacTooltipOptions {
   coincident?: PcacTooltipCoincident[];
   valueFormat?: PcacFormatEnum;
   keyFormat?: PcacFormatEnum;
+  /**
+   * The element the tooltip is placed beside instead of above the cursor: off one of its corners,
+   * whichever fits in the viewport (see `PcacTooltipBuilder.positionBeside`), so it never covers it.
+   */
+  anchor?: Element | null;
 }
 
 
@@ -274,7 +279,8 @@ export class PcacChart {
         coincident: options.coincident ?? [],
       },
       options.valueFormat,
-      options.keyFormat
+      options.keyFormat,
+      options.anchor
     );
   }
 

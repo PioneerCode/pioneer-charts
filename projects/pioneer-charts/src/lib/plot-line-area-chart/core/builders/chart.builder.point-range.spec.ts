@@ -106,6 +106,14 @@ describe('PlaChartBuilder point ranges', () => {
     expect(num(xBar, 'y1')).toBeCloseTo(scales.y(50));
   });
 
+  it('gives a series past the end of colorOverride a repeated color rather than none', () => {
+    const { svg } = build(config([[point(20, 20, both)], [point(50, 50, both)], [point(80, 80, both)]], {}));
+
+    const colors = Array.from(svg.querySelectorAll('.point-range-series'))
+      .map((group) => (group as SVGGElement).style.getPropertyValue('--pcac-point-range-series-color'));
+    expect(colors).toEqual(['#111111', '#222222', '#111111']);
+  });
+
   it('draws only the whisker for the axis that has a range', () => {
     const { svg } = build(config([[point(30, 50, { y: { min: 40, max: 60 } }), point(70, 50, { x: { min: 60, max: 80 } })]], {}));
     const [yOnly, xOnly] = Array.from(svg.querySelectorAll('.point-range'));

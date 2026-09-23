@@ -175,6 +175,16 @@ describe('PlaChartBuilder point images', () => {
     expect(svg.querySelector('circle.dot')!.getAttribute('stroke')).toBe('#123456');
   });
 
+  it('repeats colorOverride from the start when there are more series than colors', () => {
+    const cfg = config([point(0, 10)]);
+    cfg.colorOverride = ['#111111', '#222222', '#333333'];
+    cfg.data = Array.from({ length: 8 }, (_, i) => ({ key: `s${i}`, value: null, hide: false, data: [point(i, 10)] }));
+    const { svg } = build(cfg);
+
+    const strokes = Array.from(svg.querySelectorAll('circle.dot')).map((dot) => dot.getAttribute('stroke'));
+    expect(strokes).toEqual(['#111111', '#222222', '#333333', '#111111', '#222222', '#333333', '#111111', '#222222']);
+  });
+
   // The clip-path's half-box buffer exists so an image centered on an axis is drawn whole, but on
   // its own it also let an image whose center zoom had carried *past* the axis keep showing - up
   // to a whole half-image sitting entirely outside the plot, on any side. A point is now hidden

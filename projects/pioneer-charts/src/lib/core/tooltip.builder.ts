@@ -28,24 +28,33 @@ export class PcacTooltipBuilder {
   private view: EmbeddedViewRef<PcacTooltipContext> | null = null;
   private viewTemplate: TemplateRef<PcacTooltipContext> | null = null;
 
+  /** Space left between the tooltip and whatever it's placed next to (the cursor or an anchor). */
+  static readonly GAP = 8;
+
   /**
-   * Shows the tooltip for a hovered datum at the event's position. Renders `template` when the
-   * chart has one projected; otherwise falls back to the default key/value content, formatted per
-   * `valueFormat`/`keyFormat`.
+   * Shows the tooltip for a hovered datum. Renders `template` when the chart has one projected;
+   * otherwise falls back to the default key/value content, formatted per `valueFormat`/`keyFormat`.
+   * Placed beside `anchor` when one is given (see `positionBeside`), else above the event's position.
    */
   showTooltip(
     event: MouseEvent,
     template: TemplateRef<PcacTooltipContext> | undefined,
     context: PcacTooltipContext,
     valueFormat?: PcacFormatEnum,
-    keyFormat?: PcacFormatEnum
+    keyFormat?: PcacFormatEnum,
+    anchor?: Element | null
   ): void {
     if (template) {
       this.renderTemplate(template, context);
     } else {
       this.renderDefault(context.$implicit, valueFormat, keyFormat);
     }
-    this.position(event);
+    const shell = this.measurable();
+    if (anchor) {
+      this.positionBeside(shell, anchor);
+    } else {
+      this.positionAbove(shell, event);
+    }
   }
 
   /**
@@ -108,14 +117,58 @@ export class PcacTooltipBuilder {
   }
 
   /**
-   * Centers the (already rendered) tooltip horizontally on the cursor and sits it just above.
-   * Measured from the real box rather than fixed offsets so it works for content of any size.
+   * Shows the (already rendered) shell at the page's top-left so it can be measured. Left where the
+   * last hover put it, a shell near the right edge would be squeezed by its containing block and
+   * measure narrower (wrapped) than the content really is once it's moved somewhere with room.
    */
-  private position(event: MouseEvent): void {
-    const shell = this.tooltip.style('display', 'inline-block').node() as HTMLDivElement;
+  private measurable(): HTMLDivElement {
+    return this.tooltip
+      .style('left', '0px')
+      .style('top', '0px')
+      .style('display', 'inline-block')
+      .node() as HTMLDivElement;
+  }
+
+  /**
+   * Centers the tooltip horizontally on the cursor and sits it just above. Measured from the real
+   * box rather than fixed offsets so it works for content of any size.
+   */
+  private positionAbove(shell: HTMLDivElement, event: MouseEvent): void {
     this.tooltip
       .style('left', event.pageX - shell.offsetWidth / 2 + 'px')
-      .style('top', event.pageY - shell.offsetHeight - 8 + 'px');
+      .style('top', event.pageY - shell.offsetHeight - PcacTooltipBuilder.GAP + 'px');
+  }
+
+  /**
+   * Places the tooltip diagonally off one corner of `anchor`'s rendered box, so it never covers
+   * the anchor itself (e.g. a point's image). Prefers above-right - the tooltip's bottom-left
+   * corner at the anchor's top-right - and flips each axis independently when the tooltip wouldn't
+   * fit in the viewport that way: to the left when there's no room on the right, below when there's
+   * no room above. When neither side of an axis fits, it takes whichever side has more room.
+   */
+  private positionBeside(shell: HTMLDivElement, anchor: Element): void {
+    const gap = PcacTooltipBuilder.GAP;
+    const box = anchor.getBoundingClientRect();
+    const width = shell.offsetWidth;
+    const height = shell.offsetHeight;
+    // `clientWidth`/`clientHeight` of the root, unlike `innerWidth`/`innerHeight`, exclude scrollbars.
+    const viewport = document.documentElement;
+
+    const right = viewport.clientWidth - box.right - gap;
+    const left = box.left - gap;
+    const above = box.top - gap;
+    const below = viewport.clientHeight - box.bottom - gap;
+
+    const toRight = width <= right || (width > left && right >= left);
+    const toTop = height <= above || (height > below && above >= below);
+
+    const x = toRight ? box.right + gap : box.left - gap - width;
+    const y = toTop ? box.top - gap - height : box.bottom + gap;
+
+    // The rect is in viewport coordinates; the shell is absolutely positioned against the page.
+    this.tooltip
+      .style('left', x + window.scrollX + 'px')
+      .style('top', y + window.scrollY + 'px');
   }
 
   private getBarTipData(data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): string | null {

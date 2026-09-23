@@ -79,3 +79,41 @@ describe('PlaChartBuilder dot hover during the enter transition', () => {
     expect(dot.getAttribute('fill')).toBe('rgb(255, 255, 255)');
   });
 });
+
+describe('PlaChartBuilder dot hover tooltip placement', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [PlaChartEffectsBuilder] });
+    vi.spyOn(TestBed.inject(PcacTransitionService), 'getTransitionDuration').mockReturnValue(0);
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  function hover(pointConfig: PcacPlotChartConfig): { drawn: Element; show: ReturnType<typeof vi.spyOn> } {
+    const show = vi.spyOn(PlaChartBuilder.prototype, 'showTooltip').mockImplementation(() => undefined);
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, pointConfig, PcacLineAreaPlotChartConfigType.Plot);
+    const svg = elm.nativeElement as SVGSVGElement;
+    svg.querySelector('.point')!.dispatchEvent(new MouseEvent('mouseover'));
+    return { drawn: svg.querySelector('.point .dot, .point .dot-image')!, show };
+  }
+
+  // Anchoring to what's drawn (not the cursor, not the group) is what keeps the tooltip off it.
+  it('anchors the tooltip to the dot', () => {
+    const { drawn, show } = hover(config);
+
+    expect(drawn.matches('circle.dot')).toBe(true);
+    expect(show.mock.calls[0][2].anchor).toBe(drawn);
+  });
+
+  it('anchors the tooltip to the image of an image point', () => {
+    const imageConfig: PcacPlotChartConfig = {
+      ...config,
+      data: [{ ...config.data[0], data: [{ ...config.data[0].data[0], image: 'x.png' }] }],
+    };
+    const { drawn, show } = hover(imageConfig);
+
+    expect(drawn.matches('image.dot-image')).toBe(true);
+    expect(show.mock.calls[0][2].anchor).toBe(drawn);
+  });
+});

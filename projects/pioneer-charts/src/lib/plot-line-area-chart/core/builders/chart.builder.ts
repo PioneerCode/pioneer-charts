@@ -572,6 +572,8 @@ export class PlaChartBuilder extends PcacChart {
             coincident: self.coincidentWith(d),
             valueFormat: self.yAxis.format,
             keyFormat: self.xAxis.format,
+            // The dot or image itself rather than the group, so the tooltip clears what's drawn.
+            anchor: select(this).select('.dot, .dot-image').node() as Element | null,
           });
           // No-op for an image point (no circle inside to grow). Its own transition name, so it
           // runs alongside the enter rise rather than cancelling it (see DOT_HOVER_TRANSITION);

@@ -117,9 +117,16 @@ export class PlaChartBuilder extends PcacChart {
     }
     // `?.length`, not a bare truthiness check: PcacLineAreaChartConfig defaults colorOverride to
     // `[]`, and an empty array is truthy - a config built with `new` would otherwise replace the
-    // theme palette with nothing and every series would render with no color at all.
-    if (this.config.colorOverride?.length) {
-      this.colors = this.config.colorOverride;
+    // theme palette with nothing and every series would render with no color at all. Cycled out to
+    // as many entries as `initializeChartState` gave the theme palette, the same way that palette
+    // cycles its own colors, so an override shorter than the data repeats rather than leaving every
+    // series past its end with an `undefined` color (and so no line, dot stroke or range).
+    const override = this.config.colorOverride;
+    if (override?.length) {
+      this.colors = Array.from(
+        { length: Math.max(this.colors.length, override.length) },
+        (_, i) => override[i % override.length],
+      );
     }
 
     this.scales = new PlaChartScalesBuilder().build(this.xAxis, this.yAxis, this.config.data, this.width, this.height);

@@ -80,7 +80,8 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   enableZoomY: boolean = false
 
   /**
-   * Hex color codes to override the default colors
+   * Hex color codes to override the default colors, one per series in order. Repeats from the
+   * start when there are more series than colors, as the default palette does.
    */
   colorOverride: string[] = []
 

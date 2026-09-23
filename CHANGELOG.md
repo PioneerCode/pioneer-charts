@@ -1,344 +1,102 @@
+<a name="22.2.11"></a>
+# [v22.2.11]
+
+### Changed
+  - Line, area and plot chart tooltips now appear beside the hovered point instead of over it,
+    and flip sides to stay on screen.
+
+### Fixed
+  - Tooltips near the right edge of the page could be positioned incorrectly.
+
 <a name="22.2.10"></a>
 # [v22.2.10]
 
 ### Added
-  - Point ranges on the line, area and plot charts. A point that stands for the middle of a range
-    can carry `range: { x?: { min, max }, y?: { min, max } }` on its `PcacData` (`x` is read like
-    the point's `key` for the x axis' format - a number, a date, or an index for the index-based
-    formats), and `pointRange` on the chart config draws it. Off when not set; `{}` takes every
-    default. `style` is `whiskers` (error bars with caps, the default), `box` (a rectangle over
-    both ranges, a thin strip with one) or `fade` (strongest at the value, fading to the edges);
-    `show` is `hover`, `faint` (every range at `faintOpacity`, the hovered one at full strength;
-    the default) or `always`. Ranges sit between the lines/areas and the points on the point's
-    true coordinate (a fanned-out point's stays on its anchor), are clipped to the plot and follow
-    zoom. Each takes its series' color unless `color` is set, applied as
-    `--pcac-point-range-color` so a stylesheet can set it on an ancestor instead. Nothing is
-    labeled on the chart: a custom tooltip reads `point.range`. The Plot Chart docs page has a
-    live demo of every option on all three chart types.
+  - Point ranges on line, area and plot charts: a point can carry a `range`, drawn as whiskers,
+    a box or a fade via the new `pointRange` config.
 
 ### Fixed
-  - Hovering a line, area or plot chart's point while the chart was still animating in stopped
-    its dot partway up from the baseline, below its value, until the next rebuild. The hover's
-    grow/shrink ran as the same (unnamed) d3 transition as the entry's rise, so it cancelled it.
-    They now run under separate names; hover only takes over the entry's size tween.
-  - A plot chart's `pointFanOut` spokes and anchors faded in while the points were still rising in
-    from the baseline, so for the whole entry animation they pointed at where the points were
-    going to be. They now stay hidden until the points have landed, then fade in. Point ranges
-    appear the same way.
+  - Hovering a point while the chart was animating in left the dot stuck below its value.
+  - Plot chart fan-out spokes and anchors now appear after the points finish animating in.
 
 <a name="22.2.6"></a>
 # [v22.2.6]
 
 ### Added
-  - Every axis part now has a color field on `PcacAxisConfig`, each taking any CSS color and
-    applying to that axis only: `labelColor` (the `label`), `subLabelColor` (all three
-    `subLabels`), `tickColor` (the tick marks), `tickLabelColor` (the tick labels, otherwise the
-    page's text color as before), `lineColor` (the axis line) and `gridColor` (that axis's grid
-    lines). Unset, each part keeps its previous color, so nothing changes for an existing config; setting a color never turns a part on - `tickColor` shows only with a
-    `tickSize`, `lineColor` with `showLine`, `gridColor` with the grid drawn. The line/area/plot
-    charts' zoomed axes and grids keep them.
-  - Likewise `spokeColor` and `anchorColor` on `PcacPointFanOutConfig`, for the plot chart's
-    fan-out spokes and anchor dot.
-  - The colors are applied as CSS custom properties on the part's group (`--pcac-axis-label-color`,
-    `--pcac-axis-sub-label-color`, `--pcac-axis-tick-color`, `--pcac-axis-tick-label-color`,
-    `--pcac-axis-line-color`,
-    `--pcac-grid-color`, `--pcac-fan-out-spoke-color`, `--pcac-fan-out-anchor-color`), and the
-    theme's rules read each with its own color as the fallback - so a stylesheet can set the same
-    properties on any ancestor to restyle every chart under it with no config change (a config
-    color, being set on the group itself, still wins). The docs site's Axis Styling page has a
-    picker per color.
+  - Color options for every axis part (labels, ticks, axis line, grid) and for plot chart fan-out
+    spokes and anchors, also settable through CSS custom properties.
 
 <a name="22.2.5"></a>
 # [v22.2.5]
 
 ### Fixed
-  - Zooming a line, area or plot chart with the wheel over a point flickered the chart between
-    two transforms on every tick. The zoom behavior was attached to both the plot group and its
-    hit-target rect, and d3-zoom keeps a transform per element, so once a point slid out from under
-    the cursor the rect's stale transform redrew before the group's real one. It's now attached to
-    the group only; the rect's events bubble up to it.
-  - A point hovered when a zoom or pan begins is now un-hovered (tooltip hidden, dot shrunk back)
-    on the first zoom event. Zoom moves the point, not the cursor, so the browser never sent it a
-    mouseout and the tooltip stayed up until the cursor happened to cross it again.
+  - Wheel-zooming over a point made the chart flicker.
+  - A hovered point's tooltip now hides when a zoom or pan starts.
 
 <a name="22.2.4"></a>
 # [v22.2.4]
 
 ### Fixed
-  - A plot chart's `pointFanOut` ring at the edge of the domain pushed its outermost member a whole
-    ring radius past the axis - e.g. a pair at the bottom-left corner drew its lower point well
-    below the x axis - and the chart grew its margins to make room for it. A ring is now shifted
-    back inside the plot area, as one (members keep their spacing), so no member's center ever
-    sits past an axis: a fanned-out point at the edge hangs over by at most half its image box or
-    dot, exactly as a lone point at that coordinate does. The anchor dot stays on the true
-    coordinate and the spokes reach the moved members; the shift follows the coordinate under
-    zoom, and a group zoomed out of the domain drifts out with it rather than pinning to the edge.
-    The margins now grow for the `pointImage` box only, as before the fan-out existed.
-  - Zooming or panning a line, area or plot chart let a point that had left the plot keep showing
-    past the axis, on any side: the clip-path extends half a `pointImage` box (10px for dots) past
-    the plot so a point centered on an axis is drawn whole, but that same buffer also showed a
-    point whose center was already outside - up to a whole half-image floating beyond the axis,
-    and further still with a fan-out. A point's group is now hidden (`display: none`, so it can't
-    be hovered either) the moment its center leaves the plot area and shown again when it comes
-    back, so half a mark over an axis is the most that ever shows. Fan-out anchors and spokes are
-    clipped to the plot area exactly so a spoke to a hidden member stops at the axis.
-  - A Decimal-format point with a `key` of `0` was positioned as if it had no key at all: drawn at
-    pixel 0 whatever `domainMin` was, and left pinned to the y axis under zoom while everything
-    else panned (`getXFormat()` tested the key for truthiness). `0` is now a coordinate like any
-    other, for positioning and for `pointFanOut`'s coincidence grouping alike.
-  - A `Decimal` x axis's tick labels used a fixed two significant digits, so once zoom narrowed
-    the domain to a few units the ticks rounded onto one another (`10 11 12 12`). The precision
-    now follows the scale's own tick step - `9.5 10 10.5 11` zoomed in, still `0 20 40` or
-    `0.5k 1k 1.5k` on a whole domain, with trailing zeros trimmed.
-  - Lines and areas were clipped with the points' clip-path, whose buffer grows to half the
-    `pointImage` box, so on a line or area chart with images the line itself could run that far
-    past the axes once zoomed. They're now clipped to the plot area (plus 1px, half the line
-    stroke, so a line along the domain's max keeps its full width), as are the fan-out anchors
-    and spokes; only the points keep the buffer.
+  - Fanned-out points at the edge of the chart no longer spill past the axes.
+  - Points, lines and areas no longer show past the axes while zoomed or panned.
+  - Points with an x value of `0` are now positioned correctly.
+  - Decimal x-axis tick labels keep enough precision when zoomed in.
 
 <a name="22.2.3"></a>
 # [v22.2.3]
 
 ### Breaking
-  - `PcacLineAreaChartConfig.enableZoom` is renamed `enableZoomX`, now that it has a y-axis
-    counterpart (below), and now defaults to `false` like it. It still means x-axis zoom only. A
-    config that relied on the old `new`-built default of `true`, or a JSON/object-literal config
-    carrying `enableZoom`, gets no x zoom until it sets `enableZoomX: true`.
+  - `enableZoom` is renamed `enableZoomX` and now defaults to `false`.
 
 ### Added
-  - Line, area and plot charts can zoom along the y axis: `enableZoomY` on `PcacLineAreaChartConfig`
-    (default `false`) zooms and pans the y axis the way `enableZoomX` does the x axis, with the y axis
-    and its horizontal grid redrawn to follow, and the hover crosshair's value read off the zoomed
-    scale. The two are independent - either or both can be on; with only one, the other axis stays
-    put during a gesture. The docs site's Line Chart zoom demo now has both enabled.
-  - Plot charts can spread out points that share a coordinate. Set `pointFanOut` on
-    `PcacPlotChartConfig` (`{}` for the defaults) and each group of coincident points is placed
-    evenly around a ring on their shared coordinate - a pair straight up and down, larger groups
-    clockwise from the top - sized so neighbors sit `gap` px apart (or at a fixed `radius`), with
-    an anchor dot and spokes marking the true value (`showAnchor`). Previously such points were
-    drawn on top of one another, leaving only the last series' visible and hoverable. The offset
-    is applied inside each point's group, so zoom is unaffected, and the chart reserves edge space
-    for the fan-out the same way it does for point images. See `PcacPointFanOutConfig`.
-  - The tooltip context (`PcacTooltipContext`) gains `coincident`: every other point drawn at the
-    hovered point's coordinate, each with its own `data` / `parent` / `index` / `parentIndex`, so a
-    template can list who else is there. Set by the line, area and plot charts whether or not
-    `pointFanOut` is on; empty elsewhere. `PcacTooltipOptions` takes it as an optional field, and
-    `PcacTooltipCoincident` is exported for typing.
-  - The docs site's Plot Chart page demonstrates both, with a tooltip template that lists the
-    other series at a fanned-out point.
+  - Y-axis zoom on line, area and plot charts (`enableZoomY`).
+  - Plot charts can spread out points that share a coordinate (`pointFanOut`).
+  - Tooltip templates receive `coincident`: the other points at the hovered point's coordinate.
 
 <a name="22.2.1"></a>
 # [v22.2.1]
 
 ### Fixed
-  - Line, area and plot chart point images at the edge of the domain (the top of the y range, or
-    either end of the x range) were cut off by the `<svg>` whenever the image box was bigger than
-    the chart's default margins. The margins now grow to at least half the `pointImage` box on
-    every side when any point has an `image`, with the vertical growth taken out of the plot area
-    so the chart's total height stays what `height` configured. `PcacChart` gains a
-    `reserveEdgeSpace()` helper for this.
-  - Zooming a line, area or plot chart and then zooming all the way back out left the chart
-    shifted right and down by half its margins - the x domain's min no longer met the y axis and
-    its max sat past the right edge. D3's zoom viewport defaulted to the whole `<svg>` (plot plus
-    margins) while the translatable area was the plot, so the first gesture centered one inside
-    the other; the viewport is now the plot area too.
+  - Point images at the edge of the chart are no longer cut off.
+  - Zooming all the way back out no longer leaves the chart shifted.
 
 <a name="22.2.0"></a>
 # [v22.2.0]
 
-### Fixed
-  - Vertical bar charts with `heightFull` drew their y axis and grid at the configured `height`
-    while the bars stretched to the filled height, leaving every bar hanging below the zero line.
-  - Bar charts with a `colorOverride` reversed the consumer's own `colors` array in place on every
-    build, so the palette flipped back and forth on each resize.
-  - Horizontal bar charts double-counted their measured label margin, leaving the plot area
-    narrower than the container allowed, and narrower still after the first resize.
-  - Area charts now honor a series' `hide` flag; previously the dots disappeared but the fill
-    stayed painted.
-  - Vertical bar charts with `hideAxis` no longer modify the consumer's `config.height`, and all
-    charts restore their default margins on every build - so turning `hideAxis` back off no
-    longer draws the axes into zero-width margins.
-  - The legend keeps keyboard focus on an item after toggling it with Enter/Space.
-  - `(dotClicked)` now fires on `<pcac-line-chart>` and `<pcac-area-chart>`; only the plot chart
-    was forwarding it.
-  - Horizontal bar chart grid lines follow `numberOfTicks` like the axis does, instead of a fixed
-    five.
-  - Line/area chart hover effects no longer read the wrong series' path when an empty series
-    precedes a non-empty one.
-  - Fahrenheit tick labels on the x axis now read ` F`, matching the y axis, instead of `f`.
-  - The docs site footer now reads the library version from its package.json instead of a
-    hand-maintained (and already stale) literal.
-  - The docs site is now usable on mobile: navigation collapses into a toggleable drawer, and the
-    header no longer overlaps at narrow widths.
-  - "ON THIS PAGE" links on the docs site now actually scroll to the right section, including when
-    opening a link directly (deep-linking) - and only the page content scrolls, not the whole page.
-  - Charts that mount while already holding data (e.g. behind a loading spinner) now render
-    correctly instead of staying blank.
-  - Fixed a rare double-draw on initial page load that could restart a chart's entry animation.
-  - Fixed hover effects on line/area/plot charts bleeding between multiple charts on the same page.
-  - Fixed a crash when hovering an area chart with hover effects enabled.
-  - Fixed horizontal bar chart click events always reporting empty data.
-  - Fixed a crash and a non-working hover-darken effect on horizontal bar charts.
-  - Fixed line/area/plot chart dots at the very start or end of the chart appearing cut in half.
-  - Fixed line/area/plot charts rendering every series with no color when their config was
-    created with `new` (the default empty `colorOverride` was replacing the theme palette).
-  - Fixed line/area/plot chart dots on every series after the first jumping to the wrong x
-    position when zooming a chart with the default (index-based) x-axis format.
-  - The legend is now keyboard accessible: items can be focused and toggled with Enter or Space,
-    and report their checked state to screen readers. Previously they responded only to a mouse.
-  - Removed an invisible, broken border style in the docs site footer (leftover from an unused
-    dependency).
-  - Updated the published README and docs site quick-start example, which were out of date and no
-    longer matched how the library is actually used.
-  - Deep imports of the library's theme (e.g. `@pioneer-code/pioneer-charts/themes/pioneer-charts.css`
-    or `.../scss/pioneer-charts`) failed to resolve under some build tools even though the files
-    existed in the published package, because the package's module resolution metadata never
-    listed them.
-  - Updated the docs site's Theme page, which showed a broken Sass import path and a color-override
-    example that didn't actually work (see Added).
-  - The docs site's single-bar demo configs asked for a `"Percentage"` format, which never matched
-    the enum's lowercase `'percentage'` value; they now do, so those demos show `%` ticks and
-    tooltip values as intended.
-  - The docs site's footer no longer highlights the wrong section (e.g. showing "Home" as active
-    while on a documentation page) after navigating by any means other than clicking a footer link
-    itself.
-
 ### Breaking
-  - The chart-wide `numberOfTicks`, `hideAxis` and `hideGrid` config fields on the bar and
-    line/area/plot charts are gone, replaced by the per-axis `xAxis` / `yAxis` objects (see Added).
-    Migration:
+  - Chart-wide axis settings moved into per-axis `xAxis` / `yAxis` objects:
 
     | Before | After |
     | --- | --- |
-    | `numberOfTicks: n` | `xAxis: { ticks: n }, yAxis: { ticks: n }` (or just the axis that needs it) |
-    | `hideGrid: true` | `yAxis: { showGrid: false }` on vertical bar and line/area/plot charts; `xAxis: { showGrid: false }` on the horizontal bar chart |
-    | `hideAxis: true` on a vertical bar chart | `yAxis: { hide: true }` (it only ever hid the y axis); add `xAxis: { hide: true }` if there were no group labels to keep |
-    | `hideAxis: true` on a horizontal bar chart | `xAxis: { hide: true }` (it only ever hid the x axis) |
-    | `hideAxis: true` on a line/area/plot chart | `xAxis: { hide: true }, yAxis: { hide: true }` |
+    | `numberOfTicks` | `xAxis` / `yAxis`: `ticks` |
+    | `hideGrid` | `showGrid: false` on the axis that drew the grid |
+    | `hideAxis` | `hide: true` on the affected axis |
+    | `domainMax`, `tickFormat` (bar charts) | `domainMax`, `format` on the value axis |
+    | `xFormat`, `xDomainMin`, `xDomainMax`, `y…` (line/area/plot) | `format`, `domainMin`, `domainMax` on `xAxis` / `yAxis` |
 
-    Hiding is now per axis and works the same way on every chart: the hidden axis's margins (left
-    and top for the y axis, bottom and right for the x axis) go to the plot area, so the chart's
-    overall size is unchanged. The chart configs now extend a new `PcacAxisChartConfig` base
-    (`PcacChartConfig` + `xAxis`/`yAxis`); `IPcacAxisBuilderConfig` takes resolved `xAxis`/`yAxis`
-    in place of its old per-field inputs, for anyone calling `PcacAxisBuilder` directly.
-  - Likewise, the chart-level format and domain fields moved into the same per-axis objects, so
-    every axis chart now spells them the same way: `PcacAxisConfig` gained `format`, `domainMin`
-    and `domainMax` (see Added). Migration:
-
-    | Before | After |
-    | --- | --- |
-    | `domainMax: n` on a vertical bar chart | `yAxis: { domainMax: n }` |
-    | `domainMax: n` on a horizontal bar chart | `xAxis: { domainMax: n }` |
-    | `tickFormat: f` on a vertical bar chart | `yAxis: { format: f }` |
-    | `tickFormat: f` on a horizontal bar chart | `xAxis: { format: f }` |
-    | `xFormat: f`, `xDomainMin: a`, `xDomainMax: b` on a line/area/plot chart | `xAxis: { format: f, domainMin: a, domainMax: b }` |
-    | `yFormat: f`, `yDomainMin: a`, `yDomainMax: b` on a line/area/plot chart | `yAxis: { format: f, domainMin: a, domainMax: b }` |
-
-    Two defaults changed shape but not effect: the bar charts' `domainMax` (previously required
-    on an object literal) now defaults to 100 when omitted, and the line/area/plot charts'
-    formats default to `None` rather than `DatasetLength`, which those charts treat identically
-    (index-based x positions, unformatted ticks). `PcacAxisBuilder`'s config lost its
-    `xFormat`/`yFormat` fields (it reads `xAxis.format`/`yAxis.format`), and
-    `PlaChartScalesBuilder.build()` now takes the resolved axes and data instead of a config.
-  - `PcacPieChartConfig.numberOfTicks` was removed; the pie chart has no axes and never read it.
-
-### Changed
-  - **Breaking:** `isStacked` bar charts now actually stack. Each bar's `value` is its own segment
-    and segments are placed end to end in data order, so a group's total is the sum of its values
-    and each bar's tooltip reports that bar's own value. Previously every bar was drawn from the
-    baseline at its own value and merely overlapped, which only looked stacked if the data was
-    pre-accumulated and sorted highest-to-lowest - consumers doing that should switch to passing
-    per-segment values (the docs site's stacked mock data has been converted the same way). The
-    docs also described this option under the wrong name, `isGroup`.
-  - Line/area charts with `enableZoom` now keep their lines on their dots when zoomed on a
-    `DateTime` or `Decimal` x axis; the lines used to be repositioned by index regardless of the
-    x format.
-  - Tooltips are now centered above the cursor based on their rendered size, instead of at a fixed
-    offset that assumed the default content's dimensions. The default tooltip's styling moved from
-    `.pcac-d3-tooltip` (now just the positioning shell) to a new `.pcac-d3-tooltip-default` class,
-    so that a custom `pcacTooltip` template inherits none of it - a consumer overriding the default
-    look in CSS should target the new class. Two chart components (horizontal bar and line/area/plot)
-    also carried their own copy of the tooltip rule in their global styles, which overrode the
-    theme's - and any `$gray-800`/`$white` override of it - whenever one of those charts was on the
-    page; those copies are gone, so the theme's tooltip style now applies consistently.
-  - **Breaking:** removed the unused, undocumented `onResize()` method from all chart components —
-    charts now handle resizing automatically on their own.
-  - The docs site no longer depends on zone.js, in line with modern Angular; no changes were needed
-    in the chart library itself.
-  - Removed an unused dependency (Bootstrap) from the project.
-  - Simplified how the docs site's styles reference the library's shared theme colors, and removed
-    some dead CSS, including an unused color-map variable that was left over from the same
-    abandoned Bootstrap integration.
+  - Stacked bar charts now truly stack: each bar's `value` is its own segment.
+  - Removed the unused `onResize()` method from chart components, and the unused
+    `numberOfTicks` on the pie chart.
+  - The default tooltip's styling moved to a new `.pcac-d3-tooltip-default` class.
 
 ### Added
-  - Per-axis configuration: the bar (vertical and horizontal) and line/area/plot chart configs now
-    take `xAxis` and `yAxis`, each a `PcacAxisConfig` (`{ hide, showGrid, ticks, tickSize,
-    showLine, label, subLabels }`, every field optional). Five of those are new:
-    - `showGrid` turns the grid lines from that axis's ticks on or off - so every chart can now
-      draw a grid on both axes (vertical lines from the x axis, horizontal from the y), including
-      through each category of a category axis. Left unset, a chart draws the one grid it always
-      has, and no other. On line/area/plot charts the x axis's grid follows zoom.
-    - `tickSize` draws tick marks along that axis at the given length in pixels. Charts have never
-      shown tick marks (the theme hides them), and still don't unless this is set - so existing
-      charts are unaffected; `0` keeps them off but pulls the labels in. Labels follow the marks
-      and the chart's margins grow to match, so the plot area shrinks to fit them; the axis line's
-      end-caps are unaffected.
-    - `showLine` draws a solid line along that axis (D3's domain path). Off by default; independent
-      of the tick marks. Axes are now drawn above the chart's content (bars, lines, areas) so the
-      line isn't covered by anything sitting at the axis, with the line/area/plot charts' dots
-      kept above the axes so a point on the axis stays whole.
-    - `label` titles the axis: drawn centered along it at the chart's edge (below the x axis's
-      tick labels; rotated to read bottom-to-top left of the y axis's), with the margin growing
-      18px to fit it. Styled by a new `.pcac-axis-label` theme rule.
-    - `subLabels: { min?, mid?, max? }` places up to three short labels by position along the
-      axis - start, center, end - in their own row between the tick labels and the `label`,
-      anchored inside the axis's span (rotated along the y axis). The margin grows 16px while any
-      is set. Styled by a new `.pcac-axis-sub-label` theme rule.
+  - Per-axis options: grid lines, tick marks, axis line, axis titles and min/mid/max sub-labels.
+  - Custom tooltips via `<ng-template pcacTooltip>` on every chart.
+  - Images in place of dots on line, area and plot charts (`PcacData.image`, `pointImage`).
+  - `heightFull` option to fill the container's height.
+  - Charts resize automatically when their container changes size.
+  - The theme's Sass colors can be overridden from a consuming app.
 
-    Both take the theme's `$gray-900` via new `.pcac-axis-tick-marks .tick line` and
-    `.pcac-axis-line .domain` rules. The docs site has a new "Axis Styling" guide with a live demo.
-    The other three fields replace `numberOfTicks`, `hideAxis` and `hideGrid` - see Breaking.
-  - `PcacAxisConfig` also carries the axis's `format` (a `PcacFormatEnum`, default `None`) and
-    `domainMin`/`domainMax` (defaults 0 and 100), replacing the bar charts' `domainMax`/`tickFormat`
-    and the line/area/plot charts' `xFormat`/`yFormat`/`xDomainMin`/`xDomainMax`/`yDomainMin`/
-    `yDomainMax` - see Breaking for the mapping. Each does what its chart-level predecessor did:
-    on a bar chart only the value axis reads them, and only `domainMax` (bars grow from 0); on the
-    line/area/plot charts `xAxis.format` still decides how a point's `key` becomes an x position,
-    with `domainMin`/`domainMax` read under `Decimal` and `DateTime`.
-  - Custom tooltips: project an `<ng-template pcacTooltip>` into any chart (bar, line, area, plot,
-    pie) and it is rendered in place of the default key/value tooltip, as a real Angular template
-    with the hovered `PcacData` bound in (`let-point`), plus its `parent` group/series and an
-    `isThreshold` flag for bar chart threshold markers. The template owns the whole box: the
-    library only positions it and applies none of its own styling. Import `PcacTooltipDirective`
-    to use it; see the docs site's new "Custom Tooltip" guide.
-  - The tooltip template context now also carries `index` (the hovered datum's position in
-    `parent.data`, or in the top-level `data` for a pie slice) and `parentIndex` (the parent's
-    position in `data`, `null` when there is no parent). Since charts never reorder `data`, a
-    template can use them to reach back into whatever collection the `PcacData` was built from
-    (`items[parentIndex][index]`) and show fields the chart itself knows nothing about. For
-    builders, `PcacTooltipOptions.index` is required and `parentIndex` is optional.
-  - Line, area and plot charts can now draw an image at a data point instead of its dot: set
-    `image` (a URL or data URI) on the point's `PcacData`, and optionally `pointImage: { maxWidth,
-    maxHeight }` on the chart config to size it (defaults to 16 x 16). The image is scaled to fit
-    that box with its aspect ratio preserved, is centered on the point, animates in with the other
-    points, follows zoom, and gets the same tooltip and `(dotClicked)` behavior as a dot. Points
-    without an `image` keep their dot, so the two can be mixed within a series.
-  - New `heightFull` chart config option: when true, `height` becomes a *minimum* height and the
-    chart grows to fill its container whenever that container is taller, staying filled as the
-    container resizes. Give the element wrapping the chart a definite height and turn it on. Not
-    supported on the pie chart, where `height` sizes the radius rather than a drawing area.
-  - Charts now automatically resize themselves when their container's size changes, not just on
-    browser window resize.
-  - The library's theme colors can now actually be overridden from a consuming app's own Sass, as
-    the docs already claimed but didn't fully support.
+### Fixed
+  - Many chart fixes, including bar charts with `heightFull`, `colorOverride` and `hideAxis`,
+    area chart `hide`, `(dotClicked)` on line and area charts, zooming on date/decimal axes, charts
+    that mount while already holding data, and hover effects across multiple charts.
+  - Legend items are now keyboard accessible.
+  - Deep imports of the theme (`/themes/*`, `/scss/*`) now resolve.
+  - Docs site fixes for mobile layout, page navigation and out-of-date examples.
 
 ### Internal
-  - Added linting (angular-eslint) with a config tuned for this codebase's D3 usage, plus a CI
-    workflow that runs lint, tests and both builds on every push and pull request - previously
-    nothing was enforced automatically.
-  - General code cleanup: stronger typing across chart builders, simplified change-detection
-    handling, more consistent internal structure between chart types, and removal of some unused
-    code.
+  - Added linting and CI; general code cleanup; the docs site no longer uses zone.js or Bootstrap.
 
 <a name="1.0.1"></a>
 # [v1.0.0](https://github.com/PioneerCode/pioneer-charts/releases/tag/1.0.1) (2019-06-13)

@@ -22,7 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/PioneerCode/pioneer-charts.git"
   },
-  "version": "22.2.11",
+  "version": "22.2.12",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^22.1.0",

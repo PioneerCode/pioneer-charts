@@ -1,3 +1,10 @@
+<a name="22.2.12"></a>
+# [v22.2.12]
+
+### Fixed
+  - Line, area and plot charts given fewer `colorOverride` colors than series now repeat them,
+    as the default palette does, instead of drawing the extra series with no color.
+
 <a name="22.2.11"></a>
 # [v22.2.11]
 

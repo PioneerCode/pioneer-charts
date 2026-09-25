@@ -1,6 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacChart } from './chart';
+import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacAxisChartConfig, PcacChartConfig, PcacFormatEnum } from './chart.model';
 
 /**
@@ -403,6 +404,40 @@ describe('PcacChart', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { hide: true }, yAxis: { hide: true, tickSize: 30 } }), 'y');
       chart.initializeAxisState(axisConfig(), 'y');
       expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
+    });
+  });
+
+  // A rebuild or destroy removes the hovered element, which gets no mouseout to close the tooltip.
+  describe('tooltip release', () => {
+    const datum = { key: 'k', value: 1, hide: false, data: [] };
+    let tooltip: PcacTooltipBuilder;
+    let shell: HTMLDivElement;
+
+    beforeEach(() => {
+      tooltip = TestBed.inject(PcacTooltipBuilder);
+      shell = tooltip.tooltip.node() as HTMLDivElement;
+    });
+
+    afterEach(() => tooltip.hideTooltip());
+
+    it('hides the chart\'s own tooltip when it rebuilds or is destroyed', () => {
+      chart.showTooltip(new MouseEvent('mousemove'), datum, { index: 0 });
+      chart.initializeChartState(chartElm(800), config());
+      expect(shell.style.display).toBe('none');
+
+      chart.showTooltip(new MouseEvent('mousemove'), datum, { index: 0 });
+      chart.ngOnDestroy();
+      expect(shell.style.display).toBe('none');
+    });
+
+    it('leaves another chart\'s tooltip open', () => {
+      const other = TestBed.runInInjectionContext(() => new PcacChart());
+      other.showTooltip(new MouseEvent('mousemove'), datum, { index: 0 });
+
+      chart.initializeChartState(chartElm(800), config());
+      chart.ngOnDestroy();
+
+      expect(shell.style.display).toBe('inline-block');
     });
   });
 });

@@ -4,7 +4,7 @@ import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
 import { PcacGridBuilder } from './grid.builder';
 import { PcacColorService } from './color.service';
 import { select } from 'd3-selection';
-import { ElementRef, TemplateRef, inject } from '@angular/core';
+import { ElementRef, Injectable, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { PCAC_AXIS_LABEL_SPACE, PCAC_AXIS_SUB_LABEL_SPACE, PcacAxisChartConfig, PcacChartConfig, PcacChartMargin, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, axisLabelSpace, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
@@ -33,7 +33,10 @@ export interface PcacTooltipOptions {
 }
 
 
-export class PcacChart {
+// Decorated only so Angular accepts its `ngOnDestroy` hook, which the builders extending it inherit;
+// never provided itself - each builder is provided by its own chart component.
+@Injectable()
+export class PcacChart implements OnDestroy {
   axisBuilder = inject(PcacAxisBuilder);
   gridBuilder = inject(PcacGridBuilder);
   transitionService = inject(PcacTransitionService);
@@ -298,12 +301,23 @@ export class PcacChart {
       },
       options.valueFormat,
       options.keyFormat,
-      options.anchor
+      options.anchor,
+      this
     );
   }
 
+  /** Hides the tooltip if this chart is the one showing it; another chart's is left alone. */
   hideTooltip(): void {
-    this.tooltipBuilder.hideTooltip();
+    this.tooltipBuilder.hideTooltip(this);
+  }
+
+  /**
+   * Builders are provided per chart component, so Angular calls this when the component is
+   * destroyed. A chart removed while hovered (an `@if` flip, a route change) gets no `mouseout`,
+   * so without this its tooltip - and any consumer template view in it - would stay on screen.
+   */
+  ngOnDestroy(): void {
+    this.hideTooltip();
   }
 
   /**
@@ -324,10 +338,13 @@ export class PcacChart {
    * the chart (e.g. a filter that now matches nothing).
    */
   clearChart(chartElm: ElementRef): void {
+    this.hideTooltip();
     select(chartElm.nativeElement).select('g').remove();
   }
 
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
+    // The rebuild removes the hovered element, which gets no mouseout to close its tooltip.
+    this.hideTooltip();
     select(chartElm.nativeElement).select('g').remove();
     const container = chartElm.nativeElement.parentNode as HTMLElement;
     const containerWidth = container.clientWidth;

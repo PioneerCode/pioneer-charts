@@ -39,6 +39,13 @@ export class PcacTooltipBuilder implements OnDestroy {
   private view: EmbeddedViewRef<PcacTooltipContext> | null = null;
   private viewTemplate: TemplateRef<PcacTooltipContext> | null = null;
 
+  /**
+   * Whatever showed the tooltip last (a chart passes itself), so `hideTooltip(owner)` from any
+   * other chart leaves it alone. The element is shared by every chart on the page: without this, a
+   * chart rebuilding or being destroyed would close the tooltip another chart is showing.
+   */
+  private owner: object | null = null;
+
   /** Space left between the tooltip and whatever it's placed next to (the cursor or an anchor). */
   static readonly GAP = 8;
 
@@ -46,6 +53,7 @@ export class PcacTooltipBuilder implements OnDestroy {
    * Shows the tooltip for a hovered datum. Renders `template` when the chart has one projected;
    * otherwise falls back to the default key/value content, formatted per `valueFormat`/`keyFormat`.
    * Placed beside `anchor` when one is given (see `positionBeside`), else above the event's position.
+   * `owner` is what's showing it (see `hideTooltip`).
    */
   showTooltip(
     event: MouseEvent,
@@ -53,8 +61,10 @@ export class PcacTooltipBuilder implements OnDestroy {
     context: PcacTooltipContext,
     valueFormat?: PcacFormatEnum,
     keyFormat?: PcacFormatEnum,
-    anchor?: Element | null
+    anchor?: Element | null,
+    owner?: object
   ): void {
+    this.owner = owner ?? null;
     if (template) {
       this.renderTemplate(template, context);
     } else {
@@ -76,7 +86,16 @@ export class PcacTooltipBuilder implements OnDestroy {
     this.showTooltip(event, undefined, { $implicit: data, parent: null, isThreshold: false, index: 0, parentIndex: null, coincident: [] }, valueFormat, keyFormat);
   }
 
-  hideTooltip(): void {
+  /**
+   * Hides the tooltip. Given an `owner`, only if that owner is the one showing it - so a chart can
+   * release the tooltip on rebuild or destroy without closing one another chart has open. Without
+   * an owner it always hides.
+   */
+  hideTooltip(owner?: object): void {
+    if (owner !== undefined && owner !== this.owner) {
+      return;
+    }
+    this.owner = null;
     if (!this.shell) {
       // Never shown, so there's nothing to hide - and no reason to create the element just to.
       return;

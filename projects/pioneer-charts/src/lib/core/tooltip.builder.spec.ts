@@ -272,6 +272,35 @@ describe('PcacTooltipBuilder', () => {
     });
   });
 
+  describe('owner', () => {
+    const a = {};
+    const b = {};
+    const show = (owner?: object) =>
+      builder.showTooltip(mouse(), undefined, context(datum('Jan', 1)), undefined, undefined, undefined, owner);
+
+    it('is only hidden by the owner showing it', () => {
+      show(a);
+      builder.hideTooltip(b);
+      expect(shell.style.display).toBe('inline-block');
+
+      builder.hideTooltip(a);
+      expect(shell.style.display).toBe('none');
+    });
+
+    it('is always hidden when no owner is given', () => {
+      show(a);
+      builder.hideTooltip();
+      expect(shell.style.display).toBe('none');
+    });
+
+    it('belongs to whoever showed it last', () => {
+      show(a);
+      show(b);
+      builder.hideTooltip(a);
+      expect(shell.style.display).toBe('inline-block');
+    });
+  });
+
   describe('shell lifecycle', () => {
     it('touches the page only once a tooltip is first shown', () => {
       const count = () => document.querySelectorAll('.pcac-d3-tooltip').length;

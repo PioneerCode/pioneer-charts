@@ -68,6 +68,7 @@ describe('PcacTooltipBuilder', () => {
       builder.showTooltip(mouse(), undefined, context(datum('Jan', 42)));
 
       expect(shell.classList.contains('pcac-d3-tooltip')).toBe(true);
+      expect(shell.getAttribute('role')).toBe('tooltip');
       expect(shell.classList.contains('pcac-d3-tooltip-default')).toBe(true);
       expect(shell.style.display).toBe('inline-block');
       expect(shell.innerHTML).toBe('Jan<br>42');

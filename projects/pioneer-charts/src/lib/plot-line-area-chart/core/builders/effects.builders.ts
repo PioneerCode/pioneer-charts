@@ -1,10 +1,9 @@
 import { Selection, BaseType } from 'd3-selection';
-import { ScaleLinear } from 'd3-scale';
+import { ScaleLinear, ScaleTime } from 'd3-scale';
 import { PcacData, PcacFormatEnum } from '../../../core';
 import { axisTickFormat } from '../../../core/tick-format';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
-import { ScaleTime } from 'd3';
 
 export interface IPlaChartEffectsBuilderConfig {
   colors: string[];

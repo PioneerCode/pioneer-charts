@@ -1,31 +1,20 @@
 /**
  * Build pre-built theme
+ *
+ * Synchronous on purpose: a failed compile or write throws, which fails `build:lib` - so a
+ * release can't go out missing its theme CSS. (The old callback-based writes ignored their
+ * errors and the build carried on.)
  */
 import * as sass from 'sass';
-import { existsSync, mkdir, writeFile } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
+
+const source = './projects/pioneer-charts/src/lib/pioneer-charts.scss';
 const outputDirectory = './dist/pioneer-charts/themes';
 
-const result = sass.compile('./projects/pioneer-charts/src/lib/pioneer-charts.scss');
-if (existsSync(outputDirectory)) {
-  _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
-} else {
-  mkdir(outputDirectory, function () {
-    _writeFile(result.css.toString(), outputDirectory + "/pioneer-charts.css");
-  });
-}
+mkdirSync(outputDirectory, { recursive: true });
 
-const resultMin = sass.compile('./projects/pioneer-charts/src/lib/pioneer-charts.scss', { style: "compressed" });
-if (existsSync(outputDirectory)) {
-  _writeFile(resultMin.css.toString(), outputDirectory + "/pioneer-charts.min.css");
-} else {
-  mkdir(outputDirectory, function () {
-    _writeFile(resultMin.css.toString(), outputDirectory + "/pioneer-charts.min.css");
-  });
-}
-
-
-function _writeFile(data, dir) {
-  return writeFile(dir, data, function () {
-    console.log('Pioneer Charts: ' + dir + ' theme was saved!');
-  });
+for (const [file, style] of [['pioneer-charts.css', 'expanded'], ['pioneer-charts.min.css', 'compressed']]) {
+  const path = `${outputDirectory}/${file}`;
+  writeFileSync(path, sass.compile(source, { style }).css);
+  console.log('Pioneer Charts: ' + path + ' theme was saved!');
 }

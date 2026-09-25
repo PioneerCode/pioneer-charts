@@ -1,4 +1,4 @@
-import { ScaleLinear, ScaleTime } from "d3";
+import { ScaleLinear, ScaleTime } from "d3-scale";
 import { PcacData, PcacFormatEnum } from "../../core";
 
 /**

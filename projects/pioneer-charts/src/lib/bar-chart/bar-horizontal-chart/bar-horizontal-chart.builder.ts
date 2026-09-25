@@ -36,6 +36,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private config!: PcacBarHorizontalChartConfig;
   barClicked$ = this.barClickedSource.asObservable();
 
+  protected override chartTypeLabel = 'Bar chart';
+
   buildChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
     if (!config?.data?.length) {
       this.clearChart(chartElm);

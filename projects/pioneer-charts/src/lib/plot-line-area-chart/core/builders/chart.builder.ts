@@ -2,6 +2,7 @@ import { ElementRef, Injectable, inject } from '@angular/core';
 import { select, Selection } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
+import { ZoomBehavior } from 'd3-zoom';
 // Side effect only: adds .transition() to d3-selection's Selection, which the entry animations use.
 import 'd3-transition';
 import { Subject } from 'rxjs';
@@ -44,13 +45,20 @@ const DOT_HOVER_TRANSITION = 'pcac-dot-hover';
 /** See `revealAfterEntry`. */
 const REVEAL_TRANSITION = 'pcac-reveal';
 
+/** Each chart type's accessible name when its config gives no `ariaLabel`. */
+const CHART_TYPE_LABELS: Record<PcacLineAreaPlotChartConfigType, string> = {
+  [PcacLineAreaPlotChartConfigType.Line]: 'Line chart',
+  [PcacLineAreaPlotChartConfigType.Area]: 'Area chart',
+  [PcacLineAreaPlotChartConfigType.Plot]: 'Plot chart',
+};
+
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
   private effectsBuilder = inject(PlaChartEffectsBuilder);
   private scales!: PlaChartScales;
   private lineGenerator!: Line<PcacData>;
   private areaGenerator!: Area<PcacData>;
-  private zoomBehavior!: d3.ZoomBehavior<Element, unknown>;
+  private zoomBehavior!: ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
   private clipPathId!: string; // <-- added
@@ -112,6 +120,7 @@ export class PlaChartBuilder extends PcacChart {
 
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8);
+    this.chartTypeLabel = CHART_TYPE_LABELS[type];
     this.resolvePointLayout(type);
     this.reservePointSpace();
     this.pointRange = this.config.pointRange ? { ...new PcacPointRangeConfig(), ...this.config.pointRange } : null;

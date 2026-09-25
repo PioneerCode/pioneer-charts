@@ -1,4 +1,4 @@
-import { zoom } from "d3";
+import { D3ZoomEvent, ZoomBehavior, zoom } from "d3-zoom";
 
 /**
  * `extent` (the viewport the gesture happens in) is set to the plot area explicitly rather than
@@ -8,7 +8,7 @@ import { zoom } from "d3";
  * left the chart shifted right/down by half the margins: x domain min detached from the y axis,
  * domain max pushed off the right edge.
  */
-export function buildZoomBehavior(width: number, height: number, zoomedFn: (event: d3.D3ZoomEvent<Element, unknown>) => void): d3.ZoomBehavior<Element, unknown> {
+export function buildZoomBehavior(width: number, height: number, zoomedFn: (event: D3ZoomEvent<Element, unknown>) => void): ZoomBehavior<Element, unknown> {
   return zoom()
     .scaleExtent([1, 10])
     .extent([[0, 0], [width, height]])

@@ -198,4 +198,11 @@ describe('PieChartBuilder data handling', () => {
     expect(shownFill).not.toBe('');
     expect(arcs[2].style.fill).toBe(shownFill);
   });
+
+  it('names itself a pie chart for screen readers when no ariaLabel is given', () => {
+    const elm = chartElm();
+    builder.buildChart(elm, dataConfig());
+
+    expect(elm.nativeElement.getAttribute('aria-label')).toBe('Pie chart');
+  });
 });

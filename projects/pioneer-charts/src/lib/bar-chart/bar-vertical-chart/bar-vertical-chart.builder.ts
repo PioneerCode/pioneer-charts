@@ -39,6 +39,8 @@ export class BarVerticalChartBuilder extends PcacChart {
 
 
 
+  protected override chartTypeLabel = 'Bar chart';
+
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
     if (!config?.data?.length) {
       this.clearChart(chartElm);

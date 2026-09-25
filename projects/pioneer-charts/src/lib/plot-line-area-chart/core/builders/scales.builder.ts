@@ -1,5 +1,5 @@
 
-import { scaleTime } from 'd3';
+import { scaleTime } from 'd3-scale';
 import { ScaleLinear, scaleLinear, ScaleTime } from 'd3-scale';
 
 

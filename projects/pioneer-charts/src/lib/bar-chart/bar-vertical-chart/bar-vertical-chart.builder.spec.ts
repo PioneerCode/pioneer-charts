@@ -147,10 +147,25 @@ describe('BarVerticalChartBuilder', () => {
     });
   });
 
-  // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
-  // every rebuild (every container resize) flipped their palette back and forth.
-  describe('colorOverride', () => {
-    it('applies the override reversed without mutating the consumer array, on repeated builds', () => {
+  describe('colors', () => {
+    const fills = (elm: ElementRef) =>
+      Array.from((elm.nativeElement as SVGElement).querySelectorAll<SVGRectElement>('rect.pcac-bar'))
+        .map((rect) => rect.style.fill);
+
+    // Regression test: the class default `colors: []` is truthy, and was taken as an override -
+    // leaving every bar with no fill (drawn black) for any config built with `new`.
+    it('uses the theme palette when the override is the empty default', () => {
+      const elm = chartElm();
+      builder.buildChart(elm, config());
+
+      expect(builder.colors.length).toBeGreaterThan(0);
+      expect(fills(elm).every((fill) => fill !== '')).toBe(true);
+    });
+
+    // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
+    // every rebuild (every container resize) flipped their palette back and forth. The override
+    // also used to be applied reversed, against the docs; it now runs in order.
+    it('applies the override in order without mutating the consumer array, on repeated builds', () => {
       const colors = ['#111', '#222', '#333'];
       const cfg = config({ colorOverride: { colors } });
 
@@ -158,7 +173,29 @@ describe('BarVerticalChartBuilder', () => {
       builder.buildChart(chartElm(), cfg);
 
       expect(colors).toEqual(['#111', '#222', '#333']);
-      expect(builder.colors).toEqual(['#333', '#222', '#111']);
+      expect(builder.colors).toEqual(['#111', '#222', '#333']);
+    });
+
+    it('repeats an override shorter than the series', () => {
+      builder.buildChart(chartElm(), config({ colorOverride: { colors: ['#111'] } }));
+
+      expect(builder.colors).toEqual(['#111', '#111']);
+    });
+
+    // Regression test: the palette was sized from the first group alone, so a later, larger group's
+    // extra bars got an `undefined` color.
+    it('colors every bar when groups have different numbers of series', () => {
+      const elm = chartElm();
+      builder.buildChart(elm, config({
+        data: [
+          { key: 'A', value: null, hide: false, data: [{ key: 'a', value: 10, hide: false, data: [] }] },
+          { key: 'B', value: null, hide: false, data: ['a', 'b', 'c'].map((key) => ({ key, value: 10, hide: false, data: [] })) },
+        ],
+      }));
+
+      expect(builder.colors.length).toBe(3);
+      expect(fills(elm)).toHaveLength(4);
+      expect(fills(elm).every((fill) => fill !== '')).toBe(true);
     });
   });
 

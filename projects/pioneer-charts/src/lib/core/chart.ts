@@ -300,6 +300,15 @@ export class PcacChart {
    * @param chartElm Reference to SVG on dom
    * @param config Chart specific configuration
    */
+  /**
+   * Removes whatever the chart last drew, for a build with no data to draw. Builders call it
+   * rather than just returning, which left the previous data on screen when a consumer emptied
+   * the chart (e.g. a filter that now matches nothing).
+   */
+  clearChart(chartElm: ElementRef): void {
+    select(chartElm.nativeElement).select('g').remove();
+  }
+
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     select(chartElm.nativeElement).select('g').remove();
     const container = chartElm.nativeElement.parentNode as HTMLElement;

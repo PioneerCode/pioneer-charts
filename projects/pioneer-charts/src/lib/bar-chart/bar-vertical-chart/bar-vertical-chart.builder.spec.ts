@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { PcacData } from '../../core/chart.model';
 
 /**
  * Same technique as core/chart.spec.ts: a real jsdom `<svg>` with stubbed parent metrics, since
@@ -159,6 +160,88 @@ describe('BarVerticalChartBuilder', () => {
 
       expect(colors).toEqual(['#111', '#222', '#333']);
       expect(builder.colors).toEqual(['#333', '#222', '#111']);
+    });
+  });
+
+  describe('data handling', () => {
+    // Let the enter transitions finish instantly so the final geometry can be read back.
+    async function build(elm: ElementRef, cfg: PcacBarVerticalChartConfig): Promise<void> {
+      vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
+      builder.buildChart(elm, cfg);
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+
+    const threshold = (value: number | null, data: PcacData[] = []): PcacData =>
+      ({ key: null, value, hide: false, data });
+    const thresholdYs = (elm: ElementRef) =>
+      Array.from(elm.nativeElement.querySelectorAll('.pcac-threshold') as NodeListOf<SVGRectElement>)
+        .map((r) => Number(r.getAttribute('y')));
+    const twoGroups = (): PcacData[] => ['A', 'B'].map((key) => ({
+      key, value: null, hide: false, data: [{ key: 'a', value: 10, hide: false, data: [] }],
+    }));
+
+    // Regression test: the documented `data: []` is truthy, so this drew nothing.
+    it('draws one threshold across the chart from one entry with an empty data', async () => {
+      const elm = chartElm();
+      await build(elm, config({ thresholds: [threshold(50)] }));
+
+      expect(thresholdYs(elm)).toEqual([100]);
+    });
+
+    // Regression test: this shape fell into the per-bar branch and threw a TypeError.
+    it('draws a threshold per group from one entry per group, skipping groups without one', async () => {
+      const elm = chartElm();
+      await build(elm, config({
+        data: [...twoGroups(), { key: 'C', value: null, hide: false, data: [{ key: 'a', value: 10, hide: false, data: [] }] }],
+        thresholds: [threshold(50), threshold(25)],
+      }));
+
+      expect(thresholdYs(elm)).toEqual([100, 150]);
+    });
+
+    it('draws per-bar thresholds on a single-group chart', async () => {
+      const elm = chartElm();
+      await build(elm, config({ thresholds: [threshold(null, [threshold(10), threshold(20)])] }));
+
+      expect(thresholdYs(elm)).toEqual([180, 160]);
+    });
+
+    it('clears the previous chart when the data is emptied', () => {
+      const elm = chartElm();
+      builder.buildChart(elm, config());
+      builder.buildChart(elm, config({ data: [] }));
+
+      expect(elm.nativeElement.querySelectorAll('.pcac-bar')).toHaveLength(0);
+    });
+
+    it('draws a hidden bar at zero height, keeping its slot', async () => {
+      const elm = chartElm();
+      await build(elm, config({
+        data: [{ key: 'G', value: null, hide: false, data: [
+          { key: 'a', value: 10, hide: false, data: [] },
+          { key: 'b', value: 20, hide: true, data: [] },
+        ] }],
+      }));
+
+      const heights = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar') as NodeListOf<SVGRectElement>)
+        .map((r) => Number(r.getAttribute('height')));
+      expect(heights).toEqual([20, 0]);
+    });
+
+    // Regression test: the inner band took its domain from the first group alone, so a series only
+    // a later group had was drawn over the first slot.
+    it('gives every series its own slot when groups have different series', () => {
+      const elm = chartElm();
+      builder.buildChart(elm, config({
+        data: [
+          { key: 'A', value: null, hide: false, data: [{ key: 'a', value: 10, hide: false, data: [] }] },
+          { key: 'B', value: null, hide: false, data: ['a', 'b', 'c'].map((key) => ({ key, value: 10, hide: false, data: [] })) },
+        ],
+      }));
+
+      const xs = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar-group:nth-child(2) .pcac-bar') as NodeListOf<SVGRectElement>)
+        .map((r) => Number(r.getAttribute('x')));
+      expect(new Set(xs).size).toBe(3);
     });
   });
 

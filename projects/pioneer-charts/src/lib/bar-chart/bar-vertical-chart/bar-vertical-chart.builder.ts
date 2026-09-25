@@ -13,7 +13,9 @@ import 'd3-transition';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacChart } from '../../core/chart';
 import { PcacData } from '../../core/chart.model';
-import { stackStarts } from '../../core/stack';
+import { barSizes, stackStarts } from '../../core/stack';
+import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
+import { seriesKeys } from '../bar-series';
 
 import { Subject } from 'rxjs';
 
@@ -39,6 +41,7 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
     if (!config?.data?.length) {
+      this.clearChart(chartElm);
       return;
     }
 
@@ -76,7 +79,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.xScaleGrouped = scaleBand()
       .padding(0.2)
       .rangeRound([0, this.xScaleStacked.bandwidth()])
-      .domain(config.data[0].data.map((d) => d.key as string));
+      .domain(seriesKeys(config.data));
   }
 
   private drawChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
@@ -103,29 +106,21 @@ export class BarVerticalChartBuilder extends PcacChart {
 
     const group = groupsContainer.selectAll('rect')
       .data((d: PcacData) => {
-        return d.data;
+        return d.data ?? [];
       });
 
     this.drawBarsPerGroup(group, config);
 
-    // We have no thresholds to draw
-    if (!config.thresholds) {
-      return;
-    }
-
-    // Draw threshold across entire chart
-    if (config.thresholds.length === 1 && !config.thresholds[0].data) {
-      this.drawThresholdAcrossChart(config);
-    }
-
-    // Draw threshold across each group
-    if (config.thresholds.length > 1 && (!config.thresholds[0].data || config.isStacked)) {
-      this.drawThresholdsPerGroup(group, config);
-    }
-
-    // Draw threshold across each bar in group
-    if (config.thresholds.length > 1 && config.thresholds[0].data && !config.isStacked) {
-      this.drawThresholdsPerBarInGroup(group, config);
+    switch (barThresholdLayout(config.thresholds, config.isStacked)) {
+      case 'chart':
+        this.drawThresholdAcrossChart(config);
+        break;
+      case 'group':
+        this.drawThresholdsPerGroup(config);
+        break;
+      case 'bar':
+        this.drawThresholdsPerBarInGroup(group, config);
+        break;
     }
   }
 
@@ -133,9 +128,12 @@ export class BarVerticalChartBuilder extends PcacChart {
     const self = this;
     // Stacked bars sit on top of the ones before them in their group; every other layout draws
     // from the baseline (start 0).
-    const starts = config.isStacked ? stackStarts(config.data) : new Map<PcacData, number>();
+    // Sizes honor `hide` (and treat a null or non-numeric value as 0), so a hidden bar keeps its
+    // slot and color but draws nothing - see `barSizes`.
+    const sizes = barSizes(config.data);
+    const starts = config.isStacked ? stackStarts(config.data, sizes) : new Map<PcacData, number>();
     const startOf = (d: PcacData) => starts.get(d) ?? 0;
-    const endOf = (d: PcacData) => startOf(d) + Number(d.value ?? 0);
+    const endOf = (d: PcacData) => startOf(d) + (sizes.get(d) ?? 0);
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', (d: PcacData) => {
@@ -210,68 +208,85 @@ export class BarVerticalChartBuilder extends PcacChart {
   }
 
   private drawThresholdAcrossChart(config: PcacBarVerticalChartConfig) {
+    const threshold = groupThreshold(config.thresholds, 0);
+    if (!threshold) {
+      return;
+    }
     this.applyPreTransitionThresholdStyles(this.svg.select('.pcac-bars').append('rect'))
       .attr('width', this.width)
-      .attr('data-group-threshold-id', (_: unknown, i: number) => {
-        return i;
-      })
+      .attr('data-group-threshold-id', 0)
       .on('mousemove', (event: MouseEvent) => {
-        this.showTooltip(event, config.thresholds[0], { index: 0, isThreshold: true, valueFormat: this.yAxis.format });
+        this.showTooltip(event, threshold, { index: 0, isThreshold: true, valueFormat: this.yAxis.format });
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (_: unknown, i: number) => {
-        return this.yScale(config.thresholds[i].value as number);
-      });
+      .attr('y', this.yScale(Number(threshold.value)));
   }
 
-  private drawThresholdsPerGroup(group: GroupType, config: PcacBarVerticalChartConfig) {
-    const self = this
-    this.applyPreTransitionThresholdStyles(this.svg.selectAll('.pcac-bar-group').append('rect'))
+  /** One threshold across each group that has one; groups without an entry are skipped. */
+  private drawThresholdsPerGroup(config: PcacBarVerticalChartConfig) {
+    const self = this;
+    const groupIndexOf = (rect: Element) => Number((rect.parentElement as HTMLElement).dataset['groupId']);
+    const groups = this.svg.selectAll<SVGGElement, PcacData>('.pcac-bar-group')
+      .filter((_: PcacData, i: number) => groupThreshold(config.thresholds, i) !== null);
+    this.applyPreTransitionThresholdStyles(groups.append('rect'))
+      // Spans its whole group: the pre-transition styles place a rect by bar key, which a group
+      // key can collide with.
+      .attr('x', 0)
       .attr('width', this.xScaleStacked.bandwidth())
-      .attr('data-group-threshold-id', (_: unknown, i: number) => {
-        return i;
+      .attr('data-group-threshold-id', function (this: SVGRectElement) {
+        return groupIndexOf(this);
       })
-      .on('mousemove', function (this: any, event: MouseEvent) {
-        const index = Number(this.parentElement.dataset['groupId'])
-        const threshold = config.thresholds[index];
+      .on('mousemove', function (this: SVGRectElement, event: MouseEvent) {
+        const index = groupIndexOf(this);
         // A threshold's own PcacData is typically just a value, so its parent is the *data* group
         // it's drawn against (which has the key) rather than the threshold entry it came from.
         self.showTooltip(
           event,
-          config.isStacked ? threshold.data[0] : threshold,
+          groupThreshold(config.thresholds, index) as PcacData,
           { index, parent: config.data[index], parentIndex: index, isThreshold: true, valueFormat: self.yAxis.format }
         );
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (_: unknown, i: number) => {
-        return this.yScale(config.isStacked ? config.thresholds[i].data[0].value as number : config.thresholds[i].value as number);
+      .attr('y', (_: unknown, i: number, nodes: ArrayLike<Element>) => {
+        return this.yScale(Number(groupThreshold(config.thresholds, groupIndexOf(nodes[i]))?.value));
       });
   }
 
+  /** One threshold across each bar that has one; bars without an entry are skipped. */
   private drawThresholdsPerBarInGroup(group: GroupType, config: PcacBarVerticalChartConfig) {
-    const self = this
-    this.applyPreTransitionThresholdStyles(group.enter().append('rect'))
+    const self = this;
+    const thresholdOf = (rect: Element) => barThreshold(
+      config.thresholds,
+      Number((rect.parentElement as HTMLElement).dataset['groupId']),
+      Number(rect.getAttribute('data-group-threshold-id')),
+    );
+    const rects = this.applyPreTransitionThresholdStyles(group.enter().append('rect'))
       .attr('data-group-threshold-id', (_: PcacData, i: number) => {
         return i;
       })
-      .on('mousemove', function (this: any, event: MouseEvent) {
-        const target = event.target as Element
-        const index = Number(target.getAttribute("data-group-threshold-id"))
-        const groupIndex = Number(this.parentElement.dataset['groupId'])
+      .attr('width', this.xScaleGrouped.bandwidth());
+    rects.filter(function (this: SVGRectElement) {
+      return thresholdOf(this) === null;
+    }).remove();
+    rects.filter(function (this: SVGRectElement) {
+      return thresholdOf(this) !== null;
+    })
+      .on('mousemove', function (this: SVGRectElement, event: MouseEvent) {
+        const index = Number(this.getAttribute('data-group-threshold-id'));
+        const groupIndex = Number((this.parentElement as HTMLElement).dataset['groupId']);
         // Parent is the data group (see drawThresholdsPerGroup), not the threshold entry itself.
         self.showTooltip(
           event,
-          config.thresholds[groupIndex].data[index],
+          thresholdOf(this) as PcacData,
           { index, parent: config.data[groupIndex], parentIndex: groupIndex, isThreshold: true, valueFormat: self.yAxis.format }
         );
       })
-      .attr('width', this.xScaleGrouped.bandwidth())
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (d: PcacData, i: number, n: any) => {
-        return this.yScale(config.thresholds[n[0].parentElement.dataset['groupId']].data[i].value as number);
+      .attr('y', (_: PcacData, i: number, nodes: ArrayLike<Element>) => {
+        return this.yScale(Number(thresholdOf(nodes[i])?.value));
       });
   }
 

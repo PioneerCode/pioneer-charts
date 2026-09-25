@@ -105,8 +105,11 @@
               <li>One entry with an empty <b>data</b> &mdash; a single threshold across the whole chart.</li>
               <li>One entry per group, each with an empty <b>data</b> &mdash; a threshold per group, spanning
                 that group's bars.</li>
-              <li>One entry per group, each with an entry per bar in its <b>data</b> &mdash; a threshold per bar.</li>
+              <li>One entry per group, each with an entry per bar in its <b>data</b> &mdash; a threshold per bar.
+                On a stacked chart, whose groups are one bar each, the first entry in each group's <b>data</b> is
+                that group's threshold.</li>
             </ul>
+            A group or bar without an entry, or with no numeric <b>value</b>, simply has no threshold.
             A hovered threshold shows its value in the tooltip, and a custom tooltip template can tell it from a
             bar via <b>isThreshold</b>.
           </td>

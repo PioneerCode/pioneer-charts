@@ -63,6 +63,7 @@ export class PieChartBuilder extends PcacChart {
     if (!this.initializeChartState(chartElm, { ...config, heightFull: false })) {
       return;
     }
+    this.applyColorOverride(config.colorOverride);
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
     this.buildShapes(config.donut);
     this.drawChart(chartElm, config);

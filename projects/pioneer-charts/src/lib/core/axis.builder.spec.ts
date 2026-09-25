@@ -107,7 +107,9 @@ describe('PcacAxisBuilder tick size', () => {
       expect(labels(config)).toEqual(['9.5', '10', '10.5', '11', '11.5', '12']);
     });
 
-    it('stay compact on a whole domain, with an SI prefix for thousands', () => {
+    // Regression test: labels used SI prefixes, so thousands read `1.5k` and - worse - a small
+    // domain read `10m 20m ...` (milli), indistinguishable from the Minutes format.
+    it('are plain numbers with thousands separators, never SI prefixes', () => {
       const config = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
       builder.drawXAxis(config);
       expect(labels(config)).toEqual(['0', '20', '40', '60', '80', '100']);
@@ -115,7 +117,52 @@ describe('PcacAxisBuilder tick size', () => {
       const big = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
       big.xScale = scaleLinear().domain([0, 2000]).range([0, 200]);
       builder.drawXAxis(big);
-      expect(labels(big)).toEqual(['0', '0.5k', '1k', '1.5k', '2k']);
+      expect(labels(big)).toEqual(['0', '500', '1,000', '1,500', '2,000']);
+
+      const small = axisConfig({ format: PcacFormatEnum.Decimal, ticks: 6 });
+      small.xScale = scaleLinear().domain([0.01, 0.06]).range([0, 200]);
+      builder.drawXAxis(small);
+      expect(labels(small)).toEqual(['0.01', '0.02', '0.03', '0.04', '0.05', '0.06']);
+    });
+  });
+
+  describe('Percentage tick labels', () => {
+    const labels = (config: IPcacAxisBuilderConfig<number, number>, axisClass: string) =>
+      config.svg.selectAll<SVGTextElement, unknown>(`.${axisClass} .tick text`).nodes().map((t) => t.textContent);
+
+    // Regression test: ticks only appended `%`, so the documented 0-1 fraction axis read `0.2%`
+    // while the tooltip read the same value as `20%`.
+    it('read values as fractions, the same as the tooltip', () => {
+      const config = axisConfig({}, { format: PcacFormatEnum.Percentage, ticks: 5 });
+      config.yScale = scaleLinear().domain([0, 1]).range([100, 0]);
+      builder.drawYAxis(config);
+      expect(labels(config, 'pcac-y-axis')).toEqual(['0%', '20%', '40%', '60%', '80%', '100%']);
+    });
+  });
+
+  describe('OneDayHours tick labels', () => {
+    const labels = (config: IPcacAxisBuilderConfig<number, number>, axisClass: string) =>
+      config.svg.selectAll<SVGTextElement, unknown>(`.${axisClass} .tick text`).nodes().map((t) => t.textContent);
+
+    it('wrap 24 to 12am and give a fractional hour its minutes', () => {
+      const config = axisConfig({ format: PcacFormatEnum.OneDayHours, ticks: 4 });
+      config.xScale = scaleLinear().domain([0, 24]).range([0, 200]);
+      builder.drawXAxis(config);
+      expect(labels(config, 'pcac-x-axis')).toEqual(['12am', '5am', '10am', '3pm', '8pm']);
+
+      const halves = axisConfig({ format: PcacFormatEnum.OneDayHours, ticks: 3 });
+      halves.xScale = scaleLinear().domain([1, 3]).range([0, 200]);
+      builder.drawXAxis(halves);
+      expect(labels(halves, 'pcac-x-axis')).toEqual(['1am', '1:30am', '2am', '2:30am', '3am']);
+    });
+
+    // Regression test: the y axis ignored Decimal and OneDayHours, though the format is documented
+    // for both axes.
+    it('apply on the y axis too', () => {
+      const config = axisConfig({}, { format: PcacFormatEnum.OneDayHours, ticks: 2 });
+      config.yScale = scaleLinear().domain([0, 24]).range([100, 0]);
+      builder.drawYAxis(config);
+      expect(labels(config, 'pcac-y-axis')).toEqual(['12am', '10am', '8pm']);
     });
   });
 

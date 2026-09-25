@@ -220,7 +220,9 @@ export class PlaChartBuilder extends PcacChart {
         data: config.data,
         colors: this.colors,
         x: this.scales.x,
-        y: this.scales.y
+        y: this.scales.y,
+        yFormat: this.yAxis.format,
+        yTicks: this.yAxis.ticks,
       });
     }
 

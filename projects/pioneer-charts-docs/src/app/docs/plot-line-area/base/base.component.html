@@ -35,11 +35,14 @@
         </tr>
         <tr>
           <td>yAxis.format</td>
-          <td>Formats the y-axis tick labels and the value shown in a point's tooltip.
+          <td>Formats the y-axis tick labels, the hover crosshair's value and the value shown in a point's
+            tooltip.
             <ul>
-              <li><b>Percentage</b> &mdash; ticks get a <code>%</code> suffix; the tooltip shows
-                <code>value * 100</code> followed by <code>%</code> (so supply values as fractions, e.g.
-                <code>0.25</code>).</li>
+              <li><b>Percentage</b> &mdash; values are fractions: <code>0.25</code> reads <code>25%</code> on the ticks
+                and in the tooltip alike.</li>
+              <li><b>Decimal</b> &mdash; plain numbers with thousands separators (<code>1,500</code>,
+                <code>0.05</code>), with as many decimals as the tick step needs.</li>
+              <li><b>OneDayHours</b> &mdash; a 12 hour clock, as described for the x axis below.</li>
               <li><b>Minutes</b> &mdash; ticks get an <code>m</code> suffix.</li>
               <li><b>Fahrenheit</b> &mdash; ticks and the tooltip get an <code>F</code> suffix.</li>
               <li>Anything else (the default) leaves the ticks and tooltip unformatted.</li>
@@ -59,9 +62,9 @@
               </li>
               <li>
                 <b>Decimal</b> &mdash; each point's <code>key</code> is a number used directly as its x value,
-                on an axis running from <b>xAxis.domainMin</b> to <b>xAxis.domainMax</b>. Tick labels are
-                shortened to two significant digits with an SI suffix (e.g. <code>1500</code> &rarr;
-                <code>1.5k</code>).
+                on an axis running from <b>xAxis.domainMin</b> to <b>xAxis.domainMax</b>. Tick labels are plain
+                numbers with thousands separators (<code>1,500</code>, <code>0.05</code>), with as many decimals as
+                the tick step needs &mdash; so zooming in adds precision rather than repeating labels.
               </li>
               <li>
                 <b>DateTime</b> &mdash; each point's <code>key</code> is parsed with <code>new Date(key)</code>
@@ -71,13 +74,15 @@
               </li>
               <li>
                 <b>OneDayHours</b> &mdash; positions points by index like <b>DatasetLength</b>, but labels the
-                ticks as a 12 hour clock: 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm. The data is expected to be one
-                point per hour, in order from hour 0.
+                ticks as a 12 hour clock: 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm, 24 = 12am. A tick between hours
+                shows its minutes (2.5 = 2:30am). The data is expected to be one point per hour, in order from
+                hour 0.
               </li>
               <li>
                 <b>Percentage</b>, <b>Minutes</b>, <b>Fahrenheit</b> &mdash; position by index like
-                <b>DatasetLength</b>, with a <code>%</code>, <code>m</code> or <code>F</code> suffix on the tick
-                labels.
+                <b>DatasetLength</b>, labelling the ticks the same way as on the y axis: <b>Minutes</b> and
+                <b>Fahrenheit</b> add an <code>m</code> or <code>F</code> suffix, and <b>Percentage</b> reads each
+                tick as a fraction, so it only suits an axis whose values run 0 &ndash; 1.
               </li>
             </ul>
           </td>

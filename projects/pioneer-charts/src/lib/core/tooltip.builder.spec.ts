@@ -79,6 +79,14 @@ describe('PcacTooltipBuilder', () => {
       expect(shell.innerHTML).toBe('Jan<br>25%');
     });
 
+    it('shows a Percentage fraction without floating-point noise, and a missing value blank', () => {
+      builder.showTooltip(mouse(), undefined, context(datum('Jan', 0.07)), PcacFormatEnum.Percentage);
+      expect(shell.innerHTML).toBe('Jan<br>7%');
+
+      builder.showTooltip(mouse(), undefined, context({ key: 'Feb', value: null, hide: false, data: [] }), PcacFormatEnum.Percentage);
+      expect(shell.innerHTML).toBe('Feb<br>');
+    });
+
     it('shows markup in the key and value as text rather than rendering it', () => {
       builder.showTooltip(mouse(), undefined, context({
         key: '<img src=x onerror="window.pwned=1">', value: '<b>42</b>', hide: false, data: [],

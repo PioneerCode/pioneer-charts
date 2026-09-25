@@ -1,6 +1,7 @@
 import { Selection, BaseType } from 'd3-selection';
 import { ScaleLinear } from 'd3-scale';
-import { PcacData } from '../../../core';
+import { PcacData, PcacFormatEnum } from '../../../core';
+import { axisTickFormat } from '../../../core/tick-format';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
 import { ScaleTime } from 'd3';
@@ -13,6 +14,9 @@ export interface IPlaChartEffectsBuilderConfig {
   svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   x: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   y: ScaleLinear<number, number> | ScaleTime<number, number, never>;
+  /** The y axis's format and tick count, so the crosshair's value reads like the axis labels. */
+  yFormat?: PcacFormatEnum;
+  yTicks?: number;
 }
 
 /**
@@ -173,11 +177,22 @@ export class PlaChartEffectsBuilder {
           }
         }
 
-        const textTarget = this.config.y.invert(pos.y) as number
+        const value = this.config.y.invert(pos.y) as number;
         select(nodes[index]).select('text')
-          .text(textTarget.toFixed(0));
+          .text(this.formatValue(value));
 
         return 'translate(' + mousePos[0] + ',' + pos.y + ')';
       });
+  }
+
+  /**
+   * The crosshair's value, formatted the way the y axis labels its ticks - same format, same
+   * step-based precision - rather than rounded to a whole number, which read a 0-1 axis as 0 or 1.
+   */
+  private formatValue(value: number): string {
+    const y = this.config.y as ScaleLinear<number, number>;
+    const formatter = axisTickFormat(this.config.yFormat, y, this.config.yTicks)
+      ?? y.tickFormat(this.config.yTicks);
+    return formatter(value);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { axisBottom, axisLeft, AxisScale, AxisDomain } from 'd3-axis';
 import { BaseType, Selection } from 'd3-selection';
-import { PCAC_AXIS_LABEL_SPACE, PcacChartMargin, PcacFormatEnum, PcacResolvedAxisConfig } from './chart.model';
-import { format } from 'd3-format';
+import { PCAC_AXIS_LABEL_SPACE, PcacChartMargin, PcacResolvedAxisConfig } from './chart.model';
+import { axisTickFormat } from './tick-format';
 
 /**
  * Generic over each axis's own domain type (e.g. `number` for a value axis's `ScaleLinear`,
@@ -67,17 +67,11 @@ export class PcacAxisBuilder {
       yAxis.tickSizeInner(config.yAxis.tickSize);
     }
 
-    switch (config.yAxis.format) {
-      case PcacFormatEnum.Percentage:
-        yAxis.tickFormat(d => d + "%");
-        break;
-      case PcacFormatEnum.Minutes:
-        yAxis.tickFormat((d) => d + 'm');
-        break;
-      case PcacFormatEnum.Fahrenheit:
-        yAxis.tickFormat((d) => d + ' F');
-        break;
+    const yFormat = axisTickFormat(config.yAxis.format, config.yScale, config.yAxis.ticks);
+    if (yFormat) {
+      yAxis.tickFormat(yFormat);
     }
+
 
     const group = config.svg.append('g')
       .attr('class', 'pcac-y-axis')
@@ -100,28 +94,11 @@ export class PcacAxisBuilder {
       xAxis.tickSizeInner(config.xAxis.tickSize);
     }
 
-    switch (config.xAxis.format) {
-      case PcacFormatEnum.Percentage:
-        xAxis.tickFormat(d => d + "%");
-        break;
-      case PcacFormatEnum.Minutes:
-        xAxis.tickFormat((d) => d + 'm');
-        break;
-      case PcacFormatEnum.Fahrenheit:
-        xAxis.tickFormat((d) => d + ' F');
-        break;
-      case PcacFormatEnum.OneDayHours:
-        xAxis.tickFormat((d) => {
-          const h = d as number;
-          const hour = h % 12 === 0 ? 12 : h % 12;
-          const period = h < 12 ? 'am' : 'pm';
-          return `${hour}${period}`;
-        });
-        break;
-      case PcacFormatEnum.Decimal:
-        xAxis.tickFormat(decimalTickFormat(config.xScale, config.xAxis.ticks));
-        break;
+    const xFormat = axisTickFormat(config.xAxis.format, config.xScale, config.xAxis.ticks);
+    if (xFormat) {
+      xAxis.tickFormat(xFormat);
     }
+
 
     const group = config.svg.append('g')
       .attr('class', 'pcac-x-axis')
@@ -188,19 +165,4 @@ function applyColors(group: Selection<SVGGElement, unknown, BaseType, unknown>, 
     .style('--pcac-axis-line-color', () => axis.lineColor ?? null)
     .style('--pcac-axis-label-color', () => axis.labelColor ?? null)
     .style('--pcac-axis-sub-label-color', () => axis.subLabelColor ?? null);
-}
-
-/**
- * Tick labels for a `Decimal` axis: SI-prefixed (`1.5k`), with the precision taken from the
- * scale's own tick step rather than fixed. A fixed two significant digits (`.2s`) is fine for a
- * whole domain but breaks down once zoom narrows it to a few units - ticks at 10.5, 11, 11.5, 12
- * all rounded to `10 11 12 12`. `~` trims trailing zeros so a coarse step still reads `5 10 15`,
- * not `5.0 10.0 15.0`. Falls back to the fixed format for a scale without `tickFormat` (a
- * `Decimal` axis is always linear in practice, but the config type only promises `AxisScale`).
- */
-function decimalTickFormat<Domain extends AxisDomain>(scale: AxisScale<Domain>, ticks: number | undefined): (d: Domain) => string {
-  const withTicks = scale as AxisScale<Domain> & { tickFormat?: (count?: number, specifier?: string) => (d: Domain) => string };
-  const formatTick = withTicks.tickFormat ? withTicks.tickFormat(ticks, '~s') : (d: Domain) => format('.2s')(d as unknown as number);
-  // The prefix comes from the domain's largest value, which would label the origin `0k`.
-  return (d) => (Number(d) === 0 ? '0' : formatTick(d));
 }

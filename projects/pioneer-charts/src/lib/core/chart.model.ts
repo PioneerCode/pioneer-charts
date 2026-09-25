@@ -301,9 +301,8 @@ export enum PcacFormatEnum {
   Fahrenheit = 'fahrenheit',
 
   /**
-   * Expectation is we will be given a range of data from 0-23
-   * and we will map that to a 12 hour clock with am/pm
-   * e.g. 0 = 12am, 1 = 1am, 13 = 1pm, 23 = 11pm
+   * Hours of the day, 0-24, labelled on a 12 hour clock: 0 = 12am, 1 = 1am, 13 = 1pm, 24 = 12am.
+   * A value between hours shows its minutes (2.5 = 2:30am).
    */
   OneDayHours = 'oneDayHours'
 }

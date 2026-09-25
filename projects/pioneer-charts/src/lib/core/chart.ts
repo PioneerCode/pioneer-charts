@@ -324,6 +324,10 @@ export class PcacChart {
     const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
     if (measuredWidth <= 0) {
+      // The previous drawing was just removed above, so nothing is on screen any more. Forget the
+      // size it was drawn at, or a container that comes back at that same width (a hidden tab
+      // shown again) would read as unchanged to `containerSizeChanged()` and never be redrawn.
+      this.lastContainerWidth = null;
       return false;
     }
     this.width = measuredWidth;

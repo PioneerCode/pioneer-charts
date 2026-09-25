@@ -2,6 +2,8 @@ import { ElementRef, Injectable, inject } from '@angular/core';
 import { select, Selection } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
+// Side effect only: adds .transition() to d3-selection's Selection, which the entry animations use.
+import 'd3-transition';
 import { Subject } from 'rxjs';
 
 /**

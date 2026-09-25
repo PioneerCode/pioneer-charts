@@ -11,9 +11,11 @@ permissions:
   pages: write          # required
   id-token: write       # required
 
+# Shared with publish.yml's deploy-docs job, and never cancelled: a manual deploy waits for a
+# release's docs deploy to finish rather than cancelling it (and vice versa).
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -38,6 +40,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Deploy to GitHub Pages

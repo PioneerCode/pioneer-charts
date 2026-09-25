@@ -24,6 +24,13 @@ export class PcacChartConfig {
    * initializer still applies to anything constructed via `new`.
    */
   heightFull?: boolean = false
+
+  /**
+   * What the chart shows, for screen readers - e.g. `'Sales by month, 2026'`. The chart's `<svg>` is
+   * announced as one image with this name; when it isn't set, the chart's type is used (`'Bar
+   * chart'`, `'Pie chart'`, ...). Optional for the same reason as `heightFull`.
+   */
+  ariaLabel?: string
 }
 
 /**

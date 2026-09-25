@@ -27,7 +27,8 @@ export class PcacTooltipBuilder implements OnDestroy {
   get tooltip(): Selection<HTMLDivElement, unknown, null, undefined> {
     this.shell ??= select(this.document.body)
       .append('div')
-      .attr('class', 'pcac-d3-tooltip');
+      .attr('class', 'pcac-d3-tooltip')
+      .attr('role', 'tooltip');
     return this.shell;
   }
 

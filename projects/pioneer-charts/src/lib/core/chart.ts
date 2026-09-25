@@ -66,6 +66,9 @@ export class PcacChart implements OnDestroy {
   colors = [] as string[];
   startData: PcacData[] = [];
 
+  /** The chart's accessible name when its config gives no `ariaLabel`; each builder names its type. */
+  protected chartTypeLabel = 'Chart';
+
   /**
    * Swaps a consumer's `colorOverride` in for the theme palette `initializeChartState` set, in
    * order. Checks `length` rather than truthiness: every config class defaults its override to
@@ -357,6 +360,10 @@ export class PcacChart implements OnDestroy {
       return false;
     }
     this.width = measuredWidth;
+    // Announced as a single image with a name, rather than as a pile of unlabelled shapes.
+    select(chartElm.nativeElement)
+      .attr('role', 'img')
+      .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
     this.height = this.resolveHeight(container, config);
     // One color per group or per series within a group, whichever needs more - sized by the
     // largest group, since bars index colors by their position within their own group.

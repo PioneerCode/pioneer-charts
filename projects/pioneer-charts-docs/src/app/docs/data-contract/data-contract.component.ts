@@ -61,6 +61,8 @@ export class DataContractComponent {
   height: number = 200;
   /** If true, height is a minimum and the chart fills a taller container. */
   heightFull?: boolean = false;
+  /** What the chart shows, for screen readers. Defaults to its type ('Bar chart', ...). */
+  ariaLabel?: string;
 }
 
 /** Every chart with axes (bar, line, area, plot - not pie) extends this instead. */

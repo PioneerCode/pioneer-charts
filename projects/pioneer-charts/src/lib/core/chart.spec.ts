@@ -440,4 +440,21 @@ describe('PcacChart', () => {
       expect(shell.style.display).toBe('inline-block');
     });
   });
+
+  describe('accessible name', () => {
+    it('announces the chart as one image, named by its config', () => {
+      const elm = chartElm(800);
+      chart.initializeChartState(elm, { ...config(), ariaLabel: 'Sales by month' });
+
+      expect(elm.nativeElement.getAttribute('role')).toBe('img');
+      expect(elm.nativeElement.getAttribute('aria-label')).toBe('Sales by month');
+    });
+
+    it('falls back to a generic name without an ariaLabel', () => {
+      const elm = chartElm(800);
+      chart.initializeChartState(elm, config());
+
+      expect(elm.nativeElement.getAttribute('aria-label')).toBe('Chart');
+    });
+  });
 });

@@ -26,8 +26,9 @@ Guides, the API reference, live examples, and theming instructions all live on t
 
 ## Requirements
 
-- Angular ^22.0.0
-- D3 ^7.9.0
+- Angular ^22.1.0 (with RxJS ^7.4.0, which Angular itself needs)
+
+The D3 modules the charts use are installed with the package, so there's nothing else to add.
 
 ## Installation
 

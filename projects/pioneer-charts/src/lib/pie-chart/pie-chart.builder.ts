@@ -50,6 +50,8 @@ export class PieChartBuilder extends PcacChart {
   private sliceClickedSource = new Subject<PcacData>();
   sliceClicked$ = this.sliceClickedSource.asObservable();
 
+  protected override chartTypeLabel = 'Pie chart';
+
   buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
     if (!config?.data?.length) {
       this.clearChart(chartElm);

@@ -12,12 +12,15 @@ import { color } from 'd3-color';
 /**
  * Lib
  */
-import { PcacPieChartConfig } from './pie-chart.model';
+import { PcacPieChartConfig, PcacPieDonutConfig } from './pie-chart.model';
 import { PcacChart } from '../core/chart';
 import { PcacData } from '../core/chart.model';
 
 import { Subject } from 'rxjs';
 
+
+/** The largest `PcacPieDonutConfig.innerRadius` honored, so a ring is always left to draw. */
+const MAX_DONUT_INNER_RADIUS = 0.9;
 
 /**
  * Provided per-component (see PcacPieChartComponent's `providers`), not root-scoped:
@@ -28,6 +31,7 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class PieChartBuilder extends PcacChart {
   private radius!: number;
+  private innerRadius = 0;
   private arcShape!: Arc<any, PieArcDatum<PcacData>>;
   private arcOverShape!: Arc<any, PieArcDatum<PcacData>>;
   private pieAngles!: Pie<any, PcacData>;
@@ -48,20 +52,27 @@ export class PieChartBuilder extends PcacChart {
       return;
     }
     this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
-    this.buildShapes();
+    this.buildShapes(config.donut);
     this.drawChart(chartElm, config);
+    if (config.donut && this.innerRadius > 0) {
+      this.drawCenter(config.donut);
+    }
   }
 
-  private buildShapes(): void {
+  private buildShapes(donut: Partial<PcacPieDonutConfig> | undefined): void {
     const radiusOffset = 10;
+    const outerRadius = this.radius - radiusOffset;
+    const ratio = donut ? (donut.innerRadius ?? new PcacPieDonutConfig().innerRadius) : 0;
+    // Sized against the resting slice, so the hole stays put when a hovered slice grows outward.
+    this.innerRadius = Math.max(0, outerRadius * Math.min(Math.max(ratio, 0), MAX_DONUT_INNER_RADIUS));
 
     this.arcShape = arc<any, PieArcDatum<PcacData>>()
-      .innerRadius(0)
-      .outerRadius(this.radius - radiusOffset);
+      .innerRadius(this.innerRadius)
+      .outerRadius(outerRadius);
 
     this.arcOverShape = arc<any, PieArcDatum<PcacData>>()
-      .innerRadius(0)
-      .outerRadius(this.radius - radiusOffset + radiusOffset);
+      .innerRadius(this.innerRadius)
+      .outerRadius(outerRadius + radiusOffset);
 
     this.pieAngles = pie<PcacData>()
       .sort(null)
@@ -108,10 +119,46 @@ export class PieChartBuilder extends PcacChart {
       });
   }
 
+  /**
+   * The donut's `label` / `subLabel`, stacked around the center of the hole and sized to it. Drawn
+   * after the slices and ignoring the pointer, so it never blocks a slice's hover or click.
+   */
+  private drawCenter(donut: Partial<PcacPieDonutConfig>): void {
+    const { label, subLabel } = donut;
+    if (!label && !subLabel) {
+      return;
+    }
+    const labelSize = Math.min(Math.max(this.innerRadius * 0.5, 12), 40);
+    const subLabelSize = Math.min(Math.max(this.innerRadius * 0.2, 10), 16);
+    const both = !!label && !!subLabel;
+
+    const center = this.svg.append('g')
+      .attr('class', 'pcac-pie-center')
+      .attr('pointer-events', 'none')
+      .style('--pcac-pie-center-label-color', () => donut.labelColor ?? null)
+      .style('--pcac-pie-center-sub-label-color', () => donut.subLabelColor ?? null);
+
+    if (label) {
+      center.append('text')
+        .attr('class', 'pcac-pie-center-label')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('y', both ? -subLabelSize * 0.6 : 0)
+        .style('font-size', `${labelSize}px`)
+        .text(label);
+    }
+    if (subLabel) {
+      center.append('text')
+        .attr('class', 'pcac-pie-center-sub-label')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('y', both ? labelSize * 0.55 : 0)
+        .style('font-size', `${subLabelSize}px`)
+        .text(subLabel);
+    }
+  }
+
   private tweenChart(b: PieArcDatum<PcacData>) {
-    // `innerRadius`/`outerRadius` aren't part of PieArcDatum - arcShape's own .innerRadius()/.outerRadius()
-    // accessors are fixed constants and never read them from the datum, so this is a legacy no-op kept for parity.
-    (b as unknown as { innerRadius: number }).innerRadius = 0;
     const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
     return (t: number) => this.arcShape(i(t)) ?? '';
   }

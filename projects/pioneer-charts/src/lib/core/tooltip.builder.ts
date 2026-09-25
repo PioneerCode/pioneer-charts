@@ -2,6 +2,7 @@ import { ApplicationRef, DOCUMENT, EmbeddedViewRef, Injectable, OnDestroy, Templ
 import { PcacData, PcacFormatEnum } from './chart.model';
 import { PcacTooltipContext } from './tooltip.directive';
 import { Selection, select } from 'd3-selection';
+import { formatPercent } from './tick-format';
 
 @Injectable({
   providedIn: 'root',
@@ -231,10 +232,12 @@ export class PcacTooltipBuilder implements OnDestroy {
     let value = data.value;
     let key = data.key
 
-    if (valueFormat) {
+    // A missing value stays blank rather than being formatted as `0%` / `null F`.
+    if (valueFormat && value !== null && value !== undefined) {
       switch (valueFormat) {
         case PcacFormatEnum.Percentage:
-          value = value as number * 100 + '%';
+          // Same fraction rule, and the same formatting, as a Percentage axis's ticks.
+          value = formatPercent(Number(value));
           break;
         case PcacFormatEnum.Fahrenheit:
           value = `${value} F`;

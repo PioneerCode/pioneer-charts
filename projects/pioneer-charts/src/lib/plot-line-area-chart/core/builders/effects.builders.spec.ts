@@ -1,7 +1,7 @@
 import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { PlaChartEffectsBuilder } from './effects.builders';
-import { PcacData } from '../../../core/chart.model';
+import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
 
 /**
  * jsdom doesn't implement SVGGeometryElement's real geometry methods (getTotalLength() etc.) -
@@ -143,5 +143,38 @@ describe('PlaChartEffectsBuilder', () => {
     expect(groups.length).toBe(2);
     expect(groups[0]).toMatch(/,10\)$/);
     expect(groups[1]).toMatch(/,30\)$/);
+  });
+
+  // Regression test: the crosshair's value was always rounded to a whole number, so a 0-1 axis
+  // only ever read 0 or 1, and the y axis's format (e.g. Percentage) was ignored.
+  describe('crosshair value', () => {
+    function hoverAt(y: number, yFormat?: PcacFormatEnum): string | null | undefined {
+      const path = pathWithGeometry('line', 100);
+      Object.defineProperty(path, 'getPointAtLength', { value: (l: number) => ({ x: l, y }), configurable: true });
+      svgRoot.appendChild(path);
+
+      const builder = new PlaChartEffectsBuilder();
+      builder.buildEffects({
+        svg: select(svgRoot),
+        height: 100,
+        width: 100,
+        data: sampleData(),
+        colors: ['red'],
+        x: scaleLinear().domain([0, 100]).range([0, 100]),
+        y: scaleLinear().domain([0, 1]).range([100, 0]),
+        yFormat,
+        yTicks: 5,
+      });
+      svgRoot.querySelector('.effects-canvas')!.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+      return svgRoot.querySelector('.effect-group text')?.textContent;
+    }
+
+    it('keeps the precision of the y axis ticks', () => {
+      expect(hoverAt(40)).toBe('0.6');
+    });
+
+    it('reads like the y axis in its format', () => {
+      expect(hoverAt(40, PcacFormatEnum.Percentage)).toBe('60%');
+    });
   });
 });

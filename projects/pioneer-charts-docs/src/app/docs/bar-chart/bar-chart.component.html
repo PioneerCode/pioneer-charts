@@ -77,9 +77,10 @@
           <td>yAxis.format<br>xAxis.format</td>
           <td>Formats the value axis's tick labels and the value in the default tooltip (same axis as above).
             <ul>
-              <li><b>Percentage</b> &mdash; ticks get a <code>%</code> suffix; the tooltip shows
-                <code>value * 100</code> followed by <code>%</code> (so supply values as fractions, e.g.
-                <code>0.25</code> with a <b>domainMax</b> of 1).</li>
+              <li><b>Percentage</b> &mdash; values are fractions: <code>0.25</code> reads <code>25%</code> on the ticks
+                and in the tooltip alike (so give a <b>domainMax</b> of 1).</li>
+              <li><b>Decimal</b> &mdash; plain numbers with thousands separators (<code>1,500</code>,
+                <code>0.05</code>), with as many decimals as the tick step needs.</li>
               <li><b>Minutes</b> &mdash; ticks get an <code>m</code> suffix.</li>
               <li><b>Fahrenheit</b> &mdash; ticks and the tooltip get an <code>F</code> suffix.</li>
               <li>Anything else (the default) leaves the ticks and tooltip unformatted.</li>

@@ -159,8 +159,9 @@ describe('BarHorizontalChartBuilder', () => {
   });
 
   // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
-  // every rebuild (every container resize) flipped their palette back and forth.
-  it('applies colorOverride reversed without mutating the consumer array, on repeated builds', () => {
+  // every rebuild (every container resize) flipped their palette back and forth. The override
+  // also used to be applied reversed, against the docs; it now runs in order.
+  it('applies colorOverride in order without mutating the consumer array, on repeated builds', () => {
     const colors = ['#111', '#222', '#333'];
     const cfg = { ...config(), colorOverride: { colors } };
 
@@ -168,7 +169,16 @@ describe('BarHorizontalChartBuilder', () => {
     builder.buildChart(elm, cfg);
 
     expect(colors).toEqual(['#111', '#222', '#333']);
-    expect(builder.colors).toEqual(['#333', '#222', '#111']);
+    expect(builder.colors).toEqual(['#111', '#222', '#333']);
+  });
+
+  // Regression test: the default `colors: []` is truthy, and was taken as an override - every bar
+  // was left with no fill (drawn black).
+  it('uses the theme palette when the override is empty', () => {
+    const rect = elm.nativeElement.querySelector('rect.pcac-bar') as SVGRectElement;
+
+    expect(builder.colors.length).toBeGreaterThan(0);
+    expect(rect.style.fill).not.toBe('');
   });
 
   // `left` is measured from the y axis's bounding box (a constant 40 under the getBBox stub, so it

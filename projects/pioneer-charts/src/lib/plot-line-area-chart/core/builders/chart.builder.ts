@@ -94,6 +94,8 @@ export class PlaChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {
     if (!config?.data?.length) {
+      this.leavePoint();
+      this.clearChart(chartElm);
       return;
     }
 

@@ -52,6 +52,7 @@ export class PieChartBuilder extends PcacChart {
 
   buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
     if (!config?.data?.length) {
+      this.clearChart(chartElm);
       return;
     }
 
@@ -89,7 +90,9 @@ export class PieChartBuilder extends PcacChart {
 
     this.pieAngles = pie<PcacData>()
       .sort(null)
-      .value((d: PcacData) => d.value as number);
+      // A hidden slice takes no angle but keeps its index - and so its color, matching a legend -
+      // the same way a hidden line/area/plot series keeps its place.
+      .value((d: PcacData) => (d.hide ? 0 : Number(d.value ?? 0)));
   }
 
   private drawChart(chartElm: ElementRef, config: PcacPieChartConfig): void {

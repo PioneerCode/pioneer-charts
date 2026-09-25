@@ -16,34 +16,46 @@ function chartElm(width = 400): ElementRef {
   return { nativeElement: svg } as ElementRef;
 }
 
-function config(colorOverride?: string[]): PcacPieChartConfig {
+function config(hidden: string[] = []): PcacPieChartConfig {
   return {
     height: 200,
-    colorOverride,
-    data: ['A', 'B', 'C'].map((key) => ({ key, value: 1, hide: false, data: [] })),
+    data: ['A', 'B', 'C'].map((key) => ({ key, value: 1, hide: hidden.includes(key), data: [] })),
   };
 }
 
-describe('PieChartBuilder colors', () => {
+describe('PieChartBuilder data handling', () => {
   let builder: PieChartBuilder;
 
   beforeEach(() => {
     builder = TestBed.runInInjectionContext(() => new PieChartBuilder());
   });
 
-  it('uses the theme palette without an override, or with an empty one', () => {
-    builder.buildChart(chartElm(), config());
-    const palette = [...builder.colors];
+  it('clears the previous pie when the data is emptied', () => {
+    const elm = chartElm();
+    builder.buildChart(elm, config());
+    builder.buildChart(elm, { ...config(), data: [] });
 
-    builder.buildChart(chartElm(), config([]));
-
-    expect(palette.length).toBeGreaterThanOrEqual(3);
-    expect(builder.colors).toEqual(palette);
+    expect(elm.nativeElement.querySelectorAll('.pcac-arc')).toHaveLength(0);
   });
 
-  it('colors slices from colorOverride in order, repeating it when short', () => {
-    builder.buildChart(chartElm(), config(['#111', '#222']));
+  it('gives a hidden slice no angle while keeping its place, and so its color', () => {
+    const elm = chartElm();
+    builder.buildChart(elm, config(['B']));
 
-    expect(builder.colors).toEqual(['#111', '#222', '#111']);
+    const arcs = Array.from(elm.nativeElement.querySelectorAll('.pcac-arc path')) as SVGPathElement[];
+    const angles = arcs.map((path) => {
+      const d = (path as unknown as { __data__: { startAngle: number; endAngle: number } }).__data__;
+      return d.endAngle - d.startAngle;
+    });
+    expect(arcs).toHaveLength(3);
+    expect(angles[1]).toBe(0);
+    expect(angles[0]).toBeCloseTo(Math.PI);
+
+    // The slice after the hidden one keeps the color it has with nothing hidden.
+    const allShown = chartElm();
+    builder.buildChart(allShown, config());
+    const shownFill = (allShown.nativeElement.querySelectorAll('.pcac-arc path')[2] as SVGPathElement).style.fill;
+    expect(shownFill).not.toBe('');
+    expect(arcs[2].style.fill).toBe(shownFill);
   });
 });

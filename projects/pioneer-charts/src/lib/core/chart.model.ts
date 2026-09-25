@@ -238,6 +238,13 @@ export class PcacAxisChartConfig extends PcacChartConfig {
 export class PcacData {
   key: string | number | null = null
   value: string | number| null = null
+
+  /**
+   * Hides the item while keeping its place in the color order, so a `<pcac-legend>` can toggle it
+   * without the other items changing color. A line/area/plot series draws no line, area, points or
+   * hover effects; a bar (or every bar of a group) is drawn at zero size, keeping its slot; a pie
+   * slice takes no angle.
+   */
   hide: boolean = false
   data: PcacData[] = []
 

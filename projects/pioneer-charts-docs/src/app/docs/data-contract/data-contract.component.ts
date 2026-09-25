@@ -41,9 +41,10 @@ export class DataContractComponent {
   key: string | number | null = null;
   value: string | number | null = null;
   /**
-   * Line/area/plot charts only, on a series: a hidden series isn't drawn
-   * (its line/area, points and hover effects), though it keeps its place
-   * in the color order. The bar and pie charts ignore it.
+   * Hides an item while keeping its place in the color order. On a
+   * line/area/plot series: its line/area, points and hover effects aren't
+   * drawn. On a bar, or a whole bar group: drawn at zero size, keeping its
+   * slot. On a pie slice: given no angle.
    */
   hide: boolean = false;
   data: PcacData[] = [];

@@ -86,6 +86,29 @@ describe('PieChartBuilder donut', () => {
     expect(group?.querySelector('.pcac-pie-center-sub-label')?.textContent).toBe('balls');
   });
 
+  it('shrinks a long label to fit across the hole', () => {
+    // jsdom can't measure text, so the builder estimates 0.6em per glyph: 15 chars at the
+    // preferred 27px (0.5 x the 54px hole radius) is 243px, wider than the 86.4px allowed, so it
+    // shrinks to 9.6px - still above the 8px floor.
+    builder.buildChart(elm, config({ label: 'A long label xx' }));
+
+    const text = center()?.querySelector('.pcac-pie-center-label') as SVGTextElement;
+    expect(parseFloat(text.style.fontSize)).toBeCloseTo(9.6);
+  });
+
+  it('leaves out a line that cannot fit at a readable size', () => {
+    builder.buildChart(elm, config({ label: '67', subLabel: 'a sub label far too long to fit' }));
+
+    expect(center()?.querySelector('.pcac-pie-center-label')?.textContent).toBe('67');
+    expect(center()?.querySelector('.pcac-pie-center-sub-label')).toBeNull();
+  });
+
+  it('draws no center text when the hole is too small for any', () => {
+    builder.buildChart(elm, config({ innerRadius: 0.05, label: '67', subLabel: 'balls' }));
+
+    expect(center()).toBeNull();
+  });
+
   it('draws no center text on a plain pie even when given a label', () => {
     builder.buildChart(elm, config({ innerRadius: 0, label: '67' }));
 

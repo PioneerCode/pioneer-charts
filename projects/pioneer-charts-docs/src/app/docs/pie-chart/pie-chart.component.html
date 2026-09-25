@@ -57,9 +57,10 @@
             <ul>
               <li><b>innerRadius</b> &mdash; radius of the hole as a fraction of the pie's radius, from 0 (a plain
                 pie) to 0.9; values outside that are clamped. Default 0.6.</li>
-              <li><b>label</b> &mdash; large text centered in the hole, e.g. a total. Sized to the hole. Not drawn
-                when omitted.</li>
-              <li><b>subLabel</b> &mdash; a smaller line under <b>label</b>. Not drawn when omitted.</li>
+              <li><b>label</b> &mdash; large text centered in the hole, e.g. a total. Sized to the hole and shrunk
+                to fit across it; left out if it would have to go below 8px. Not drawn when omitted.</li>
+              <li><b>subLabel</b> &mdash; a smaller line under <b>label</b>, fitted the same way. Not drawn when
+                omitted.</li>
               <li><b>labelColor</b> / <b>subLabelColor</b> &mdash; any CSS color for the two lines, in place of the
                 theme's <code>$gray-800</code> and <code>$gray-600</code>. Applied as the
                 <code>--pcac-pie-center-label-color</code> / <code>--pcac-pie-center-sub-label-color</code> custom

@@ -11,10 +11,13 @@ export class PcacPieDonutConfig {
    */
   innerRadius: number = 0.6
 
-  /** Large text centered in the hole, e.g. `'67'`. Not drawn when not set. */
+  /**
+   * Large text centered in the hole, e.g. `'67'`. Sized to the hole and shrunk to fit across it;
+   * left out if it would have to go below 8px. Not drawn when not set.
+   */
   label?: string
 
-  /** Smaller line under `label`, e.g. `'balls'`. Not drawn when not set. */
+  /** Smaller line under `label`, e.g. `'balls'`, fitted the same way. Not drawn when not set. */
   subLabel?: string
 
   /**

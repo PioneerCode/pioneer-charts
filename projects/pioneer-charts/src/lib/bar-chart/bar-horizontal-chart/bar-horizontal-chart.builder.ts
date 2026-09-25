@@ -3,6 +3,8 @@ import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { BaseType } from 'd3-selection';
+// Side effect only: adds .transition() to d3-selection's Selection, which the bar animations use.
+import 'd3-transition';
 import { Subject } from 'rxjs';
 
 /**

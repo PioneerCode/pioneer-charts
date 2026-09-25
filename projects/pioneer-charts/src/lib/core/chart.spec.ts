@@ -82,6 +82,15 @@ describe('PcacChart', () => {
       expect(chart.containerSizeChanged(chartElm(0))).toBe(true);
     });
 
+    // Regression test: a build that fails for lack of width (the chart's tab hidden with
+    // `display: none`) has already removed the previous drawing. If the container then comes back
+    // at the width it was last drawn at, that must still read as changed, or nothing redraws it.
+    it('returns true when a container returns to its last width after a failed build', () => {
+      chart.initializeChartState(chartElm(800), config());
+      chart.initializeChartState(chartElm(0), config());
+      expect(chart.containerSizeChanged(chartElm(800))).toBe(true);
+    });
+
     // Regression test: bar-horizontal-chart's setHorizontalMarginsBasedOnContent() recomputes
     // `width` and overwrites `margin.left` *after* initializeChartState(), based on measured
     // axis-label widths. containerSizeChanged() must keep comparing against the container's raw

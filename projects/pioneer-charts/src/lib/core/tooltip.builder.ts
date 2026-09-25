@@ -1,23 +1,34 @@
-import { ApplicationRef, EmbeddedViewRef, Injectable, TemplateRef, inject } from '@angular/core';
+import { ApplicationRef, DOCUMENT, EmbeddedViewRef, Injectable, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { PcacData, PcacFormatEnum } from './chart.model';
 import { PcacTooltipContext } from './tooltip.directive';
-import { select } from 'd3';
+import { Selection, select } from 'd3-selection';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PcacTooltipBuilder {
+export class PcacTooltipBuilder implements OnDestroy {
   private appRef = inject(ApplicationRef);
+  private document = inject(DOCUMENT);
+
+  private shell: Selection<HTMLDivElement, unknown, null, undefined> | null = null;
 
   /**
    * One tooltip element shared by every chart on the page, appended to `<body>` so it can float
    * over anything. It's only ever a positioning shell: the default look (`.pcac-d3-tooltip-default`)
    * is toggled on when the library renders its own key/value content and off when a consumer's
    * `<ng-template pcacTooltip>` is rendered into it instead, so a custom template owns the whole box.
+   *
+   * Created on first use rather than with the service, which every chart builder injects: that
+   * way nothing touches the DOM until a chart actually shows a tooltip, so building a chart
+   * where there's no browser `document` (server-side rendering) doesn't throw. Removed again in
+   * `ngOnDestroy()`, when the app that owns this root service is destroyed.
    */
-  public tooltip = select('body')
-    .append('div')
-    .attr('class', 'pcac-d3-tooltip');
+  get tooltip(): Selection<HTMLDivElement, unknown, null, undefined> {
+    this.shell ??= select(this.document.body)
+      .append('div')
+      .attr('class', 'pcac-d3-tooltip');
+    return this.shell;
+  }
 
   /**
    * The consumer template currently rendered into the shell, if any. Created on the first show
@@ -66,15 +77,35 @@ export class PcacTooltipBuilder {
   }
 
   hideTooltip(): void {
-    this.tooltip.style('display', 'none');
+    if (!this.shell) {
+      // Never shown, so there's nothing to hide - and no reason to create the element just to.
+      return;
+    }
+    this.shell.style('display', 'none');
     this.destroyView();
   }
 
+  ngOnDestroy(): void {
+    this.destroyView();
+    this.shell?.remove();
+    this.shell = null;
+  }
+
+  /**
+   * The library's own key/value content. Built from text nodes, never parsed as HTML: `key` and
+   * `value` are consumer data, and markup in them must show as text rather than run.
+   */
   private renderDefault(data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
     this.destroyView();
-    this.tooltip
+    const { key, value } = this.getBarTipData(data, valueFormat, keyFormat);
+    const shell = this.tooltip
       .classed('pcac-d3-tooltip-default', true)
-      .html(this.getBarTipData(data, valueFormat, keyFormat));
+      .html(null)
+      .node() as HTMLDivElement;
+    if (key !== null) {
+      shell.append(key, this.document.createElement('br'));
+    }
+    shell.append(value);
   }
 
   private renderTemplate(template: TemplateRef<PcacTooltipContext>, context: PcacTooltipContext): void {
@@ -113,7 +144,7 @@ export class PcacTooltipBuilder {
     this.view.destroy();
     this.view = null;
     this.viewTemplate = null;
-    this.tooltip.html(null);
+    this.shell?.html(null);
   }
 
   /**
@@ -152,7 +183,8 @@ export class PcacTooltipBuilder {
     const width = shell.offsetWidth;
     const height = shell.offsetHeight;
     // `clientWidth`/`clientHeight` of the root, unlike `innerWidth`/`innerHeight`, exclude scrollbars.
-    const viewport = document.documentElement;
+    const viewport = this.document.documentElement;
+    const view = this.document.defaultView;
 
     const right = viewport.clientWidth - box.right - gap;
     const left = box.left - gap;
@@ -167,11 +199,16 @@ export class PcacTooltipBuilder {
 
     // The rect is in viewport coordinates; the shell is absolutely positioned against the page.
     this.tooltip
-      .style('left', x + window.scrollX + 'px')
-      .style('top', y + window.scrollY + 'px');
+      .style('left', x + (view?.scrollX ?? 0) + 'px')
+      .style('top', y + (view?.scrollY ?? 0) + 'px');
   }
 
-  private getBarTipData(data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): string | null {
+  /** The default tooltip's two lines as plain text; `key` is null when the datum has none. */
+  private getBarTipData(
+    data: PcacData,
+    valueFormat?: PcacFormatEnum,
+    keyFormat?: PcacFormatEnum,
+  ): { key: string | null; value: string } {
     let value = data.value;
     let key = data.key
 
@@ -201,8 +238,10 @@ export class PcacTooltipBuilder {
       }
     }
 
-    const finalValue = value ? value.toString() : value;
-
-    return key ? key + '<br>' + finalValue : `${finalValue}`;
+    // A key of 0 (e.g. hour 0) is a real key; only a missing or empty one leaves the line out.
+    return {
+      key: key === null || key === undefined || key === '' ? null : String(key),
+      value: value === null || value === undefined ? '' : String(value),
+    };
   }
 }

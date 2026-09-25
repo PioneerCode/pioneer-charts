@@ -54,11 +54,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
-    // Copy before reversing: `.reverse()` is in place, and this is the consumer's own array -
-    // reversing it directly flipped their palette on every rebuild (i.e. every resize).
-    if (config.colorOverride && config.colorOverride.colors) {
-      this.colors = [...config.colorOverride.colors].reverse();
-    }
+    this.applyColorOverride(config.colorOverride?.colors);
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

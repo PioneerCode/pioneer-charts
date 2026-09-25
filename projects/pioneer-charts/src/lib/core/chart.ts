@@ -64,6 +64,24 @@ export class PcacChart {
   startData: PcacData[] = [];
 
   /**
+   * Swaps a consumer's `colorOverride` in for the theme palette `initializeChartState` set, in
+   * order. Checks `length` rather than truthiness: every config class defaults its override to
+   * `[]`, and an empty array is truthy - taken as an override, it would leave every mark with no
+   * color. Cycled out to at least as many entries as the theme palette, the same way that palette
+   * cycles its own colors, so an override shorter than the data repeats rather than leaving the
+   * marks past its end with an `undefined` color. Call after `initializeChartState()`.
+   */
+  protected applyColorOverride(override: readonly string[] | undefined): void {
+    if (!override?.length) {
+      return;
+    }
+    this.colors = Array.from(
+      { length: Math.max(this.colors.length, override.length) },
+      (_, i) => override[i % override.length],
+    );
+  }
+
+  /**
    * Raw, unadjusted container width measured by the last successful `initializeChartState()`
    * call, or `null` if none has succeeded yet. Deliberately tracked separately from `width`:
    * some builders (e.g. bar-horizontal-chart's `setHorizontalMarginsBasedOnContent`) recompute
@@ -315,11 +333,19 @@ export class PcacChart {
     const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
     if (measuredWidth <= 0) {
+      // The previous drawing was just removed above, so nothing is on screen any more. Forget the
+      // size it was drawn at, or a container that comes back at that same width (a hidden tab
+      // shown again) would read as unchanged to `containerSizeChanged()` and never be redrawn.
+      this.lastContainerWidth = null;
       return false;
     }
     this.width = measuredWidth;
     this.height = this.resolveHeight(container, config);
-    this.colors = this.colorService.getColorScale(Math.max(config.data.length, config.data[0]?.data ? config.data[0].data.length : 0));
+    // One color per group or per series within a group, whichever needs more - sized by the
+    // largest group, since bars index colors by their position within their own group.
+    this.colors = this.colorService.getColorScale(
+      Math.max(config.data.length, ...config.data.map((d) => d.data?.length ?? 0)),
+    );
     this.lastContainerWidth = containerWidth;
     this.lastContainerHeight = container.clientHeight;
     this.lastHeightFull = config.heightFull === true;

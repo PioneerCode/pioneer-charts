@@ -11,15 +11,26 @@ export class PcacColorService {
   private warning = '#fec163';
   private orange = '#ffa177';
   private blue = '#55d8fe';
-  private scale = [
-    this.primaryLight,
-    this.success,
-    this.danger,
-    this.warning,
-    this.orange,
-    this.blue
-  ] as string[];
   private alert = 'red';
+
+  /** A consumer's own scale from `setScale()`; replaces the default palette while set. */
+  private customScale: string[] | null = null;
+
+  /**
+   * The palette charts cycle through: the `setScale()` one when given, else the default colors
+   * built from the current fields - so a setter like `setSuccess()` changes the charts drawn after
+   * it, rather than a copy of the colors taken when the service was created.
+   */
+  private get scale(): string[] {
+    return this.customScale ?? [
+      this.primaryLight,
+      this.success,
+      this.danger,
+      this.warning,
+      this.orange,
+      this.blue,
+    ];
+  }
 
   /**
    * Get a scale of colors dynamically
@@ -39,13 +50,16 @@ export class PcacColorService {
   }
 
   /**
-   * Set the scale that charts use to set colors of data[x] on the UI.
+   * Set the scale that charts use to set colors of data[x] on the UI, in place of the default
+   * palette (and of the individual color setters below, which only shape the default). An empty
+   * array goes back to the default palette rather than leaving charts with no colors.
    * @param colors A collection of hex values
    */
   setScale(colors: string[]): void {
-    this.scale = colors;
+    this.customScale = colors.length ? [...colors] : null;
   }
 
+  /** @deprecated No chart reads the primary color; it isn't part of the palette. */
   setPrimary(color: string): void {
     this.primary = color;
   }
@@ -60,6 +74,10 @@ export class PcacColorService {
 
   setDanger(color: string): void {
     this.danger = color;
+  }
+
+  setWarning(color: string): void {
+    this.warning = color;
   }
 
   setOrange(color: string): void {

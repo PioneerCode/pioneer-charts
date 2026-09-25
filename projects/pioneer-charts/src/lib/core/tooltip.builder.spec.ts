@@ -79,6 +79,22 @@ describe('PcacTooltipBuilder', () => {
       expect(shell.innerHTML).toBe('Jan<br>25%');
     });
 
+    it('shows markup in the key and value as text rather than rendering it', () => {
+      builder.showTooltip(mouse(), undefined, context({
+        key: '<img src=x onerror="window.pwned=1">', value: '<b>42</b>', hide: false, data: [],
+      }));
+
+      expect(shell.querySelector('img')).toBeNull();
+      expect(shell.querySelector('b')).toBeNull();
+      expect(shell.textContent).toBe('<img src=x onerror="window.pwned=1"><b>42</b>');
+    });
+
+    it('keeps a key of 0 and shows a missing value as blank', () => {
+      builder.showTooltip(mouse(), undefined, context({ key: 0, value: null, hide: false, data: [] }));
+
+      expect(shell.innerHTML).toBe('0<br>');
+    });
+
     it('is what the deprecated showBarTooltip() renders', () => {
       builder.showBarTooltip(mouse(), datum('Feb', 7));
 
@@ -253,6 +269,34 @@ describe('PcacTooltipBuilder', () => {
         expect(shell.style.top).toBe('652px');
         vi.restoreAllMocks();
       });
+    });
+  });
+
+  describe('shell lifecycle', () => {
+    it('touches the page only once a tooltip is first shown', () => {
+      const count = () => document.querySelectorAll('.pcac-d3-tooltip').length;
+      const before = count();
+
+      const fresh = TestBed.runInInjectionContext(() => new PcacTooltipBuilder());
+      fresh.hideTooltip();
+      expect(count()).toBe(before);
+
+      fresh.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+      expect(count()).toBe(before + 1);
+      fresh.ngOnDestroy();
+      expect(count()).toBe(before);
+    });
+
+    it('is removed from the page when the app is torn down, and recreated on next use', () => {
+      builder.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+      expect(document.body.contains(shell)).toBe(true);
+
+      builder.ngOnDestroy();
+      expect(document.body.contains(shell)).toBe(false);
+
+      const recreated = builder.tooltip.node() as HTMLDivElement;
+      expect(recreated).not.toBe(shell);
+      expect(document.body.contains(recreated)).toBe(true);
     });
   });
 });

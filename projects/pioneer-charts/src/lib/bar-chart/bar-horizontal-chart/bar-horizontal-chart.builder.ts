@@ -3,6 +3,8 @@ import { color } from 'd3-color';
 import { scaleBand, ScaleBand, scaleLinear, ScaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { BaseType } from 'd3-selection';
+// Side effect only: adds .transition() to d3-selection's Selection, which the bar animations use.
+import 'd3-transition';
 import { Subject } from 'rxjs';
 
 /**
@@ -46,11 +48,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
       return;
     }
 
-    // Copy before reversing: `.reverse()` is in place, and this is the consumer's own array -
-    // reversing it directly flipped their palette on every rebuild (i.e. every resize).
-    if (config.colorOverride && config.colorOverride.colors) {
-      this.colors = [...config.colorOverride.colors].reverse();
-    }
+    this.applyColorOverride(config.colorOverride?.colors);
     this.buildScales(chartElm, this.config);
     this.drawChart(chartElm, this.config);
   }

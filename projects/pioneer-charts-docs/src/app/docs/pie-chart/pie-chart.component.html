@@ -11,6 +11,37 @@
     </div>
   </section>
   <section class="pc-doc-section">
+    <h3 id="donut">Donut</h3>
+    <p class="mb-3">Set <code>donut</code> on the config to draw the slices as a ring around an empty center;
+      <code>{{ '{}' }}</code> takes every default. The center can hold a short <code>label</code> and
+      <code>subLabel</code> &mdash; typically the total the slices add up to. Slices, hover and
+      <code>sliceClicked</code> work the same as on the pie. The controls below edit the chart's <code>donut</code>
+      live; each field is described in the Configuration table.</p>
+    @let d = donut();
+    <div class="pc-controls max-w-md mb-3">
+      <label for="pc-donut-inner-radius">innerRadius</label>
+      <input id="pc-donut-inner-radius" type="range" min="0" max="0.9" step="0.05" [value]="d.innerRadius ?? 0.6"
+        (input)="setDonut('innerRadius', $any($event.target).valueAsNumber)" />
+      <span class="pc-readout">{{ d.innerRadius ?? 0.6 }}</span>
+
+      <label for="pc-donut-label">label</label>
+      <input id="pc-donut-label" type="text" [value]="d.label ?? ''" [placeholder]="'' + total()"
+        (input)="setDonut('label', $any($event.target).value)" />
+      <span class="pc-muted">{{ d.label ? '' : 'the total' }}</span>
+
+      <label for="pc-donut-sub-label">subLabel</label>
+      <input id="pc-donut-sub-label" type="text" [value]="d.subLabel ?? ''"
+        (input)="setDonut('subLabel', $any($event.target).value)" />
+      <span></span>
+    </div>
+    <mat-card class="p-3 mb-3">
+      <app-layout-resource-state [resource]="pcService.pieChartConfig">
+        <pcac-pie-chart [config]="donutConfig()" (sliceClicked)="pcService.onClicked($event)"></pcac-pie-chart>
+      </app-layout-resource-state>
+    </mat-card>
+    <app-layout-code language="javascript" [code]="donutCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
     <h3>Markup</h3>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
   </section>
@@ -19,6 +50,25 @@
     <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
     <app-layout-base-config [includeHeightFull]="false">
       <tbody>
+        <tr>
+          <td>donut</td>
+          <td>Draw the pie as a donut: slices as a ring around an empty center. Off when omitted;
+            <code>{{ '{}' }}</code> turns it on with the defaults below.
+            <ul>
+              <li><b>innerRadius</b> &mdash; radius of the hole as a fraction of the pie's radius, from 0 (a plain
+                pie) to 0.9; values outside that are clamped. Default 0.6.</li>
+              <li><b>label</b> &mdash; large text centered in the hole, e.g. a total. Sized to the hole and shrunk
+                to fit across it; left out if it would have to go below 8px. Not drawn when omitted.</li>
+              <li><b>subLabel</b> &mdash; a smaller line under <b>label</b>, fitted the same way. Not drawn when
+                omitted.</li>
+              <li><b>labelColor</b> / <b>subLabelColor</b> &mdash; any CSS color for the two lines, in place of the
+                theme's <code>$gray-800</code> and <code>$gray-600</code>. Applied as the
+                <code>--pcac-pie-center-label-color</code> / <code>--pcac-pie-center-sub-label-color</code> custom
+                properties on the chart's <code>.pcac-pie-center</code> group, which a stylesheet can set on an
+                ancestor instead.</li>
+            </ul>
+          </td>
+        </tr>
         <tr>
           <td>colorOverride</td>
           <td>Slice colors, any CSS color, used in data order instead of the theme palette: the first slice takes

@@ -1,3 +1,10 @@
+<a name="22.2.13"></a>
+# [v22.2.13]
+
+### Added
+  - Donut option for the pie chart: set `donut` to draw the slices as a ring, with an optional
+    label and sub-label in the center (e.g. a total).
+
 <a name="22.2.12"></a>
 # [v22.2.12]
 

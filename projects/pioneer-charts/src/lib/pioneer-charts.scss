@@ -27,10 +27,21 @@
 
 // Each color below is `var(--pcac-*-color, <theme color>)`. A builder sets the property on a
 // part's group only when the chart's config gives that color (`PcacAxisConfig`'s `*Color` fields,
-// `PcacPointFanOutConfig.spokeColor` / `anchorColor`), so a chart without one looks as before. A
+// `PcacPointFanOutConfig.spokeColor` / `anchorColor`, `PcacPieDonutConfig.labelColor` /
+// `subLabelColor`), so a chart without one looks as before. A
 // stylesheet can set the same property on any ancestor; a config value, on the group itself, wins.
 .pcac-grid-rule line {
   stroke: var(--pcac-grid-color, #{imports.$gray-200});
+}
+
+// The donut's center text (`PcacPieDonutConfig.labelColor` / `subLabelColor`).
+.pcac-pie-center-label {
+  fill: var(--pcac-pie-center-label-color, #{imports.$gray-800});
+  font-weight: 500;
+}
+
+.pcac-pie-center-sub-label {
+  fill: var(--pcac-pie-center-sub-label-color, #{imports.$gray-600});
 }
 
 .pcac-x-axis,

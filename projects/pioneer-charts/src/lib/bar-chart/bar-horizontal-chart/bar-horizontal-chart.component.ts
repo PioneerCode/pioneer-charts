@@ -52,7 +52,8 @@ export class PcacBarHorizontalChartComponent {
 
   buildChart(): void {
     const config = this.config();
-    if (config && config.data && config.data.length > 0) {
+    // Handed over even when empty: the builder clears what it last drew rather than leaving it.
+    if (config) {
       this.chartBuilder.buildChart(this.chartElm(), config);
     }
   }

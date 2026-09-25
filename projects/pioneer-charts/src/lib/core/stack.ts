@@ -1,20 +1,38 @@
 import { PcacData } from './chart.model';
 
 /**
- * Where each bar of a stacked group starts: the running total of the bars before it, in data
- * order, so the first bar sits on the baseline and each later one on top of the previous. Values
- * are the bar's *own* size (segment), not a pre-accumulated total; a null value counts as 0.
+ * How long each bar is drawn: its value, or 0 when it can't be drawn - a null or non-numeric
+ * value, or `hide` set on the bar or on its whole group. A hidden bar keeps its slot (and so its
+ * color) and just draws nothing, the same way a hidden line/area/plot series keeps its place.
+ * Negative values are kept as they are; the bar charts only draw upward from 0.
  *
  * Keyed by the bar's own `PcacData` object so D3 callbacks (which only get the datum) can look
- * their offset up directly.
+ * their size up directly.
  */
-export function stackStarts(groups: PcacData[]): Map<PcacData, number> {
+export function barSizes(groups: PcacData[]): Map<PcacData, number> {
+  const sizes = new Map<PcacData, number>();
+  for (const group of groups) {
+    for (const bar of group.data ?? []) {
+      const value = Number(bar.value ?? 0);
+      sizes.set(bar, group.hide || bar.hide || !Number.isFinite(value) ? 0 : value);
+    }
+  }
+  return sizes;
+}
+
+/**
+ * Where each bar of a stacked group starts: the running total of the bars before it, in data
+ * order, so the first bar sits on the baseline and each later one on top of the previous. Sizes
+ * are the bar's *own* (segment), not a pre-accumulated total, taken from `barSizes` - so a null,
+ * non-numeric or hidden bar adds nothing to the stack.
+ */
+export function stackStarts(groups: PcacData[], sizes = barSizes(groups)): Map<PcacData, number> {
   const starts = new Map<PcacData, number>();
   for (const group of groups) {
     let total = 0;
-    for (const bar of group.data) {
+    for (const bar of group.data ?? []) {
       starts.set(bar, total);
-      total += Number(bar.value ?? 0);
+      total += sizes.get(bar) ?? 0;
     }
   }
   return starts;

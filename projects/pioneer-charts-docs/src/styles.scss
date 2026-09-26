@@ -6,6 +6,7 @@
 
 
 @layer base {
+
   p,
   h1,
   h2,
@@ -64,8 +65,6 @@ body {
 
   // Reset the user agent margin.
   margin: 0;
-
-  background-color: colors.$primary;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -204,6 +203,7 @@ body {
 .pc-doc-section {
   margin-bottom: 2rem;
 }
+
 // The docs layout (page-docs.html) scrolls the page itself, not a pane inside it. Material's drawer
 // container clips its content and its content area scrolls on its own by default, which would
 // trap the page inside them and stop the sticky "On this page" column from sticking. (Qualified
@@ -212,7 +212,7 @@ body {
   overflow: visible;
   min-height: calc(100dvh - var(--app-header-height, 64px));
 
-  > .mat-drawer-content {
+  >.mat-drawer-content {
     overflow: visible;
   }
 }
@@ -266,8 +266,27 @@ html {
 // heading's level is set by where it sits in the page's outline - h1, then h2, then h3, none
 // skipped - so a section title that used to be an h3 for its size is an h2 with `pc-h3`. Unlayered,
 // so these win over the tag sizes.
-.pc-h2 { font-size: 2rem; }
-.pc-h3 { font-size: 1.75rem; }
-.pc-h4 { font-size: 1.5rem; }
-.pc-h5 { font-size: 1.25rem; }
-.pc-h6 { font-size: 1rem; }
+.pc-h2 {
+  font-size: 2rem;
+}
+
+.pc-h3 {
+  font-size: 1.75rem;
+}
+
+.pc-h4 {
+  font-size: 1.5rem;
+}
+
+.pc-h5 {
+  font-size: 1.25rem;
+}
+
+.pc-h6 {
+  font-size: 1rem;
+}
+
+
+.bg-primary {
+  background-color: colors.$primary;
+}

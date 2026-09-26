@@ -6,7 +6,7 @@
 }
 
 mat-sidenav-container {
-  background-color: #fff;
+  // background-color: #fff;
 }
 
 // The sidebar on a desktop: fixed below the header, down the left edge. Its bottom is kept at the
@@ -22,7 +22,7 @@ mat-sidenav-container {
   // Scrolling the list to its end doesn't carry on into the page.
   overscroll-behavior: contain;
   border-right: 1px solid rgba(0, 0, 0, 0.5);
-  background-color: #fff;
+  // background-color: #fff;
   z-index: 2;
 
   // Only a drawer below 960px (the template keeps this in the page either way). Same breakpoint as
@@ -41,7 +41,7 @@ mat-sidenav-container {
 
 // The sidebar below 960px: a drawer over the page.
 .sidenav-container {
-  background-color: #fff;
+  // background-color: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 0;
   width: 280px;

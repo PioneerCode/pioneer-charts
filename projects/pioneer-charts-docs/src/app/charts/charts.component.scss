@@ -1,3 +1,10 @@
+// The theme's background, full width - the docs pages get the same from Material's sidenav
+// container; without it the page showed the body's dark color (the footer's) around its cards.
+:host {
+  display: block;
+  background-color: var(--mat-sys-surface);
+}
+
 .pc-charts-page {
   h1 {
     margin-bottom: 0.5rem;

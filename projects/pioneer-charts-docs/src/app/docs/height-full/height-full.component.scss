@@ -5,12 +5,14 @@
 // the chart to overlay its loading state) and is a plain `display: block` with no height of its
 // own, so without this the chain breaks and the chart sees an auto-height container - the exact
 // fallback case the page is trying not to demonstrate here.
+//
+// A chart taller than what's left for it (the slider below 200px) is clipped there, inside the
+// card, rather than by the card element itself - clipping that would cut off the card's own
+// shadow, which is drawn outside it.
 .pc-height-full-container {
-  box-sizing: border-box;
-  overflow: hidden;
-
   app-layout-resource-state {
     height: 100%;
+    overflow: hidden;
   }
 }
 

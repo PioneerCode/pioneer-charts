@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AppService } from './app.service';
 import { LayoutHeader } from './layout/header/header';
 import { LayoutFooter } from './layout/footer/footer';
+import { DocsNavService } from './layout/docs-nav.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { LayoutFooter } from './layout/footer/footer';
 })
 export class App {
   protected readonly title = signal('Pioneer Charts');
+  protected readonly nav = inject(DocsNavService);
 
   constructor() {
     // Eagerly instantiate the root-scoped AppService here so its httpResource()-backed

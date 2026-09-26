@@ -1,5 +1,16 @@
-.nav {
+.nav-row {
   gap: 4px;
+}
+
+// The phone-only row under the toolbar holding the docs sidebar's Menu button.
+.menu-row {
+  justify-content: center;
+  height: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  .mat-icon {
+    margin-right: 8px;
+  }
 }
 
 .logo-icon {

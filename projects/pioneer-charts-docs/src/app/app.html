@@ -1,5 +1,6 @@
 <app-layout-header class="fixed top-0 left-0 right-0 z-50"/>
-<div class="mt-[64px]">
+<!-- Clears the fixed header, whose height varies (see LayoutHeader). -->
+<div [style.margin-top.px]="nav.headerHeight()">
   <router-outlet />
 </div>
 <app-layout-footer />

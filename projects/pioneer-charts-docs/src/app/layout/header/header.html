@@ -1,26 +1,38 @@
 <mat-toolbar class="nav">
-  <a matButton routerLink="/">
-    <div class="logo-icon">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        viewBox="0 0 208.7 161.3" xml:space="preserve">
-        <polygon class="logo-polygon"
-          points="122.2,7.6 122.5,7.6 200.3,161.2 207.6,161.2 125.9,0.3 118.8,0.3 82.7,71.5 67.8,42.2 60.8,42.2 0.4,161.2
-                7.7,161.2 64.1,49.5 64.5,49.5 79.2,78.5 37.2,161.2 44.5,161.2 82.7,85.6 98.7,117.2 76.3,161.2 83.6,161.2 102.3,124.3
-                120.9,161.2 128.2,161.2 105.8,117.2 122.3,84.6 122.7,84.6 161.4,161.2 168.6,161.2 126,77.3 118.9,77.3 102.3,110.2 86.3,78.6 " />
-      </svg>
-    </div>
-    <span class="hidden sm:inline">Pioneer Charts</span>
-  </a>
-  <a matButton routerLink="/docs/guides/introduction">Documentation</a>
-  <a matButton routerLink="/charts">Charts</a>
-  <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank" class="ms-auto">
-    <div class="github-icon">
-      <svg viewBox="0 0 20 20" aria-hidden="true" class="docs-github-logo">
-        <path
-          d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V19c0 .27.16.59.67.5C17.14 18.16 20 14.42 20 10A10 10 0 0 0 10 0z"
-          fill="currentColor" fill-rule="evenodd"></path>
-      </svg>
-    </div>
-    <span class="hidden sm:inline">GitHub</span>
-  </a>
+  <mat-toolbar-row class="nav-row">
+    <a matButton routerLink="/">
+      <div class="logo-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          viewBox="0 0 208.7 161.3" xml:space="preserve">
+          <polygon class="logo-polygon"
+            points="122.2,7.6 122.5,7.6 200.3,161.2 207.6,161.2 125.9,0.3 118.8,0.3 82.7,71.5 67.8,42.2 60.8,42.2 0.4,161.2
+                  7.7,161.2 64.1,49.5 64.5,49.5 79.2,78.5 37.2,161.2 44.5,161.2 82.7,85.6 98.7,117.2 76.3,161.2 83.6,161.2 102.3,124.3
+                  120.9,161.2 128.2,161.2 105.8,117.2 122.3,84.6 122.7,84.6 161.4,161.2 168.6,161.2 126,77.3 118.9,77.3 102.3,110.2 86.3,78.6 " />
+        </svg>
+      </div>
+      <span class="hidden sm:inline">Pioneer Charts</span>
+    </a>
+    <a matButton routerLink="/docs/guides/introduction">Documentation</a>
+    <a matButton routerLink="/charts">Charts</a>
+    <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank" class="ms-auto">
+      <div class="github-icon">
+        <svg viewBox="0 0 20 20" aria-hidden="true" class="docs-github-logo">
+          <path
+            d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V19c0 .27.16.59.67.5C17.14 18.16 20 14.42 20 10A10 10 0 0 0 10 0z"
+            fill="currentColor" fill-rule="evenodd"></path>
+        </svg>
+      </div>
+      <span class="hidden sm:inline">GitHub</span>
+    </a>
+  </mat-toolbar-row>
+  <!-- On a phone, docs pages open their sidebar (a drawer) from here: see DocsNavService. -->
+  @if (nav.showMenuButton()) {
+    <mat-toolbar-row class="menu-row">
+      <button matButton type="button" [attr.aria-expanded]="nav.opened()" aria-controls="docs-navigation"
+        (click)="nav.toggle()">
+        <mat-icon>menu</mat-icon>
+        Menu
+      </button>
+    </mat-toolbar-row>
+  }
 </mat-toolbar>

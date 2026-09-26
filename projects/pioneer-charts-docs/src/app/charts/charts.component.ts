@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import {
   PcacBarHorizontalChartComponent,
   PcacBarVerticalChartComponent,
-  PcacPieChartComponent,
+  PcacPieChart,
+  PcacDonutChart,
   PcacAreaChart,
   PcacLineChart
 } from '@pioneer-code/pioneer-charts';
@@ -18,11 +19,19 @@ import { LayoutResourceState } from '../layout/resource-state/resource-state';
     PcacBarHorizontalChartComponent,
     PcacLineChart,
     PcacAreaChart,
-    PcacPieChartComponent,
+    PcacPieChart,
+    PcacDonutChart,
     MatCardModule,
     LayoutResourceState
   ]
 })
 export class ChartsComponent {
   readonly service = inject(AppService);
+
+  /** The pie's data again, drawn as a donut with its total in the center. */
+  readonly donutConfig = computed(() => {
+    const config = this.service.pieChartConfig.value();
+    const total = (config.data ?? []).reduce((sum, d) => sum + Number(d.value ?? 0), 0);
+    return { ...config, label: String(total), subLabel: 'total' };
+  });
 }

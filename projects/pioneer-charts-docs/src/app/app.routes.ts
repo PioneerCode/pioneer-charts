@@ -68,7 +68,12 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/pie-chart', title: 'Pie Chart',
         loadComponent: () => import('./docs/pie-chart/pie-chart.component').then(m => m.PieChartComponent),
-        data: { description: 'Angular pie and donut charts from Pioneer Charts, with animated transitions.' },
+        data: { description: 'An Angular pie chart from Pioneer Charts, with animated transitions and click events for each slice.' },
+    },
+    {
+        path: 'docs/components/charts/donut-chart', title: 'Donut Chart',
+        loadComponent: () => import('./docs/donut-chart/donut-chart.component').then(m => m.DonutChartComponent),
+        data: { description: 'An Angular donut chart from Pioneer Charts, with a total or other label in its center and animated transitions.' },
     },
     {
         path: 'charts', title: 'Charts',

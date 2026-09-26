@@ -92,11 +92,18 @@
       </mat-card>
     </div>
   </div>
-  <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
+  <div class="container mx-auto grid grid-cols-2 gap-4 mt-3">
     <div>
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="service.pieChartConfig">
           <pcac-pie-chart [config]="service.pieChartConfig.value()" (sliceClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card class="p-3">
+        <app-layout-resource-state [resource]="service.pieChartConfig">
+          <pcac-donut-chart [config]="donutConfig()" (sliceClicked)="service.onClicked($event)" />
         </app-layout-resource-state>
       </mat-card>
     </div>

@@ -8,7 +8,7 @@ export const SITE_URL = 'https://pioneercharts.com';
 const SITE_NAME = 'Pioneer Charts';
 const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
 /** The home page's description (and index.html's), for any route without its own. */
-const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot and pie charts built on D3'
+const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie and donut charts built on D3'
   + ' - responsive, themeable and simple to configure.';
 
 /**

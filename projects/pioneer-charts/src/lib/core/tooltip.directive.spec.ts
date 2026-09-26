@@ -5,8 +5,8 @@ import { PcacBarVerticalChartComponent } from '../bar-chart/bar-vertical-chart/b
 import { PcacBarVerticalChartConfig } from '../bar-chart/bar-vertical-chart/bar-vertical-chart.model';
 import { PcacLineChart } from '../plot-line-area-chart/line/line.component';
 import { PcacLineChartConfig } from '../plot-line-area-chart/line/line.model';
-import { PcacPieChartComponent } from '../pie-chart/pie-chart.component';
-import { PcacPieChartConfig } from '../pie-chart/pie-chart.model';
+import { PcacPieChart } from '../pie-donut-chart/pie/pie.component';
+import { PcacPieChartConfig } from '../pie-donut-chart/pie/pie.model';
 import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacTooltipDirective } from './tooltip.directive';
 
@@ -23,7 +23,7 @@ import { PcacTooltipDirective } from './tooltip.directive';
  */
 @Component({
   selector: 'pcac-tooltip-directive-test-host',
-  imports: [PcacBarVerticalChartComponent, PcacLineChart, PcacPieChartComponent, PcacTooltipDirective],
+  imports: [PcacBarVerticalChartComponent, PcacLineChart, PcacPieChart, PcacTooltipDirective],
   template: `
     <pcac-bar-vertical-chart [config]="barConfig()">
       <ng-template pcacTooltip let-point let-group="parent" let-i="index" let-g="parentIndex">

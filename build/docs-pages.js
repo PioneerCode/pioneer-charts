@@ -8,7 +8,8 @@
  * 2. Writes 404.html - what Pages serves, with a 404 status, for any URL that isn't a file - from
  *    the client-only shell (index.csr.html), which renders whatever the router makes of the URL:
  *    the home page, marked noindex (see seo.ts).
- * 3. Writes sitemap.xml from the routes the builder actually pre-rendered.
+ * 3. Writes sitemap.xml from the routes the builder actually pre-rendered - less the redirects
+ *    (`redirectTo` routes, which it writes as a meta-refresh page), since a sitemap lists pages.
  */
 import { copyFileSync, readdirSync, readFileSync, renameSync, rmdirSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
@@ -33,10 +34,12 @@ for (const route of routes.filter((route) => route !== '/')) {
 
 copyFileSync(`${browser}/index.csr.html`, `${browser}/404.html`);
 
-const urls = routes.map((route) => `  <url><loc>${SITE_URL}${route}</loc></url>`).join('\n');
+const pageFile = (route) => (route === '/' ? `${browser}/index.html` : `${browser}${route}.html`);
+const pages = routes.filter((route) => !readFileSync(pageFile(route), 'utf-8').includes('http-equiv="refresh"'));
+const urls = pages.map((route) => `  <url><loc>${SITE_URL}${route}</loc></url>`).join('\n');
 writeFileSync(
   `${browser}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
 );
 
-console.log(`Pioneer Charts: docs pages flattened, 404.html and sitemap.xml written (${routes.length} pages)`);
+console.log(`Pioneer Charts: docs pages flattened, 404.html and sitemap.xml written (${pages.length} pages, ${routes.length - pages.length} redirects)`);

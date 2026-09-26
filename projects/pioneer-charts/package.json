@@ -16,7 +16,15 @@
     "data visualization",
     "charts",
     "d3",
-    "angular"
+    "angular",
+    "angular charts",
+    "bar chart",
+    "line chart",
+    "area chart",
+    "scatter plot",
+    "pie chart",
+    "donut chart",
+    "legend"
   ],
   "repository": {
     "type": "git",

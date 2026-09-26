@@ -1,4 +1,6 @@
-<header class="pt-24 pb-24 text-center relative">
+<!-- overflow-hidden clips the decorative logo, which sits half past the right edge; unclipped it
+     widened the page on a phone. -->
+<header class="pt-24 pb-24 text-center relative overflow-hidden">
   <div class="absolute bottom-0 left-[50%] ms-24 w-124 z-0">
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       viewBox="0 0 208.7 161.3" xml:space="preserve">
@@ -16,17 +18,17 @@
   </div>
 </header>
 <div class="pt-5 pb-16 bg-white">
-  <div class=" container mx-auto gap-4 grid grid-cols-3 pb-5 pt-5 place-items-center">
+  <div class="container mx-auto px-4 gap-8 grid grid-cols-1 md:grid-cols-3 pb-5 pt-5 place-items-center">
     <div class="text-center">
       <mat-icon class="large-icon">bar_chart</mat-icon>
-      <h3>Beautiful Charts</h3>
+      <h2 class="pc-h3">Beautiful Charts</h2>
       <p>Data Visualizations don't need to be ugly! Pioneer Charts comes with a beautiful default theme of which
         is customizable
         to suit your needs.</p>
     </div>
     <div class="text-center">
       <mat-icon class="large-icon">code</mat-icon>
-      <h3>Open Source</h3>
+      <h2 class="pc-h3">Open Source</h2>
       <p>Pioneer Charts is developed and maintained in the
         <a href="https://github.com/PioneerCode/pioneer-charts" title="Pioneer Charts Github">open</a>. Have a
         feature request or found a bug? Contributions are welcome!
@@ -34,7 +36,7 @@
     </div>
     <div class="text-center">
       <mat-icon class="large-icon">checklist</mat-icon>
-      <h3>Battle Tested Code</h3>
+      <h2 class="pc-h3">Battle Tested Code</h2>
       <p>Pioneer Charts is built on top of
         <a href="https://angular.io" title="Angular">Angular</a> and backed by
         <a href="https://d3js.org/" title="D3">D3</a>. Of which produces performant and consistent rendering
@@ -42,14 +44,14 @@
       </p>
     </div>
   </div>
-  <div class="container mx-auto grid grid-cols-1">
+  <div class="container mx-auto px-4 grid grid-cols-1">
     <div>
       <h2 class="mt-5">Charts made simple</h2>
       <p>Pioneer Charts allows you to create beautiful, consistent and responsive charts with minimal
         effort. </p>
     </div>
   </div>
-  <div class="container grid grid-cols-1 mx-auto">
+  <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="col">
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="appService.areaChartConfig">
@@ -59,9 +61,9 @@
       </mat-card>
     </div>
   </div>
-  <div class="container grid grid-cols-1 mx-auto">
+  <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="col pt-5 pb-5">
-      <h4>Standing on the shoulders of giants</h4>
+      <h2 class="pc-h4">Standing on the shoulders of giants</h2>
       <p>Pioneer Charts utilizes
         <a href="https://angular.io" title="Angular">Angular</a> as its delivery method. Meaning, if you are familiar with
         <a href="https://angular.io" title="Angular">Angular</a> then you are familiar with how the charts inside of
@@ -74,7 +76,7 @@
       </p>
     </div>
   </div>
-  <div class="container grid grid-cols-1 mx-auto">
+  <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="text-center">
       <a routerLink="/docs/guides/introduction" matButton="filled" class="me-2">Get
         Started</a>

@@ -1,5 +1,14 @@
 :host {
   display: block;
-  overflow: scroll;
   width: 100%;
+  // A flex item (beside the "On this page" column) doesn't shrink below its content's width by
+  // default, so one wide table or code block would push the whole page sideways; 0 lets the wide
+  // thing scroll inside its own box instead.
+  min-width: 0;
+}
+
+// Focused by script on arriving from another page, for keyboard and screen-reader users; not a
+// control, so no focus ring.
+.pc-docs-heading:focus {
+  outline: none;
 }

@@ -11,78 +11,82 @@
     </div>
   </section>
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markupCode" />
   </section>
   <section class="pc-doc-section">
-    <h3 id="api">API</h3>
+    <h2 class="pc-h3" id="api">API</h2>
     <app-layout-code language="javascript" [code]="importCode" />
-    <h5 id="configuration" class="mb-0">Configuration</h5>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Description</th>
-          <th>Type</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>heading</td>
-          <td>If provided, will display a Heading for the legend. </td>
-          <td><code>string</code></td>
-          <td><code>null</code></td>
-        </tr>
-        <tr>
-          <td>items</td>
-          <td>Collection of legend items to display, in order. Each is a <code>PcacLegendConfigItem</code>:
-            <ul>
-              <li><b>label</b> &mdash; the text shown next to the item's color swatch. Required.</li>
-              <li><b>checked</b> &mdash; whether the item is on. An unchecked item is drawn dimmed. Clicking an
-                item (or pressing Enter / Space on it) flips this. Default true.</li>
-              <li><b>colorOverride</b> &mdash; a hex color for the swatch. Left <code>null</code>, the item gets
-                the theme palette's color for its position, the same one a chart gives its series at that index
-                &mdash; so a legend whose items are in series order matches the chart without any override.</li>
-            </ul>
-          </td>
-          <td><code>PcacLegendConfigItem[]</code></td>
-          <td><code>[]</code></td>
-        </tr>
-      </tbody>
-    </table>
+    <h3 id="configuration" class="pc-h5 mb-0">Configuration</h3>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>heading</td>
+            <td>If provided, will display a Heading for the legend. </td>
+            <td><code>string</code></td>
+            <td><code>null</code></td>
+          </tr>
+          <tr>
+            <td>items</td>
+            <td>Collection of legend items to display, in order. Each is a <code>PcacLegendConfigItem</code>:
+              <ul>
+                <li><b>label</b> &mdash; the text shown next to the item's color swatch. Required.</li>
+                <li><b>checked</b> &mdash; whether the item is on. An unchecked item is drawn dimmed. Clicking an
+                  item (or pressing Enter / Space on it) flips this. Default true.</li>
+                <li><b>colorOverride</b> &mdash; a hex color for the swatch. Left <code>null</code>, the item gets
+                  the theme palette's color for its position, the same one a chart gives its series at that index
+                  &mdash; so a legend whose items are in series order matches the chart without any override.</li>
+              </ul>
+            </td>
+            <td><code>PcacLegendConfigItem[]</code></td>
+            <td><code>[]</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <p class="text-sm mt-2"><b>config</b> is a two-way model: when an item is clicked the legend replaces its
       config with one whose item has <b>checked</b> flipped, and writes it back through
       <code>[(config)]</code> if you bind that way. With a one-way <code>[config]</code> the change only reaches
       you through the <b>(itemClicked)</b> event.</p>
   </section>
   <section class="pc-doc-section">
-    <h3 id="events" class="mb-0">Events</h3>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Binding</th>
-          <th>Description</th>
-          <th>Payload</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            (itemClicked)="onItemClicked($event)"
-          </td>
-          <td>Emitted when a legend item is clicked or toggled from the keyboard, with every item's updated state
-            &mdash; the clicked one's <b>checked</b> flipped. Typically used to set <b>hide</b> on the matching
-            chart series.</td>
-          <td>
-            <code>PcacLegendConfigItem[]</code>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (itemClicked)="onItemClicked($event)"
+            </td>
+            <td>Emitted when a legend item is clicked or toggled from the keyboard, with every item's updated state
+              &mdash; the clicked one's <b>checked</b> flipped. Typically used to set <b>hide</b> on the matching
+              chart series.</td>
+            <td>
+              <code>PcacLegendConfigItem[]</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
   <section class="pc-doc-section">
-    <h3 id="contract">Contract</h3>
+    <h2 class="pc-h3" id="contract">Contract</h2>
     <div class="pc-config-container">
       <app-layout-code language="json" [code]="pcService.legendConfig.value() | stringify"></app-layout-code>
     </div>

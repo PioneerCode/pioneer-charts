@@ -54,6 +54,9 @@ export class ThemeComponent {
   --pcac-grid-color: #495057;
   --pcac-fan-out-spoke-color: #6c757d;
   --pcac-fan-out-anchor-color: #adb5bd;
+  --pcac-point-range-color: #adb5bd;
+  --pcac-donut-center-label-color: #f8f9fa;
+  --pcac-donut-center-sub-label-color: #adb5bd;
 }`;
   importStylesCode = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts";`;
   importStylesCodeOverride = `@use "@pioneer-code/pioneer-charts/scss/pioneer-charts" with (

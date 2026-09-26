@@ -1,6 +1,7 @@
 <footer>
-  <div class="meta-top container grid grid-cols-2 mx-auto pt-8 pb-8">
-    <h5 class="mb-0">
+  <!-- Stacked on a phone; side by side from tablet width. -->
+  <div class="meta-top container grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto px-4 pt-8 pb-8">
+    <h2 class="pc-h5 mb-0">
       <a class="flex items-center" href="https://github.com/PioneerCode">
         <div class="logo-icon w-8 inline-block me-4">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
@@ -15,8 +16,8 @@
           Pioneer Code
         </div>
       </a>
-    </h5>
-    <div class="flex items-center justify-end">
+    </h2>
+    <nav class="footer-links flex flex-wrap items-center md:justify-end" aria-label="Site">
       <a class="me-3" routerLink="/" [class.active]="service.mainRoute() === MainRoutes.HOME">
         Home
       </a>
@@ -26,17 +27,17 @@
       <a class="me-3" routerLink="/charts" [class.active]="service.mainRoute() === MainRoutes.CHARTS">
         Charts
       </a>
-    </div>
+    </nav>
   </div>
   <mat-divider />
-  <div class="meta-bottom container grid grid-cols-2 mx-auto pt-2 pb-2">
+  <div class="meta-bottom container grid grid-cols-1 md:grid-cols-2 gap-2 mx-auto px-4 pt-3 pb-3">
     <div>
-      <p class="float-left m-0">
+      <p class="m-0">
         Version: {{version()}}
       </p>
     </div>
     <div>
-      <p class="float-right m-0">
+      <p class="m-0 md:text-right">
         Develop by <a href="https://github.com/PioneerCode" alt="Pioneer Code">Pioneer Code</a> ©2026. Code and Docs
         licensed under an
         <a href="https://github.com/PioneerCode/pioneer-charts/blob/main/LICENSE"

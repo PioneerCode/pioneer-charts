@@ -1,6 +1,7 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideCheckNoChangesConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, TitleStrategy } from '@angular/router';
+import { provideRouter, TitleStrategy, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withXhr } from '@angular/common/http';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { PageSeoStrategy } from './seo';
@@ -21,9 +22,15 @@ export const appConfig: ApplicationConfig = {
     // so this should stay silent - keeping it on permanently costs nothing and is
     // the cheapest possible guard against a future regression of that assumption.
     provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 }),
-    provideRouter(routes),
+    // The page itself scrolls (the docs layout has no scrolling pane of its own). The router's
+    // scroll events drive it, but App acts on them rather than the router's own scroller - see
+    // App for why - so both of the router's own behaviors are off here.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'disabled', anchorScrolling: 'disabled' })),
     // Page titles, meta descriptions and canonical URLs, from each route's title/data (see seo.ts).
     { provide: TitleStrategy, useClass: PageSeoStrategy },
-    provideHttpClient(withXhr())
+    provideHttpClient(withXhr()),
+    // The pages are pre-rendered at build time (see app.routes.server.ts); hydration picks up that
+    // HTML in the browser rather than throwing it away and rendering the page again.
+    provideClientHydration(withEventReplay()),
   ]
 };

@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 
 // Every page has a `title` and a `data.description`: PageSeoStrategy (seo.ts) turns them into the
-// document title, meta description, Open Graph tags and canonical URL. build/sitemap.js reads the
-// `path`s below to write sitemap.xml, so a new page only needs adding here.
+// document title, meta description, Open Graph tags and canonical URL. Every route is pre-rendered
+// at build time (app.routes.server.ts) and listed in sitemap.xml (build/docs-pages.js), so a new
+// page only needs adding here.
 export const routes: Routes = [
     {
         path: '',
@@ -67,7 +68,12 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/pie-chart', title: 'Pie Chart',
         loadComponent: () => import('./docs/pie-chart/pie-chart.component').then(m => m.PieChartComponent),
-        data: { description: 'Angular pie and donut charts from Pioneer Charts, with animated transitions.' },
+        data: { description: 'An Angular pie chart from Pioneer Charts, with animated transitions and click events for each slice.' },
+    },
+    {
+        path: 'docs/components/charts/donut-chart', title: 'Donut Chart',
+        loadComponent: () => import('./docs/donut-chart/donut-chart.component').then(m => m.DonutChartComponent),
+        data: { description: 'An Angular donut chart from Pioneer Charts, with a total or other label in its center and animated transitions.' },
     },
     {
         path: 'charts', title: 'Charts',

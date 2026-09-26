@@ -1,3 +1,48 @@
+<a name="22.2.16"></a>
+# [v22.2.16]
+
+### Added
+  - `PcacDonutChart` (`<pcac-donut-chart>`) with `PcacDonutChartConfig`: the donut is now a chart
+    of its own rather than an option on the pie. The ring settings - `innerRadius`, `label`,
+    `subLabel`, `labelColor` and `subLabelColor` - sit directly on its config. It's announced to
+    screen readers as "Donut chart" when `ariaLabel` isn't set.
+
+### Changed
+  - **Breaking.** The pie and donut charts are split, the way line, area and plot are:
+    - `PcacPieChartComponent` is renamed `PcacPieChart`. Its selector, `<pcac-pie-chart>`, and its
+      `sliceClicked` output are unchanged.
+    - `PcacPieChartConfig` no longer has `donut`, and `PcacPieDonutConfig` is removed. Move a
+      donut to `<pcac-donut-chart>`, with the old `donut` fields on the config itself:
+
+      ```ts
+      // Before
+      config: PcacPieChartConfig = { data, donut: { innerRadius: 0.7, label: '67' } };
+      // <pcac-pie-chart [config]="config" />
+
+      // After
+      config: PcacDonutChartConfig = { data, innerRadius: 0.7, label: '67' };
+      // <pcac-donut-chart [config]="config" />
+      ```
+
+      A pie config that still sets `donut` can compile when it's built through a spread, a
+      signal update or loaded JSON, and draws a plain pie. In development the chart logs a
+      warning when it sees one.
+    - The donut's center classes and custom properties are renamed from `pcac-pie-center*` to
+      `pcac-donut-center*`: `.pcac-donut-center`, `.pcac-donut-center-label`,
+      `.pcac-donut-center-sub-label`, `--pcac-donut-center-label-color` and
+      `--pcac-donut-center-sub-label-color`.
+    - The chart's inner `<section>` is now `pcac-pie-donut-chart`. It keeps the
+      `pcac-pie-chart` class as well, so styles written against it still apply.
+  - Legend items wrap onto another line when the legend is too narrow for them, and are at least
+    24px tall, so they're easier to tap. The unused `pcac-legend-item-last` class is gone.
+  - The package lists its chart types in its npm keywords.
+
+### Fixed
+  - A donut `innerRadius` of `NaN` (from an empty number input, say) drew nothing; it now falls
+    back to the default.
+  - A chart rendered on the server, where there's no layout to measure, draws nothing rather than
+    a chart `NaN` pixels wide.
+
 <a name="22.2.15"></a>
 # [v22.2.15]
 

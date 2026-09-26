@@ -46,6 +46,16 @@ describe('PcacChart', () => {
       expect(chart.width).toBe(widthBefore);
     });
 
+    // Regression test: rendered on the server there's no layout, `clientWidth` is undefined and the
+    // width comes out NaN - which `<= 0` let through, so every chart drew (and threw) with a NaN
+    // width while its page was pre-rendered.
+    it('returns false when the container has no measurable width at all (server rendering)', () => {
+      const elm = chartElm(0);
+      Object.defineProperty(elm.nativeElement.parentNode, 'clientWidth', { value: undefined, configurable: true });
+
+      expect(chart.initializeChartState(elm, config())).toBe(false);
+    });
+
     it('returns false when clientWidth is smaller than the margins alone', () => {
       // margin.left(40) + margin.right(16) = 56; a 40px container computes a negative width.
       const result = chart.initializeChartState(chartElm(40), config());

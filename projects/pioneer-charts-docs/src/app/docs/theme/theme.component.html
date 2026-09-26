@@ -5,7 +5,7 @@
       &mdash; can also be set on the chart's own config, or as CSS custom properties.</p>
   </section>
   <section class="pc-doc-section">
-    <h3 id="default-theme">Default Theme</h3>
+    <h2 class="pc-h3" id="default-theme">Default Theme</h2>
     <p>A compiled version of the default theme is located at the following:</p>
     <pre class="app-layout-code">./node_modules/&#64;pioneer-code/pioneer-charts/
   |-  themes
@@ -13,20 +13,20 @@
   |   |-  pioneer-charts.min.css</pre>
   </section>
   <section class="pc-doc-section">
-    <h3 id="sass">Sass</h3>
+    <h2 class="pc-h3" id="sass">Sass</h2>
     <p>If you prefer adding the default theme to your project through a Sass build, you need to make reference to the
       root Pioneer Chart Sass file in your project like so.</p>
     <app-layout-code language="typescript" [code]="importStylesCode"></app-layout-code>
   </section>
   <section class="pc-doc-section">
-    <h3 id="customize">Customize</h3>
+    <h2 class="pc-h3" id="customize">Customize</h2>
     <p>Styling for Pioneer Charts takes place at three different levels: the theme's Sass variables, per-chart
       color fields on a config (with a CSS custom property behind each), and the color service for the data
       itself. The need to align styling across css and javascript comes from the dynamic nature styles are applied
       through
       <a href="https://d3js.org/" title="D3">D3</a>.
     </p>
-    <h5 id="styles">Styles</h5>
+    <h3 class="pc-h5" id="styles">Styles</h3>
     <p>Much like before, you are going to want to import the Pioneer Chart Sass code into your code. The difference
       being,
       you will now want to override Pioneer Chart variables at the same time.</p>
@@ -34,17 +34,20 @@
     <p>For a full reference of variables, you can look at the default theme import file locate at the following:</p>
     <pre
       class="app-layout-code">./node_modules/&#64;pioneer-code/pioneer-charts/scss/core/theme/imports.scss</pre>
-    <h5 id="chart-colors">Chart Colors</h5>
+    <h3 class="pc-h5" id="chart-colors">Chart Colors</h3>
     <p>The colors of a chart's guides have a field each on its config, taking any CSS color and applying to that
       chart alone: on each axis (<code>PcacAxisConfig</code>) <b>labelColor</b>, <b>subLabelColor</b>,
       <b>tickLabelColor</b>, <b>tickColor</b>, <b>lineColor</b> and <b>gridColor</b>; on the plot chart's
-      <code>pointFanOut</code>, <b>spokeColor</b> and <b>anchorColor</b>. Unset, each keeps the theme's color.
+      <code>pointFanOut</code>, <b>spokeColor</b> and <b>anchorColor</b>; on a line, area or plot chart's
+      <code>pointRange</code>, <b>color</b> (unset, each range takes its series' color); and on the
+      <a routerLink="/docs/components/charts/donut-chart">donut chart</a>, <b>labelColor</b> and
+      <b>subLabelColor</b> for the text in its center. Unset, each keeps the theme's color.
       See <a routerLink="/docs/guides/axis-styling">Axis Styling</a> to try them.</p>
     <p>Each is applied as a CSS custom property on the part it colors, and the theme reads every one with its own
       color as the fallback &mdash; so you can also set them in a stylesheet, on any ancestor, to restyle every
       chart under it without touching a config (a config color still wins where given):</p>
     <app-layout-code language="css" [code]="customPropertiesCode"></app-layout-code>
-    <h5 id="color-service">Color Service</h5>
+    <h3 class="pc-h5" id="color-service">Color Service</h3>
     <p>In some cases, the charts that utilize d3 apply styles dynamically. For example, in a bar chart, a d3 iteration
       over a collection of data that produces individual bars in the chart might require each bar to be a different
       color. Meaning, in that piece of code that colors are being applied from the color service.</p>
@@ -57,23 +60,25 @@
     <p>Now that you have access to the colorService, you can start interacting with its API directly in
       <b>ngOnInit</b>.
     </p>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Call</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>setScale(colors: string[])</td>
-          <td>Supply n-number of hex color values. These values will be applied to charts that require dynamic coloring.
-            If the supplied length is less then the number of data iterations in the chart, the coloring will circle
-            back to the start of the color collection. Typically you want this palette to match your own app's
-            branding.
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Call</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>setScale(colors: string[])</td>
+            <td>Supply n-number of hex color values. These values will be applied to charts that require dynamic coloring.
+              If the supplied length is less then the number of data iterations in the chart, the coloring will circle
+              back to the start of the color collection. Typically you want this palette to match your own app's
+              branding.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </app-layout-page-docs>

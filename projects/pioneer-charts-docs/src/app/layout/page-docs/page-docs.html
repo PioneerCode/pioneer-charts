@@ -1,22 +1,30 @@
-<mat-sidenav-container class="max-h-screen w-[100%]">
-  <mat-sidenav class="sidenav-container" [mode]="isMobile() ? 'over' : 'side'" [opened]="sidenavOpened()"
-    (openedChange)="sidenavOpened.set($event)" [fixedInViewport]="isMobile()" fixedTopGap="64">
-    <app-layout-page-docs-navigation />
+<!-- The page itself scrolls, not a pane inside it. On a desktop the sidebar is fixed below the
+     header, and its bottom follows the footer up the screen as the footer scrolls in (see
+     page-docs.ts), so it ends where the footer begins, with its own list scrolling inside it - as on
+     the Angular Material docs. The "On this page" column sticks beside the content. Below 960px the
+     sidebar is a drawer instead, opened from the header's Menu row (which points at the drawer's
+     navigation, id docs-navigation). -->
+<mat-sidenav-container class="pc-docs-layout">
+  <mat-sidenav class="sidenav-container" mode="over" [opened]="nav.isMobile() && nav.opened()"
+    (openedChange)="nav.opened.set($event)" [fixedInViewport]="true" [fixedTopGap]="nav.headerHeight()">
+    <!-- Only as a drawer, so the page never holds two copies of the navigation. -->
+    @if (nav.isMobile()) {
+      <app-layout-page-docs-navigation />
+    }
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="flex max-h-screen w-[100%]">
-      @if (isMobile()) {
-        <button mat-icon-button type="button" class="m-2 self-start" aria-label="Toggle navigation"
-          (click)="sidenavOpened.set(!sidenavOpened())">
-          <mat-icon>menu</mat-icon>
-        </button>
-      }
-      <app-layout-page-docs-content #pageContent [pageTitle]="pageTitle()">
+    <!-- Always rendered, and hidden by CSS below 960px (page-docs.scss): the pre-rendered page and a
+         phone starting the app then agree on it, rather than hydration finding the page's
+         desktop sidebar missing on a phone. Its own id, apart from the drawer's copy. -->
+    <aside #sidebar class="pc-docs-sidebar">
+      <app-layout-page-docs-navigation navId="docs-sidebar-navigation" />
+    </aside>
+    <div class="pc-docs-main flex">
+      <app-layout-page-docs-content [pageTitle]="pageTitle()">
         <ng-content />
       </app-layout-page-docs-content>
-      @if (!isMobile()) {
-        <app-layout-jump-nav [jumpNav]="jumpNav()" (jump)="pageContent.scrollToSection($event)" />
-      }
+      <!-- Always here; CSS shows it from 1280px (jump-nav.scss). -->
+      <app-layout-jump-nav [jumpNav]="jumpNav()" />
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -3,7 +3,7 @@
     charts. Add thresholds
     across all variants through a matching api.</p>
   <section class="pc-doc-section">
-    <div class="grid grid-cols-3 gap-4 mx-auto mb-6">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
           <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
@@ -23,7 +23,7 @@
         </app-layout-resource-state>
       </mat-card>
     </div>
-    <div class="grid grid-cols-2 gap-4 mx-auto mb-6">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
           <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
@@ -56,14 +56,14 @@
     </mat-card>
   </section>
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
-    <h5 id="horizontal">Horizontal</h5>
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <h3 class="pc-h5" id="horizontal">Horizontal</h3>
     <app-layout-code language="markup" [code]="horizontalCode"></app-layout-code>
-    <h5 id="vertical">Vertical</h5>
+    <h3 class="pc-h5" id="vertical">Vertical</h3>
     <app-layout-code language="markup" [code]="verticalCode"></app-layout-code>
   </section>
   <section class="pc-doc-section">
-    <h3 id="api">API</h3>
+    <h2 class="pc-h3" id="api">API</h2>
     <app-layout-code language="typescript" [code]="importCode"></app-layout-code>
     <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">
@@ -130,70 +130,72 @@
     </app-layout-base-config>
   </section>
   <section class="pc-doc-section">
-    <h3 id="events" class="mb-0">Events</h3>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Binding</th>
-          <th>Description</th>
-          <th>Payload</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            (barClicked)="service.onClicked($event)"
-          </td>
-          <td>Emitted when a bar in the graph is clicked.</td>
-          <td>
-            <a routerLink="/docs/guides/data-contract">PcacData</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (barClicked)="service.onClicked($event)"
+            </td>
+            <td>Emitted when a bar in the graph is clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">PcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
   <section class="pc-doc-section">
-    <h3 id="contract">Contract</h3>
-    <div class="grid grid-cols-4 gap-4">
+    <h2 class="pc-h3" id="contract">Contract</h2>
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @5xl:grid-cols-4 gap-4">
       <div>
-        <h5>Vertical Single</h5>
+        <h3 class="pc-h5">Vertical Single</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barVerticalChartSingleConfig.value()| stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Vertical Grouped</h5>
+        <h3 class="pc-h5">Vertical Grouped</h3>
         <app-layout-code [setMax]="true" [setMax]="true" language="json"
           [code]="service.barVerticalChartGroupConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Vertical Stacked</h5>
+        <h3 class="pc-h5">Vertical Stacked</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barVerticalChartStackedConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Vertical Multi</h5>
+        <h3 class="pc-h5">Vertical Multi</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barVerticalChartConfig.value() | stringify"></app-layout-code>
       </div>
     </div>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @5xl:grid-cols-4 gap-4">
       <div>
-        <h5>Horizontal Single</h5>
+        <h3 class="pc-h5">Horizontal Single</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barHorizontalChartSingleConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Horizontal Grouped</h5>
+        <h3 class="pc-h5">Horizontal Grouped</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barHorizontalChartGroupConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Horizontal Stacked</h5>
+        <h3 class="pc-h5">Horizontal Stacked</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barHorizontalChartStackedConfig.value() | stringify"></app-layout-code>
       </div>
       <div>
-        <h5>Horizontal Multi</h5>
+        <h3 class="pc-h5">Horizontal Multi</h3>
         <app-layout-code [setMax]="true" language="json"
           [code]="service.barHorizontalChartConfig.value() | stringify"></app-layout-code>
       </div>

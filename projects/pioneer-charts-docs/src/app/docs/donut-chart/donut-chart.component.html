@@ -1,0 +1,107 @@
+<app-layout-page-docs pageTitle="Donut Chart" [jumpNav]="jumpNav()">
+  <p class="lead" id="donut-chart">Donut chart component: the slices of a pie drawn as a ring around an empty
+    center, which can hold a short <code>label</code> and <code>subLabel</code> &mdash; typically the total the
+    slices add up to. Takes the same data as the <a routerLink="/docs/components/charts/pie-chart">Pie
+    Chart</a>, with animated transitions.</p>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="try-it">Try it</h2>
+    <p class="mb-3">The controls edit the chart's config live; each field is described in the Configuration table.</p>
+    @let d = settings();
+    <div class="pc-controls max-w-md mb-3">
+      <label for="pc-donut-inner-radius">innerRadius</label>
+      <input id="pc-donut-inner-radius" type="range" min="0" max="0.9" step="0.05" [value]="d.innerRadius"
+        (input)="set('innerRadius', $any($event.target).valueAsNumber)" />
+      <span class="pc-readout">{{ d.innerRadius }}</span>
+      @if (d.innerRadius === 0) {
+        <span class="pc-muted" style="grid-column: 1 / -1">No hole, so no room for the label: this is a pie.</span>
+      }
+
+      <label for="pc-donut-label">label</label>
+      <input id="pc-donut-label" type="text" [value]="d.label" [placeholder]="'' + total()"
+        (input)="set('label', $any($event.target).value)" />
+      <span class="pc-muted">{{ d.label ? '' : 'the total' }}</span>
+
+      <label for="pc-donut-sub-label">subLabel</label>
+      <input id="pc-donut-sub-label" type="text" [value]="d.subLabel"
+        (input)="set('subLabel', $any($event.target).value)" />
+      <span></span>
+    </div>
+    <mat-card class="p-3 mb-3">
+      <app-layout-resource-state [resource]="pcService.pieChartConfig">
+        <pcac-donut-chart [config]="config()" (sliceClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
+    </mat-card>
+    <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="api">API</h2>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config [includeHeightFull]="false">
+      <tbody>
+        <tr>
+          <td>innerRadius</td>
+          <td>Radius of the hole as a fraction of the chart's radius, from 0 (no hole &mdash; a pie) to 0.9; values
+            outside that are clamped. Default 0.6.</td>
+        </tr>
+        <tr>
+          <td>label</td>
+          <td>Large text centered in the hole, e.g. a total. Sized to the hole and shrunk to fit across it; left out
+            if it would have to go below 8px. Not drawn when omitted.</td>
+        </tr>
+        <tr>
+          <td>subLabel</td>
+          <td>A smaller line under <b>label</b>, fitted the same way. Not drawn when omitted.</td>
+        </tr>
+        <tr>
+          <td>labelColor / subLabelColor</td>
+          <td>Any CSS color for the two lines, in place of the theme's <code>$gray-800</code> and
+            <code>$gray-600</code>. Applied as the <code>--pcac-donut-center-label-color</code> /
+            <code>--pcac-donut-center-sub-label-color</code> custom properties on the chart's
+            <code>.pcac-donut-center</code> group, which a stylesheet can set on an ancestor instead.</td>
+        </tr>
+        <tr>
+          <td>colorOverride</td>
+          <td>Slice colors, any CSS color, used in data order instead of the theme palette: the first slice takes
+            the first color. Repeated when there are more slices than colors. Omitted or empty, the theme palette is
+            used. To match a <a routerLink="/docs/components/charts/legend">legend</a>, give each of its items the same
+            color with <b>colorOverride</b>.</td>
+        </tr>
+      </tbody>
+    </app-layout-base-config>
+  </section>
+  <section class="pc-doc-section">
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (sliceClicked)="onClicked($event)"
+            </td>
+            <td>Emitted when a slice is clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">PcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="contract">Contract</h2>
+    <div class="pc-config-container">
+      <app-layout-code language="json" [code]="config() | stringify"></app-layout-code>
+    </div>
+  </section>
+</app-layout-page-docs>

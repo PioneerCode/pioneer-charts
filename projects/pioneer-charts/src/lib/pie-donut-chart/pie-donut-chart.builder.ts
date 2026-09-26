@@ -12,14 +12,15 @@ import { color } from 'd3-color';
 /**
  * Lib
  */
-import { PcacPieChartConfig, PcacPieDonutConfig } from './pie-chart.model';
+import { PcacPieDonutChartConfig, PcacPieDonutChartType } from './pie-donut-chart.model';
+import { PcacDonutChartConfig } from './donut/donut.model';
 import { PcacChart } from '../core/chart';
 import { PcacData } from '../core/chart.model';
 
 import { Subject } from 'rxjs';
 
 
-/** The largest `PcacPieDonutConfig.innerRadius` honored, so a ring is always left to draw. */
+/** The largest `PcacDonutChartConfig.innerRadius` honored, so a ring is always left to draw. */
 const MAX_DONUT_INNER_RADIUS = 0.9;
 
 /** Smallest font a center line is drawn at; a line that can't fit the hole at this size is left out. */
@@ -35,13 +36,13 @@ const CENTER_TEXT_WIDTH = 1.6;
 const ESTIMATED_GLYPH_WIDTH = 0.6;
 
 /**
- * Provided per-component (see PcacPieChartComponent's `providers`), not root-scoped:
+ * Provided per-component (see PcacPieDonutChartComponent's `providers`), not root-scoped:
  * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
  * height, colors, svg). A root singleton would be shared and clobbered by every
- * <pcac-pie-chart> rendered at once.
+ * <pcac-pie-donut-chart> rendered at once.
  */
 @Injectable()
-export class PieChartBuilder extends PcacChart {
+export class PieDonutChartBuilder extends PcacChart {
   private radius!: number;
   private innerRadius = 0;
   private arcShape!: Arc<any, PieArcDatum<PcacData>>;
@@ -52,7 +53,11 @@ export class PieChartBuilder extends PcacChart {
 
   protected override chartTypeLabel = 'Pie chart';
 
-  buildChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
+  /**
+   * Draws `config` as a pie, or - for `PcacPieDonutChartType.Donut` - as a donut, reading the ring
+   * settings off the config (`PcacDonutChartConfig`), with its defaults for any left unset.
+   */
+  buildChart(chartElm: ElementRef, config: PcacPieDonutChartConfig, type: PcacPieDonutChartType): void {
     if (!config?.data?.length) {
       this.clearChart(chartElm);
       return;
@@ -60,26 +65,53 @@ export class PieChartBuilder extends PcacChart {
 
     // The pie deliberately opts out of `heightFull`: `height` here feeds the radius rather than a
     // drawing area, so growing into a tall container would silently change the size of the pie
-    // itself. `PcacPieChartConfig` inherits the property from PcacChartConfig, so it's neutralized
-    // here rather than being absent from the type. (`<pcac-pie-chart>` also never gets the
+    // itself. `PcacPieDonutChartConfig` inherits the property from PcacChartConfig, so it's neutralized
+    // here rather than being absent from the type. (`<pcac-pie-donut-chart>` also never gets the
     // `pcac-height-full` class the other charts use to stretch their host.)
+    const donut = type === PcacPieDonutChartType.Donut ? donutSettings(config as PcacDonutChartConfig) : null;
+    if (type === PcacPieDonutChartType.Pie) {
+      this.warnOfDonutOnPie(config);
+    }
+    // Announced for what it draws: a ring, or - a donut with no hole included - a pie (see
+    // PcacChart.chartTypeLabel).
+    this.chartTypeLabel = donut && donut.innerRadius > 0 ? 'Donut chart' : 'Pie chart';
     if (!this.initializeChartState(chartElm, { ...config, heightFull: false })) {
       return;
     }
     this.applyColorOverride(config.colorOverride);
     this.radius = Math.min(this.height, this.width) / 2;
-    this.buildShapes(config.donut);
+    this.buildShapes(donut?.innerRadius ?? 0);
     this.drawChart(chartElm, config);
-    if (config.donut && this.innerRadius > 0) {
-      this.drawCenter(config.donut);
+    if (donut && this.innerRadius > 0) {
+      this.drawCenter(donut);
     }
   }
 
-  private buildShapes(donut: Partial<PcacPieDonutConfig> | undefined): void {
+  private warnedOfDonutOnPie = false;
+
+  /**
+   * Development builds only: a pie config still carrying 22.2's `donut` option. It isn't read any
+   * more - the donut is PcacDonutChart now - and TypeScript doesn't always catch it (a config built
+   * by spreading, or loaded as JSON, compiles fine), so the chart would quietly draw a plain pie.
+   * Warned once per chart.
+   */
+  private warnOfDonutOnPie(config: PcacPieDonutChartConfig): void {
+    if (typeof ngDevMode === 'undefined' || !ngDevMode || this.warnedOfDonutOnPie || !('donut' in config)) {
+      return;
+    }
+    this.warnedOfDonutOnPie = true;
+    console.warn(
+      'Pioneer Charts: <pcac-pie-chart> ignores `donut`. For a donut, use <pcac-donut-chart> with ' +
+      'PcacDonutChartConfig, which takes innerRadius, label, subLabel, labelColor and subLabelColor ' +
+      'directly - see the 22.3.0 CHANGELOG.',
+    );
+  }
+
+  /** `ratio` is the hole's radius as a share of the chart's: 0 for a pie. */
+  private buildShapes(ratio: number): void {
     const radiusOffset = 10;
     // Never negative: in a container under 20px the offset would otherwise turn the pie inside out.
     const outerRadius = Math.max(0, this.radius - radiusOffset);
-    const ratio = donut ? (donut.innerRadius ?? new PcacPieDonutConfig().innerRadius) : 0;
     // Sized against the resting slice, so the hole stays put when a hovered slice grows outward.
     this.innerRadius = Math.max(0, outerRadius * Math.min(Math.max(ratio, 0), MAX_DONUT_INNER_RADIUS));
 
@@ -99,7 +131,7 @@ export class PieChartBuilder extends PcacChart {
       .value((d: PcacData) => (d.hide ? 0 : Number(d.value ?? 0)));
   }
 
-  private drawChart(chartElm: ElementRef, config: PcacPieChartConfig): void {
+  private drawChart(chartElm: ElementRef, config: PcacPieDonutChartConfig): void {
     this.buildContainer(chartElm, true);
     const self = this;
     this.svg.selectAll('.pcac-arc')
@@ -155,21 +187,21 @@ export class PieChartBuilder extends PcacChart {
    * drop below `MIN_CENTER_FONT_SIZE` is left out rather than spill over the slices. Drawn after
    * the slices and ignoring the pointer, so it never blocks a slice's hover or click.
    */
-  private drawCenter(donut: Partial<PcacPieDonutConfig>): void {
+  private drawCenter(donut: PcacDonutChartConfig): void {
     if (!donut.label && !donut.subLabel) {
       return;
     }
     const maxWidth = this.innerRadius * CENTER_TEXT_WIDTH;
 
     const center = this.svg.append('g')
-      .attr('class', 'pcac-pie-center')
+      .attr('class', 'pcac-donut-center')
       .attr('pointer-events', 'none')
-      .style('--pcac-pie-center-label-color', () => donut.labelColor ?? null)
-      .style('--pcac-pie-center-sub-label-color', () => donut.subLabelColor ?? null);
+      .style('--pcac-donut-center-label-color', () => donut.labelColor ?? null)
+      .style('--pcac-donut-center-sub-label-color', () => donut.subLabelColor ?? null);
 
-    const label = this.drawCenterLine(center, 'pcac-pie-center-label', donut.label,
+    const label = this.drawCenterLine(center, 'pcac-donut-center-label', donut.label,
       Math.min(this.innerRadius * 0.5, 40), maxWidth);
-    const subLabel = this.drawCenterLine(center, 'pcac-pie-center-sub-label', donut.subLabel,
+    const subLabel = this.drawCenterLine(center, 'pcac-donut-center-sub-label', donut.subLabel,
       Math.min(this.innerRadius * 0.2, 16), maxWidth);
 
     if (!label && !subLabel) {
@@ -222,4 +254,13 @@ export class PieChartBuilder extends PcacChart {
     const i = interpolate({ startAngle: 0, endAngle: 0 }, b);
     return (t: number) => this.arcShape(i(t)) ?? '';
   }
+}
+
+/** A donut config with its defaults filled in for whatever the consumer left unset. */
+function donutSettings(config: PcacDonutChartConfig): PcacDonutChartConfig & { innerRadius: number } {
+  const defaults = new PcacDonutChartConfig();
+  // Unset or not a number (NaN, say - an empty number input's value), the default: a NaN ratio
+  // survived the clamp and made every slice's path NaN, so nothing drew.
+  const innerRadius = Number.isFinite(config.innerRadius) ? config.innerRadius! : defaults.innerRadius ?? 0;
+  return { ...config, innerRadius };
 }

@@ -6,7 +6,7 @@
   </p>
 
   <section class="pc-doc-section">
-    <h3 id="try-it">Try It</h3>
+    <h2 class="pc-h3" id="try-it">Try It</h2>
     <p>Both charts below use the same config &mdash; <b>height: 200</b> &mdash; and the same container. The only
       difference is <b>heightFull</b>. Drag the slider to resize the containers.</p>
 
@@ -17,7 +17,7 @@
       <span class="pc-height-full-readout">{{ containerHeight() }}px</span>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 mb-2">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-2">
       <div>
         <p class="pc-height-full-caption"><code>heightFull: false</code> &mdash; stays 200px tall</p>
         <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">
@@ -42,13 +42,13 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="flex-layout">Fill A Flex Layout</h3>
+    <h2 class="pc-h3" id="flex-layout">Fill A Flex Layout</h2>
     <p>The container does not have to carry an explicit height &mdash; any definite height works, including one
       handed down by a flex or grid track. That covers the common case: a tile with a header on top and a chart
       taking whatever is left.</p>
 
     <mat-card class="p-3 flex flex-col mb-4" [style.height.px]="containerHeight()">
-      <h5 class="m-0">Requests Per Minute</h5>
+      <h3 class="pc-h5 m-0">Requests Per Minute</h3>
       <p class="text-sm mb-2">Last 24 hours</p>
       <div class="flex-1 min-h-0 pc-height-full-flex-body">
         <app-layout-resource-state [resource]="service.lineChartConfig">
@@ -61,13 +61,13 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
     <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="notes">Notes</h3>
+    <h2 class="pc-h3" id="notes">Notes</h2>
     <ul>
       <li>
         <b>Give the wrapper a definite height.</b> An explicit height, or a flex/grid track that resolves to one. If

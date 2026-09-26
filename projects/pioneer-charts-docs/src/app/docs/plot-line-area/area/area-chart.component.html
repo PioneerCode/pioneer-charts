@@ -1,5 +1,5 @@
 <app-plot-line-area-base [title]="'Area Chart'" [lead]="'Configurable to display an area or line chart.'" [markup]="markupCode" [importCode]="importCode" [contract]="pcService.areaChartConfig.value() | stringify">
-  <div class="grid grid-cols-2 gap-4 mb-6">
+  <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-6">
     <mat-card class="p-3">
       <app-layout-resource-state [resource]="pcService.lineChartConfig">
         <pcac-area-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
@@ -16,7 +16,7 @@
       <pcac-area-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Point images</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Point images</h2>
   <p class="mb-3">Set <code>image</code> on a data point to draw it in place of the dot, sized by the
     config's <code>pointImage</code> box. Points without an <code>image</code> keep their dot.</p>
   <mat-card class="p-3">

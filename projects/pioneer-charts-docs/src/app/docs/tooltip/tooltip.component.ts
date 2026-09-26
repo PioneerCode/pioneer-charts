@@ -6,7 +6,7 @@ import {
   PcacBarVerticalChartComponent,
   PcacData,
   PcacLineChart,
-  PcacPieChartComponent,
+  PcacPieChart,
   PcacTooltipDirective,
 } from '@pioneer-code/pioneer-charts';
 
@@ -30,7 +30,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
     MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
-    PcacPieChartComponent,
+    PcacPieChart,
     PcacTooltipDirective,
   ]
 })

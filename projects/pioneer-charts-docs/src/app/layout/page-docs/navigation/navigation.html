@@ -1,5 +1,5 @@
-<nav class="bg-white pt-2">
-  <h3 class="m-0 ms-3 me-3">Getting Started</h3>
+<nav [id]="navId()" class="bg-white pt-2" aria-label="Documentation">
+  <h2 class="pc-h3 m-0 ms-3 me-3">Getting Started</h2>
   <div class="pl-3 pr-3">
     <mat-nav-list>
       <a mat-list-item routerLink="/docs/guides/introduction" routerLinkActive="pcac-navigation-active-link">Introduction</a>
@@ -10,7 +10,7 @@
       <a mat-list-item routerLink="/docs/guides/data-contract" routerLinkActive="pcac-navigation-active-link">Data Contract</a>
     </mat-nav-list>
   </div>
-  <h3 class="m-0 ms-3 me-3 mt-3">Charts</h3>
+  <h2 class="pc-h3 m-0 ms-3 me-3 mt-3">Charts</h2>
   <div class="pl-3 pr-3">
     <mat-nav-list>
       <a mat-list-item routerLink="/docs/components/charts/bar-chart" routerLinkActive="pcac-navigation-active-link">Bar Chart</a>
@@ -18,6 +18,7 @@
       <a mat-list-item routerLink="/docs/components/charts/line-chart" routerLinkActive="pcac-navigation-active-link">Line Chart</a>
       <a mat-list-item routerLink="/docs/components/charts/plot-chart" routerLinkActive="pcac-navigation-active-link">Plot Chart</a>
       <a mat-list-item routerLink="/docs/components/charts/pie-chart" routerLinkActive="pcac-navigation-active-link">Pie Chart</a>
+      <a mat-list-item routerLink="/docs/components/charts/donut-chart" routerLinkActive="pcac-navigation-active-link">Donut Chart</a>
       <a mat-list-item routerLink="/docs/components/charts/legend" routerLinkActive="pcac-navigation-active-link">Legend</a>
     </mat-nav-list>
   </div>

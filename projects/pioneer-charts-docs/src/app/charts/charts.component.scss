@@ -1,0 +1,65 @@
+.pc-charts-page {
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.pc-charts-lead {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.pc-charts-docs {
+  white-space: nowrap;
+  font-size: 0.875rem;
+  a {
+    color: #3f51b5;
+    text-decoration: underline;
+    // A taller tap area than the line of text, without moving the text.
+    display: inline-block;
+    padding: 8px 0;
+  }
+}
+
+.pc-charts-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 999px;
+    background: #fff;
+    padding: 0.25rem 0.875rem;
+    min-height: 40px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+// A jump link scrolls a section just below the fixed header (the router's anchor scrolling, with
+// the offset LayoutHeader sets) and focuses it - hence tabindex="-1", and no focus ring for that.
+.pc-charts-section {
+  margin-bottom: 2.5rem;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Fills the rest of its card (a flex column) and centers a chart shorter than its neighbours in it.
+.pc-charts-centered {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

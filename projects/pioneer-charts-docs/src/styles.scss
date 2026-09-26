@@ -98,6 +98,12 @@ body {
     accent-color: colors.$primary;
   }
 
+  // The browser's 13px checkbox is a small thing to tap; its label (`for`) is a target too.
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
   // A checkbox or color swatch sits in the slider's column, left-aligned.
   input[type="checkbox"],
   input[type="color"] {
@@ -155,6 +161,13 @@ body {
   }
 }
 
+// A docs table on a screen too narrow for it scrolls sideways in its own box, rather than pushing
+// the page (and everything else on it) sideways.
+.pc-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 .pc-table {
   min-width: 100%;
   border: 0;
@@ -191,3 +204,70 @@ body {
 .pc-doc-section {
   margin-bottom: 2rem;
 }
+// The docs layout (page-docs.html) scrolls the page itself, not a pane inside it. Material's drawer
+// container clips its content and its content area scrolls on its own by default, which would
+// trap the page inside them and stop the sticky "On this page" column from sticking. (Qualified
+// with Material's own class so it outranks Material's rule, which loads after this stylesheet.)
+.mat-drawer-container.pc-docs-layout {
+  overflow: visible;
+  min-height: calc(100dvh - var(--app-header-height, 64px));
+
+  > .mat-drawer-content {
+    overflow: visible;
+  }
+}
+
+// A docs section scrolled to - by a link on the page, "On this page", or a URL's #fragment - lands
+// just below the fixed header rather than behind it.
+app-layout-page-docs-content [id] {
+  scroll-margin-top: calc(var(--app-header-height, 64px) + 16px);
+}
+
+// A plain code block written straight into a docs page (the Theme page's directory tree), rather
+// than through <app-layout-code>, which scrolls its own: a line longer than the screen scrolls
+// sideways here too, instead of widening the whole page on a phone.
+pre.app-layout-code {
+  overflow-x: auto;
+}
+
+// Jumps to a section on the same page (the router's anchorScrolling) glide there; the router
+// still puts a new page at its top instantly, as it asks for that explicitly.
+html {
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+// The fixed header's height, for everything that starts or sticks below it. Set here for the first
+// paint - before the app starts, a pre-rendered page included - from what the header will be:
+// Material's toolbar is 56px below 600px and 64px otherwise, and docs pages add the 48px Menu row
+// below 960px (header.html). LayoutHeader then sets the measured height over it.
+:root {
+  --app-header-height: 64px;
+
+  @media (max-width: 599.98px) {
+    --app-header-height: 56px;
+  }
+}
+
+:root:has(app-layout-page-docs) {
+  @media (max-width: 959.98px) {
+    --app-header-height: 112px;
+  }
+
+  @media (max-width: 599.98px) {
+    --app-header-height: 104px;
+  }
+}
+
+// A heading's look, apart from its level. Headings are sized by tag (the base layer above), but a
+// heading's level is set by where it sits in the page's outline - h1, then h2, then h3, none
+// skipped - so a section title that used to be an h3 for its size is an h2 with `pc-h3`. Unlayered,
+// so these win over the tag sizes.
+.pc-h2 { font-size: 2rem; }
+.pc-h3 { font-size: 1.75rem; }
+.pc-h4 { font-size: 1.5rem; }
+.pc-h5 { font-size: 1.25rem; }
+.pc-h6 { font-size: 1rem; }

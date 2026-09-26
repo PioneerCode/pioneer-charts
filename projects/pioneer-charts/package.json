@@ -16,13 +16,21 @@
     "data visualization",
     "charts",
     "d3",
-    "angular"
+    "angular",
+    "angular charts",
+    "bar chart",
+    "line chart",
+    "area chart",
+    "scatter plot",
+    "pie chart",
+    "donut chart",
+    "legend"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PioneerCode/pioneer-charts.git"
   },
-  "version": "22.2.15",
+  "version": "22.2.16",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^22.1.0",

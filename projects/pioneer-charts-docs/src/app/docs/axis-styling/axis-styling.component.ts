@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, DOCUMENT } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { color } from 'd3-color';
 import { RouterLink } from '@angular/router';
@@ -54,7 +54,7 @@ export class AxisStylingComponent {
   protected readonly colorFields: readonly { field: AxisColor; theme: string }[] = [
     { field: 'labelColor', theme: '#495057' },
     { field: 'subLabelColor', theme: '#6c757d' },
-    { field: 'tickLabelColor', theme: bodyTextColorHex() },
+    { field: 'tickLabelColor', theme: bodyTextColorHex(inject(DOCUMENT)) },
     { field: 'tickColor', theme: '#212529' },
     { field: 'lineColor', theme: '#212529' },
     { field: 'gridColor', theme: '#e9ecef' },
@@ -197,7 +197,12 @@ const sparkline = {
 } as PcacLineChartConfig;`;
 }
 
-/** The page's text color as `#rrggbb`, the only form a color input accepts; black if it can't be read. */
-function bodyTextColorHex(): string {
-  return color(getComputedStyle(document.body).color)?.formatHex() ?? '#000000';
+/**
+ * The page's text color as `#rrggbb`, the only form a color input accepts; black if it can't be
+ * read - as when the page is pre-rendered at build time, where there are no computed styles.
+ */
+function bodyTextColorHex(document: Document): string {
+  const view = document.defaultView;
+  const text = typeof view?.getComputedStyle === 'function' ? view.getComputedStyle(document.body).color : '';
+  return color(text)?.formatHex() ?? '#000000';
 }

@@ -1,4 +1,4 @@
-import { Component, input, Resource } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 /**
@@ -16,5 +16,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './resource-state.scss',
 })
 export class LayoutResourceState {
-  readonly resource = input.required<Resource<unknown>>();
+  /** Just the loading/error state - an `httpResource`, or AppService's MockConfig. */
+  readonly resource = input.required<{ isLoading(): boolean; error(): unknown }>();
 }

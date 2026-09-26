@@ -1,104 +1,216 @@
-<div class="pt-8 pb-8 bg-white">
-  <div class="container mx-auto grid grid-cols-4 gap-4">
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
-          <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
-          <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barVerticalChartStackedConfig">
-          <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barVerticalChartConfig">
-          <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-  </div>
-  <div class="container mx-auto grid grid-cols-4 gap-4 mt-3">
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
-          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barHorizontalChartGroupConfig">
-          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barHorizontalChartStackedConfig">
-          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
-          <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value()"
-            (barClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-  </div>
-  <div class="container mx-auto grid grid-cols-2 gap-4 mt-3">
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.lineChartConfig">
-          <pcac-line-chart [config]="service.lineChartConfig.value()" (dotClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-    <div>
-      <mat-card class="p-3 h-full">
-        <app-layout-resource-state [resource]="service.areaChartConfig">
-          <pcac-area-chart [config]="service.areaChartConfig.value()" (dotClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-  </div>
-  <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
-    <div>
-      <mat-card class="p-3">
-        <app-layout-resource-state [resource]="service.areaChartHideConfig">
-          <pcac-area-chart [config]="service.areaChartHideConfig.value()" (dotClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
-  </div>
-  <div class="container mx-auto grid grid-cols-1 gap-4 mt-3">
-    <div>
-      <mat-card class="p-3">
-        <app-layout-resource-state [resource]="service.pieChartConfig">
-          <pcac-pie-chart [config]="service.pieChartConfig.value()" (sliceClicked)="service.onClicked($event)" />
-        </app-layout-resource-state>
-      </mat-card>
-    </div>
+<div class="bg-white">
+  <div class="pc-charts-page container mx-auto px-4 pt-8 pb-12">
+    <header class="mb-8">
+      <h1>Charts</h1>
+      <nav class="pc-charts-nav" aria-label="Chart sections">
+        <!-- Links, so the URL takes the section's #hash; the router scrolls there (below the fixed
+             header) and moves focus to the section (anchorScrolling, app.config.ts). -->
+        @for (section of sections; track section.id) {
+        <a routerLink="." [fragment]="section.id">{{ section.label }}</a>
+        }
+      </nav>
+    </header>
+
+    <section id="bar-charts" class="pc-charts-section" tabindex="-1">
+      <h2>Bar charts</h2>
+      <p class="pc-charts-lead mb-0">Vertical and horizontal, as one series, grouped or stacked, with optional
+        thresholds
+        drawn across the chart, each group or each bar. </p>
+      <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/bar-chart'">Bar Chart</a> · <a
+            [routerLink]="'/docs/guides/axis-styling'">Axis Styling</a></span></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+        <pc-chart-card heading="Vertical" caption="One series across groups, with a threshold across the chart.">
+          <app-layout-resource-state [resource]="service.barVerticalChartConfig">
+            <pcac-bar-vertical-chart [config]="service.barVerticalChartConfig.value() | chartLabel: 'Vertical bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Single group" caption="One bar at 89% on a percentage y axis, with a threshold at 75%.">
+          <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
+            <pcac-bar-vertical-chart [config]="barVerticalSingleConfig() | chartLabel: 'Single group, vertical bar chart'" (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Grouped" caption="A bar per series in each group, with a threshold per bar.">
+          <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+            <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value() | chartLabel: 'Grouped, vertical bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Stacked" caption="Series stacked into one bar per group, with a threshold per group.">
+          <app-layout-resource-state [resource]="service.barVerticalChartStackedConfig">
+            <pcac-bar-vertical-chart [config]="service.barVerticalChartStackedConfig.value() | chartLabel: 'Stacked, vertical bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+        <pc-chart-card heading="Horizontal"
+          caption="The same data turned on its side, with a threshold across the chart.">
+          <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
+            <pcac-bar-horizontal-chart [config]="service.barHorizontalChartConfig.value() | chartLabel: 'Horizontal bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Single group" caption="One bar at 89% on a percentage x axis, with a threshold at 75%.">
+          <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
+            <pcac-bar-horizontal-chart [config]="barHorizontalSingleConfig() | chartLabel: 'Single group, horizontal bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Colors per group"
+          caption="Grouped, with spreadColorsPerGroup coloring by group instead of series.">
+          <app-layout-resource-state [resource]="service.barHorizontalChartGroupConfig">
+            <pcac-bar-horizontal-chart [config]="service.barHorizontalChartGroupConfig.value() | chartLabel: 'Colors per group, horizontal bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Stacked" caption="Horizontal stacks, with a threshold per group.">
+          <app-layout-resource-state [resource]="service.barHorizontalChartStackedConfig">
+            <pcac-bar-horizontal-chart [config]="service.barHorizontalChartStackedConfig.value() | chartLabel: 'Stacked, horizontal bar chart'"
+              (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <pc-chart-card heading="Axis styling"
+          caption="Axis titles, tick marks, axis lines and a grid, in colors set on the config.">
+          <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
+            <pcac-bar-vertical-chart [config]="barAxisConfig() | chartLabel: 'Axis styling, vertical bar chart'" (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Long labels"
+          caption="Labels take at most half the chart; longer ones are shortened with &hellip;">
+          <app-layout-resource-state [resource]="service.barHorizontalChartConfig">
+            <pcac-bar-horizontal-chart [config]="barLongLabelsConfig() | chartLabel: 'Long labels, horizontal bar chart'" (barClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+    </section>
+    <section id="line-area-charts" class="pc-charts-section" tabindex="-1">
+      <h2>Line & area charts</h2>
+      <p class="pc-charts-lead mb-0">Series over a numeric, date or index x axis, with a hover crosshair, zoom, and images in
+        place of dots. </p>
+      <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/line-chart'">Line
+            Chart</a> · <a [routerLink]="'/docs/components/charts/area-chart'">Area Chart</a></span></p>
+      <div class="grid grid-cols-1 gap-4 mb-4">
+        <pc-chart-card heading="Dates and zoom"
+          caption="A DateTime x axis and a Fahrenheit y axis. Scroll or drag to zoom and pan both axes.">
+          <app-layout-resource-state [resource]="service.lineChartZoomConfig">
+            <pcac-line-chart [config]="service.lineChartZoomConfig.value() | chartLabel: 'Dates and zoom, line chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+        <pc-chart-card heading="Line" caption="Three series with a hover crosshair.">
+          <app-layout-resource-state [resource]="service.lineChartConfig">
+            <pcac-line-chart [config]="service.lineChartConfig.value() | chartLabel: 'Line chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Area" caption="Three series, filled.">
+          <app-layout-resource-state [resource]="service.areaChartConfig">
+            <pcac-area-chart [config]="service.areaChartConfig.value() | chartLabel: 'Area chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Axes hidden" caption="Both axes hidden: their space goes back to the plot.">
+          <app-layout-resource-state [resource]="service.areaChartHideConfig">
+            <pcac-area-chart [config]="axesHiddenConfig() | chartLabel: 'Axes hidden, area chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Line with images" caption="One series with its points drawn as images.">
+          <app-layout-resource-state [resource]="service.lineChartImagesConfig">
+            <pcac-line-chart [config]="service.lineChartImagesConfig.value() | chartLabel: 'Line with images, line chart'"
+              (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Area with images" caption="The same images on an area chart.">
+          <app-layout-resource-state [resource]="service.areaChartImagesConfig">
+            <pcac-area-chart [config]="service.areaChartImagesConfig.value() | chartLabel: 'Area with images, area chart'"
+              (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Sparkline" caption="No axes, no grid, no crosshair: just the shape, 80px tall.">
+          <!-- Centered in the card: the sparkline is 80px tall, its neighbours in the row 200px. -->
+          <div class="pc-charts-centered">
+            <app-layout-resource-state [resource]="service.lineChartConfig">
+              <pcac-line-chart [config]="sparklineConfig() | chartLabel: 'Sparkline, line chart'" (dotClicked)="service.onClicked($event)" />
+            </app-layout-resource-state>
+          </div>
+        </pc-chart-card>
+      </div>
+    </section>
+    <section id="plot-charts" class="pc-charts-section" tabindex="-1">
+      <h2>Plot charts</h2>
+      <p class="pc-charts-lead mb-0">Points on a numeric x axis, with zoom, ranges around each point, and overlapping
+        points
+        fanned out so each can be hovered.</p>
+      <p> <span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/plot-chart'">Plot
+            Chart</a></span></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <pc-chart-card heading="Plot" caption="Three series of points; zoom along x.">
+          <app-layout-resource-state [resource]="service.plotConfig">
+            <pcac-plot-chart [config]="plotConfig() | chartLabel: 'Plot chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Fan-out" caption="Points at the same spot spread around it, joined by spokes.">
+          <app-layout-resource-state [resource]="service.plotFanOutConfig">
+            <pcac-plot-chart [config]="plotFanOutConfig() | chartLabel: 'Fan-out, plot chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Point ranges"
+          caption="A range around each reading, labelled axes, hours of the day on x.">
+          <app-layout-resource-state [resource]="service.plotRangeConfig">
+            <pcac-plot-chart [config]="service.plotRangeConfig.value() | chartLabel: 'Point ranges, plot chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Point images" caption="Images in place of dots.">
+          <app-layout-resource-state [resource]="service.plotImagesConfig">
+            <pcac-plot-chart [config]="plotImagesConfig() | chartLabel: 'Point images, plot chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+    </section>
+    <section id="pie-donut-charts" class="pc-charts-section" tabindex="-1">
+      <h2>Pie & donut charts</h2>
+      <p class="pc-charts-lead mb-0">Slices of a whole, as a pie or as a ring with room for a label in the center. </p>
+      <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/pie-chart'">Pie Chart</a> · <a
+            [routerLink]="'/docs/components/charts/donut-chart'">Donut Chart</a></span></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+        <pc-chart-card heading="Pie" caption="Five slices from the theme palette.">
+          <app-layout-resource-state [resource]="service.pieChartConfig">
+            <pcac-pie-chart [config]="service.pieChartConfig.value() | chartLabel: 'Pie chart'" (sliceClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Donut" caption="The same slices as a ring, with their total in the center.">
+          <app-layout-resource-state [resource]="service.pieChartConfig">
+            <pcac-donut-chart [config]="donutTotalConfig() | chartLabel: 'Donut chart'" (sliceClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Thin donut" caption="A larger hole (innerRadius 0.8) and custom colors.">
+          <app-layout-resource-state [resource]="service.pieChartConfig">
+            <pcac-donut-chart [config]="donutThinConfig() | chartLabel: 'Thin donut, donut chart'" (sliceClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+    </section>
+    <section id="legend" class="pc-charts-section" tabindex="-1">
+      <h2>Legend</h2>
+      <p class="pc-charts-lead mb-0">A legend is its own component, so it can sit anywhere and drive any chart. Here
+        each one switches its chart's slices or series on and off; a hidden one keeps its color. </p>
+      <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/legend'">Legend</a></span></p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <pc-chart-card heading="Legend and pie" caption="Click a legend item to hide or show its slice.">
+          <app-layout-resource-state [resource]="service.pieChartConfig">
+            <pcac-legend [config]="pieLegend.config()" (itemClicked)="pieLegend.onClicked($event)" />
+            <pcac-pie-chart [config]="legendPieConfig() | chartLabel: 'Legend and pie, pie chart'" (sliceClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+        <pc-chart-card heading="Legend and line" caption="Click a legend item to hide or show its series.">
+          <app-layout-resource-state [resource]="service.lineChartConfig">
+            <pcac-legend [config]="lineLegend.config()" (itemClicked)="lineLegend.onClicked($event)" />
+            <pcac-line-chart [config]="legendLineConfig() | chartLabel: 'Legend and line, line chart'" (dotClicked)="service.onClicked($event)" />
+          </app-layout-resource-state>
+        </pc-chart-card>
+      </div>
+    </section>
   </div>
 </div>

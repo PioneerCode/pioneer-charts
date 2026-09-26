@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 
 // Every page has a `title` and a `data.description`: PageSeoStrategy (seo.ts) turns them into the
-// document title, meta description, Open Graph tags and canonical URL. build/sitemap.js reads the
-// `path`s below to write sitemap.xml, so a new page only needs adding here.
+// document title, meta description, Open Graph tags and canonical URL. Every route is pre-rendered
+// at build time (app.routes.server.ts) and listed in sitemap.xml (build/docs-pages.js), so a new
+// page only needs adding here.
 export const routes: Routes = [
     {
         path: '',

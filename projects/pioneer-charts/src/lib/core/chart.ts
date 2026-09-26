@@ -384,7 +384,10 @@ export class PcacChart implements OnDestroy {
     const container = chartElm.nativeElement.parentNode as HTMLElement;
     const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
-    if (measuredWidth <= 0) {
+    // `!(> 0)` rather than `<= 0`, so a width that can't be measured at all - `NaN`, as when a page
+    // is rendered on the server, where there's no layout and `clientWidth` is undefined - also
+    // draws nothing, rather than drawing a chart `NaN` pixels wide.
+    if (!(measuredWidth > 0)) {
       // The previous drawing was just removed above, so nothing is on screen any more. Forget the
       // size it was drawn at, or a container that comes back at that same width (a hidden tab
       // shown again) would read as unchanged to `containerSizeChanged()` and never be redrawn.

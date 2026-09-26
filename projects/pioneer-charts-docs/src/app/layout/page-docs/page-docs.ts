@@ -1,4 +1,5 @@
-import { Component, DestroyRef, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, inject, input, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -42,7 +43,12 @@ export class LayoutPageDocs {
       this.isMobile.set(mobileQuery.matches);
       this.sidenavOpened.set(!mobileQuery.matches);
     };
-    mobileQuery.addEventListener('change', listener);
-    inject(DestroyRef).onDestroy(() => mobileQuery.removeEventListener('change', listener));
+    // Only in the browser: when the page is pre-rendered at build time there is no viewport, and
+    // the CDK's stand-in media query has no event listeners. The pre-rendered page gets the
+    // desktop layout; hydration switches a phone to the mobile one.
+    if (isPlatformBrowser(inject(PLATFORM_ID))) {
+      mobileQuery.addEventListener('change', listener);
+      inject(DestroyRef).onDestroy(() => mobileQuery.removeEventListener('change', listener));
+    }
   }
 }

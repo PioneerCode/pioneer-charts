@@ -25,7 +25,7 @@ function config(): PcacBarHorizontalChartConfig {
     isStacked: false,
     thresholds: [],
     spreadColorsPerGroup: false,
-    colorOverride: { colors: [] },
+    colorOverride: [],
     data: [
       { key: 'Group A', value: null, hide: false, data: [{ key: 'Bar 1', value: 10, hide: false, data: [] }] },
     ],
@@ -159,12 +159,12 @@ describe('BarHorizontalChartBuilder', () => {
     ]);
   });
 
-  // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
+  // Regression test: `colorOverride.reverse()` reversed the consumer's array in place, so
   // every rebuild (every container resize) flipped their palette back and forth. The override
   // also used to be applied reversed, against the docs; it now runs in order.
   it('applies colorOverride in order without mutating the consumer array, on repeated builds', () => {
     const colors = ['#111', '#222', '#333'];
-    const cfg = { ...config(), colorOverride: { colors } };
+    const cfg = { ...config(), colorOverride: colors };
 
     builder.buildChart(elm, cfg);
     builder.buildChart(elm, cfg);
@@ -173,7 +173,7 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.colors).toEqual(['#111', '#222', '#333']);
   });
 
-  // Regression test: the default `colors: []` is truthy, and was taken as an override - every bar
+  // Regression test: the default `colorOverride: []` is truthy, and was taken as an override - every bar
   // was left with no fill (drawn black).
   it('uses the theme palette when the override is empty', () => {
     const rect = elm.nativeElement.querySelector('rect.pcac-bar') as SVGRectElement;

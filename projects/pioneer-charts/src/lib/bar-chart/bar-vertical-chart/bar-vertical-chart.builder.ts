@@ -15,7 +15,7 @@ import { PcacChart } from '../../core/chart';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
+import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
 
 import { Subject } from 'rxjs';
 
@@ -57,7 +57,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     }
 
     this.ensureColorCount(seriesKeys(config.data).length);
-    this.applyColorOverride(config.colorOverride?.colors);
+    this.applyColorOverride(barColorOverride(config.colorOverride));
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

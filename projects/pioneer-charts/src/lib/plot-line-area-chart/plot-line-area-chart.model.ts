@@ -74,7 +74,9 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   /**
    * Zoom and pan along the x / y axis (scroll / pinch to zoom 1x-10x, drag to pan, never leaving
    * the original domain). Either, or both, can be on. A gesture is always two-dimensional, so with
-   * only one enabled the other axis simply stays put. Both off by default.
+   * only one enabled the other axis simply stays put. Both off by default. The zoom is kept when
+   * the chart redraws - a new config, a series toggled in a legend, a resize (which keeps the same
+   * part of the domain in view) - and dropped when zoom is turned off or the zoomable axes change.
    */
   enableZoomX: boolean = false
   enableZoomY: boolean = false

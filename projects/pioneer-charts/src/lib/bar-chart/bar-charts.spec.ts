@@ -76,8 +76,8 @@ for (const chart of charts) {
       } as Config;
     }
 
-    function build(cfg: Config): SVGSVGElement {
-      const elm = chartElm();
+    function build(cfg: Config, width?: number): SVGSVGElement {
+      const elm = chartElm(width);
       builder.buildChart(elm, cfg);
       return elm.nativeElement;
     }
@@ -188,8 +188,13 @@ for (const chart of charts) {
     it('still draws bars when there are more categories than pixels', async () => {
       // The vertical chart sets a bar's width as part of its enter transition.
       vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
-      const groups = Array.from({ length: 1000 }, (_, i) => group(`g${i}`, [bar('a', 10)]));
-      const svg = build(config(groups));
+      // A 200px-square chart, so a few hundred categories already outnumber the pixels on either
+      // chart's category axis: each group is a full axis tick and bar to draw, and a thousand of
+      // them took over 5s on a CI runner.
+      const groups = Array.from({ length: 400 }, (_, i) => group(`g${i}`, [bar('a', 10)]));
+      const svg = build(config(groups), 200);
+      const plot = chart.size === 'height' ? builder.width : builder.height;
+      expect(groups.length).toBeGreaterThan(plot);
       await wait(50);
 
       expect(Number(bars(svg)[0].getAttribute(chart.thickness))).toBeGreaterThan(0);

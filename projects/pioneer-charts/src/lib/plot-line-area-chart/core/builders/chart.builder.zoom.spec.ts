@@ -1,6 +1,6 @@
 import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { zoomIdentity, ZoomBehavior } from 'd3-zoom';
+import { zoomIdentity, zoomTransform, ZoomBehavior } from 'd3-zoom';
 import { PlaChartBuilder } from './chart.builder';
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType } from '../../plot-line-area-chart.model';
@@ -281,5 +281,88 @@ describe('PlaChartBuilder zoom', () => {
     expect(constrained.k).toBe(1);
     expect(constrained.x).toBe(0);
     expect(constrained.y).toBe(0);
+  });
+
+  describe('across rebuilds', () => {
+    const transform = zoomIdentity.translate(-400, 0).scale(3);
+
+    /** The zoom the behavior itself holds, on the group it's attached to. */
+    function behaviorZoom(elm: ElementRef): { k: number; x: number; y: number } {
+      const { k, x, y } = zoomTransform(elm.nativeElement.querySelector('g')!);
+      return { k, x, y };
+    }
+
+    it('keeps the zoom when the chart is rebuilt, and tells the zoom behavior so', () => {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      const elm = chartElm();
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      zoomTo(builder, transform);
+      const zoomed = firstPoint(elm.nativeElement).dot;
+      const zoomedTicks = ticks(elm.nativeElement, 'x');
+
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+      expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(zoomed.x, 5);
+      expect(ticks(elm.nativeElement, 'x')).toEqual(zoomedTicks);
+      // So the next gesture carries on from here rather than from the whole domain.
+      expect(behaviorZoom(elm)).toEqual({ k: 3, x: -400, y: 0 });
+    });
+
+    it('keeps the same part of the domain in view when the chart is resized', () => {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      builder.buildChart(chartElm(800), config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      zoomTo(builder, transform);
+      const zoomedTicks = ticks(document.body.lastElementChild!.querySelector('svg')!, 'x');
+      const narrowWidth = builder.width;
+
+      const wide = chartElm(1600);
+      builder.buildChart(wide, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+      // Twice the plot, so twice the pan, at the same scale.
+      const zoom = behaviorZoom(wide);
+      expect(zoom.k).toBe(3);
+      expect(zoom.x).toBeCloseTo(-400 * builder.width / narrowWidth, 5);
+      expect(ticks(wide.nativeElement, 'x')[0]).toBe(zoomedTicks[0]);
+    });
+
+    it('starts unzoomed once zoom has been turned off, even when it is turned back on', () => {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      const elm = chartElm();
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      const unzoomed = firstPoint(elm.nativeElement).dot;
+      zoomTo(builder, transform);
+
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime, { enableZoomX: false }), PcacLineAreaPlotChartConfigType.Line);
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+      expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(unzoomed.x, 5);
+      expect(behaviorZoom(elm)).toEqual({ k: 1, x: 0, y: 0 });
+    });
+
+    it('starts unzoomed when the zoomable axes change', () => {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      const elm = chartElm();
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      const unzoomed = firstPoint(elm.nativeElement).dot;
+      zoomTo(builder, transform);
+
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime, { enableZoomY: true }), PcacLineAreaPlotChartConfigType.Line);
+
+      expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(unzoomed.x, 5);
+    });
+
+    it('applies a later zoom to the whole domain, not on top of the resumed one', () => {
+      const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+      const elm = chartElm();
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+      zoomTo(builder, transform);
+      const zoomed = firstPoint(elm.nativeElement).dot;
+      builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+      zoomTo(builder, transform);
+
+      expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(zoomed.x, 5);
+      expect(firstPoint(elm.nativeElement).line.x).toBeCloseTo(zoomed.x, 5);
+    });
   });
 });

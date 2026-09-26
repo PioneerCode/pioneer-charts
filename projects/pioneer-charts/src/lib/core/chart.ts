@@ -7,7 +7,7 @@ import { select } from 'd3-selection';
 import { ElementRef, Injectable, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { PCAC_AXIS_LABEL_SPACE, PCAC_AXIS_SUB_LABEL_SPACE, PcacAxisChartConfig, PcacChartConfig, PcacChartMargin, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, axisLabelSpace, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
-import { PcacTooltipBuilder } from './tooltip.builder';
+import { PcacTooltipBuilder, tooltipText } from './tooltip.builder';
 import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 
 /** The most of its container's width a chart's measured left (label) margin may take. */
@@ -311,7 +311,7 @@ export class PcacChart implements OnDestroy {
    * projected and the default key/value content otherwise. Every builder's hover handler should
    * go through here rather than `tooltipBuilder` directly so the template is honored everywhere.
    */
-  showTooltip(event: MouseEvent, data: PcacData, options: PcacTooltipOptions): void {
+  showTooltip(event: MouseEvent | null, data: PcacData, options: PcacTooltipOptions): void {
     this.tooltipBuilder.showTooltip(
       event,
       this.tooltipTemplate(),
@@ -333,6 +333,39 @@ export class PcacChart implements OnDestroy {
   /** Hides the tooltip if this chart is the one showing it; another chart's is left alone. */
   hideTooltip(): void {
     this.tooltipBuilder.hideTooltip(this);
+  }
+
+  /**
+   * A mark's accessible name: its parent's key (the bar's group, the point's series), its own key
+   * and its value, formatted as the tooltip formats them - `"Chips, 2024: 680"`.
+   */
+  protected markLabel(
+    data: PcacData,
+    options: { parent?: PcacData | null; valueFormat?: PcacFormatEnum; keyFormat?: PcacFormatEnum } = {},
+  ): string {
+    const { key, value } = tooltipText(data, options.valueFormat, options.keyFormat);
+    const parentKey = options.parent?.key;
+    const names = [parentKey === null || parentKey === undefined || parentKey === '' ? null : String(parentKey), key]
+      .filter((name): name is string => name !== null);
+    return `${names.join(', ')}${names.length ? ': ' : ''}${value === '' ? 'no value' : value}`;
+  }
+
+  /**
+   * Keyboard focus on a mark: its tooltip, beside it (there's no pointer to put it above). With a
+   * consumer `pcacTooltip` template, the mark is also described by the tooltip, so a screen reader
+   * reads whatever the template adds to the mark's own name; the default tooltip only repeats it.
+   */
+  protected showMarkTooltip(element: Element, data: PcacData, options: PcacTooltipOptions): void {
+    this.showTooltip(null, data, { ...options, anchor: options.anchor ?? element });
+    if (this.tooltipTemplate()) {
+      element.setAttribute('aria-describedby', PcacTooltipBuilder.ID);
+    }
+  }
+
+  /** Keyboard focus leaving a mark: the undoing of `showMarkTooltip`. */
+  protected hideMarkTooltip(element: Element): void {
+    this.hideTooltip();
+    element.removeAttribute('aria-describedby');
   }
 
   /**
@@ -395,9 +428,11 @@ export class PcacChart implements OnDestroy {
       return false;
     }
     this.width = measuredWidth;
-    // Announced as a single image with a name, rather than as a pile of unlabelled shapes.
+    // A named group of marks, each with its own name and role (see marks.ts), rather than a pile of
+    // unlabelled shapes. (A `role="img"`, which this used to be, would hide the marks inside it from
+    // a screen reader, and keyboard focus on them would announce nothing.)
     select(chartElm.nativeElement)
-      .attr('role', 'img')
+      .attr('role', 'group')
       .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
     this.height = this.resolveHeight(container, config);
     this.colors = colors;

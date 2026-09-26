@@ -15,6 +15,7 @@ import { color } from 'd3-color';
 import { PcacPieDonutChartConfig, PcacPieDonutChartType } from './pie-donut-chart.model';
 import { PcacDonutChartConfig } from './donut/donut.model';
 import { PcacChart } from '../core/chart';
+import { makeMarksAccessible, refreshTabStop } from '../core/marks';
 import { PcacData } from '../core/chart.model';
 
 import { Subject } from 'rxjs';
@@ -134,7 +135,33 @@ export class PieDonutChartBuilder extends PcacChart {
   private drawChart(chartElm: ElementRef, config: PcacPieDonutChartConfig): void {
     this.buildContainer(chartElm, true);
     const self = this;
-    this.svg.selectAll('.pcac-arc')
+    // Pops the slice out, darkened, for the pointer and keyboard focus alike (see
+    // makeMarksAccessible).
+    const pop = (slice: SVGPathElement, d: PieArcDatum<PcacData>) => {
+      const t = transition().duration(this.transitionService.getTransitionDuration() / 3)
+      const c = color(this.colors[d.index])
+      const ct = c ? c.darker(1).toString() : this.colors[d.index]
+      const selected = select<SVGPathElement, PieArcDatum<PcacData>>(slice);
+      // Hovered mid-way through the enter sweep, the slice is finished first: growing it straight
+      // from its part-swept path morphed it oddly on the way out to the hover shape. Only then -
+      // re-entering a slice mid-way through its hover shrink must grow it from where it is, not
+      // snap it back to rest first (which flickered).
+      if (active(slice, 'enter')) {
+        selected.interrupt('enter').attr('d', this.arcShape(d));
+      }
+      selected
+        .transition(t)
+        .attr('d', this.arcOverShape)
+        .style('fill', ct);
+    };
+    const rest = (slice: SVGPathElement, d: PieArcDatum<PcacData>) => {
+      select<SVGPathElement, PieArcDatum<PcacData>>(slice)
+        .transition()
+        .duration(this.transitionService.getTransitionDuration() / 3)
+        .attr('d', this.arcShape)
+        .style('fill', this.colors[d.index]);
+    };
+    const slices = this.svg.selectAll('.pcac-arc')
       .data(this.pieAngles(config.data))
       .enter().append('g')
       .attr('class', 'pcac-arc')
@@ -143,36 +170,33 @@ export class PieDonutChartBuilder extends PcacChart {
         return this.colors[i];
       })
       .on('mouseover', function (this: SVGPathElement, _: MouseEvent, d: PieArcDatum<PcacData>) {
-        const t = transition().duration(self.transitionService.getTransitionDuration() / 3)
-        const c = color(self.colors[d.index])
-        const ct = c ? c.darker(1).toString() : self.colors[d.index]
-        const slice = select<SVGPathElement, PieArcDatum<PcacData>>(this);
-        // Hovered mid-way through the enter sweep, the slice is finished first: growing it straight
-        // from its part-swept path morphed it oddly on the way out to the hover shape. Only then -
-        // re-entering a slice mid-way through its hover shrink must grow it from where it is, not
-        // snap it back to rest first (which flickered).
-        if (active(this, 'enter')) {
-          slice.interrupt('enter').attr('d', self.arcShape(d));
-        }
-        slice
-          .transition(t)
-          .attr('d', self.arcOverShape)
-          .style('fill', ct);
+        pop(this, d);
       })
       .on('mousemove', (event: MouseEvent, d: PieArcDatum<PcacData>) => {
         self.showTooltip(event, d.data, { index: d.index });
       })
       .on('mouseout', function (this: SVGPathElement, _: MouseEvent, d: PieArcDatum<PcacData>) {
         self.hideTooltip();
-        select<SVGPathElement, PieArcDatum<PcacData>>(this)
-          .transition()
-          .duration(self.transitionService.getTransitionDuration() / 3)
-          .attr('d', self.arcShape)
-          .style('fill', self.colors[d.index]);
+        rest(this, d);
       })
       .on('click', (_event: MouseEvent, d: PieArcDatum<PcacData>) => {
         this.sliceClickedSource.next(d.data);
-      })
+      });
+    makeMarksAccessible(slices, {
+      label: (d) => this.markLabel(d.data),
+      skip: (d) => !!d.data.hide,
+      activate: (d) => this.sliceClickedSource.next(d.data),
+      focus: (slice, d) => {
+        pop(slice, d);
+        this.showMarkTooltip(slice, d.data, { index: d.index });
+      },
+      blur: (slice, d) => {
+        this.hideMarkTooltip(slice);
+        rest(slice, d);
+      },
+    });
+    refreshTabStop(chartElm.nativeElement);
+    slices
       // Named, so the hover transitions (unnamed) and the check above can tell it apart from them.
       .transition('enter')
       .duration(this.transitionService.getTransitionDuration())

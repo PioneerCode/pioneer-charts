@@ -80,3 +80,24 @@ describe('PcacLegend swatches', () => {
     expect(emitted[0].map((item) => [item.label, item.checked])).toEqual([['A', false], ['B', true]]);
   });
 });
+
+describe('PcacLegend screen readers', () => {
+  it('is a group named by its heading', async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    await fixture.whenStable();
+    const legend = fixture.nativeElement.querySelector('pcac-legend') as HTMLElement;
+    const heading = legend.querySelector('.pcac-legend-label') as HTMLElement;
+
+    expect(legend.getAttribute('role')).toBe('group');
+    expect(heading.id).toBeTruthy();
+    expect(legend.getAttribute('aria-labelledby')).toBe(heading.id);
+  });
+
+  it('has no name to point to without a heading', async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.componentInstance.config.update((config) => ({ ...config, heading: null }));
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('pcac-legend').hasAttribute('aria-labelledby')).toBe(false);
+  });
+});

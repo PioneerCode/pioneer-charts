@@ -199,5 +199,66 @@ for (const chart of charts) {
 
       expect(Number(bars(svg)[0].getAttribute(chart.thickness))).toBeGreaterThan(0);
     });
+
+    describe('keyboard and screen readers', () => {
+      const data = () => [
+        group('Chips', [bar('2023', 10), bar('2024', 20)]),
+        group('Gum', [bar('2023', 30), { ...bar('2024', 40), hide: true }]),
+      ];
+      const key = (target: Element, name: string) =>
+        target.dispatchEvent(new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true }));
+      const tooltip = () => document.querySelector<HTMLElement>('.pcac-d3-tooltip');
+
+      it('names each bar by its group, its key and its value', () => {
+        const svg = build(config(data()));
+
+        expect(bars(svg).slice(0, 3).map((b) => b.getAttribute('aria-label')))
+          .toEqual(['Chips, 2023: 10', 'Chips, 2024: 20', 'Gum, 2023: 30']);
+        expect(bars(svg)[0].getAttribute('role')).toBe('img');
+      });
+
+      it('is one Tab stop, and leaves a hidden bar out', () => {
+        const svg = build(config(data()));
+
+        expect(bars(svg).map((b) => b.getAttribute('tabindex'))).toEqual(['0', '-1', '-1', null]);
+        expect(bars(svg)[3].getAttribute('aria-hidden')).toBe('true');
+      });
+
+      it('emits barClicked for Enter on a bar', () => {
+        const groups = data();
+        const svg = build(config(groups));
+        const clicked: PcacData[] = [];
+        builder.barClicked$.subscribe((d) => clicked.push(d));
+
+        key(bars(svg)[1], 'Enter');
+
+        // The consumer's own datum, as a click emits.
+        expect(clicked).toHaveLength(1);
+        expect(clicked[0]).toBe(groups[0].data[1]);
+      });
+
+      it('shows the tooltip on focus and hides it on blur', () => {
+        const svg = build(config(data()));
+        const first = bars(svg)[0];
+
+        first.focus();
+        expect(tooltip()?.style.display).toBe('inline-block');
+        expect(tooltip()?.textContent).toContain('10');
+
+        first.blur();
+        expect(tooltip()?.style.display).toBe('none');
+      });
+
+      it('moves between bars across groups with the arrow keys', () => {
+        const svg = build(config(data()));
+        bars(svg)[0].focus();
+
+        key(bars(svg)[0], 'ArrowRight');
+        key(bars(svg)[1], 'ArrowRight');
+
+        expect(document.activeElement).toBe(bars(svg)[2]);
+        expect(tooltip()?.textContent).toContain('30');
+      });
+    });
   });
 }

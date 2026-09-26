@@ -35,4 +35,24 @@
     <h3 class="pc-h5" id="step-3-import-styles">Step 3: Import Styles</h3>
     <app-layout-code language="typescript" [code]="importStylesCode"></app-layout-code>
   </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="accessibility">Accessibility</h2>
+    <p>Every chart can be used from the keyboard and read by a screen reader, with nothing to set up.</p>
+    <ul>
+      <li>A chart is one stop in the <b>Tab</b> order. Inside it, the arrow keys move from bar to bar (slice,
+        point), and <b>Home</b> and <b>End</b> go to the first and last.</li>
+      <li>The focused bar, slice or point is highlighted and shows its tooltip, as it would under the pointer.
+        <b>Escape</b> hides the tooltip.</li>
+      <li><b>Enter</b> or <b>Space</b> does what a click does: <code>barClicked</code>, <code>sliceClicked</code>
+        or <code>dotClicked</code> emits.</li>
+      <li>A screen reader announces the chart by its <code>ariaLabel</code>, and each bar, slice or point by its
+        key and value, formatted as its axis is &mdash; &ldquo;Chips, Week 3: 125&rdquo;. Axes and grid lines are
+        left out, as the marks already carry their values. With a
+        <a routerLink="/docs/guides/tooltip">custom tooltip</a>, the focused mark is described by the tooltip
+        too, so whatever the template adds is read out.</li>
+      <li>When the user has asked their system to reduce motion, charts are drawn without animation.</li>
+      <li>A <a routerLink="/docs/components/charts/legend">legend</a> is a group named by its heading, and each
+        of its items a switch that <b>Enter</b> or <b>Space</b> toggles.</li>
+    </ul>
+  </section>
 </app-layout-page-docs>

@@ -11,7 +11,8 @@ import 'd3-transition';
  * Lib
  */
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
-import { PcacChart } from '../../core/chart';
+import { PcacChart, PcacTooltipOptions } from '../../core/chart';
+import { makeMarksAccessible, refreshTabStop } from '../../core/marks';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
@@ -90,6 +91,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.drawGrids(this.xScaleStacked, this.yScale);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
+    refreshTabStop(chartElm.nativeElement);
   }
 
   private addGroups(config: PcacBarVerticalChartConfig) {
@@ -148,7 +150,28 @@ export class BarVerticalChartBuilder extends PcacChart {
       }
       return this.colors[byKey ? keys.indexOf(d.key as string) : Number(bar.getAttribute('data-group-bar-id'))];
     };
-    group.enter().append('rect')
+    // The hover fades run as their own named transition: an unnamed one would cancel the enter
+    // transition still growing the bar, leaving it part-grown until the next rebuild. Shared by
+    // the pointer and keyboard focus (see makeMarksAccessible).
+    const highlight = (bar: SVGRectElement, d: PcacData) => {
+      const fill = fillOf(d, bar);
+      select(bar)
+        .transition('hover')
+        .duration(this.transitionService.getTransitionDuration() / 5)
+        .style('fill', color(fill)?.darker(1).toString() ?? fill);
+    };
+    const rest = (bar: SVGRectElement, d: PcacData) => {
+      select(bar)
+        .transition('hover')
+        .duration(this.transitionService.getTransitionDuration() / 5)
+        .style('fill', fillOf(d, bar));
+    };
+    const tooltipOptions = (bar: SVGRectElement): PcacTooltipOptions => {
+      const groupIndex = Number((bar.parentNode as Element).getAttribute('data-group-id'));
+      const index = Number(bar.getAttribute('data-group-bar-id'));
+      return { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: this.yAxis.format };
+    };
+    const bars = group.enter().append('rect')
       .attr('class', 'pcac-bar')
       // A stacked bar spans its whole group, which is already translated into place; looking its
       // series key up in the group band put it off in another group's slot whenever the key
@@ -164,30 +187,33 @@ export class BarVerticalChartBuilder extends PcacChart {
         return this.height;
       })
       .attr('height', 0)
-      // The hover fades run as their own named transition: an unnamed one would cancel the enter
-      // transition still growing the bar, leaving it part-grown until the next rebuild.
       .on('mouseover', function (this: SVGRectElement, _event: MouseEvent, d: PcacData) {
-        const fill = fillOf(d, this);
-        select(this)
-          .transition('hover')
-          .duration(self.transitionService.getTransitionDuration() / 5)
-          .style('fill', color(fill)?.darker(1).toString() ?? fill);
+        highlight(this, d);
       })
       .on('mousemove', function (this: SVGRectElement, event: MouseEvent, d: PcacData) {
-        const groupIndex = Number((this.parentNode as Element).getAttribute('data-group-id'));
-        const index = Number(this.getAttribute('data-group-bar-id'));
-        self.showTooltip(event, d, { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: self.yAxis.format });
+        self.showTooltip(event, d, tooltipOptions(this));
       })
       .on('mouseout', function (this: SVGRectElement, _event: MouseEvent, d: PcacData) {
         self.hideTooltip();
-        select(this)
-          .transition('hover')
-          .duration(self.transitionService.getTransitionDuration() / 5)
-          .style('fill', fillOf(d, this));
+        rest(this, d);
       })
       .on('click', (_, d: PcacData) => {
         this.barClickedSource.next(d);
-      })
+      });
+    makeMarksAccessible(bars, {
+      label: (d, bar) => this.markLabel(d, { parent: tooltipOptions(bar).parent, valueFormat: this.yAxis.format }),
+      skip: (d) => !!d.hide,
+      activate: (d) => this.barClickedSource.next(d),
+      focus: (bar, d) => {
+        highlight(bar, d);
+        this.showMarkTooltip(bar, d, tooltipOptions(bar));
+      },
+      blur: (bar, d) => {
+        this.hideMarkTooltip(bar);
+        rest(bar, d);
+      },
+    });
+    bars
       .transition()
       .duration(this.transitionService.getTransitionDuration())
       .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())

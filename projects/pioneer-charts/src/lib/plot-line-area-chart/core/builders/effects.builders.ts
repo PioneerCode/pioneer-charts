@@ -66,7 +66,9 @@ export class PlaChartEffectsBuilder {
 
   private buildCollection() {
     const collection = this.config.svg.append('g')
-      .attr('class', 'effects');
+      .attr('class', 'effects')
+      // The hover crosshair repeats, for the pointer, what the points' own names say.
+      .attr('aria-hidden', 'true');
 
     collection.append('path')
       .attr('class', 'effect-line');

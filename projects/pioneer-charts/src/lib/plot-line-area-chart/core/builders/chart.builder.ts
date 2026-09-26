@@ -14,6 +14,8 @@ import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig, PcacPointRangeConfig } from '../../plot-line-area-chart.model';
 import { PcacPlotChartConfig, PcacPointFanOutConfig } from '../../plot/plot.model';
 import { PcacChart } from '../../../core/chart';
+import { makeMarksAccessible, refreshTabStop } from '../../../core/marks';
+import { PcacTooltipBuilder } from '../../../core/tooltip.builder';
 import { PcacData } from '../../../core/chart.model';
 import { PcacTooltipCoincident } from '../../../core/tooltip.directive';
 import { PlaChartScalesBuilder, PlaChartScales, longestSeriesLength } from './scales.builder';
@@ -219,6 +221,8 @@ export class PlaChartBuilder extends PcacChart {
         this.svg.selectAll('.dots').selectAll<SVGGElement, PcacData>('.point')
           .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, zoomedScales))
           .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, zoomedScales));
+        // The chart's Tab stop may just have been zoomed out of the plot, and hidden.
+        refreshTabStop(this.svg.node()?.ownerSVGElement ?? null);
         // A fan-out's anchor is positioned like the points it belongs to, so it moves the same way;
         // its spokes are re-aimed because the ring's shift back into the plot (`fanOutShift`)
         // depends on where the anchor now is.
@@ -283,6 +287,7 @@ export class PlaChartBuilder extends PcacChart {
     this.drawPointRanges();
     this.drawFanOuts();
     this.drawDots(config);
+    refreshTabStop(chartElm.nativeElement);
   }
 
   /**
@@ -662,34 +667,27 @@ export class PlaChartBuilder extends PcacChart {
         .attr('class', 'point')
         .attr('transform', (d: PcacData, i: number) => this.pointTransform(d, i, this.scales))
         .attr('display', (d: PcacData, i: number) => this.pointDisplay(d, i, this.scales))
-        .on('mouseover', function (this: SVGGElement, event: MouseEvent, d: PcacData) {
-          self.hoveredPoint = this;
-          self.focusPointRange(d);
-          // `d` is the very element bound from `series.data` above, so identity lookup is exact.
-          self.showTooltip(event, d, {
-            index: series.data.indexOf(d),
-            parent: series,
-            parentIndex: index,
-            coincident: self.coincidentWith(d),
-            valueFormat: self.yAxis.format,
-            keyFormat: self.xAxis.format,
-            // The dot or image itself rather than the group, so the tooltip clears what's drawn.
-            anchor: select(this).select('.dot, .dot-image').node() as Element | null,
-          });
-          // No-op for an image point (no circle inside to grow). Its own transition name, so it
-          // runs alongside the enter rise rather than cancelling it (see DOT_HOVER_TRANSITION);
-          // it only takes over the entry's size tween, which it would otherwise fight over `r`.
-          select(this).select('.dot')
-            .interrupt(DOT_GROW_TRANSITION)
-            .transition(DOT_HOVER_TRANSITION)
-            .duration(duration / 3)
-            .attr('r', 6)
-            .attr('fill', self.colors[index]);
+        .on('mouseover', function (this: SVGGElement, _event: MouseEvent, d: PcacData) {
+          self.enterPoint(this, d, series, index);
         })
         .on('mouseout', () => this.leavePoint())
         .on('click', (_event: MouseEvent, d: PcacData) => {
           this.dotClickedSource.next(d);
         });
+      makeMarksAccessible(points, {
+        label: (d) => this.markLabel(d, { parent: series, valueFormat: this.yAxis.format, keyFormat: this.xAxis.format }),
+        activate: (d) => this.dotClickedSource.next(d),
+        focus: (point, d) => {
+          this.enterPoint(point, d, series, index);
+          if (this.tooltipTemplate()) {
+            point.setAttribute('aria-describedby', PcacTooltipBuilder.ID);
+          }
+        },
+        blur: (point) => {
+          this.leavePoint();
+          point.removeAttribute('aria-describedby');
+        },
+      });
 
       points.filter((d: PcacData) => !d.image)
         .append('circle')
@@ -723,6 +721,36 @@ export class PlaChartBuilder extends PcacChart {
         .duration(duration)
         .attr('y', (d: PcacData) => -maxHeight / 2 + this.offsetOf(d).dy);
     }
+  }
+
+  /**
+   * Starts a hover on a point - its tooltip, beside it; its range brought forward; its dot grown -
+   * for the pointer and keyboard focus alike (see makeMarksAccessible). Ended by `leavePoint`.
+   */
+  private enterPoint(point: SVGGElement, d: PcacData, series: PcacData, index: number): void {
+    const duration = this.transitionService.getTransitionDuration();
+    this.hoveredPoint = point;
+    this.focusPointRange(d);
+    // `d` is the very element bound from `series.data`, so identity lookup is exact.
+    this.showTooltip(null, d, {
+      index: series.data.indexOf(d),
+      parent: series,
+      parentIndex: index,
+      coincident: this.coincidentWith(d),
+      valueFormat: this.yAxis.format,
+      keyFormat: this.xAxis.format,
+      // The dot or image itself rather than the group, so the tooltip clears what's drawn.
+      anchor: select(point).select('.dot, .dot-image').node() as Element | null ?? point,
+    });
+    // No-op for an image point (no circle inside to grow). Its own transition name, so it
+    // runs alongside the enter rise rather than cancelling it (see DOT_HOVER_TRANSITION);
+    // it only takes over the entry's size tween, which it would otherwise fight over `r`.
+    select(point).select('.dot')
+      .interrupt(DOT_GROW_TRANSITION)
+      .transition(DOT_HOVER_TRANSITION)
+      .duration(duration / 3)
+      .attr('r', 6)
+      .attr('fill', this.colors[index]);
   }
 
   /**

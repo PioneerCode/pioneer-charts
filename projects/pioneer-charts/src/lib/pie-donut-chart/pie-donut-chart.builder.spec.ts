@@ -311,3 +311,33 @@ describe('PieDonutChartBuilder sizing and hover', () => {
     expect(slice.getAttribute('d')).toBe(midShrink);
   });
 });
+
+describe('PieDonutChartBuilder keyboard and screen readers', () => {
+  let builder: PieDonutChartBuilder;
+  let elm: ElementRef;
+  const slices = () => Array.from((elm.nativeElement as SVGSVGElement).querySelectorAll<SVGPathElement>('.pcac-arc path'));
+
+  beforeEach(() => {
+    builder = TestBed.runInInjectionContext(() => new PieDonutChartBuilder());
+    elm = chartElm();
+  });
+
+  it('names each slice by its key and value, and leaves a hidden one out', () => {
+    builder.buildChart(elm, dataConfig(['B']), Donut);
+
+    expect(slices().map((s) => s.getAttribute('aria-label'))).toEqual(['A: 1', null, 'C: 1']);
+    expect(slices().map((s) => s.getAttribute('tabindex'))).toEqual(['0', null, '-1']);
+  });
+
+  it('emits sliceClicked for Enter on a slice', () => {
+    const config = dataConfig();
+    builder.buildChart(elm, config, Pie);
+    const clicked: PcacData[] = [];
+    builder.sliceClicked$.subscribe((d) => clicked.push(d));
+
+    slices()[2].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+    expect(clicked).toHaveLength(1);
+    expect(clicked[0]).toBe(config.data[2]);
+  });
+});

@@ -61,6 +61,7 @@ export class PcacGridBuilder {
   drawVerticalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-vertical')
+      .attr('aria-hidden', 'true')
       .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.rule')
       .data(gridLines(config.xScale, config.numberOfTicks))
@@ -78,6 +79,7 @@ export class PcacGridBuilder {
   drawHorizontalGrid<XDomain extends AxisDomain, YDomain extends AxisDomain>(config: IPcacGridBuilderConfig<XDomain, YDomain>): void {
     config.svg.append('g')
       .attr('class', 'pcac-grid pcac-grid-horizontal')
+      .attr('aria-hidden', 'true')
       .style('--pcac-grid-color', () => config.color ?? null)
       .selectAll('g.pcac-grid-rule')
       .data(gridLines(config.yScale, config.numberOfTicks))

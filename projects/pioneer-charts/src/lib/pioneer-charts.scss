@@ -25,6 +25,27 @@
   border-radius: 2px;
 }
 
+// A bar, slice or point with keyboard focus (see core/marks.ts). Focus already does what hover does -
+// highlights the mark and shows its tooltip - and the ring marks which one has it on top of that,
+// so it can't be mistaken for a mark the pointer happens to be over. Only for focus from the
+// keyboard: pressing the pointer on a mark doesn't focus it.
+[data-pcac-mark]:focus {
+  outline: none;
+}
+
+[data-pcac-mark]:focus-visible {
+  outline: 2px solid imports.$gray-800;
+  outline-offset: 2px;
+}
+
+// A slice is traced along its own edge instead: an outline is always a rectangle - the slice's
+// bounding box - which, around a wedge, frames half its neighbors too.
+.pcac-arc path[data-pcac-mark]:focus-visible {
+  outline: none;
+  stroke: imports.$gray-800;
+  stroke-width: 2px;
+}
+
 // Each color below is `var(--pcac-*-color, <theme color>)`. A builder sets the property on a
 // part's group only when the chart's config gives that color (`PcacAxisConfig`'s `*Color` fields,
 // `PcacPointFanOutConfig.spokeColor` / `anchorColor`, `PcacDonutChartConfig.labelColor` /

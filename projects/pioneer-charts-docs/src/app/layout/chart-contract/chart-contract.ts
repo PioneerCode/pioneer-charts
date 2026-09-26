@@ -54,7 +54,7 @@ interface ContractData {
       padding: 1rem;
       overflow: auto;
       font-size: 14px;
-      color: rgb(214, 51, 132);
+      color: light-dark(rgb(214, 51, 132), #f48fb1);
       background: var(--mat-sys-surface-container-low, #f7f7f7);
       border-radius: 8px;
     }

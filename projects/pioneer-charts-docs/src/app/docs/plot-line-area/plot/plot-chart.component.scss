@@ -10,7 +10,7 @@
   font: inherit;
   justify-self: start;
   padding: 0.15rem 0.4rem;
-  border: 1px solid rgba(colors.$primary, 0.3);
+  border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 3px;
 }
 

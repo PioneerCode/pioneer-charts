@@ -1,6 +1,6 @@
 <mat-toolbar class="nav">
   <mat-toolbar-row class="nav-row">
-    <a matButton routerLink="/">
+    <a matButton routerLink="/" class="icon-link" aria-label="Pioneer Charts home">
       <div class="logo-icon">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 208.7 161.3" xml:space="preserve">
@@ -17,7 +17,7 @@
 
     <!-- Named by aria-label: below 640px the visible text is hidden and the icon is aria-hidden, which
          left the link with no name at all. -->
-    <a matButton href="https://www.npmjs.com/package/@pioneer-code/pioneer-charts" target="_blank" aria-label="npm"  class="ms-auto">
+    <a matButton href="https://www.npmjs.com/package/@pioneer-code/pioneer-charts" target="_blank" aria-label="npm" class="icon-link ms-auto">
       <div class="npm-icon">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path
@@ -27,7 +27,7 @@
       </div>
       <span class="hidden sm:inline">npm</span>
     </a>
-    <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank"
+    <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank" class="icon-link"
       aria-label="GitHub">
       <div class="github-icon">
         <svg viewBox="0 0 20 20" aria-hidden="true" class="docs-github-logo">
@@ -38,6 +38,13 @@
       </div>
       <span class="hidden sm:inline">GitHub</span>
     </a>
+    <!-- Named for what it does, which changes with the theme. A plain title for the hover hint:
+         MatTooltip would bring Material's overlay code into every page's initial bundle. -->
+    <button matIconButton type="button" class="theme-toggle" (click)="theme.toggle()"
+      [attr.aria-label]="theme.dark() ? 'Switch to the light theme' : 'Switch to the dark theme'"
+      [title]="theme.dark() ? 'Light theme' : 'Dark theme'">
+      <mat-icon>{{ theme.dark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
 
   </mat-toolbar-row>
   <!-- Below 960px, docs pages open their sidebar (a drawer) from here: see DocsNavService. On every

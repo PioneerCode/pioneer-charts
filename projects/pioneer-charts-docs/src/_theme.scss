@@ -160,6 +160,7 @@ html {
   ));
 
   // Outlined cards (the code blocks) are white rather than the theme's surface color, a faint warm
-  // tint. The chart cards are elevated ones, whitened in ChartCard.
-  @include mat.card-overrides((outlined-container-color: #fff));
+  // tint - on the light theme; a step up from the page on the dark one. The chart cards are
+  // elevated ones, set in ChartCard.
+  @include mat.card-overrides((outlined-container-color: light-dark(#fff, var(--mat-sys-surface-container-low))));
 }

@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { DocsNavService } from '../docs-nav.service';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'app-layout-header',
@@ -19,6 +20,7 @@ import { DocsNavService } from '../docs-nav.service';
 })
 export class LayoutHeader {
   protected readonly nav = inject(DocsNavService);
+  protected readonly theme = inject(ThemeService);
 
   constructor() {
     // The router scrolls to a URL's #section (anchorScrolling, app.config.ts); this keeps the

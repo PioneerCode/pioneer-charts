@@ -35,14 +35,14 @@ import { MatCardModule } from '@angular/material/card';
     @use '@angular/material' as mat;
 
     // White rather than Material's default card fill (the theme's surface-container-low, a warm
-    // grey): only the chart cards, not the code blocks, which are cards too.
+    // grey) - on the light theme; on the dark one, a step up from the page's surface.
     :host {
-      @include mat.card-overrides((elevated-container-color: #fff));
+      @include mat.card-overrides((elevated-container-color: light-dark(#fff, var(--mat-sys-surface-container))));
     }
 
     // Clear of the contract button in the card's top-right corner.
     .pc-chart-card-title { font-size: 1rem; font-weight: 500; margin: 0 2.5rem 0.25rem 0; }
-    .pc-chart-card-caption { font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); margin: 0; }
+    .pc-chart-card-caption { font-size: 0.875rem; color: var(--mat-sys-on-surface-variant); margin: 0; }
     .pc-chart-card-body { flex: 1 1 auto; min-height: 0; margin-top: 0.75rem; }
   `,
 })

@@ -18,6 +18,17 @@
     content="Pioneer Charts is an Angular library of bar, line, area, plot, pie and donut charts built on D3 - responsive, themeable and simple to configure.">
   <meta property="og:url" content="https://pioneercharts.com/">
   <meta name="twitter:card" content="summary">
+  <!-- The light or dark theme, set before the first paint so a page never flashes the other one:
+       the choice saved by the header's switch, else the system's setting. See ThemeService. -->
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('pc-theme'); } catch (e) {}
+      var dark = saved ? saved === 'dark'
+        : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.add(dark ? 'pc-dark' : 'pc-light');
+    })();
+  </script>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

@@ -50,12 +50,36 @@
 
 
 
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
+// A control's own color (a slider's fill, a checkbox's tick, a text button): the site's dark ink
+// on the light theme, its light violet on the dark one, where the ink would all but disappear.
+$pc-ink: light-dark(#{colors.$primary}, #{colors.$primary-light});
+
+// The light or dark theme, from the class ThemeService (and index.html, before the first paint)
+// puts on <html>. Every Material color token is a `light-dark()` pair, resolved against this, and
+// so are the site's own colors below - so the class switches the whole site.
+html {
   color-scheme: light;
 
+  &.pc-dark {
+    color-scheme: dark;
+
+    // The charts' own grays - axis titles, tick marks, grid lines, the donut's center text -
+    // lightened for a dark card, through the custom properties the library reads them from (see the
+    // Theme page). A chart's config still wins over these; tick labels follow the text color, and
+    // point ranges keep their series' color.
+    --pcac-axis-label-color: #dee2e6;
+    --pcac-axis-sub-label-color: #adb5bd;
+    --pcac-axis-tick-color: #adb5bd;
+    --pcac-axis-line-color: #adb5bd;
+    --pcac-grid-color: #3a3f46;
+    --pcac-fan-out-spoke-color: #6c757d;
+    --pcac-fan-out-anchor-color: #adb5bd;
+    --pcac-donut-center-label-color: #f8f9fa;
+    --pcac-donut-center-sub-label-color: #adb5bd;
+  }
+}
+
+body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
@@ -94,7 +118,7 @@ body {
 
   input[type="range"],
   input[type="checkbox"] {
-    accent-color: colors.$primary;
+    accent-color: $pc-ink;
   }
 
   // The browser's 13px checkbox is a small thing to tap; its label (`for`) is a target too.
@@ -112,7 +136,7 @@ body {
   input[type="text"] {
     font: inherit;
     padding: 0.15rem 0.4rem;
-    border: 1px solid rgba(colors.$primary, 0.3);
+    border: 1px solid var(--mat-sys-outline-variant);
     border-radius: 3px;
   }
 
@@ -120,7 +144,7 @@ body {
     width: 3rem;
     height: 1.5rem;
     padding: 0;
-    border: 1px solid rgba(colors.$primary, 0.3);
+    border: 1px solid var(--mat-sys-outline-variant);
     border-radius: 3px;
     background: none;
   }
@@ -147,10 +171,10 @@ body {
   font: inherit;
   font-size: 0.85rem;
   padding: 0 0.4rem;
-  border: 1px solid rgba(colors.$primary, 0.3);
+  border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 3px;
   background: none;
-  color: colors.$primary;
+  color: $pc-ink;
   cursor: pointer;
 
   &:disabled {
@@ -179,19 +203,19 @@ body {
     height: 56px;
 
     th {
-      color: rgba(0, 0, 0, 0.87);
+      color: var(--mat-sys-on-surface);
       text-align: left;
       font-weight: 500;
       padding: 16px;
       line-height: 20px;
       font-size: 14px;
-      border-bottom: 1px solid #74777f;
+      border-bottom: 1px solid var(--mat-sys-outline);
     }
 
     td {
       padding: 16px;
       font-size: 14px;
-      border-bottom: 1px solid #74777f;
+      border-bottom: 1px solid var(--mat-sys-outline);
     }
   }
 

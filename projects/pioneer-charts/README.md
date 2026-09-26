@@ -6,4 +6,4 @@ copies the repository root's [README.md](../../README.md) (and [LICENSE](../../L
 
 For building, testing and releasing, see the root README and
 [.github/CONTRIBUTING.md](../../.github/CONTRIBUTING.md). Usage docs live at
-https://charts.pioneercode.com.
+https://pioneercharts.com.

@@ -16,7 +16,7 @@ What kind of change does this PR introduce?
 [ ] Refactoring (no functional changes, no api changes)
 [ ] Build related changes
 [ ] Documentation content changes
-[ ] charts.pioneercode.com application / infrastructure changes
+[ ] pioneercharts.com application / infrastructure changes
 [ ] Other... Please describe:
 ```
 

@@ -10,7 +10,7 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 
 Guides, the API reference, live examples, and theming instructions all live on the docs site:
 
-**https://charts.pioneercode.com**
+**https://pioneercharts.com**
 
 ## Features
 
@@ -36,7 +36,7 @@ The D3 modules the charts use are installed with the package, so there's nothing
 npm install --save @pioneer-code/pioneer-charts
 ```
 
-Then follow the [Introduction](https://charts.pioneercode.com) on the docs site to import the components and theme into your app.
+Then follow the [Introduction](https://pioneercharts.com) on the docs site to import the components and theme into your app.
 
 ## Contributing
 

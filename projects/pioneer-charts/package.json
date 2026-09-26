@@ -1,7 +1,7 @@
 {
   "name": "@pioneer-code/pioneer-charts",
   "description": "Pioneer Charts, a library of data visualization charts built on top of Angular and D3.",
-  "homepage": "https://charts.pioneercode.com",
+  "homepage": "https://pioneercharts.com",
   "bugs": {
     "url": "https://github.com/PioneerCode/pioneer-charts/issues"
   },

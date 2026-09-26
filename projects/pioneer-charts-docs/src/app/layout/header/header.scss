@@ -1,5 +1,24 @@
 .nav-row {
   gap: 4px;
+
+  // A phone's row holds the logo, both nav links, npm, GitHub and the theme switch: 400px as
+  // Material sizes them, more than a phone has. Below 600px the three that show only an icon there
+  // (their text is hidden) are sized to it rather than to a button's 64px minimum, and the row's
+  // own padding halves - 312px, room even at 320px.
+  @media (max-width: 599.98px) {
+    padding: 0 8px;
+
+    .icon-link.mat-mdc-button {
+      min-width: 0;
+      padding: 0 8px;
+    }
+
+    .logo-icon,
+    .github-icon,
+    .npm-icon {
+      margin-right: 0;
+    }
+  }
 }
 
 // The row under the toolbar holding the docs sidebar's Menu button, below 960px. (Same breakpoint
@@ -32,11 +51,18 @@
   fill: #fff;
 }
 
-.github-icon {
+.github-icon,
+.npm-icon {
   position: relative;
   top: 2px;
   width: 24px;
   height: 18px;
   display: inline-block;
   margin-right: 6px;
+}
+
+// The toolbar's white, like the links beside it. Material colors an icon button from the page's
+// theme instead - on the light one, a dark gray that all but vanished on this dark bar.
+.theme-toggle.mat-mdc-icon-button {
+  color: inherit;
 }

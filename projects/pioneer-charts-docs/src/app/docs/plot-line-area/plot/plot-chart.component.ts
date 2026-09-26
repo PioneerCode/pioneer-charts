@@ -1,8 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
-import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
 import {
   PcacAreaChart, PcacLineChart, PcacPlotChart, PcacPointFanOutConfig, PcacPointRangeConfig, PcacPointRangeShow,
@@ -10,21 +8,23 @@ import {
 } from '@pioneer-code/pioneer-charts';
 import { PlotLineAreaBaseComponent } from '../base/base.component';
 import { LayoutResourceState } from '../../../layout/resource-state/resource-state';
+import { ChartCard } from '../../../layout/chart-card/chart-card';
+import { ChartContract } from '../../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-plot-chart',
   templateUrl: './plot-chart.component.html',
   styleUrl: './plot-chart.component.scss',
   imports: [
+    ChartCard,
+    ChartContract,
     PlotLineAreaBaseComponent,
-    MatCardModule,
     PcacPlotChart,
     PcacLineChart,
     PcacAreaChart,
     PcacTooltipDirective,
     NgTemplateOutlet,
     RouterLink,
-    StringifyPipe,
     LayoutResourceState
   ]
 })

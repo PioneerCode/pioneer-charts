@@ -3,11 +3,11 @@
   </p>
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
-      <mat-card class="p-3">
+      <pc-chart-card heading="Legend" [level]="2">
         <app-layout-resource-state [resource]="pcService.legendConfig">
           <pcac-legend [config]="pcService.legendConfig.value()" (itemClicked)="onItemClicked($event)"/>
         </app-layout-resource-state>
-      </mat-card>
+      </pc-chart-card>
     </div>
   </section>
   <section class="pc-doc-section">
@@ -83,12 +83,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </section>
-  <section class="pc-doc-section">
-    <h2 class="pc-h3" id="contract">Contract</h2>
-    <div class="pc-config-container">
-      <app-layout-code language="json" [code]="pcService.legendConfig.value() | stringify"></app-layout-code>
     </div>
   </section>
 </app-layout-page-docs>

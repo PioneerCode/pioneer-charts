@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import {
   PcacBarVerticalChartComponent,
@@ -15,19 +14,22 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-tooltip',
   templateUrl: './tooltip.component.html',
   styleUrl: './tooltip.component.scss',
   imports: [
+    ChartCard,
+    ChartContract,
     DecimalPipe,
     PercentPipe,
     RouterLink,
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
     PcacPieChart,

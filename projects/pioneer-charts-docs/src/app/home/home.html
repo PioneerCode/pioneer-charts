@@ -1,6 +1,6 @@
 <!-- overflow-hidden clips the decorative logo, which sits half past the right edge; unclipped it
      widened the page on a phone. -->
-<header class="pt-24 pb-24 text-center relative overflow-hidden">
+<header class="pt-24 pb-24 text-center relative overflow-hidden bg-primary">
   <div class="absolute bottom-0 left-[50%] ms-24 w-124 z-0">
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       viewBox="0 0 208.7 161.3" xml:space="preserve">
@@ -17,7 +17,7 @@
       Started</a>
   </div>
 </header>
-<div class="pt-5 pb-16 bg-white">
+<div class="pt-5 pb-16">
   <div class="container mx-auto px-4 gap-8 grid grid-cols-1 md:grid-cols-3 pb-5 pt-5 place-items-center">
     <div class="text-center">
       <mat-icon class="large-icon">bar_chart</mat-icon>
@@ -53,12 +53,12 @@
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="col">
-      <mat-card class="p-3">
+      <pc-chart-card heading="Area chart" caption="Three series of snack calories; hover for the crosshair.">
         <app-layout-resource-state [resource]="appService.areaChartConfig">
           <pcac-area-chart [config]="appService.areaChartConfig.value()"
             (dotClicked)="appService.onClicked($event)" />
         </app-layout-resource-state>
-      </mat-card>
+      </pc-chart-card>
     </div>
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">

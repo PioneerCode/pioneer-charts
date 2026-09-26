@@ -149,11 +149,18 @@ html {
     ),
     typography: (
       plain-family: Roboto,
-      brand-family: Open Sans,
+      // Roboto, the one family index.html loads: Open Sans never was, so Material's brand-font text
+      // (a dialog's title, say) fell back to the browser's serif.
+      brand-family: Roboto,
       bold-weight: 900,
       medium-weight: 500,
       regular-weight: 300,
     ),
     density: 0,
   ));
+
+  // Outlined cards (the code blocks) are white rather than the theme's surface color, a faint warm
+  // tint - on the light theme; a step up from the page on the dark one. The chart cards are
+  // elevated ones, set in ChartCard.
+  @include mat.card-overrides((outlined-container-color: light-dark(#fff, var(--mat-sys-surface-container-low))));
 }

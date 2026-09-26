@@ -21,7 +21,6 @@ export class PlotLineAreaBaseComponent {
   readonly lead = input.required<string>();
   readonly markup = input.required<string>();
   readonly importCode = input.required<string>();
-  readonly contract = input.required<string>();
 
   pcService = inject(AppService);
   jumpNav = signal<IJumpNav[]>([
@@ -44,10 +43,6 @@ export class PlotLineAreaBaseComponent {
     {
       key: 'Events',
       value: 'events',
-    },
-    {
-      key: 'Contract',
-      value: 'contract',
     }
   ])
 }

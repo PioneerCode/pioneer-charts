@@ -13,8 +13,7 @@
 
     <div class="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4 mb-2">
       <div>
-        <p class="pc-tooltip-caption">Grouped bar &mdash; <code>parent</code> is the group</p>
-        <mat-card class="p-3">
+        <pc-chart-card heading="Grouped bar" caption="parent is the group">
           <app-layout-resource-state [resource]="service.barVerticalChartGroupConfig">
             <pcac-bar-vertical-chart [config]="service.barVerticalChartGroupConfig.value()">
               <ng-template pcacTooltip let-point let-group="parent" let-threshold="isThreshold">
@@ -37,11 +36,10 @@
               </ng-template>
             </pcac-bar-vertical-chart>
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
       <div>
-        <p class="pc-tooltip-caption">Line &mdash; <code>parent</code> is the series</p>
-        <mat-card class="p-3">
+        <pc-chart-card heading="Line" caption="parent is the series">
           <app-layout-resource-state [resource]="service.lineChartConfig">
             <pcac-line-chart [config]="service.lineChartConfig.value()">
               <ng-template pcacTooltip let-point let-series="parent">
@@ -56,11 +54,10 @@
               </ng-template>
             </pcac-line-chart>
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
       <div>
-        <p class="pc-tooltip-caption">Pie &mdash; no <code>parent</code>; slices are top level</p>
-        <mat-card class="p-3">
+        <pc-chart-card heading="Pie" caption="No parent: slices are top level">
           <app-layout-resource-state [resource]="service.pieChartConfig">
             <pcac-pie-chart [config]="service.pieChartConfig.value()">
               <ng-template pcacTooltip let-slice>
@@ -74,7 +71,7 @@
               </ng-template>
             </pcac-pie-chart>
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
     </div>
   </section>

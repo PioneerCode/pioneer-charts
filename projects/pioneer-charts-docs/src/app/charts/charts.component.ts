@@ -22,8 +22,9 @@ import {
 } from '@pioneer-code/pioneer-charts';
 import { AppService } from '../app.service';
 import { LayoutResourceState } from '../layout/resource-state/resource-state';
-import { ChartCard } from './chart-card';
+import { ChartCard } from '../layout/chart-card/chart-card';
 import { ChartLabelPipe } from './chart-label.pipe';
+import { ChartContract } from '../layout/chart-contract/chart-contract';
 
 /** The page's sections, in order, for the jump links at the top. */
 const SECTIONS = [
@@ -91,6 +92,7 @@ const LONG_CATEGORIES: Record<string, string> = {
   templateUrl: './charts.component.html',
   styleUrl: './charts.component.scss',
   imports: [
+    ChartContract,
     RouterLink,
     ChartCard,
     ChartLabelPipe,

@@ -1,6 +1,6 @@
 <mat-toolbar class="nav">
   <mat-toolbar-row class="nav-row">
-    <a matButton routerLink="/">
+    <a matButton routerLink="/" class="icon-link" aria-label="Pioneer Charts home">
       <div class="logo-icon">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 208.7 161.3" xml:space="preserve">
@@ -14,7 +14,21 @@
     </a>
     <a matButton routerLink="/docs/guides/introduction">Documentation</a>
     <a matButton routerLink="/charts">Charts</a>
-    <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank" class="ms-auto">
+
+    <!-- Named by aria-label: below 640px the visible text is hidden and the icon is aria-hidden, which
+         left the link with no name at all. -->
+    <a matButton href="https://www.npmjs.com/package/@pioneer-code/pioneer-charts" target="_blank" aria-label="npm" class="icon-link ms-auto">
+      <div class="npm-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z"
+            fill="currentColor"></path>
+        </svg>
+      </div>
+      <span class="hidden sm:inline">npm</span>
+    </a>
+    <a matButton href="https://github.com/PioneerCode/pioneer-charts" target="_blank" class="icon-link"
+      aria-label="GitHub">
       <div class="github-icon">
         <svg viewBox="0 0 20 20" aria-hidden="true" class="docs-github-logo">
           <path
@@ -24,17 +38,25 @@
       </div>
       <span class="hidden sm:inline">GitHub</span>
     </a>
+    <!-- Named for what it does, which changes with the theme. A plain title for the hover hint:
+         MatTooltip would bring Material's overlay code into every page's initial bundle. -->
+    <button matIconButton type="button" class="theme-toggle" (click)="theme.toggle()"
+      [attr.aria-label]="theme.dark() ? 'Switch to the light theme' : 'Switch to the dark theme'"
+      [title]="theme.dark() ? 'Light theme' : 'Dark theme'">
+      <mat-icon>{{ theme.dark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
   </mat-toolbar-row>
   <!-- Below 960px, docs pages open their sidebar (a drawer) from here: see DocsNavService. On every
        docs page, pre-rendered HTML included, and hidden by CSS from 960px (header.scss) - so a
        phone's first paint already has it, rather than the page jumping when the app adds it. -->
   @if (nav.available()) {
-    <mat-toolbar-row class="menu-row">
-      <button matButton type="button" [attr.aria-expanded]="nav.opened()" aria-controls="docs-navigation"
-        (click)="nav.toggle()">
-        <mat-icon>menu</mat-icon>
-        Menu
-      </button>
-    </mat-toolbar-row>
+  <mat-toolbar-row class="menu-row">
+    <button matButton type="button" [attr.aria-expanded]="nav.opened()" aria-controls="docs-navigation"
+      (click)="nav.toggle()">
+      <mat-icon>menu</mat-icon>
+      Menu
+    </button>
+  </mat-toolbar-row>
   }
 </mat-toolbar>

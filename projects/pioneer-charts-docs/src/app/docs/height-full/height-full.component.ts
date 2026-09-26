@@ -1,5 +1,4 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
@@ -7,16 +6,19 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-height-full',
   templateUrl: './height-full.component.html',
   styleUrl: './height-full.component.scss',
   imports: [
+    ChartCard,
+    ChartContract,
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
   ]

@@ -19,20 +19,18 @@
 
     <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-2">
       <div>
-        <p class="pc-height-full-caption"><code>heightFull: false</code> &mdash; stays 200px tall</p>
-        <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">
+        <pc-chart-card heading="heightFull: false" caption="Stays 200px tall" class="pc-height-full-container" [style.height.px]="containerHeight()">
           <app-layout-resource-state [resource]="service.barVerticalChartConfig">
             <pcac-bar-vertical-chart [config]="fixedConfig()" />
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
       <div>
-        <p class="pc-height-full-caption"><code>heightFull: true</code> &mdash; fills the container</p>
-        <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">
+        <pc-chart-card heading="heightFull: true" caption="Fills the container" class="pc-height-full-container" [style.height.px]="containerHeight()">
           <app-layout-resource-state [resource]="service.barVerticalChartConfig">
             <pcac-bar-vertical-chart [config]="fullConfig()" />
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
     </div>
     <p class="text-sm">Drag below 200px and the two panels converge: there is nothing left to fill, so
@@ -47,15 +45,12 @@
       handed down by a flex or grid track. That covers the common case: a tile with a header on top and a chart
       taking whatever is left.</p>
 
-    <mat-card class="p-3 flex flex-col mb-4" [style.height.px]="containerHeight()">
-      <h3 class="pc-h5 m-0">Requests Per Minute</h3>
-      <p class="text-sm mb-2">Last 24 hours</p>
-      <div class="flex-1 min-h-0 pc-height-full-flex-body">
-        <app-layout-resource-state [resource]="service.lineChartConfig">
-          <pcac-line-chart [config]="lineFullConfig()" />
-        </app-layout-resource-state>
-      </div>
-    </mat-card>
+    <pc-chart-card heading="Requests Per Minute" caption="Last 24 hours" class="pc-height-full-container mb-4"
+      [style.height.px]="containerHeight()">
+      <app-layout-resource-state [resource]="service.lineChartConfig">
+        <pcac-line-chart [config]="lineFullConfig()" />
+      </app-layout-resource-state>
+    </pc-chart-card>
 
     <app-layout-code language="markup" [code]="flexCode"></app-layout-code>
   </section>

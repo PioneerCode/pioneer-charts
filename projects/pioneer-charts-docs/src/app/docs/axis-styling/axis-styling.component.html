@@ -67,20 +67,18 @@
 
     <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-2">
       <div>
-        <p class="pc-axis-styling-caption"><code>&lt;pcac-bar-vertical-chart&gt;</code></p>
-        <mat-card class="p-3">
+        <pc-chart-card heading="Vertical bar chart" caption="<pcac-bar-vertical-chart>">
           <app-layout-resource-state [resource]="service.barVerticalChartConfig">
             <pcac-bar-vertical-chart [config]="barConfig()" />
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
       <div>
-        <p class="pc-axis-styling-caption"><code>&lt;pcac-line-chart&gt;</code></p>
-        <mat-card class="p-3">
+        <pc-chart-card heading="Line chart" caption="<pcac-line-chart>">
           <app-layout-resource-state [resource]="service.lineChartConfig">
             <pcac-line-chart [config]="lineConfig()" />
           </app-layout-resource-state>
-        </mat-card>
+        </pc-chart-card>
       </div>
     </div>
     <p class="text-sm">A few things to notice: the bar chart's x axis is a category axis, so <b>ticks</b> does

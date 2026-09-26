@@ -26,11 +26,11 @@
         (input)="set('subLabel', $any($event.target).value)" />
       <span></span>
     </div>
-    <mat-card class="p-3 mb-3">
+    <pc-chart-card heading="Donut" caption="Change the settings above and it redraws." class="mb-3">
       <app-layout-resource-state [resource]="pcService.pieChartConfig">
         <pcac-donut-chart [config]="config()" (sliceClicked)="pcService.onClicked($event)" />
       </app-layout-resource-state>
-    </mat-card>
+    </pc-chart-card>
     <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
   </section>
   <section class="pc-doc-section">
@@ -96,12 +96,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </section>
-  <section class="pc-doc-section">
-    <h2 class="pc-h3" id="contract">Contract</h2>
-    <div class="pc-config-container">
-      <app-layout-code language="json" [code]="config() | stringify"></app-layout-code>
     </div>
   </section>
 </app-layout-page-docs>

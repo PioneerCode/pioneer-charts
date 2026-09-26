@@ -1,26 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
 import { PcacBarHorizontalChartComponent, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
-import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { AppService } from '../../app.service';
-import { StringifyPipe } from '../../stringify.pipe';
 import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-bar-chart',
   templateUrl: './bar-chart.component.html',
   imports: [
+    ChartCard,
+    ChartContract,
     LayoutCode,
     LayoutBaseConfig,
     LayoutPageDocs,
-    MatCardModule,
     RouterLink,
-    StringifyPipe,
     PcacBarHorizontalChartComponent,
     PcacBarVerticalChartComponent,
     LayoutResourceState
@@ -58,10 +58,6 @@ export class BarChartComponent {
     {
       key: 'Events',
       value: 'events',
-    },
-    {
-      key: 'Contract',
-      value: 'contract',
     }
   ]);
 

@@ -16,7 +16,7 @@
     overflow-x: hidden;
     // Scrolling the list to its end doesn't carry on into the page.
     overscroll-behavior: contain;
-    background-color: #fff;
+    // background-color: #fff;
 
     // Only from 1280px: it takes 300px beside the content, and below that (with the 280px
     // sidebar) it left the content too narrow to read. CSS alone decides, so the pre-rendered page

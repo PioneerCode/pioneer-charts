@@ -29,7 +29,9 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 
-  button {
+  a {
+    display: inline-flex;
+    align-items: center;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 999px;
     background: #fff;
@@ -44,10 +46,14 @@
   }
 }
 
-// Clears the fixed header when a jump link scrolls a section to the top.
+// A jump link scrolls a section just below the fixed header (the router's anchor scrolling, with
+// the offset LayoutHeader sets) and focuses it - hence tabindex="-1", and no focus ring for that.
 .pc-charts-section {
-  scroll-margin-top: 80px;
   margin-bottom: 2.5rem;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 // Fills the rest of its card (a flex column) and centers a chart shorter than its neighbours in it.

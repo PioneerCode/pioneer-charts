@@ -67,12 +67,16 @@ export class DonutChartComponent {
     this.settings.update((settings) => ({ ...settings, [field]: value }));
   }
 
-  configCode = `const config: PcacDonutChartConfig = {
+  /** The demo's own config, as code - so the sample always matches the chart above it. */
+  protected readonly configCode = computed(() => {
+    const { innerRadius, label, subLabel } = this.config();
+    return `const config: PcacDonutChartConfig = {
   data: [...],
-  innerRadius: 0.6,
-  label: '67',
-  subLabel: 'balls',
+  innerRadius: ${innerRadius},
+  label: '${label}',
+  subLabel: '${subLabel}',
 };`;
+  });
 
   markupCode = `<pcac-donut-chart [config]="config" (sliceClicked)="onClicked($event)" />`;
   importCode = `import { PcacDonutChart, PcacDonutChartConfig } from '@pioneer-code/pioneer-charts';`;

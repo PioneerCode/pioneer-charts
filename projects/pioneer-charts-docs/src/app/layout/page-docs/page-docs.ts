@@ -35,13 +35,12 @@ export class LayoutPageDocs {
     // (jump-nav.scss), so the pre-rendered page - built with no screen to measure - lays out the
     // same as the app does once it starts.
     const drawerQuery = inject(MediaMatcher).matchMedia('(max-width: 959.98px)');
-    // The drawer starts closed and the panel open, and stays so across the breakpoint: resizing
-    // past it while the drawer happens to be open shouldn't leave the panel closed once it's back.
-    // The header's Menu button and the drawer's own backdrop/ESC dismissal (openedChange) write to
-    // the same `opened` signal.
+    // The drawer starts closed, and closes whenever the layout crosses the breakpoint. The
+    // header's Menu button and the drawer's own backdrop/ESC dismissal (openedChange) write to the
+    // same `opened` signal.
     const sync = () => {
       this.nav.isMobile.set(drawerQuery.matches);
-      this.nav.opened.set(!drawerQuery.matches);
+      this.nav.opened.set(false);
     };
     sync();
     this.nav.available.set(true);
@@ -71,8 +70,8 @@ export class LayoutPageDocs {
     let footer: Element | null = null;
     const update = () => {
       const sidebar = this.sidebar()?.nativeElement;
-      if (!sidebar) {
-        return; // Below 960px there's no sidebar, only the drawer.
+      if (!sidebar || this.nav.isMobile()) {
+        return; // Below 960px the sidebar is hidden; the drawer stands in for it.
       }
       footer ??= document.querySelector('app-layout-footer');
       if (!footer) {

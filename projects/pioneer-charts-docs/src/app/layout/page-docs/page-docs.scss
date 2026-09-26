@@ -25,9 +25,8 @@ mat-sidenav-container {
   background-color: #fff;
   z-index: 2;
 
-  // Also hidden by CSS, not only left out by the template (`nav.isMobile()`): the pre-rendered
-  // HTML is built with the desktop layout, and a phone painting it before the app starts must not
-  // lay out for it. Same breakpoint as page-docs.ts.
+  // Only a drawer below 960px (the template keeps this in the page either way). Same breakpoint as
+  // page-docs.ts.
   @media (max-width: 959.98px) {
     display: none;
   }

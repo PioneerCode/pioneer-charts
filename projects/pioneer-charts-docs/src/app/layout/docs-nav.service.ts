@@ -19,8 +19,8 @@ export class DocsNavService {
   /** Whether the docs layout is in its phone layout, where the sidebar is a drawer. */
   readonly isMobile = signal(false);
 
-  /** Whether the sidebar is open: always on a desktop, while toggled open on a phone. */
-  readonly opened = signal(true);
+  /** Whether the drawer (the sidebar below 960px) is open. The desktop sidebar is always shown. */
+  readonly opened = signal(false);
 
   /** The header's height in px, as last measured (64 until then - the desktop toolbar). */
   readonly headerHeight = signal(64);

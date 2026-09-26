@@ -47,6 +47,13 @@ describe('pie/donut wrappers', () => {
     expect(fixture.componentInstance.clicked).toEqual([[kind, slices()[1]]]);
   });
 
+  it('keeps 22.2\'s pcac-pie-chart class on the inner section, for app CSS written against it', async () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('section.pcac-pie-chart svg').length).toBe(2);
+  });
+
   it('draws the pie as a pie and the donut as a ring with its center label', async () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     await fixture.whenStable();

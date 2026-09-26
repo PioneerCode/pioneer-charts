@@ -69,6 +69,9 @@ export class PieDonutChartBuilder extends PcacChart {
     // here rather than being absent from the type. (`<pcac-pie-donut-chart>` also never gets the
     // `pcac-height-full` class the other charts use to stretch their host.)
     const donut = type === PcacPieDonutChartType.Donut ? donutSettings(config as PcacDonutChartConfig) : null;
+    if (type === PcacPieDonutChartType.Pie) {
+      this.warnOfDonutOnPie(config);
+    }
     // Announced for what it draws: a ring, or - a donut with no hole included - a pie (see
     // PcacChart.chartTypeLabel).
     this.chartTypeLabel = donut && donut.innerRadius > 0 ? 'Donut chart' : 'Pie chart';
@@ -82,6 +85,26 @@ export class PieDonutChartBuilder extends PcacChart {
     if (donut && this.innerRadius > 0) {
       this.drawCenter(donut);
     }
+  }
+
+  private warnedOfDonutOnPie = false;
+
+  /**
+   * Development builds only: a pie config still carrying 22.2's `donut` option. It isn't read any
+   * more - the donut is PcacDonutChart now - and TypeScript doesn't always catch it (a config built
+   * by spreading, or loaded as JSON, compiles fine), so the chart would quietly draw a plain pie.
+   * Warned once per chart.
+   */
+  private warnOfDonutOnPie(config: PcacPieDonutChartConfig): void {
+    if (typeof ngDevMode === 'undefined' || !ngDevMode || this.warnedOfDonutOnPie || !('donut' in config)) {
+      return;
+    }
+    this.warnedOfDonutOnPie = true;
+    console.warn(
+      'Pioneer Charts: <pcac-pie-chart> ignores `donut`. For a donut, use <pcac-donut-chart> with ' +
+      'PcacDonutChartConfig, which takes innerRadius, label, subLabel, labelColor and subLabelColor ' +
+      'directly - see the 22.3.0 CHANGELOG.',
+    );
   }
 
   /** `ratio` is the hole's radius as a share of the chart's: 0 for a pie. */
@@ -236,5 +259,8 @@ export class PieDonutChartBuilder extends PcacChart {
 /** A donut config with its defaults filled in for whatever the consumer left unset. */
 function donutSettings(config: PcacDonutChartConfig): PcacDonutChartConfig & { innerRadius: number } {
   const defaults = new PcacDonutChartConfig();
-  return { ...config, innerRadius: config.innerRadius ?? defaults.innerRadius ?? 0 };
+  // Unset or not a number (NaN, say - an empty number input's value), the default: a NaN ratio
+  // survived the clamp and made every slice's path NaN, so nothing drew.
+  const innerRadius = Number.isFinite(config.innerRadius) ? config.innerRadius! : defaults.innerRadius ?? 0;
+  return { ...config, innerRadius };
 }

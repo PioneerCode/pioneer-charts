@@ -6,3 +6,9 @@
   // thing scroll inside its own box instead.
   min-width: 0;
 }
+
+// Focused by script on arriving from another page, for keyboard and screen-reader users; not a
+// control, so no focus ring.
+.pc-docs-heading:focus {
+  outline: none;
+}

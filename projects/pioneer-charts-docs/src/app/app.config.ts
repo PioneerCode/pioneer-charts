@@ -22,10 +22,10 @@ export const appConfig: ApplicationConfig = {
     // so this should stay silent - keeping it on permanently costs nothing and is
     // the cheapest possible guard against a future regression of that assumption.
     provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 }),
-    // The page itself scrolls (the docs layout has no scrolling pane of its own), so the router
-    // puts each new page at the top (and back/forward where you were), and scrolls to a URL's
-    // #section - just below the fixed header, through the offset LayoutHeader gives it.
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })),
+    // The page itself scrolls (the docs layout has no scrolling pane of its own). The router's
+    // scroll events drive it, but App acts on them rather than the router's own scroller - see
+    // App for why - so both of the router's own behaviors are off here.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'disabled', anchorScrolling: 'disabled' })),
     // Page titles, meta descriptions and canonical URLs, from each route's title/data (see seo.ts).
     { provide: TitleStrategy, useClass: PageSeoStrategy },
     provideHttpClient(withXhr()),

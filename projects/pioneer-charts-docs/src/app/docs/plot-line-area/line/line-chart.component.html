@@ -17,7 +17,7 @@
       <pcac-line-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Point images</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Point images</h2>
   <p class="mb-3">Set <code>image</code> on a data point to draw it in place of the dot, sized by the
     config's <code>pointImage</code> box. Points without an <code>image</code> keep their dot.</p>
   <mat-card class="p-3">
@@ -25,7 +25,7 @@
       <pcac-line-chart [config]="pcService.lineChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Zoom</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Zoom</h2>
   <p class="mb-3">With <code>enableZoomX</code> on, the x axis can be zoomed and panned in place: scroll (or pinch)
     over the chart to zoom from 1&times; up to 10&times; around the cursor, then drag to pan. The view never leaves
     the original domain, and the lines, points, x axis and vertical grid all follow. A point (dot or image) is

@@ -261,3 +261,13 @@ html {
     --app-header-height: 104px;
   }
 }
+
+// A heading's look, apart from its level. Headings are sized by tag (the base layer above), but a
+// heading's level is set by where it sits in the page's outline - h1, then h2, then h3, none
+// skipped - so a section title that used to be an h3 for its size is an h2 with `pc-h3`. Unlayered,
+// so these win over the tag sizes.
+.pc-h2 { font-size: 2rem; }
+.pc-h3 { font-size: 1.75rem; }
+.pc-h4 { font-size: 1.5rem; }
+.pc-h5 { font-size: 1.25rem; }
+.pc-h6 { font-size: 1rem; }

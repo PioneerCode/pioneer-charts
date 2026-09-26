@@ -10,14 +10,14 @@
             can always be expressed as a multi-dimensional array.</p>
         </section>
         <section class="pc-doc-section">
-          <h3 id="data">PcacData</h3>
+          <h2 class="pc-h3" id="data">PcacData</h2>
           <app-layout-code language="typescript" [code]="data"></app-layout-code>
           <p>When a configuration interface is created for a chart, it starts off with a representation of raw data.
             <b>data: PcacData[];</b> represent the base of our multi-dimensional array that we discussed above.
           </p>
         </section>
         <section class="pc-doc-section">
-          <h3 id="chart-config">PcacChartConfig</h3>
+          <h2 class="pc-h3" id="chart-config">PcacChartConfig</h2>
           <app-layout-code language="typescript" [code]="baseConfig"></app-layout-code>
           <p>Every chart shares these basic configuration parameters, so they live on one base class whose
             <b>data</b> is the <b>PcacData[]</b> above. Charts with axes add the per-axis <b>xAxis</b> /
@@ -28,7 +28,7 @@
           </p>
         </section>
         <section class="pc-doc-section">
-          <h3 id="new-chart-config">New Chart Config</h3>
+          <h2 class="pc-h3" id="new-chart-config">New Chart Config</h2>
           <p>With a base that represents the shared aspects of every chart and a repeatable contract for raw data,
             each chart's own config extends one of those bases and adds its chart-specific fields alongside. The
             vertical bar chart's, for example, is the following; every chart's page documents its fields under
@@ -37,7 +37,7 @@
           <app-layout-code language="typescript" [code]="barChartConfig"></app-layout-code>
         </section>
         <section class="pc-doc-section">
-          <h3 id="map">Binding Configuration</h3>
+          <h2 class="pc-h3" id="map">Binding Configuration</h2>
           <p>When adding a chart to your markup, you will typically bind your data and configuration on the
             <b>[config]</b> input of that chart.
           </p>

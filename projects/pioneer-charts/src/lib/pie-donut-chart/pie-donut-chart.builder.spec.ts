@@ -70,6 +70,36 @@ describe('PieDonutChartBuilder donut', () => {
     return elm.nativeElement.querySelector('.pcac-donut-center');
   }
 
+  // Regression test: an innerRadius of NaN (an empty number input's value, say) got through the
+  // 0-0.9 clamp and made every slice's path NaN, so nothing drew.
+  it('falls back to the default hole for an innerRadius that isn\'t a number', () => {
+    builder.buildChart(elm, donutConfig({ innerRadius: NaN }), Donut);
+
+    expect(innerRadius()).toBeCloseTo(outerRadius() * 0.6);
+  });
+
+  it('warns once, in development, when a pie config still carries 22.2\'s donut option', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const leftover = { ...dataConfig(), donut: { label: '67' } } as PcacPieDonutChartConfig;
+
+    builder.buildChart(elm, leftover, Pie);
+    builder.buildChart(elm, leftover, Pie);
+    builder.buildChart(chartElm(), dataConfig(), Pie);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain('<pcac-donut-chart>');
+    warn.mockRestore();
+  });
+
+  it('doesn\'t warn for a pie config without donut', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    builder.buildChart(elm, dataConfig(), Pie);
+
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
   it('draws the pie chart without a hole, ignoring any ring settings on its config', () => {
     builder.buildChart(elm, donutConfig({ innerRadius: 0.6, label: '67' }), Pie);
 

@@ -2,7 +2,8 @@
      header, and its bottom follows the footer up the screen as the footer scrolls in (see
      page-docs.ts), so it ends where the footer begins, with its own list scrolling inside it - as on
      the Angular Material docs. The "On this page" column sticks beside the content. Below 960px the
-     sidebar is a drawer instead, opened from the header's Menu row. -->
+     sidebar is a drawer instead, opened from the header's Menu row (which points at the drawer's
+     navigation, id docs-navigation). -->
 <mat-sidenav-container class="pc-docs-layout">
   <mat-sidenav class="sidenav-container" mode="over" [opened]="nav.isMobile() && nav.opened()"
     (openedChange)="nav.opened.set($event)" [fixedInViewport]="true" [fixedTopGap]="nav.headerHeight()">
@@ -12,11 +13,12 @@
     }
   </mat-sidenav>
   <mat-sidenav-content>
-    @if (!nav.isMobile()) {
-      <aside #sidebar class="pc-docs-sidebar">
-        <app-layout-page-docs-navigation />
-      </aside>
-    }
+    <!-- Always rendered, and hidden by CSS below 960px (page-docs.scss): the pre-rendered page and a
+         phone starting the app then agree on it, rather than hydration finding the page's
+         desktop sidebar missing on a phone. Its own id, apart from the drawer's copy. -->
+    <aside #sidebar class="pc-docs-sidebar">
+      <app-layout-page-docs-navigation navId="docs-sidebar-navigation" />
+    </aside>
     <div class="pc-docs-main flex">
       <app-layout-page-docs-content [pageTitle]="pageTitle()">
         <ng-content />

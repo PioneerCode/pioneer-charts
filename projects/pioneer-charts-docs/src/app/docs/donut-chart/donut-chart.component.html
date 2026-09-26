@@ -4,7 +4,7 @@
     slices add up to. Takes the same data as the <a routerLink="/docs/components/charts/pie-chart">Pie
     Chart</a>, with animated transitions.</p>
   <section class="pc-doc-section">
-    <h3 id="try-it">Try it</h3>
+    <h2 class="pc-h3" id="try-it">Try it</h2>
     <p class="mb-3">The controls edit the chart's config live; each field is described in the Configuration table.</p>
     @let d = settings();
     <div class="pc-controls max-w-md mb-3">
@@ -12,6 +12,9 @@
       <input id="pc-donut-inner-radius" type="range" min="0" max="0.9" step="0.05" [value]="d.innerRadius"
         (input)="set('innerRadius', $any($event.target).valueAsNumber)" />
       <span class="pc-readout">{{ d.innerRadius }}</span>
+      @if (d.innerRadius === 0) {
+        <span class="pc-muted" style="grid-column: 1 / -1">No hole, so no room for the label: this is a pie.</span>
+      }
 
       <label for="pc-donut-label">label</label>
       <input id="pc-donut-label" type="text" [value]="d.label" [placeholder]="'' + total()"
@@ -28,14 +31,14 @@
         <pcac-donut-chart [config]="config()" (sliceClicked)="pcService.onClicked($event)" />
       </app-layout-resource-state>
     </mat-card>
-    <app-layout-code language="javascript" [code]="configCode"></app-layout-code>
+    <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
   </section>
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
   </section>
   <section class="pc-doc-section">
-    <h3 id="api">API</h3>
+    <h2 class="pc-h3" id="api">API</h2>
     <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
     <app-layout-base-config [includeHeightFull]="false">
       <tbody>
@@ -71,7 +74,7 @@
     </app-layout-base-config>
   </section>
   <section class="pc-doc-section">
-    <h3 id="events" class="mb-0">Events</h3>
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
     <div class="pc-table-scroll">
       <table class="pc-table">
         <thead>
@@ -96,7 +99,7 @@
     </div>
   </section>
   <section class="pc-doc-section">
-    <h3 id="contract">Contract</h3>
+    <h2 class="pc-h3" id="contract">Contract</h2>
     <div class="pc-config-container">
       <app-layout-code language="json" [code]="config() | stringify"></app-layout-code>
     </div>

@@ -17,11 +17,11 @@
     </mat-card> -->
   </section>
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markup()" />
   </section>
   <section class="pc-doc-section">
-    <h3 id="api">API</h3>
+    <h2 class="pc-h3" id="api">API</h2>
     <app-layout-code language="javascript" [code]="importCode()"></app-layout-code>
     <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">
@@ -158,7 +158,7 @@
     </app-layout-base-config>
   </section>
   <section class="pc-doc-section">
-    <h3 id="events" class="mb-0">Events</h3>
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
     <div class="pc-table-scroll">
       <table class="pc-table">
         <thead>
@@ -183,7 +183,7 @@
     </div>
   </section>
   <section class="pc-doc-section">
-    <h3 id="contract">Contract</h3>
+    <h2 class="pc-h3" id="contract">Contract</h2>
     <app-layout-code language="json" [code]="contract()"></app-layout-code>
   </section>
 </app-layout-page-docs>

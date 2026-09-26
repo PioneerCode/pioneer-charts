@@ -6,7 +6,7 @@
   </p>
 
   <section class="pc-doc-section">
-    <h3 id="try-it">Try It</h3>
+    <h2 class="pc-h3" id="try-it">Try It</h2>
     <p>Hover the charts below. Each one has its own template; the bar and line tooltips use <b>parent</b> to
       show the point's share of its group / series, and the bar chart's thresholds are flagged via
       <b>isThreshold</b>.</p>
@@ -80,7 +80,7 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <p>Import <b>PcacTooltipDirective</b> alongside the chart component, then put an
       <b>&lt;ng-template pcacTooltip&gt;</b> inside the chart element. The hovered datum is the template's implicit
       value (<b>let-point</b>, or whatever name you like); the rest of the context is picked up by name.</p>
@@ -89,14 +89,14 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="context">Template Context</h3>
+    <h2 class="pc-h3" id="context">Template Context</h2>
     <p>The template is type-checked against <b>PcacTooltipContext</b> under <code>strictTemplates</code>, so
       <code>point.value</code> and friends are checked as <b>PcacData</b>.</p>
     <app-layout-code language="typescript" [code]="contextCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="your-own-data">Your Own Data</h3>
+    <h2 class="pc-h3" id="your-own-data">Your Own Data</h2>
     <p>A <b>PcacData</b> only carries a key and a value, but the tooltip often wants more &mdash; the customer
       behind an order, the unit a reading was taken in. The context's <b>index</b> and <b>parentIndex</b> give
       the hovered datum's position in <code>data</code>, and charts never reorder <code>data</code>, so if the
@@ -113,7 +113,7 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="styling">Styling</h3>
+    <h2 class="pc-h3" id="styling">Styling</h2>
     <p>With a template present the library applies <i>none</i> of its own tooltip styling &mdash; no background,
       padding, font or color. It only positions the rendered template (centered above the cursor) and keeps it
       from intercepting the mouse. The template owns the whole box.</p>
@@ -124,11 +124,11 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="notes">Notes</h3>
+    <h2 class="pc-h3" id="notes">Notes</h2>
     <ul>
       <li>
-        <b>Every chart supports it.</b> Bar (vertical and horizontal, including thresholds), line, area, plot
-        and pie. Leave the template out and the default key/value tooltip is used, formatted per the chart's
+        <b>Every chart supports it.</b> Bar (vertical and horizontal, including thresholds), line, area, plot,
+        pie and donut. Leave the template out and the default key/value tooltip is used, formatted per the chart's
         <code>xAxis.format</code> / <code>yAxis.format</code> as before; those formats are not applied to a
         custom template, which gets the raw <b>PcacData</b>.
       </li>

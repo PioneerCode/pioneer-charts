@@ -23,6 +23,7 @@ import {
 import { AppService } from '../app.service';
 import { LayoutResourceState } from '../layout/resource-state/resource-state';
 import { ChartCard } from './chart-card';
+import { ChartLabelPipe } from './chart-label.pipe';
 
 /** The page's sections, in order, for the jump links at the top. */
 const SECTIONS = [
@@ -92,6 +93,7 @@ const LONG_CATEGORIES: Record<string, string> = {
   imports: [
     RouterLink,
     ChartCard,
+    ChartLabelPipe,
     LayoutResourceState,
     PcacBarVerticalChartComponent,
     PcacBarHorizontalChartComponent,
@@ -202,8 +204,4 @@ export class ChartsComponent {
     return { ...config, data: this.lineLegend.apply(named, (_, i) => LINE_SERIES[i]) };
   });
 
-  /** Scrolls the page itself (not a pane) to a section; the header is fixed, see the sections' scroll margin. */
-  scrollTo(id: string): void {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
 }

@@ -10,7 +10,7 @@
       <pcac-plot-chart [config]="pcService.plotConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Point images</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Point images</h2>
   <p class="mb-3">Set <code>image</code> on a data point to draw it in place of the dot, sized by the
     config's <code>pointImage</code> box. Points without an <code>image</code> keep their dot.</p>
   <mat-card class="p-3">
@@ -18,7 +18,7 @@
       <pcac-plot-chart [config]="pcService.plotImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Points that share a coordinate</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Points that share a coordinate</h2>
   <p class="mb-3">Set <code>pointFanOut</code> to spread points that would be drawn on top of one another
     around their shared coordinate, so each stays visible and hoverable; <code>{{ '{}' }}</code> takes every
     default. An anchor dot marks the true value. Whether or not it's on, a hovered point's tooltip context
@@ -84,7 +84,7 @@
       </pcac-plot-chart>
     </app-layout-resource-state>
   </mat-card>
-  <h4 class="mt-6 mb-2">Point ranges</h4>
+  <h2 class="pc-h4 mt-6 mb-2">Point ranges</h2>
   <p class="mb-3">When a point stands for the middle of a range, give it a <code>range</code> with an
     <code>x</code> and / or <code>y</code> <code>{{ '{ min, max }' }}</code>, and set <code>pointRange</code> on the
     config to draw it; <code>{{ '{}' }}</code> takes every default. Works the same on the plot, line and area charts.

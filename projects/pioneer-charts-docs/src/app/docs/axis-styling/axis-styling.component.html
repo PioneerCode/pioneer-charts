@@ -8,13 +8,13 @@
   </p>
 
   <section class="pc-doc-section">
-    <h3 id="try-it">Try It</h3>
+    <h2 class="pc-h3" id="try-it">Try It</h2>
     <p>Both charts below share the same two axis configs. Each column is one <code>PcacAxisConfig</code>.</p>
 
     <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-4">
       @for (axis of axes; track axis) {
       <div class="pc-controls">
-        <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
+        <h3 class="pc-h5 pc-axis-styling-heading"><code>{{ axis }}Axis</code></h3>
         @let a = axis === 'x' ? xAxis() : yAxis();
 
         <label [for]="'pc-axis-' + axis + '-label'">label</label>
@@ -93,12 +93,12 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="markup">Markup</h3>
+    <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="colors">Colors</h3>
+    <h2 class="pc-h3" id="colors">Colors</h2>
     <p>Each part of an axis has a color field. Give it any CSS color and only that part, on that axis, changes.
       Leave it out and the part keeps its default.</p>
 
@@ -154,10 +154,10 @@
       <li><b>Any CSS color works.</b> Hex, <code>rgb()</code>, a named color, even <code>currentColor</code>.</li>
     </ol>
 
-    <h5 class="mt-4">In the config</h5>
+    <h3 class="pc-h5 mt-4">In the config</h3>
     <app-layout-code language="typescript" [code]="colorConfigCode"></app-layout-code>
 
-    <h5 class="mt-4">Or in a stylesheet</h5>
+    <h3 class="pc-h5 mt-4">Or in a stylesheet</h3>
     <p>Every color is also a CSS custom property, so you can set the same thing in CSS instead &mdash; on the chart,
       on a wrapper, or on <code>body</code> &mdash; and every chart inside picks it up. Handy for a dark panel.
       If a chart's config also sets the color, the config wins.</p>
@@ -165,7 +165,7 @@
   </section>
 
   <section class="pc-doc-section">
-    <h3 id="notes">Notes</h3>
+    <h2 class="pc-h3" id="notes">Notes</h2>
     <ul>
       <li>
         <b>Everything is optional.</b> Omit a field to get its default, or omit <b>xAxis</b> / <b>yAxis</b>

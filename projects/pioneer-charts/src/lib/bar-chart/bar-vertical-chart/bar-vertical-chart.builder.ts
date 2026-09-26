@@ -56,6 +56,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       return;
     }
 
+    this.ensureColorCount(seriesKeys(config.data).length);
     this.applyColorOverride(config.colorOverride?.colors);
     this.buildScales(config);
     this.drawChart(chartElm, config);
@@ -132,70 +133,55 @@ export class BarVerticalChartBuilder extends PcacChart {
     const starts = config.isStacked ? stackStarts(config.data, sizes) : new Map<PcacData, number>();
     const startOf = (d: PcacData) => starts.get(d) ?? 0;
     const endOf = (d: PcacData) => startOf(d) + (sizes.get(d) ?? 0);
+    // Colored by series - the bar's key's place among every group's keys, the same slot it's drawn
+    // in - rather than by its position in its own group, which differs when groups hold different
+    // series. With `spreadColorsPerGroup`, by group instead.
+    const keys = seriesKeys(config.data);
+    const fillOf = (d: PcacData, bar: SVGRectElement) => config.spreadColorsPerGroup
+      ? this.colors[Number((bar.parentNode as Element).getAttribute('data-group-id'))]
+      : this.colors[keys.indexOf(d.key as string)];
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
-      .attr('x', (d: PcacData) => {
-        const value = !config.isStacked ? this.xScaleGrouped(d.key as string) : this.xScaleStacked(d.key as string)
-        return value ? value : 0;
-      })
+      // A stacked bar spans its whole group, which is already translated into place; looking its
+      // series key up in the group band put it off in another group's slot whenever the key
+      // matched a group key.
+      .attr('x', (d: PcacData) => config.isStacked ? 0 : this.xScaleGrouped(d.key as string) ?? 0)
       .attr('data-group-bar-id', (_: PcacData, i: number) => {
         return i;
       })
-      .style('fill', (d: PcacData, i: number, n: any) => {
-        if (config.spreadColorsPerGroup) {
-          const groupIndex = parseInt(n[0].parentNode.getAttribute('data-group-id'), 10);
-          return this.colors[groupIndex];
-        }
-        return this.colors[i];
+      .style('fill', function (this: SVGRectElement, d: PcacData) {
+        return fillOf(d, this);
       })
       .attr('y', () => {
         return this.height;
       })
       .attr('height', 0)
-      .on('mouseover', function (this: any) {
+      // The hover fades run as their own named transition: an unnamed one would cancel the enter
+      // transition still growing the bar, leaving it part-grown until the next rebuild.
+      .on('mouseover', function (this: SVGRectElement, _event: MouseEvent, d: PcacData) {
+        const fill = fillOf(d, this);
         select(this)
-          .transition()
+          .transition('hover')
           .duration(self.transitionService.getTransitionDuration() / 5)
-          .style('fill', () => {
-            if (config.spreadColorsPerGroup) {
-              const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
-              const c = color(self.colors[groupIndex])
-              const ct = c ? c.darker(1).toString() : self.colors[groupIndex]
-              return ct
-            }
-            const groupIndex = parseInt(this.getAttribute('data-group-bar-id'), 10);
-            const c = color(self.colors[groupIndex])
-            const ct = c ? c.darker(1).toString() : self.colors[groupIndex]
-            return ct
-          });
+          .style('fill', color(fill)?.darker(1).toString() ?? fill);
       })
       .on('mousemove', function (this: SVGRectElement, event: MouseEvent, d: PcacData) {
         const groupIndex = Number((this.parentNode as Element).getAttribute('data-group-id'));
         const index = Number(this.getAttribute('data-group-bar-id'));
         self.showTooltip(event, d, { index, parent: config.data[groupIndex], parentIndex: groupIndex, valueFormat: self.yAxis.format });
       })
-      .on('mouseout', function (this: any) {
+      .on('mouseout', function (this: SVGRectElement, _event: MouseEvent, d: PcacData) {
         self.hideTooltip();
         select(this)
-          .transition()
+          .transition('hover')
           .duration(self.transitionService.getTransitionDuration() / 5)
-          .style('fill', () => {
-            if (config.spreadColorsPerGroup) {
-              const groupIndex = parseInt(this.parentNode.getAttribute('data-group-id'), 10);
-              return self.colors[groupIndex];
-            }
-            const groupIndex = parseInt(this.getAttribute('data-group-bar-id'), 10);
-            return self.colors[groupIndex];
-          });
+          .style('fill', fillOf(d, this));
       })
       .on('click', (_, d: PcacData) => {
         this.barClickedSource.next(d);
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      // .transition(
-      //   transition().duration(this.transitionService.getTransitionDuration())
-      // )
       .attr('width', !config.isStacked ? this.xScaleGrouped.bandwidth() : this.xScaleStacked.bandwidth())
       .attr('y', (d: PcacData) => {
         return this.yScale(endOf(d));

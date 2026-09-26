@@ -15,6 +15,11 @@ export class PlaChartScales {
  * `format`/`domainMin`/`domainMax` defaults are already applied - see `PcacLineAreaChartConfig`
  * for what each format does with them.
  */
+/** The number of points in the longest series. */
+export function longestSeriesLength(data: PcacData[]): number {
+  return data.reduce((max, series) => Math.max(max, series.data.length), 0);
+}
+
 export class PlaChartScalesBuilder {
   build(
     xAxis: PcacResolvedAxisConfig, yAxis: PcacResolvedAxisConfig, data: PcacData[], chartWidth: number, chartHeight: number
@@ -38,9 +43,11 @@ export class PlaChartScalesBuilder {
           .domain([xAxis.domainMin as number, xAxis.domainMax as number])
           .range([0, chartWidth]);
       default:
-        // DatasetLength and every other format position points by index
+        // DatasetLength and every other format position points by index - across the longest
+        // series, not the first, which may be shorter or empty (an empty one gave [0, -1], an
+        // inverted scale that pushed every point off the plot).
         return scaleLinear()
-          .domain([0, data[0].data.length - 1])
+          .domain([0, Math.max(0, longestSeriesLength(data) - 1)])
           .range([0, chartWidth]);
     }
   }

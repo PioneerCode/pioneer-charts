@@ -16,7 +16,7 @@ import { PcacPlotChartConfig, PcacPointFanOutConfig } from '../../plot/plot.mode
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
 import { PcacTooltipCoincident } from '../../../core/tooltip.directive';
-import { PlaChartScalesBuilder, PlaChartScales } from './scales.builder';
+import { PlaChartScalesBuilder, PlaChartScales, longestSeriesLength } from './scales.builder';
 import { getXFormat } from '../x-format';
 import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
@@ -97,6 +97,12 @@ export class PlaChartBuilder extends PcacChart {
   private pointRange: PcacPointRangeConfig | null = null;
   /** Each drawn range's `.point-range` group, by its point, so hover can find the one to focus. */
   private rangeGroupOf = new Map<PcacData, SVGGElement>();
+  /**
+   * Whether this build has the hover crosshair: `enableEffects`, on a line or area chart. A plot
+   * chart has no line for it to follow, so it gets none - its circles had nowhere to go and sat
+   * stacked in the plot's top-left corner.
+   */
+  private effectsEnabled = false;
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -111,7 +117,7 @@ export class PlaChartBuilder extends PcacChart {
     // no mouseout, so its tooltip is closed here (see `leavePoint`).
     this.leavePoint();
     this.config = JSON.parse(JSON.stringify(config));
-    this.startData = range(this.config.data[0].data.length).map((): PcacData => ({
+    this.startData = range(longestSeriesLength(this.config.data)).map((): PcacData => ({
       key: '',
       value: 0,
       hide: false,
@@ -168,10 +174,12 @@ export class PlaChartBuilder extends PcacChart {
         // used to do, and which also overwrote the original generators' x accessor for good) is
         // only right for the default DatasetLength format; a DateTime/Decimal chart's lines
         // drifted away from its dots as soon as it was zoomed.
+        // Interrupted first: a zoom during the enter transition would otherwise have the rest of
+        // that transition keep drawing the unzoomed shape over this one.
         const zoomedLine = buildLineGenerator(this.xAxis.format, zoomedScales);
         const zoomedArea = buildAreaGenerator(this.xAxis.format, zoomedScales, this.height);
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.line').attr('d', (d: PcacData[]) => zoomedLine(d));
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.area').attr('d', (d: PcacData[]) => zoomedArea(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.line').interrupt().attr('d', (d: PcacData[]) => zoomedLine(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.area').interrupt().attr('d', (d: PcacData[]) => zoomedArea(d));
 
         // Update dots / point images. Nested selectAll (not a flat svg.selectAll('.point')) so
         // that `i` is the point's index *within its own series* - the x format default
@@ -189,9 +197,8 @@ export class PlaChartBuilder extends PcacChart {
           .attr('x2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dx)
           .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dy);
 
-        // The hover crosshair walks the (already updated) line geometry, but reads its value back
-        // off the y scale - which must be the zoomed one or the label is wrong.
-        if (this.config.enableEffects) {
+        // The hover crosshair positions and labels against the scales, so it takes the zoomed ones.
+        if (this.effectsEnabled) {
           this.effectsBuilder.updateScales(newX, newY);
         }
 
@@ -221,7 +228,8 @@ export class PlaChartBuilder extends PcacChart {
 
     this.drawLineArea(config, type);
 
-    if (config.enableEffects) {
+    this.effectsEnabled = !!config.enableEffects && type !== PcacLineAreaPlotChartConfigType.Plot;
+    if (this.effectsEnabled) {
       this.effectsBuilder.buildEffects({
         svg: this.svg,
         height: this.height,
@@ -230,6 +238,7 @@ export class PlaChartBuilder extends PcacChart {
         colors: this.colors,
         x: this.scales.x,
         y: this.scales.y,
+        xFormat: this.xAxis.format,
         yFormat: this.yAxis.format,
         yTicks: this.yAxis.ticks,
       });
@@ -374,15 +383,15 @@ export class PlaChartBuilder extends PcacChart {
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
+      // Set up front rather than on the transition, so a zoom interrupting it (see the zoom
+      // handler) doesn't leave the line uncolored, or a hidden one showing.
+      .attr('stroke', this.colors[index])
+      .attr('fill', 'none')
+      .attr('style', hide ? 'display: none' : null)
       .attr('d', this.lineGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.lineGenerator)
-      .attr('stroke', () => {
-        return this.colors[index];
-      })
-      .attr('fill', 'none')
-      .attr('style', () => hide ? 'display: none' : null);
+      .attr('d', this.lineGenerator);
   }
 
   private drawArea(lineData: PcacData[], index: number, hide = false) {

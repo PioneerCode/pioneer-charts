@@ -77,6 +77,13 @@ export class PcacChart implements OnDestroy {
    * cycles its own colors, so an override shorter than the data repeats rather than leaving the
    * marks past its end with an `undefined` color. Call after `initializeChartState()`.
    */
+  /** Grows the palette to at least `count` colors, repeating it as `getColorScale` does. */
+  protected ensureColorCount(count: number): void {
+    if (this.colors.length < count) {
+      this.colors = this.colorService.getColorScale(count);
+    }
+  }
+
   protected applyColorOverride(override: readonly string[] | undefined): void {
     if (!override?.length) {
       return;
@@ -365,8 +372,8 @@ export class PcacChart implements OnDestroy {
       .attr('role', 'img')
       .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
     this.height = this.resolveHeight(container, config);
-    // One color per group or per series within a group, whichever needs more - sized by the
-    // largest group, since bars index colors by their position within their own group.
+    // One color per group or per series within a group, whichever needs more. Bar charts, which
+    // color by series across groups, top this up with `ensureColorCount()`.
     this.colors = this.colorService.getColorScale(
       Math.max(config.data.length, ...config.data.map((d) => d.data?.length ?? 0)),
     );

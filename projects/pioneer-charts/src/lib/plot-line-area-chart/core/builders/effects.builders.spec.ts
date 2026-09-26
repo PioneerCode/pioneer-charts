@@ -3,21 +3,8 @@ import { scaleLinear } from 'd3-scale';
 import { PlaChartEffectsBuilder } from './effects.builders';
 import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
 
-/**
- * jsdom doesn't implement SVGGeometryElement's real geometry methods (getTotalLength() etc.) -
- * stub deterministic ones directly on the element, same technique real browsers just do natively.
- */
-function pathWithGeometry(className: string, length: number): SVGPathElement {
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('class', className);
-  Object.defineProperty(path, 'getTotalLength', { value: () => length, configurable: true });
-  Object.defineProperty(path, 'getPointAtLength', { value: (l: number) => ({ x: l, y: 0 }), configurable: true });
-  return path;
-}
-
-function sampleData(): PcacData[] {
-  return [{ key: '', value: 0, hide: false, data: [{ key: 0, value: 1, hide: false, data: [] }] }];
-}
+const point = (value: PcacData['value'], key: PcacData['key'] = ''): PcacData => ({ key, value, hide: false, data: [] });
+const series = (key: string, data: PcacData[]): PcacData => ({ key, value: 0, hide: false, data });
 
 describe('PlaChartEffectsBuilder', () => {
   let svgRoot: SVGGElement;
@@ -31,150 +18,122 @@ describe('PlaChartEffectsBuilder', () => {
     document.body.removeChild(svgRoot);
   });
 
-  // Regression test: PlaChartBuilder.drawArea() (used for type: 'area') draws <path class="area">,
-  // never <path class="line"> — that's only drawLine() (type: 'line'). buildEffects() used to
-  // collect geometry by selecting '.line' unconditionally, so an area-type chart with
-  // enableEffects: true left its internal `lines` array empty, and the first mousemove threw
-  // "Cannot read properties of undefined (reading 'getTotalLength')" hovering it.
-  //
-  // Asserts real positioning, not just "doesn't throw": updateEffects()'s own defensive guard for
-  // Plot-type charts (see below) would silently no-op an area chart here too if the selector
-  // regressed back to '.line' alone, without ever throwing — that guard is a fallback for charts
-  // with no connecting geometry at all, not a substitute for finding an area chart's own path.
-  it('positions the crosshair correctly hovering an area-type chart (only a .area path, no .line)', () => {
-    svgRoot.appendChild(pathWithGeometry('area', 100));
-
+  /**
+   * Builds the effects over a 100x100 plot whose y axis runs 0-100 (so a value's pixel is
+   * `100 - value`) and whose x axis positions points by index across `xDomain`.
+   */
+  function build(data: PcacData[], options: { xDomain?: [number, number]; colors?: string[]; yFormat?: PcacFormatEnum; yDomain?: [number, number] } = {}) {
     const builder = new PlaChartEffectsBuilder();
-    const scale = scaleLinear().domain([0, 100]).range([0, 100]);
     builder.buildEffects({
       svg: select(svgRoot),
       height: 100,
       width: 100,
-      data: sampleData(),
-      colors: ['red'],
-      x: scale,
-      y: scale,
+      data,
+      colors: options.colors ?? ['red', 'green', 'blue'],
+      x: scaleLinear().domain(options.xDomain ?? [0, 4]).range([0, 100]),
+      y: scaleLinear().domain(options.yDomain ?? [0, 100]).range([100, 0]),
+      xFormat: PcacFormatEnum.DatasetLength,
+      yFormat: options.yFormat,
+      yTicks: 5,
     });
+    return builder;
+  }
 
-    const canvas = svgRoot.querySelector('.effects-canvas')!;
-    expect(() => canvas.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }))).not.toThrow();
+  function hover(x: number): void {
+    const event = new MouseEvent('mousemove', { bubbles: true });
+    Object.defineProperty(event, 'offsetX', { value: x });
+    Object.defineProperty(event, 'offsetY', { value: 0 });
+    svgRoot.querySelector('.effects-canvas')!.dispatchEvent(event);
+  }
 
-    const effectGroup = svgRoot.querySelector('.effect-group')!;
-    expect(effectGroup.getAttribute('transform')).toMatch(/^translate\(/);
+  const groups = () => Array.from(svgRoot.querySelectorAll<SVGGElement>('.effect-group'));
+  const text = (group: SVGGElement) => group.querySelector('text')!.textContent;
+
+  it('marks the value interpolated between the points either side of the cursor', () => {
+    build([series('a', [point(0), point(40), point(80), point(60), point(20)])]);
+
+    hover(37.5); // halfway between index 1 (x 25, 40) and index 2 (x 50, 80)
+
+    expect(groups()[0].getAttribute('transform')).toBe('translate(37.5,40)');
+    expect(text(groups()[0])).toBe('60');
   });
 
-  it('does not throw hovering a plot-type chart (neither a .line nor a .area path)', () => {
-    // PlaChartBuilder.drawLineArea() only draws for type Line/Area; a Plot-type chart draws
-    // neither, so `lines` is empty even after the fix above — updateEffects()'s per-group guard
-    // (not the selector) is what has to hold here.
-    const builder = new PlaChartEffectsBuilder();
-    const scale = scaleLinear().domain([0, 100]).range([0, 100]);
-    builder.buildEffects({
-      svg: select(svgRoot),
-      height: 100,
-      width: 100,
-      data: sampleData(),
-      colors: ['red'],
-      x: scale,
-      y: scale,
-    });
+  // Regression test: the crosshair used to find its point by binary-searching the drawn path's
+  // geometry for the cursor's x. An area's outline runs along the top, then back along the
+  // baseline, so near the right edge of an area falling to the right the search landed on the
+  // way back and read the left end's value.
+  it('reads the right value near the right edge of a series falling to the right', () => {
+    build([series('a', [point(90), point(70), point(50), point(30), point(10)])]);
 
-    const canvas = svgRoot.querySelector('.effects-canvas')!;
-    expect(() => canvas.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }))).not.toThrow();
+    hover(90); // between index 3 (x 75, 30) and index 4 (x 100, 10)
+
+    expect(text(groups()[0])).toBe('18');
+    expect(groups()[0].getAttribute('transform')).toBe('translate(90,82)');
   });
 
-  it('still positions the crosshair correctly for a line-type chart', () => {
-    svgRoot.appendChild(pathWithGeometry('line', 100));
+  it('holds the first or last value beyond the ends of the series', () => {
+    build([series('a', [point(10), point(20), point(30)])], { xDomain: [0, 4] });
 
-    const builder = new PlaChartEffectsBuilder();
-    const scale = scaleLinear().domain([0, 100]).range([0, 100]);
-    builder.buildEffects({
-      svg: select(svgRoot),
-      height: 100,
-      width: 100,
-      data: sampleData(),
-      colors: ['red'],
-      x: scale,
-      y: scale,
-    });
+    hover(90); // past the last point (index 2, x 50)
+    expect(text(groups()[0])).toBe('30');
 
-    const canvas = svgRoot.querySelector('.effects-canvas')!;
-    canvas.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
-
-    const effectGroup = svgRoot.querySelector('.effect-group')!;
-    expect(effectGroup.getAttribute('transform')).toMatch(/^translate\(/);
+    hover(0);
+    expect(text(groups()[0])).toBe('10');
   });
 
-  // Regression test: the effect groups are built from series with data, but the path list was
-  // collected from every .line/.area path - so an empty series in the middle shifted each later
-  // group onto the previous series' path.
-  it('pairs each effect group with its own series\' path when an empty series sits between them', () => {
-    const point = (y: number): PcacData => ({ key: 0, value: y, hide: false, data: [] });
-    const withDatum = (path: SVGPathElement, data: PcacData[], y: number) => {
-      select(path).datum(data);
-      Object.defineProperty(path, 'getPointAtLength', { value: (l: number) => ({ x: l, y }), configurable: true });
-      return path;
-    };
-    const first = [point(1)];
-    const empty: PcacData[] = [];
-    const third = [point(3)];
-    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), first, 10));
-    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), empty, 20));
-    svgRoot.appendChild(withDatum(pathWithGeometry('line', 100), third, 30));
+  it('hides the mark over a gap in the series, where no line is drawn', () => {
+    build([series('a', [point(10), point(null), point(30), point(40), point(50)])]);
 
-    const builder = new PlaChartEffectsBuilder();
-    const scale = scaleLinear().domain([0, 100]).range([0, 100]);
-    builder.buildEffects({
-      svg: select(svgRoot),
-      height: 100,
-      width: 100,
-      data: [
-        { key: 'a', value: 0, hide: false, data: first },
-        { key: 'b', value: 0, hide: false, data: empty },
-        { key: 'c', value: 0, hide: false, data: third },
-      ],
-      colors: ['red', 'green', 'blue'],
-      x: scale,
-      y: scale,
-    });
-    svgRoot.querySelector('.effects-canvas')!.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+    hover(12.5);
+    expect(groups()[0].getAttribute('visibility')).toBe('hidden');
 
-    const groups = Array.from(svgRoot.querySelectorAll('.effect-group')).map((g) => g.getAttribute('transform'));
-    expect(groups.length).toBe(2);
-    expect(groups[0]).toMatch(/,10\)$/);
-    expect(groups[1]).toMatch(/,30\)$/);
+    hover(62.5);
+    expect(groups()[0].getAttribute('visibility')).toBeNull();
+    expect(text(groups()[0])).toBe('35');
+  });
+
+  it('follows the scales handed over by a zoom', () => {
+    const builder = build([series('a', [point(0), point(40), point(80), point(60), point(20)])]);
+    builder.updateScales(scaleLinear().domain([0, 2]).range([0, 100]), scaleLinear().domain([0, 100]).range([100, 0]));
+
+    hover(50); // index 1 on the zoomed x scale
+
+    expect(text(groups()[0])).toBe('40');
+  });
+
+  // Regression test: effect groups skip empty series, and each used to be colored by its position
+  // among the non-empty ones rather than by its series - so every group after an empty series
+  // took the previous series' color.
+  it('pairs each effect group with its own series and color when an empty series sits between them', () => {
+    build([
+      series('a', [point(10), point(10)]),
+      series('b', []),
+      series('c', [point(30), point(30)]),
+    ]);
+
+    hover(10);
+
+    expect(groups().length).toBe(2);
+    expect(text(groups()[0])).toBe('10');
+    expect(text(groups()[1])).toBe('30');
+    expect(groups().map((g) => g.querySelector('circle')!.style.stroke)).toEqual(['red', 'blue']);
   });
 
   // Regression test: the crosshair's value was always rounded to a whole number, so a 0-1 axis
   // only ever read 0 or 1, and the y axis's format (e.g. Percentage) was ignored.
   describe('crosshair value', () => {
-    function hoverAt(y: number, yFormat?: PcacFormatEnum): string | null | undefined {
-      const path = pathWithGeometry('line', 100);
-      Object.defineProperty(path, 'getPointAtLength', { value: (l: number) => ({ x: l, y }), configurable: true });
-      svgRoot.appendChild(path);
-
-      const builder = new PlaChartEffectsBuilder();
-      builder.buildEffects({
-        svg: select(svgRoot),
-        height: 100,
-        width: 100,
-        data: sampleData(),
-        colors: ['red'],
-        x: scaleLinear().domain([0, 100]).range([0, 100]),
-        y: scaleLinear().domain([0, 1]).range([100, 0]),
-        yFormat,
-        yTicks: 5,
-      });
-      svgRoot.querySelector('.effects-canvas')!.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
-      return svgRoot.querySelector('.effect-group text')?.textContent;
-    }
+    const hoverAt = (value: number, yFormat?: PcacFormatEnum) => {
+      build([series('a', [point(value), point(value)])], { yFormat, yDomain: [0, 1] });
+      hover(10);
+      return text(groups()[0]);
+    };
 
     it('keeps the precision of the y axis ticks', () => {
-      expect(hoverAt(40)).toBe('0.6');
+      expect(hoverAt(0.6)).toBe('0.6');
     });
 
     it('reads like the y axis in its format', () => {
-      expect(hoverAt(40, PcacFormatEnum.Percentage)).toBe('60%');
+      expect(hoverAt(0.6, PcacFormatEnum.Percentage)).toBe('60%');
     });
   });
 });

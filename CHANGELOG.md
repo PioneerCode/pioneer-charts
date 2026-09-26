@@ -1,3 +1,28 @@
+<a name="22.2.14"></a>
+# [v22.2.14]
+
+### Added
+  - `ariaLabel` on every chart config: the chart is announced to screen readers as one image
+    with that name (its type - "Bar chart", "Pie chart", ... - when it isn't set).
+
+### Changed
+  - The D3 modules the charts use are now installed with the package. `d3` and `@types/d3` are
+    no longer peer dependencies, and `rxjs ^7.4.0` now is.
+
+### Removed
+  - **Breaking for code that imported internals.** Internal chart plumbing is no longer
+    exported:
+    - the chart builders `BarVerticalChartBuilder`, `BarHorizontalChartBuilder` and
+      `PieChartBuilder`, and their `PcacChart` base class (with `PcacTooltipOptions`);
+    - `PcacAxisBuilder`, `PcacGridBuilder`, `PcacTooltipBuilder`, `PcacTransitionService` and
+      `PcacChartResizeService` (with `IPcacAxisBuilderConfig` and `IPcacGridBuilderConfig`);
+    - `resolveAxisConfig`, `axisLabelSpace`, `hasAxisSubLabels`, `PCAC_AXIS_LABEL_SPACE`,
+      `PCAC_AXIS_SUB_LABEL_SPACE`, `PcacChartMargin` and `PcacResolvedAxisConfig`.
+
+    These were never meant as public API. What a consumer configures, binds or styles with -
+    the components, config/model classes, `PcacColorService` and `PcacTooltipDirective` - is
+    unchanged.
+
 <a name="22.2.13"></a>
 # [v22.2.13]
 

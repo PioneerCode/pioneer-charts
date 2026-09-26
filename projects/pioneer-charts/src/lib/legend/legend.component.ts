@@ -12,12 +12,21 @@ export class PcacLegendConfig {
   items: PcacLegendConfigItem[] = [];
 }
 
+let nextLegendId = 0;
+
 @Component({
   selector: 'pcac-legend',
   templateUrl: './legend.component.html',
   styleUrl: './legend.component.scss',
+  // One named group of switches, so a screen reader announces the heading ("Series") on entering
+  // the legend, and each switch as part of it, rather than a heading and some unrelated switches.
+  host: {
+    role: 'group',
+    '[attr.aria-labelledby]': 'config().heading ? headingId : null',
+  },
 })
 export class PcacLegend {
+  readonly headingId = `pcac-legend-heading-${nextLegendId++}`;
   readonly colorService = inject(PcacColorService);
   config = model.required<PcacLegendConfig>();
   itemClicked = output<PcacLegendConfigItem[]>();

@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutCode } from '../../layout/code/code';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
@@ -10,6 +11,7 @@ import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
   imports: [
     LayoutCode,
     LayoutPageDocs,
+    RouterLink,
   ]
 })
 export class IntroductionComponent {
@@ -37,6 +39,10 @@ export class IntroductionComponent {
     {
       key: 'Import Styles',
       value: 'step-3-import-styles',
+    },
+    {
+      key: 'Accessibility',
+      value: 'accessibility',
     }
   ])
 

@@ -77,6 +77,9 @@ export class PcacAxisBuilder {
       .attr('class', 'pcac-y-axis')
       // Axes are raised above the interactive overlays (see raiseAxes) and take no mouse events
       .attr('pointer-events', 'none')
+      // Nor are they read out: the marks' own names carry each key and value (see marks.ts), and
+      // every tick label as well would only bury them.
+      .attr('aria-hidden', 'true')
       .classed('pcac-axis-tick-marks', config.yAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.yAxis.showLine)
       .call(yAxis)
@@ -103,6 +106,7 @@ export class PcacAxisBuilder {
     const group = config.svg.append('g')
       .attr('class', 'pcac-x-axis')
       .attr('pointer-events', 'none')
+      .attr('aria-hidden', 'true')
       .classed('pcac-axis-tick-marks', config.xAxis.tickSize !== undefined)
       .classed('pcac-axis-line', config.xAxis.showLine)
       .attr('transform', 'translate(0,' + config.height + ')')

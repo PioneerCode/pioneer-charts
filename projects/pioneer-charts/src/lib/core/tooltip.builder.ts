@@ -28,6 +28,7 @@ export class PcacTooltipBuilder implements OnDestroy {
     this.shell ??= select(this.document.body)
       .append('div')
       .attr('class', 'pcac-d3-tooltip')
+      .attr('id', PcacTooltipBuilder.ID)
       .attr('role', 'tooltip');
     return this.shell;
   }
@@ -48,6 +49,12 @@ export class PcacTooltipBuilder implements OnDestroy {
    */
   private owner: object | null = null;
 
+  /**
+   * The tooltip element's id, for a focused mark's `aria-describedby` (see `PcacChart.focusMark`).
+   * One per page, like the element.
+   */
+  static readonly ID = 'pcac-tooltip';
+
   /** Space left between the tooltip and whatever it's placed next to (the cursor or an anchor). */
   static readonly GAP = 8;
 
@@ -55,10 +62,11 @@ export class PcacTooltipBuilder implements OnDestroy {
    * Shows the tooltip for a hovered datum. Renders `template` when the chart has one projected;
    * otherwise falls back to the default key/value content, formatted per `valueFormat`/`keyFormat`.
    * Placed beside `anchor` when one is given (see `positionBeside`), else above the event's position.
+   * `event` can be `null` only with an `anchor`: a tooltip shown for keyboard focus has no pointer.
    * `owner` is what's showing it (see `hideTooltip`).
    */
   showTooltip(
-    event: MouseEvent,
+    event: MouseEvent | null,
     template: TemplateRef<PcacTooltipContext> | undefined,
     context: PcacTooltipContext,
     valueFormat?: PcacFormatEnum,
@@ -75,7 +83,7 @@ export class PcacTooltipBuilder implements OnDestroy {
     const shell = this.measurable();
     if (anchor) {
       this.positionBeside(shell, anchor);
-    } else {
+    } else if (event) {
       this.positionAbove(shell, event);
     }
   }
@@ -110,7 +118,7 @@ export class PcacTooltipBuilder implements OnDestroy {
    */
   private renderDefault(data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
     this.destroyView();
-    const { key, value } = this.getBarTipData(data, valueFormat, keyFormat);
+    const { key, value } = tooltipText(data, valueFormat, keyFormat);
     const shell = this.tooltip
       .classed('pcac-d3-tooltip-default', true)
       .html(null)
@@ -230,46 +238,49 @@ export class PcacTooltipBuilder implements OnDestroy {
       .style('left', x + (view?.scrollX ?? 0) + 'px')
       .style('top', y + (view?.scrollY ?? 0) + 'px');
   }
+}
 
-  /** The default tooltip's two lines as plain text; `key` is null when the datum has none. */
-  private getBarTipData(
-    data: PcacData,
-    valueFormat?: PcacFormatEnum,
-    keyFormat?: PcacFormatEnum,
-  ): { key: string | null; value: string } {
-    let value = data.value;
-    let key = data.key
+/**
+ * The default tooltip's two lines as plain text; `key` is null when the datum has none. Also what a
+ * mark's accessible name is made of (see `PcacChart.markLabel`), so the two read the same.
+ */
+export function tooltipText(
+  data: PcacData,
+  valueFormat?: PcacFormatEnum,
+  keyFormat?: PcacFormatEnum,
+): { key: string | null; value: string } {
+  let value = data.value;
+  let key = data.key
 
-    // Formatted the way the value's axis labels it (see `formatValue`), so the tooltip for a
-    // point reads like the axis it sits against - `1:30pm`, not `13.5`, on a OneDayHours axis.
-    // A missing value stays blank rather than being formatted as `0%` / `null F`.
-    if (value !== null && value !== undefined) {
-      value = formatValue(valueFormat, value) ?? value;
-    }
-
-    if (key !== null && key !== undefined && key !== '') {
-      // A key that doesn't parse as a date is shown as it is, rather than as "Invalid Date".
-      if (keyFormat === PcacFormatEnum.DateTime && !Number.isNaN(new Date(key).getTime())) {
-        key = new Date(key).toLocaleDateString('en-US', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        })
-      } else if (keyFormat === PcacFormatEnum.Decimal) {
-        // Only where the key *is* the x value. Every other x format positions points by index,
-        // so its axis labels the index, not the key - formatting the key would only make it
-        // disagree with the axis (and tag text keys with a unit: `Mon` read `Monm` on Minutes).
-        key = formatValue(keyFormat, key) ?? key;
-      }
-    }
-
-    // A key of 0 (e.g. hour 0) is a real key; only a missing or empty one leaves the line out.
-    return {
-      key: key === null || key === undefined || key === '' ? null : String(key),
-      value: value === null || value === undefined ? '' : String(value),
-    };
+  // Formatted the way the value's axis labels it (see `formatValue`), so the tooltip for a
+  // point reads like the axis it sits against - `1:30pm`, not `13.5`, on a OneDayHours axis.
+  // A missing value stays blank rather than being formatted as `0%` / `null F`.
+  if (value !== null && value !== undefined) {
+    value = formatValue(valueFormat, value) ?? value;
   }
+
+  if (key !== null && key !== undefined && key !== '') {
+    // A key that doesn't parse as a date is shown as it is, rather than as "Invalid Date".
+    if (keyFormat === PcacFormatEnum.DateTime && !Number.isNaN(new Date(key).getTime())) {
+      key = new Date(key).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })
+    } else if (keyFormat === PcacFormatEnum.Decimal) {
+      // Only where the key *is* the x value. Every other x format positions points by index,
+      // so its axis labels the index, not the key - formatting the key would only make it
+      // disagree with the axis (and tag text keys with a unit: `Mon` read `Monm` on Minutes).
+      key = formatValue(keyFormat, key) ?? key;
+    }
+  }
+
+  // A key of 0 (e.g. hour 0) is a real key; only a missing or empty one leaves the line out.
+  return {
+    key: key === null || key === undefined || key === '' ? null : String(key),
+    value: value === null || value === undefined ? '' : String(value),
+  };
 }

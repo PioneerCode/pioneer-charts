@@ -21,8 +21,9 @@
       <tr>
         <td>ariaLabel</td>
         <td>What the chart shows, for screen readers &mdash; e.g. <code>'Sales by month, 2026'</code>. The chart is
-          announced as one image with this name. When omitted, its type is used: <code>'Bar chart'</code>,
-          <code>'Pie chart'</code>, <code>'Line chart'</code> and so on.</td>
+          announced as a group with this name, and each bar, slice or point inside it by its own key and value (see
+          <a routerLink="/docs/guides/introduction" fragment="accessibility">Accessibility</a>). When omitted, its
+          type is used: <code>'Bar chart'</code>, <code>'Pie chart'</code>, <code>'Line chart'</code> and so on.</td>
       </tr>
       @if(includeHeightFull()) {
       <tr>

@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { PcacBarHorizontalChartComponent, PcacBarVerticalChartComponent } from '@pioneer-code/pioneer-charts';
 import { MatCardModule } from '@angular/material/card';
+import { RouterLink } from '@angular/router';
 
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
@@ -18,6 +19,7 @@ import { LayoutResourceState } from '../../layout/resource-state/resource-state'
     LayoutBaseConfig,
     LayoutPageDocs,
     MatCardModule,
+    RouterLink,
     StringifyPipe,
     PcacBarHorizontalChartComponent,
     PcacBarVerticalChartComponent,

@@ -452,11 +452,13 @@ describe('PcacChart', () => {
   });
 
   describe('accessible name', () => {
-    it('announces the chart as one image, named by its config', () => {
+    // A group rather than one image: an image's contents are hidden from a screen reader, and
+    // the marks inside have names and take focus of their own (see marks.ts).
+    it('announces the chart as a group of marks, named by its config', () => {
       const elm = chartElm(800);
       chart.initializeChartState(elm, { ...config(), ariaLabel: 'Sales by month' });
 
-      expect(elm.nativeElement.getAttribute('role')).toBe('img');
+      expect(elm.nativeElement.getAttribute('role')).toBe('group');
       expect(elm.nativeElement.getAttribute('aria-label')).toBe('Sales by month');
     });
 

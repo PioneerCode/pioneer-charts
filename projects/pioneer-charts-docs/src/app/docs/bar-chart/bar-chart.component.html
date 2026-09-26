@@ -3,7 +3,7 @@
     charts. Add thresholds
     across all variants through a matching api.</p>
   <section class="pc-doc-section">
-    <div class="grid grid-cols-3 gap-4 mx-auto mb-6">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="service.barVerticalChartSingleConfig">
           <pcac-bar-vertical-chart [config]="service.barVerticalChartSingleConfig.value()"
@@ -23,7 +23,7 @@
         </app-layout-resource-state>
       </mat-card>
     </div>
-    <div class="grid grid-cols-2 gap-4 mx-auto mb-6">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mx-auto mb-6">
       <mat-card class="p-3">
         <app-layout-resource-state [resource]="service.barHorizontalChartSingleConfig">
           <pcac-bar-horizontal-chart [config]="service.barHorizontalChartSingleConfig.value()"
@@ -131,30 +131,32 @@
   </section>
   <section class="pc-doc-section">
     <h3 id="events" class="mb-0">Events</h3>
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Binding</th>
-          <th>Description</th>
-          <th>Payload</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            (barClicked)="service.onClicked($event)"
-          </td>
-          <td>Emitted when a bar in the graph is clicked.</td>
-          <td>
-            <a routerLink="/docs/guides/data-contract">PcacData</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              (barClicked)="service.onClicked($event)"
+            </td>
+            <td>Emitted when a bar in the graph is clicked.</td>
+            <td>
+              <a routerLink="/docs/guides/data-contract">PcacData</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
   <section class="pc-doc-section">
     <h3 id="contract">Contract</h3>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @5xl:grid-cols-4 gap-4">
       <div>
         <h5>Vertical Single</h5>
         <app-layout-code [setMax]="true" language="json"
@@ -176,7 +178,7 @@
           [code]="service.barVerticalChartConfig.value() | stringify"></app-layout-code>
       </div>
     </div>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 @5xl:grid-cols-4 gap-4">
       <div>
         <h5>Horizontal Single</h5>
         <app-layout-code [setMax]="true" language="json"

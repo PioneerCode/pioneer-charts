@@ -1,8 +1,21 @@
+@use "colors";
+
 footer {
 	color: #fff;
+	// Its own background, not the page's showing through: on docs pages it sits in the content
+	// column, over the layout's white background (see page-docs.html).
+	background-color: colors.$primary;
 
 	.polygon {
 		fill: #fff;
+	}
+
+	// Tall enough to tap comfortably (the links were 24px, and 14px in the bottom line).
+	.footer-links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0 4px;
 	}
 
 	.meta-bottom {
@@ -14,6 +27,9 @@ footer {
 			}
 
 			font-weight: bold;
+			// Inline links in a line of text; padding (not layout) gives them a taller tap area.
+			display: inline-block;
+			padding: 6px 0;
 		}
 	}
 }

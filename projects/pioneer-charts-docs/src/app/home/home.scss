@@ -9,10 +9,18 @@ header {
 }
 
 $icon-size: 128px;
+$icon-size-phone: 88px;
 
 .large-icon {
   font-size: $icon-size;
   height: $icon-size;
   width: $icon-size;
   color: colors.$accent;
+
+  // One feature per row on a phone (see home.html): a smaller icon keeps each one to about a screen.
+  @media (max-width: 767px) {
+    font-size: $icon-size-phone;
+    height: $icon-size-phone;
+    width: $icon-size-phone;
+  }
 }

@@ -1,10 +1,13 @@
 :host {
   display: flex;
   align-items: center;
+  // Items wrap onto another line when the legend is narrower than them - on a phone, say - rather
+  // than running off its side (which also widened the page they were on).
+  flex-wrap: wrap;
+  column-gap: 8px;
 }
 
 .pcac-legend-label {
-  margin-right: 8px;
   margin-bottom: 2.5px;
 }
 
@@ -12,7 +15,9 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-right: 8px;
+  // At least 24px tall, the minimum size for something to tap (WCAG 2.5.8): the text line alone
+  // was about 19px.
+  min-height: 24px;
 
   &:hover {
     .pcac-legend-circle {
@@ -35,9 +40,6 @@
   opacity: 0.5;
 }
 
-.pcac-legend-item-last {
-  margin-right: 0;
-}
 // Legend items are keyboard-operable (role="switch" + tabindex), so they need a visible focus
 // ring - the default outline is drawn against the host app's background, not ours, so it's left
 // as the browser's own rather than themed.

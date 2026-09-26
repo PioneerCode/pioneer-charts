@@ -18,6 +18,9 @@
   a {
     color: #3f51b5;
     text-decoration: underline;
+    // A taller tap area than the line of text, without moving the text.
+    display: inline-block;
+    padding: 8px 0;
   }
 }
 
@@ -31,6 +34,7 @@
     border-radius: 999px;
     background: #fff;
     padding: 0.25rem 0.875rem;
+    min-height: 40px;
     cursor: pointer;
 
     &:hover,

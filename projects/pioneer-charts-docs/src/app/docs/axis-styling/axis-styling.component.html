@@ -11,7 +11,7 @@
     <h3 id="try-it">Try It</h3>
     <p>Both charts below share the same two axis configs. Each column is one <code>PcacAxisConfig</code>.</p>
 
-    <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-4">
       @for (axis of axes; track axis) {
       <div class="pc-controls">
         <h5 class="pc-axis-styling-heading"><code>{{ axis }}Axis</code></h5>
@@ -65,7 +65,7 @@
       }
     </div>
 
-    <div class="grid grid-cols-2 gap-4 mb-2">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-2">
       <div>
         <p class="pc-axis-styling-caption"><code>&lt;pcac-bar-vertical-chart&gt;</code></p>
         <mat-card class="p-3">
@@ -102,47 +102,49 @@
     <p>Each part of an axis has a color field. Give it any CSS color and only that part, on that axis, changes.
       Leave it out and the part keeps its default.</p>
 
-    <table class="pc-table">
-      <thead>
-        <tr>
-          <th>Field</th>
-          <th>What it colors</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><b>labelColor</b></td>
-          <td>The axis title (<b>label</b>)</td>
-          <td>Dark gray</td>
-        </tr>
-        <tr>
-          <td><b>subLabelColor</b></td>
-          <td>The <b>subLabels</b> row (all three)</td>
-          <td>Gray</td>
-        </tr>
-        <tr>
-          <td><b>tickLabelColor</b></td>
-          <td>The values along the axis</td>
-          <td>The page's text color</td>
-        </tr>
-        <tr>
-          <td><b>tickColor</b></td>
-          <td>The tick marks (needs <b>tickSize</b>)</td>
-          <td>Near black</td>
-        </tr>
-        <tr>
-          <td><b>lineColor</b></td>
-          <td>The axis line (needs <b>showLine</b>)</td>
-          <td>Near black</td>
-        </tr>
-        <tr>
-          <td><b>gridColor</b></td>
-          <td>This axis's grid lines (needs the grid on)</td>
-          <td>Light gray</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>What it colors</th>
+            <th>Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>labelColor</b></td>
+            <td>The axis title (<b>label</b>)</td>
+            <td>Dark gray</td>
+          </tr>
+          <tr>
+            <td><b>subLabelColor</b></td>
+            <td>The <b>subLabels</b> row (all three)</td>
+            <td>Gray</td>
+          </tr>
+          <tr>
+            <td><b>tickLabelColor</b></td>
+            <td>The values along the axis</td>
+            <td>The page's text color</td>
+          </tr>
+          <tr>
+            <td><b>tickColor</b></td>
+            <td>The tick marks (needs <b>tickSize</b>)</td>
+            <td>Near black</td>
+          </tr>
+          <tr>
+            <td><b>lineColor</b></td>
+            <td>The axis line (needs <b>showLine</b>)</td>
+            <td>Near black</td>
+          </tr>
+          <tr>
+            <td><b>gridColor</b></td>
+            <td>This axis's grid lines (needs the grid on)</td>
+            <td>Light gray</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <p class="mt-3">Three things to know:</p>
     <ol>

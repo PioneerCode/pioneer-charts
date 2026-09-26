@@ -1,10 +1,42 @@
-
 mat-sidenav-container {
   background-color: #fff;
 }
 
+// The sidebar on a desktop: fixed below the header, down the left edge. Its bottom is kept at the
+// footer's top while the footer is on screen (page-docs.ts); until then it runs to the bottom of
+// the screen.
+.pc-docs-sidebar {
+  position: fixed;
+  top: var(--app-header-height, 64px);
+  bottom: 0;
+  left: 0;
+  width: 280px;
+  overflow-y: auto;
+  // Scrolling the list to its end doesn't carry on into the page.
+  overscroll-behavior: contain;
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+  z-index: 2;
+
+  // Also hidden by CSS, not only left out by the template (`nav.isMobile()`): the pre-rendered
+  // HTML is built with the desktop layout, and a phone painting it before the app starts must not
+  // lay out for it. Same breakpoint as page-docs.ts.
+  @media (max-width: 959.98px) {
+    display: none;
+  }
+}
+
+// The content and "On this page", beside the fixed sidebar on a desktop.
+.pc-docs-main {
+  @media (min-width: 960px) {
+    margin-left: 280px;
+  }
+}
+
+// The sidebar below 960px: a drawer over the page.
 .sidenav-container {
   background-color: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 0;
+  width: 280px;
 }

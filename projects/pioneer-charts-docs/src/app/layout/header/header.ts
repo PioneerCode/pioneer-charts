@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, afterNextRender, inject } from '@angular/core';
+import { Component, DOCUMENT, DestroyRef, ElementRef, afterNextRender, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -26,8 +26,15 @@ export class LayoutHeader {
     // when a page is pre-rendered, where the default (64px) stands.
     const host = inject(ElementRef<HTMLElement>).nativeElement;
     const destroyRef = inject(DestroyRef);
+    const root = inject(DOCUMENT).documentElement;
     afterNextRender(() => {
-      const observer = new ResizeObserver(() => this.nav.headerHeight.set(Math.round(host.getBoundingClientRect().height)));
+      // Also as a CSS custom property, for styles positioned below the header (the docs'
+      // sticky "On this page" column).
+      const observer = new ResizeObserver(() => {
+        const height = Math.round(host.getBoundingClientRect().height);
+        this.nav.headerHeight.set(height);
+        root.style.setProperty('--app-header-height', `${height}px`);
+      });
       observer.observe(host);
       destroyRef.onDestroy(() => observer.disconnect());
     });

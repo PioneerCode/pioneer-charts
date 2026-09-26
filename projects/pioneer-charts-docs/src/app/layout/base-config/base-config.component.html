@@ -1,143 +1,145 @@
 <h5 id="configuration" class="mb-0">Configuration</h5>
-<table class="pc-table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>data</td>
-      <td>Collection of
-        <a routerLink="/docs/guides/data-contract">PcacData</a> objects.
-      </td>
-    </tr>
-    <tr>
-      <td>height</td>
-      <td>Height of chart component. Default is 200px.</td>
-    </tr>
-    <tr>
-      <td>ariaLabel</td>
-      <td>What the chart shows, for screen readers &mdash; e.g. <code>'Sales by month, 2026'</code>. The chart is
-        announced as one image with this name. When omitted, its type is used: <code>'Bar chart'</code>,
-        <code>'Pie chart'</code>, <code>'Line chart'</code> and so on.</td>
-    </tr>
-    @if(includeHeightFull()) {
-    <tr>
-      <td>heightFull</td>
-      <td>If true, <b>height</b> is treated as a <i>minimum</i> height and the chart grows to fill
-        its container whenever that container is taller. Default is false.
-        <ul>
-          <li>
-            Give the element you wrap the chart in a definite height &mdash; an explicit
-            <b>height</b>, or a flex/grid track that resolves to one. The chart stretches itself to
-            fill it.
-          </li>
-          <li>
-            If that wrapper is auto-height, there is nothing to fill and the chart falls back to
-            <b>height</b>.
-          </li>
-          <li>
-            The chart keeps filling as the container resizes, so this works with collapsing
-            sidebars, tabs and window resizes.
-          </li>
-        </ul>
-      </td>
-    </tr>
-    }
-    @if(includeAxes()) {
-    <tr>
-      <td>xAxis / yAxis</td>
-      <td>Per-axis settings, one <code>PcacAxisConfig</code> for each axis. Every field is optional; omit the
-        whole object for a default axis. See the <a routerLink="/docs/guides/axis-styling">Axis Styling</a>
-        guide for a live demo.
-        <ul>
-          <li>
-            <b>hide</b> &mdash; if true, the axis isn't drawn at all and the margins it would have occupied go
-            to the plot (left and top for the y axis, bottom and right for the x axis); the chart's overall size
-            doesn't change. Default false.
-          </li>
-          <li>
-            <b>showGrid</b> &mdash; draw grid lines from this axis's ticks (or, on a category axis, from each
-            category) across the plot: horizontal lines for the y axis, vertical for the x. Left unset, each chart
-            keeps the grid it has always drawn &mdash; the y axis's on vertical bar and line/area/plot charts, the
-            x axis's on the horizontal bar chart &mdash; and no other. Set it to turn either grid on or off.
-          </li>
-          <li>
-            <b>gridColor</b> &mdash; any CSS color for this axis's grid lines, in place of the theme's
-            <code>$gray-200</code>. Only shows while that grid is drawn (it doesn't turn the grid on). Applied as
-            the <code>--pcac-grid-color</code> custom property on the grid group; a stylesheet can set the same
-            property on an ancestor instead.
-          </li>
-          <li>
-            <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the
-            number of grid lines. Ignored by a category axis, which has one tick per category. Default 5.
-          </li>
-          <li>
-            <b>tickSize</b> &mdash; length in pixels of the small tick marks. Marks are not drawn unless this is
-            set, so setting a size is also what turns them on (6 is D3's usual length); <code>0</code> keeps them
-            off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
-            by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
-            Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>,
-            unless <b>tickColor</b> is set.
-          </li>
-          <li>
-            <b>tickColor</b> &mdash; any CSS color for the tick marks. Only shows once <b>tickSize</b> has turned
-            the marks on. Applied as <code>--pcac-axis-tick-color</code> on the axis group.
-          </li>
-          <li>
-            <b>tickLabelColor</b> &mdash; any CSS color for the tick labels (the values along the axis), which
-            otherwise follow the page's text color (<code>currentColor</code>). Applied as
-            <code>--pcac-axis-tick-label-color</code> on the axis group.
-          </li>
-          <li>
-            <b>showLine</b> &mdash; if true, draw a solid line along the axis itself (with D3's short end-caps).
-            Independent of the tick marks. Default false. Stroked with the theme's <code>$gray-900</code> via
-            <code>.pcac-axis-line .domain</code>, unless <b>lineColor</b> is set.
-          </li>
-          <li>
-            <b>lineColor</b> &mdash; any CSS color for the axis line. Only shows with <b>showLine</b> on. Applied
-            as <code>--pcac-axis-line-color</code> on the axis group.
-          </li>
-          <li>
-            <b>label</b> &mdash; a title for the axis, drawn centered along it just inside the chart's edge (below
-            the tick labels for the x axis; rotated to read bottom-to-top, left of them, for the y axis). The
-            margin grows by 18px to make room, shrinking the plot area. Not drawn on a hidden axis. Styled by the
-            theme's <code>.pcac-axis-label</code> rule.
-          </li>
-          <li>
-            <b>labelColor</b> &mdash; any CSS color for the <b>label</b>, in place of the theme's
-            <code>$gray-700</code>. Applied as <code>--pcac-axis-label-color</code> on the axis group.
-          </li>
-          <li>
-            <b>subLabels</b> &mdash; <code>{{ '{' }} min?, mid?, max? {{ '}' }}</code>: up to three short labels placed
-            by position along the axis, in their own row just outside the tick labels (and inside the <b>label</b>,
-            if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
-            so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
-            bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
-            <code>.pcac-axis-sub-label</code> rule.
-          </li>
-          <li>
-            <b>subLabelColor</b> &mdash; any CSS color for all of the <b>subLabels</b>, in place of the theme's
-            <code>$gray-600</code>. Applied as <code>--pcac-axis-sub-label-color</code> on the axis group.
-          </li>
-          <li>
-            <b>format</b> &mdash; a <code>PcacFormatEnum</code>: how this axis's values are shown in its tick
-            labels and in the default tooltip, and on the line/area/plot charts' x axis also how a point's
-            <b>key</b> maps to an x position. What each value does is chart-specific; see the rows below. Default
-            <b>None</b>. Ignored by a category axis.
-          </li>
-          <li>
-            <b>domainMin</b> / <b>domainMax</b> &mdash; the axis's domain, independent of the data. Defaults 0 and
-            100. Which axes read them is chart-specific (see the rows below): a bar chart's value axis reads only
-            <b>domainMax</b>, and the line/area/plot charts' x axis reads them only under the <b>Decimal</b> and
-            <b>DateTime</b> formats.
-          </li>
-        </ul>
-      </td>
-    </tr>
-    }
-  </tbody>
-  <ng-content></ng-content>
-</table>
+<div class="pc-table-scroll">
+  <table class="pc-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>data</td>
+        <td>Collection of
+          <a routerLink="/docs/guides/data-contract">PcacData</a> objects.
+        </td>
+      </tr>
+      <tr>
+        <td>height</td>
+        <td>Height of chart component. Default is 200px.</td>
+      </tr>
+      <tr>
+        <td>ariaLabel</td>
+        <td>What the chart shows, for screen readers &mdash; e.g. <code>'Sales by month, 2026'</code>. The chart is
+          announced as one image with this name. When omitted, its type is used: <code>'Bar chart'</code>,
+          <code>'Pie chart'</code>, <code>'Line chart'</code> and so on.</td>
+      </tr>
+      @if(includeHeightFull()) {
+      <tr>
+        <td>heightFull</td>
+        <td>If true, <b>height</b> is treated as a <i>minimum</i> height and the chart grows to fill
+          its container whenever that container is taller. Default is false.
+          <ul>
+            <li>
+              Give the element you wrap the chart in a definite height &mdash; an explicit
+              <b>height</b>, or a flex/grid track that resolves to one. The chart stretches itself to
+              fill it.
+            </li>
+            <li>
+              If that wrapper is auto-height, there is nothing to fill and the chart falls back to
+              <b>height</b>.
+            </li>
+            <li>
+              The chart keeps filling as the container resizes, so this works with collapsing
+              sidebars, tabs and window resizes.
+            </li>
+          </ul>
+        </td>
+      </tr>
+      }
+      @if(includeAxes()) {
+      <tr>
+        <td>xAxis / yAxis</td>
+        <td>Per-axis settings, one <code>PcacAxisConfig</code> for each axis. Every field is optional; omit the
+          whole object for a default axis. See the <a routerLink="/docs/guides/axis-styling">Axis Styling</a>
+          guide for a live demo.
+          <ul>
+            <li>
+              <b>hide</b> &mdash; if true, the axis isn't drawn at all and the margins it would have occupied go
+              to the plot (left and top for the y axis, bottom and right for the x axis); the chart's overall size
+              doesn't change. Default false.
+            </li>
+            <li>
+              <b>showGrid</b> &mdash; draw grid lines from this axis's ticks (or, on a category axis, from each
+              category) across the plot: horizontal lines for the y axis, vertical for the x. Left unset, each chart
+              keeps the grid it has always drawn &mdash; the y axis's on vertical bar and line/area/plot charts, the
+              x axis's on the horizontal bar chart &mdash; and no other. Set it to turn either grid on or off.
+            </li>
+            <li>
+              <b>gridColor</b> &mdash; any CSS color for this axis's grid lines, in place of the theme's
+              <code>$gray-200</code>. Only shows while that grid is drawn (it doesn't turn the grid on). Applied as
+              the <code>--pcac-grid-color</code> custom property on the grid group; a stylesheet can set the same
+              property on an ancestor instead.
+            </li>
+            <li>
+              <b>ticks</b> &mdash; requested number of ticks (a hint to D3, so the exact count can differ), and the
+              number of grid lines. Ignored by a category axis, which has one tick per category. Default 5.
+            </li>
+            <li>
+              <b>tickSize</b> &mdash; length in pixels of the small tick marks. Marks are not drawn unless this is
+              set, so setting a size is also what turns them on (6 is D3's usual length); <code>0</code> keeps them
+              off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
+              by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
+              Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>,
+              unless <b>tickColor</b> is set.
+            </li>
+            <li>
+              <b>tickColor</b> &mdash; any CSS color for the tick marks. Only shows once <b>tickSize</b> has turned
+              the marks on. Applied as <code>--pcac-axis-tick-color</code> on the axis group.
+            </li>
+            <li>
+              <b>tickLabelColor</b> &mdash; any CSS color for the tick labels (the values along the axis), which
+              otherwise follow the page's text color (<code>currentColor</code>). Applied as
+              <code>--pcac-axis-tick-label-color</code> on the axis group.
+            </li>
+            <li>
+              <b>showLine</b> &mdash; if true, draw a solid line along the axis itself (with D3's short end-caps).
+              Independent of the tick marks. Default false. Stroked with the theme's <code>$gray-900</code> via
+              <code>.pcac-axis-line .domain</code>, unless <b>lineColor</b> is set.
+            </li>
+            <li>
+              <b>lineColor</b> &mdash; any CSS color for the axis line. Only shows with <b>showLine</b> on. Applied
+              as <code>--pcac-axis-line-color</code> on the axis group.
+            </li>
+            <li>
+              <b>label</b> &mdash; a title for the axis, drawn centered along it just inside the chart's edge (below
+              the tick labels for the x axis; rotated to read bottom-to-top, left of them, for the y axis). The
+              margin grows by 18px to make room, shrinking the plot area. Not drawn on a hidden axis. Styled by the
+              theme's <code>.pcac-axis-label</code> rule.
+            </li>
+            <li>
+              <b>labelColor</b> &mdash; any CSS color for the <b>label</b>, in place of the theme's
+              <code>$gray-700</code>. Applied as <code>--pcac-axis-label-color</code> on the axis group.
+            </li>
+            <li>
+              <b>subLabels</b> &mdash; <code>{{ '{' }} min?, mid?, max? {{ '}' }}</code>: up to three short labels placed
+              by position along the axis, in their own row just outside the tick labels (and inside the <b>label</b>,
+              if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
+              so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
+              bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
+              <code>.pcac-axis-sub-label</code> rule.
+            </li>
+            <li>
+              <b>subLabelColor</b> &mdash; any CSS color for all of the <b>subLabels</b>, in place of the theme's
+              <code>$gray-600</code>. Applied as <code>--pcac-axis-sub-label-color</code> on the axis group.
+            </li>
+            <li>
+              <b>format</b> &mdash; a <code>PcacFormatEnum</code>: how this axis's values are shown in its tick
+              labels and in the default tooltip, and on the line/area/plot charts' x axis also how a point's
+              <b>key</b> maps to an x position. What each value does is chart-specific; see the rows below. Default
+              <b>None</b>. Ignored by a category axis.
+            </li>
+            <li>
+              <b>domainMin</b> / <b>domainMax</b> &mdash; the axis's domain, independent of the data. Defaults 0 and
+              100. Which axes read them is chart-specific (see the rows below): a bar chart's value axis reads only
+              <b>domainMax</b>, and the line/area/plot charts' x axis reads them only under the <b>Decimal</b> and
+              <b>DateTime</b> formats.
+            </li>
+          </ul>
+        </td>
+      </tr>
+      }
+    </tbody>
+    <ng-content></ng-content>
+  </table>
+</div>

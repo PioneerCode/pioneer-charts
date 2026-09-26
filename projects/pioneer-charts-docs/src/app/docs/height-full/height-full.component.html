@@ -17,7 +17,7 @@
       <span class="pc-height-full-readout">{{ containerHeight() }}px</span>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 mb-2">
+    <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-2">
       <div>
         <p class="pc-height-full-caption"><code>heightFull: false</code> &mdash; stays 200px tall</p>
         <mat-card class="p-3 pc-height-full-container" [style.height.px]="containerHeight()">

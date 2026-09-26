@@ -1,9 +1,11 @@
 @use "colors";
 
 :host {
-    min-width: 240px;
+    // A block, not a custom element's default `inline`: an inline host drew its border in pieces
+    // around line fragments, which showed as grey slivers down the sidebar's left edge. No border
+    // of its own - the sidebar column and the drawer draw the edge.
+    display: block;
     background-color: #fff;
-    border: 1px solid #e0e0e0;
 }
 
 .pcac-navigation-active-link {

@@ -98,6 +98,12 @@ body {
     accent-color: colors.$primary;
   }
 
+  // The browser's 13px checkbox is a small thing to tap; its label (`for`) is a target too.
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
   // A checkbox or color swatch sits in the slider's column, left-aligned.
   input[type="checkbox"],
   input[type="color"] {
@@ -155,6 +161,13 @@ body {
   }
 }
 
+// A docs table on a screen too narrow for it scrolls sideways in its own box, rather than pushing
+// the page (and everything else on it) sideways.
+.pc-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 .pc-table {
   min-width: 100%;
   border: 0;
@@ -190,4 +203,29 @@ body {
 
 .pc-doc-section {
   margin-bottom: 2rem;
+}
+// The docs layout (page-docs.html) scrolls the page itself, not a pane inside it. Material's drawer
+// container clips its content and its content area scrolls on its own by default, which would
+// trap the page inside them and stop the sticky "On this page" column from sticking. (Qualified
+// with Material's own class so it outranks Material's rule, which loads after this stylesheet.)
+.mat-drawer-container.pc-docs-layout {
+  overflow: visible;
+  min-height: calc(100dvh - var(--app-header-height, 64px));
+
+  > .mat-drawer-content {
+    overflow: visible;
+  }
+}
+
+// A docs section scrolled to - by a link on the page, "On this page", or a URL's #fragment - lands
+// just below the fixed header rather than behind it.
+app-layout-page-docs-content [id] {
+  scroll-margin-top: calc(var(--app-header-height, 64px) + 16px);
+}
+
+// A plain code block written straight into a docs page (the Theme page's directory tree), rather
+// than through <app-layout-code>, which scrolls its own: a line longer than the screen scrolls
+// sideways here too, instead of widening the whole page on a phone.
+pre.app-layout-code {
+  overflow-x: auto;
 }

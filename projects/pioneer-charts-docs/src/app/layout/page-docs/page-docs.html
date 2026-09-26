@@ -1,14 +1,27 @@
-<mat-sidenav-container class="max-h-screen w-[100%]">
-  <mat-sidenav class="sidenav-container" [mode]="nav.isMobile() ? 'over' : 'side'" [opened]="nav.opened()"
-    (openedChange)="nav.opened.set($event)" [fixedInViewport]="nav.isMobile()" [fixedTopGap]="nav.headerHeight()">
-    <app-layout-page-docs-navigation />
+<!-- The page itself scrolls, not a pane inside it. On a desktop the sidebar is fixed below the
+     header, and its bottom follows the footer up the screen as the footer scrolls in (see
+     page-docs.ts), so it ends where the footer begins, with its own list scrolling inside it - as on
+     the Angular Material docs. The "On this page" column sticks beside the content. Below 960px the
+     sidebar is a drawer instead, opened from the header's Menu row. -->
+<mat-sidenav-container class="pc-docs-layout">
+  <mat-sidenav class="sidenav-container" mode="over" [opened]="nav.isMobile() && nav.opened()"
+    (openedChange)="nav.opened.set($event)" [fixedInViewport]="true" [fixedTopGap]="nav.headerHeight()">
+    <!-- Only as a drawer, so the page never holds two copies of the navigation. -->
+    @if (nav.isMobile()) {
+      <app-layout-page-docs-navigation />
+    }
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="flex max-h-screen w-[100%]">
+    @if (!nav.isMobile()) {
+      <aside #sidebar class="pc-docs-sidebar">
+        <app-layout-page-docs-navigation />
+      </aside>
+    }
+    <div class="pc-docs-main flex">
       <app-layout-page-docs-content #pageContent [pageTitle]="pageTitle()">
         <ng-content />
       </app-layout-page-docs-content>
-      @if (!nav.isMobile()) {
+      @if (showJumpNav()) {
         <app-layout-jump-nav [jumpNav]="jumpNav()" (jump)="pageContent.scrollToSection($event)" />
       }
     </div>

@@ -1,0 +1,55 @@
+.pc-charts-page {
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.pc-charts-lead {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.pc-charts-docs {
+  white-space: nowrap;
+  font-size: 0.875rem;
+  a {
+    color: #3f51b5;
+    text-decoration: underline;
+  }
+}
+
+.pc-charts-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  button {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 999px;
+    background: #fff;
+    padding: 0.25rem 0.875rem;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+// Clears the fixed header when a jump link scrolls a section to the top.
+.pc-charts-section {
+  scroll-margin-top: 80px;
+  margin-bottom: 2.5rem;
+}
+
+// Fills the rest of its card (a flex column) and centers a chart shorter than its neighbours in it.
+.pc-charts-centered {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

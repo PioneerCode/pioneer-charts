@@ -69,8 +69,7 @@ export class PcacGridBuilder {
       .attr('transform', (x): string => (`translate(${x}, 0)`))
       .append('svg:line')
       .attr('y1', 0)
-      .attr('y2', config.height)
-      .attr('class', (d, i: number) => (i === 0 ? 'pcac-grid-rule-last' : ''));
+      .attr('y2', config.height);
   }
 
   /**
@@ -88,7 +87,6 @@ export class PcacGridBuilder {
       .attr('y1', (y) => y)
       .attr('y2', (y) => y)
       .attr('x1', 0)
-      .attr('x2', config.width)
-      .attr('class', (_, i) => (i === 0 ? 'pcac-grid-rule-last' : ''));
+      .attr('x2', config.width);
   }
 }

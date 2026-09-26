@@ -81,14 +81,6 @@ export class PcacTooltipBuilder implements OnDestroy {
   }
 
   /**
-   * @deprecated Builders should call `PcacChart.showTooltip()`, which routes through a chart's
-   * projected `pcacTooltip` template. This only ever renders the default content.
-   */
-  showBarTooltip(event: MouseEvent, data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
-    this.showTooltip(event, undefined, { $implicit: data, parent: null, isThreshold: false, index: 0, parentIndex: null, coincident: [] }, valueFormat, keyFormat);
-  }
-
-  /**
    * Hides the tooltip. Given an `owner`, only if that owner is the one showing it - so a chart can
    * release the tooltip on rebuild or destroy without closing one another chart has open. Without
    * an owner it always hides.

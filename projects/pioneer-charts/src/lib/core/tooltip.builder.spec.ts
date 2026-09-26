@@ -144,13 +144,6 @@ describe('PcacTooltipBuilder', () => {
 
       expect(shell.innerHTML).toBe('0<br>');
     });
-
-    it('is what the deprecated showBarTooltip() renders', () => {
-      builder.showBarTooltip(mouse(), datum('Feb', 7));
-
-      expect(shell.classList.contains('pcac-d3-tooltip-default')).toBe(true);
-      expect(shell.innerHTML).toBe('Feb<br>7');
-    });
   });
 
   describe('with a template', () => {

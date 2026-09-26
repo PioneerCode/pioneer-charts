@@ -70,7 +70,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     this.yScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
-      .range([this.height, 0])
+      // Rounded, as the vertical chart's band is, so bars land on whole pixels with crisp edges.
+      .rangeRound([this.height, 0])
       .padding(0.1);
 
     this.yScaleGrouped = scaleBand()

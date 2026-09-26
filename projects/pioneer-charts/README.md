@@ -1,24 +1,9 @@
-# PioneerCharts
+# @pioneer-code/pioneer-charts (library source)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.0.
+This folder is the library's source. It isn't what ships as the package's README: `npm run build:lib`
+copies the repository root's [README.md](../../README.md) (and [LICENSE](../../LICENSE)) into
+`dist/pioneer-charts` instead.
 
-## Code scaffolding
-
-Run `ng generate component component-name --project pioneer-charts` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project pioneer-charts`.
-> Note: Don't forget to add `--project pioneer-charts` or else it will be added to the default project in your `angular.json` file. 
-
-## Build
-
-Run `ng build pioneer-charts` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build pioneer-charts`, go to the dist folder `cd dist/pioneer-charts` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test pioneer-charts` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+For building, testing and releasing, see the root README and
+[.github/CONTRIBUTING.md](../../.github/CONTRIBUTING.md). Usage docs live at
+https://charts.pioneercode.com.

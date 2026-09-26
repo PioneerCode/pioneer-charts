@@ -9,7 +9,7 @@ import { debounceTime } from 'rxjs/operators';
  * A plain `window:resize` listener (the previous approach) misses any layout-driven size change
  * that isn't a viewport resize — a sidebar collapsing, a tab becoming active, a flex/grid reflow.
  * It also can't help a chart that mounts already holding data (e.g. behind a loading gate): that
- * chart's first `ngOnChanges` can fire before the browser has committed layout for its own
+ * chart's first build `effect` run can fire before the browser has committed layout for its own
  * just-created DOM node, so `PcacChart.initializeChartState()` measures a 0-width container and
  * bails out with nothing drawn — and with no resize ever firing, nothing retries it.
  *

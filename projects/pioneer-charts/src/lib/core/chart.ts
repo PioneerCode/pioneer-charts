@@ -334,18 +334,6 @@ export class PcacChart implements OnDestroy {
   }
 
   /**
-   * Prior to building a chart, we need to initialize the state of the chart.
-   *
-   * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
-   * been laid out yet, so its `clientWidth` measures 0 — this happens when a chart mounts
-   * already holding data (e.g. behind a loading gate) and its first `ngOnChanges` fires before
-   * the browser has committed layout for its own just-created DOM node. Callers should bail out
-   * of their build on `false` rather than proceeding with a degenerate width; `PcacChartResizeService`
-   * (wired up by every chart component) retries the build once the container has a real size.
-   * @param chartElm Reference to SVG on dom
-   * @param config Chart specific configuration
-   */
-  /**
    * Removes whatever the chart last drew, for a build with no data to draw. Builders call it
    * rather than just returning, which left the previous data on screen when a consumer emptied
    * the chart (e.g. a filter that now matches nothing).
@@ -355,6 +343,19 @@ export class PcacChart implements OnDestroy {
     select(chartElm.nativeElement).select('g').remove();
   }
 
+  /**
+   * Prior to building a chart, we need to initialize the state of the chart.
+   *
+   * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
+   * been laid out yet, so its `clientWidth` measures 0 — this happens when a chart mounts
+   * already holding data (e.g. behind a loading gate) and its first build `effect` run fires
+   * before the browser has committed layout for its own just-created DOM node. Callers should
+   * bail out of their build on `false` rather than proceeding with a degenerate width;
+   * `PcacChartResizeService` (wired up by every chart component) retries the build once the
+   * container has a real size.
+   * @param chartElm Reference to SVG on dom
+   * @param config Chart specific configuration
+   */
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     // The rebuild removes the hovered element, which gets no mouseout to close its tooltip.
     this.hideTooltip();
@@ -425,9 +426,10 @@ export class PcacChart implements OnDestroy {
    * `PcacChartResizeService`'s `ResizeObserver` is guaranteed to fire once as soon as it starts
    * observing — that's what lets a chart recover from the 0-width race described on
    * `initializeChartState`, but it also means that "routine" first callback usually lands
-   * moments after `ngOnChanges` already built successfully at the same width. Without this
-   * check, that redundant callback would restart the chart's enter transition mid-animation for
-   * no visual change. Only `ngOnChanges` (which reacts to data, not size) should skip this check.
+   * moments after the component's build `effect` already built successfully at the same width.
+   * Without this check, that redundant callback would restart the chart's enter transition
+   * mid-animation for no visual change. Only that effect (which reacts to config, not size) should
+   * skip this check.
    * @param chartElm Reference to SVG on dom
    */
   containerSizeChanged(chartElm: ElementRef): boolean {

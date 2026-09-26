@@ -32,7 +32,6 @@ Our bug tracker utilizes several labels to help organize and identify issues. He
 - `js` - Issues stemming from our compiled TS or source JavaScript files.
 - `meta` - Issues with the project itself or our GitHub repository.
 - `bar-chart` - Issues dealing with both vertical and horizontal bar charts modules.
-- `table` - Issues dealing with the table module.
 - `line-area-chart` - Issues dealing with the line area chart module.
 
 For a complete look at our labels, see the [project labels page](https://github.com/PioneerCode/pioneer-charts/labels).
@@ -49,7 +48,7 @@ Guidelines for bug reports:
    reported.
 
 2. **Check if the issue has been fixed** &mdash; try to reproduce it using the
-   latest `master` or development branch in the repository.
+   latest `main` branch in the repository.
 
 3. **Isolate the problem** &mdash; ideally create a step by step set of instructions to reproduce the problem you are trying to report.
 
@@ -103,11 +102,10 @@ Please adhere to the [coding guidelines](#code-guidelines) used throughout the
 project (indentation, accurate comments, etc.) and any other requirements
 (such as test coverage).
 
-When contributing to Pioneer Chart's documentation, you should edit the
-documentation source files in
-[the "demo" app](https://github.com/PioneerCode/pioneer-charts/tree/master/src/apps/demo/src).
-**Do not edit the `gh-pages` branch.** That branch is generated from the
-documentation source files and is managed separately by Pioneer Chart's Core Team.
+When contributing to Pioneer Chart's documentation, edit the docs app's source in
+[`projects/pioneer-charts-docs`](https://github.com/PioneerCode/pioneer-charts/tree/main/projects/pioneer-charts-docs/src)
+(`npm start` serves it locally). The live site is built from it and deployed by the release
+workflow; nothing else needs editing.
 
 Adhering to the following process is the best way to get your work
 included in the project:
@@ -117,7 +115,7 @@ included in the project:
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/PioneerCode/pioneer-charts.git
+   git clone https://github.com/<your-username>/pioneer-charts.git
    # Navigate to the newly cloned directory
    cd pioneer-charts
    # Assign the original repo to a remote called "upstream"
@@ -127,8 +125,8 @@ included in the project:
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout master
-   git pull upstream master
+   git checkout main
+   git pull upstream main
    ```
 
 3. Create a new topic branch (off the main project development branch) to
@@ -147,7 +145,7 @@ included in the project:
 5. Locally merge (or rebase) the upstream development branch into your topic branch:
 
    ```bash
-   git pull [--rebase] upstream master
+   git pull [--rebase] upstream main
    ```
 
 6. Push your topic branch up to your fork:
@@ -157,10 +155,10 @@ included in the project:
    ```
 
 7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description against the `master` branch.
+    with a clear title and description against the `main` branch.
 
 **IMPORTANT**: By submitting a patch, you agree to allow the project owners to
-license your work under the terms of the [MIT License](LICENSE).
+license your work under the terms of the [MIT License](../LICENSE).
 
 
 ## Code guidelines
@@ -187,8 +185,8 @@ Run `npm run lint` before committing to ensure your changes follow our coding st
 Publishing to npm is automated by the [Publish workflow](workflows/publish.yml); nothing is
 published from a local machine.
 
-1. On a branch, bump `version` in `projects/pioneer-charts/package.json` (and move the `Unreleased`
-   notes in `CHANGELOG.md` under that version).
+1. On a branch, bump `version` in `projects/pioneer-charts/package.json` and add an entry for it
+   at the top of `CHANGELOG.md`.
 2. Open a pull request against `main` and merge it once CI is green. `main` only accepts changes
    through pull requests, and the publish workflow refuses to run on a commit that didn't arrive
    that way. The workflow then lints, tests, builds the library and dry-runs the publish.
@@ -203,4 +201,4 @@ To redeploy the docs site without cutting a release (typo fixes, new guides), ru
 
 ## License
 
-By contributing your code, you agree to license your contribution under the [MIT License](LICENSE).
+By contributing your code, you agree to license your contribution under the [MIT License](../LICENSE).

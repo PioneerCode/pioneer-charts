@@ -1,0 +1,15 @@
+# Keeps the workflows' actions current. They're pinned to commit SHAs (with the version in a
+# trailing comment) so a moved or compromised tag can't change what runs; Dependabot bumps both
+# the SHA and the comment. One grouped PR a month rather than one per action.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ci

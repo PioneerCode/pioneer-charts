@@ -6,10 +6,10 @@ name: Deploy to GitHub Pages
 on:
   workflow_dispatch:
 
+# Read-only by default: the build job runs `npm ci`, and with it every dependency's install
+# scripts, so it gets no more than it needs. Only `deploy` can write to Pages.
 permissions:
   contents: read
-  pages: write          # required
-  id-token: write       # required
 
 # Shared with publish.yml's deploy-docs job, and never cancelled: a manual deploy waits for a
 # release's docs deploy to finish rather than cancelling it (and vice versa).
@@ -40,6 +40,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write          # to deploy to Pages
+      id-token: write       # to verify the deployment originates from this workflow
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

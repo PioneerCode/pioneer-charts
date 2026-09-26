@@ -98,6 +98,40 @@ describe('PcacTooltipBuilder', () => {
       expect(shell.textContent).toBe('<img src=x onerror="window.pwned=1"><b>42</b>');
     });
 
+    // Regression test: the tooltip only knew Percentage and Fahrenheit values (and DateTime keys),
+    // so on an axis in any other format it disagreed with the axis beside it - a OneDayHours axis
+    // read `1:30pm` while the tooltip for the same point read `13.5`.
+    describe('reads like the axis it sits against', () => {
+      const shown = (value: number | string, valueFormat?: PcacFormatEnum, key: number | string = 'Jan', keyFormat?: PcacFormatEnum) => {
+        builder.showTooltip(mouse(), undefined, context({ key, value, hide: false, data: [] }), valueFormat, keyFormat);
+        return shell.innerHTML;
+      };
+
+      it('formats every axis format\'s values the way its ticks are labelled', () => {
+        expect(shown(13.5, PcacFormatEnum.OneDayHours)).toBe('Jan<br>1:30pm');
+        expect(shown(5, PcacFormatEnum.Minutes)).toBe('Jan<br>5m');
+        expect(shown(1500.25, PcacFormatEnum.Decimal)).toBe('Jan<br>1,500.25');
+        expect(shown(72, PcacFormatEnum.Fahrenheit)).toBe('Jan<br>72 F');
+        expect(shown(0.25, PcacFormatEnum.Percentage)).toBe('Jan<br>25%');
+      });
+
+      it('formats the key in the x axis\'s format too', () => {
+        expect(shown(10, undefined, 13, PcacFormatEnum.OneDayHours)).toBe('1pm<br>10');
+        expect(shown(10, undefined, 0.5, PcacFormatEnum.Percentage)).toBe('50%<br>10');
+      });
+
+      it('leaves values alone in the formats with no labelling of their own', () => {
+        expect(shown(1500.25, PcacFormatEnum.DatasetLength)).toBe('Jan<br>1500.25');
+        expect(shown(1500.25, PcacFormatEnum.None)).toBe('Jan<br>1500.25');
+        expect(shown(3, undefined, 3, PcacFormatEnum.DatasetLength)).toBe('3<br>3');
+      });
+
+      it('shows a value a numeric format can\'t read as it is', () => {
+        expect(shown('n/a', PcacFormatEnum.OneDayHours)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Percentage)).toBe('Jan<br>n/a');
+      });
+    });
+
     it('keeps a key of 0 and shows a missing value as blank', () => {
       builder.showTooltip(mouse(), undefined, context({ key: 0, value: null, hide: false, data: [] }));
 

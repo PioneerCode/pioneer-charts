@@ -204,3 +204,43 @@ describe('BarHorizontalChartBuilder', () => {
     expect(builder.margin.bottom).toBe(20);
   });
 });
+
+// Regression test: the left margin grew to fit the measured labels with no limit, so labels wider
+// than the container left the plot a negative width - every bar got a negative `width` and none
+// drew. The margin is now capped at half the container, the labels cut off at the edge instead.
+describe('BarHorizontalChartBuilder with labels wider than the container', () => {
+  const labelWidth = 300;
+
+  beforeAll(() => {
+    (SVGElement.prototype as unknown as { getBBox: () => DOMRect }).getBBox = () =>
+      ({ x: 0, y: 0, width: labelWidth, height: 12 }) as DOMRect;
+  });
+
+  afterAll(() => {
+    delete (SVGElement.prototype as unknown as { getBBox?: () => DOMRect }).getBBox;
+  });
+
+  it('keeps room for the bars', async () => {
+    const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+    vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
+    const elm = chartElm(200);
+
+    builder.buildChart(elm, config());
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(builder.margin.left).toBe(100);
+    expect(builder.width).toBeGreaterThan(0);
+    const widths = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar') as NodeListOf<SVGRectElement>)
+      .map((bar) => Number(bar.getAttribute('width')));
+    expect(widths).toHaveLength(1);
+    expect(widths[0]).toBeGreaterThan(0);
+  });
+
+  it('leaves narrower labels their full width', () => {
+    const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+
+    builder.buildChart(chartElm(1000), config());
+
+    expect(builder.margin.left).toBeGreaterThanOrEqual(labelWidth);
+  });
+});

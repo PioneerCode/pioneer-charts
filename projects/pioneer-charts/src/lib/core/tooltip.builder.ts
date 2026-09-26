@@ -2,7 +2,7 @@ import { ApplicationRef, DOCUMENT, EmbeddedViewRef, Injectable, OnDestroy, Templ
 import { PcacData, PcacFormatEnum } from './chart.model';
 import { PcacTooltipContext } from './tooltip.directive';
 import { Selection, select } from 'd3-selection';
-import { formatPercent } from './tick-format';
+import { formatValue } from './tick-format';
 
 @Injectable({
   providedIn: 'root',
@@ -233,31 +233,25 @@ export class PcacTooltipBuilder implements OnDestroy {
     let value = data.value;
     let key = data.key
 
+    // Formatted the way the value's axis labels it (see `formatValue`), so the tooltip for a
+    // point reads like the axis it sits against - `1:30pm`, not `13.5`, on a OneDayHours axis.
     // A missing value stays blank rather than being formatted as `0%` / `null F`.
-    if (valueFormat && value !== null && value !== undefined) {
-      switch (valueFormat) {
-        case PcacFormatEnum.Percentage:
-          // Same fraction rule, and the same formatting, as a Percentage axis's ticks.
-          value = formatPercent(Number(value));
-          break;
-        case PcacFormatEnum.Fahrenheit:
-          value = `${value} F`;
-          break;
-      }
+    if (value !== null && value !== undefined) {
+      value = formatValue(valueFormat, value) ?? value;
     }
 
-    if (key && keyFormat) {
-      switch (keyFormat) {
-        case PcacFormatEnum.DateTime:
-          key = new Date(key).toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          })
-          break;
+    if (key !== null && key !== undefined && key !== '') {
+      if (keyFormat === PcacFormatEnum.DateTime) {
+        key = new Date(key).toLocaleDateString('en-US', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        })
+      } else {
+        key = formatValue(keyFormat, key) ?? key;
       }
     }
 

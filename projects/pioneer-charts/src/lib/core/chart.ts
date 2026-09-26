@@ -10,6 +10,9 @@ import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 
+/** The most of its container's width a chart's measured left (label) margin may take. */
+const MAX_LABEL_MARGIN_SHARE = 0.5;
+
 /**
  * Everything `showTooltip()` needs beyond the hovered datum itself. `parent`/`isThreshold` feed
  * the consumer template's context; the formats only apply to the default (no template) content.
@@ -473,10 +476,15 @@ export class PcacChart implements OnDestroy {
    * the label, so measuring at a different length would put the labels off by the difference)
    * and adds its `axisLabelSpace()` back on top, since the measurement replaces whatever
    * `initializeAxisState()` reserved for the label / sub labels.
+   *
+   * The margin never takes more than `MAX_LABEL_MARGIN_SHARE` of the container: labels wider than
+   * that are cut off at the chart's left edge rather than squeezing the plot to nothing (it used
+   * to go to a negative width, and no bars drew at all). Returns `false`, like
+   * `initializeChartState()`, if there is still no room left to draw in.
    * @param chartElm Reference to SVG on dom
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
-  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): boolean {
     const axisY = axisLeft(yScale).ticks(5);
     if (this.yAxis.tickSize !== undefined) {
       axisY.tickSizeInner(this.yAxis.tickSize);
@@ -496,8 +504,10 @@ export class PcacChart implements OnDestroy {
     // double-counted it, and since `margin` persists on the builder between builds, the amount
     // double-counted grew on the next rebuild - the plot area came out narrower than the
     // container allowed and then shrank further after the first resize.
-    const left = max + axisLabelSpace(this.yAxis);
+    const containerWidth = this.width + this.margin.left + this.margin.right;
+    const left = Math.min(max + axisLabelSpace(this.yAxis), containerWidth * MAX_LABEL_MARGIN_SHARE);
     this.width = this.width + this.margin.left - left;
     this.margin.left = left;
+    return this.width > 0;
   }
 }

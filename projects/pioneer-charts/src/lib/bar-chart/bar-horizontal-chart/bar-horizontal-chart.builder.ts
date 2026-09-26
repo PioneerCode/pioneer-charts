@@ -55,11 +55,14 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     this.ensureColorCount(seriesKeys(config.data).length);
     this.applyColorOverride(config.colorOverride?.colors);
-    this.buildScales(chartElm, config);
+    if (!this.buildScales(chartElm, config)) {
+      return;
+    }
     this.drawChart(chartElm, config);
   }
 
-  private buildScales(chartElm: ElementRef, config: PcacBarHorizontalChartConfig) {
+  /** Returns `false` if the container leaves no room to draw in once the labels are measured. */
+  private buildScales(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): boolean {
     // Bars grow from 0, so only `domainMax` is read; `xAxis.domainMin` is ignored.
     this.xScale = scaleLinear()
       .domain([0, this.xAxis.domainMax as number]);
@@ -76,11 +79,12 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .domain(seriesKeys(config.data));
 
     // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
-    if (!this.yAxis.hide) {
-      this.setHorizontalMarginsBasedOnContent(chartElm, this.yScaleStacked);
+    if (!this.yAxis.hide && !this.setHorizontalMarginsBasedOnContent(chartElm, this.yScaleStacked)) {
+      return false;
     }
 
     this.xScale.range([0, this.width]);
+    return true;
   }
 
   private drawChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {

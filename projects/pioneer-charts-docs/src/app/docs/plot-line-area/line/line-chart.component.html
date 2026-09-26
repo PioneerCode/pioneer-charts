@@ -1,30 +1,30 @@
 <app-plot-line-area-base [title]="'Line Chart'" [lead]="'Configurable to display an area or line chart.'"
-  [markup]="markupCode" [importCode]="importCode" [contract]="pcService.lineChartConfig.value() | stringify">
+  [markup]="markupCode" [importCode]="importCode">
   <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-6">
-    <mat-card class="p-3">
+    <pc-chart-card heading="Three series" [level]="2">
       <app-layout-resource-state [resource]="pcService.lineChartConfig">
         <pcac-line-chart [config]="pcService.lineChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
       </app-layout-resource-state>
-    </mat-card>
-    <mat-card class="p-3">
+    </pc-chart-card>
+    <pc-chart-card heading="Three series, other values" [level]="2">
       <app-layout-resource-state [resource]="pcService.areaChartConfig">
         <pcac-line-chart [config]="pcService.areaChartConfig.value()" (dotClicked)="pcService.onClicked($event)" />
       </app-layout-resource-state>
-    </mat-card>
+    </pc-chart-card>
   </div>
-  <mat-card class="p-3 ">
+  <pc-chart-card heading="Axes hidden" [level]="2">
     <app-layout-resource-state [resource]="pcService.areaChartHideConfig">
       <pcac-line-chart [config]="pcService.areaChartHideConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
-  </mat-card>
+  </pc-chart-card>
   <h2 class="pc-h4 mt-6 mb-2">Point images</h2>
   <p class="mb-3">Set <code>image</code> on a data point to draw it in place of the dot, sized by the
     config's <code>pointImage</code> box. Points without an <code>image</code> keep their dot.</p>
-  <mat-card class="p-3">
+  <pc-chart-card heading="Forecast with icons">
     <app-layout-resource-state [resource]="pcService.lineChartImagesConfig">
       <pcac-line-chart [config]="pcService.lineChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
-  </mat-card>
+  </pc-chart-card>
   <h2 class="pc-h4 mt-6 mb-2">Zoom</h2>
   <p class="mb-3">With <code>enableZoomX</code> on, the x axis can be zoomed and panned in place: scroll (or pinch)
     over the chart to zoom from 1&times; up to 10&times; around the cursor, then drag to pan. The view never leaves
@@ -34,11 +34,11 @@
     the same for the y axis, with the y axis and horizontal grid following; turn on either or both. This demo has
     both: two weeks of readings every six hours, two series &mdash; crowded at 1&times;, so zoom in on a day or
     two, and on the 50&ndash;90&deg; band the readings actually occupy within the 40&ndash;100&deg; axis.</p>
-  <mat-card class="p-3">
+  <pc-chart-card heading="Temperatures by date">
     <app-layout-resource-state [resource]="pcService.lineChartZoomConfig">
       <pcac-line-chart [config]="pcService.lineChartZoomConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
-  </mat-card>
+  </pc-chart-card>
   <p class="text-sm mt-2">Zoom works the same on the area and plot charts. Both options are off by default. This
     demo leaves the hover effects (<code>enableEffects</code>) off so the gesture is the only thing happening.</p>
 </app-plot-line-area-base>

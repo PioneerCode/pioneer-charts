@@ -1,5 +1,4 @@
 import { Component, computed, inject, signal, DOCUMENT } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { color } from 'd3-color';
 import { RouterLink } from '@angular/router';
 import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
@@ -9,6 +8,8 @@ import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 /** The `PcacAxisConfig` fields the demo lets you toggle; `tickSize` is the slider's. */
 type AxisToggle = 'hide' | 'showGrid' | 'showLine';
@@ -21,10 +22,11 @@ type AxisColor = 'labelColor' | 'subLabelColor' | 'tickLabelColor' | 'tickColor'
   templateUrl: './axis-styling.component.html',
   styleUrl: './axis-styling.component.scss',
   imports: [
+    ChartCard,
+    ChartContract,
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    MatCardModule,
     PcacBarVerticalChartComponent,
     PcacLineChart,
     RouterLink,

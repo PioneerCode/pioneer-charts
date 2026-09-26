@@ -53,12 +53,12 @@
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="col">
-      <mat-card class="p-3">
+      <pc-chart-card heading="Area chart" caption="Three series of snack calories; hover for the crosshair.">
         <app-layout-resource-state [resource]="appService.areaChartConfig">
           <pcac-area-chart [config]="appService.areaChartConfig.value()"
             (dotClicked)="appService.onClicked($event)" />
         </app-layout-resource-state>
-      </mat-card>
+      </pc-chart-card>
     </div>
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">

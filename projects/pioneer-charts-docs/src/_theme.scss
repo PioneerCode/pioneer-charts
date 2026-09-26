@@ -149,7 +149,9 @@ html {
     ),
     typography: (
       plain-family: Roboto,
-      brand-family: Open Sans,
+      // Roboto, the one family index.html loads: Open Sans never was, so Material's brand-font text
+      // (a dialog's title, say) fell back to the browser's serif.
+      brand-family: Roboto,
       bold-weight: 900,
       medium-weight: 500,
       regular-weight: 300,

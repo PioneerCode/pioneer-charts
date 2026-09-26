@@ -1,19 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { PcacAreaChart } from '@pioneer-code/pioneer-charts';
-import { StringifyPipe } from '../../../stringify.pipe';
 import { AppService } from '../../../app.service';
 import { PlotLineAreaBaseComponent } from '../base/base.component';
 import { LayoutResourceState } from '../../../layout/resource-state/resource-state';
+import { ChartCard } from '../../../layout/chart-card/chart-card';
+import { ChartContract } from '../../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-area-chart',
   templateUrl: './area-chart.component.html',
   imports: [
+    ChartCard,
+    ChartContract,
     PlotLineAreaBaseComponent,
-    MatCardModule,
     PcacAreaChart,
-    StringifyPipe,
     LayoutResourceState
   ]
 })

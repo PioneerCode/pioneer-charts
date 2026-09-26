@@ -4,12 +4,12 @@
     Chart</a>.</p>
   <section class="pc-doc-section">
     <div class="grid grid-cols-1 gap-4 mb-6">
-      <mat-card class="p-3">
+      <pc-chart-card heading="Pie" [level]="2">
         <app-layout-resource-state [resource]="pcService.pieChartConfig">
           <pcac-pie-chart [config]="pcService.pieChartConfig.value()"
             (sliceClicked)="pcService.onClicked($event)" />
         </app-layout-resource-state>
-      </mat-card>
+      </pc-chart-card>
     </div>
   </section>
   <section class="pc-doc-section">
@@ -54,12 +54,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </section>
-  <section class="pc-doc-section">
-    <h2 class="pc-h3" id="contract">Contract</h2>
-    <div class="pc-config-container">
-      <app-layout-code language="json" [code]="pcService.pieChartConfig.value() | stringify"></app-layout-code>
     </div>
   </section>
 </app-layout-page-docs>

@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 
 import { PcacPieChart } from '@pioneer-code/pioneer-charts';
@@ -7,21 +6,22 @@ import { AppService } from '../../app.service';
 import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
-import { StringifyPipe } from '../../stringify.pipe';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 @Component({
   selector: 'pc-pie-chart',
   templateUrl: './pie-chart.component.html',
   imports: [
+    ChartCard,
+    ChartContract,
     LayoutCode,
     LayoutBaseConfig,
     LayoutPageDocs,
-    MatCardModule,
     RouterLink,
     PcacPieChart,
-    StringifyPipe,
     LayoutResourceState,
   ]
 })
@@ -34,7 +34,6 @@ export class PieChartComponent {
     { key: 'API', value: 'api' },
     { key: 'Configuration', value: 'configuration' },
     { key: 'Events', value: 'events' },
-    { key: 'Contract', value: 'contract' },
   ]);
 
   markupCode = `<pcac-pie-chart [config]="config" (sliceClicked)="onClicked($event)" />`;

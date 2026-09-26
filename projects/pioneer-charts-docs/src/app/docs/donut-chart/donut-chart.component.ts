@@ -1,5 +1,4 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 
 import { PcacDonutChart, PcacDonutChartConfig } from '@pioneer-code/pioneer-charts';
@@ -7,9 +6,10 @@ import { AppService } from '../../app.service';
 import { LayoutBaseConfig } from '../../layout/base-config/base-config.component';
 import { LayoutCode } from '../../layout/code/code';
 import { LayoutPageDocs } from '../../layout/page-docs/page-docs';
-import { StringifyPipe } from '../../stringify.pipe';
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutResourceState } from '../../layout/resource-state/resource-state';
+import { ChartCard } from '../../layout/chart-card/chart-card';
+import { ChartContract } from '../../layout/chart-contract/chart-contract';
 
 /** The ring settings the "Try it" controls edit. */
 interface DonutSettings {
@@ -22,13 +22,13 @@ interface DonutSettings {
   selector: 'pc-donut-chart',
   templateUrl: './donut-chart.component.html',
   imports: [
+    ChartCard,
+    ChartContract,
     LayoutCode,
     LayoutBaseConfig,
     LayoutPageDocs,
-    MatCardModule,
     RouterLink,
     PcacDonutChart,
-    StringifyPipe,
     LayoutResourceState,
   ]
 })
@@ -42,7 +42,6 @@ export class DonutChartComponent {
     { key: 'API', value: 'api' },
     { key: 'Configuration', value: 'configuration' },
     { key: 'Events', value: 'events' },
-    { key: 'Contract', value: 'contract' },
   ]);
 
   /** Starts with no label of its own, so the center shows the total. */

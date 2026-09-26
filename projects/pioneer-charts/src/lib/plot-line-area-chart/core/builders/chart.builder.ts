@@ -21,6 +21,7 @@ import { getXFormat } from '../x-format';
 import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
+import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
@@ -61,7 +62,16 @@ export class PlaChartBuilder extends PcacChart {
   private zoomBehavior!: ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
-  private clipPathId!: string; // <-- added
+  /**
+   * Numbers this chart's clip-path ids (and, through `plotClipPathId`, its range gradients'),
+   * which have to be unique in the whole page: `url(#id)` resolves to the first match in the
+   * document, so a duplicate would clip one chart with another's rect. A per-instance counter
+   * rather than the timestamp-plus-random stamp this used to be, which two charts rebuilding in
+   * the same millisecond (every chart on a page reacts to a window resize at once) could share.
+   */
+  private static nextInstanceId = 0;
+  private readonly instanceId = ++PlaChartBuilder.nextInstanceId;
+  private clipPathId!: string;
   /**
    * A second clip-path for everything that isn't a point - lines, areas, fan-out anchors and
    * spokes: the plot area plus `PLOT_CLIP_ALLOWANCE`. These have no business past the axes; the
@@ -309,10 +319,10 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   private createReusableClipPath(): void {
-    const stamp = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-    this.clipPathId = `pcac-clip-${stamp}`;
-    this.plotClipPathId = `pcac-clip-plot-${stamp}`;
-    this.svg.selectAll(`defs #${this.clipPathId}, defs #${this.plotClipPathId}`).remove();
+    // The previous build's <defs> went with the rest of its drawing (see initializeChartState),
+    // so the same ids are free again.
+    this.clipPathId = `pcac-clip-${this.instanceId}`;
+    this.plotClipPathId = `pcac-clip-plot-${this.instanceId}`;
     const defs = this.svg.append('defs');
     defs.append('clipPath')
       .attr('id', this.clipPathId)
@@ -572,7 +582,7 @@ export class PlaChartBuilder extends PcacChart {
       const series = config.data[index];
       const points = this.svg.append('g')
         .attr('class', 'dots')
-        .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
+        .attr('clip-path', `url(#${this.clipPathId})`)
         .attr('style', series.hide ? 'display: none' : null)
         .selectAll('.point')
         .data(series.data)
@@ -684,8 +694,13 @@ export class PlaChartBuilder extends PcacChart {
    * with its center already outside. Also takes it out of hover's reach, as a hidden group
    * receives no pointer events.
    */
+  /**
+   * A point with no value to plot isn't drawn - the same test the line/area uses to leave a gap
+   * (`hasValue`). An empty string used to slip through: the scale reads `''` as 0, so the line
+   * left a gap while a dot sat (hoverable) on the baseline.
+   */
   private pointDisplay(d: PcacData, i: number, scales: PlaChartScales): string | null {
-    return this.pointVisible(d, i, scales) ? null : 'none';
+    return hasValue(d) && this.pointVisible(d, i, scales) ? null : 'none';
   }
 
   private pointVisible(d: PcacData, i: number, scales: PlaChartScales): boolean {

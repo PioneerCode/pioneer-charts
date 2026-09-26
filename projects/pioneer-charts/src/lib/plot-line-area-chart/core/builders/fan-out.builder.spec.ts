@@ -56,6 +56,25 @@ describe('findCoincidentGroups', () => {
     expect(groups.length).toBe(1);
     expect(groups[0].members.map((m) => m.seriesIndex)).toEqual([0, 3]);
   });
+
+  // Regression test: only null/undefined values were left out, so points that aren't drawn - an
+  // empty string, NaN - could still be fanned out around a spot with nothing on it.
+  it('leaves out points the chart doesn\'t draw: an empty string or NaN value', () => {
+    const undrawn = (value: unknown) => ({ ...point(1, null), value } as PcacData);
+    const groups = findCoincidentGroups(
+      [series([undrawn('')]), series([undrawn('')]), series([undrawn(NaN)]), series([undrawn(NaN)])],
+      PcacFormatEnum.Decimal
+    );
+    expect(groups.length).toBe(0);
+  });
+
+  it('compares values as numbers, so 5 and "5" - drawn at the same spot - coincide', () => {
+    const groups = findCoincidentGroups(
+      [series([point(1, 5)]), series([{ ...point(1, null), value: '5' } as PcacData])],
+      PcacFormatEnum.Decimal
+    );
+    expect(groups.length).toBe(1);
+  });
 });
 
 describe('fanOutRadius', () => {

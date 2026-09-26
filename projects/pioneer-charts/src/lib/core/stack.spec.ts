@@ -25,6 +25,13 @@ describe('barSizes', () => {
     expect([sizes.get(shown), sizes.get(hidden), sizes.get(inHiddenGroup)]).toEqual([5, 0, 0]);
   });
 
+  it('draws a negative value as 0', () => {
+    const bars = [bar(-5), bar(5)];
+    const sizes = barSizes([{ key: 'g', value: null, hide: false, data: bars }]);
+
+    expect(bars.map((b) => sizes.get(b))).toEqual([0, 5]);
+  });
+
   it('tolerates a group without data', () => {
     expect(barSizes([{ key: 'g', value: 1, hide: false } as PcacData]).size).toBe(0);
   });
@@ -37,5 +44,14 @@ describe('stackStarts', () => {
     const starts = stackStarts([{ key: 'g', value: null, hide: false, data: bars }]);
 
     expect(bars.map((b) => starts.get(b))).toEqual([0, 10, 10, 10, 10]);
+  });
+
+  // Regression test: a negative segment pulled every later one in its stack down, overlapping the
+  // bars before it.
+  it('doesn\'t let a negative bar pull the rest of the stack down', () => {
+    const bars = [bar(10), bar(-4), bar(5)];
+    const starts = stackStarts([{ key: 'g', value: null, hide: false, data: bars }]);
+
+    expect(bars.map((b) => starts.get(b))).toEqual([0, 10, 10]);
   });
 });

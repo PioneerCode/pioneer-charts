@@ -67,7 +67,7 @@ export class PieChartBuilder extends PcacChart {
       return;
     }
     this.applyColorOverride(config.colorOverride);
-    this.radius = Math.min(Math.min(this.height, this.width), Math.min(this.height, this.width)) / 2;
+    this.radius = Math.min(this.height, this.width) / 2;
     this.buildShapes(config.donut);
     this.drawChart(chartElm, config);
     if (config.donut && this.innerRadius > 0) {
@@ -77,7 +77,8 @@ export class PieChartBuilder extends PcacChart {
 
   private buildShapes(donut: Partial<PcacPieDonutConfig> | undefined): void {
     const radiusOffset = 10;
-    const outerRadius = this.radius - radiusOffset;
+    // Never negative: in a container under 20px the offset would otherwise turn the pie inside out.
+    const outerRadius = Math.max(0, this.radius - radiusOffset);
     const ratio = donut ? (donut.innerRadius ?? new PcacPieDonutConfig().innerRadius) : 0;
     // Sized against the resting slice, so the hole stays put when a hovered slice grows outward.
     this.innerRadius = Math.max(0, outerRadius * Math.min(Math.max(ratio, 0), MAX_DONUT_INNER_RADIUS));
@@ -112,7 +113,12 @@ export class PieChartBuilder extends PcacChart {
         const t = transition().duration(self.transitionService.getTransitionDuration() / 3)
         const c = color(self.colors[d.index])
         const ct = c ? c.darker(1).toString() : self.colors[d.index]
-        select<SVGPathElement, PieArcDatum<PcacData>>(this).transition(t)
+        // Hovered mid-way through the enter sweep, the slice is finished first: growing it straight
+        // from its part-swept path morphed it oddly on the way out to the hover shape.
+        select<SVGPathElement, PieArcDatum<PcacData>>(this)
+          .interrupt()
+          .attr('d', self.arcShape(d))
+          .transition(t)
           .attr('d', self.arcOverShape)
           .style('fill', ct);
       })

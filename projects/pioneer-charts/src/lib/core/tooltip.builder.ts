@@ -183,12 +183,27 @@ export class PcacTooltipBuilder implements OnDestroy {
 
   /**
    * Centers the tooltip horizontally on the cursor and sits it just above. Measured from the real
-   * box rather than fixed offsets so it works for content of any size.
+   * box rather than fixed offsets so it works for content of any size. Kept on screen like
+   * `positionBeside`: slid in from whichever side edge it would cross (the left one winning if it's
+   * wider than the viewport), and dropped below the cursor when there's no room above - hovering
+   * a bar at the page's edge used to cut the tooltip off.
    */
   private positionAbove(shell: HTMLDivElement, event: MouseEvent): void {
+    const gap = PcacTooltipBuilder.GAP;
+    const width = shell.offsetWidth;
+    const height = shell.offsetHeight;
+    const viewport = this.document.documentElement;
+    const scrollX = this.document.defaultView?.scrollX ?? 0;
+    const scrollY = this.document.defaultView?.scrollY ?? 0;
+
+    const centered = event.pageX - width / 2;
+    const left = Math.max(scrollX, Math.min(centered, scrollX + viewport.clientWidth - width));
+    const above = event.pageY - height - gap;
+    const top = above >= scrollY ? above : event.pageY + gap;
+
     this.tooltip
-      .style('left', event.pageX - shell.offsetWidth / 2 + 'px')
-      .style('top', event.pageY - shell.offsetHeight - PcacTooltipBuilder.GAP + 'px');
+      .style('left', left + 'px')
+      .style('top', top + 'px');
   }
 
   /**
@@ -241,7 +256,8 @@ export class PcacTooltipBuilder implements OnDestroy {
     }
 
     if (key !== null && key !== undefined && key !== '') {
-      if (keyFormat === PcacFormatEnum.DateTime) {
+      // A key that doesn't parse as a date is shown as it is, rather than as "Invalid Date".
+      if (keyFormat === PcacFormatEnum.DateTime && !Number.isNaN(new Date(key).getTime())) {
         key = new Date(key).toLocaleDateString('en-US', {
           day: '2-digit',
           month: '2-digit',

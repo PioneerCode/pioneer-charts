@@ -3,6 +3,7 @@ import { PcacTooltipBuilder } from '../../core/tooltip.builder';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
 import { PcacBarVerticalChartComponent } from './bar-vertical-chart.component';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
+import { PcacColorService } from '../../core/color.service';
 
 describe('PcacBarVerticalChartComponent', () => {
   beforeAll(() => {
@@ -27,5 +28,24 @@ describe('PcacBarVerticalChartComponent', () => {
     fixture.destroy();
 
     expect(shell.style.display).toBe('none');
+  });
+
+  // Regression test: the palette wasn't reactive, so `PcacColorService.setScale()` (e.g. a theme
+  // toggle) left every chart on screen in the old colors until its config next changed. The
+  // container here is never laid out (jsdom), which is also the case the first build of a real
+  // chart can hit - it must still pick up palette changes.
+  it('redraws when the palette changes, even before its container is laid out', async () => {
+    const fixture = TestBed.createComponent(PcacBarVerticalChartComponent);
+    fixture.componentRef.setInput('config', {
+      ...new PcacBarVerticalChartConfig(),
+      data: [{ key: 'g', value: null, hide: false, data: [{ key: 'a', value: 1, hide: false, data: [] }] }],
+    });
+    await fixture.whenStable();
+    const build = vi.spyOn(fixture.debugElement.injector.get(BarVerticalChartBuilder), 'buildChart');
+
+    TestBed.inject(PcacColorService).setScale(['#123456']);
+    await fixture.whenStable();
+
+    expect(build).toHaveBeenCalledTimes(1);
   });
 });

@@ -132,6 +132,13 @@ describe('PcacTooltipBuilder', () => {
       });
     });
 
+    // Regression test: a DateTime key that doesn't parse read "Invalid Date".
+    it('shows a DateTime key that isn\'t a date as it is', () => {
+      builder.showTooltip(mouse(), undefined, context(datum('Q3 total', 1)), undefined, PcacFormatEnum.DateTime);
+
+      expect(shell.innerHTML).toBe('Q3 total<br>1');
+    });
+
     it('keeps a key of 0 and shows a missing value as blank', () => {
       builder.showTooltip(mouse(), undefined, context({ key: 0, value: null, hide: false, data: [] }));
 
@@ -220,15 +227,47 @@ describe('PcacTooltipBuilder', () => {
   });
 
   describe('positioning', () => {
-    it('centers the rendered box horizontally on the cursor and sits it above, from measured size', () => {
-      // jsdom does no layout, so the box's size is stubbed to make the arithmetic observable.
-      Object.defineProperty(shell, 'offsetWidth', { value: 100, configurable: true });
-      Object.defineProperty(shell, 'offsetHeight', { value: 40, configurable: true });
+    describe('above the cursor', () => {
+      const root = document.documentElement;
 
-      builder.showTooltip(mouse(200, 300), host.full(), context(datum('jan', 1)));
+      // jsdom does no layout, so a 1000x800 viewport and a 100x40 box are stubbed to make the
+      // arithmetic observable.
+      beforeEach(() => {
+        Object.defineProperty(root, 'clientWidth', { value: 1000, configurable: true });
+        Object.defineProperty(root, 'clientHeight', { value: 800, configurable: true });
+        Object.defineProperty(shell, 'offsetWidth', { value: 100, configurable: true });
+        Object.defineProperty(shell, 'offsetHeight', { value: 40, configurable: true });
+      });
 
-      expect(shell.style.left).toBe('150px');
-      expect(shell.style.top).toBe('252px');
+      afterEach(() => {
+        delete (root as any).clientWidth;
+        delete (root as any).clientHeight;
+        delete (shell as any).offsetWidth;
+        delete (shell as any).offsetHeight;
+      });
+
+      it('centers the rendered box horizontally on the cursor and sits it above, from measured size', () => {
+        builder.showTooltip(mouse(200, 300), host.full(), context(datum('jan', 1)));
+
+        expect(shell.style.left).toBe('150px');
+        expect(shell.style.top).toBe('252px');
+      });
+
+      // Regression test: the box was centered on the cursor unconditionally, so near the page's
+      // edges it ran off screen and was cut off.
+      it('slides in from the left and right edges of the viewport', () => {
+        builder.showTooltip(mouse(20, 300), host.full(), context(datum('jan', 1)));
+        expect(shell.style.left).toBe('0px');
+
+        builder.showTooltip(mouse(990, 300), host.full(), context(datum('jan', 1)));
+        expect(shell.style.left).toBe('900px');
+      });
+
+      it('drops below the cursor when there is no room above', () => {
+        builder.showTooltip(mouse(200, 30), host.full(), context(datum('jan', 1)));
+
+        expect(shell.style.top).toBe('38px'); // 30 + gap
+      });
     });
 
     describe('beside an anchor', () => {

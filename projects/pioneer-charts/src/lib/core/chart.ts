@@ -359,6 +359,16 @@ export class PcacChart implements OnDestroy {
     // The rebuild removes the hovered element, which gets no mouseout to close its tooltip.
     this.hideTooltip();
     select(chartElm.nativeElement).select('g').remove();
+    // One color per group or per series within a group, whichever needs more. Bar charts, which
+    // color by series across groups, top this up with `ensureColorCount()`. Read before the width
+    // check below, even though a build that fails it draws nothing: this runs inside each chart
+    // component's build `effect`, and reading the palette is what makes that effect redraw the
+    // chart when the palette changes (see `PcacColorService`) - including a chart whose first
+    // build found its container not laid out yet. (A loop rather than `Math.max(...)` over the
+    // groups: spreading one argument per group overflows the call stack at a few hundred thousand.)
+    const colors = this.colorService.getColorScale(
+      config.data.reduce((max, d) => Math.max(max, d.data?.length ?? 0), config.data.length),
+    );
     const container = chartElm.nativeElement.parentNode as HTMLElement;
     const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
@@ -375,11 +385,7 @@ export class PcacChart implements OnDestroy {
       .attr('role', 'img')
       .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
     this.height = this.resolveHeight(container, config);
-    // One color per group or per series within a group, whichever needs more. Bar charts, which
-    // color by series across groups, top this up with `ensureColorCount()`.
-    this.colors = this.colorService.getColorScale(
-      Math.max(config.data.length, ...config.data.map((d) => d.data?.length ?? 0)),
-    );
+    this.colors = colors;
     this.lastContainerWidth = containerWidth;
     this.lastContainerHeight = container.clientHeight;
     this.lastHeightFull = config.heightFull === true;

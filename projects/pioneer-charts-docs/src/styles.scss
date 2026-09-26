@@ -229,3 +229,35 @@ app-layout-page-docs-content [id] {
 pre.app-layout-code {
   overflow-x: auto;
 }
+
+// Jumps to a section on the same page (the router's anchorScrolling) glide there; the router
+// still puts a new page at its top instantly, as it asks for that explicitly.
+html {
+  scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
+}
+
+// The fixed header's height, for everything that starts or sticks below it. Set here for the first
+// paint - before the app starts, a pre-rendered page included - from what the header will be:
+// Material's toolbar is 56px below 600px and 64px otherwise, and docs pages add the 48px Menu row
+// below 960px (header.html). LayoutHeader then sets the measured height over it.
+:root {
+  --app-header-height: 64px;
+
+  @media (max-width: 599.98px) {
+    --app-header-height: 56px;
+  }
+}
+
+:root:has(app-layout-page-docs) {
+  @media (max-width: 959.98px) {
+    --app-header-height: 112px;
+  }
+
+  @media (max-width: 599.98px) {
+    --app-header-height: 104px;
+  }
+}

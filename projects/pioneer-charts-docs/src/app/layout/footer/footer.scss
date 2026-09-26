@@ -1,14 +1,19 @@
 @use "colors";
 
-// Drawn above the docs sidebar (page-docs.scss, z-index 2). The sidebar's bottom is moved up to
-// the footer's top from a scroll handler, which during a fast scroll can run a frame after the
-// browser has already drawn the page scrolled - for that frame the sidebar would reach into the
-// footer. Stacked on top, the footer simply covers it instead. (The docs content, sidebar
-// included, sits in Material's drawer content, which is its own stacking context at z-index 1.)
+// Drawn above the desktop docs sidebar (page-docs.scss, z-index 2). The sidebar's bottom is moved
+// up to the footer's top from a scroll handler, which during a fast scroll can run a frame after
+// the browser has already drawn the page scrolled - for that frame the sidebar would reach into
+// the footer. Stacked on top, the footer simply covers it instead. (The docs content, sidebar
+// included, sits in Material's drawer container, which is its own stacking context at z-index 1.)
+// Desktop only: below 960px the sidebar is the drawer, which opens over the page - footer included -
+// from that same container, so the footer must stay beneath it there.
 :host {
   display: block;
-  position: relative;
-  z-index: 3;
+
+  @media (min-width: 960px) {
+    position: relative;
+    z-index: 3;
+  }
 }
 
 footer {

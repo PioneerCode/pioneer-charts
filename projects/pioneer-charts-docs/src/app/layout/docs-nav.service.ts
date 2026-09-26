@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 /**
  * What the header and the docs layout share about the docs sidebar. On a phone the sidebar is a
@@ -21,9 +21,6 @@ export class DocsNavService {
 
   /** Whether the sidebar is open: always on a desktop, while toggled open on a phone. */
   readonly opened = signal(true);
-
-  /** Whether the header shows its Menu button. */
-  readonly showMenuButton = computed(() => this.available() && this.isMobile());
 
   /** The header's height in px, as last measured (64 until then - the desktop toolbar). */
   readonly headerHeight = signal(64);

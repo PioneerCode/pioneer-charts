@@ -1,3 +1,10 @@
+:host {
+  // A block, not a custom element's default `inline`: page-docs.ts watches this element's size
+  // (a ResizeObserver) to keep the desktop sidebar ending at the footer as the page grows, and an
+  // inline element never reports a size change.
+  display: block;
+}
+
 mat-sidenav-container {
   background-color: #fff;
 }

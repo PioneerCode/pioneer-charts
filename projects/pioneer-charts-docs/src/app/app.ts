@@ -1,9 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppService } from './app.service';
 import { LayoutHeader } from './layout/header/header';
 import { LayoutFooter } from './layout/footer/footer';
-import { DocsNavService } from './layout/docs-nav.service';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +15,4 @@ import { DocsNavService } from './layout/docs-nav.service';
 })
 export class App {
   protected readonly title = signal('Pioneer Charts');
-  protected readonly nav = inject(DocsNavService);
-
-  constructor() {
-    // Eagerly instantiate the root-scoped AppService here so its httpResource()-backed
-    // chart configs start loading at app bootstrap instead of on first use.
-    inject(AppService);
-  }
 }

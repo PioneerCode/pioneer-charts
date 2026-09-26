@@ -18,9 +18,9 @@
     overscroll-behavior: contain;
     background-color: #fff;
 
-    // Hidden by CSS too, for the same reason as the sidebar (page-docs.scss): the pre-rendered page
-    // is the desktop layout, and on a smaller screen this column must not widen its first paint.
-    // Same breakpoint as page-docs.ts.
+    // Only from 1280px: it takes 300px beside the content, and below that (with the 280px
+    // sidebar) it left the content too narrow to read. CSS alone decides, so the pre-rendered page
+    // - built with no screen to measure - lays out the same as the running app.
     @media (max-width: 1279.98px) {
         display: none;
     }

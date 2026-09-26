@@ -2,10 +2,16 @@
   gap: 4px;
 }
 
-// The phone-only row under the toolbar holding the docs sidebar's Menu button.
+// The row under the toolbar holding the docs sidebar's Menu button, below 960px. (Same breakpoint
+// as page-docs.ts; the --app-header-height fallback in styles.scss counts its 48px.)
 .menu-row {
   justify-content: center;
   height: 48px;
+
+  @media (min-width: 960px) {
+    display: none;
+  }
+
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 
   .mat-icon {

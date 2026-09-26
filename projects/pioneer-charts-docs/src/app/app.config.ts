@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideCheckNoChangesConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, TitleStrategy } from '@angular/router';
+import { provideRouter, TitleStrategy, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
@@ -22,7 +22,10 @@ export const appConfig: ApplicationConfig = {
     // so this should stay silent - keeping it on permanently costs nothing and is
     // the cheapest possible guard against a future regression of that assumption.
     provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 }),
-    provideRouter(routes),
+    // The page itself scrolls (the docs layout has no scrolling pane of its own), so the router
+    // puts each new page at the top (and back/forward where you were), and scrolls to a URL's
+    // #section - just below the fixed header, through the offset LayoutHeader gives it.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })),
     // Page titles, meta descriptions and canonical URLs, from each route's title/data (see seo.ts).
     { provide: TitleStrategy, useClass: PageSeoStrategy },
     provideHttpClient(withXhr()),

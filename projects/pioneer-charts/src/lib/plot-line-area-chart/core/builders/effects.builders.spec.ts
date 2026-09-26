@@ -139,6 +139,18 @@ describe('PlaChartEffectsBuilder', () => {
     });
   });
 
+  // Regression test: a wheel zoom under a still cursor sends no mousemove, so the crosshair stayed
+  // on its pre-zoom values while the lines moved underneath it.
+  it('re-reads the crosshair at the same spot when a zoom hands over new scales', () => {
+    const builder = build([series('a', [point(0), point(40), point(80), point(60), point(20)])]);
+    hover(50); // index 2 -> 80
+    expect(text(groups()[0])).toBe('80');
+
+    builder.updateScales(scaleLinear().domain([0, 2]).range([0, 100]), scaleLinear().domain([0, 100]).range([100, 0]));
+
+    expect(text(groups()[0])).toBe('40'); // index 1 on the zoomed scale
+  });
+
   it('follows the scales handed over by a zoom', () => {
     const builder = build([series('a', [point(0), point(40), point(80), point(60), point(20)])]);
     builder.updateScales(scaleLinear().domain([0, 2]).range([0, 100]), scaleLinear().domain([0, 100]).range([100, 0]));

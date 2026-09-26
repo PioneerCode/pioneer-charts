@@ -49,7 +49,7 @@ npm ci
 npm run build:lib      # build the library into dist/pioneer-charts - the docs site uses that build
 npm start              # serve the docs site
 npm run lint
-npm test               # library unit tests (vitest)
+npm test               # unit tests for the library and the docs site (vitest)
 ```
 
 The docs site imports the library from `dist/pioneer-charts`, not its source, so it needs `build:lib`

@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { BarHorizontalChartBuilder } from './bar-horizontal-chart.builder';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart.model';
+import { PcacData } from '../../core/chart.model';
 
 /**
  * Same technique as core/chart.spec.ts: a real jsdom `<svg>` with a stubbed parent `clientWidth`,
@@ -236,11 +237,90 @@ describe('BarHorizontalChartBuilder with labels wider than the container', () =>
     expect(widths[0]).toBeGreaterThan(0);
   });
 
+  // Labels wider than the capped margin are shortened to fit in it, rather than running on past
+  // the chart's left edge and over the axis title. Text width is stubbed at 10px a character.
+  describe('shortening labels to the capped margin', () => {
+    beforeAll(() => {
+      (SVGElement.prototype as unknown as { getComputedTextLength: () => number }).getComputedTextLength =
+        function (this: SVGElement) { return (this.textContent ?? '').length * 10; };
+    });
+
+    afterAll(() => {
+      delete (SVGElement.prototype as unknown as { getComputedTextLength?: () => number }).getComputedTextLength;
+    });
+
+    const longLabel = 'A very long category name';
+    const tickLabels = (elm: ElementRef) =>
+      Array.from(elm.nativeElement.querySelectorAll('.pcac-y-axis .tick text') as NodeListOf<Element>).map((t) => t.textContent);
+    const withKey = (cfg: PcacBarHorizontalChartConfig) => ({ ...cfg, data: [{ ...cfg.data[0], key: longLabel }] });
+
+    it('ends a label with "…" once it fits between the chart edge and the ticks', () => {
+      const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+      const elm = chartElm(200);
+
+      builder.buildChart(elm, withKey(config()));
+
+      // Margin capped at 100; less the 6px tick and 3px padding, 91px - 9 characters.
+      expect(tickLabels(elm)).toEqual(['A very l…']);
+    });
+
+    it('keeps clear of the axis title\'s band', () => {
+      const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+      const elm = chartElm(200);
+
+      builder.buildChart(elm, withKey({ ...config(), yAxis: { label: 'Category' } }));
+
+      // The title's 18px come out of the 91px too: 73px - 7 characters.
+      expect(tickLabels(elm)).toEqual(['A very…']);
+    });
+
+    it('leaves labels alone when they fit', () => {
+      const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+      const elm = chartElm(1000);
+
+      builder.buildChart(elm, withKey(config()));
+
+      expect(tickLabels(elm)).toEqual([longLabel]);
+    });
+  });
+
   it('leaves narrower labels their full width', () => {
     const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
 
     builder.buildChart(chartElm(1000), config());
 
     expect(builder.margin.left).toBeGreaterThanOrEqual(labelWidth);
+  });
+});
+
+// Regression test: a per-bar threshold's `y` - its bar's slot - was only set on the enter
+// transition, so each one slid down from the top of its group into place.
+describe('BarHorizontalChartBuilder per-bar thresholds', () => {
+  beforeAll(() => {
+    (SVGElement.prototype as unknown as { getBBox: () => DOMRect }).getBBox = () =>
+      ({ x: 0, y: 0, width: 40, height: 12 }) as DOMRect;
+  });
+
+  afterAll(() => {
+    delete (SVGElement.prototype as unknown as { getBBox?: () => DOMRect }).getBBox;
+  });
+
+  it('draws each threshold in its bar\'s slot from the start', () => {
+    const builder = TestBed.runInInjectionContext(() => new BarHorizontalChartBuilder());
+    const elm = chartElm();
+    const threshold = (value: number | null, data: PcacData[] = []): PcacData => ({ key: null, value, hide: false, data });
+    builder.buildChart(elm, {
+      ...config(),
+      data: [{ key: 'Group A', value: null, hide: false, data: [
+        { key: 'Bar 1', value: 10, hide: false, data: [] },
+        { key: 'Bar 2', value: 20, hide: false, data: [] },
+      ] }],
+      thresholds: [threshold(null, [threshold(15), threshold(25)])],
+    });
+
+    const bars = Array.from(elm.nativeElement.querySelectorAll('.pcac-bar') as NodeListOf<Element>).map((b) => b.getAttribute('y'));
+    const thresholds = Array.from(elm.nativeElement.querySelectorAll('.pcac-threshold') as NodeListOf<Element>).map((t) => t.getAttribute('y'));
+    expect(thresholds).toEqual(bars);
+    expect(new Set(thresholds).size).toBe(2);
   });
 });

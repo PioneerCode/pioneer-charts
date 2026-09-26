@@ -87,9 +87,10 @@ export class PieChartBuilder extends PcacChart {
       .innerRadius(this.innerRadius)
       .outerRadius(outerRadius);
 
+    // A pie too small to draw anything at rest (see above) doesn't pop out a disc on hover either.
     this.arcOverShape = arc<any, PieArcDatum<PcacData>>()
       .innerRadius(this.innerRadius)
-      .outerRadius(outerRadius + radiusOffset);
+      .outerRadius(outerRadius > 0 ? outerRadius + radiusOffset : 0);
 
     this.pieAngles = pie<PcacData>()
       .sort(null)

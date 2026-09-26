@@ -13,6 +13,12 @@ import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 /** The most of its container's width a chart's measured left (label) margin may take. */
 const MAX_LABEL_MARGIN_SHARE = 0.5;
 
+/** D3's gap between a tick and its label (`axis.tickPadding()`), which the builders never change. */
+const TICK_PADDING = 3;
+
+/** D3's default tick length (`axis.tickSizeInner()`), used while an axis's `tickSize` isn't set. */
+const DEFAULT_TICK_SIZE = 6;
+
 /**
  * Everything `showTooltip()` needs beyond the hovered datum itself. `parent`/`isThreshold` feed
  * the consumer template's context; the formats only apply to the default (no template) content.
@@ -67,6 +73,11 @@ export class PcacChart implements OnDestroy {
   width = 400;
   height = 400;
   colors = [] as string[];
+  /**
+   * How wide a y-axis tick label may be once `setHorizontalMarginsBasedOnContent` has capped the
+   * margin, or `null` while the labels fit as they are. See `truncateYTickLabels`.
+   */
+  protected yTickLabelMaxWidth: number | null = null;
   startData: PcacData[] = [];
 
   /** The chart's accessible name when its config gives no `ariaLabel`; each builder names its type. */
@@ -493,6 +504,7 @@ export class PcacChart implements OnDestroy {
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
   setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): boolean {
+    this.yTickLabelMaxWidth = null;
     const axisY = axisLeft(yScale).ticks(5);
     if (this.yAxis.tickSize !== undefined) {
       axisY.tickSizeInner(this.yAxis.tickSize);
@@ -513,9 +525,56 @@ export class PcacChart implements OnDestroy {
     // double-counted grew on the next rebuild - the plot area came out narrower than the
     // container allowed and then shrank further after the first resize.
     const containerWidth = this.width + this.margin.left + this.margin.right;
-    const left = Math.min(max + axisLabelSpace(this.yAxis), containerWidth * MAX_LABEL_MARGIN_SHARE);
+    const labelSpace = axisLabelSpace(this.yAxis);
+    const left = Math.min(max + labelSpace, containerWidth * MAX_LABEL_MARGIN_SHARE);
     this.width = this.width + this.margin.left - left;
     this.margin.left = left;
+    if (left < max + labelSpace) {
+      // Capped: the labels are shortened to what's left between the axis title's band and the
+      // ticks (see `truncateYTickLabels`), rather than running on past the chart's edge - and
+      // over the title.
+      const tickOverhead = Math.max(this.yAxis.tickSize ?? DEFAULT_TICK_SIZE, 0) + TICK_PADDING;
+      this.yTickLabelMaxWidth = Math.max(0, left - labelSpace - tickOverhead);
+    }
     return this.width > 0;
   }
+
+  /**
+   * Shortens every y-axis tick label wider than the room `setHorizontalMarginsBasedOnContent` left
+   * for it, ending it in "…". Call after the axis is drawn. Does nothing when the labels fit.
+   */
+  protected truncateYTickLabels(): void {
+    const maxWidth = this.yTickLabelMaxWidth;
+    if (maxWidth === null) {
+      return;
+    }
+    this.svg.selectAll<SVGTextElement, unknown>('.pcac-y-axis .tick text').each(function () {
+      fitText(this, maxWidth);
+    });
+  }
+}
+
+/**
+ * Shortens `text` to the longest prefix that, with "…" appended, fits in `maxWidth` - just "…"
+ * if nothing does. Measured with `getComputedTextLength()`, so the text must be rendered; left
+ * alone where that isn't available (a DOM without layout).
+ */
+function fitText(text: SVGTextElement, maxWidth: number): void {
+  if (typeof text.getComputedTextLength !== 'function' || text.getComputedTextLength() <= maxWidth) {
+    return;
+  }
+  const full = text.textContent ?? '';
+  const withEllipsis = (length: number) => full.slice(0, length).trimEnd() + '…';
+  let fits = 0;
+  let tooLong = full.length;
+  while (tooLong - fits > 1) {
+    const mid = Math.floor((fits + tooLong) / 2);
+    text.textContent = withEllipsis(mid);
+    if (text.getComputedTextLength() <= maxWidth) {
+      fits = mid;
+    } else {
+      tooLong = mid;
+    }
+  }
+  text.textContent = withEllipsis(fits);
 }

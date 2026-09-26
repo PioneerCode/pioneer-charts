@@ -93,6 +93,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private drawChart(chartElm: ElementRef, config: PcacBarHorizontalChartConfig): void {
     this.buildContainer(chartElm);
     this.axisBuilder.drawAxis(this.axisBuilderConfig(this.xScale, this.yScaleStacked));
+    this.truncateYTickLabels();
     this.drawGrids(this.xScale, this.yScaleStacked);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
@@ -254,6 +255,10 @@ export class BarHorizontalChartBuilder extends PcacChart {
       .attr('data-group-threshold-id', (_: PcacData, i: number) => {
         return i;
       })
+      // Placed in its bar's slot up front - only its value (`x`) animates. Set on the transition,
+      // it slid in from the top of the group, where the vertical chart's appear in place.
+      // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
+      .attr('y', (d: PcacData) => this.yScaleGrouped(d.key as string) ?? null)
       .attr('height', this.yScaleGrouped.bandwidth());
     rects.filter(function (this: SVGRectElement) {
       return thresholdOf(this) === null;
@@ -273,10 +278,6 @@ export class BarHorizontalChartBuilder extends PcacChart {
       })
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('y', (d: PcacData) => {
-        // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
-        return this.yScaleGrouped(d.key as string) ?? null;
-      })
       .attr('x', (_: PcacData, i: number, nodes: ArrayLike<Element>) => {
         return this.xScale(Number(thresholdOf(nodes[i])?.value));
       });

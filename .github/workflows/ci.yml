@@ -32,8 +32,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Only the library has specs. `ng test pioneer-charts-docs` exits 1 on "no tests found",
-      # so it stays out of CI until that project actually has a spec file.
+      # Both projects' specs (see the `test` script). The docs specs don't import the library, so
+      # they don't need it built first.
       - name: Test
         run: npm run test
 

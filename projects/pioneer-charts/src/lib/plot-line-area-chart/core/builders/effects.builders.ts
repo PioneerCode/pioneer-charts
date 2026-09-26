@@ -35,9 +35,12 @@ export class PlaChartEffectsBuilder {
   // The series that get an effect group, each with its index in `config.data` (which is what its
   // line's color is picked by, so a skipped empty series doesn't shift the colors after it).
   private series: { data: PcacData; index: number }[] = [];
+  /** Where the cursor last was over the plot, while the crosshair is showing; null otherwise. */
+  private lastMousePos: [number, number] | null = null;
 
   buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
+    this.lastMousePos = null;
     this.series = config.data
       .map((data, index) => ({ data, index }))
       .filter(({ data }) => data.data.length > 0);
@@ -53,6 +56,12 @@ export class PlaChartEffectsBuilder {
   updateScales(x: IPlaChartEffectsBuilderConfig['x'], y: IPlaChartEffectsBuilderConfig['y']): void {
     this.config.x = x;
     this.config.y = y;
+    // A wheel zoom moves the lines under a cursor that stays put, and sends no mousemove - so the
+    // crosshair is re-read at the same spot, or it would sit on the pre-zoom values until the
+    // mouse next moved.
+    if (this.lastMousePos) {
+      this.onMouseMove(this.lastMousePos);
+    }
   }
 
   private buildCollection() {
@@ -116,6 +125,7 @@ export class PlaChartEffectsBuilder {
   }
 
   private hideEffects() {
+    this.lastMousePos = null;
     this.config.svg.select('.effect-line')
       .style('opacity', '0');
     this.config.svg.selectAll('.effect-group circle')
@@ -125,6 +135,7 @@ export class PlaChartEffectsBuilder {
   }
 
   private onMouseMove(mousePos: [number, number]) {
+    this.lastMousePos = mousePos;
     this.updateLine(mousePos);
     this.updateEffects(mousePos);
   }

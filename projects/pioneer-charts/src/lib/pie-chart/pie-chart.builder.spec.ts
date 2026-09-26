@@ -223,8 +223,10 @@ describe('PieChartBuilder sizing and hover', () => {
   it('never gives the pie a negative radius when it is very short', () => {
     builder.buildChart(chartElm(), { ...dataConfig(), height: 12 });
 
-    const shape = (builder as unknown as { arcShape: Arc<unknown, PieArcDatum<PcacData>> }).arcShape;
-    expect(shape.outerRadius()({} as PieArcDatum<PcacData>)).toBe(0);
+    const shapes = builder as unknown as Record<'arcShape' | 'arcOverShape', Arc<unknown, PieArcDatum<PcacData>>>;
+    expect(shapes.arcShape.outerRadius()({} as PieArcDatum<PcacData>)).toBe(0);
+    // Nor does it pop a disc out on hover, though nothing shows at rest.
+    expect(shapes.arcOverShape.outerRadius()({} as PieArcDatum<PcacData>)).toBe(0);
   });
 
   // Regression test: hovering a slice mid-way through the enter sweep grew it straight from its

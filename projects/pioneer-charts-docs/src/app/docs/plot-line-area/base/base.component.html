@@ -1,5 +1,5 @@
 <app-layout-page-docs [pageTitle]="title()" [jumpNav]="jumpNav()">
-  <p class="lead">{{ lead() }}</p>
+  <p class="lead" id="chart">{{ lead() }}</p>
   <section class="pc-doc-section">
     <ng-content>
 
@@ -17,11 +17,11 @@
     </mat-card> -->
   </section>
   <section class="pc-doc-section">
-    <h3>Markup</h3>
+    <h3 id="markup">Markup</h3>
     <app-layout-code language="markup" [code]="markup()" />
   </section>
   <section class="pc-doc-section">
-    <h3>API</h3>
+    <h3 id="api">API</h3>
     <app-layout-code language="javascript" [code]="importCode()"></app-layout-code>
     <app-layout-base-config [includeAxes]="true">
       <tbody style="border-top: none;">

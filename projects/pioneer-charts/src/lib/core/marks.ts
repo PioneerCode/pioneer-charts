@@ -50,15 +50,18 @@ export function makeMarksAccessible<E extends Element, D>(
       return skipped(d) ? null : access.label(d, this);
     })
     .attr('tabindex', (d: D) => (skipped(d) ? null : -1))
-    .on('mousedown.pcac-mark', (event: MouseEvent) => event.preventDefault())
-    .on('focus.pcac-mark', function (this: E, _event: FocusEvent, d: D) {
+    // The events are typed plainly as `Event`: with the element type generic here, d3's typings
+    // (@types/d3-selection 3.0.12 on) can't narrow them to `MouseEvent`/`KeyboardEvent`.
+    .on('mousedown.pcac-mark', (event: Event) => event.preventDefault())
+    .on('focus.pcac-mark', function (this: E, _event: Event, d: D) {
       access.focus(this, d);
     })
-    .on('blur.pcac-mark', function (this: E, _event: FocusEvent, d: D) {
+    .on('blur.pcac-mark', function (this: E, _event: Event, d: D) {
       access.blur(this, d);
     })
-    .on('keydown.pcac-mark', function (this: E, event: KeyboardEvent, d: D) {
-      switch (event.key) {
+    .on('keydown.pcac-mark', function (this: E, event: Event, d: D) {
+      const { key } = event as KeyboardEvent;
+      switch (key) {
         case 'Enter':
         case ' ':
           event.preventDefault();
@@ -68,7 +71,7 @@ export function makeMarksAccessible<E extends Element, D>(
           access.blur(this, d);
           return;
       }
-      const target = neighbor(this, event.key);
+      const target = neighbor(this, key);
       if (target) {
         event.preventDefault();
         moveFocus(this, target);

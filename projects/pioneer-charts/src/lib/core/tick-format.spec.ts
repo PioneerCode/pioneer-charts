@@ -58,6 +58,8 @@ describe('formatValue', () => {
       expect(formatValue(PcacFormatEnum.Percentage, value)).toBeNull();
       expect(formatValue(PcacFormatEnum.Decimal, value)).toBeNull();
       expect(formatValue(PcacFormatEnum.OneDayHours, value)).toBeNull();
+      expect(formatValue(PcacFormatEnum.Minutes, value)).toBeNull();
+      expect(formatValue(PcacFormatEnum.Fahrenheit, value)).toBeNull();
     }
   });
 });

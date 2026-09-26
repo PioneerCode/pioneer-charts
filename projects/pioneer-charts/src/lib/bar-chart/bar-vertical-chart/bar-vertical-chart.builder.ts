@@ -15,7 +15,7 @@ import { PcacChart } from '../../core/chart';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { seriesKeys } from '../bar-series';
+import { canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
 
 import { Subject } from 'rxjs';
 
@@ -72,12 +72,15 @@ export class BarVerticalChartBuilder extends PcacChart {
 
     this.xScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
-      .rangeRound([0, this.width])
+      .range([0, this.width])
+      // Rounded to whole pixels for crisp bar edges, while there's room to (see canRoundBands).
+      .round(canRoundBands(this.width, config.data.length))
       .padding(0.1);
 
     this.xScaleGrouped = scaleBand()
       .padding(0.2)
-      .rangeRound([0, this.xScaleStacked.bandwidth()])
+      .range([0, this.xScaleStacked.bandwidth()])
+      .round(canRoundBands(this.xScaleStacked.bandwidth(), seriesKeys(config.data).length))
       .domain(seriesKeys(config.data));
   }
 
@@ -135,11 +138,16 @@ export class BarVerticalChartBuilder extends PcacChart {
     const endOf = (d: PcacData) => startOf(d) + (sizes.get(d) ?? 0);
     // Colored by series - the bar's key's place among every group's keys, the same slot it's drawn
     // in - rather than by its position in its own group, which differs when groups hold different
-    // series. With `spreadColorsPerGroup`, by group instead.
+    // series. By position after all when the keys can't tell series apart (see
+    // `hasDistinctSeriesKeys`), and with `spreadColorsPerGroup`, by group instead.
     const keys = seriesKeys(config.data);
-    const fillOf = (d: PcacData, bar: SVGRectElement) => config.spreadColorsPerGroup
-      ? this.colors[Number((bar.parentNode as Element).getAttribute('data-group-id'))]
-      : this.colors[keys.indexOf(d.key as string)];
+    const byKey = hasDistinctSeriesKeys(config.data);
+    const fillOf = (d: PcacData, bar: SVGRectElement) => {
+      if (config.spreadColorsPerGroup) {
+        return this.colors[Number((bar.parentNode as Element).getAttribute('data-group-id'))];
+      }
+      return this.colors[byKey ? keys.indexOf(d.key as string) : Number(bar.getAttribute('data-group-bar-id'))];
+    };
     group.enter().append('rect')
       .attr('class', 'pcac-bar')
       // A stacked bar spans its whole group, which is already translated into place; looking its

@@ -48,9 +48,9 @@ export function formatValue(pcacFormat: PcacFormatEnum | undefined, value: unkno
     case PcacFormatEnum.OneDayHours:
       return Number.isFinite(numeric) ? formatHourOfDay(numeric) : null;
     case PcacFormatEnum.Minutes:
-      return value + 'm';
+      return Number.isFinite(numeric) ? value + 'm' : null;
     case PcacFormatEnum.Fahrenheit:
-      return value + ' F';
+      return Number.isFinite(numeric) ? value + ' F' : null;
     default:
       return null;
   }

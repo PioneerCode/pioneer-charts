@@ -25,12 +25,6 @@ import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
-/**
- * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
- * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
- * height, colors, svg). A root singleton would be shared and clobbered by every
- * <pcac-line-area-chart> rendered at once.
- */
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
 const PLOT_CLIP_ALLOWANCE = 1;
 
@@ -53,6 +47,12 @@ const CHART_TYPE_LABELS: Record<PcacLineAreaPlotChartConfigType, string> = {
   [PcacLineAreaPlotChartConfigType.Plot]: 'Plot chart',
 };
 
+/**
+ * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
+ * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-line-area-chart> rendered at once.
+ */
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
   private effectsBuilder = inject(PlaChartEffectsBuilder);
@@ -453,7 +453,9 @@ export class PlaChartBuilder extends PcacChart {
         .style('--pcac-point-range-series-color', () => this.colors[seriesIndex])
         .style('display', () => series.hide ? 'none' : null);
       series.data.forEach((point) => {
-        if (point.range) {
+        // A point with no value draws no dot (see `pointDisplay`), so it draws no range either -
+        // one would stand around a coordinate with nothing on it (on the baseline, for `''`).
+        if (point.range && hasValue(point)) {
           this.rangeGroupOf.set(point, seriesGroup.append('g').attr('class', 'point-range').node()!);
         }
       });
@@ -693,11 +695,10 @@ export class PlaChartBuilder extends PcacChart {
    * the clip-path's buffer do the work, showed a point up to a whole half-mark beyond the axis
    * with its center already outside. Also takes it out of hover's reach, as a hidden group
    * receives no pointer events.
-   */
-  /**
-   * A point with no value to plot isn't drawn - the same test the line/area uses to leave a gap
-   * (`hasValue`). An empty string used to slip through: the scale reads `''` as 0, so the line
-   * left a gap while a dot sat (hoverable) on the baseline.
+   *
+   * A point with no value to plot isn't drawn at all - the same test the line/area uses to leave
+   * a gap (`hasValue`). An empty string used to slip through: the scale reads `''` as 0, so the
+   * line left a gap while a dot sat (hoverable) on the baseline.
    */
   private pointDisplay(d: PcacData, i: number, scales: PlaChartScales): string | null {
     return hasValue(d) && this.pointVisible(d, i, scales) ? null : 'none';

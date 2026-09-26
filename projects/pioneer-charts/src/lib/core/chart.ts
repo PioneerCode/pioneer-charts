@@ -72,6 +72,13 @@ export class PcacChart implements OnDestroy {
   /** The chart's accessible name when its config gives no `ariaLabel`; each builder names its type. */
   protected chartTypeLabel = 'Chart';
 
+  /** Grows the palette to at least `count` colors, repeating it as `getColorScale` does. */
+  protected ensureColorCount(count: number): void {
+    if (this.colors.length < count) {
+      this.colors = this.colorService.getColorScale(count);
+    }
+  }
+
   /**
    * Swaps a consumer's `colorOverride` in for the theme palette `initializeChartState` set, in
    * order. Checks `length` rather than truthiness: every config class defaults its override to
@@ -80,13 +87,6 @@ export class PcacChart implements OnDestroy {
    * cycles its own colors, so an override shorter than the data repeats rather than leaving the
    * marks past its end with an `undefined` color. Call after `initializeChartState()`.
    */
-  /** Grows the palette to at least `count` colors, repeating it as `getColorScale` does. */
-  protected ensureColorCount(count: number): void {
-    if (this.colors.length < count) {
-      this.colors = this.colorService.getColorScale(count);
-    }
-  }
-
   protected applyColorOverride(override: readonly string[] | undefined): void {
     if (!override?.length) {
       return;

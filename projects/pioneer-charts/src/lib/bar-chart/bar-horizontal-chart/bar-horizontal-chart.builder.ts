@@ -15,7 +15,7 @@ import { PcacChart } from '../../core/chart';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { seriesKeys } from '../bar-series';
+import { canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
 // actually matched what `.selectAll()`'s default generics resolve to).
@@ -70,13 +70,15 @@ export class BarHorizontalChartBuilder extends PcacChart {
 
     this.yScaleStacked = scaleBand()
       .domain(config.data.map((d) => d.key as string))
-      // Rounded, as the vertical chart's band is, so bars land on whole pixels with crisp edges.
-      .rangeRound([this.height, 0])
+      .range([this.height, 0])
+      // Rounded to whole pixels for crisp bar edges, while there's room to (see canRoundBands).
+      .round(canRoundBands(this.height, config.data.length))
       .padding(0.1);
 
     this.yScaleGrouped = scaleBand()
       .padding(0.05)
-      .rangeRound([0, this.yScaleStacked.bandwidth()])
+      .range([0, this.yScaleStacked.bandwidth()])
+      .round(canRoundBands(this.yScaleStacked.bandwidth(), seriesKeys(config.data).length))
       .domain(seriesKeys(config.data));
 
     // The left margin is sized to the y axis's labels - unless there is no y axis to size it to
@@ -140,11 +142,16 @@ export class BarHorizontalChartBuilder extends PcacChart {
     const endOf = (d: PcacData) => startOf(d) + (sizes.get(d) ?? 0);
     // Colored by series - the bar's key's place among every group's keys, the same slot it's drawn
     // in - rather than by its position in its own group, which differs when groups hold different
-    // series. With `spreadColorsPerGroup`, by group instead.
+    // series. By position after all when the keys can't tell series apart (see
+    // `hasDistinctSeriesKeys`), and with `spreadColorsPerGroup`, by group instead.
     const keys = seriesKeys(config.data);
-    const fillOf = (d: PcacData, bar: SVGRectElement) => config.spreadColorsPerGroup
-      ? this.colors[Number((bar.parentNode as Element).getAttribute('data-group-id'))]
-      : this.colors[keys.indexOf(d.key as string)];
+    const byKey = hasDistinctSeriesKeys(config.data);
+    const fillOf = (d: PcacData, bar: SVGRectElement) => {
+      if (config.spreadColorsPerGroup) {
+        return this.colors[Number((bar.parentNode as Element).getAttribute('data-group-id'))];
+      }
+      return this.colors[byKey ? keys.indexOf(d.key as string) : Number(bar.getAttribute('data-group-bar-id'))];
+    };
     groups.enter().append('rect')
       .attr('class', 'pcac-bar')
       .attr('x', (d: PcacData) => this.xScale(startOf(d)))

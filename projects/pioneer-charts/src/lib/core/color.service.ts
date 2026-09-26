@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, untracked } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,15 @@ export class PcacColorService {
    * swatches while newly built charts took the new palette.
    */
   private readonly version = signal(0);
+
+  /**
+   * Bumps `version` from a setter. `untracked`, because Angular forbids writing a signal inside a
+   * `computed` - and a consumer deriving its theme reactively (`computed(() => { setScale(...);
+   * ... })`) called these setters there without error before they were reactive.
+   */
+  private changed(): void {
+    untracked(() => this.version.update((v) => v + 1));
+  }
 
   /** A consumer's own scale from `setScale()`; replaces the default palette while set. */
   private customScale: string[] | null = null;
@@ -67,47 +76,47 @@ export class PcacColorService {
    */
   setScale(colors: string[]): void {
     this.customScale = colors.length ? [...colors] : null;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   /** @deprecated No chart reads the primary color; it isn't part of the palette. */
   setPrimary(color: string): void {
     this.primary = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setPrimaryLight(color: string): void {
     this.primaryLight = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setSuccess(color: string): void {
     this.success = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setDanger(color: string): void {
     this.danger = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setWarning(color: string): void {
     this.warning = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setOrange(color: string): void {
     this.orange = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setBlue(color: string): void {
     this.blue = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 
   setAlert(color: string): void {
     this.alert = color;
-    this.version.update((v) => v + 1);
+    this.changed();
   }
 }

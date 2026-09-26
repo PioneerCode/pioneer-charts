@@ -71,6 +71,15 @@ describe('PlaChartBuilder point ranges', () => {
 
   afterEach(() => vi.restoreAllMocks());
 
+  // Regression test: a point with no value stopped drawing its dot, but its range was still drawn
+  // - around the baseline, for an empty-string value.
+  it('draws no range for a point with no value', () => {
+    const valueless = { ...point(50, 0, both), value: '' } as PcacData;
+    const { svg } = build(config([[valueless, point(20, 20, both)]], {}));
+
+    expect(svg.querySelectorAll('.point-range').length).toBe(1);
+  });
+
   it('draws nothing when pointRange is not set, even for points with a range', () => {
     const { svg } = build(config([[point(50, 50, both)]]));
     expect(svg.querySelector('.point-ranges')).toBeNull();

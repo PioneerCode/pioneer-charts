@@ -115,9 +115,17 @@ describe('PcacTooltipBuilder', () => {
         expect(shown(0.25, PcacFormatEnum.Percentage)).toBe('Jan<br>25%');
       });
 
-      it('formats the key in the x axis\'s format too', () => {
-        expect(shown(10, undefined, 13, PcacFormatEnum.OneDayHours)).toBe('1pm<br>10');
-        expect(shown(10, undefined, 0.5, PcacFormatEnum.Percentage)).toBe('50%<br>10');
+      it('formats a Decimal x axis\'s key, which is the x value, like the axis', () => {
+        expect(shown(10, undefined, 1500, PcacFormatEnum.Decimal)).toBe('1,500<br>10');
+      });
+
+      // Regression test: every key went through the x axis's format, but only Decimal/DateTime
+      // position points by key - the other formats' axes label the point's index - and Minutes
+      // tagged a text key with its unit (`Mon` read `Monm`).
+      it('leaves the key alone on an x axis that positions points by index', () => {
+        expect(shown(10, undefined, 'Mon', PcacFormatEnum.Minutes)).toBe('Mon<br>10');
+        expect(shown(10, undefined, 13, PcacFormatEnum.OneDayHours)).toBe('13<br>10');
+        expect(shown(10, undefined, 0.5, PcacFormatEnum.Percentage)).toBe('0.5<br>10');
       });
 
       it('leaves values alone in the formats with no labelling of their own', () => {
@@ -129,6 +137,8 @@ describe('PcacTooltipBuilder', () => {
       it('shows a value a numeric format can\'t read as it is', () => {
         expect(shown('n/a', PcacFormatEnum.OneDayHours)).toBe('Jan<br>n/a');
         expect(shown('n/a', PcacFormatEnum.Percentage)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Minutes)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Fahrenheit)).toBe('Jan<br>n/a');
       });
     });
 

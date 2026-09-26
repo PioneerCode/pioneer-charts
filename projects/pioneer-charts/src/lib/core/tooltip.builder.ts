@@ -258,7 +258,10 @@ export class PcacTooltipBuilder implements OnDestroy {
           minute: '2-digit',
           second: '2-digit'
         })
-      } else {
+      } else if (keyFormat === PcacFormatEnum.Decimal) {
+        // Only where the key *is* the x value. Every other x format positions points by index,
+        // so its axis labels the index, not the key - formatting the key would only make it
+        // disagree with the axis (and tag text keys with a unit: `Mon` read `Monm` on Minutes).
         key = formatValue(keyFormat, key) ?? key;
       }
     }

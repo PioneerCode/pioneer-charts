@@ -243,4 +243,27 @@ describe('PieChartBuilder sizing and hover', () => {
     const datum = (slice as unknown as { __data__: PieArcDatum<PcacData> }).__data__;
     expect(slice.getAttribute('d')).toBe(shape(datum));
   });
+
+  // Regression test: the snap to the resting shape ran on every mouseover, so re-entering a slice
+  // part-way through its hover shrink jumped it back to rest before growing it again (a flicker).
+  it('grows a slice re-entered mid-shrink from where it is', async () => {
+    const duration = 60;
+    vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(duration);
+    const elm = chartElm();
+    builder.buildChart(elm, dataConfig());
+    const slice = elm.nativeElement.querySelector('.pcac-arc path') as SVGPathElement;
+    await new Promise((resolve) => setTimeout(resolve, duration * 2));
+
+    slice.dispatchEvent(new MouseEvent('mouseover'));
+    await new Promise((resolve) => setTimeout(resolve, duration));
+    slice.dispatchEvent(new MouseEvent('mouseout'));
+    await new Promise((resolve) => setTimeout(resolve, duration / 6));
+    const midShrink = slice.getAttribute('d');
+    slice.dispatchEvent(new MouseEvent('mouseover'));
+
+    const shape = (builder as unknown as { arcShape: Arc<unknown, PieArcDatum<PcacData>> }).arcShape;
+    const datum = (slice as unknown as { __data__: PieArcDatum<PcacData> }).__data__;
+    expect(midShrink).not.toBe(shape(datum));
+    expect(slice.getAttribute('d')).toBe(midShrink);
+  });
 });

@@ -34,12 +34,14 @@ const charts = [
     // The attributes the bar's position within its group, and its grown size, are drawn with.
     offset: 'x',
     size: 'height',
+    thickness: 'width',
   },
   {
     name: 'BarHorizontalChartBuilder',
     create: () => new BarHorizontalChartBuilder() as Builder,
     offset: 'y',
     size: 'width',
+    thickness: 'height',
   },
 ] as const;
 
@@ -146,6 +148,51 @@ for (const chart of charts) {
       expect(a).toBeTruthy();
       expect(b).toBeTruthy();
       expect(a).not.toBe(b);
+    });
+
+    // Regression test: coloring by series key painted every bar that shares a key the same
+    // color - and `PcacData.key` defaults to null, so a stack built without keys came out as one
+    // solid color. Keys that can't tell series apart fall back to coloring by position.
+    it('colors a stack whose segments have no keys by position', () => {
+      const keyless = (value: number): PcacData => ({ key: null, value, hide: false, data: [] });
+      const svg = build(config([group('A', [keyless(10), keyless(20), keyless(30)])], { isStacked: true }));
+
+      expect(new Set(bars(svg).map((r) => r.style.fill)).size).toBe(3);
+    });
+
+    it('colors bars that repeat a key within their group by position', () => {
+      const svg = build(config([group('A', [bar('x', 10), bar('x', 20)])], { isStacked: true }));
+
+      const [first, second] = bars(svg).map((r) => r.style.fill);
+      expect(first).not.toBe(second);
+    });
+
+    it('puts a bar back to its own color when the pointer leaves it', async () => {
+      const duration = 40;
+      vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(duration);
+      const svg = build(config([group('A', [bar('a', 10), bar('b', 10)])]));
+      const rect = bars(svg)[1];
+      const resting = rect.style.fill;
+
+      rect.dispatchEvent(new MouseEvent('mouseover'));
+      await wait(duration);
+      expect(rect.style.fill).not.toBe(resting);
+      rect.dispatchEvent(new MouseEvent('mouseout'));
+      await wait(duration * 2);
+
+      expect(rect.style.fill).toBe(resting);
+    });
+
+    // Regression test: rounding the category band to whole pixels floors its step, so with more
+    // categories than pixels every band - and so every bar - collapsed to 0 and nothing drew.
+    it('still draws bars when there are more categories than pixels', async () => {
+      // The vertical chart sets a bar's width as part of its enter transition.
+      vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(0);
+      const groups = Array.from({ length: 1000 }, (_, i) => group(`g${i}`, [bar('a', 10)]));
+      const svg = build(config(groups));
+      await wait(50);
+
+      expect(Number(bars(svg)[0].getAttribute(chart.thickness))).toBeGreaterThan(0);
     });
   });
 }

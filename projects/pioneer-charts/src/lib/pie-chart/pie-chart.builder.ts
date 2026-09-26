@@ -6,7 +6,7 @@ import { Injectable, ElementRef } from '@angular/core';
 import { arc, pie, Arc, Pie, PieArcDatum } from 'd3-shape';
 import { BaseType, select, Selection } from 'd3-selection';
 import { interpolate } from 'd3-interpolate';
-import { transition } from 'd3-transition';
+import { active, transition } from 'd3-transition';
 import { color } from 'd3-color';
 
 /**
@@ -113,11 +113,15 @@ export class PieChartBuilder extends PcacChart {
         const t = transition().duration(self.transitionService.getTransitionDuration() / 3)
         const c = color(self.colors[d.index])
         const ct = c ? c.darker(1).toString() : self.colors[d.index]
+        const slice = select<SVGPathElement, PieArcDatum<PcacData>>(this);
         // Hovered mid-way through the enter sweep, the slice is finished first: growing it straight
-        // from its part-swept path morphed it oddly on the way out to the hover shape.
-        select<SVGPathElement, PieArcDatum<PcacData>>(this)
-          .interrupt()
-          .attr('d', self.arcShape(d))
+        // from its part-swept path morphed it oddly on the way out to the hover shape. Only then -
+        // re-entering a slice mid-way through its hover shrink must grow it from where it is, not
+        // snap it back to rest first (which flickered).
+        if (active(this, 'enter')) {
+          slice.interrupt('enter').attr('d', self.arcShape(d));
+        }
+        slice
           .transition(t)
           .attr('d', self.arcOverShape)
           .style('fill', ct);
@@ -136,7 +140,8 @@ export class PieChartBuilder extends PcacChart {
       .on('click', (_event: MouseEvent, d: PieArcDatum<PcacData>) => {
         this.sliceClickedSource.next(d.data);
       })
-      .transition()
+      // Named, so the hover transitions (unnamed) and the check above can tell it apart from them.
+      .transition('enter')
       .duration(this.transitionService.getTransitionDuration())
       .attrTween('d', (b: PieArcDatum<PcacData>) => {
         return this.tweenChart(b);

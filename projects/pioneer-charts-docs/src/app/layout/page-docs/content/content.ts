@@ -1,5 +1,7 @@
 import { afterNextRender, Component, ElementRef, inject, input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-layout-page-docs-content',
@@ -27,6 +29,16 @@ export class LayoutPageDocsContent {
     const route = inject(ActivatedRoute);
     afterNextRender(() => {
       const fragment = route.snapshot.fragment;
+      if (fragment) {
+        this.scrollToSection(fragment);
+      }
+    });
+
+    // In-page links (`<a routerLink="." fragment="...">`) change the fragment without re-creating
+    // this component, so those are followed too. (A plain `href="#id"` can't work here: it
+    // resolves against `<base href="/">` to the home page, and wouldn't scroll this pane anyway.)
+    // The first emission is the current fragment, handled above once the page has painted.
+    route.fragment.pipe(skip(1), takeUntilDestroyed()).subscribe((fragment) => {
       if (fragment) {
         this.scrollToSection(fragment);
       }

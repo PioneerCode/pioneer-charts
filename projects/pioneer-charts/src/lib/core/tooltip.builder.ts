@@ -2,7 +2,7 @@ import { ApplicationRef, DOCUMENT, EmbeddedViewRef, Injectable, OnDestroy, Templ
 import { PcacData, PcacFormatEnum } from './chart.model';
 import { PcacTooltipContext } from './tooltip.directive';
 import { Selection, select } from 'd3-selection';
-import { formatPercent } from './tick-format';
+import { formatValue } from './tick-format';
 
 @Injectable({
   providedIn: 'root',
@@ -78,14 +78,6 @@ export class PcacTooltipBuilder implements OnDestroy {
     } else {
       this.positionAbove(shell, event);
     }
-  }
-
-  /**
-   * @deprecated Builders should call `PcacChart.showTooltip()`, which routes through a chart's
-   * projected `pcacTooltip` template. This only ever renders the default content.
-   */
-  showBarTooltip(event: MouseEvent, data: PcacData, valueFormat?: PcacFormatEnum, keyFormat?: PcacFormatEnum): void {
-    this.showTooltip(event, undefined, { $implicit: data, parent: null, isThreshold: false, index: 0, parentIndex: null, coincident: [] }, valueFormat, keyFormat);
   }
 
   /**
@@ -183,12 +175,27 @@ export class PcacTooltipBuilder implements OnDestroy {
 
   /**
    * Centers the tooltip horizontally on the cursor and sits it just above. Measured from the real
-   * box rather than fixed offsets so it works for content of any size.
+   * box rather than fixed offsets so it works for content of any size. Kept on screen like
+   * `positionBeside`: slid in from whichever side edge it would cross (the left one winning if it's
+   * wider than the viewport), and dropped below the cursor when there's no room above - hovering
+   * a bar at the page's edge used to cut the tooltip off.
    */
   private positionAbove(shell: HTMLDivElement, event: MouseEvent): void {
+    const gap = PcacTooltipBuilder.GAP;
+    const width = shell.offsetWidth;
+    const height = shell.offsetHeight;
+    const viewport = this.document.documentElement;
+    const scrollX = this.document.defaultView?.scrollX ?? 0;
+    const scrollY = this.document.defaultView?.scrollY ?? 0;
+
+    const centered = event.pageX - width / 2;
+    const left = Math.max(scrollX, Math.min(centered, scrollX + viewport.clientWidth - width));
+    const above = event.pageY - height - gap;
+    const top = above >= scrollY ? above : event.pageY + gap;
+
     this.tooltip
-      .style('left', event.pageX - shell.offsetWidth / 2 + 'px')
-      .style('top', event.pageY - shell.offsetHeight - PcacTooltipBuilder.GAP + 'px');
+      .style('left', left + 'px')
+      .style('top', top + 'px');
   }
 
   /**
@@ -233,31 +240,29 @@ export class PcacTooltipBuilder implements OnDestroy {
     let value = data.value;
     let key = data.key
 
+    // Formatted the way the value's axis labels it (see `formatValue`), so the tooltip for a
+    // point reads like the axis it sits against - `1:30pm`, not `13.5`, on a OneDayHours axis.
     // A missing value stays blank rather than being formatted as `0%` / `null F`.
-    if (valueFormat && value !== null && value !== undefined) {
-      switch (valueFormat) {
-        case PcacFormatEnum.Percentage:
-          // Same fraction rule, and the same formatting, as a Percentage axis's ticks.
-          value = formatPercent(Number(value));
-          break;
-        case PcacFormatEnum.Fahrenheit:
-          value = `${value} F`;
-          break;
-      }
+    if (value !== null && value !== undefined) {
+      value = formatValue(valueFormat, value) ?? value;
     }
 
-    if (key && keyFormat) {
-      switch (keyFormat) {
-        case PcacFormatEnum.DateTime:
-          key = new Date(key).toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          })
-          break;
+    if (key !== null && key !== undefined && key !== '') {
+      // A key that doesn't parse as a date is shown as it is, rather than as "Invalid Date".
+      if (keyFormat === PcacFormatEnum.DateTime && !Number.isNaN(new Date(key).getTime())) {
+        key = new Date(key).toLocaleDateString('en-US', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        })
+      } else if (keyFormat === PcacFormatEnum.Decimal) {
+        // Only where the key *is* the x value. Every other x format positions points by index,
+        // so its axis labels the index, not the key - formatting the key would only make it
+        // disagree with the axis (and tag text keys with a unit: `Mon` read `Monm` on Minutes).
+        key = formatValue(keyFormat, key) ?? key;
       }
     }
 

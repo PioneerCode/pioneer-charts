@@ -98,17 +98,61 @@ describe('PcacTooltipBuilder', () => {
       expect(shell.textContent).toBe('<img src=x onerror="window.pwned=1"><b>42</b>');
     });
 
+    // Regression test: the tooltip only knew Percentage and Fahrenheit values (and DateTime keys),
+    // so on an axis in any other format it disagreed with the axis beside it - a OneDayHours axis
+    // read `1:30pm` while the tooltip for the same point read `13.5`.
+    describe('reads like the axis it sits against', () => {
+      const shown = (value: number | string, valueFormat?: PcacFormatEnum, key: number | string = 'Jan', keyFormat?: PcacFormatEnum) => {
+        builder.showTooltip(mouse(), undefined, context({ key, value, hide: false, data: [] }), valueFormat, keyFormat);
+        return shell.innerHTML;
+      };
+
+      it('formats every axis format\'s values the way its ticks are labelled', () => {
+        expect(shown(13.5, PcacFormatEnum.OneDayHours)).toBe('Jan<br>1:30pm');
+        expect(shown(5, PcacFormatEnum.Minutes)).toBe('Jan<br>5m');
+        expect(shown(1500.25, PcacFormatEnum.Decimal)).toBe('Jan<br>1,500.25');
+        expect(shown(72, PcacFormatEnum.Fahrenheit)).toBe('Jan<br>72 F');
+        expect(shown(0.25, PcacFormatEnum.Percentage)).toBe('Jan<br>25%');
+      });
+
+      it('formats a Decimal x axis\'s key, which is the x value, like the axis', () => {
+        expect(shown(10, undefined, 1500, PcacFormatEnum.Decimal)).toBe('1,500<br>10');
+      });
+
+      // Regression test: every key went through the x axis's format, but only Decimal/DateTime
+      // position points by key - the other formats' axes label the point's index - and Minutes
+      // tagged a text key with its unit (`Mon` read `Monm`).
+      it('leaves the key alone on an x axis that positions points by index', () => {
+        expect(shown(10, undefined, 'Mon', PcacFormatEnum.Minutes)).toBe('Mon<br>10');
+        expect(shown(10, undefined, 13, PcacFormatEnum.OneDayHours)).toBe('13<br>10');
+        expect(shown(10, undefined, 0.5, PcacFormatEnum.Percentage)).toBe('0.5<br>10');
+      });
+
+      it('leaves values alone in the formats with no labelling of their own', () => {
+        expect(shown(1500.25, PcacFormatEnum.DatasetLength)).toBe('Jan<br>1500.25');
+        expect(shown(1500.25, PcacFormatEnum.None)).toBe('Jan<br>1500.25');
+        expect(shown(3, undefined, 3, PcacFormatEnum.DatasetLength)).toBe('3<br>3');
+      });
+
+      it('shows a value a numeric format can\'t read as it is', () => {
+        expect(shown('n/a', PcacFormatEnum.OneDayHours)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Percentage)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Minutes)).toBe('Jan<br>n/a');
+        expect(shown('n/a', PcacFormatEnum.Fahrenheit)).toBe('Jan<br>n/a');
+      });
+    });
+
+    // Regression test: a DateTime key that doesn't parse read "Invalid Date".
+    it('shows a DateTime key that isn\'t a date as it is', () => {
+      builder.showTooltip(mouse(), undefined, context(datum('Q3 total', 1)), undefined, PcacFormatEnum.DateTime);
+
+      expect(shell.innerHTML).toBe('Q3 total<br>1');
+    });
+
     it('keeps a key of 0 and shows a missing value as blank', () => {
       builder.showTooltip(mouse(), undefined, context({ key: 0, value: null, hide: false, data: [] }));
 
       expect(shell.innerHTML).toBe('0<br>');
-    });
-
-    it('is what the deprecated showBarTooltip() renders', () => {
-      builder.showBarTooltip(mouse(), datum('Feb', 7));
-
-      expect(shell.classList.contains('pcac-d3-tooltip-default')).toBe(true);
-      expect(shell.innerHTML).toBe('Feb<br>7');
     });
   });
 
@@ -186,15 +230,47 @@ describe('PcacTooltipBuilder', () => {
   });
 
   describe('positioning', () => {
-    it('centers the rendered box horizontally on the cursor and sits it above, from measured size', () => {
-      // jsdom does no layout, so the box's size is stubbed to make the arithmetic observable.
-      Object.defineProperty(shell, 'offsetWidth', { value: 100, configurable: true });
-      Object.defineProperty(shell, 'offsetHeight', { value: 40, configurable: true });
+    describe('above the cursor', () => {
+      const root = document.documentElement;
 
-      builder.showTooltip(mouse(200, 300), host.full(), context(datum('jan', 1)));
+      // jsdom does no layout, so a 1000x800 viewport and a 100x40 box are stubbed to make the
+      // arithmetic observable.
+      beforeEach(() => {
+        Object.defineProperty(root, 'clientWidth', { value: 1000, configurable: true });
+        Object.defineProperty(root, 'clientHeight', { value: 800, configurable: true });
+        Object.defineProperty(shell, 'offsetWidth', { value: 100, configurable: true });
+        Object.defineProperty(shell, 'offsetHeight', { value: 40, configurable: true });
+      });
 
-      expect(shell.style.left).toBe('150px');
-      expect(shell.style.top).toBe('252px');
+      afterEach(() => {
+        delete (root as any).clientWidth;
+        delete (root as any).clientHeight;
+        delete (shell as any).offsetWidth;
+        delete (shell as any).offsetHeight;
+      });
+
+      it('centers the rendered box horizontally on the cursor and sits it above, from measured size', () => {
+        builder.showTooltip(mouse(200, 300), host.full(), context(datum('jan', 1)));
+
+        expect(shell.style.left).toBe('150px');
+        expect(shell.style.top).toBe('252px');
+      });
+
+      // Regression test: the box was centered on the cursor unconditionally, so near the page's
+      // edges it ran off screen and was cut off.
+      it('slides in from the left and right edges of the viewport', () => {
+        builder.showTooltip(mouse(20, 300), host.full(), context(datum('jan', 1)));
+        expect(shell.style.left).toBe('0px');
+
+        builder.showTooltip(mouse(990, 300), host.full(), context(datum('jan', 1)));
+        expect(shell.style.left).toBe('900px');
+      });
+
+      it('drops below the cursor when there is no room above', () => {
+        builder.showTooltip(mouse(200, 30), host.full(), context(datum('jan', 1)));
+
+        expect(shell.style.top).toBe('38px'); // 30 + gap
+      });
     });
 
     describe('beside an anchor', () => {

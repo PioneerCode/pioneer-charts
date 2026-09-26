@@ -5,9 +5,9 @@ name: Publish
 # Flow: bump `version` in projects/pioneer-charts/package.json on a branch -> PR -> merge -> this runs.
 #   test    first confirms the pushed commit landed via a merged PR (direct pushes to main fail here;
 #           the `main` ruleset should already reject those, this is the backstop for bypassers),
-#           then lint + unit tests + full library build + `npm publish --dry-run`, then checks whether
-#           that version is already on npm. The built dist is handed to `publish` as an artifact so
-#           what ships is exactly what was tested.
+#           then lint + unit tests + full library build, then checks whether that version is already
+#           on npm and, if it isn't, runs `npm publish --dry-run`. The built dist is handed to
+#           `publish` as an artifact so what ships is exactly what was tested.
 #   publish skipped entirely if the version is already published (so no spurious approval requests);
 #           otherwise waits for approval on the `npm` environment (Settings -> Environments), then
 #           publishes via npm Trusted Publishing (OIDC) - no NPM_TOKEN secret involved.
@@ -81,11 +81,6 @@ jobs:
       - name: Build library
         run: npm run build:lib
 
-      # Packs the tarball and prints its contents without uploading - catches a broken
-      # `exports` map or a missing themes/scss directory before anything irreversible.
-      - name: Publish (dry run)
-        run: npm publish ./${{ env.PACKAGE_DIR }} --access public --dry-run
-
       - name: Resolve version
         id: version
         run: |
@@ -105,6 +100,18 @@ jobs:
           else
             echo "::notice::${PACKAGE_NAME}@${version} is new - publish will request approval."
           fi
+
+      # Packs the tarball and prints its contents without uploading - catches a broken
+      # `exports` map or a missing themes/scss directory before anything irreversible. Only for a
+      # version that will actually be published: npm refuses even a dry run of a version already
+      # on npm ("You cannot publish over the previously published versions"), which failed this job
+      # on any merge touching package.json without a version bump. And with the same `--tag` the
+      # real publish uses, since npm also refuses a prerelease under the default tag, dry run or not.
+      - name: Publish (dry run)
+        if: steps.version.outputs.should_publish == 'true'
+        run: >
+          npm publish ./${{ env.PACKAGE_DIR }} --access public --dry-run
+          ${{ steps.version.outputs.prerelease == 'true' && '--tag next' || '' }}
 
       - name: Upload package
         uses: actions/upload-artifact@v4

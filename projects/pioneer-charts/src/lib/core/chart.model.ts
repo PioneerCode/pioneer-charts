@@ -3,10 +3,11 @@
  *    INewChart extends IChart
  */
 export class PcacChartConfig {
+  data: PcacData[] = []
+
   /**
    * Height in pixels
    */
-  data: PcacData[] = []
   height: number = 200
 
   /**

@@ -4,6 +4,8 @@ import { PcacData, PcacFormatEnum } from '../../../core';
 import { axisTickFormat } from '../../../core/tick-format';
 import { Injectable } from '@angular/core';
 import { select } from 'd3-selection';
+import { getXFormat } from '../x-format';
+import { hasValue } from './has-value';
 
 export interface IPlaChartEffectsBuilderConfig {
   colors: string[];
@@ -13,6 +15,8 @@ export interface IPlaChartEffectsBuilderConfig {
   svg: Selection<SVGGElement, unknown, BaseType, unknown>;
   x: ScaleLinear<number, number> | ScaleTime<number, number, never>;
   y: ScaleLinear<number, number> | ScaleTime<number, number, never>;
+  /** The x axis's format, so the crosshair positions points the way the lines do (`getXFormat`). */
+  xFormat: PcacFormatEnum;
   /** The y axis's format and tick count, so the crosshair's value reads like the axis labels. */
   yFormat?: PcacFormatEnum;
   yTicks?: number;
@@ -20,7 +24,7 @@ export interface IPlaChartEffectsBuilderConfig {
 
 /**
  * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
- * holds mutable per-chart-instance state (`config`, `lines`) despite looking like a stateless
+ * holds mutable per-chart-instance state (`config`, `series`) despite looking like a stateless
  * helper. A root singleton would be shared and clobbered by every `<pcac-line-area-chart>`
  * rendered at once — each instance's hover effects would end up reading/writing whichever
  * chart's `buildEffects()` ran last, not their own.
@@ -28,38 +32,36 @@ export interface IPlaChartEffectsBuilderConfig {
 @Injectable()
 export class PlaChartEffectsBuilder {
   private config!: IPlaChartEffectsBuilderConfig;
-  // .getTotalLength()/.getPointAtLength() below are SVGGeometryElement methods - the paths this
-  // collects are always <path> elements (see PlaChartBuilder.drawLine/.drawArea). A chart draws
-  // one or the other depending on its `type` (never both), so this selector is never ambiguous.
-  // Plot-type charts draw neither (just standalone dots, no connecting geometry) - updateEffects()
-  // below guards against that rather than this collecting nothing for it to index into.
-  private lines: SVGGeometryElement[] = [];
+  // The series that get an effect group, each with its index in `config.data` (which is what its
+  // line's color is picked by, so a skipped empty series doesn't shift the colors after it).
+  private series: { data: PcacData; index: number }[] = [];
+  /** Where the cursor last was over the plot, while the crosshair is showing; null otherwise. */
+  private lastMousePos: [number, number] | null = null;
 
   buildEffects(config: IPlaChartEffectsBuilderConfig): void {
     this.config = config;
-    this.lines = [];
-    // Filtered on the same predicate buildCollection() applies to the effect groups (each path's
-    // datum is its series' point array), so `lines[i]` always belongs to the i-th group - an
-    // empty series in the middle of the data would otherwise shift every later group onto the
-    // wrong path.
-    this.config.svg.selectAll<SVGGeometryElement, PcacData[]>('.line, .area')
-      .filter((d) => d?.length !== 0)
-      .each((d, i, n) => {
-        this.lines.push(n[i]);
-      });
+    this.lastMousePos = null;
+    this.series = config.data
+      .map((data, index) => ({ data, index }))
+      .filter(({ data }) => data.data.length > 0);
     this.buildCollection();
     this.buildCanvas();
   }
 
   /**
-   * Swaps in the scales a zoom has rescaled. The crosshair finds its point by walking the line
-   * geometry, which the chart already redraws on zoom, but the value it labels comes from
-   * inverting `y` - so a y-axis zoom has to hand the zoomed scale over here or the label reads
-   * the pixel against the original domain.
+   * Swaps in the scales a zoom has rescaled. The crosshair positions and labels its points
+   * against the scales, so a zoom has to hand them over here or it would track the unzoomed
+   * lines.
    */
   updateScales(x: IPlaChartEffectsBuilderConfig['x'], y: IPlaChartEffectsBuilderConfig['y']): void {
     this.config.x = x;
     this.config.y = y;
+    // A wheel zoom moves the lines under a cursor that stays put, and sends no mousemove - so the
+    // crosshair is re-read at the same spot, or it would sit on the pre-zoom values until the
+    // mouse next moved.
+    if (this.lastMousePos) {
+      this.onMouseMove(this.lastMousePos);
+    }
   }
 
   private buildCollection() {
@@ -70,19 +72,15 @@ export class PlaChartEffectsBuilder {
       .attr('class', 'effect-line');
 
     const mousePerLine = collection.selectAll('.effect-group')
-      .data(this.config.data.filter((elm) => {
-        return elm.data.length > 0;
-      }))
+      .data(this.series)
       .enter().append('g')
       .attr('class', 'effect-group')
-      .attr('style', (d: PcacData) => d.hide ? 'display: none' : null);
+      .attr('style', ({ data }) => data.hide ? 'display: none' : null);
 
     mousePerLine.append('circle')
       .attr('r', 7)
       .attr('class', 'effect-circle')
-      .style('stroke', (d: PcacData, i: number) => {
-        return this.config.colors[i];
-      });
+      .style('stroke', ({ index }) => this.config.colors[index]);
 
     mousePerLine.append('text')
       .attr('class', 'effect-text')
@@ -127,6 +125,7 @@ export class PlaChartEffectsBuilder {
   }
 
   private hideEffects() {
+    this.lastMousePos = null;
     this.config.svg.select('.effect-line')
       .style('opacity', '0');
     this.config.svg.selectAll('.effect-group circle')
@@ -136,6 +135,7 @@ export class PlaChartEffectsBuilder {
   }
 
   private onMouseMove(mousePos: [number, number]) {
+    this.lastMousePos = mousePos;
     this.updateLine(mousePos);
     this.updateEffects(mousePos);
   }
@@ -146,42 +146,66 @@ export class PlaChartEffectsBuilder {
   }
 
   private updateEffects(mousePos: [number, number]) {
-    this.config.svg.selectAll('.effect-group')
-      .attr('transform', (data, index: number, nodes) => {
-        const line = this.lines[index];
-        if (!line) {
-          // No connected line/area geometry for this group to walk (a plot-type chart, whose
-          // dots aren't joined by a path) — nothing to position the crosshair against, so leave
-          // it where it was rather than reading .getTotalLength() off undefined.
-          return null;
+    this.config.svg.selectAll<SVGGElement, { data: PcacData }>('.effect-group')
+      .each((series, index, nodes) => {
+        const group = select(nodes[index]);
+        const value = this.valueAt(series.data.data, mousePos[0]);
+        // No value under the cursor (a gap in the series): nothing to mark, so the group is
+        // hidden rather than left at its last position.
+        group.attr('visibility', value === null ? 'hidden' : null);
+        if (value === null) {
+          return;
         }
-
-        let beginning = 0;
-        let end = line.getTotalLength();
-        let pos;
-
-        while (true) {
-          const target = Math.floor((beginning + end) / 2);
-          pos = line.getPointAtLength(target);
-          if ((target === end || target === beginning) && pos.x !== mousePos[0]) {
-            break;
-          }
-
-          if (pos.x > mousePos[0]) {
-            end = target;
-          } else if (pos.x < mousePos[0]) {
-            beginning = target;
-          } else {
-            break;
-          }
-        }
-
-        const value = this.config.y.invert(pos.y) as number;
-        select(nodes[index]).select('text')
-          .text(this.formatValue(value));
-
-        return 'translate(' + mousePos[0] + ',' + pos.y + ')';
+        group.attr('transform', 'translate(' + mousePos[0] + ',' + this.config.y(value) + ')');
+        group.select('text').text(this.formatValue(value));
       });
+  }
+
+  /**
+   * The series' value at plot x `mouseX`, interpolated along the segment of the line that spans it
+   * - the same (linear) join the line/area draws between two consecutive points - or null if it
+   * falls in a gap, where the line isn't drawn. Beyond the line's leftmost/rightmost point it holds
+   * that point's value.
+   *
+   * Works on the segments in data order and never assumes x increases along them: DateTime or
+   * Decimal data can come newest-first (or in any order), and the line still joins consecutive
+   * points - reading "the first point" as the leftmost one showed the newest value everywhere.
+   *
+   * Worked out from the data rather than by walking the drawn path: an area's outline doubles
+   * back along its baseline, so a search over the path's geometry could land on the bottom edge
+   * and read the wrong value.
+   */
+  private valueAt(points: PcacData[], mouseX: number): number | null {
+    const xAt = (i: number) => getXFormat(this.config.xFormat, points[i], i, this.config.x);
+    const valueOf = (i: number) => Number(points[i].value);
+    const drawn = points.map((_, i) => i).filter((i) => hasValue(points[i]));
+    if (!drawn.length) {
+      return null;
+    }
+
+    // A segment joins two points next to each other in the data, both with a value - a point
+    // without one between them breaks the line (`defined(hasValue)`).
+    for (let i = 1; i < points.length; i++) {
+      if (!hasValue(points[i - 1]) || !hasValue(points[i])) {
+        continue;
+      }
+      const [xa, xb] = [xAt(i - 1), xAt(i)];
+      if (mouseX < Math.min(xa, xb) || mouseX > Math.max(xa, xb)) {
+        continue;
+      }
+      const [va, vb] = [valueOf(i - 1), valueOf(i)];
+      return xb === xa ? vb : va + (vb - va) * (mouseX - xa) / (xb - xa);
+    }
+
+    const leftmost = drawn.reduce((min, i) => (xAt(i) < xAt(min) ? i : min));
+    const rightmost = drawn.reduce((max, i) => (xAt(i) > xAt(max) ? i : max));
+    if (mouseX <= xAt(leftmost)) {
+      return valueOf(leftmost);
+    }
+    if (mouseX >= xAt(rightmost)) {
+      return valueOf(rightmost);
+    }
+    return null;
   }
 
   /**

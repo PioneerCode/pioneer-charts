@@ -1,5 +1,6 @@
 import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
 import { hasKey } from '../x-format';
+import { hasValue } from './has-value';
 
 /** A point along with where it sits in the chart's `data`, the way a tooltip context reports it. */
 export interface PlaCoincidentPoint {
@@ -39,10 +40,12 @@ export function findCoincidentGroups(series: PcacData[], xFormat: PcacFormatEnum
       return;
     }
     s.data.forEach((data, index) => {
-      if (data.value === null || data.value === undefined) {
+      // Same test as the line/dots use, so a point that isn't drawn (`''`, NaN) never joins a ring.
+      if (!hasValue(data)) {
         return;
       }
-      const key = `${xPositionKey(xFormat, data, index)}|${data.value}`;
+      // By numeric value, so `5` and `'5'` - drawn at the same spot - are recognized as sharing it.
+      const key = `${xPositionKey(xFormat, data, index)}|${Number(data.value)}`;
       let members = byPosition.get(key);
       if (!members) {
         members = [];

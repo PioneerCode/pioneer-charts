@@ -65,3 +65,56 @@ describe('PlaChartBuilder clip-path', () => {
     expect(width - builder.width).toBe(height - builder.height);
   });
 });
+
+// Regression test: the clip-path ids were a timestamp plus a random number, which two charts
+// rebuilding in the same millisecond could share - and `url(#id)` resolves to the first match in
+// the page, so one chart was clipped with the other's rect.
+describe('PlaChartBuilder clip-path ids', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [PlaChartEffectsBuilder] });
+  });
+
+  const ids = (elm: ElementRef) => Array.from(elm.nativeElement.querySelectorAll('clipPath') as NodeListOf<Element>).map((c) => c.id);
+
+  it('never shares an id with another chart, even building in the same millisecond', () => {
+    vi.spyOn(Date, 'now').mockReturnValue(1_000_000);
+    vi.spyOn(Math, 'random').mockReturnValue(0.5);
+    const first = chartElm();
+    const second = chartElm();
+    TestBed.runInInjectionContext(() => new PlaChartBuilder()).buildChart(first, config(), PcacLineAreaPlotChartConfigType.Line);
+    TestBed.runInInjectionContext(() => new PlaChartBuilder()).buildChart(second, config(), PcacLineAreaPlotChartConfigType.Line);
+    vi.restoreAllMocks();
+
+    expect(ids(first).length).toBe(2);
+    expect(ids(first).filter((id) => ids(second).includes(id))).toEqual([]);
+  });
+
+  it('keeps its ids across rebuilds, with only one set in the page', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(), PcacLineAreaPlotChartConfigType.Line);
+    const before = ids(elm);
+    builder.buildChart(elm, config(), PcacLineAreaPlotChartConfigType.Line);
+
+    expect(ids(elm)).toEqual(before);
+  });
+});
+
+// Regression test: the line left a gap at a point whose value was an empty string (`hasValue`),
+// but the scale read `''` as 0, so its dot was still drawn - and hoverable - on the baseline.
+describe('PlaChartBuilder points without a value', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [PlaChartEffectsBuilder] });
+  });
+
+  it('draws no dot for an empty-string value', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    const cfg = config();
+    cfg.data[0].data.push({ key: 2, value: '', hide: false, data: [] });
+    builder.buildChart(elm, cfg, PcacLineAreaPlotChartConfigType.Plot);
+
+    const displays = Array.from(elm.nativeElement.querySelectorAll('.point') as NodeListOf<Element>).map((p) => p.getAttribute('display'));
+    expect(displays).toEqual([null, null, 'none']);
+  });
+});

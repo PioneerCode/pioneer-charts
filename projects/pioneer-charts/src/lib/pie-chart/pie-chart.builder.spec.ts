@@ -2,6 +2,8 @@ import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PieChartBuilder } from './pie-chart.builder';
 import { PcacPieChartConfig, PcacPieDonutConfig } from './pie-chart.model';
+import { Arc, PieArcDatum } from 'd3-shape';
+import { PcacData } from '../core/chart.model';
 
 /**
  * Same technique as core/chart.spec.ts: a real jsdom `<svg>` with a stubbed parent `clientWidth`,
@@ -204,5 +206,66 @@ describe('PieChartBuilder data handling', () => {
     builder.buildChart(elm, dataConfig());
 
     expect(elm.nativeElement.getAttribute('aria-label')).toBe('Pie chart');
+  });
+});
+
+describe('PieChartBuilder sizing and hover', () => {
+  let builder: PieChartBuilder;
+
+  beforeEach(() => {
+    builder = TestBed.runInInjectionContext(() => new PieChartBuilder());
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  // Regression test: the outer radius was the radius less a 10px hover allowance, unclamped - so a
+  // pie under 20px across got a negative radius, and d3 drew it inside out.
+  it('never gives the pie a negative radius when it is very short', () => {
+    builder.buildChart(chartElm(), { ...dataConfig(), height: 12 });
+
+    const shapes = builder as unknown as Record<'arcShape' | 'arcOverShape', Arc<unknown, PieArcDatum<PcacData>>>;
+    expect(shapes.arcShape.outerRadius()({} as PieArcDatum<PcacData>)).toBe(0);
+    // Nor does it pop a disc out on hover, though nothing shows at rest.
+    expect(shapes.arcOverShape.outerRadius()({} as PieArcDatum<PcacData>)).toBe(0);
+  });
+
+  // Regression test: hovering a slice mid-way through the enter sweep grew it straight from its
+  // part-swept path, morphing it oddly. It now finishes the slice first.
+  it('finishes a slice hovered during the enter sweep before growing it', async () => {
+    const duration = 300;
+    vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(duration);
+    const elm = chartElm();
+    builder.buildChart(elm, dataConfig());
+    const slice = elm.nativeElement.querySelector('.pcac-arc path') as SVGPathElement;
+    await new Promise((resolve) => setTimeout(resolve, duration / 4));
+
+    slice.dispatchEvent(new MouseEvent('mouseover'));
+
+    const shape = (builder as unknown as { arcShape: Arc<unknown, PieArcDatum<PcacData>> }).arcShape;
+    const datum = (slice as unknown as { __data__: PieArcDatum<PcacData> }).__data__;
+    expect(slice.getAttribute('d')).toBe(shape(datum));
+  });
+
+  // Regression test: the snap to the resting shape ran on every mouseover, so re-entering a slice
+  // part-way through its hover shrink jumped it back to rest before growing it again (a flicker).
+  it('grows a slice re-entered mid-shrink from where it is', async () => {
+    const duration = 60;
+    vi.spyOn(builder.transitionService, 'getTransitionDuration').mockReturnValue(duration);
+    const elm = chartElm();
+    builder.buildChart(elm, dataConfig());
+    const slice = elm.nativeElement.querySelector('.pcac-arc path') as SVGPathElement;
+    await new Promise((resolve) => setTimeout(resolve, duration * 2));
+
+    slice.dispatchEvent(new MouseEvent('mouseover'));
+    await new Promise((resolve) => setTimeout(resolve, duration));
+    slice.dispatchEvent(new MouseEvent('mouseout'));
+    await new Promise((resolve) => setTimeout(resolve, duration / 6));
+    const midShrink = slice.getAttribute('d');
+    slice.dispatchEvent(new MouseEvent('mouseover'));
+
+    const shape = (builder as unknown as { arcShape: Arc<unknown, PieArcDatum<PcacData>> }).arcShape;
+    const datum = (slice as unknown as { __data__: PieArcDatum<PcacData> }).__data__;
+    expect(midShrink).not.toBe(shape(datum));
+    expect(slice.getAttribute('d')).toBe(midShrink);
   });
 });

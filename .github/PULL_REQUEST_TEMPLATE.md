@@ -1,7 +1,7 @@
 ## PR Checklist
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/PioneerCode/pioneer-charts/blob/master/.github/CONTRIBUTING.md
+- [ ] The commit message follows our guidelines: https://github.com/PioneerCode/pioneer-charts/blob/main/.github/CONTRIBUTING.md
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
 
@@ -16,7 +16,7 @@ What kind of change does this PR introduce?
 [ ] Refactoring (no functional changes, no api changes)
 [ ] Build related changes
 [ ] Documentation content changes
-[ ] charts.pioneercode.com application / infrastructure changes
+[ ] pioneercharts.com application / infrastructure changes
 [ ] Other... Please describe:
 ```
 

@@ -1,7 +1,7 @@
 {
   "name": "@pioneer-code/pioneer-charts",
   "description": "Pioneer Charts, a library of data visualization charts built on top of Angular and D3.",
-  "homepage": "https://charts.pioneercode.com",
+  "homepage": "https://pioneercharts.com",
   "bugs": {
     "url": "https://github.com/PioneerCode/pioneer-charts/issues"
   },
@@ -22,7 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/PioneerCode/pioneer-charts.git"
   },
-  "version": "22.2.14",
+  "version": "22.2.15",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^22.1.0",

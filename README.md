@@ -10,7 +10,7 @@ Pioneer Charts is an Angular library for building beautiful, customizable, and r
 
 Guides, the API reference, live examples, and theming instructions all live on the docs site:
 
-**https://charts.pioneercode.com**
+**https://pioneercharts.com**
 
 ## Features
 
@@ -36,7 +36,7 @@ The D3 modules the charts use are installed with the package, so there's nothing
 npm install --save @pioneer-code/pioneer-charts
 ```
 
-Then follow the [Introduction](https://charts.pioneercode.com) on the docs site to import the components and theme into your app.
+Then follow the [Introduction](https://pioneercharts.com) on the docs site to import the components and theme into your app.
 
 ## Contributing
 
@@ -46,11 +46,15 @@ This repository is an Angular workspace containing the library (`projects/pionee
 
 ```bash
 npm ci
-npm start              # serve the docs site, which consumes the library
+npm run build:lib      # build the library into dist/pioneer-charts - the docs site uses that build
+npm start              # serve the docs site
 npm run lint
-npm test               # library unit tests (vitest)
-npm run build:lib      # build the publishable package into dist/pioneer-charts
+npm test               # unit tests for the library and the docs site (vitest)
 ```
+
+The docs site imports the library from `dist/pioneer-charts`, not its source, so it needs `build:lib`
+before its first `npm start`. While working on both, run `npm run start-components` alongside
+`npm start` to rebuild the library on every change.
 
 Every push and pull request to `main` is verified by [GitHub Actions](https://github.com/PioneerCode/pioneer-charts/actions) (lint, tests, and both builds).
 

@@ -1,8 +1,9 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideCheckNoChangesConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, TitleStrategy } from '@angular/router';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 
 import { routes } from './app.routes';
+import { PageSeoStrategy } from './seo';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,8 @@ export const appConfig: ApplicationConfig = {
     // the cheapest possible guard against a future regression of that assumption.
     provideCheckNoChangesConfig({ exhaustive: true, interval: 5000 }),
     provideRouter(routes),
+    // Page titles, meta descriptions and canonical URLs, from each route's title/data (see seo.ts).
+    { provide: TitleStrategy, useClass: PageSeoStrategy },
     provideHttpClient(withXhr())
   ]
 };

@@ -4,7 +4,9 @@ import { PcacData } from './chart.model';
  * How long each bar is drawn: its value, or 0 when it can't be drawn - a null or non-numeric
  * value, or `hide` set on the bar or on its whole group. A hidden bar keeps its slot (and so its
  * color) and just draws nothing, the same way a hidden line/area/plot series keeps its place.
- * Negative values are kept as they are; the bar charts only draw upward from 0.
+ * A negative value is drawn as 0 too: the bar charts only draw upward from a 0 baseline, and a
+ * negative size was an invalid SVG `height`/`width` (the bar vanished with a console error) that
+ * also pulled the rest of a stack down over the bars before it.
  *
  * Keyed by the bar's own `PcacData` object so D3 callbacks (which only get the datum) can look
  * their size up directly.
@@ -14,7 +16,7 @@ export function barSizes(groups: PcacData[]): Map<PcacData, number> {
   for (const group of groups) {
     for (const bar of group.data ?? []) {
       const value = Number(bar.value ?? 0);
-      sizes.set(bar, group.hide || bar.hide || !Number.isFinite(value) ? 0 : value);
+      sizes.set(bar, group.hide || bar.hide || !Number.isFinite(value) ? 0 : Math.max(0, value));
     }
   }
   return sizes;

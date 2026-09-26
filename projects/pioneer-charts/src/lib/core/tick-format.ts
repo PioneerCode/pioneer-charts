@@ -27,6 +27,35 @@ export function formatHourOfDay(value: number): string {
   return minutes === 0 ? `${hour}${period}` : `${hour}:${String(minutes).padStart(2, '0')}${period}`;
 }
 
+/** Plain numbers with thousands separators - `1,500`, `0.05` - for the `Decimal` format. */
+const formatDecimal = format(',~f');
+
+/**
+ * A single value (not a tick) in `pcacFormat`, the way an axis in that format labels it - so a
+ * tooltip reads like the axis it's measured against. Returns null for the formats that have no
+ * formatting of their own, and for a value the format can't read as a number, which callers show
+ * as it is.
+ */
+export function formatValue(pcacFormat: PcacFormatEnum | undefined, value: unknown): string | null {
+  const numeric = typeof value === 'number' || (typeof value === 'string' && value.trim() !== '')
+    ? Number(value)
+    : NaN;
+  switch (pcacFormat) {
+    case PcacFormatEnum.Percentage:
+      return Number.isFinite(numeric) ? formatPercent(numeric) : null;
+    case PcacFormatEnum.Decimal:
+      return Number.isFinite(numeric) ? formatDecimal(numeric) : null;
+    case PcacFormatEnum.OneDayHours:
+      return Number.isFinite(numeric) ? formatHourOfDay(numeric) : null;
+    case PcacFormatEnum.Minutes:
+      return Number.isFinite(numeric) ? value + 'm' : null;
+    case PcacFormatEnum.Fahrenheit:
+      return Number.isFinite(numeric) ? value + ' F' : null;
+    default:
+      return null;
+  }
+}
+
 /**
  * The tick label format for an axis in `format`, shared by both axes (so a format means the same
  * thing on x and y) and by anything that labels a value on that axis, like the line/area hover
@@ -47,7 +76,7 @@ export function axisTickFormat<Domain extends AxisDomain>(
     case PcacFormatEnum.Decimal:
       // Plain numbers with thousands separators - `1,500`, `0.05` - rather than SI prefixes, which
       // turned a differential of 0.05 into `50m` (reading as minutes, like the Minutes format).
-      return withTicks.tickFormat ? withTicks.tickFormat(ticks, ',~f') : (d) => format(',~f')(Number(d));
+      return withTicks.tickFormat ? withTicks.tickFormat(ticks, ',~f') : (d) => formatDecimal(Number(d));
     case PcacFormatEnum.Minutes:
       return (d) => d + 'm';
     case PcacFormatEnum.Fahrenheit:

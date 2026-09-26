@@ -1,3 +1,71 @@
+<a name="22.2.15"></a>
+# [v22.2.15]
+
+### Changed
+  - Changing the palette through `PcacColorService` (`setScale()` and the other setters) now
+    updates legends and redraws charts already on screen, instead of only charts drawn afterwards.
+    A redraw replays the chart's enter animation.
+  - Default tooltips format values the way their axis labels them for every format: `Minutes`,
+    `Decimal` and `OneDayHours` join `Percentage` and `Fahrenheit`, so a tooltip reads `1:30pm`
+    next to an axis that does rather than `13.5`. On a `Decimal` x axis the key is formatted too.
+  - Plot charts no longer draw the hover crosshair (`enableEffects`): with no line to follow, its
+    markers sat in the plot's top-left corner.
+  - Bar charts draw a negative value as an empty bar rather than an invalid one, and no longer let
+    it pull the rest of a stack down.
+  - Horizontal bar chart labels take at most half the chart's width; longer ones are shortened
+    with "…" instead of squeezing the bars out.
+  - The package now includes its `LICENSE`, and its homepage is https://pioneercharts.com.
+
+### Fixed
+  - Bar charts:
+    - Hovering a bar while it grew in left it part-grown until the next redraw.
+    - The horizontal chart's `barClicked` and tooltip handed back copies of the data rather than
+      the consumer's own `PcacData` objects.
+    - A stacked bar was drawn out of its slot when a series key matched a group key.
+    - Grouped bars are colored by series, so groups holding different series match the legend.
+    - Labels wider than the container left the horizontal chart with no bars.
+    - More categories than pixels drew nothing.
+    - Horizontal per-bar thresholds slid in from the top of their group instead of appearing in
+      place.
+  - Pie chart: hovering a slice during its enter animation morphed it oddly, and a very small pie
+    drew inside out or popped a disc out on hover.
+  - Line, area and plot charts:
+    - The area chart's hover crosshair could read the wrong value, and data not in ascending x
+      order (e.g. newest-first dates) gave wrong values on any chart.
+    - The crosshair now updates when the chart is zoomed under a still cursor.
+    - Zooming during the enter animation snapped lines and areas back to their unzoomed shape.
+    - An empty first series flipped the x axis when points are positioned by index.
+    - Hover markers took the wrong color after an empty series.
+    - A point with an empty-string value drew a dot (and its range) on the baseline.
+    - Clip paths could collide between charts that redrew at the same moment.
+  - Tooltips shown above the cursor are kept on screen, and a `DateTime` key that isn't a date is
+    shown as it is rather than as "Invalid Date".
+
+<a name="22.2.14"></a>
+# [v22.2.14]
+
+### Added
+  - `ariaLabel` on every chart config: the chart is announced to screen readers as one image
+    with that name (its type - "Bar chart", "Pie chart", ... - when it isn't set).
+
+### Changed
+  - The D3 modules the charts use are now installed with the package. `d3` and `@types/d3` are
+    no longer peer dependencies, and `rxjs ^7.4.0` now is.
+
+### Removed
+  - **Breaking for code that imported internals.** Internal chart plumbing is no longer
+    exported:
+    - the chart builders `BarVerticalChartBuilder`, `BarHorizontalChartBuilder` and
+      `PieChartBuilder`, and their `PcacChart` base class (with `PcacTooltipOptions`);
+    - `PcacAxisBuilder`, `PcacGridBuilder`, `PcacTooltipBuilder`, `PcacTransitionService` and
+      `PcacChartResizeService` (with `IPcacAxisBuilderConfig` and `IPcacGridBuilderConfig`);
+    - `resolveAxisConfig`, `axisLabelSpace`, `hasAxisSubLabels`, `PCAC_AXIS_LABEL_SPACE`,
+      `PCAC_AXIS_SUB_LABEL_SPACE`, `PcacChartMargin` and `PcacResolvedAxisConfig`.
+
+    These were never meant as public API. What a consumer configures, binds or styles with -
+    the components, config/model classes, `PcacColorService` and `PcacTooltipDirective` - is
+    unchanged.
+
 <a name="22.2.13"></a>
 # [v22.2.13]
 

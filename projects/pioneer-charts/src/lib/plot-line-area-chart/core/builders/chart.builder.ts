@@ -16,20 +16,15 @@ import { PcacPlotChartConfig, PcacPointFanOutConfig } from '../../plot/plot.mode
 import { PcacChart } from '../../../core/chart';
 import { PcacData } from '../../../core/chart.model';
 import { PcacTooltipCoincident } from '../../../core/tooltip.directive';
-import { PlaChartScalesBuilder, PlaChartScales } from './scales.builder';
+import { PlaChartScalesBuilder, PlaChartScales, longestSeriesLength } from './scales.builder';
 import { getXFormat } from '../x-format';
 import { buildLineGenerator } from './line-generator.builder';
 import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
+import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
-/**
- * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
- * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
- * height, colors, svg). A root singleton would be shared and clobbered by every
- * <pcac-line-area-chart> rendered at once.
- */
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
 const PLOT_CLIP_ALLOWANCE = 1;
 
@@ -52,6 +47,12 @@ const CHART_TYPE_LABELS: Record<PcacLineAreaPlotChartConfigType, string> = {
   [PcacLineAreaPlotChartConfigType.Plot]: 'Plot chart',
 };
 
+/**
+ * Provided per-component (see PcacLineAreaChartComponent's `providers`), not root-scoped: this
+ * builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
+ * height, colors, svg). A root singleton would be shared and clobbered by every
+ * <pcac-line-area-chart> rendered at once.
+ */
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
   private effectsBuilder = inject(PlaChartEffectsBuilder);
@@ -61,7 +62,16 @@ export class PlaChartBuilder extends PcacChart {
   private zoomBehavior!: ZoomBehavior<Element, unknown>;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
-  private clipPathId!: string; // <-- added
+  /**
+   * Numbers this chart's clip-path ids (and, through `plotClipPathId`, its range gradients'),
+   * which have to be unique in the whole page: `url(#id)` resolves to the first match in the
+   * document, so a duplicate would clip one chart with another's rect. A per-instance counter
+   * rather than the timestamp-plus-random stamp this used to be, which two charts rebuilding in
+   * the same millisecond (every chart on a page reacts to a window resize at once) could share.
+   */
+  private static nextInstanceId = 0;
+  private readonly instanceId = ++PlaChartBuilder.nextInstanceId;
+  private clipPathId!: string;
   /**
    * A second clip-path for everything that isn't a point - lines, areas, fan-out anchors and
    * spokes: the plot area plus `PLOT_CLIP_ALLOWANCE`. These have no business past the axes; the
@@ -97,6 +107,12 @@ export class PlaChartBuilder extends PcacChart {
   private pointRange: PcacPointRangeConfig | null = null;
   /** Each drawn range's `.point-range` group, by its point, so hover can find the one to focus. */
   private rangeGroupOf = new Map<PcacData, SVGGElement>();
+  /**
+   * Whether this build has the hover crosshair: `enableEffects`, on a line or area chart. A plot
+   * chart has no line for it to follow, so it gets none - its circles had nowhere to go and sat
+   * stacked in the plot's top-left corner.
+   */
+  private effectsEnabled = false;
   dotClicked$ = this.dotClickedSource.asObservable();
 
 
@@ -111,7 +127,7 @@ export class PlaChartBuilder extends PcacChart {
     // no mouseout, so its tooltip is closed here (see `leavePoint`).
     this.leavePoint();
     this.config = JSON.parse(JSON.stringify(config));
-    this.startData = range(this.config.data[0].data.length).map((): PcacData => ({
+    this.startData = range(longestSeriesLength(this.config.data)).map((): PcacData => ({
       key: '',
       value: 0,
       hide: false,
@@ -168,10 +184,12 @@ export class PlaChartBuilder extends PcacChart {
         // used to do, and which also overwrote the original generators' x accessor for good) is
         // only right for the default DatasetLength format; a DateTime/Decimal chart's lines
         // drifted away from its dots as soon as it was zoomed.
+        // Interrupted first: a zoom during the enter transition would otherwise have the rest of
+        // that transition keep drawing the unzoomed shape over this one.
         const zoomedLine = buildLineGenerator(this.xAxis.format, zoomedScales);
         const zoomedArea = buildAreaGenerator(this.xAxis.format, zoomedScales, this.height);
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.line').attr('d', (d: PcacData[]) => zoomedLine(d));
-        this.svg.selectAll<SVGPathElement, PcacData[]>('.area').attr('d', (d: PcacData[]) => zoomedArea(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.line').interrupt().attr('d', (d: PcacData[]) => zoomedLine(d));
+        this.svg.selectAll<SVGPathElement, PcacData[]>('.area').interrupt().attr('d', (d: PcacData[]) => zoomedArea(d));
 
         // Update dots / point images. Nested selectAll (not a flat svg.selectAll('.point')) so
         // that `i` is the point's index *within its own series* - the x format default
@@ -189,9 +207,8 @@ export class PlaChartBuilder extends PcacChart {
           .attr('x2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dx)
           .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dy);
 
-        // The hover crosshair walks the (already updated) line geometry, but reads its value back
-        // off the y scale - which must be the zoomed one or the label is wrong.
-        if (this.config.enableEffects) {
+        // The hover crosshair positions and labels against the scales, so it takes the zoomed ones.
+        if (this.effectsEnabled) {
           this.effectsBuilder.updateScales(newX, newY);
         }
 
@@ -221,7 +238,8 @@ export class PlaChartBuilder extends PcacChart {
 
     this.drawLineArea(config, type);
 
-    if (config.enableEffects) {
+    this.effectsEnabled = !!config.enableEffects && type !== PcacLineAreaPlotChartConfigType.Plot;
+    if (this.effectsEnabled) {
       this.effectsBuilder.buildEffects({
         svg: this.svg,
         height: this.height,
@@ -230,6 +248,7 @@ export class PlaChartBuilder extends PcacChart {
         colors: this.colors,
         x: this.scales.x,
         y: this.scales.y,
+        xFormat: this.xAxis.format,
         yFormat: this.yAxis.format,
         yTicks: this.yAxis.ticks,
       });
@@ -300,10 +319,10 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   private createReusableClipPath(): void {
-    const stamp = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-    this.clipPathId = `pcac-clip-${stamp}`;
-    this.plotClipPathId = `pcac-clip-plot-${stamp}`;
-    this.svg.selectAll(`defs #${this.clipPathId}, defs #${this.plotClipPathId}`).remove();
+    // The previous build's <defs> went with the rest of its drawing (see initializeChartState),
+    // so the same ids are free again.
+    this.clipPathId = `pcac-clip-${this.instanceId}`;
+    this.plotClipPathId = `pcac-clip-plot-${this.instanceId}`;
     const defs = this.svg.append('defs');
     defs.append('clipPath')
       .attr('id', this.clipPathId)
@@ -374,15 +393,15 @@ export class PlaChartBuilder extends PcacChart {
       .append('path')
       .datum(lineData)
       .attr('class', 'line')
+      // Set up front rather than on the transition, so a zoom interrupting it (see the zoom
+      // handler) doesn't leave the line uncolored, or a hidden one showing.
+      .attr('stroke', this.colors[index])
+      .attr('fill', 'none')
+      .attr('style', hide ? 'display: none' : null)
       .attr('d', this.lineGenerator(this.startData))
       .transition()
       .duration(this.transitionService.getTransitionDuration())
-      .attr('d', this.lineGenerator)
-      .attr('stroke', () => {
-        return this.colors[index];
-      })
-      .attr('fill', 'none')
-      .attr('style', () => hide ? 'display: none' : null);
+      .attr('d', this.lineGenerator);
   }
 
   private drawArea(lineData: PcacData[], index: number, hide = false) {
@@ -434,7 +453,9 @@ export class PlaChartBuilder extends PcacChart {
         .style('--pcac-point-range-series-color', () => this.colors[seriesIndex])
         .style('display', () => series.hide ? 'none' : null);
       series.data.forEach((point) => {
-        if (point.range) {
+        // A point with no value draws no dot (see `pointDisplay`), so it draws no range either -
+        // one would stand around a coordinate with nothing on it (on the baseline, for `''`).
+        if (point.range && hasValue(point)) {
           this.rangeGroupOf.set(point, seriesGroup.append('g').attr('class', 'point-range').node()!);
         }
       });
@@ -563,7 +584,7 @@ export class PlaChartBuilder extends PcacChart {
       const series = config.data[index];
       const points = this.svg.append('g')
         .attr('class', 'dots')
-        .attr('clip-path', `url(#${this.clipPathId})`) // <-- apply clip
+        .attr('clip-path', `url(#${this.clipPathId})`)
         .attr('style', series.hide ? 'display: none' : null)
         .selectAll('.point')
         .data(series.data)
@@ -674,9 +695,13 @@ export class PlaChartBuilder extends PcacChart {
    * the clip-path's buffer do the work, showed a point up to a whole half-mark beyond the axis
    * with its center already outside. Also takes it out of hover's reach, as a hidden group
    * receives no pointer events.
+   *
+   * A point with no value to plot isn't drawn at all - the same test the line/area uses to leave
+   * a gap (`hasValue`). An empty string used to slip through: the scale reads `''` as 0, so the
+   * line left a gap while a dot sat (hoverable) on the baseline.
    */
   private pointDisplay(d: PcacData, i: number, scales: PlaChartScales): string | null {
-    return this.pointVisible(d, i, scales) ? null : 'none';
+    return hasValue(d) && this.pointVisible(d, i, scales) ? null : 'none';
   }
 
   private pointVisible(d: PcacData, i: number, scales: PlaChartScales): boolean {

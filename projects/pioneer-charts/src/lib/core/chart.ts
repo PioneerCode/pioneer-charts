@@ -10,6 +10,15 @@ import { PcacTransitionService } from './transition.service';
 import { PcacTooltipBuilder } from './tooltip.builder';
 import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 
+/** The most of its container's width a chart's measured left (label) margin may take. */
+const MAX_LABEL_MARGIN_SHARE = 0.5;
+
+/** D3's gap between a tick and its label (`axis.tickPadding()`), which the builders never change. */
+const TICK_PADDING = 3;
+
+/** D3's default tick length (`axis.tickSizeInner()`), used while an axis's `tickSize` isn't set. */
+const DEFAULT_TICK_SIZE = 6;
+
 /**
  * Everything `showTooltip()` needs beyond the hovered datum itself. `parent`/`isThreshold` feed
  * the consumer template's context; the formats only apply to the default (no template) content.
@@ -64,10 +73,22 @@ export class PcacChart implements OnDestroy {
   width = 400;
   height = 400;
   colors = [] as string[];
+  /**
+   * How wide a y-axis tick label may be once `setHorizontalMarginsBasedOnContent` has capped the
+   * margin, or `null` while the labels fit as they are. See `truncateYTickLabels`.
+   */
+  protected yTickLabelMaxWidth: number | null = null;
   startData: PcacData[] = [];
 
   /** The chart's accessible name when its config gives no `ariaLabel`; each builder names its type. */
   protected chartTypeLabel = 'Chart';
+
+  /** Grows the palette to at least `count` colors, repeating it as `getColorScale` does. */
+  protected ensureColorCount(count: number): void {
+    if (this.colors.length < count) {
+      this.colors = this.colorService.getColorScale(count);
+    }
+  }
 
   /**
    * Swaps a consumer's `colorOverride` in for the theme palette `initializeChartState` set, in
@@ -324,18 +345,6 @@ export class PcacChart implements OnDestroy {
   }
 
   /**
-   * Prior to building a chart, we need to initialize the state of the chart.
-   *
-   * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
-   * been laid out yet, so its `clientWidth` measures 0 — this happens when a chart mounts
-   * already holding data (e.g. behind a loading gate) and its first `ngOnChanges` fires before
-   * the browser has committed layout for its own just-created DOM node. Callers should bail out
-   * of their build on `false` rather than proceeding with a degenerate width; `PcacChartResizeService`
-   * (wired up by every chart component) retries the build once the container has a real size.
-   * @param chartElm Reference to SVG on dom
-   * @param config Chart specific configuration
-   */
-  /**
    * Removes whatever the chart last drew, for a build with no data to draw. Builders call it
    * rather than just returning, which left the previous data on screen when a consumer emptied
    * the chart (e.g. a filter that now matches nothing).
@@ -345,10 +354,33 @@ export class PcacChart implements OnDestroy {
     select(chartElm.nativeElement).select('g').remove();
   }
 
+  /**
+   * Prior to building a chart, we need to initialize the state of the chart.
+   *
+   * Returns `false` (and leaves `width`/`height`/`colors` untouched) if the container hasn't
+   * been laid out yet, so its `clientWidth` measures 0 — this happens when a chart mounts
+   * already holding data (e.g. behind a loading gate) and its first build `effect` run fires
+   * before the browser has committed layout for its own just-created DOM node. Callers should
+   * bail out of their build on `false` rather than proceeding with a degenerate width;
+   * `PcacChartResizeService` (wired up by every chart component) retries the build once the
+   * container has a real size.
+   * @param chartElm Reference to SVG on dom
+   * @param config Chart specific configuration
+   */
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     // The rebuild removes the hovered element, which gets no mouseout to close its tooltip.
     this.hideTooltip();
     select(chartElm.nativeElement).select('g').remove();
+    // One color per group or per series within a group, whichever needs more. Bar charts, which
+    // color by series across groups, top this up with `ensureColorCount()`. Read before the width
+    // check below, even though a build that fails it draws nothing: this runs inside each chart
+    // component's build `effect`, and reading the palette is what makes that effect redraw the
+    // chart when the palette changes (see `PcacColorService`) - including a chart whose first
+    // build found its container not laid out yet. (A loop rather than `Math.max(...)` over the
+    // groups: spreading one argument per group overflows the call stack at a few hundred thousand.)
+    const colors = this.colorService.getColorScale(
+      config.data.reduce((max, d) => Math.max(max, d.data?.length ?? 0), config.data.length),
+    );
     const container = chartElm.nativeElement.parentNode as HTMLElement;
     const containerWidth = container.clientWidth;
     const measuredWidth = containerWidth - this.margin.left - this.margin.right;
@@ -365,11 +397,7 @@ export class PcacChart implements OnDestroy {
       .attr('role', 'img')
       .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
     this.height = this.resolveHeight(container, config);
-    // One color per group or per series within a group, whichever needs more - sized by the
-    // largest group, since bars index colors by their position within their own group.
-    this.colors = this.colorService.getColorScale(
-      Math.max(config.data.length, ...config.data.map((d) => d.data?.length ?? 0)),
-    );
+    this.colors = colors;
     this.lastContainerWidth = containerWidth;
     this.lastContainerHeight = container.clientHeight;
     this.lastHeightFull = config.heightFull === true;
@@ -409,9 +437,10 @@ export class PcacChart implements OnDestroy {
    * `PcacChartResizeService`'s `ResizeObserver` is guaranteed to fire once as soon as it starts
    * observing — that's what lets a chart recover from the 0-width race described on
    * `initializeChartState`, but it also means that "routine" first callback usually lands
-   * moments after `ngOnChanges` already built successfully at the same width. Without this
-   * check, that redundant callback would restart the chart's enter transition mid-animation for
-   * no visual change. Only `ngOnChanges` (which reacts to data, not size) should skip this check.
+   * moments after the component's build `effect` already built successfully at the same width.
+   * Without this check, that redundant callback would restart the chart's enter transition
+   * mid-animation for no visual change. Only that effect (which reacts to config, not size) should
+   * skip this check.
    * @param chartElm Reference to SVG on dom
    */
   containerSizeChanged(chartElm: ElementRef): boolean {
@@ -466,10 +495,16 @@ export class PcacChart implements OnDestroy {
    * the label, so measuring at a different length would put the labels off by the difference)
    * and adds its `axisLabelSpace()` back on top, since the measurement replaces whatever
    * `initializeAxisState()` reserved for the label / sub labels.
+   *
+   * The margin never takes more than `MAX_LABEL_MARGIN_SHARE` of the container: labels wider than
+   * that are cut off at the chart's left edge rather than squeezing the plot to nothing (it used
+   * to go to a negative width, and no bars drew at all). Returns `false`, like
+   * `initializeChartState()`, if there is still no room left to draw in.
    * @param chartElm Reference to SVG on dom
    * @param yScale D3 scale transformation object (d3.ScaleBand)
    */
-  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): void {
+  setHorizontalMarginsBasedOnContent<Domain extends AxisDomain>(chartElm: ElementRef, yScale: AxisScale<Domain>): boolean {
+    this.yTickLabelMaxWidth = null;
     const axisY = axisLeft(yScale).ticks(5);
     if (this.yAxis.tickSize !== undefined) {
       axisY.tickSizeInner(this.yAxis.tickSize);
@@ -489,8 +524,57 @@ export class PcacChart implements OnDestroy {
     // double-counted it, and since `margin` persists on the builder between builds, the amount
     // double-counted grew on the next rebuild - the plot area came out narrower than the
     // container allowed and then shrank further after the first resize.
-    const left = max + axisLabelSpace(this.yAxis);
+    const containerWidth = this.width + this.margin.left + this.margin.right;
+    const labelSpace = axisLabelSpace(this.yAxis);
+    const left = Math.min(max + labelSpace, containerWidth * MAX_LABEL_MARGIN_SHARE);
     this.width = this.width + this.margin.left - left;
     this.margin.left = left;
+    if (left < max + labelSpace) {
+      // Capped: the labels are shortened to what's left between the axis title's band and the
+      // ticks (see `truncateYTickLabels`), rather than running on past the chart's edge - and
+      // over the title.
+      const tickOverhead = Math.max(this.yAxis.tickSize ?? DEFAULT_TICK_SIZE, 0) + TICK_PADDING;
+      this.yTickLabelMaxWidth = Math.max(0, left - labelSpace - tickOverhead);
+    }
+    return this.width > 0;
   }
+
+  /**
+   * Shortens every y-axis tick label wider than the room `setHorizontalMarginsBasedOnContent` left
+   * for it, ending it in "…". Call after the axis is drawn. Does nothing when the labels fit.
+   */
+  protected truncateYTickLabels(): void {
+    const maxWidth = this.yTickLabelMaxWidth;
+    if (maxWidth === null) {
+      return;
+    }
+    this.svg.selectAll<SVGTextElement, unknown>('.pcac-y-axis .tick text').each(function () {
+      fitText(this, maxWidth);
+    });
+  }
+}
+
+/**
+ * Shortens `text` to the longest prefix that, with "…" appended, fits in `maxWidth` - just "…"
+ * if nothing does. Measured with `getComputedTextLength()`, so the text must be rendered; left
+ * alone where that isn't available (a DOM without layout).
+ */
+function fitText(text: SVGTextElement, maxWidth: number): void {
+  if (typeof text.getComputedTextLength !== 'function' || text.getComputedTextLength() <= maxWidth) {
+    return;
+  }
+  const full = text.textContent ?? '';
+  const withEllipsis = (length: number) => full.slice(0, length).trimEnd() + '…';
+  let fits = 0;
+  let tooLong = full.length;
+  while (tooLong - fits > 1) {
+    const mid = Math.floor((fits + tooLong) / 2);
+    text.textContent = withEllipsis(mid);
+    if (text.getComputedTextLength() <= maxWidth) {
+      fits = mid;
+    } else {
+      tooLong = mid;
+    }
+  }
+  text.textContent = withEllipsis(fits);
 }

@@ -1,3 +1,4 @@
+import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PcacColorService } from './color.service';
 
@@ -35,6 +36,23 @@ describe('PcacColorService', () => {
     service.setScale(['#aaa', '#bbb']);
 
     expect(service.getColorScale(3)).toEqual(['#aaa', '#bbb', '#aaa']);
+  });
+
+  // Regression test: the setters became signal writes, which Angular forbids inside a `computed`
+  // (NG0600) - breaking a consumer that set the palette while deriving its theme reactively.
+  it('can be set from inside a computed, and still notifies what reads the palette', () => {
+    const theme = signal(['#aaa']);
+    const config = computed(() => {
+      service.setScale(theme());
+      return {};
+    });
+    const palette = computed(() => service.getColorScale(1));
+
+    expect(() => config()).not.toThrow();
+    expect(palette()).toEqual(['#aaa']);
+    theme.set(['#bbb']);
+    config();
+    expect(palette()).toEqual(['#bbb']);
   });
 
   it('does not keep a reference to the array given to setScale()', () => {

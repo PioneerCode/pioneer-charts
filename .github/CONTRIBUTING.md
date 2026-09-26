@@ -104,7 +104,7 @@ project (indentation, accurate comments, etc.) and any other requirements
 
 When contributing to Pioneer Chart's documentation, edit the docs app's source in
 [`projects/pioneer-charts-docs`](https://github.com/PioneerCode/pioneer-charts/tree/main/projects/pioneer-charts-docs/src)
-(`npm start` serves it locally). The live site is built from it and deployed by the release
+(`npm run build:lib` once, then `npm start`, serves it locally). The live site is built from it and deployed by the release
 workflow; nothing else needs editing.
 
 Adhering to the following process is the best way to get your work

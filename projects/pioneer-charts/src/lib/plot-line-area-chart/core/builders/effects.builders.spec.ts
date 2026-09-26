@@ -1,6 +1,6 @@
 import { select } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
-import { PlaChartEffectsBuilder } from './effects.builders';
+import { scaleLinear, scaleTime } from 'd3-scale';
+import { IPlaChartEffectsBuilderConfig, PlaChartEffectsBuilder } from './effects.builders';
 import { PcacData, PcacFormatEnum } from '../../../core/chart.model';
 
 const point = (value: PcacData['value'], key: PcacData['key'] = ''): PcacData => ({ key, value, hide: false, data: [] });
@@ -22,7 +22,10 @@ describe('PlaChartEffectsBuilder', () => {
    * Builds the effects over a 100x100 plot whose y axis runs 0-100 (so a value's pixel is
    * `100 - value`) and whose x axis positions points by index across `xDomain`.
    */
-  function build(data: PcacData[], options: { xDomain?: [number, number]; colors?: string[]; yFormat?: PcacFormatEnum; yDomain?: [number, number] } = {}) {
+  function build(data: PcacData[], options: {
+    xDomain?: [number, number]; colors?: string[]; yFormat?: PcacFormatEnum; yDomain?: [number, number];
+    xFormat?: PcacFormatEnum; x?: IPlaChartEffectsBuilderConfig['x'];
+  } = {}) {
     const builder = new PlaChartEffectsBuilder();
     builder.buildEffects({
       svg: select(svgRoot),
@@ -30,9 +33,9 @@ describe('PlaChartEffectsBuilder', () => {
       width: 100,
       data,
       colors: options.colors ?? ['red', 'green', 'blue'],
-      x: scaleLinear().domain(options.xDomain ?? [0, 4]).range([0, 100]),
+      x: options.x ?? scaleLinear().domain(options.xDomain ?? [0, 4]).range([0, 100]),
       y: scaleLinear().domain(options.yDomain ?? [0, 100]).range([100, 0]),
-      xFormat: PcacFormatEnum.DatasetLength,
+      xFormat: options.xFormat ?? PcacFormatEnum.DatasetLength,
       yFormat: options.yFormat,
       yTicks: 5,
     });
@@ -90,6 +93,50 @@ describe('PlaChartEffectsBuilder', () => {
     hover(62.5);
     expect(groups()[0].getAttribute('visibility')).toBeNull();
     expect(text(groups()[0])).toBe('35');
+  });
+
+  // Regression test: the crosshair took the first point in the data as the leftmost, so DateTime
+  // data listed newest-first read the newest value across the whole plot.
+  describe('with data not in ascending x order', () => {
+    const day = (d: number) => `2024-01-0${d}T00:00:00Z`;
+    // Jan 1 - Jan 5 across the 100px plot, 25px a day.
+    const byDate = { xFormat: PcacFormatEnum.DateTime, x: scaleTime().domain([new Date(day(1)), new Date(day(5))]).range([0, 100]) };
+
+    it('reads newest-first DateTime data like the line draws it', () => {
+      build([series('a', [5, 4, 3, 2, 1].map((d) => point(d * 10, day(d))))], byDate);
+
+      hover(12.5); // halfway between Jan 1 (10) and Jan 2 (20)
+      expect(text(groups()[0])).toBe('15');
+
+      hover(90); // between Jan 4 (40) and Jan 5 (50)
+      expect(text(groups()[0])).toBe('46');
+    });
+
+    it('holds the leftmost and rightmost values, whichever end of the data they are at', () => {
+      build([series('a', [4, 3, 2].map((d) => point(d * 10, day(d))))], byDate);
+
+      hover(5); // left of Jan 2
+      expect(text(groups()[0])).toBe('20');
+
+      hover(95); // right of Jan 4
+      expect(text(groups()[0])).toBe('40');
+    });
+
+    it('reads descending Decimal data like the line draws it', () => {
+      build([series('a', [point(10, 100), point(20, 50), point(30, 0)])], {
+        xFormat: PcacFormatEnum.Decimal, x: scaleLinear().domain([0, 100]).range([0, 100]),
+      });
+
+      hover(75); // between x 100 (10) and x 50 (20)
+      expect(text(groups()[0])).toBe('15');
+    });
+
+    it('still hides the mark over a gap in newest-first data', () => {
+      build([series('a', [point(50, day(5)), point(null, day(4)), point(30, day(3))])], byDate);
+
+      hover(62.5); // between Jan 3 and Jan 5, where the missing Jan 4 breaks the line
+      expect(groups()[0].getAttribute('visibility')).toBe('hidden');
+    });
   });
 
   it('follows the scales handed over by a zoom', () => {

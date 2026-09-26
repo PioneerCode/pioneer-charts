@@ -151,9 +151,14 @@ export class PlaChartEffectsBuilder {
   }
 
   /**
-   * The series' value at plot x `mouseX`, interpolated between the two points either side of it
-   * the same way the (linear) line/area joins them - or null if it falls in a gap, where the
-   * line isn't drawn. Beyond the first/last point it holds that point's value.
+   * The series' value at plot x `mouseX`, interpolated along the segment of the line that spans it
+   * - the same (linear) join the line/area draws between two consecutive points - or null if it
+   * falls in a gap, where the line isn't drawn. Beyond the line's leftmost/rightmost point it holds
+   * that point's value.
+   *
+   * Works on the segments in data order and never assumes x increases along them: DateTime or
+   * Decimal data can come newest-first (or in any order), and the line still joins consecutive
+   * points - reading "the first point" as the leftmost one showed the newest value everywhere.
    *
    * Worked out from the data rather than by walking the drawn path: an area's outline doubles
    * back along its baseline, so a search over the path's geometry could land on the bottom edge
@@ -161,30 +166,33 @@ export class PlaChartEffectsBuilder {
    */
   private valueAt(points: PcacData[], mouseX: number): number | null {
     const xAt = (i: number) => getXFormat(this.config.xFormat, points[i], i, this.config.x);
+    const valueOf = (i: number) => Number(points[i].value);
     const drawn = points.map((_, i) => i).filter((i) => hasValue(points[i]));
     if (!drawn.length) {
       return null;
     }
-    const first = drawn[0];
-    const last = drawn[drawn.length - 1];
-    if (mouseX <= xAt(first)) {
-      return Number(points[first].value);
-    }
-    if (mouseX >= xAt(last)) {
-      return Number(points[last].value);
-    }
-    for (let n = 1; n < drawn.length; n++) {
-      const [a, b] = [drawn[n - 1], drawn[n]];
-      const [xa, xb] = [xAt(a), xAt(b)];
-      if (mouseX > xb) {
+
+    // A segment joins two points next to each other in the data, both with a value - a point
+    // without one between them breaks the line (`defined(hasValue)`).
+    for (let i = 1; i < points.length; i++) {
+      if (!hasValue(points[i - 1]) || !hasValue(points[i])) {
         continue;
       }
-      // Points with no value between the two break the line (`defined(hasValue)`).
-      if (b - a > 1) {
-        return null;
+      const [xa, xb] = [xAt(i - 1), xAt(i)];
+      if (mouseX < Math.min(xa, xb) || mouseX > Math.max(xa, xb)) {
+        continue;
       }
-      const [va, vb] = [Number(points[a].value), Number(points[b].value)];
+      const [va, vb] = [valueOf(i - 1), valueOf(i)];
       return xb === xa ? vb : va + (vb - va) * (mouseX - xa) / (xb - xa);
+    }
+
+    const leftmost = drawn.reduce((min, i) => (xAt(i) < xAt(min) ? i : min));
+    const rightmost = drawn.reduce((max, i) => (xAt(i) > xAt(max) ? i : max));
+    if (mouseX <= xAt(leftmost)) {
+      return valueOf(leftmost);
+    }
+    if (mouseX >= xAt(rightmost)) {
+      return valueOf(rightmost);
     }
     return null;
   }

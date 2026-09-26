@@ -46,11 +46,15 @@ This repository is an Angular workspace containing the library (`projects/pionee
 
 ```bash
 npm ci
-npm start              # serve the docs site, which consumes the library
+npm run build:lib      # build the library into dist/pioneer-charts - the docs site uses that build
+npm start              # serve the docs site
 npm run lint
 npm test               # library unit tests (vitest)
-npm run build:lib      # build the publishable package into dist/pioneer-charts
 ```
+
+The docs site imports the library from `dist/pioneer-charts`, not its source, so it needs `build:lib`
+before its first `npm start`. While working on both, run `npm run start-components` alongside
+`npm start` to rebuild the library on every change.
 
 Every push and pull request to `main` is verified by [GitHub Actions](https://github.com/PioneerCode/pioneer-charts/actions) (lint, tests, and both builds).
 

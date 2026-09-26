@@ -44,3 +44,40 @@ jobs:
 
       - name: Build docs
         run: npm run build:docs
+
+  # The library's peer range starts at Angular 22.1 (projects/pioneer-charts/package.json), while
+  # the workspace itself is on 22.2 - so this job proves the bottom of that range: the library's
+  # tests and build, and the docs app (a real consumer of the built package), all on 22.1.
+  angular-min:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+
+      # The lockfile is on 22.2 and npm won't mix the two, so it's resolved afresh here (in this
+      # job's checkout only; nothing is committed back).
+      - name: Install Angular 22.1
+        run: |
+          for p in cdk common compiler core forms material platform-browser platform-server router ssr; do
+            npm pkg set "dependencies.@angular/$p=~22.1.0"
+          done
+          for p in build cli compiler-cli; do
+            npm pkg set "devDependencies.@angular/$p=~22.1.0"
+          done
+          rm package-lock.json
+          npm install
+          npx ng version
+
+      - name: Test library
+        run: npx ng test @pioneer-code/pioneer-charts
+
+      - name: Build library
+        run: npm run build:lib
+
+      - name: Build docs
+        run: npm run build:docs

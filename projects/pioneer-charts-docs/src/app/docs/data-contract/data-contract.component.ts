@@ -75,7 +75,7 @@ export class PcacAxisChartConfig extends PcacChartConfig {
   isStacked: boolean = false;
   thresholds: PcacData[] = [];
   spreadColorsPerGroup: boolean = false;
-  colorOverride: PcacBarVerticalChartColorOverrideConfig = new PcacBarVerticalChartColorOverrideConfig();
+  colorOverride: string[] = [];
 }`;
 
   bindConfig = `<pcac-bar-vertical-chart [config]="config" />`;

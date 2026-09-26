@@ -4,7 +4,6 @@ import { Injectable, signal, untracked } from '@angular/core';
   providedIn: 'root',
 })
 export class PcacColorService {
-  private primary = '#43425d';
   private primaryLight = '#a3a1fb';
   private success = '#5ee2a0';
   private danger = '#ff6565';
@@ -76,12 +75,6 @@ export class PcacColorService {
    */
   setScale(colors: string[]): void {
     this.customScale = colors.length ? [...colors] : null;
-    this.changed();
-  }
-
-  /** @deprecated No chart reads the primary color; it isn't part of the palette. */
-  setPrimary(color: string): void {
-    this.primary = color;
     this.changed();
   }
 

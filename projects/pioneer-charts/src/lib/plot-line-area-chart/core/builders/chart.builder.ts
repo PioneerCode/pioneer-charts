@@ -2,7 +2,7 @@ import { ElementRef, Injectable, inject } from '@angular/core';
 import { select, Selection } from 'd3-selection';
 import { Line, Area } from 'd3-shape';
 import { range } from 'd3-array';
-import { ZoomBehavior } from 'd3-zoom';
+import { ZoomBehavior, ZoomTransform, zoomIdentity } from 'd3-zoom';
 // Side effect only: adds .transition() to d3-selection's Selection, which the entry animations use.
 import 'd3-transition';
 import { Subject } from 'rxjs';
@@ -56,7 +56,24 @@ const CHART_TYPE_LABELS: Record<PcacLineAreaPlotChartConfigType, string> = {
 @Injectable()
 export class PlaChartBuilder extends PcacChart {
   private effectsBuilder = inject(PlaChartEffectsBuilder);
+  /**
+   * The scales as drawn: `baseScales` with the zoom this build started at (see `keptZoom`) applied.
+   * A zoom gesture rescales from `baseScales`, never from these.
+   */
   private scales!: PlaChartScales;
+  /** The unzoomed scales, spanning the whole domain. */
+  private baseScales!: PlaChartScales;
+  /**
+   * The zoom a rebuild picks up again, so a new config (a series toggled in the legend, live
+   * data) or a resize doesn't throw away where the user had zoomed to. The pan is kept as a share
+   * of the plot's size, which is what carries it across a resize: the same part of the domain
+   * stays in view. `axes` is which axes were zoomable; a build where that differs starts unzoomed.
+   */
+  private keptZoom: { k: number; x: number; y: number; axes: string } | null = null;
+  /** The zoom this build starts at, if any; applied to the zoom behavior once it's attached. */
+  private startZoom: ZoomTransform | null = null;
+  /** Set while `startZoom` is handed to the zoom behavior, whose resulting zoom event is skipped. */
+  private restoringZoom = false;
   private lineGenerator!: Line<PcacData>;
   private areaGenerator!: Area<PcacData>;
   private zoomBehavior!: ZoomBehavior<Element, unknown>;
@@ -146,7 +163,9 @@ export class PlaChartBuilder extends PcacChart {
     }
     this.applyColorOverride(this.config.colorOverride);
 
-    this.scales = new PlaChartScalesBuilder().build(this.xAxis, this.yAxis, this.config.data, this.width, this.height);
+    this.baseScales = new PlaChartScalesBuilder().build(this.xAxis, this.yAxis, this.config.data, this.width, this.height);
+    this.startZoom = this.resumeZoom();
+    this.scales = this.startZoom ? this.zoomedScales(this.startZoom) : this.baseScales;
     this.lineGenerator = buildLineGenerator(this.xAxis.format, this.scales);
     this.areaGenerator = buildAreaGenerator(this.xAxis.format, this.scales, this.height);
 
@@ -156,13 +175,15 @@ export class PlaChartBuilder extends PcacChart {
         // cursor (or is hidden outright, see `pointDisplay`), and either way the browser never
         // sends it a mouseout - its tooltip would stay up, and its dot stay grown, until the
         // cursor happened to cross it again. So the hover is ended here, on every zoom event.
+        // The build's own starting zoom, handed to the behavior: already drawn that way.
+        if (this.restoringZoom) {
+          return;
+        }
         this.leavePoint();
+        this.keepZoom(event.transform);
 
-        // A d3 zoom transform is always two-dimensional; only the enabled axes follow it and the
-        // other keeps its original scale, so that component of the gesture is simply ignored.
-        const newX = this.config.enableZoomX ? event.transform.rescaleX(this.scales.x) : this.scales.x;
-        const newY = this.config.enableZoomY ? event.transform.rescaleY(this.scales.y) : this.scales.y;
-        const zoomedScales: PlaChartScales = { x: newX, y: newY };
+        const zoomedScales = this.zoomedScales(event.transform);
+        const { x: newX, y: newY } = zoomedScales;
 
         // Update the zoomed axes, each with its grid: the grid hangs off the axis's ticks, so it
         // is redrawn against the rescaled scale and dropped back underneath everything (append
@@ -350,6 +371,47 @@ export class PlaChartBuilder extends PcacChart {
     return !!(this.config.enableZoomX || this.config.enableZoomY);
   }
 
+  /** Which axes zoom, as `keptZoom.axes` records them. */
+  private get zoomAxes(): string {
+    return `${!!this.config.enableZoomX}${!!this.config.enableZoomY}`;
+  }
+
+  /**
+   * `baseScales` under a zoom transform. A d3 zoom transform is always two-dimensional; only the
+   * enabled axes follow it and the other keeps its original scale, so that component of the
+   * gesture is simply ignored.
+   */
+  private zoomedScales(transform: ZoomTransform): PlaChartScales {
+    return {
+      x: this.config.enableZoomX ? transform.rescaleX(this.baseScales.x) : this.baseScales.x,
+      y: this.config.enableZoomY ? transform.rescaleY(this.baseScales.y) : this.baseScales.y,
+    };
+  }
+
+  /** Records a zoom for the next build to resume (see `keptZoom`). */
+  private keepZoom(transform: ZoomTransform): void {
+    this.keptZoom = {
+      k: transform.k,
+      x: transform.x / this.width,
+      y: transform.y / this.height,
+      axes: this.zoomAxes,
+    };
+  }
+
+  /**
+   * The zoom this build starts at: the kept one, fitted to this build's plot size, or `null` for
+   * none - zoom off, the zoomable axes changed, or never zoomed. Forgets the kept zoom when it
+   * can't be resumed, so turning zoom off and on again starts unzoomed.
+   */
+  private resumeZoom(): ZoomTransform | null {
+    const kept = this.keptZoom;
+    if (!kept || !this.zoomEnabled || kept.axes !== this.zoomAxes) {
+      this.keptZoom = null;
+      return null;
+    }
+    return zoomIdentity.translate(kept.x * this.width, kept.y * this.height).scale(kept.k);
+  }
+
   private attachZoomBehavior(): void {
     if (!this.zoomEnabled) return;
 
@@ -374,6 +436,14 @@ export class PlaChartBuilder extends PcacChart {
       .attr('pointer-events', 'all');
 
     this.svg.call(this.zoomBehavior as any);
+
+    // A resumed zoom is already drawn (`scales`); the behavior is told it too, so the next gesture
+    // carries on from there rather than from the whole domain.
+    if (this.startZoom) {
+      this.restoringZoom = true;
+      this.svg.call(this.zoomBehavior.transform as any, this.startZoom);
+      this.restoringZoom = false;
+    }
   }
 
   private drawLineArea(config: PcacLineAreaChartConfig, type: PcacLineAreaPlotChartConfigType): void {

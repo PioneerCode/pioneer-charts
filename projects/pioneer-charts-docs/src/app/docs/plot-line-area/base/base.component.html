@@ -113,7 +113,9 @@
           <td>enableZoomY</td>
           <td>The same along the y-axis: zoom (1x to 10x) and pan within the y domain, with the y-axis and its
             grid following. Independent of <code>enableZoomX</code> &mdash; set either or both. With only one on,
-            the other axis just stays put during a gesture. Default is false.</td>
+            the other axis just stays put during a gesture. Default is false. A zoom survives the chart redrawing
+            &mdash; a new config, a series toggled in a legend, a resize &mdash; and is dropped when zoom is turned
+            off or the zoomable axes change.</td>
         </tr>
         <tr>
           <td>colorOverride</td>

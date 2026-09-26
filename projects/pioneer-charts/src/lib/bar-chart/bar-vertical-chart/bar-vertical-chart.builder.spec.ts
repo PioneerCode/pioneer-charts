@@ -163,12 +163,12 @@ describe('BarVerticalChartBuilder', () => {
       expect(fills(elm).every((fill) => fill !== '')).toBe(true);
     });
 
-    // Regression test: `colorOverride.colors.reverse()` reversed the consumer's array in place, so
+    // Regression test: `colorOverride.reverse()` reversed the consumer's array in place, so
     // every rebuild (every container resize) flipped their palette back and forth. The override
     // also used to be applied reversed, against the docs; it now runs in order.
     it('applies the override in order without mutating the consumer array, on repeated builds', () => {
       const colors = ['#111', '#222', '#333'];
-      const cfg = config({ colorOverride: { colors } });
+      const cfg = config({ colorOverride: colors });
 
       builder.buildChart(chartElm(), cfg);
       builder.buildChart(chartElm(), cfg);
@@ -177,8 +177,24 @@ describe('BarVerticalChartBuilder', () => {
       expect(builder.colors).toEqual(['#111', '#222', '#333']);
     });
 
+    // Up to 22.2 the bar charts took `colorOverride: { colors: [...] }`; a config still shaped
+    // that way (spread together or loaded as JSON, so TypeScript misses it) keeps working, with a
+    // development-mode warning.
+    it('still reads the old `{ colors }` override, warning once', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const legacy = { colorOverride: { colors: ['#111', '#222'] } } as unknown as Partial<PcacBarVerticalChartConfig>;
+
+      builder.buildChart(chartElm(), config(legacy));
+      builder.buildChart(chartElm(), config(legacy));
+
+      expect(builder.colors).toEqual(['#111', '#222']);
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toContain('plain array');
+      warn.mockRestore();
+    });
+
     it('repeats an override shorter than the series', () => {
-      builder.buildChart(chartElm(), config({ colorOverride: { colors: ['#111'] } }));
+      builder.buildChart(chartElm(), config({ colorOverride: ['#111'] }));
 
       expect(builder.colors).toEqual(['#111', '#111']);
     });

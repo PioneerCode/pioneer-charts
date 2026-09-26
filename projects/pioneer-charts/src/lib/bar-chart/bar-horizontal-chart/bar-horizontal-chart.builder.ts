@@ -15,7 +15,7 @@ import { PcacChart } from '../../core/chart';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
+import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
 // actually matched what `.selectAll()`'s default generics resolve to).
@@ -54,7 +54,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     this.ensureColorCount(seriesKeys(config.data).length);
-    this.applyColorOverride(config.colorOverride?.colors);
+    this.applyColorOverride(barColorOverride(config.colorOverride));
     if (!this.buildScales(chartElm, config)) {
       return;
     }

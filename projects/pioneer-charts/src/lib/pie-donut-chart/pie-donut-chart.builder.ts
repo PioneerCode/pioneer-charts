@@ -103,7 +103,7 @@ export class PieDonutChartBuilder extends PcacChart {
     console.warn(
       'Pioneer Charts: <pcac-pie-chart> ignores `donut`. For a donut, use <pcac-donut-chart> with ' +
       'PcacDonutChartConfig, which takes innerRadius, label, subLabel, labelColor and subLabelColor ' +
-      'directly - see the 22.3.0 CHANGELOG.',
+      'directly - see the 22.2.16 CHANGELOG.',
     );
   }
 

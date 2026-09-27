@@ -1,3 +1,51 @@
+<a name="22.2.18"></a>
+# [v22.2.18]
+
+### Added
+  - Three more colors you can set with CSS custom properties, like the axis and grid colors -
+    for a page with a dark background, say:
+    - `--pcac-focus-ring-color`: the keyboard focus ring (and a focused slice's outline);
+    - `--pcac-crosshair-line-color` and `--pcac-crosshair-text-color`: the line and area charts'
+      hover crosshair.
+
+    Each defaults to the gray it used before.
+  - A chart with no `ariaLabel` is named with its axis titles as well as its type - "Bar chart -
+    x axis: Product, y axis: Units sold". The titles are hidden from screen readers where they're
+    drawn, so this is where they're read.
+
+### Changed
+  - The bar chart components are `PcacBarVerticalChart` and `PcacBarHorizontalChart`, without the
+    `Component` suffix every other chart dropped. The old names still work, as the same classes,
+    and are deprecated; they'll be removed in a later version.
+  - `colorOverride` is optional on every chart's config. It was required on the bar, line, area
+    and plot configs, so a typed object literal had to spell out `colorOverride: []`.
+  - The bar components' `buildChart()` and `chartElm`, the pie, donut, line, area and plot
+    components' `types`, and the legend's `colorService` are no longer public. None of them was
+    meant to be used from outside.
+  - `@angular/common` is no longer a peer dependency; the library never imported it.
+  - The package marks its `.css` and `.scss` files as having side effects, so a bundler doesn't
+    drop an `import '@pioneer-code/pioneer-charts/themes/pioneer-charts.css'`.
+  - The legend's hover animation is off when the user has asked to reduce motion, and a legend
+    without a heading no longer renders an empty heading element.
+
+### Fixed
+  - Keyboard use:
+    - A chart that redraws - a click handler updating its data, a resize, live data - keeps
+      keyboard focus on the same bar, slice or point. It used to drop focus to the top of the page.
+    - Escape stops once it has hidden a tooltip, so it doesn't also close a dialog the chart is
+      in; a second Escape goes on as usual.
+    - Keys pressed with Alt, Ctrl or Cmd are left to the browser (Alt+Left is Back again).
+    - Pressing the pointer on a mark releases a mark in the same chart that had keyboard focus,
+      which stayed highlighted.
+  - A `format` on a bar chart's category axis turned text keys into `NaN%` or `Chipsm`. It now
+    formats only keys that are numbers, and the horizontal chart sizes its labels with the format.
+  - Grouped bars whose series keys don't tell them apart - left `null`, or repeated - were drawn
+    on top of each other. Each now has its own slot, by its place in the group.
+  - A zoom or pan still under way when a line, area or plot chart redrew moved the new drawing
+    and replaced the zoom it keeps.
+  - The old bar `colorOverride: { colors: [] }` - every bar config's default before 22.2.17 - no
+    longer triggers the development warning, which is for colors actually set.
+
 <a name="22.2.17"></a>
 # [v22.2.17]
 

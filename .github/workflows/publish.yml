@@ -126,10 +126,14 @@ jobs:
       - name: Build docs
         run: npm run build:docs
 
+      # Kept as long as the package above: `deploy-docs` only runs after the npm approval, which can
+      # wait days, and this action's own default of one day let it publish to npm and then fail to
+      # deploy the docs.
       - name: Upload docs
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist/pioneer-charts-docs/browser
+          retention-days: 7
 
   publish:
     needs: test
@@ -197,6 +201,9 @@ jobs:
 
   deploy-docs:
     needs: [test, publish]
+    # Not for a prerelease (published under `next`): the site documents what `latest` installs, and
+    # a beta's docs would describe features its readers don't have.
+    if: needs.test.outputs.prerelease != 'true'
     runs-on: ubuntu-latest
     # Same group as deploy-angular.yml so a manual docs deploy and a release never race.
     concurrency:

@@ -16,7 +16,7 @@ import { makeMarksAccessible } from '../../core/marks';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys, seriesSlots } from '../bar-series';
+import { barColorOverride, canRoundBands, colorOverrideWarning, hasDistinctSeriesKeys, seriesKeys, seriesSlots } from '../bar-series';
 
 import { Subject } from 'rxjs';
 
@@ -34,6 +34,8 @@ type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked!: ScaleBand<string>;
   private xScaleGrouped!: ScaleBand<string>;
+  /** Warns, once for this chart, about a `colorOverride` in its old `{ colors }` shape. */
+  private readonly warnOfColorOverride = colorOverrideWarning();
   /** A bar's slot in `xScaleGrouped`, from its datum and its index in its group (see `seriesSlots`). */
   private slotOf: (bar: PcacData, index: number) => string = (bar) => bar.key as string;
   private yScale!: ScaleLinear<number, number>;
@@ -60,7 +62,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     }
 
     this.ensureColorCount(seriesKeys(config.data).length);
-    this.applyColorOverride(barColorOverride(config.colorOverride));
+    this.applyColorOverride(barColorOverride(config.colorOverride, this.warnOfColorOverride));
     this.buildScales(config);
     this.drawChart(chartElm, config);
   }

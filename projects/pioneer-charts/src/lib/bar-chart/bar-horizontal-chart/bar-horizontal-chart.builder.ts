@@ -16,7 +16,7 @@ import { makeMarksAccessible } from '../../core/marks';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys, seriesSlots } from '../bar-series';
+import { barColorOverride, canRoundBands, colorOverrideWarning, hasDistinctSeriesKeys, seriesKeys, seriesSlots } from '../bar-series';
 
 // `BaseType` (not the hand-rolled union this used to be, which omitted `null` and never
 // actually matched what `.selectAll()`'s default generics resolve to).
@@ -33,6 +33,8 @@ export class BarHorizontalChartBuilder extends PcacChart {
   private xScale!: ScaleLinear<number, number>;
   private yScaleStacked!: ScaleBand<string>;
   private yScaleGrouped!: ScaleBand<string>;
+  /** Warns, once for this chart, about a `colorOverride` in its old `{ colors }` shape. */
+  private readonly warnOfColorOverride = colorOverrideWarning();
   /** A bar's slot in `yScaleGrouped`, from its datum and its index in its group (see `seriesSlots`). */
   private slotOf: (bar: PcacData, index: number) => string = (bar) => bar.key as string;
   private barClickedSource = new Subject<PcacData>();
@@ -57,7 +59,7 @@ export class BarHorizontalChartBuilder extends PcacChart {
     }
 
     this.ensureColorCount(seriesKeys(config.data).length);
-    this.applyColorOverride(barColorOverride(config.colorOverride));
+    this.applyColorOverride(barColorOverride(config.colorOverride, this.warnOfColorOverride));
     if (!this.buildScales(chartElm, config)) {
       return;
     }

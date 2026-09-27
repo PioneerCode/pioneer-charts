@@ -1,6 +1,6 @@
 import { PcacData } from '../core/chart.model';
 import { barThreshold, barThresholdLayout, groupThreshold } from './bar-thresholds';
-import { barColorOverride, seriesKeys, seriesSlots } from './bar-series';
+import { barColorOverride, colorOverrideWarning, seriesKeys, seriesSlots } from './bar-series';
 import { vi } from 'vitest';
 
 function t(value: number | null, data: PcacData[] = []): PcacData {
@@ -82,15 +82,29 @@ describe('barColorOverride', () => {
   afterEach(() => vi.restoreAllMocks());
 
   it('reads the old { colors } shape, warning only when it actually sets colors', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warn = vi.fn();
 
     // Every bar config defaulted to `{ colors: [] }` before 22.2.17: saved back then, it isn't a
     // choice its author made, so it isn't worth a warning.
-    expect(barColorOverride({ colors: [] })).toEqual([]);
+    expect(barColorOverride({ colors: [] }, warn)).toEqual([]);
     expect(warn).not.toHaveBeenCalled();
 
-    expect(barColorOverride({ colors: ['#111'] })).toEqual(['#111']);
+    expect(barColorOverride({ colors: ['#111'] }, warn)).toEqual(['#111']);
     expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  // Regression test: the "once" was a flag shared by the whole module, so which test (or chart)
+  // warned depended on which built first - on CI it wasn't this one.
+  it('warns once per warning, however often it is asked to', () => {
+    const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const first = colorOverrideWarning();
+    const second = colorOverrideWarning();
+
+    first();
+    first();
+    second();
+
+    expect(consoleWarn).toHaveBeenCalledTimes(2);
   });
 
   it('passes a plain array, or nothing, straight through', () => {

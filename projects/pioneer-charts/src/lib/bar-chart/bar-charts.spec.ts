@@ -6,6 +6,7 @@ import { BarHorizontalChartBuilder } from './bar-horizontal-chart/bar-horizontal
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart/bar-vertical-chart.model';
 import { PcacBarHorizontalChartConfig } from './bar-horizontal-chart/bar-horizontal-chart.model';
 import { PcacData } from '../core/chart.model';
+import * as api from '../../public-api';
 
 /**
  * Behavior both bar charts share, run against each. Same technique as the builders' own specs: a
@@ -209,6 +210,25 @@ for (const chart of charts) {
       expect(new Set(offsets).size).toBe(2);
     });
 
+    // The axis titles are drawn in the axis groups, which screen readers skip; without an
+    // ariaLabel of its own, the chart's name is the only place they're read.
+    it('names the chart by its type and axis titles when it has no ariaLabel', () => {
+      const svg = build(config([group('A', [bar('a', 10)])], {
+        xAxis: { domainMax: 100, label: 'Product' },
+        yAxis: { domainMax: 100, label: 'Units sold' },
+      }));
+
+      expect(svg.getAttribute('aria-label')).toBe('Bar chart - x axis: Product, y axis: Units sold');
+    });
+
+    it('prefers its own ariaLabel', () => {
+      const svg = build(config([group('A', [bar('a', 10)])], {
+        ariaLabel: 'Sales', yAxis: { domainMax: 100, label: 'Units sold' },
+      }));
+
+      expect(svg.getAttribute('aria-label')).toBe('Sales');
+    });
+
     describe('keyboard and screen readers', () => {
       const data = () => [
         group('Chips', [bar('2023', 10), bar('2024', 20)]),
@@ -307,3 +327,12 @@ for (const chart of charts) {
     });
   });
 }
+
+// The bar components were renamed without the `Component` suffix every other chart dropped; the old
+// names stay exported, as the same classes, until a later version.
+describe('bar chart component names', () => {
+  it('still exports the old names, as the same components', () => {
+    expect(api.PcacBarVerticalChartComponent).toBe(api.PcacBarVerticalChart);
+    expect(api.PcacBarHorizontalChartComponent).toBe(api.PcacBarHorizontalChart);
+  });
+});

@@ -1,5 +1,4 @@
-// The theme's background, full width - the docs pages get the same from Material's sidenav
-// container; without it the page showed the body's dark color (the footer's) around its cards.
+// The theme's background, full width, as the docs pages get from Material's sidenav container.
 :host {
   display: block;
   background-color: var(--mat-sys-surface);
@@ -53,8 +52,8 @@
   }
 }
 
-// A jump link scrolls a section just below the fixed header (the router's anchor scrolling, with
-// the offset LayoutHeader sets) and focuses it - hence tabindex="-1", and no focus ring for that.
+// A jump link scrolls a section just below the fixed header (App, with the offset LayoutHeader
+// sets) and focuses it - hence tabindex="-1", and no focus ring for that.
 .pc-charts-section {
   margin-bottom: 2.5rem;
 

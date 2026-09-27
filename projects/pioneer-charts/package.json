@@ -33,7 +33,6 @@
   "version": "22.2.17",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^22.1.0",
     "@angular/core": "^22.1.0",
     "rxjs": "^7.4.0"
   },
@@ -50,5 +49,8 @@
     "d3-zoom": "^3.0.0",
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ]
 }

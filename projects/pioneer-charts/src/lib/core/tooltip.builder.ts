@@ -50,7 +50,7 @@ export class PcacTooltipBuilder implements OnDestroy {
   private owner: object | null = null;
 
   /**
-   * The tooltip element's id, for a focused mark's `aria-describedby` (see `PcacChart.focusMark`).
+   * The tooltip element's id, for a focused mark's `aria-describedby` (see `PcacChart.showMarkTooltip`).
    * One per page, like the element.
    */
   static readonly ID = 'pcac-tooltip';

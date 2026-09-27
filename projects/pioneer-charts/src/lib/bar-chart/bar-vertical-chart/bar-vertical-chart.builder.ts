@@ -25,7 +25,7 @@ import { Subject } from 'rxjs';
 type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
 /**
- * Provided per-component (see PcacBarVerticalChartComponent's `providers`), not root-scoped:
+ * Provided per-component (see PcacBarVerticalChart's `providers`), not root-scoped:
  * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
  * height, colors, svg). A root singleton would be shared and clobbered by every
  * <pcac-bar-vertical-chart> rendered at once.

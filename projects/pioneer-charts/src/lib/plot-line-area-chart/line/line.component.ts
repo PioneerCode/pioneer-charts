@@ -15,7 +15,7 @@ import { PcacTooltipDirective } from "../../core/tooltip.directive";
 })
 export class PcacLineChart {
   readonly config = input.required<PcacLineChartConfig>();
-  readonly types = PcacLineAreaPlotChartConfigType;
+  protected readonly types = PcacLineAreaPlotChartConfigType;
   readonly dotClicked = output<PcacData>()
 
   /**

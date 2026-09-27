@@ -1,6 +1,5 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AppService } from '../../../app.service';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
 import { LayoutCode } from '../../../layout/code/code';
@@ -22,7 +21,6 @@ export class PlotLineAreaBaseComponent {
   readonly markup = input.required<string>();
   readonly importCode = input.required<string>();
 
-  pcService = inject(AppService);
   jumpNav = signal<IJumpNav[]>([
     {
       key: 'Chart',

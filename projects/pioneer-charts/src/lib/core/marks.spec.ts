@@ -141,6 +141,19 @@ describe('makeMarksAccessible', () => {
     expect(access.activate).not.toHaveBeenCalled();
   });
 
+  // Regression test: pressing the pointer on a mark doesn't focus it - so a mark focused from the
+  // keyboard kept focus, and its highlight, while the pointer worked on another; its tooltip was
+  // gone (the other mark's mouseout hid it), leaving it stuck highlighted.
+  it('lets go of a focused mark in the same chart when the pointer is pressed on another', () => {
+    const { rects, access } = setUp([{ key: 'a' }, { key: 'b' }]);
+    rects[0].focus();
+
+    rects[1].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+
+    expect(document.activeElement).not.toBe(rects[0]);
+    expect(access.blur).toHaveBeenCalledWith(rects[0], { key: 'a' });
+  });
+
   it('leaves other keys to the page', () => {
     const { rects } = setUp([{ key: 'a' }, { key: 'b' }]);
 

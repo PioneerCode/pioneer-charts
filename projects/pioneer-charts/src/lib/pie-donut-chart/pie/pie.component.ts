@@ -12,7 +12,7 @@ import { PcacTooltipDirective } from '../../core/tooltip.directive';
 })
 export class PcacPieChart {
   readonly config = input.required<PcacPieChartConfig>();
-  readonly types = PcacPieDonutChartType;
+  protected readonly types = PcacPieDonutChartType;
   readonly sliceClicked = output<PcacData>();
 
   /**

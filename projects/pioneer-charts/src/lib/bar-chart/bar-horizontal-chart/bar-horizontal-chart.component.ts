@@ -17,11 +17,11 @@ import { PcacTooltipDirective } from '../../core/tooltip.directive';
   encapsulation: ViewEncapsulation.None,
   providers: [BarHorizontalChartBuilder]
 })
-export class PcacBarHorizontalChartComponent {
+export class PcacBarHorizontalChart {
   private chartBuilder = inject(BarHorizontalChartBuilder);
 
   readonly config = input.required<PcacBarHorizontalChartConfig>();
-  readonly chartElm = viewChild.required<ElementRef>('chart');
+  private readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly barClicked = outputFromObservable(this.chartBuilder.barClicked$);
 
   /**
@@ -50,7 +50,7 @@ export class PcacBarHorizontalChartComponent {
     });
   }
 
-  buildChart(): void {
+  private buildChart(): void {
     const config = this.config();
     // Handed over even when empty: the builder clears what it last drew rather than leaving it.
     if (config) {

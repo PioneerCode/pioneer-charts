@@ -3,9 +3,9 @@ import { RouterLink } from '@angular/router';
 import {
   PcacAreaChart,
   PcacAreaChartConfig,
-  PcacBarHorizontalChartComponent,
+  PcacBarHorizontalChart,
   PcacBarHorizontalChartConfig,
-  PcacBarVerticalChartComponent,
+  PcacBarVerticalChart,
   PcacBarVerticalChartConfig,
   PcacData,
   PcacDonutChart,
@@ -97,8 +97,8 @@ const LONG_CATEGORIES: Record<string, string> = {
     ChartCard,
     ChartLabelPipe,
     LayoutResourceState,
-    PcacBarVerticalChartComponent,
-    PcacBarHorizontalChartComponent,
+    PcacBarVerticalChart,
+    PcacBarHorizontalChart,
     PcacLineChart,
     PcacAreaChart,
     PcacPlotChart,
@@ -111,14 +111,18 @@ export class ChartsComponent {
   readonly service = inject(AppService);
   readonly sections = SECTIONS;
 
-  /** The grouped bars with axis titles, tick marks, axis lines and a grid, in custom colors. */
+  /**
+   * The grouped bars with axis titles, tick marks, axis lines and a grid, in custom colors. Colors
+   * are CSS values applied as custom properties, so the grid's can be a `light-dark()` pair and
+   * follow the site's theme - its pale light-theme lavender glared on a dark card.
+   */
   readonly barAxisConfig = computed<PcacBarVerticalChartConfig>(() => {
     const config = this.service.barVerticalChartGroupConfig.value();
     return {
       ...config,
       thresholds: [],
       xAxis: { ...config.xAxis, label: 'Product', tickSize: 6, showLine: true, lineColor: '#5c6bc0', tickColor: '#5c6bc0' },
-      yAxis: { ...config.yAxis, label: 'Units sold', showGrid: true, tickSize: 6, showLine: true, gridColor: '#e8eaf6' },
+      yAxis: { ...config.yAxis, label: 'Units sold', showGrid: true, tickSize: 6, showLine: true, gridColor: 'light-dark(#e8eaf6, #2f3350)' },
     };
   });
 

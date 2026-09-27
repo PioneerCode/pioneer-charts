@@ -257,8 +257,8 @@ pre.app-layout-code {
   overflow-x: auto;
 }
 
-// Jumps to a section on the same page (the router's anchorScrolling) glide there; the router
-// still puts a new page at its top instantly, as it asks for that explicitly.
+// Jumps to a section on the same page (App scrolls to a link's #section) glide there; a new page
+// still starts at its top instantly, as App asks for that explicitly.
 html {
   scroll-behavior: smooth;
 

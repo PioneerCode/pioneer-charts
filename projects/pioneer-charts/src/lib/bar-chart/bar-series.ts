@@ -69,12 +69,15 @@ export function barColorOverride(override: readonly string[] | { colors?: readon
   if (!override || Array.isArray(override)) {
     return override as readonly string[] | undefined;
   }
-  if (typeof ngDevMode !== 'undefined' && ngDevMode && !warnedOfColorOverrideObject) {
+  const colors = (override as { colors?: readonly string[] }).colors;
+  // Only for colors actually set: before 22.2.17 every bar config defaulted to `{ colors: [] }`,
+  // so one saved as JSON back then would warn about an override its author never chose.
+  if (colors?.length && typeof ngDevMode !== 'undefined' && ngDevMode && !warnedOfColorOverrideObject) {
     warnedOfColorOverrideObject = true;
     console.warn(
       'Pioneer Charts: a bar chart\'s `colorOverride` is now a plain array of colors, like the other ' +
       'charts\' - use `colorOverride: [...]` rather than `colorOverride: { colors: [...] }`.',
     );
   }
-  return (override as { colors?: readonly string[] }).colors;
+  return colors;
 }

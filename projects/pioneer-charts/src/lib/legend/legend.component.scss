@@ -34,6 +34,12 @@
   border-radius: 50%;
   margin-right: 4px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  // Grown in place, without the animation, for anyone who has asked their system to reduce
+  // motion - as the charts are drawn without theirs (PcacTransitionService).
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .pcac-legend-unchecked {

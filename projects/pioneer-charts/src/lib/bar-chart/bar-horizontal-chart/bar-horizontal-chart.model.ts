@@ -6,8 +6,8 @@ export class PcacBarHorizontalChartConfig extends PcacAxisChartConfig {
   spreadColorsPerGroup: boolean = false
   /**
    * Bar colors, any CSS color, in place of the theme palette - by series, or by group with
-   * `spreadColorsPerGroup`. Repeated when there are more series (or groups) than colors. Empty,
-   * the theme palette is used.
+   * `spreadColorsPerGroup`. Repeated when there are more series (or groups) than colors. Omitted
+   * or empty, the theme palette is used - optional, as on every chart's config.
    */
-  colorOverride: string[] = []
+  colorOverride?: string[]
 }

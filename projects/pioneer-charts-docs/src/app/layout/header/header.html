@@ -38,12 +38,16 @@
       </div>
       <span class="hidden sm:inline">GitHub</span>
     </a>
-    <!-- Named for what it does, which changes with the theme. A plain title for the hover hint:
-         MatTooltip would bring Material's overlay code into every page's initial bundle. -->
-    <button matIconButton type="button" class="theme-toggle" (click)="theme.toggle()"
-      [attr.aria-label]="theme.dark() ? 'Switch to the light theme' : 'Switch to the dark theme'"
-      [title]="theme.dark() ? 'Light theme' : 'Dark theme'">
-      <mat-icon>{{ theme.dark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    <!-- A toggle: one name, its state in aria-pressed - the same in the pre-rendered HTML as once
+         the app has started. Both icons are always there and CSS shows the one for the theme (the
+         moon on the light theme, the sun on the dark), from custom properties index.html's
+         pre-paint script sets inline, so a dark page shows the sun before the app starts too. A
+         plain title for the hover hint: MatTooltip would bring Material's overlay code into every
+         page's initial bundle. -->
+    <button matIconButton type="button" class="theme-toggle" (click)="theme.toggle()" aria-label="Dark theme"
+      [attr.aria-pressed]="theme.dark()" title="Dark theme">
+      <mat-icon class="pc-theme-icon-moon">dark_mode</mat-icon>
+      <mat-icon class="pc-theme-icon-sun">light_mode</mat-icon>
     </button>
 
   </mat-toolbar-row>

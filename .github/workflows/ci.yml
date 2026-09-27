@@ -6,9 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# A newer push to a pull request cancels the run it replaces; on main every merge gets a result
+# of its own, so two quick merges don't leave the first with only a cancelled check.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read

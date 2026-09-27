@@ -384,6 +384,20 @@ export class PcacChart implements OnDestroy {
     this.markFocus = null;
   }
 
+  /**
+   * The chart's accessible name when its config gives no `ariaLabel`: its type, and the titles of
+   * the axes it shows - "Bar chart - x axis: Product, y axis: Units sold". The titles are drawn
+   * inside the axis groups, which are hidden from screen readers (the marks' own names carry each
+   * key and value), so this is the only place they're read out.
+   */
+  private defaultChartName(): string {
+    const axes: [string, PcacResolvedAxisConfig][] = [['x', this.xAxis], ['y', this.yAxis]];
+    const titles = axes
+      .filter(([, axis]) => !axis.hide && !!axis.label)
+      .map(([name, axis]) => `${name} axis: ${axis.label}`);
+    return titles.length ? `${this.chartTypeLabel} - ${titles.join(', ')}` : this.chartTypeLabel;
+  }
+
   /** Keyboard focus leaving a mark: the undoing of `showMarkTooltip`. */
   protected hideMarkTooltip(element: Element): void {
     this.hideTooltip();
@@ -457,7 +471,7 @@ export class PcacChart implements OnDestroy {
     // a screen reader, and keyboard focus on them would announce nothing.)
     select(chartElm.nativeElement)
       .attr('role', 'group')
-      .attr('aria-label', config.ariaLabel || this.chartTypeLabel);
+      .attr('aria-label', config.ariaLabel || this.defaultChartName());
     this.height = this.resolveHeight(container, config);
     this.colors = colors;
     this.lastContainerWidth = containerWidth;

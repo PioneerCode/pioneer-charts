@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
+import { PcacBarVerticalChart, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
 import { LayoutCode } from '../../layout/code/code';
@@ -19,7 +19,7 @@ import { ChartContract } from '../../layout/chart-contract/chart-contract';
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    PcacBarVerticalChartComponent,
+    PcacBarVerticalChart,
     PcacLineChart,
   ]
 })

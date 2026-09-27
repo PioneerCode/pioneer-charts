@@ -8,8 +8,8 @@ export interface IJumpNav {
 
 /**
  * "On this page": a link per section. Each is a plain `routerLink` with a `fragment`, so the URL
- * takes the section's #hash (shareable, back/forward) and the router scrolls to it
- * (`anchorScrolling` in app.config.ts).
+ * takes the section's #hash (shareable, back/forward), and App scrolls to the section and focuses
+ * it (see App.followRouterScrolling).
  */
 @Component({
   selector: 'app-layout-jump-nav',

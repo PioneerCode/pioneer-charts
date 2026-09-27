@@ -36,6 +36,9 @@
       // HTML, which has no class yet - so it has `color-scheme: light` but not the dark rule, and
       // the page drew light until the full stylesheet arrived. An inline style outranks it.
       document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      // The header switch's icon (header.scss), for the same reason.
+      document.documentElement.style.setProperty('--pc-theme-icon-moon', dark ? 'none' : 'inline-block');
+      document.documentElement.style.setProperty('--pc-theme-icon-sun', dark ? 'inline-block' : 'none');
     })();
   </script>
   <link rel="icon" type="image/x-icon" href="favicon.ico">

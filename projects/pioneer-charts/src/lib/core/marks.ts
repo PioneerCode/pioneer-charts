@@ -33,7 +33,9 @@ export interface PcacMarkAccess<E extends Element, D> {
  * with Alt, Ctrl or Cmd are left to the browser (Alt+Left is Back).
  *
  * A mark takes focus from the keyboard only: pressing the pointer on one is kept from focusing it,
- * so a click doesn't leave a keyboard-style tooltip and focus ring behind on the clicked mark.
+ * so a click doesn't leave a keyboard-style tooltip and focus ring behind on the clicked mark. It
+ * does let go of a mark in the same chart that has focus, which would otherwise stay highlighted,
+ * its tooltip gone, while the pointer is at work elsewhere in the chart.
  */
 export function makeMarksAccessible<E extends Element, D>(
   marks: Selection<E, D, any, any>,
@@ -56,7 +58,13 @@ export function makeMarksAccessible<E extends Element, D>(
     .attr('tabindex', (d: D) => (skipped(d) ? null : -1))
     // The events are typed plainly as `Event`: with the element type generic here, d3's typings
     // (@types/d3-selection 3.0.12 on) can't narrow them to `MouseEvent`/`KeyboardEvent`.
-    .on('mousedown.pcac-mark', (event: Event) => event.preventDefault())
+    .on('mousedown.pcac-mark', function (this: E, event: Event) {
+      event.preventDefault();
+      const focused = this.ownerDocument.activeElement;
+      if (focused !== this && focused?.hasAttribute(MARK_ATTR) && sameChart(focused, this)) {
+        (focused as SVGElement).blur();
+      }
+    })
     .on('focus.pcac-mark', function (this: E, _event: Event, d: D) {
       open.add(this);
       access.focus(this, d);
@@ -150,6 +158,11 @@ export function refreshTabStop(root: Element | null, previous: PcacMarkFocus | n
   if (previous?.focused) {
     (stop as SVGElement).focus({ preventScroll: true });
   }
+}
+
+/** Whether two marks are in the same chart (the same `<svg>`). */
+function sameChart(a: Element, b: Element): boolean {
+  return ((a as SVGElement).ownerSVGElement ?? a.parentElement) === ((b as SVGElement).ownerSVGElement ?? b.parentElement);
 }
 
 /** The chart's marks that can take focus now, in drawing order. */

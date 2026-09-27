@@ -85,6 +85,16 @@ describe('axisTickFormat', () => {
     expect(axisTickFormat(PcacFormatEnum.Decimal, band, 5)!('1500')).toBe('1,500');
   });
 
+  // Regression test: a format on a category axis ran every key through it - text keys and all -
+  // so the horizontal bar chart's groups, with a Percentage y axis, all read "NaN%".
+  it('leaves a category axis\'s text keys as they are, formatting only the numeric ones', () => {
+    const band = scaleBand<string>().domain(['Chips', '0.25']);
+    expect(axisTickFormat(PcacFormatEnum.Percentage, band, 5)!('Chips')).toBe('Chips');
+    expect(axisTickFormat(PcacFormatEnum.Minutes, band, 5)!('Chips')).toBe('Chips');
+    expect(axisTickFormat(PcacFormatEnum.Fahrenheit, band, 5)!('')).toBe('');
+    expect(axisTickFormat(PcacFormatEnum.Percentage, band, 5)!('0.25')).toBe('25%');
+  });
+
   it('labels minutes, degrees and hours of the day', () => {
     expect(axisTickFormat(PcacFormatEnum.Minutes, linear, 5)!(5)).toBe('5m');
     expect(axisTickFormat(PcacFormatEnum.Fahrenheit, linear, 5)!(72)).toBe('72 F');

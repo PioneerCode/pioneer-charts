@@ -28,7 +28,9 @@ export interface PcacMarkAccess<E extends Element, D> {
  * order (see `refreshTabStop`): Tab reaches the chart once, and the arrow keys move between its
  * marks, Home and End to the first and last. A chart of a thousand bars isn't a thousand Tab
  * presses to get past. Focus does what hovering does (`focus`), and Enter or Space what a click
- * does (`activate`); Escape hides the tooltip, as moving the pointer away would.
+ * does (`activate`); Escape hides the tooltip, as moving the pointer away would - and goes no
+ * further while it has one to hide, so it doesn't also close a dialog the chart is in. Keys pressed
+ * with Alt, Ctrl or Cmd are left to the browser (Alt+Left is Back).
  *
  * A mark takes focus from the keyboard only: pressing the pointer on one is kept from focusing it,
  * so a click doesn't leave a keyboard-style tooltip and focus ring behind on the clicked mark.
@@ -38,6 +40,8 @@ export function makeMarksAccessible<E extends Element, D>(
   access: PcacMarkAccess<E, D>,
 ): void {
   const skipped = (d: D) => access.skip?.(d) ?? false;
+  // The marks showing what focus shows (their tooltip, highlighted), until blur or Escape.
+  const open = new WeakSet<Element>();
   marks
     .attr(MARK_ATTR, (d: D) => (skipped(d) ? null : ''))
     .attr('aria-hidden', (d: D) => (skipped(d) ? 'true' : null))
@@ -54,13 +58,18 @@ export function makeMarksAccessible<E extends Element, D>(
     // (@types/d3-selection 3.0.12 on) can't narrow them to `MouseEvent`/`KeyboardEvent`.
     .on('mousedown.pcac-mark', (event: Event) => event.preventDefault())
     .on('focus.pcac-mark', function (this: E, _event: Event, d: D) {
+      open.add(this);
       access.focus(this, d);
     })
     .on('blur.pcac-mark', function (this: E, _event: Event, d: D) {
+      open.delete(this);
       access.blur(this, d);
     })
     .on('keydown.pcac-mark', function (this: E, event: Event, d: D) {
-      const { key } = event as KeyboardEvent;
+      const { key, altKey, ctrlKey, metaKey } = event as KeyboardEvent;
+      if (altKey || ctrlKey || metaKey) {
+        return;
+      }
       switch (key) {
         case 'Enter':
         case ' ':
@@ -68,7 +77,13 @@ export function makeMarksAccessible<E extends Element, D>(
           access.activate(d);
           return;
         case 'Escape':
-          access.blur(this, d);
+          // Only while there's a tooltip to hide; a second Escape carries on to whatever the
+          // chart is in (a dialog closes, as it would have).
+          if (open.delete(this)) {
+            event.preventDefault();
+            event.stopPropagation();
+            access.blur(this, d);
+          }
           return;
       }
       const target = neighbor(this, key);
@@ -79,22 +94,61 @@ export function makeMarksAccessible<E extends Element, D>(
     });
 }
 
+/** Where a chart's Tab stop was, and whether it had focus: what a redraw puts back. */
+export interface PcacMarkFocus {
+  /** The Tab stop's place among the marks that could take focus. */
+  index: number;
+  focused: boolean;
+}
+
 /**
- * Puts the chart's one Tab stop (`tabindex="0"`) on its first mark that can take focus, and takes
- * it off every other. Call once a chart's marks are drawn, and again whenever marks can have been
- * hidden - by zoom, say - so Tab doesn't land on one that can't be focused and skip the chart.
- * Leaves it where it is when that mark can still take focus, so coming back to the chart returns
- * to the mark last visited.
+ * Notes the chart's Tab stop - and whether it has focus - before a redraw removes every mark, so
+ * `refreshTabStop` can put both back: a keyboard user who pressed Enter on a bar, with a click
+ * handler that updates the data, stays on that bar rather than being dropped at the top of the
+ * page. `null` when the chart has no Tab stop.
  */
-export function refreshTabStop(root: Element | null): void {
+export function captureMarkFocus(root: Element | null): PcacMarkFocus | null {
+  if (!root) {
+    return null;
+  }
+  const marks = navigableMarks(root);
+  const index = marks.findIndex((mark) => mark.getAttribute('tabindex') === '0');
+  if (index < 0) {
+    return null;
+  }
+  return { index, focused: root.ownerDocument.activeElement === marks[index] };
+}
+
+/**
+ * Puts the chart's one Tab stop (`tabindex="0"`) on a mark that can take focus; every other mark
+ * is `-1` already (`makeMarksAccessible`). Call once a chart's marks are drawn, and again whenever
+ * marks can have been hidden - by zoom, say - so Tab doesn't land on one that can't be focused and
+ * skip the chart.
+ *
+ * Leaves the Tab stop where it is while that mark can still take focus, so coming back to the chart
+ * returns to the mark last visited. After a redraw, given what `captureMarkFocus` noted, it goes
+ * back to the same place - the last mark, if there are fewer now - and takes focus back if it had
+ * it. Touches only the old and new stops, as it runs on every zoom frame.
+ */
+export function refreshTabStop(root: Element | null, previous: PcacMarkFocus | null = null): void {
   if (!root) {
     return;
   }
+  const current = root.querySelector(`[${MARK_ATTR}][tabindex="0"]`);
+  if (current && !previous && !isNotDisplayed(current, root)) {
+    return;
+  }
   const marks = navigableMarks(root);
-  const current = marks.find((mark) => mark.getAttribute('tabindex') === '0');
-  const stop = current ?? marks[0];
-  for (const mark of root.querySelectorAll(`[${MARK_ATTR}]`)) {
-    mark.setAttribute('tabindex', mark === stop ? '0' : '-1');
+  const stop = previous ? marks[Math.min(previous.index, marks.length - 1)] : marks[0];
+  if (current && current !== stop) {
+    current.setAttribute('tabindex', '-1');
+  }
+  if (!stop) {
+    return;
+  }
+  stop.setAttribute('tabindex', '0');
+  if (previous?.focused) {
+    (stop as SVGElement).focus({ preventScroll: true });
   }
 }
 

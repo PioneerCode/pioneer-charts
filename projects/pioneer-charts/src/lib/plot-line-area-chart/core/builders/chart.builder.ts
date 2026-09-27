@@ -78,7 +78,8 @@ export class PlaChartBuilder extends PcacChart {
   private restoringZoom = false;
   private lineGenerator!: Line<PcacData>;
   private areaGenerator!: Area<PcacData>;
-  private zoomBehavior!: ZoomBehavior<Element, unknown>;
+  /** This build's zoom behavior; `null` while zoom is off. */
+  private zoomBehavior: ZoomBehavior<Element, unknown> | null = null;
   private dotClickedSource = new Subject<PcacData>();
   private config!: PcacLineAreaChartConfig;
   /**
@@ -172,13 +173,17 @@ export class PlaChartBuilder extends PcacChart {
     this.areaGenerator = buildAreaGenerator(this.xAxis.format, this.scales, this.height);
 
     if (this.zoomEnabled) {
-      this.zoomBehavior = buildZoomBehavior(this.width, this.height, (event) => {
+      const behavior = buildZoomBehavior(this.width, this.height, (event) => {
         // Zoom moves the points, not the mouse: the hovered one slides out from under a still
         // cursor (or is hidden outright, see `pointDisplay`), and either way the browser never
         // sends it a mouseout - its tooltip would stay up, and its dot stay grown, until the
         // cursor happened to cross it again. So the hover is ended here, on every zoom event.
-        // The build's own starting zoom, handed to the behavior: already drawn that way.
-        if (this.restoringZoom) {
+        // The build's own starting zoom, handed to the behavior: already drawn that way. And a
+        // gesture begun on an earlier build - a drag still going when live data or a resize redrew
+        // the chart, which d3-zoom carries on through listeners on the window - belongs to a
+        // drawing that's gone: left to run, it moved this one and overwrote the kept zoom with its
+        // own, and the next gesture snapped back.
+        if (this.restoringZoom || behavior !== this.zoomBehavior) {
           return;
         }
         this.leavePoint();
@@ -247,6 +252,9 @@ export class PlaChartBuilder extends PcacChart {
         this.svg.selectAll('.fan-outs').raise();
         this.svg.selectAll('.dots').raise();
       });
+      this.zoomBehavior = behavior;
+    } else {
+      this.zoomBehavior = null;
     }
 
     this.drawChart(chartElm, this.config, type);
@@ -287,7 +295,7 @@ export class PlaChartBuilder extends PcacChart {
     this.drawPointRanges();
     this.drawFanOuts();
     this.drawDots(config);
-    refreshTabStop(chartElm.nativeElement);
+    this.restoreTabStop(chartElm);
   }
 
   /**
@@ -418,7 +426,8 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   private attachZoomBehavior(): void {
-    if (!this.zoomEnabled) return;
+    const zoom = this.zoomBehavior;
+    if (!this.zoomEnabled || !zoom) return;
 
     // A transparent rect so the empty plot area is a hit target too: a `<g>` has no area of its
     // own, so wheel/drag only reaches it through something painted. The rect is only ever that -
@@ -440,13 +449,13 @@ export class PlaChartBuilder extends PcacChart {
       .attr('fill', 'none')
       .attr('pointer-events', 'all');
 
-    this.svg.call(this.zoomBehavior as any);
+    this.svg.call(zoom as any);
 
     // A resumed zoom is already drawn (`scales`); the behavior is told it too, so the next gesture
     // carries on from there rather than from the whole domain.
     if (this.startZoom) {
       this.restoringZoom = true;
-      this.svg.call(this.zoomBehavior.transform as any, this.startZoom);
+      this.svg.call(zoom.transform as any, this.startZoom);
       this.restoringZoom = false;
     }
   }

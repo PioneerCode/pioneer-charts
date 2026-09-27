@@ -1,6 +1,6 @@
 import { PcacData } from '../core/chart.model';
 import { barThreshold, barThresholdLayout, groupThreshold } from './bar-thresholds';
-import { seriesKeys } from './bar-series';
+import { seriesKeys, seriesSlots } from './bar-series';
 
 function t(value: number | null, data: PcacData[] = []): PcacData {
   return { key: null, value, hide: false, data };
@@ -55,5 +55,24 @@ describe('seriesKeys', () => {
       ({ key: 'g', value: null, hide: false, data: keys.map((key) => ({ key, value: 1, hide: false, data: [] })) });
 
     expect(seriesKeys([group(['a']), group(['a', 'b', 'c']), group(['d', 'b'])])).toEqual(['a', 'b', 'c', 'd']);
+  });
+});
+
+describe('seriesSlots', () => {
+  const bar = (key: string | null): PcacData => ({ key, value: 1, hide: false, data: [] });
+  const group = (key: string, bars: PcacData[]): PcacData => ({ key, value: null, hide: false, data: bars });
+
+  it('places bars by series key when the keys tell the series apart', () => {
+    const slots = seriesSlots([group('A', [bar('x'), bar('y')]), group('B', [bar('y')])]);
+
+    expect(slots.domain).toEqual(['x', 'y']);
+    expect(slots.slotOf(bar('y'), 0)).toBe('y');
+  });
+
+  it('places bars by position when they have no keys, or repeat one', () => {
+    const slots = seriesSlots([group('A', [bar(null), bar(null), bar(null)]), group('B', [bar('x'), bar('x')])]);
+
+    expect(slots.domain).toEqual(['0', '1', '2']);
+    expect([0, 1, 2].map((i) => slots.slotOf(bar(null), i))).toEqual(['0', '1', '2']);
   });
 });

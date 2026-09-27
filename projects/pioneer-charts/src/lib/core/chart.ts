@@ -7,6 +7,8 @@ import { select } from 'd3-selection';
 import { ElementRef, Injectable, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { PCAC_AXIS_LABEL_SPACE, PCAC_AXIS_SUB_LABEL_SPACE, PcacAxisChartConfig, PcacChartConfig, PcacChartMargin, PcacData, PcacFormatEnum, PcacResolvedAxisConfig, axisLabelSpace, resolveAxisConfig } from './chart.model';
 import { PcacTransitionService } from './transition.service';
+import { axisTickFormat } from './tick-format';
+import { PcacMarkFocus, captureMarkFocus, refreshTabStop } from './marks';
 import { PcacTooltipBuilder, tooltipText } from './tooltip.builder';
 import { PcacTooltipCoincident, PcacTooltipContext } from './tooltip.directive';
 
@@ -362,6 +364,26 @@ export class PcacChart implements OnDestroy {
     }
   }
 
+  /**
+   * Where the chart's Tab stop was before the last redraw removed its marks, and whether it had
+   * focus; put back by `restoreTabStop`. Kept until then - across a build that couldn't draw (no
+   * width yet) - and not overwritten by a second clear in the same build, which finds no marks.
+   */
+  private markFocus: PcacMarkFocus | null = null;
+
+  private noteMarkFocus(chartElm: ElementRef): void {
+    this.markFocus = captureMarkFocus(chartElm.nativeElement) ?? this.markFocus;
+  }
+
+  /**
+   * Puts the chart's Tab stop on its new marks - where it was before the redraw, with focus if it
+   * had it (see marks.ts). Every builder calls this once its marks are drawn.
+   */
+  protected restoreTabStop(chartElm: ElementRef): void {
+    refreshTabStop(chartElm.nativeElement, this.markFocus);
+    this.markFocus = null;
+  }
+
   /** Keyboard focus leaving a mark: the undoing of `showMarkTooltip`. */
   protected hideMarkTooltip(element: Element): void {
     this.hideTooltip();
@@ -384,6 +406,7 @@ export class PcacChart implements OnDestroy {
    */
   clearChart(chartElm: ElementRef): void {
     this.hideTooltip();
+    this.noteMarkFocus(chartElm);
     select(chartElm.nativeElement).select('g').remove();
   }
 
@@ -403,6 +426,7 @@ export class PcacChart implements OnDestroy {
   initializeChartState(chartElm: ElementRef, config: PcacChartConfig): boolean {
     // The rebuild removes the hovered element, which gets no mouseout to close its tooltip.
     this.hideTooltip();
+    this.noteMarkFocus(chartElm);
     select(chartElm.nativeElement).select('g').remove();
     // One color per group or per series within a group, whichever needs more. Bar charts, which
     // color by series across groups, top this up with `ensureColorCount()`. Read before the width
@@ -546,6 +570,11 @@ export class PcacChart implements OnDestroy {
     const axisY = axisLeft(yScale).ticks(5);
     if (this.yAxis.tickSize !== undefined) {
       axisY.tickSizeInner(this.yAxis.tickSize);
+    }
+    // Labelled as the axis will label them, or a unit suffix went unmeasured and ran off the edge.
+    const format = axisTickFormat(this.yAxis.format, yScale, this.yAxis.ticks);
+    if (format) {
+      axisY.tickFormat(format);
     }
     let max = 0;
     select(chartElm.nativeElement).append('g')

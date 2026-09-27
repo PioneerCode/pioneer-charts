@@ -154,7 +154,8 @@ export class PcacAxisConfig {
    * (`yAxis`) or key (`xAxis`) in the default tooltip. On the line/area/plot charts the x axis's
    * format is also what decides how a point's `key` maps to an x position (by index for the
    * default, `Decimal` and `DateTime` by the key's own value on a linear/time scale - see
-   * `PcacLineAreaChartConfig`); a bar chart's category axis ignores it. Default `None`, which
+   * `PcacLineAreaChartConfig`); on a bar chart's category axis it only formats keys that are
+   * numbers, and shows any other key as it is. Default `None`, which
    * on those charts behaves as `DatasetLength`.
    */
   format?: PcacFormatEnum = PcacFormatEnum.None

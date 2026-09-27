@@ -1,6 +1,6 @@
 import { select } from 'd3-selection';
 import { vi } from 'vitest';
-import { makeMarksAccessible, refreshTabStop } from './marks';
+import { captureMarkFocus, makeMarksAccessible, refreshTabStop } from './marks';
 
 interface Datum { key: string; hide?: boolean }
 
@@ -22,8 +22,8 @@ function setUp(data: Datum[]) {
   return { svg, access, rects };
 }
 
-const key = (target: Element, name: string) => {
-  const event = new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true });
+const key = (target: Element, name: string, modifiers: KeyboardEventInit = {}) => {
+  const event = new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true, ...modifiers });
   target.dispatchEvent(event);
   return event;
 };
@@ -111,6 +111,36 @@ describe('makeMarksAccessible', () => {
     expect(access.blur).toHaveBeenCalledTimes(2);
   });
 
+  // Regression test: Escape bubbled on, so in a dialog it closed the whole dialog along with the
+  // tooltip it was meant to hide.
+  it('keeps an Escape that hides a tooltip to itself, and lets the next one through', () => {
+    const { svg, rects, access } = setUp([{ key: 'a' }]);
+    const outside = vi.fn();
+    svg.addEventListener('keydown', outside);
+    rects[0].focus();
+
+    const first = key(rects[0], 'Escape');
+    const second = key(rects[0], 'Escape');
+
+    expect(first.defaultPrevented).toBe(true);
+    expect(access.blur).toHaveBeenCalledTimes(1);
+    expect(outside).toHaveBeenCalledTimes(1);
+    expect(second.defaultPrevented).toBe(false);
+  });
+
+  it('leaves keys pressed with Alt, Ctrl or Cmd to the browser', () => {
+    const { rects, access } = setUp([{ key: 'a' }, { key: 'b' }]);
+    rects[0].focus();
+
+    const back = key(rects[0], 'ArrowLeft', { altKey: true });
+    key(rects[0], 'ArrowRight', { metaKey: true });
+    key(rects[0], 'Enter', { ctrlKey: true });
+
+    expect(back.defaultPrevented).toBe(false);
+    expect(document.activeElement).toBe(rects[0]);
+    expect(access.activate).not.toHaveBeenCalled();
+  });
+
   it('leaves other keys to the page', () => {
     const { rects } = setUp([{ key: 'a' }, { key: 'b' }]);
 
@@ -149,5 +179,39 @@ describe('refreshTabStop', () => {
     refreshTabStop(svg);
 
     expect(rects.map((r) => r.getAttribute('tabindex'))).toEqual(['-1', '0']);
+  });
+});
+
+describe('captureMarkFocus / refreshTabStop across a redraw', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  /** Replaces the marks with a fresh set, as a chart's redraw does. */
+  function redraw(svg: SVGSVGElement, data: Datum[]) {
+    svg.innerHTML = '';
+    const access = { label: (d: Datum) => d.key, activate: vi.fn(), focus: vi.fn(), blur: vi.fn() };
+    makeMarksAccessible(select(svg).selectAll('rect').data(data).enter().append('rect'), access);
+    return Array.from(svg.querySelectorAll('rect'));
+  }
+
+  it('puts the Tab stop back where it was, and focus with it', () => {
+    const { svg, rects } = setUp([{ key: 'a' }, { key: 'b' }, { key: 'c' }]);
+    rects[0].focus();
+    key(rects[0], 'ArrowRight');
+
+    const noted = captureMarkFocus(svg);
+    const fresh = redraw(svg, [{ key: 'a' }, { key: 'b' }, { key: 'c' }]);
+    refreshTabStop(svg, noted);
+
+    expect(noted).toEqual({ index: 1, focused: true });
+    expect(fresh.map((r) => r.getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+    expect(document.activeElement).toBe(fresh[1]);
+  });
+
+  it('notes nothing for a chart with no marks', () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+    expect(captureMarkFocus(svg)).toBeNull();
   });
 });

@@ -16,6 +16,25 @@ export function seriesKeys(groups: PcacData[]): string[] {
 }
 
 /**
+ * The slots a grouped (not stacked) chart places each group's bars in, and which slot a bar takes:
+ * its series key - so a series sits in the same place in every group - when the keys tell the
+ * series apart (see `hasDistinctSeriesKeys`), and its position in its group otherwise. Placed by
+ * key regardless, bars with no key (`PcacData`'s default `null`) or a repeated one all fell into
+ * one slot and were drawn on top of each other, only the last visible - though they were already
+ * colored by position in that case.
+ */
+export function seriesSlots(groups: PcacData[]): { domain: string[]; slotOf: (bar: PcacData, index: number) => string } {
+  if (hasDistinctSeriesKeys(groups)) {
+    return { domain: seriesKeys(groups), slotOf: (bar) => bar.key as string };
+  }
+  const size = groups.reduce((max, group) => Math.max(max, group.data?.length ?? 0), 0);
+  return {
+    domain: Array.from({ length: size }, (_, i) => String(i)),
+    slotOf: (_bar, index) => String(index),
+  };
+}
+
+/**
  * Whether every bar has a key that is unique within its own group - what coloring bars by series
  * key needs. Without that (keys left `null`, as `PcacData` defaults them, or repeated within a
  * group, as stacked data often has), coloring by key would paint every bar sharing a key the

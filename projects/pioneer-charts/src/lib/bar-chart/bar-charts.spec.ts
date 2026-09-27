@@ -200,6 +200,15 @@ for (const chart of charts) {
       expect(Number(bars(svg)[0].getAttribute(chart.thickness))).toBeGreaterThan(0);
     });
 
+    // Regression test: bars were placed by series key, so bars with no key (PcacData's default) or
+    // a repeated one all landed in one slot, drawn over each other with only the last visible.
+    it('gives bars without distinct series keys a slot each', () => {
+      const svg = build(config([group('A', [bar(null as unknown as string, 10), bar(null as unknown as string, 20)])]));
+
+      const offsets = bars(svg).map((b) => b.getAttribute(chart.offset));
+      expect(new Set(offsets).size).toBe(2);
+    });
+
     describe('keyboard and screen readers', () => {
       const data = () => [
         group('Chips', [bar('2023', 10), bar('2024', 20)]),
@@ -247,6 +256,42 @@ for (const chart of charts) {
 
         first.blur();
         expect(tooltip()?.style.display).toBe('none');
+      });
+
+      // Regression test: every redraw replaced the marks, so a keyboard user whose Enter updated the
+      // data - or who was on a chart that resized, or took live data - was dropped at the top of
+      // the page, and the Tab stop went back to the first bar.
+      it('keeps focus, and the Tab stop, on the same bar through a redraw', () => {
+        const svg = build(config(data()));
+        bars(svg)[0].focus();
+        key(bars(svg)[0], 'ArrowRight');
+
+        builder.buildChart({ nativeElement: svg } as ElementRef, config(data()));
+
+        expect(document.activeElement).toBe(bars(svg)[1]);
+        expect(bars(svg).map((b) => b.getAttribute('tabindex'))).toEqual(['-1', '0', '-1', null]);
+      });
+
+      it('keeps the Tab stop without taking focus when the chart didn\'t have it', () => {
+        const svg = build(config(data()));
+        bars(svg)[0].focus();
+        key(bars(svg)[0], 'ArrowRight');
+        bars(svg)[1].blur();
+
+        builder.buildChart({ nativeElement: svg } as ElementRef, config(data()));
+
+        expect(document.activeElement).not.toBe(bars(svg)[1]);
+        expect(bars(svg)[1].getAttribute('tabindex')).toBe('0');
+      });
+
+      it('moves to the last bar when the one it was on is gone', () => {
+        const svg = build(config(data()));
+        bars(svg)[0].focus();
+        key(bars(svg)[0], 'End');
+
+        builder.buildChart({ nativeElement: svg } as ElementRef, config([group('Chips', [bar('2023', 10)])]));
+
+        expect(document.activeElement).toBe(bars(svg)[0]);
       });
 
       it('moves between bars across groups with the arrow keys', () => {

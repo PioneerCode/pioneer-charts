@@ -15,7 +15,7 @@ import { color } from 'd3-color';
 import { PcacPieDonutChartConfig, PcacPieDonutChartType } from './pie-donut-chart.model';
 import { PcacDonutChartConfig } from './donut/donut.model';
 import { PcacChart } from '../core/chart';
-import { makeMarksAccessible, refreshTabStop } from '../core/marks';
+import { makeMarksAccessible } from '../core/marks';
 import { PcacData } from '../core/chart.model';
 
 import { Subject } from 'rxjs';
@@ -195,7 +195,7 @@ export class PieDonutChartBuilder extends PcacChart {
         rest(slice, d);
       },
     });
-    refreshTabStop(chartElm.nativeElement);
+    this.restoreTabStop(chartElm);
     slices
       // Named, so the hover transitions (unnamed) and the check above can tell it apart from them.
       .transition('enter')

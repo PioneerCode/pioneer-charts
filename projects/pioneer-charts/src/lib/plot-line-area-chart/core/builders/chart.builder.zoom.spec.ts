@@ -365,4 +365,31 @@ describe('PlaChartBuilder zoom', () => {
       expect(firstPoint(elm.nativeElement).line.x).toBeCloseTo(zoomed.x, 5);
     });
   });
+
+  // Regression test: a drag still going when the chart redrew kept firing through the old zoom
+  // behavior (d3-zoom listens on the window until mouseup), moving the new drawing and overwriting
+  // the kept zoom with its own.
+  it('ignores zoom events from a gesture begun on an earlier drawing', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+    const stale = (builder as unknown as { zoomBehavior: ZoomBehavior<Element, unknown> }).zoomBehavior;
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+    const before = firstPoint(elm.nativeElement).dot;
+
+    (stale.on('zoom') as (event: { transform: typeof zoomIdentity }) => void)({ transform: zoomIdentity.translate(-400, 0).scale(3) });
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+    expect(firstPoint(elm.nativeElement).dot.x).toBeCloseTo(before.x, 5);
+  });
+
+  it('drops its zoom behavior when a redraw turns zoom off', () => {
+    const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
+    const elm = chartElm();
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime), PcacLineAreaPlotChartConfigType.Line);
+
+    builder.buildChart(elm, config(PcacFormatEnum.DateTime, { enableZoomX: false }), PcacLineAreaPlotChartConfigType.Line);
+
+    expect((builder as unknown as { zoomBehavior: unknown }).zoomBehavior).toBeNull();
+  });
 });

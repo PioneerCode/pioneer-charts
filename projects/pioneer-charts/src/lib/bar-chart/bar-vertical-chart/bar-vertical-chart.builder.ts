@@ -12,11 +12,11 @@ import 'd3-transition';
  */
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacChart, PcacTooltipOptions } from '../../core/chart';
-import { makeMarksAccessible, refreshTabStop } from '../../core/marks';
+import { makeMarksAccessible } from '../../core/marks';
 import { PcacData } from '../../core/chart.model';
 import { barSizes, stackStarts } from '../../core/stack';
 import { barThreshold, barThresholdLayout, groupThreshold } from '../bar-thresholds';
-import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys } from '../bar-series';
+import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys, seriesSlots } from '../bar-series';
 
 import { Subject } from 'rxjs';
 
@@ -34,6 +34,8 @@ type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 export class BarVerticalChartBuilder extends PcacChart {
   private xScaleStacked!: ScaleBand<string>;
   private xScaleGrouped!: ScaleBand<string>;
+  /** A bar's slot in `xScaleGrouped`, from its datum and its index in its group (see `seriesSlots`). */
+  private slotOf: (bar: PcacData, index: number) => string = (bar) => bar.key as string;
   private yScale!: ScaleLinear<number, number>;
   private barClickedSource = new Subject<PcacData>();
   barClicked$ = this.barClickedSource.asObservable();
@@ -78,11 +80,13 @@ export class BarVerticalChartBuilder extends PcacChart {
       .round(canRoundBands(this.width, config.data.length))
       .padding(0.1);
 
+    const slots = seriesSlots(config.data);
+    this.slotOf = slots.slotOf;
     this.xScaleGrouped = scaleBand()
       .padding(0.2)
       .range([0, this.xScaleStacked.bandwidth()])
-      .round(canRoundBands(this.xScaleStacked.bandwidth(), seriesKeys(config.data).length))
-      .domain(seriesKeys(config.data));
+      .round(canRoundBands(this.xScaleStacked.bandwidth(), slots.domain.length))
+      .domain(slots.domain);
   }
 
   private drawChart(chartElm: ElementRef, config: PcacBarVerticalChartConfig): void {
@@ -91,7 +95,7 @@ export class BarVerticalChartBuilder extends PcacChart {
     this.drawGrids(this.xScaleStacked, this.yScale);
     this.addGroups(config);
     this.axisBuilder.raiseAxes(this.svg);
-    refreshTabStop(chartElm.nativeElement);
+    this.restoreTabStop(chartElm);
   }
 
   private addGroups(config: PcacBarVerticalChartConfig) {
@@ -176,7 +180,7 @@ export class BarVerticalChartBuilder extends PcacChart {
       // A stacked bar spans its whole group, which is already translated into place; looking its
       // series key up in the group band put it off in another group's slot whenever the key
       // matched a group key.
-      .attr('x', (d: PcacData) => config.isStacked ? 0 : this.xScaleGrouped(d.key as string) ?? 0)
+      .attr('x', (d: PcacData, i: number) => config.isStacked ? 0 : this.xScaleGrouped(this.slotOf(d, i)) ?? 0)
       .attr('data-group-bar-id', (_: PcacData, i: number) => {
         return i;
       })
@@ -310,12 +314,12 @@ export class BarVerticalChartBuilder extends PcacChart {
 
   private applyPreTransitionThresholdStyles<S extends Selection<any, any, any, any>>(elm: S): S {
     return elm.attr('class', 'pcac-threshold')
-      .attr('x', (d: any) => {
+      .attr('x', (d: any, i: number) => {
         // Not every caller's selection has a per-item PcacData bound (the whole-chart threshold
         // rect has none), hence the defensive fallback rather than assuming `d` is always present.
         const datum = d as PcacData | undefined;
         // ScaleBand can return undefined for a key outside its domain; `.attr()` needs null, not undefined.
-        return this.xScaleGrouped(datum ? datum.key as string : '') ?? null;
+        return this.xScaleGrouped(datum ? this.slotOf(datum, i) : '') ?? null;
       })
       .attr('y', () => {
         return this.height;

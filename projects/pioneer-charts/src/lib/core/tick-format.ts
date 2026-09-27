@@ -63,8 +63,30 @@ export function formatValue(pcacFormat: PcacFormatEnum | undefined, value: unkno
  *
  * Numeric formats take their precision from the scale's tick step where the scale has one: a
  * fixed precision is fine for a whole domain but breaks down once zoom narrows it to a few units.
+ *
+ * On a category axis (a band scale - a bar chart's groups) only keys that are numbers are formatted
+ * - `'0.25'` reads `25%` - and any other key is shown as it is: a format there, easy to set by
+ * mistake on the horizontal chart (where y is the category axis), turned every label into `NaN%`
+ * or `Chipsm`.
  */
 export function axisTickFormat<Domain extends AxisDomain>(
+  pcacFormat: PcacFormatEnum | undefined,
+  scale: AxisScale<Domain>,
+  ticks: number | undefined,
+): ((d: Domain) => string) | null {
+  const format = valueTickFormat(pcacFormat, scale, ticks);
+  if (!format || !('bandwidth' in scale)) {
+    return format;
+  }
+  return (d: Domain) => isNumericKey(d) ? format(d) : String(d);
+}
+
+/** A category key that reads as a number - `0.25`, `'1500'` - rather than text like `'Chips'`. */
+function isNumericKey(key: unknown): boolean {
+  return (typeof key === 'number' || (typeof key === 'string' && key.trim() !== '')) && Number.isFinite(Number(key));
+}
+
+function valueTickFormat<Domain extends AxisDomain>(
   pcacFormat: PcacFormatEnum | undefined,
   scale: AxisScale<Domain>,
   ticks: number | undefined,

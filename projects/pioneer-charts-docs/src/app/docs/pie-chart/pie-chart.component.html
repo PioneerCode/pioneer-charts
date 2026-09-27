@@ -13,6 +13,46 @@
     </div>
   </section>
   <section class="pc-doc-section">
+    <h2 class="pc-h3" id="when-to-use">When To Use A Pie Chart</h2>
+    <p>A pie chart shows how a whole splits into parts: each slice's angle is its share of the total, so
+      it answers "what fraction is this?" at a glance. It works best when:</p>
+    <ul>
+      <li>the parts add up to a meaningful whole &mdash; a budget, a survey's answers, a day's traffic by
+        source;</li>
+      <li>there are only a few of them, about five or fewer, so every slice is big enough to see and
+        label;</li>
+      <li>one or two parts stand out, since the eye compares a slice against the whole far better than
+        against a slice of nearly the same size.</li>
+    </ul>
+    <p>Reach for another chart when those don't hold. To compare parts that are close in size, or more than a
+      handful of them, a <a routerLink="/docs/components/charts/bar-chart">bar chart</a> puts the values on a
+      common scale. To show how the parts change over time, use a
+      <a routerLink="/docs/components/charts/line-chart">line</a> or
+      <a routerLink="/docs/components/charts/area-chart">area chart</a>. And for the same slices with the total
+      written in the middle, use the <a routerLink="/docs/components/charts/donut-chart">donut chart</a>, which
+      takes the same data.</p>
+    <p>Every slice can be reached from the keyboard, and is announced by its key and value, so a pie chart
+      doesn't depend on seeing its colors (see <a routerLink="/docs/guides/introduction"
+        fragment="accessibility">Accessibility</a>).</p>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="with-a-legend">With A Legend</h2>
+    <p>A <a routerLink="/docs/components/charts/legend">legend</a> names the slices, and lets readers switch
+      them off to compare the rest. Click an item below to hide or show its slice.</p>
+    <pc-chart-card heading="Snacks, with a legend" caption="Click a legend item to hide or show its slice."
+      class="mb-4">
+      <app-layout-resource-state [resource]="pcService.pieChartConfig">
+        <pcac-legend [config]="legend()" (itemClicked)="onItemClicked($event)" />
+        <pcac-pie-chart [config]="pie()" (sliceClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
+    </pc-chart-card>
+    <p>The legend's items and the chart's slices come from the same data, in the same order: a legend item
+      with no <b>colorOverride</b> takes the theme palette's color for its position, just as the slice does.
+      Hiding a slice sets its <b>hide</b> rather than removing it, so it keeps its place &mdash; and its color
+      &mdash; and the swatches keep matching.</p>
+    <app-layout-code language="typescript" [code]="legendCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
     <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
   </section>

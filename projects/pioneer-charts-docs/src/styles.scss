@@ -244,6 +244,15 @@ body {
   }
 }
 
+// Links in a docs page's text - its paragraphs, lists and tables - look like links: Tailwind's reset
+// strips a link's color and underline, which left them looking like the words around them. The
+// same indigo as the Charts page's "Docs:" links, lightened on the dark theme.
+app-layout-page-docs-content :is(p, li, td) a {
+  color: light-dark(#3f51b5, #9fa8da);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 // A docs section scrolled to - by a link on the page, "On this page", or a URL's #fragment - lands
 // just below the fixed header rather than behind it.
 app-layout-page-docs-content [id] {

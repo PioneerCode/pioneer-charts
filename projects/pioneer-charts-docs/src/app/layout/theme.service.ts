@@ -25,14 +25,19 @@ export class ThemeService {
     }
     const query = this.root.ownerDocument.defaultView?.matchMedia?.(DARK_QUERY);
     query?.addEventListener('change', (event) => {
-      if (!this.saved()) {
+      // Not once the switch has been used - even with storage blocked, where it isn't saved.
+      if (!this.chosen && !this.saved()) {
         this.apply(event.matches);
       }
     });
   }
 
+  /** Set once the switch is used: the system setting no longer applies, saved or not. */
+  private chosen = false;
+
   toggle(): void {
     const dark = !this.dark();
+    this.chosen = true;
     this.apply(dark);
     try {
       localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
@@ -44,8 +49,11 @@ export class ThemeService {
   private apply(dark: boolean): void {
     this.root.classList.toggle('pc-dark', dark);
     this.root.classList.toggle('pc-light', !dark);
-    // Kept in step with the inline `color-scheme` index.html sets, which outranks the class's.
+    // Kept in step with the inline `color-scheme` index.html sets, which outranks the class's, and
+    // with the header switch's icon (header.scss).
     this.root.style.colorScheme = dark ? 'dark' : 'light';
+    this.root.style.setProperty('--pc-theme-icon-moon', dark ? 'none' : 'inline-block');
+    this.root.style.setProperty('--pc-theme-icon-sun', dark ? 'inline-block' : 'none');
     this.dark.set(dark);
   }
 

@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe, PercentPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
-  PcacBarVerticalChartComponent,
+  PcacBarVerticalChart,
   PcacData,
   PcacLineChart,
   PcacPieChart,
@@ -30,7 +30,7 @@ import { ChartContract } from '../../layout/chart-contract/chart-contract';
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    PcacBarVerticalChartComponent,
+    PcacBarVerticalChart,
     PcacLineChart,
     PcacPieChart,
     PcacTooltipDirective,
@@ -93,10 +93,10 @@ export class TooltipComponent {
   </ng-template>
 </pcac-bar-vertical-chart>`;
 
-  importCode = `import { PcacBarVerticalChartComponent, PcacTooltipDirective } from '@pioneer-code/pioneer-charts';
+  importCode = `import { PcacBarVerticalChart, PcacTooltipDirective } from '@pioneer-code/pioneer-charts';
 
 @Component({
-  imports: [PcacBarVerticalChartComponent, PcacTooltipDirective],
+  imports: [PcacBarVerticalChart, PcacTooltipDirective],
   // ...
 })`;
 

@@ -23,7 +23,7 @@ import { barColorOverride, canRoundBands, hasDistinctSeriesKeys, seriesKeys, ser
 type GroupType = Selection<BaseType, PcacData, BaseType, PcacData>;
 
 /**
- * Provided per-component (see PcacBarHorizontalChartComponent's `providers`), not root-scoped:
+ * Provided per-component (see PcacBarHorizontalChart's `providers`), not root-scoped:
  * this builder extends PcacChart, which holds mutable per-chart-instance state (margin, width,
  * height, colors, svg). A root singleton would be shared and clobbered by every
  * <pcac-bar-horizontal-chart> rendered at once.

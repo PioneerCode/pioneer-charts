@@ -27,7 +27,7 @@ let nextLegendId = 0;
 })
 export class PcacLegend {
   readonly headingId = `pcac-legend-heading-${nextLegendId++}`;
-  readonly colorService = inject(PcacColorService);
+  private readonly colorService = inject(PcacColorService);
   config = model.required<PcacLegendConfig>();
   itemClicked = output<PcacLegendConfigItem[]>();
 

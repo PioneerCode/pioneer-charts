@@ -1,7 +1,9 @@
+<!-- The group titles are labels for their lists rather than headings: the sidebar comes before the
+     page in the document, so as h2s they put two headings ahead of every page's h1. -->
 <nav [id]="navId()" class="pt-2" aria-label="Documentation">
-  <h2 class="pc-h3 m-0 ms-3 me-3">Getting Started</h2>
+  <p class="pc-h3 m-0 ms-3 me-3" [id]="navId() + '-guides'">Getting Started</p>
   <div class="pl-3 pr-3">
-    <mat-nav-list>
+    <mat-nav-list [attr.aria-labelledby]="navId() + '-guides'">
       <a mat-list-item routerLink="/docs/guides/introduction" routerLinkActive="pcac-navigation-active-link">Introduction</a>
       <a mat-list-item routerLink="/docs/guides/theme" routerLinkActive="pcac-navigation-active-link">Theme</a>
       <a mat-list-item routerLink="/docs/guides/height-full" routerLinkActive="pcac-navigation-active-link">Full Height</a>
@@ -10,9 +12,9 @@
       <a mat-list-item routerLink="/docs/guides/data-contract" routerLinkActive="pcac-navigation-active-link">Data Contract</a>
     </mat-nav-list>
   </div>
-  <h2 class="pc-h3 m-0 ms-3 me-3 mt-3">Charts</h2>
+  <p class="pc-h3 m-0 ms-3 me-3 mt-3" [id]="navId() + '-charts'">Charts</p>
   <div class="pl-3 pr-3">
-    <mat-nav-list>
+    <mat-nav-list [attr.aria-labelledby]="navId() + '-charts'">
       <a mat-list-item routerLink="/docs/components/charts/bar-chart" routerLinkActive="pcac-navigation-active-link">Bar Chart</a>
       <a mat-list-item routerLink="/docs/components/charts/area-chart" routerLinkActive="pcac-navigation-active-link">Area Chart</a>
       <a mat-list-item routerLink="/docs/components/charts/line-chart" routerLinkActive="pcac-navigation-active-link">Line Chart</a>

@@ -66,3 +66,14 @@
 .theme-toggle.mat-mdc-icon-button {
   color: inherit;
 }
+
+// Which of the switch's two icons shows (see header.html): set inline on <html> by index.html's
+// pre-paint script and ThemeService, so it's right before the app starts - the pre-rendered page's
+// inlined CSS keeps only rules matching its HTML, which has no theme class yet.
+.pc-theme-icon-moon {
+  display: var(--pc-theme-icon-moon, inline-block);
+}
+
+.pc-theme-icon-sun {
+  display: var(--pc-theme-icon-sun, none);
+}

@@ -14,7 +14,7 @@
  *
  * Safe to run again on output it has already shaped (each step skips what's done).
  */
-import { copyFileSync, existsSync, readdirSync, readFileSync, renameSync, rmdirSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, renameSync, rmdirSync, rmSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 
 const SITE_URL = 'https://pioneercharts.com';
@@ -44,7 +44,10 @@ for (const route of routes.filter((route) => route !== '/')) {
 }
 
 if (existsSync(`${browser}/index.csr.html`)) {
-  copyFileSync(`${browser}/index.csr.html`, `${browser}/404.html`);
+  // Marked noindex in its own HTML, not only once the app has started (seo.ts): it carries the home
+  // page's title and canonical, and `/404.html` itself answers with a 200.
+  const shell = readFileSync(`${browser}/index.csr.html`, 'utf-8');
+  writeFileSync(`${browser}/404.html`, shell.replace('<head>', '<head>\n  <meta name="robots" content="noindex">'));
   rmSync(`${browser}/index.csr.html`);
 }
 

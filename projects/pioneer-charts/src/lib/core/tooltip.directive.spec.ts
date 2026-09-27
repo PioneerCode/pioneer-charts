@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
-import { PcacBarVerticalChartComponent } from '../bar-chart/bar-vertical-chart/bar-vertical-chart.component';
+import { PcacBarVerticalChart } from '../bar-chart/bar-vertical-chart/bar-vertical-chart.component';
 import { PcacBarVerticalChartConfig } from '../bar-chart/bar-vertical-chart/bar-vertical-chart.model';
 import { PcacLineChart } from '../plot-line-area-chart/line/line.component';
 import { PcacLineChartConfig } from '../plot-line-area-chart/line/line.model';
@@ -23,7 +23,7 @@ import { PcacTooltipDirective } from './tooltip.directive';
  */
 @Component({
   selector: 'pcac-tooltip-directive-test-host',
-  imports: [PcacBarVerticalChartComponent, PcacLineChart, PcacPieChart, PcacTooltipDirective],
+  imports: [PcacBarVerticalChart, PcacLineChart, PcacPieChart, PcacTooltipDirective],
   template: `
     <pcac-bar-vertical-chart [config]="barConfig()">
       <ng-template pcacTooltip let-point let-group="parent" let-i="index" let-g="parentIndex">

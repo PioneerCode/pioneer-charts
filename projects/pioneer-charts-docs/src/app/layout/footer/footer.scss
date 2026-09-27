@@ -18,8 +18,8 @@
 
 footer {
 	color: #fff;
-	// Its own background, not the page's showing through: on docs pages it sits in the content
-	// column, over the layout's white background (see page-docs.html).
+	// Its own background, not the page's showing through: the page's is the theme's surface, light
+	// or dark, and the footer is dark on both.
 	background-color: colors.$primary;
 
 	.polygon {

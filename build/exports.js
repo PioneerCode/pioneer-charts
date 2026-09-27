@@ -9,7 +9,7 @@
  * field at all, Node's resolution algorithm rejects every subpath not explicitly listed there -
  * regardless of what files actually exist on disk - with ERR_PACKAGE_PATH_NOT_EXPORTED. Without
  * this patch, an import like `@pioneer-code/pioneer-charts/themes/pioneer-charts.css` (as shown
- * in README.md and the docs site's Theme page) would fail under any tooling that enforces
+ * on the docs site's Introduction and Theme pages) would fail under any tooling that enforces
  * "exports" (which includes Vite - the same tool this repo's own dev server uses).
  *
  * Must run after build/theme.js and build/sass.js (see the build:lib script in package.json).

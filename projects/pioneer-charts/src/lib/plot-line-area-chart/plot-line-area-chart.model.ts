@@ -82,10 +82,11 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   enableZoomY: boolean = false
 
   /**
-   * Hex color codes to override the default colors, one per series in order. Repeats from the
-   * start when there are more series than colors, as the default palette does.
+   * Series colors, any CSS color, in place of the theme palette, one per series in order. Repeats
+   * from the start when there are more series than colors, as the default palette does. Omitted or
+   * empty, the theme palette is used - optional, as on every chart's config.
    */
-  colorOverride: string[] = []
+  colorOverride?: string[]
 
   /**
    * Bounding box for any point images (`PcacData.image`) on this chart. Optional; each field falls

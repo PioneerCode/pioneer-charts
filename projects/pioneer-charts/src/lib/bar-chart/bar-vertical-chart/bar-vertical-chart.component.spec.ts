@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { PcacTooltipBuilder } from '../../core/tooltip.builder';
 import { BarVerticalChartBuilder } from './bar-vertical-chart.builder';
-import { PcacBarVerticalChartComponent } from './bar-vertical-chart.component';
+import { PcacBarVerticalChart } from './bar-vertical-chart.component';
 import { PcacBarVerticalChartConfig } from './bar-vertical-chart.model';
 import { PcacColorService } from '../../core/color.service';
 
-describe('PcacBarVerticalChartComponent', () => {
+describe('PcacBarVerticalChart', () => {
   beforeAll(() => {
     // jsdom has no ResizeObserver, which every chart component uses.
     vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
@@ -16,7 +16,7 @@ describe('PcacBarVerticalChartComponent', () => {
   // Regression test: a chart removed while hovered (an @if flip, a route change) gets no mouseout,
   // so the shared tooltip stayed on screen after its chart was gone.
   it('closes its tooltip when destroyed while hovered', () => {
-    const fixture = TestBed.createComponent(PcacBarVerticalChartComponent);
+    const fixture = TestBed.createComponent(PcacBarVerticalChart);
     fixture.componentRef.setInput('config', { ...new PcacBarVerticalChartConfig(), data: [] });
     fixture.detectChanges();
 
@@ -35,7 +35,7 @@ describe('PcacBarVerticalChartComponent', () => {
   // container here is never laid out (jsdom), which is also the case the first build of a real
   // chart can hit - it must still pick up palette changes.
   it('redraws when the palette changes, even before its container is laid out', async () => {
-    const fixture = TestBed.createComponent(PcacBarVerticalChartComponent);
+    const fixture = TestBed.createComponent(PcacBarVerticalChart);
     fixture.componentRef.setInput('config', {
       ...new PcacBarVerticalChartConfig(),
       data: [{ key: 'g', value: null, hide: false, data: [{ key: 'a', value: 1, hide: false, data: [] }] }],

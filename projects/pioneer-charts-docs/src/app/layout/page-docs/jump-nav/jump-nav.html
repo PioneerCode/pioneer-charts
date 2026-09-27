@@ -1,4 +1,4 @@
-<nav class="mt-6 px-6 min-w-[300px]">
+<nav class="mt-6 px-6 min-w-[300px]" aria-label="On this page">
     <h2 class="pc-h6"><small>ON THIS PAGE</small></h2>
     @for (item of jumpNav(); track $index) {
     <a  routerLink="." [fragment]="item.value" class="w-[100%] block">{{ item.key }}</a>

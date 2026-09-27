@@ -23,8 +23,8 @@ export class LayoutHeader {
   protected readonly theme = inject(ThemeService);
 
   constructor() {
-    // The router scrolls to a URL's #section (anchorScrolling, app.config.ts); this keeps the
-    // section just below this fixed header rather than behind it.
+    // App scrolls to a URL's #section through the ViewportScroller (App.followRouterScrolling);
+    // this keeps the section just below this fixed header rather than behind it.
     inject(ViewportScroller).setOffset(() => [0, this.nav.headerHeight() + 16]);
 
     // The header is fixed over the page, so the page starts - and the docs drawer opens - below

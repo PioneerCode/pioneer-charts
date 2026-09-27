@@ -2,8 +2,8 @@
   <header class="mb-8">
     <h1>Charts</h1>
     <nav class="pc-charts-nav" aria-label="Chart sections">
-      <!-- Links, so the URL takes the section's #hash; the router scrolls there (below the fixed
-             header) and moves focus to the section (anchorScrolling, app.config.ts). -->
+      <!-- Links, so the URL takes the section's #hash; App scrolls there (below the fixed header)
+             and moves focus to the section (App.followRouterScrolling). -->
       @for (section of sections; track section.id) {
       <a routerLink="." [fragment]="section.id">{{ section.label }}</a>
       }

@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal, DOCUMENT } from '@angular/core';
 import { color } from 'd3-color';
 import { RouterLink } from '@angular/router';
-import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChartComponent, PcacLineChart } from '@pioneer-code/pioneer-charts';
+import { PcacAxisConfig, PcacAxisSubLabels, PcacBarVerticalChart, PcacLineChart } from '@pioneer-code/pioneer-charts';
 
 import { AppService } from '../../app.service';
 import { LayoutCode } from '../../layout/code/code';
@@ -28,7 +28,7 @@ type AxisColor = 'labelColor' | 'subLabelColor' | 'tickLabelColor' | 'tickColor'
     LayoutCode,
     LayoutPageDocs,
     LayoutResourceState,
-    PcacBarVerticalChartComponent,
+    PcacBarVerticalChart,
     PcacLineChart,
     RouterLink,
   ]

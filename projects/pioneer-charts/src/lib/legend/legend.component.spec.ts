@@ -99,5 +99,7 @@ describe('PcacLegend screen readers', () => {
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('pcac-legend').hasAttribute('aria-labelledby')).toBe(false);
+    // Nor an empty heading row, which took up a slot (and a gap) ahead of the first item.
+    expect(fixture.nativeElement.querySelector('.pcac-legend-label')).toBeNull();
   });
 });

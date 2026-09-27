@@ -95,8 +95,8 @@ export class PcacAxisConfig {
    * the axis. Labels follow the marks (D3 places them at tick length + 3px), and the chart's
    * margins grow or shrink by the same amount so the plot area makes room for them - a longer
    * tick means a slightly smaller plot, never labels pushed off the edge. Only the per-tick marks
-   * change; the axis line's two end-caps keep their default length. Color comes from the theme
-   * (`.pcac-axis-tick-marks .tick line`, `$gray-900`, the same as the axis line).
+   * change; the axis line's two end-caps keep their default length. Colored by `tickColor`, the
+   * theme's `$gray-900` (like the axis line) by default.
    */
   tickSize?: number
 
@@ -114,8 +114,8 @@ export class PcacAxisConfig {
 
   /**
    * Draw a solid line along the axis itself (the full length of the axis, with D3's short
-   * end-caps). Off by default, as the theme has always hidden it. Color comes from the theme
-   * (`.pcac-axis-line .domain`, `$gray-900`).
+   * end-caps). Off by default, as the theme has always hidden it. Colored by `lineColor`, the
+   * theme's `$gray-900` by default.
    */
   showLine?: boolean = false
 

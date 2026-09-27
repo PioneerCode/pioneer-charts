@@ -44,7 +44,8 @@
   - A zoom or pan still under way when a line, area or plot chart redrew moved the new drawing
     and replaced the zoom it keeps.
   - The old bar `colorOverride: { colors: [] }` - every bar config's default before 22.2.17 - no
-    longer triggers the development warning, which is for colors actually set.
+    longer triggers the development warning, which is for colors actually set. The warning comes
+    once per chart, like the pie's leftover-`donut` one, rather than once per page.
 
 <a name="22.2.17"></a>
 # [v22.2.17]

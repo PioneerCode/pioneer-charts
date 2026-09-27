@@ -57,27 +57,43 @@ export function canRoundBands(length: number, count: number): boolean {
   return count > 0 && length / count >= 2;
 }
 
-let warnedOfColorOverrideObject = false;
-
 /**
  * A bar config's `colorOverride` as the plain list of colors every chart now takes. Up to 22.2 the
  * bar charts wrapped it as `{ colors: [...] }`; a config still shaped that way - which TypeScript
- * misses when it's spread together or loaded as JSON - is still read, and development builds warn
- * about it once.
+ * misses when it's spread together or loaded as JSON - is still read, and `warn` is called (see
+ * `colorOverrideWarning`). Only for colors actually set: before 22.2.17 every bar config defaulted
+ * to `{ colors: [] }`, so one saved as JSON back then would warn about an override its author
+ * never chose.
  */
-export function barColorOverride(override: readonly string[] | { colors?: readonly string[] } | undefined): readonly string[] | undefined {
+export function barColorOverride(
+  override: readonly string[] | { colors?: readonly string[] } | undefined,
+  warn: () => void = () => undefined,
+): readonly string[] | undefined {
   if (!override || Array.isArray(override)) {
     return override as readonly string[] | undefined;
   }
   const colors = (override as { colors?: readonly string[] }).colors;
-  // Only for colors actually set: before 22.2.17 every bar config defaulted to `{ colors: [] }`,
-  // so one saved as JSON back then would warn about an override its author never chose.
-  if (colors?.length && typeof ngDevMode !== 'undefined' && ngDevMode && !warnedOfColorOverrideObject) {
-    warnedOfColorOverrideObject = true;
+  if (colors?.length) {
+    warn();
+  }
+  return colors;
+}
+
+/**
+ * The development-mode warning about the old `colorOverride` shape, for one chart: each bar builder
+ * keeps its own, so it warns once per chart - like the pie's leftover-`donut` warning - rather than
+ * once per page, which also made it depend on which chart happened to build first.
+ */
+export function colorOverrideWarning(): () => void {
+  let warned = false;
+  return () => {
+    if (warned || typeof ngDevMode === 'undefined' || !ngDevMode) {
+      return;
+    }
+    warned = true;
     console.warn(
       'Pioneer Charts: a bar chart\'s `colorOverride` is now a plain array of colors, like the other ' +
       'charts\' - use `colorOverride: [...]` rather than `colorOverride: { colors: [...] }`.',
     );
-  }
-  return colors;
+  };
 }

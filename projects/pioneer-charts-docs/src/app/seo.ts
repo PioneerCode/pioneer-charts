@@ -6,6 +6,9 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@ang
 export const SITE_URL = 'https://pioneercharts.com';
 
 const SITE_NAME = 'Pioneer Charts';
+const REPOSITORY_URL = 'https://github.com/PioneerCode/pioneer-charts';
+/** The docs' own start page: the "Documentation" step in a docs page's breadcrumbs. */
+const DOCS_PATH = '/docs/guides/introduction';
 const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
 /** The home page's description (and index.html's), for any route without its own. */
 const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie and donut charts built on D3'
@@ -13,9 +16,10 @@ const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, 
 
 /**
  * Keeps each page's search and link-preview metadata in step with the route, from the route's
- * `title` and `data.description` (see app.routes.ts): the document title, `<meta name=description>`,
- * the Open Graph tags, and `<link rel=canonical>`. A route marked `data.notFound` (the catch-all)
- * gets `noindex`, since it shows the home page at a URL that isn't one.
+ * `title`, `data.searchTitle` and `data.description` (see app.routes.ts): the document title,
+ * `<meta name=description>`, the Open Graph tags, `<link rel=canonical>`, and structured data (see
+ * `structuredData`). A route marked `data.notFound` (the catch-all) gets `noindex`, since it shows
+ * the home page at a URL that isn't one, and no structured data.
  *
  * A `TitleStrategy` rather than a router-events subscription because the router already calls it
  * once per completed navigation, with the final route snapshot.
@@ -29,7 +33,8 @@ export class PageSeoStrategy extends TitleStrategy {
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const route = deepestChild(snapshot.root);
     const pageTitle = this.buildTitle(snapshot);
-    const title = pageTitle ? `${pageTitle} · ${SITE_NAME}` : DEFAULT_TITLE;
+    const searchTitle: string | undefined = route.data['searchTitle'] ?? pageTitle;
+    const title = searchTitle ? `${searchTitle} · ${SITE_NAME}` : DEFAULT_TITLE;
     const description: string = route.data['description'] ?? DEFAULT_DESCRIPTION;
     const notFound = route.data['notFound'] === true;
     // The path alone - no query or fragment - and the home page's for a URL that isn't a page.
@@ -46,6 +51,28 @@ export class PageSeoStrategy extends TitleStrategy {
       this.meta.removeTag('name="robots"');
     }
     this.canonicalLink().setAttribute('href', url);
+    this.setStructuredData(notFound ? null : structuredData(url, pageTitle ?? null, description));
+  }
+
+  /**
+   * The page's JSON-LD, in one `<script type="application/ld+json">` in the head, replaced on each
+   * navigation; `null` removes it. Written during pre-rendering like the rest, so it's in each
+   * page's HTML for crawlers that don't run JavaScript.
+   */
+  private setStructuredData(data: object | null): void {
+    let script = this.document.head.querySelector<HTMLScriptElement>('script#pc-structured-data');
+    if (!data) {
+      script?.remove();
+      return;
+    }
+    if (!script) {
+      script = this.document.createElement('script');
+      script.id = 'pc-structured-data';
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+    // `<` escaped so no string in it can close the script element early.
+    script.textContent = JSON.stringify(data).replace(/</g, '\\u003c');
   }
 
   private canonicalLink(): HTMLLinkElement {
@@ -57,6 +84,43 @@ export class PageSeoStrategy extends TitleStrategy {
     }
     return link;
   }
+}
+
+/**
+ * Structured data for a page (schema.org, as JSON-LD). The home page describes the site and the
+ * library itself - a `WebSite` and a `SoftwareSourceCode` - so search engines know what the project
+ * is. Every other page gets a `BreadcrumbList` (Pioneer Charts > Documentation > Bar Chart), which
+ * search results can show in place of the page's bare URL.
+ */
+export function structuredData(url: string, pageTitle: string | null, description: string): object {
+  if (url === `${SITE_URL}/`) {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        { '@type': 'WebSite', name: SITE_NAME, url },
+        {
+          '@type': 'SoftwareSourceCode',
+          name: SITE_NAME,
+          description,
+          url,
+          codeRepository: REPOSITORY_URL,
+          programmingLanguage: 'TypeScript',
+          runtimePlatform: 'Angular',
+          license: 'https://opensource.org/licenses/MIT',
+        },
+      ],
+    };
+  }
+  const trail = [{ name: SITE_NAME, url: `${SITE_URL}/` }];
+  if (url.startsWith(`${SITE_URL}/docs/`) && url !== `${SITE_URL}${DOCS_PATH}`) {
+    trail.push({ name: 'Documentation', url: `${SITE_URL}${DOCS_PATH}` });
+  }
+  trail.push({ name: pageTitle ?? SITE_NAME, url });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((step, i) => ({ '@type': 'ListItem', position: i + 1, name: step.name, item: step.url })),
+  };
 }
 
 function deepestChild(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {

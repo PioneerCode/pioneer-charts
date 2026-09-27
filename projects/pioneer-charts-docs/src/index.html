@@ -32,6 +32,10 @@
       var dark = saved ? saved === 'dark'
         : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
       document.documentElement.classList.add(dark ? 'pc-dark' : 'pc-light');
+      // Inline, too: the page's inlined critical CSS only keeps rules matching the pre-rendered
+      // HTML, which has no class yet - so it has `color-scheme: light` but not the dark rule, and
+      // the page drew light until the full stylesheet arrived. An inline style outranks it.
+      document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     })();
   </script>
   <link rel="icon" type="image/x-icon" href="favicon.ico">

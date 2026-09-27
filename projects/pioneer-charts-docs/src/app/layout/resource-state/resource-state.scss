@@ -11,3 +11,9 @@
   justify-content: center;
   background: color-mix(in srgb, var(--mat-sys-surface) 85%, transparent);
 }
+
+// The theme's error color, which reads on either theme (Tailwind's fixed red-600 fell under 3.5:1
+// on the dark one).
+.pc-resource-state-error {
+  color: var(--mat-sys-error);
+}

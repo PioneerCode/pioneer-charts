@@ -33,8 +33,10 @@
   outline: none;
 }
 
+// Its color is `--pcac-focus-ring-color`, like the axis and grid colors below: a page with a dark
+// background sets a light one.
 [data-pcac-mark]:focus-visible {
-  outline: 2px solid imports.$gray-800;
+  outline: 2px solid var(--pcac-focus-ring-color, #{imports.$gray-800});
   outline-offset: 2px;
 }
 
@@ -42,7 +44,7 @@
 // bounding box - which, around a wedge, frames half its neighbors too.
 .pcac-arc path[data-pcac-mark]:focus-visible {
   outline: none;
-  stroke: imports.$gray-800;
+  stroke: var(--pcac-focus-ring-color, #{imports.$gray-800});
   stroke-width: 2px;
 }
 

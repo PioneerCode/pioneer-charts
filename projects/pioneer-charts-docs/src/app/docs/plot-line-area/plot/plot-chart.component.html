@@ -49,7 +49,7 @@
       (change)="setFanOut('showAnchor', $any($event.target).checked)" />
     <span></span>
 
-    @for (color of fanOutColors; track color.field) {
+    @for (color of fanOutColors(); track color.field) {
     <label [for]="'pc-fan-out-' + color.field">{{ color.field }}</label>
     <input [id]="'pc-fan-out-' + color.field" type="color" [value]="f[color.field] ?? color.theme"
       [disabled]="!fanOutEnabled() || f.showAnchor === false"

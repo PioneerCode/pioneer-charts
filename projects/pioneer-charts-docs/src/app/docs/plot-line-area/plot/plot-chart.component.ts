@@ -10,6 +10,7 @@ import { PlotLineAreaBaseComponent } from '../base/base.component';
 import { LayoutResourceState } from '../../../layout/resource-state/resource-state';
 import { ChartCard } from '../../../layout/chart-card/chart-card';
 import { ChartContract } from '../../../layout/chart-contract/chart-contract';
+import { ThemeService } from '../../../layout/theme.service';
 
 @Component({
   selector: 'pc-plot-chart',
@@ -41,11 +42,16 @@ export class PlotChartComponent {
   protected readonly fanOutEnabled = signal(true);
   protected readonly fanOut = signal<Partial<PcacPointFanOutConfig>>({});
 
-  /** The two color fields, with the theme's own color for each so an unset picker shows what's drawn. */
-  protected readonly fanOutColors = [
-    { field: 'spokeColor', theme: '#ced4da' },
-    { field: 'anchorColor', theme: '#6c757d' },
-  ] as const;
+  private readonly theme = inject(ThemeService);
+
+  /**
+   * The two color fields, with the theme's own color for each so an unset picker shows what's
+   * drawn - the lighter pair the site's dark theme sets (styles.scss) while it's on.
+   */
+  protected readonly fanOutColors = computed(() => [
+    { field: 'spokeColor', theme: this.theme.dark() ? '#6c757d' : '#ced4da' },
+    { field: 'anchorColor', theme: this.theme.dark() ? '#adb5bd' : '#6c757d' },
+  ] as const);
 
   /** Same pattern as the Axis Styling page: a fresh config object so the chart rebuilds. */
   protected readonly fanOutConfig = computed(() => ({

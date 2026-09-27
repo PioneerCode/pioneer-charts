@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, PLATFORM_ID, inject, signal } from '@angular/core';
+import { ApplicationRef, Component, DOCUMENT, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterOutlet, Scroll } from '@angular/router';
@@ -17,8 +17,6 @@ import { LayoutFooter } from './layout/footer/footer';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('Pioneer Charts');
-
   constructor() {
     if (isPlatformBrowser(inject(PLATFORM_ID))) {
       this.followRouterScrolling();
@@ -33,11 +31,13 @@ export class App {
    *   and laid out. The router restores as soon as the page renders, when a docs page is still
    *   short of the charts its mock data will add, so it stopped well short (3953px of 5000px);
    * - a link to a #section scrolls there, likewise once stable, just below the fixed header (the
-   *   offset LayoutHeader gives the ViewportScroller), and focuses it.
+   *   offset LayoutHeader gives the ViewportScroller), and moves keyboard focus to it (see
+   *   `focusSection`).
    * A later navigation cancels a restore still waiting on the previous one.
    */
   private followRouterScrolling(): void {
     const scroller = inject(ViewportScroller);
+    const document = inject(DOCUMENT);
     const appRef = inject(ApplicationRef);
     scroller.setHistoryScrollRestoration('manual');
     let latest = 0;
@@ -58,7 +58,27 @@ export class App {
         scroller.scrollToPosition(event.position, { behavior: 'instant' });
       } else if (event.anchor) {
         scroller.scrollToAnchor(event.anchor);
+        focusSection(document, event.anchor);
       }
     });
   }
+}
+
+/**
+ * Moves keyboard focus to the section a #fragment link went to, so Tab carries on from there
+ * rather than from the link. The scroller tries to focus it too, but a section's heading or
+ * paragraph isn't focusable, so that did nothing - focus stayed on the "On this page" link, or,
+ * arriving from another page, fell to the page itself (the page's own heading doesn't take it when
+ * there's a section to go to; see LayoutPageDocsContent). `tabindex="-1"` makes it focusable by
+ * script without putting it in the Tab order.
+ */
+function focusSection(document: Document, id: string): void {
+  const section = document.getElementById(id);
+  if (!section) {
+    return;
+  }
+  if (!section.hasAttribute('tabindex')) {
+    section.setAttribute('tabindex', '-1');
+  }
+  section.focus({ preventScroll: true });
 }

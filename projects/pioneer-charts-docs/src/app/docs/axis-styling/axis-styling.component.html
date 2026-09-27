@@ -54,7 +54,7 @@
           (change)="onToggle(axis, 'hide', $event)" />
         <span></span>
 
-        @for (color of colorFields; track color.field) {
+        @for (color of colorFields(); track color.field) {
         <label [for]="'pc-axis-' + axis + '-' + color.field">{{ color.field }}</label>
         <input [id]="'pc-axis-' + axis + '-' + color.field" type="color" [value]="a[color.field] ?? color.theme"
           (input)="onColor(axis, color.field, $event)" />

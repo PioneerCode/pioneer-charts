@@ -9,5 +9,7 @@
 }
 
 .pcac-navigation-active-link {
-    background-color: colors.$accent-light;
+    // The accent at half strength, on the light theme; on the dark one that came out a muddy green
+    // under light text (under 4:1), so it's a deeper, solid green there.
+    background-color: light-dark(#{colors.$accent-light}, #1f6b47);
 }

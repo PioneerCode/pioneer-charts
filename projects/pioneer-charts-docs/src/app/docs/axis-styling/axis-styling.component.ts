@@ -10,6 +10,7 @@ import { LayoutResourceState } from '../../layout/resource-state/resource-state'
 import { IJumpNav } from '../../layout/page-docs/jump-nav/jump-nav';
 import { ChartCard } from '../../layout/chart-card/chart-card';
 import { ChartContract } from '../../layout/chart-contract/chart-contract';
+import { ThemeService } from '../../layout/theme.service';
 
 /** The `PcacAxisConfig` fields the demo lets you toggle; `tickSize` is the slider's. */
 type AxisToggle = 'hide' | 'showGrid' | 'showLine';
@@ -49,18 +50,26 @@ export class AxisStylingComponent {
   /** The three sub label slots, for the template's inputs */
   protected readonly subLabelKeys: readonly (keyof PcacAxisSubLabels)[] = ['min', 'mid', 'max'];
 
+  private readonly theme = inject(ThemeService);
+  private readonly document = inject(DOCUMENT);
+
   /**
-   * The color fields, each with the part's default color (the theme's `$gray-*`; for tick labels
-   * the page's text color) so an unset picker shows what the chart is actually drawing.
+   * The color fields, each with the part's default color so an unset picker shows what the chart is
+   * actually drawing: the library theme's `$gray-*` on the light theme, the lighter grays the site's
+   * dark theme sets instead (styles.scss) on the dark one, and for tick labels the page's text
+   * color. Worked out again when the theme is switched.
    */
-  protected readonly colorFields: readonly { field: AxisColor; theme: string }[] = [
-    { field: 'labelColor', theme: '#495057' },
-    { field: 'subLabelColor', theme: '#6c757d' },
-    { field: 'tickLabelColor', theme: bodyTextColorHex(inject(DOCUMENT)) },
-    { field: 'tickColor', theme: '#212529' },
-    { field: 'lineColor', theme: '#212529' },
-    { field: 'gridColor', theme: '#e9ecef' },
-  ];
+  protected readonly colorFields = computed<readonly { field: AxisColor; theme: string }[]>(() => {
+    const dark = this.theme.dark();
+    return [
+      { field: 'labelColor', theme: dark ? '#dee2e6' : '#495057' },
+      { field: 'subLabelColor', theme: dark ? '#adb5bd' : '#6c757d' },
+      { field: 'tickLabelColor', theme: bodyTextColorHex(this.document) },
+      { field: 'tickColor', theme: dark ? '#adb5bd' : '#212529' },
+      { field: 'lineColor', theme: dark ? '#adb5bd' : '#212529' },
+      { field: 'gridColor', theme: dark ? '#3a3f46' : '#e9ecef' },
+    ];
+  });
 
   /**
    * Spread into a new object rather than mutating the resource's own value, so the chart rebuilds

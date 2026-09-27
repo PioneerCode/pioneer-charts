@@ -44,6 +44,8 @@ export class ThemeService {
   private apply(dark: boolean): void {
     this.root.classList.toggle('pc-dark', dark);
     this.root.classList.toggle('pc-light', !dark);
+    // Kept in step with the inline `color-scheme` index.html sets, which outranks the class's.
+    this.root.style.colorScheme = dark ? 'dark' : 'light';
     this.dark.set(dark);
   }
 

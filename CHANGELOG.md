@@ -1,3 +1,50 @@
+<a name="22.2.17"></a>
+# [v22.2.17]
+
+### Added
+  - Charts work from the keyboard and with a screen reader:
+    - Each chart is one Tab stop. Inside it, the arrow keys move from bar to bar (slice, point),
+      and Home and End go to the first and last. Marks that aren't shown - a hidden series or
+      bar, a point zoomed out of view - are skipped.
+    - A focused bar, slice or point is highlighted and shows its tooltip, as under the pointer,
+      with a focus ring (`[data-pcac-mark]:focus-visible` in the theme). Escape hides the
+      tooltip.
+    - Enter or Space does what a click does: `barClicked`, `sliceClicked` or `dotClicked` emits.
+    - Each mark is announced by its key and value, formatted as its axis is - "Chips, Week 3:
+      125". Axes, grid lines and the hover crosshair are hidden from screen readers. With a
+      `pcacTooltip` template, the focused mark is also described by the tooltip.
+    - A legend is a group named by its heading.
+  - Charts are drawn without animation when the user has asked their system to reduce motion.
+  - Line, area and plot charts keep their zoom when they redraw - a new config, a series toggled
+    in a legend, a resize (which keeps the same part of the domain in view). Turning zoom off,
+    or changing which axes zoom, starts the chart unzoomed again.
+
+### Changed
+  - **Breaking.** A bar chart's `colorOverride` is a plain array of colors, as it is on every
+    other chart:
+
+    ```ts
+    // Before
+    colorOverride: { colors: ['#3949ab', '#5c6bc0'] }
+    // After
+    colorOverride: ['#3949ab', '#5c6bc0']
+    ```
+
+    `PcacBarVerticalChartColorOverrideConfig` and `PcacBarHorizontalChartColorOverrideConfig` are
+    removed. A config still shaped the old way - which TypeScript misses when it's spread together
+    or loaded as JSON - is still read, and development builds warn about it once.
+  - **Breaking for code or tests that read it.** A chart's `<svg>` is `role="group"` rather than
+    `role="img"`, still named by `ariaLabel`: an image's contents are hidden from screen readers,
+    and the bars, slices and points inside now have names and take focus of their own.
+
+### Removed
+  - **Breaking.** `PcacColorService.setPrimary()`, deprecated since no chart ever read the color
+    it set.
+
+### Fixed
+  - The library builds against `@types/d3-selection` 3.0.12, whose stricter event typings
+    rejected some of its event handlers.
+
 <a name="22.2.16"></a>
 # [v22.2.16]
 

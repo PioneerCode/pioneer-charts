@@ -10,6 +10,8 @@ import {
   PcacData,
   PcacDonutChart,
   PcacDonutChartConfig,
+  PcacDotPlotChart,
+  PcacDotPlotChartConfig,
   PcacLegend,
   PcacLegendConfig,
   PcacLegendConfigItem,
@@ -19,6 +21,8 @@ import {
   PcacPieChartConfig,
   PcacPlotChart,
   PcacPlotChartConfig,
+  PcacProximityChart,
+  PcacProximityChartConfig,
 } from '@pioneer-code/pioneer-charts';
 import { AppService } from '../app.service';
 import { LayoutResourceState } from '../layout/resource-state/resource-state';
@@ -32,6 +36,8 @@ const SECTIONS = [
   { id: 'line-area-charts', label: 'Line & Area' },
   { id: 'plot-charts', label: 'Plot' },
   { id: 'pie-donut-charts', label: 'Pie & Donut' },
+  { id: 'dot-plot-charts', label: 'Dot Plot' },
+  { id: 'proximity-charts', label: 'Proximity' },
   { id: 'legend', label: 'Legend' },
 ];
 
@@ -70,6 +76,12 @@ function atHeight<T extends { height: number }>(config: () => T, height: number)
   return computed(() => ({ ...config(), height }));
 }
 
+/** A made-up chance of rain for the fan-out mock's cloudy and rainy readings, as on the Plot Chart page. */
+const RAIN_CHANCE: Record<string, number[]> = {
+  Cloudy: [0.1, 0.2, 0.3, 0.25, 0.35, 0.15],
+  Rain: [0.9, 0.7, 0.8, 1, 0.6],
+};
+
 /** Names for the line mock's three unnamed series, so a legend has something to show. */
 const LINE_SERIES = ['North', 'South', 'West'];
 
@@ -104,6 +116,8 @@ const LONG_CATEGORIES: Record<string, string> = {
     PcacPlotChart,
     PcacPieChart,
     PcacDonutChart,
+    PcacDotPlotChart,
+    PcacProximityChart,
     PcacLegend,
   ]
 })
@@ -150,6 +164,75 @@ export class ChartsComponent {
   readonly plotConfig = atHeight<PcacPlotChartConfig>(() => this.service.plotConfig.value(), 260);
   readonly plotFanOutConfig = atHeight<PcacPlotChartConfig>(() => this.service.plotFanOutConfig.value(), 260);
   readonly plotImagesConfig = atHeight<PcacPlotChartConfig>(() => this.service.plotImagesConfig.value(), 260);
+
+  /**
+   * The fan-out mock split at noon and at 50 into four named quadrants: `referenceLines` and
+   * `cornerLabels`, as on the Plot Chart page.
+   */
+  readonly plotReferenceConfig = computed<PcacPlotChartConfig>(() => ({
+    ...this.plotFanOutConfig(),
+    referenceLines: [
+      { axis: 'x' as const, value: 12, label: 'Noon' },
+      { axis: 'y' as const, value: 50, label: '50' },
+    ],
+    cornerLabels: { topLeft: 'Morning, high', topRight: 'Afternoon, high', bottomLeft: 'Morning, low', bottomRight: 'Afternoon, low' },
+  }));
+
+  /**
+   * The fan-out mock with a made-up chance of rain on the cloudy and rainy readings, as a ring round
+   * each (`gauge` and `pointGauge`); sunny and unknown readings get none. As on the Plot Chart page.
+   */
+  readonly plotGaugeConfig = computed<PcacPlotChartConfig>(() => {
+    const config = this.plotFanOutConfig();
+    return {
+      ...config,
+      data: config.data.map((series) => ({
+        ...series,
+        data: series.data.map((point, i) => {
+          const chance = RAIN_CHANCE[series.key as string]?.[i];
+          return chance === undefined ? point : { ...point, gauge: chance };
+        }),
+      })),
+      pointGauge: { max: 1, name: 'Chance of rain' },
+    };
+  });
+
+  /** June's daily highs as weather icons, values within 2° stacking together. */
+  readonly dotPlotImagesConfig = computed<PcacDotPlotChartConfig>(() => ({
+    ...this.service.dotPlotChartConfig.value(),
+    binWidth: 2,
+  }));
+
+  /** The same highs as dots in each sky's color, only equal values stacking. */
+  readonly dotPlotDotsConfig = computed<PcacDotPlotChartConfig>(() => {
+    const config = this.service.dotPlotChartConfig.value();
+    return {
+      ...config,
+      data: config.data.map((series) => ({
+        ...series,
+        data: series.data.map(({ image: _image, ...point }) => point),
+      })),
+    };
+  });
+
+  /** Cities by how alike their climate is to Portland's, named, with rings every 10%. */
+  readonly proximityConfig = computed<PcacProximityChartConfig>(() => ({
+    ...this.service.proximityChartConfig.value(),
+    height: 300,
+    showLabels: true,
+    centerSize: 40,
+    itemSize: 24,
+  }));
+
+  /** The same, pared back: no names, rings or spokes - the tooltip names each city. */
+  readonly proximityPlainConfig = computed<PcacProximityChartConfig>(() => ({
+    ...this.service.proximityChartConfig.value(),
+    height: 300,
+    rings: [],
+    showSpokes: false,
+    centerSize: 36,
+    itemSize: 22,
+  }));
 
   /** The horizontal bars with category names too long for the chart: shortened with "…" to fit. */
   readonly barLongLabelsConfig = computed<PcacBarHorizontalChartConfig>(() => {

@@ -185,6 +185,20 @@
             (dotClicked)="service.onClicked($event)" />
         </app-layout-resource-state>
       </pc-chart-card>
+      <pc-chart-card heading="Reference lines"
+        caption="Dashed lines at noon and at 50, with the four quadrants named in the corners.">
+        <app-layout-resource-state [resource]="service.plotFanOutConfig">
+          <pcac-plot-chart [config]="plotReferenceConfig() | chartLabel: 'Readings split into quadrants at noon and 50, plot chart'"
+            (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
+      <pc-chart-card heading="Point gauges"
+        caption="A ring round each cloudy or rainy reading, filled by its chance of rain.">
+        <app-layout-resource-state [resource]="service.plotFanOutConfig">
+          <pcac-plot-chart [config]="plotGaugeConfig() | chartLabel: 'Readings with a chance-of-rain ring, plot chart'"
+            (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
     </div>
   </section>
   <section id="pie-donut-charts" class="pc-charts-section" tabindex="-1">
@@ -209,6 +223,48 @@
         <app-layout-resource-state [resource]="service.pieChartConfig">
           <pcac-donut-chart [config]="donutThinConfig() | chartLabel: 'Thin donut, donut chart'"
             (sliceClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
+    </div>
+  </section>
+  <section id="dot-plot-charts" class="pc-charts-section" tabindex="-1">
+    <h2>Dot plot charts</h2>
+    <p class="pc-charts-lead mb-0">Every item placed along one value axis, stacked into columns where values match or
+      fall in the same bin, so the spread shows while each item stays hoverable. </p>
+    <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/dot-plot-chart'">Dot Plot
+          Chart</a></span></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <pc-chart-card heading="Binned, with images" caption="A month of daily highs as their weather, in 2° bins.">
+        <app-layout-resource-state [resource]="service.dotPlotChartConfig">
+          <pcac-dot-plot-chart [config]="dotPlotImagesConfig() | chartLabel: 'Daily highs in 2 degree bins, dot plot'"
+            (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
+      <pc-chart-card heading="Dots" caption="The same highs as dots in each sky's color; only equal values stack.">
+        <app-layout-resource-state [resource]="service.dotPlotChartConfig">
+          <pcac-dot-plot-chart [config]="dotPlotDotsConfig() | chartLabel: 'Daily highs, dot plot'"
+            (dotClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
+    </div>
+  </section>
+  <section id="proximity-charts" class="pc-charts-section" tabindex="-1">
+    <h2>Proximity charts</h2>
+    <p class="pc-charts-lead mb-0">One item in the middle and others around it, closer in for a closer match - by
+      similarity or by distance. </p>
+    <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/proximity-chart'">Proximity
+          Chart</a></span></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <pc-chart-card heading="Named, with rings" caption="Cities by how alike their climate is to Portland's.">
+        <app-layout-resource-state [resource]="service.proximityChartConfig">
+          <pcac-proximity-chart [config]="proximityConfig() | chartLabel: 'Cities by climate likeness to Portland, proximity chart'"
+            (itemClicked)="service.onClicked($event)" />
+        </app-layout-resource-state>
+      </pc-chart-card>
+      <pc-chart-card heading="Plain" caption="No names, rings or spokes; the tooltip names each city.">
+        <app-layout-resource-state [resource]="service.proximityChartConfig">
+          <pcac-proximity-chart [config]="proximityPlainConfig() | chartLabel: 'Cities by climate likeness to Portland, plain proximity chart'"
+            (itemClicked)="service.onClicked($event)" />
         </app-layout-resource-state>
       </pc-chart-card>
     </div>

@@ -15,6 +15,8 @@ import { PcacProximityPlacement, placeProximity, proximityDistance } from './pro
 const CENTER_GAP = 6;
 /** Room kept outside the rim for a ring label, in px. */
 const RIM_LABEL_ROOM = 4;
+/** Room a name takes below its item with `showLabels` - the gap and one line of 11px text - in px. */
+const ITEM_LABEL_ROOM = 16;
 
 /** The center, or one item around it, as the builder draws it. */
 interface PlaProximityMark {
@@ -58,9 +60,11 @@ export class ProximityChartBuilder extends PcacChart {
     this.ensureColorCount(placements.length + 1);
     this.applyColorOverride(config.colorOverride);
 
-    // Items run from just outside the center's mark to the rim, their own half-size kept inside it.
+    // Items run from just outside the center's mark to the rim, their own half-size kept inside it -
+    // and, with names under them, the name of an item at the bottom of the rim too.
     const inner = centerSize / 2 + CENTER_GAP + itemSize / 2;
-    const outer = Math.max(inner, Math.min(this.width, this.height) / 2 - itemSize / 2 - RIM_LABEL_ROOM);
+    const edgeRoom = itemSize / 2 + (config.showLabels ? ITEM_LABEL_ROOM : RIM_LABEL_ROOM);
+    const outer = Math.max(inner, Math.min(this.width, this.height) / 2 - edgeRoom);
     const radiusOf = (distance: number) => inner + distance * (outer - inner);
 
     this.buildContainer(chartElm, true);

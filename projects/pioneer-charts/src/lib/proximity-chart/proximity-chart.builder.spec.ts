@@ -132,4 +132,12 @@ describe('ProximityChartBuilder', () => {
     expect(Number(label.getAttribute('x'))).toBeGreaterThan(0);
     expect(Math.abs(Number(label.getAttribute('y')))).toBeLessThan(0.001);
   });
+
+  it('keeps room for the name under an item on the rim when names are shown', () => {
+    const rim = (showLabels: boolean) => {
+      const { svg } = build(config([item('far', 0)], { itemSize: 30, showLabels }));
+      return radius(positions(svg)[0]);
+    };
+    expect(rim(false) - rim(true)).toBe(12);
+  });
 });

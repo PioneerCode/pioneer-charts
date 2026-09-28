@@ -91,7 +91,7 @@ export const routes: Routes = [
     {
         path: 'charts', title: 'Charts',
         loadComponent: () => import('./charts/charts.component').then(m => m.ChartsComponent),
-        data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie and donut - with legends, zoom, thresholds and custom colors.' },
+        data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie, donut, dot plot and proximity - with legends, zoom, thresholds and custom colors.' },
     },
     // Any other URL shows the home page, but isn't a page of its own: PageSeoStrategy marks it
     // `noindex` so a mistyped link can't be indexed as a copy of the home page.

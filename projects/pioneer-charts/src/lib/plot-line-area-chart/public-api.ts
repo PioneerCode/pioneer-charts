@@ -3,10 +3,11 @@
 // export * from './plot-line-area-chart.model';
 // The rest of that model stays internal (the shared PcacLineAreaChartConfig is reached through
 // the per-chart PcacLineChartConfig/PcacAreaChartConfig/PcacPlotChartConfig subclasses), but
-// the point-image, point-range, reference-line and corner-label types are part of those configs'
+// the point-image, point-range, point-gauge, reference-line and corner-label types are part of those configs'
 // public shape, so they're exported alone.
 export {
   PcacCornerLabels,
+  PcacPointGaugeConfig,
   PcacPointImageConfig,
   PcacPointRangeConfig,
   PcacPointRangeShow,

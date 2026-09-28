@@ -12,6 +12,13 @@
     Both take their colors through CSS custom properties like the axis colors
     (`--pcac-reference-line-color`, `--pcac-corner-label-color`), and both are hidden from screen
     readers like the grid, so a chart whose lines carry meaning should say so in its `ariaLabel`.
+  - Point gauges on the line, area and plot charts: give a point a `gauge` and set `pointGauge` on
+    the config, and a ring around its dot or image fills clockwise as a share of `pointGauge.max` -
+    a third number per point on a two-measure scatter. Points without a `gauge` get no ring. The
+    ring moves with zoom and fan-out, and fan-out spacing and edge space grow to fit it. Its colors
+    are `--pcac-point-gauge-color` (the series' color by default) and
+    `--pcac-point-gauge-track-color`; with a `name`, each point's screen reader name reads the
+    gauge too ("…, PSA 0.018").
 
 <a name="22.2.18"></a>
 # [v22.2.18]

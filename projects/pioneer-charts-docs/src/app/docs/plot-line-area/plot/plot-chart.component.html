@@ -90,6 +90,17 @@
       <pcac-plot-chart [config]="referenceConfig()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </pc-chart-card>
+  <h2 class="pc-h4 mt-6 mb-2">Point gauges</h2>
+  <p class="mb-3">Give a point a <code>gauge</code> and set <code>pointGauge</code> on the config to show a third
+    number per point as a ring around its mark: the arc fills clockwise from 12 o'clock as a share of
+    <code>pointGauge.max</code>, over a faint track. It surrounds an image as readily as a dot, moves with zoom and
+    fan-out, and a point without a <code>gauge</code> gets no ring. Here the rings show a made-up chance of rain on
+    the cloudy and rainy readings. Works the same on the plot, line and area charts.</p>
+  <pc-chart-card heading="Readings with a chance of rain" class="mb-3">
+    <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
+      <pcac-plot-chart [config]="gaugeConfig()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
+  </pc-chart-card>
   <h2 class="pc-h4 mt-6 mb-2">Point ranges</h2>
   <p class="mb-3">When a point stands for the middle of a range, give it a <code>range</code> with an
     <code>x</code> and / or <code>y</code> <code>{{ '{ min, max }' }}</code>, and set <code>pointRange</code> on the
@@ -177,6 +188,25 @@
     </app-layout-resource-state>
   </pc-chart-card>
   <ng-container configRows>
+    <tr>
+      <td>pointGauge</td>
+      <td>Draw each point's <b>gauge</b> as a ring around its mark (its dot, or its image). Off when omitted;
+        <code>{{ '{}' }}</code> turns it on with the defaults below. The arc fills clockwise from 12 o'clock in
+        proportion to <b>gauge</b> / <b>max</b>, clamped to empty and full. Drawn with the mark, so zoom and fan-out
+        carry it along; fan-out spacing and the chart's edge space grow to fit it.
+        <ul>
+          <li><b>max</b> &mdash; the <b>gauge</b> value of a full ring. Default 1.</li>
+          <li><b>width</b> &mdash; ring thickness in pixels. Default 2.5.</li>
+          <li><b>gap</b> &mdash; space between the mark and the ring in pixels. Default 3.</li>
+          <li><b>showTrack</b> &mdash; draw the unfilled rest of the ring. Default true.</li>
+          <li><b>name</b> &mdash; what the gauge measures. When set, each point's screen reader name ends with it
+            and the point's value (&ldquo;&hellip;, PSA 0.018&rdquo;); unset, the ring is only visual.</li>
+          <li><b>color</b> / <b>trackColor</b> &mdash; any CSS color for the arc (default: the series' color) and
+            the track (default: the theme's <code>$gray-200</code>), as <code>--pcac-point-gauge-color</code> /
+            <code>--pcac-point-gauge-track-color</code> on the chart's <code>.dots</code> groups.</li>
+        </ul>
+      </td>
+    </tr>
     <tr>
       <td>referenceLines</td>
       <td>Dashed lines across the plot at chosen values, drawn over the grid and under the series, clipped to the

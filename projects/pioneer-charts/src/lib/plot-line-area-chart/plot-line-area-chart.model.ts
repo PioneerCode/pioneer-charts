@@ -61,6 +61,43 @@ export class PcacPointRangeConfig {
 }
 
 /**
+ * Drawing for `PcacData.gauge` on the line/area/plot charts: a ring around each point's mark (its
+ * dot, or its image) whose arc fills clockwise from 12 o'clock in proportion to `gauge / max`,
+ * over a faint full-circle track. Drawn with the mark, so it moves with zoom and fan-out; fan-out
+ * spacing and the chart's edge space grow to fit it. Points without a `gauge` get no ring.
+ */
+export class PcacPointGaugeConfig {
+  /** The `gauge` value of a full ring. Default 1, for values that are already a fraction. */
+  max: number = 1
+
+  /** Ring thickness in px. */
+  width: number = 2.5
+
+  /** Space between the mark (the image box, or a hovered dot) and the ring, in px. */
+  gap: number = 3
+
+  /** Draw the unfilled rest of the ring, so an arc reads as a share of a whole. */
+  showTrack: boolean = true
+
+  /**
+   * What the gauge measures, e.g. `'PSA'`. When set, each point's screen reader name ends with it
+   * and the point's value - "…, PSA 0.018" - since the ring itself is only visual. Unset, the
+   * ring isn't read at all; say what it means in the chart's `ariaLabel`, or a custom tooltip.
+   */
+  name?: string
+
+  /**
+   * Any CSS color for the filled arc. Unset, each takes its series' color. Applied as
+   * `--pcac-point-gauge-color` on the chart's `.dots` groups, so a stylesheet can set it on an
+   * ancestor instead (a config value wins).
+   */
+  color?: string
+
+  /** Any CSS color for the track (`--pcac-point-gauge-track-color`). Theme default `$gray-200`. */
+  trackColor?: string
+}
+
+/**
  * A line across the plot at one value on an axis (see `PcacLineAreaChartConfig.referenceLines`):
  * a target, a threshold, a median. Drawn dashed, over the grid and under the series, clipped to
  * the plot area, and moved with zoom like the data.
@@ -157,6 +194,13 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
    * one carries meaning, say so in the chart's `ariaLabel`.
    */
   referenceLines?: Partial<PcacReferenceLine>[]
+
+  /**
+   * Draw each point's `gauge` as a ring around its mark (see `PcacData.gauge`). Off when not set;
+   * `{}` turns it on with every `PcacPointGaugeConfig` default. Points without a `gauge` draw
+   * nothing extra.
+   */
+  pointGauge?: Partial<PcacPointGaugeConfig>
 
   /**
    * Labels in the plot's four corners (see `PcacCornerLabels`). None when not set. Hidden from

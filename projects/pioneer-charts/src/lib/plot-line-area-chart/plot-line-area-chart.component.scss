@@ -37,6 +37,19 @@
     fill: var(--pcac-reference-line-color, #{imports.$gray-500});
   }
 
+  // `pointGauge` (see PcacPointGaugeConfig): a ring around each point with a `gauge`. The arc is
+  // the config's `color` (`--pcac-point-gauge-color`, on each `.dots` group) or else the series'
+  // own (`--pcac-point-gauge-series-color`, which the builder sets on each ring); the track is
+  // `trackColor` (`--pcac-point-gauge-track-color`) or a light gray, like the grid.
+  .point-gauge-track {
+    fill: none;
+    stroke: var(--pcac-point-gauge-track-color, #{imports.$gray-200});
+  }
+
+  .point-gauge-arc {
+    fill: var(--pcac-point-gauge-color, var(--pcac-point-gauge-series-color));
+  }
+
   .corner-label {
     font-size: 12px;
     font-weight: 500;

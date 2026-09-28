@@ -88,6 +88,10 @@ export class AppRepository {
     return './mock/line-area-chart/plot-chart-range.json';
   }
 
+  getDotPlotChartUrl() {
+    return './mock/dot-plot-chart/dot-plot-chart.json';
+  }
+
   getPieChartConfigUrl() {
     return './mock/pie-chart.json';
   }

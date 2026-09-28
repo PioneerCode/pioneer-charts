@@ -12,7 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 /** The charts the directive sits on - and the legend, which is only given a button of its own alone. */
 const CHARTS =
   'pcac-bar-vertical-chart, pcac-bar-horizontal-chart, pcac-line-chart, pcac-area-chart, pcac-plot-chart, ' +
-  'pcac-pie-chart, pcac-donut-chart';
+  'pcac-pie-chart, pcac-donut-chart, pcac-dot-plot-chart';
 
 /** Each element the directive sits on, and the config class its contract is an instance of. */
 const CONFIG_CLASSES: Record<string, string> = {
@@ -23,6 +23,7 @@ const CONFIG_CLASSES: Record<string, string> = {
   'pcac-plot-chart': 'PcacPlotChartConfig',
   'pcac-pie-chart': 'PcacPieChartConfig',
   'pcac-donut-chart': 'PcacDonutChartConfig',
+  'pcac-dot-plot-chart': 'PcacDotPlotChartConfig',
   'pcac-legend': 'PcacLegendConfig',
 };
 
@@ -121,7 +122,7 @@ export class ChartContractButton {
   // Spelled out rather than built from CHARTS: a selector has to be a literal for the compiler.
   selector:
     'pcac-bar-vertical-chart, pcac-bar-horizontal-chart, pcac-line-chart, pcac-area-chart, pcac-plot-chart, ' +
-    'pcac-pie-chart, pcac-donut-chart, pcac-legend',
+    'pcac-pie-chart, pcac-donut-chart, pcac-dot-plot-chart, pcac-legend',
 })
 export class ChartContract {
   readonly config = input<unknown>();

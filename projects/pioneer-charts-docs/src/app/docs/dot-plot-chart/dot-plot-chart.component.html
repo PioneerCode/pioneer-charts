@@ -1,0 +1,99 @@
+<app-layout-page-docs pageTitle="Dot Plot Chart" [jumpNav]="jumpNav()">
+  <p class="lead" id="dot-plot-chart">Dot plot component: every point placed along one value axis, with points that
+    share a value &mdash; or fall in the same <code>binWidth</code> bin &mdash; stacked into a column above it. It
+    shows how values are spread out while keeping each item visible, hoverable and clickable, and a point can be drawn
+    as its own <code>image</code>. Takes the same series-of-points data as the
+    <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a>: a point's <code>value</code> is its position on
+    the axis, its <code>key</code> its name, and its series its color. Points without a numeric <code>value</code>, and
+    hidden series and points, are left out.</p>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="try-it">Try it</h2>
+    <p class="mb-3">A month of daily highs, one mark per day, grouped by sky. The controls edit the chart's config
+      live; each field is described in the Configuration table.</p>
+    @let s = settings();
+    <div class="pc-controls max-w-md mb-3">
+      <label for="pc-dot-bin-width">binWidth</label>
+      <select id="pc-dot-bin-width" [value]="'' + s.binWidth" (change)="set('binWidth', +$any($event.target).value)">
+        @for (w of binWidths; track w) {
+          <option [value]="'' + w">{{ w === 0 ? 'none' : w + '°' }}</option>
+        }
+      </select>
+      <span class="pc-muted">{{ s.binWidth ? 'values within ' + s.binWidth + '° stack' : 'only equal values stack' }}</span>
+
+      <label for="pc-dot-images">images</label>
+      <input id="pc-dot-images" type="checkbox" [checked]="s.images" (change)="set('images', $any($event.target).checked)" />
+      <span class="pc-muted">{{ s.images ? 'each day drawn as its weather' : 'dots in each series\' color' }}</span>
+    </div>
+    <pc-chart-card heading="Daily highs in June" caption="Change the settings above and it redraws." class="mb-3">
+      <app-layout-resource-state [resource]="pcService.dotPlotChartConfig">
+        <pcac-dot-plot-chart [config]="config()" (dotClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
+    </pc-chart-card>
+    <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="api">API</h2>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config [includeAxes]="true">
+      <tbody>
+        <tr>
+          <td>value axis</td>
+          <td>On a dot plot <code>xAxis</code> is the value axis. <b>domainMin</b> / <b>domainMax</b> fix its span; without them it spans the data,
+            rounded out to nice ticks. <b>format</b> formats its ticks and the tooltip's value, and every label, sub
+            label, tick and grid setting applies. There is no y axis &mdash; a column's height is a count of marks,
+            not a value &mdash; so <b>yAxis</b> is ignored.</td>
+        </tr>
+        <tr>
+          <td>binWidth</td>
+          <td>Group values into bins this wide, in the axis's units, and stack each bin at its center. Bins start at
+            <code>xAxis.domainMin</code>, or 0 without one. Unset, only equal values stack.</td>
+        </tr>
+        <tr>
+          <td>dotRadius</td>
+          <td>Radius of a point's dot in pixels. Default 6. A hovered dot grows by 2 and fills with its series'
+            color.</td>
+        </tr>
+        <tr>
+          <td>gap</td>
+          <td>Space between stacked marks in pixels. Default 2.</td>
+        </tr>
+        <tr>
+          <td>pointImage</td>
+          <td>Bounding box (<b>maxWidth</b> / <b>maxHeight</b>) for points with an <b>image</b>, drawn in place of their
+            dot, as on the plot chart. When the tallest column wouldn't fit the chart's <b>height</b>, every mark
+            shrinks evenly until it does, so nothing is cut off.</td>
+        </tr>
+        <tr>
+          <td>colorOverride</td>
+          <td>Series colors, any CSS color, in place of the theme palette, one per series in order. Repeated when there
+            are more series than colors.</td>
+        </tr>
+      </tbody>
+    </app-layout-base-config>
+  </section>
+  <section class="pc-doc-section">
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>(dotClicked)="onClicked($event)"</td>
+            <td>Emitted when a dot or image is clicked, or activated with Enter or Space.</td>
+            <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</app-layout-page-docs>

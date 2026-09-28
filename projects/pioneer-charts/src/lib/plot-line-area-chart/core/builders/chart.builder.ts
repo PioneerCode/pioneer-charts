@@ -762,7 +762,13 @@ export class PlaChartBuilder extends PcacChart {
           .attr('transform', (d: PcacData) => `translate(${this.offsetOf(d).dx}, ${rise(d)})`)
           .transition()
           .duration(duration)
-          .attr('transform', (d: PcacData) => `translate(${this.offsetOf(d).dx}, ${this.offsetOf(d).dy})`);
+          // Tweened as a number rather than `.attr('transform', ...)`: d3's transform interpolation
+          // parses through SVG DOM APIs (`transform.baseVal`) that not every environment has.
+          .attrTween('transform', (d: PcacData) => {
+            const { dx, dy } = this.offsetOf(d);
+            const from = rise(d);
+            return (t: number) => `translate(${dx}, ${from + (dy - from) * t})`;
+          });
       }
     }
   }

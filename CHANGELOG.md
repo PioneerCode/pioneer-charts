@@ -2,6 +2,12 @@
 # [Unreleased]
 
 ### Added
+  - A dot plot chart, `<pcac-dot-plot-chart>` (`PcacDotPlotChart`, `PcacDotPlotChartConfig`): every
+    point placed along one value axis, with points that share a value - or fall in the same
+    `binWidth` bin - stacked into a column above it. Takes the plot chart's series-of-points data,
+    draws a point's `image` in place of its dot (sized by `pointImage`), and shrinks every mark
+    evenly when the tallest column wouldn't fit. Tooltips, keyboard access, `dotClicked`,
+    `colorOverride`, `heightFull` and the x axis's styling work as on the other charts.
   - Reference lines and corner labels on the line, area and plot charts:
     - `referenceLines`: dashed lines at chosen values on either axis - a target, a threshold, a
       median - each with an optional label and color. They sit over the grid and under the

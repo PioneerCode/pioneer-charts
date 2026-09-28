@@ -74,6 +74,19 @@ describe('PlaChartBuilder keyboard and screen readers', () => {
     expect(clicked).toEqual([cfg.data[0].data[1]]);
   });
 
+  it("carries a point's id through to dotClicked", () => {
+    const cfg = config({
+      data: [{ key: 'Wins', value: null, hide: false, data: [{ ...point(10, 0.2), id: 42 }] }],
+    });
+    builder.buildChart(elm, cfg, PcacLineAreaPlotChartConfigType.Plot);
+    const clicked: PcacData[] = [];
+    builder.dotClicked$.subscribe((d) => clicked.push(d));
+
+    points()[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+    expect(clicked.map((d) => d.id)).toEqual([42]);
+  });
+
   it('grows a point and shows its tooltip on focus', () => {
     builder.buildChart(elm, config(), PcacLineAreaPlotChartConfigType.Plot);
 

@@ -111,6 +111,14 @@ describe('ProximityChartBuilder', () => {
     expect(clicked.map((d) => d.key)).toEqual(['near', 'Viking']);
   });
 
+  it("carries an item's id through to itemClicked", () => {
+    const { builder, svg } = build(config([{ ...item('near', 0.9), id: 'sku-1' }]));
+    const clicked: PcacData[] = [];
+    builder.itemClicked$.subscribe((d) => clicked.push(d));
+    svg.querySelector<SVGGElement>('.pcac-proximity-item')!.dispatchEvent(new MouseEvent('click'));
+    expect(clicked[0].id).toBe('sku-1');
+  });
+
   it('clears what it drew when given nothing to draw', () => {
     const builder = TestBed.runInInjectionContext(() => new ProximityChartBuilder());
     const elm = chartElm();

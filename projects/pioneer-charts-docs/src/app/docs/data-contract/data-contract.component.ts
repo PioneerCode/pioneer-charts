@@ -53,6 +53,11 @@ export class DataContractComponent {
    * image to draw in place of its dot, sized by the config's pointImage.
    */
   image?: string;
+  /**
+   * Your own identifier for the item, e.g. a record's primary key. Never
+   * drawn; carried through so a click output can be traced back to its record.
+   */
+  id?: string | number;
 }`;
 
   baseConfig = `export class PcacChartConfig {

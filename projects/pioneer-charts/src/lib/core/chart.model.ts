@@ -290,6 +290,17 @@ export class PcacData {
    * Optional for the same reason as `image`.
    */
   gauge?: number
+
+  /**
+   * The consumer's own identifier for this item - a record's primary key, say. Nothing draws or
+   * labels it; it's carried through untouched so a click output (`dotClicked`, `barClicked`,
+   * `sliceClicked`, `itemClicked`) can be traced back to the record it came from. Click outputs
+   * emit a copy of the item (the chart works on a copy of its config), so matching by object
+   * identity doesn't work, and matching by `key` or `image` breaks as soon as two items share one.
+   *
+   * Optional for the same reason as `image`.
+   */
+  id?: string | number
 }
 
 /**

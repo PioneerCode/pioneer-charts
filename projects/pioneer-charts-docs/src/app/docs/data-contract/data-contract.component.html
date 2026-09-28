@@ -15,6 +15,14 @@
           <p>When a configuration interface is created for a chart, it starts off with a representation of raw data.
             <b>data: PcacData[];</b> represent the base of our multi-dimensional array that we discussed above.
           </p>
+          <h3 class="pc-h5 mt-4" id="item-ids">Tracing a click back with <code>id</code></h3>
+          <p>Every chart's click output (<b>barClicked</b>, <b>sliceClicked</b>, <b>dotClicked</b>,
+            <b>itemClicked</b>) emits the clicked <b>PcacData</b>. It's a copy, though: the chart works on a copy of
+            its config, so comparing the emitted item to your own objects never matches. Matching on <b>key</b> or
+            <b>image</b> breaks as soon as two items share one. Set <b>id</b> to your own identifier for the item
+            (a record's primary key, say) instead. The chart never draws it, and it comes back on the emitted item.
+          </p>
+          <app-layout-code language="typescript" [code]="idExample"></app-layout-code>
         </section>
         <section class="pc-doc-section">
           <h2 class="pc-h3" id="chart-config">PcacChartConfig</h2>

@@ -24,6 +24,10 @@ export class DataContractComponent {
       value: 'data',
     },
     {
+      key: 'Item ids',
+      value: 'item-ids',
+    },
+    {
       key: 'PcacChartConfig',
       value: 'chart-config',
     },
@@ -58,6 +62,17 @@ export class DataContractComponent {
    * drawn; carried through so a click output can be traced back to its record.
    */
   id?: string | number;
+}`;
+
+  idExample = `// Each point carries its record's id...
+data: balls.map((ball) => ({
+  key: ball.name, value: null, hide: false,
+  data: [{ key: ball.x, value: ball.y, hide: false, data: [], id: ball.id }],
+})),
+
+// ...so a click finds the record it came from.
+onDotClicked(point: PcacData): void {
+  const ball = this.balls.find((b) => b.id === point.id);
 }`;
 
   baseConfig = `export class PcacChartConfig {

@@ -1,11 +1,12 @@
-<a name="unreleased"></a>
-# [Unreleased]
+<a name="22.2.20"></a>
+# [v22.2.20]
 
 ### Added
   - `PcacData.id`: an optional identifier of your own (a record's primary key, say), never drawn,
     carried through to every click output (`dotClicked`, `barClicked`, `sliceClicked`,
     `itemClicked`). Click outputs emit a copy of the item, so this is how to trace one back to its
     record when `key` or `image` isn't unique.
+  - Docs: an "Item ids" section on the Data Contract page, linked from each chart's click output.
 
 <a name="22.2.19"></a>
 # [v22.2.19]

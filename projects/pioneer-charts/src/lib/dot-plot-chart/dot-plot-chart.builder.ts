@@ -49,13 +49,16 @@ export class DotPlotChartBuilder extends PcacChart {
     config = { ...config, yAxis: { ...config.yAxis, hide: true } };
     this.initializeAxisState(config, 'x', 0);
 
+    const defaults = new PcacDotPlotChartConfig();
+    const dotRadius = config.dotRadius ?? defaults.dotRadius!;
+    const gap = config.gap ?? defaults.gap!;
     this.pointImage = { ...new PcacPointImageConfig(), ...config.pointImage };
     const origin = rawXAxis?.domainMin !== undefined ? Number(rawXAxis.domainMin) : 0;
     this.placements = stackDots(config.data, config.binWidth, origin);
     const hasImages = this.placements.some((p) => !!p.data.image);
     const fullSize = hasImages
       ? Math.max(this.pointImage.maxWidth, this.pointImage.maxHeight)
-      : 2 * (config.dotRadius + DOT_HOVER_GROWTH);
+      : 2 * (dotRadius + DOT_HOVER_GROWTH);
     // A mark at the domain's edge is centered on it, so half of it hangs past the plot area.
     const half = Math.ceil(fullSize / 2);
     this.reserveEdgeSpace({ left: half, right: half });
@@ -68,10 +71,10 @@ export class DotPlotChartBuilder extends PcacChart {
 
     // Shrink every mark evenly when the tallest column wouldn't fit the plot's height.
     const tallest = tallestColumn(this.placements);
-    const fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + config.gap))) : 1;
+    const fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + gap))) : 1;
     this.markSize = fullSize * fit;
-    this.markGap = config.gap * fit;
-    this.dotRadius = config.dotRadius * fit;
+    this.markGap = gap * fit;
+    this.dotRadius = dotRadius * fit;
 
     this.xScale = this.buildXScale(rawXAxis?.domainMin, rawXAxis?.domainMax);
     this.drawChart(chartElm);

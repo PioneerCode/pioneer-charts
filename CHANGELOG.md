@@ -2,6 +2,11 @@
 # [Unreleased]
 
 ### Added
+  - A proximity chart, `<pcac-proximity-chart>` (`PcacProximityChart`, `PcacProximityChartConfig`):
+    one item in the middle (`center`) and others (`data`) around it, each closer in or further out by
+    its `value` - a similarity or a distance, set by `closeValue` / `farValue`. Optional dashed guide
+    `rings` labelled in `format`, spokes and names under the items (`showLabels`); images in place
+    of dots, tooltips, keyboard access, `itemClicked`, `colorOverride` and `heightFull`.
   - A dot plot chart, `<pcac-dot-plot-chart>` (`PcacDotPlotChart`, `PcacDotPlotChartConfig`): every
     point placed along one value axis, with points that share a value - or fall in the same
     `binWidth` bin - stacked into a column above it. Takes the plot chart's series-of-points data,

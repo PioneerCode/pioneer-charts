@@ -20,8 +20,6 @@ const point = (key: string, value: number, extra: Partial<PcacData> = {}): PcacD
 function config(points: PcacData[][], extra: Partial<PcacDotPlotChartConfig> = {}): PcacDotPlotChartConfig {
   return {
     height: 200,
-    dotRadius: 6,
-    gap: 2,
     xAxis: { domainMin: 0, domainMax: 10 },
     data: points.map((p, i) => ({ key: `series ${i}`, value: null, hide: false, data: p })),
     ...extra,
@@ -124,5 +122,12 @@ describe('DotPlotChartBuilder', () => {
     builder.buildChart(elm, config([[point('a', 1)]]));
     builder.buildChart(elm, config([]));
     expect(elm.nativeElement.querySelector('.pcac-dot-mark')).toBeNull();
+  });
+
+  it('defaults the dot radius and gap when a config leaves them out', () => {
+    const { svg } = build(config([[point('a', 5), point('b', 5)]]));
+    expect(svg.querySelector('circle.pcac-dot')!.getAttribute('r')).toBe('6');
+    const [a, b] = centers(svg);
+    expect(a.y - b.y).toBe(18);
   });
 });

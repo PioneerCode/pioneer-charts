@@ -84,6 +84,11 @@ export const routes: Routes = [
         data: { searchTitle: 'Angular Dot Plot Chart', description: 'An Angular dot plot from Pioneer Charts: values stacked into columns along one axis, with binning and images in place of dots.' },
     },
     {
+        path: 'docs/components/charts/proximity-chart', title: 'Proximity Chart',
+        loadComponent: () => import('./docs/proximity-chart/proximity-chart.component').then(m => m.ProximityChartComponent),
+        data: { searchTitle: 'Angular Proximity Chart', description: 'An Angular proximity chart from Pioneer Charts: one item in the middle and its closest matches around it, placed by similarity or distance.' },
+    },
+    {
         path: 'charts', title: 'Charts',
         loadComponent: () => import('./charts/charts.component').then(m => m.ChartsComponent),
         data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie and donut - with legends, zoom, thresholds and custom colors.' },

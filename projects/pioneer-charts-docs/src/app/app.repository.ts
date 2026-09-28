@@ -88,6 +88,10 @@ export class AppRepository {
     return './mock/line-area-chart/plot-chart-range.json';
   }
 
+  getProximityChartUrl() {
+    return './mock/proximity-chart/proximity-chart.json';
+  }
+
   getDotPlotChartUrl() {
     return './mock/dot-plot-chart/dot-plot-chart.json';
   }

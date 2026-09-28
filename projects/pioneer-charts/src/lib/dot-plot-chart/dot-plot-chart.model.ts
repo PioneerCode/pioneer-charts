@@ -25,11 +25,14 @@ export class PcacDotPlotChartConfig extends PcacAxisChartConfig {
    */
   binWidth?: number
 
-  /** Radius of a point's dot, in px. Points with an `image` are sized by `pointImage` instead. */
-  dotRadius: number = 6
+  /**
+   * Radius of a point's dot, in px; default 6. Points with an `image` are sized by `pointImage`
+   * instead. Optional, as `colorOverride` is on every chart, so an object literal needn't spell it out.
+   */
+  dotRadius?: number = 6
 
-  /** Space between marks stacked in a column, in px. */
-  gap: number = 2
+  /** Space between marks stacked in a column, in px; default 2. Optional, likewise. */
+  gap?: number = 2
 
   /**
    * Bounding box for points' images (`PcacData.image`), drawn in place of their dots, as on the

@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
  * Lib
  */
 import { PlaChartEffectsBuilder } from './effects.builders';
-import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointImageConfig, PcacPointRangeConfig } from '../../plot-line-area-chart.model';
+import { PcacLineAreaChartConfig, PcacLineAreaPlotChartConfigType, PcacPointGaugeConfig, PcacPointImageConfig, PcacPointRangeConfig } from '../../plot-line-area-chart.model';
 import { PcacPlotChartConfig, PcacPointFanOutConfig } from '../../plot/plot.model';
 import { PcacChart } from '../../../core/chart';
 import { makeMarksAccessible, refreshTabStop } from '../../../core/marks';
@@ -25,6 +25,8 @@ import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
 import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
+import { GAUGE_DOT_RADIUS, drawPointGauges, gaugeExtent, hasGauge } from './point-gauge.builder';
+import { drawCornerLabels, drawReferenceLines, positionReferenceLines } from './reference-lines.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
@@ -125,6 +127,8 @@ export class PlaChartBuilder extends PcacChart {
   private hoveredPoint: SVGGElement | null = null;
   /** `config.pointRange` with its defaults applied, or `null` while ranges are off. */
   private pointRange: PcacPointRangeConfig | null = null;
+  /** `pointGauge` with its defaults, or `null` while it's off. */
+  private pointGauge: PcacPointGaugeConfig | null = null;
   /** Each drawn range's `.point-range` group, by its point, so hover can find the one to focus. */
   private rangeGroupOf = new Map<PcacData, SVGGElement>();
   /**
@@ -157,6 +161,8 @@ export class PlaChartBuilder extends PcacChart {
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8);
     this.chartTypeLabel = CHART_TYPE_LABELS[type];
+    // Before the layout: a ring widens what fan-out and the edge space have to make room for.
+    this.pointGauge = this.config.pointGauge ? { ...new PcacPointGaugeConfig(), ...this.config.pointGauge } : null;
     this.resolvePointLayout(type);
     this.reservePointSpace();
     this.pointRange = this.config.pointRange ? { ...new PcacPointRangeConfig(), ...this.config.pointRange } : null;
@@ -237,6 +243,10 @@ export class PlaChartBuilder extends PcacChart {
           .attr('x2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dx)
           .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dy);
 
+        // Reference lines sit at data values, so they move with it; corner labels are pinned to the
+        // frame and stay put.
+        positionReferenceLines(this.svg, zoomedScales, this.xAxis.format, this.width, this.height);
+
         // The hover crosshair positions and labels against the scales, so it takes the zoomed ones.
         if (this.effectsEnabled) {
           this.effectsBuilder.updateScales(newX, newY);
@@ -268,6 +278,10 @@ export class PlaChartBuilder extends PcacChart {
     this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y));
 
     this.drawGrids(this.scales.x, this.scales.y);
+
+    // Over the grid, under the series: guides, not data.
+    drawCornerLabels(this.svg, config.cornerLabels, this.width, this.height);
+    drawReferenceLines(this.svg, config.referenceLines, this.scales, this.xAxis.format, this.width, this.height, this.plotClipPathId);
 
     this.drawLineArea(config, type);
 
@@ -321,10 +335,13 @@ export class PlaChartBuilder extends PcacChart {
     }
     this.fanOut = { ...new PcacPointFanOutConfig(), ...fanOut };
     // A group's members are kept apart by the size of what's drawn for them: the image box when
-    // any member has an image, else a hovered dot (r = 6).
+    // any member has an image, else a hovered dot (r = 6) - plus a gauge ring on both sides when
+    // any member has one.
     const { maxWidth, maxHeight } = this.pointImage;
+    const ring = (group: PlaCoincidentGroup) =>
+      this.pointGauge && group.members.some((member) => hasGauge(member.data)) ? 2 * gaugeExtent(this.pointGauge) : 0;
     const markSize = (group: PlaCoincidentGroup) =>
-      group.members.some((member) => !!member.data.image) ? Math.max(maxWidth, maxHeight) : 12;
+      (group.members.some((member) => !!member.data.image) ? Math.max(maxWidth, maxHeight) : 2 * GAUGE_DOT_RADIUS) + ring(group);
     const radius = (group: PlaCoincidentGroup) =>
       this.fanOut!.radius ?? fanOutRadius(group.members.length, markSize(group), this.fanOut!.gap);
     this.fanOutOffsets = fanOutOffsets(this.coincidentGroups, radius);
@@ -341,13 +358,16 @@ export class PlaChartBuilder extends PcacChart {
    * `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
    */
   private reservePointSpace(): void {
-    const hasImages = this.config.data.some((series) => series.data.some((point) => !!point.image));
-    if (!hasImages) {
+    const points = this.config.data.flatMap((series) => series.data);
+    const hasImages = points.some((point) => !!point.image);
+    // A gauge ring reaches past its mark on every side, so it needs the same room the mark does.
+    const ring = this.pointGauge && points.some(hasGauge) ? Math.ceil(gaugeExtent(this.pointGauge)) : 0;
+    if (!hasImages && !ring) {
       this.clipBuffer = 10;
       return;
     }
-    const halfWidth = Math.ceil(this.pointImage.maxWidth / 2);
-    const halfHeight = Math.ceil(this.pointImage.maxHeight / 2);
+    const halfWidth = (hasImages ? Math.ceil(this.pointImage.maxWidth / 2) : GAUGE_DOT_RADIUS) + ring;
+    const halfHeight = (hasImages ? Math.ceil(this.pointImage.maxHeight / 2) : GAUGE_DOT_RADIUS) + ring;
     this.clipBuffer = Math.max(10, halfWidth, halfHeight);
     this.reserveEdgeSpace({ top: halfHeight, bottom: halfHeight, left: halfWidth, right: halfWidth });
   }
@@ -670,6 +690,9 @@ export class PlaChartBuilder extends PcacChart {
         .attr('class', 'dots')
         .attr('clip-path', `url(#${this.clipPathId})`)
         .attr('style', series.hide ? 'display: none' : null)
+        // After `style`, which replaces the whole attribute.
+        .style('--pcac-point-gauge-color', () => this.pointGauge?.color ?? null)
+        .style('--pcac-point-gauge-track-color', () => this.pointGauge?.trackColor ?? null)
         .selectAll('.point')
         .data(series.data)
         .enter().append('g')
@@ -684,7 +707,8 @@ export class PlaChartBuilder extends PcacChart {
           this.dotClickedSource.next(d);
         });
       makeMarksAccessible(points, {
-        label: (d) => this.markLabel(d, { parent: series, valueFormat: this.yAxis.format, keyFormat: this.xAxis.format }),
+        label: (d) => this.markLabel(d, { parent: series, valueFormat: this.yAxis.format, keyFormat: this.xAxis.format })
+          + this.gaugeLabel(d),
         activate: (d) => this.dotClickedSource.next(d),
         focus: (point, d) => {
           this.enterPoint(point, d, series, index);
@@ -729,7 +753,32 @@ export class PlaChartBuilder extends PcacChart {
         .transition()
         .duration(duration)
         .attr('y', (d: PcacData) => -maxHeight / 2 + this.offsetOf(d).dy);
+
+      // Gauge rings around the image box or the dot, rising in with the mark they surround.
+      if (this.pointGauge) {
+        const markRadius = (d: PcacData) => d.image ? Math.max(maxWidth, maxHeight) / 2 : GAUGE_DOT_RADIUS;
+        drawPointGauges(points, this.pointGauge, markRadius)
+          .style('--pcac-point-gauge-series-color', () => this.colors[index])
+          .attr('transform', (d: PcacData) => `translate(${this.offsetOf(d).dx}, ${rise(d)})`)
+          .transition()
+          .duration(duration)
+          // Tweened as a number rather than `.attr('transform', ...)`: d3's transform interpolation
+          // parses through SVG DOM APIs (`transform.baseVal`) that not every environment has.
+          .attrTween('transform', (d: PcacData) => {
+            const { dx, dy } = this.offsetOf(d);
+            const from = rise(d);
+            return (t: number) => `translate(${dx}, ${from + (dy - from) * t})`;
+          });
+      }
     }
+  }
+
+  /**
+   * The end of a point's screen reader name for its gauge - ", PSA 0.018" - when `pointGauge` has a
+   * `name` and the point a `gauge`; otherwise nothing, the ring being only visual.
+   */
+  private gaugeLabel(d: PcacData): string {
+    return this.pointGauge?.name && hasGauge(d) ? `, ${this.pointGauge.name} ${d.gauge}` : '';
   }
 
   /**

@@ -1,0 +1,113 @@
+<app-layout-page-docs pageTitle="Proximity Chart" [jumpNav]="jumpNav()">
+  <p class="lead" id="proximity-chart">Proximity chart component: one item in the middle and others around it, each
+    closer in or further out by its <code>value</code> &mdash; how similar it is to the center, or how far from it. It
+    answers "what's nearest to this?" at a glance, and any item, the center included, can be drawn as its own
+    <code>image</code>.</p>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="try-it">Try it</h2>
+    <p class="mb-3">Cities by how similar their climate is to Portland's, made-up scores from 0 to 1. The controls edit
+      the chart's config live; each field is described in the Configuration table.</p>
+    @let s = settings();
+    <div class="pc-controls max-w-md mb-3">
+      <label for="pc-prox-labels">showLabels</label>
+      <input id="pc-prox-labels" type="checkbox" [checked]="s.showLabels" (change)="set('showLabels', $any($event.target).checked)" />
+      <span></span>
+
+      <label for="pc-prox-rings">rings</label>
+      <input id="pc-prox-rings" type="checkbox" [checked]="s.rings" (change)="set('rings', $any($event.target).checked)" />
+      <span class="pc-muted">{{ s.rings ? 'at 90%, 80%, 70% and 60%' : 'none' }}</span>
+
+      <label for="pc-prox-spokes">showSpokes</label>
+      <input id="pc-prox-spokes" type="checkbox" [checked]="s.showSpokes" (change)="set('showSpokes', $any($event.target).checked)" />
+      <span></span>
+
+      <label for="pc-prox-item-size">itemSize</label>
+      <input id="pc-prox-item-size" type="range" min="16" max="48" step="2" [value]="s.itemSize"
+        (input)="set('itemSize', $any($event.target).valueAsNumber)" />
+      <span class="pc-readout">{{ s.itemSize }}px</span>
+    </div>
+    <pc-chart-card heading="Climates like Portland's" caption="Change the settings above and it redraws." class="mb-3">
+      <app-layout-resource-state [resource]="pcService.proximityChartConfig">
+        <pcac-proximity-chart [config]="config()" (itemClicked)="pcService.onClicked($event)" />
+      </app-layout-resource-state>
+    </pc-chart-card>
+    <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="api">API</h2>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config>
+      <tbody>
+        <tr>
+          <td>center</td>
+          <td>The item the others are measured against, drawn in the middle: a <b>key</b> (its name) and optionally an
+            <b>image</b>. Its <b>value</b> isn't used.</td>
+        </tr>
+        <tr>
+          <td>closeValue / farValue</td>
+          <td>The <b>value</b> that sits right up against the center, and the one on the outer rim; values in between
+            are placed proportionally, and anything beyond either is held at it. Defaults 1 and 0, for a similarity
+            from 0 to 1. For a distance, swap them: <code>closeValue: 0, farValue: &lt;largest distance&gt;</code>.</td>
+        </tr>
+        <tr>
+          <td>rings</td>
+          <td>Values to draw a faint dashed guide ring at, each labelled in <b>format</b>. None when omitted.</td>
+        </tr>
+        <tr>
+          <td>format</td>
+          <td>How values read on the ring labels, in the tooltip and to screen readers, as on an axis &mdash; e.g.
+            <code>Percentage</code>.</td>
+        </tr>
+        <tr>
+          <td>showLabels</td>
+          <td>Write each item's <b>key</b> under it, and the center's under the center. Default false: names are in
+            the tooltip either way. Keep it off for long names or a crowded ring.</td>
+        </tr>
+        <tr>
+          <td>showSpokes</td>
+          <td>Draw a faint line from the center to each item. Default true.</td>
+        </tr>
+        <tr>
+          <td>startAngle</td>
+          <td>Where the first item sits, in degrees clockwise from 12 o'clock. Default 0. Items go around clockwise in
+            data order, evenly spaced, so put the closest first to have it at the top.</td>
+        </tr>
+        <tr>
+          <td>centerSize / itemSize</td>
+          <td>Size in pixels of the center's image (or twice its dot's radius) and of each item's. Defaults 64 and
+            40. Best with a handful to a dozen or so items; past that they crowd one another around the ring.</td>
+        </tr>
+        <tr>
+          <td>colorOverride</td>
+          <td>Dot colors, any CSS color, for items without an <b>image</b>: the center takes the first, then the items
+            in data order. Repeated when there are more items than colors.</td>
+        </tr>
+      </tbody>
+    </app-layout-base-config>
+  </section>
+  <section class="pc-doc-section">
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>(itemClicked)="onClicked($event)"</td>
+            <td>Emitted when an item or the center is clicked, or activated with Enter or Space.</td>
+            <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</app-layout-page-docs>

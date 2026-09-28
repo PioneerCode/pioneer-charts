@@ -23,6 +23,39 @@
     fill: var(--pcac-fan-out-anchor-color, #{imports.$gray-600});
   }
 
+  // `referenceLines` (see PcacReferenceLine) and `cornerLabels` (PcacCornerLabels): guides, drawn
+  // as quietly as the fan-out anchors. `color` overrides them through `--pcac-reference-line-color`
+  // (on each line's group) and `--pcac-corner-label-color` (on the labels' group), as above.
+  .reference-line-stroke {
+    stroke: var(--pcac-reference-line-color, #{imports.$gray-500});
+    stroke-width: 1px;
+    stroke-dasharray: 4 4;
+  }
+
+  .reference-line-label {
+    font-size: 11px;
+    fill: var(--pcac-reference-line-color, #{imports.$gray-500});
+  }
+
+  // `pointGauge` (see PcacPointGaugeConfig): a ring around each point with a `gauge`. The arc is
+  // the config's `color` (`--pcac-point-gauge-color`, on each `.dots` group) or else the series'
+  // own (`--pcac-point-gauge-series-color`, which the builder sets on each ring); the track is
+  // `trackColor` (`--pcac-point-gauge-track-color`) or a light gray, like the grid.
+  .point-gauge-track {
+    fill: none;
+    stroke: var(--pcac-point-gauge-track-color, #{imports.$gray-200});
+  }
+
+  .point-gauge-arc {
+    fill: var(--pcac-point-gauge-color, var(--pcac-point-gauge-series-color));
+  }
+
+  .corner-label {
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--pcac-corner-label-color, #{imports.$gray-600});
+  }
+
   // `pointRange` (see PcacPointRangeConfig): each point's `range`, drawn by the builder into a
   // `.point-range` group per point, a `.point-range-series` group per series, and one
   // `.point-ranges` group for the chart. Color is the config's `color` when set

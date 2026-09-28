@@ -1,0 +1,249 @@
+{
+  "height": 240,
+  "dotRadius": 6,
+  "gap": 2,
+  "xAxis": {
+    "domainMin": 50,
+    "domainMax": 90,
+    "ticks": 8,
+    "showGrid": true,
+    "label": "Daily high (\u00b0F)"
+  },
+  "pointImage": {
+    "maxWidth": 22,
+    "maxHeight": 22
+  },
+  "data": [
+    {
+      "key": "Sunny",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": "June 1",
+          "value": 80,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 6",
+          "value": 76,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 8",
+          "value": 81,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 9",
+          "value": 87,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 10",
+          "value": 80,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 14",
+          "value": 75,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 15",
+          "value": 74,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 16",
+          "value": 80,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 22",
+          "value": 74,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 23",
+          "value": 84,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 27",
+          "value": 75,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 28",
+          "value": 81,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 29",
+          "value": 75,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        },
+        {
+          "key": "June 30",
+          "value": 78,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/sun.svg"
+        }
+      ]
+    },
+    {
+      "key": "Cloudy",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": "June 4",
+          "value": 64,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 7",
+          "value": 69,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 12",
+          "value": 74,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 17",
+          "value": 66,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 18",
+          "value": 69,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 19",
+          "value": 65,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 20",
+          "value": 71,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 24",
+          "value": 66,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 25",
+          "value": 67,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        },
+        {
+          "key": "June 26",
+          "value": 63,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/cloud.svg"
+        }
+      ]
+    },
+    {
+      "key": "Rain",
+      "value": null,
+      "hide": false,
+      "data": [
+        {
+          "key": "June 2",
+          "value": 54,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        },
+        {
+          "key": "June 3",
+          "value": 62,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        },
+        {
+          "key": "June 5",
+          "value": 52,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        },
+        {
+          "key": "June 11",
+          "value": 59,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        },
+        {
+          "key": "June 13",
+          "value": 65,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        },
+        {
+          "key": "June 21",
+          "value": 60,
+          "hide": false,
+          "data": [],
+          "image": "./mock/line-area-chart/images/rain.svg"
+        }
+      ]
+    }
+  ]
+}

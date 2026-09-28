@@ -1,3 +1,43 @@
+<a name="22.2.19"></a>
+# [v22.2.19]
+
+### Added
+  - A proximity chart, `<pcac-proximity-chart>` (`PcacProximityChart`, `PcacProximityChartConfig`):
+    one item in the middle (`center`) and others (`data`) around it, each closer in or further out by
+    its `value` - a similarity or a distance, set by `closeValue` / `farValue`. Optional dashed guide
+    `rings` labelled in `format`, spokes and names under the items (`showLabels`); images in place
+    of dots, tooltips, keyboard access, `itemClicked`, `colorOverride` and `heightFull`. The guides'
+    and labels' colors are CSS custom properties, for a dark background say:
+    `--pcac-proximity-ring-color`, `--pcac-proximity-ring-label-color`,
+    `--pcac-proximity-spoke-color`, `--pcac-proximity-label-color` and
+    `--pcac-proximity-label-halo-color` (the outline that keeps a line behind a name from cutting
+    through it - set it to the background).
+  - A dot plot chart, `<pcac-dot-plot-chart>` (`PcacDotPlotChart`, `PcacDotPlotChartConfig`): every
+    point placed along one value axis, with points that share a value - or fall in the same
+    `binWidth` bin - stacked into a column above it. Takes the plot chart's series-of-points data,
+    draws a point's `image` in place of its dot (sized by `pointImage`), and shrinks every mark
+    evenly when the tallest column wouldn't fit. Tooltips, keyboard access, `dotClicked`,
+    `colorOverride`, `heightFull` and the x axis's styling work as on the other charts.
+  - Reference lines and corner labels on the line, area and plot charts:
+    - `referenceLines`: dashed lines at chosen values on either axis - a target, a threshold, a
+      median - each with an optional label and color. They sit over the grid and under the
+      series, and move with zoom.
+    - `cornerLabels`: text in the plot's four corners, naming the regions it divides into (the
+      quadrants two reference lines make, say). Pinned to the frame, so zoom leaves them alone.
+
+    Both take their colors through CSS custom properties like the axis colors
+    (`--pcac-reference-line-color`, `--pcac-corner-label-color`), and both are hidden from screen
+    readers like the grid, so a chart whose lines carry meaning should say so in its `ariaLabel`.
+  - Point gauges on the line, area and plot charts: give a point a `gauge` and set `pointGauge` on
+    the config, and a ring around its dot or image fills clockwise as a share of `pointGauge.max` -
+    a third number per point on a two-measure scatter. Points without a `gauge` get no ring. The
+    ring moves with zoom and fan-out, and fan-out spacing and edge space grow to fit it. Its colors
+    are `--pcac-point-gauge-color` (the series' color by default) and
+    `--pcac-point-gauge-track-color`; with a `name`, each point's screen reader name reads the
+    gauge too ("…, PSA 0.018").
+  - Docs: pages for the dot plot and proximity charts, reference lines, corner labels and point
+    gauges on the Plot Chart page, and examples of all four on the Charts page.
+
 <a name="22.2.18"></a>
 # [v22.2.18]
 

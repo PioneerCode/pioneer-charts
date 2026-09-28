@@ -1,7 +1,7 @@
 import { inject, Injectable, Injector, runInInjectionContext, untracked } from '@angular/core';
 import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { AppRepository } from './app.repository';
-import type { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig, PcacPlotChartConfig } from '@pioneer-code/pioneer-charts';
+import type { PcacAreaChartConfig, PcacBarHorizontalChartConfig, PcacBarVerticalChartConfig, PcacData, PcacDotPlotChartConfig, PcacLegendConfig, PcacLineChartConfig, PcacPieChartConfig, PcacPlotChartConfig, PcacProximityChartConfig } from '@pioneer-code/pioneer-charts';
 
 /**
  * What each chart shows while its mock loads: no data (so it draws nothing) at the default height.
@@ -64,6 +64,10 @@ export class AppService {
   }
 
   pieChartConfig = this.mock<PcacPieChartConfig>(() => this.repository.getPieChartConfigUrl());
+
+  dotPlotChartConfig = this.mock<PcacDotPlotChartConfig>(() => this.repository.getDotPlotChartUrl());
+
+  proximityChartConfig = this.mock<PcacProximityChartConfig>(() => this.repository.getProximityChartUrl());
 
   barVerticalChartConfig = this.mock<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartUrl());
   barVerticalChartSingleConfig = this.mock<PcacBarVerticalChartConfig>(() => this.repository.getBarVerticalChartSingleUrl());

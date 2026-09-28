@@ -1,0 +1,27 @@
+.pcac-dot-plot-chart {
+  svg {
+    width: 100%;
+    display: block;
+  }
+
+  // A dot's outline is its series' color (set by the builder); its fill is the page's background
+  // until hovered or focused, when it fills with the series' color. `--pcac-dot-fill` changes the
+  // resting fill - for a dark background, say - as the theme's other custom properties do.
+  .pcac-dot {
+    stroke-width: 2px;
+  }
+
+  .pcac-dot-mark {
+    cursor: pointer;
+  }
+}
+
+// `heightFull` support (see PcacChartConfig.heightFull), as on the other charts.
+pcac-dot-plot-chart.pcac-height-full {
+  display: block;
+  height: 100%;
+
+  .pcac-dot-plot-chart {
+    height: 100%;
+  }
+}

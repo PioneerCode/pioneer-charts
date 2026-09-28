@@ -79,9 +79,19 @@ export const routes: Routes = [
         data: { searchTitle: 'Angular Donut Chart', description: 'An Angular donut chart from Pioneer Charts, with a total or other label in its center and animated transitions.' },
     },
     {
+        path: 'docs/components/charts/dot-plot-chart', title: 'Dot Plot Chart',
+        loadComponent: () => import('./docs/dot-plot-chart/dot-plot-chart.component').then(m => m.DotPlotChartComponent),
+        data: { searchTitle: 'Angular Dot Plot Chart', description: 'An Angular dot plot from Pioneer Charts: values stacked into columns along one axis, with binning and images in place of dots.' },
+    },
+    {
+        path: 'docs/components/charts/proximity-chart', title: 'Proximity Chart',
+        loadComponent: () => import('./docs/proximity-chart/proximity-chart.component').then(m => m.ProximityChartComponent),
+        data: { searchTitle: 'Angular Proximity Chart', description: 'An Angular proximity chart from Pioneer Charts: one item in the middle and its closest matches around it, placed by similarity or distance.' },
+    },
+    {
         path: 'charts', title: 'Charts',
         loadComponent: () => import('./charts/charts.component').then(m => m.ChartsComponent),
-        data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie and donut - with legends, zoom, thresholds and custom colors.' },
+        data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie, donut, dot plot and proximity - with legends, zoom, thresholds and custom colors.' },
     },
     // Any other URL shows the home page, but isn't a page of its own: PageSeoStrategy marks it
     // `noindex` so a mistyped link can't be indexed as a copy of the home page.

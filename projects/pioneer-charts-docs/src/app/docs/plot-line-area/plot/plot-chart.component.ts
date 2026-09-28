@@ -60,6 +60,50 @@ export class PlotChartComponent {
   }));
 
   /**
+   * The reference-line demo: the fan-out mock, split at noon and at 50 into four named quadrants.
+   * Its x axis zooms, so the vertical line can be seen moving with the data while the corner
+   * labels stay put.
+   */
+  protected readonly referenceConfig = computed(() => ({
+    ...this.pcService.plotFanOutConfig.value(),
+    referenceLines: [
+      { axis: 'x' as const, value: 12, label: 'Noon' },
+      { axis: 'y' as const, value: 50, label: '50' },
+    ],
+    cornerLabels: {
+      topLeft: 'Morning, high',
+      topRight: 'Afternoon, high',
+      bottomLeft: 'Morning, low',
+      bottomRight: 'Afternoon, low',
+    },
+    ariaLabel: 'Readings by hour, split at noon and at 50 into four quadrants',
+  }));
+
+  /**
+   * The gauge demo: the fan-out mock with a made-up chance of rain on the cloudy and rainy
+   * readings. Sunny and unknown readings get no gauge, so they get no ring.
+   */
+  private static readonly RAIN_CHANCE: Record<string, number[]> = {
+    Cloudy: [0.1, 0.2, 0.3, 0.25, 0.35, 0.15],
+    Rain: [0.9, 0.7, 0.8, 1, 0.6],
+  };
+  protected readonly gaugeConfig = computed(() => {
+    const mock = this.pcService.plotFanOutConfig.value();
+    return {
+      ...mock,
+      data: mock.data.map(series => ({
+        ...series,
+        data: series.data.map((point, i) => {
+          const chance = PlotChartComponent.RAIN_CHANCE[series.key as string]?.[i];
+          return chance === undefined ? point : { ...point, gauge: chance };
+        }),
+      })),
+      pointGauge: { max: 1, name: 'Chance of rain' },
+      ariaLabel: 'Readings by hour; a ring around each cloudy or rainy reading shows its chance of rain',
+    };
+  });
+
+  /**
    * The point-range demo: one data set, drawn as whichever chart type is picked, with an editable
    * `pointRange`. Starts as `{}` - every default - to match the mock.
    */

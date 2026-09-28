@@ -1,0 +1,68 @@
+@use "../core/theme/imports";
+
+.pcac-proximity-chart {
+  svg {
+    width: 100%;
+    display: block;
+  }
+
+  // Guides: the rings, their labels and the spokes, as quiet as the plot chart's fan-out anchors.
+  // Each color is a custom property, so a stylesheet can restyle them - for a dark background, say.
+  .pcac-proximity-ring circle {
+    stroke: var(--pcac-proximity-ring-color, #{imports.$gray-300});
+    stroke-dasharray: 3 4;
+  }
+
+  .pcac-proximity-ring-label {
+    font-size: 11px;
+    fill: var(--pcac-proximity-ring-label-color, #{imports.$gray-600});
+  }
+
+  .pcac-proximity-spoke {
+    stroke: var(--pcac-proximity-spoke-color, #{imports.$gray-300});
+    stroke-width: 1px;
+  }
+
+  .pcac-proximity-item {
+    cursor: pointer;
+  }
+
+  // Names under the items (`showLabels`), and ring labels, keep a halo of the background around them
+  // so a spoke or ring running behind doesn't cut through the text.
+  .pcac-proximity-label,
+  .pcac-proximity-ring-label {
+    paint-order: stroke;
+    stroke: var(--pcac-proximity-label-halo-color, #{imports.$white});
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+
+  .pcac-proximity-label {
+    font-size: 11px;
+    fill: var(--pcac-proximity-label-color, #{imports.$gray-800});
+  }
+
+  .pcac-proximity-center .pcac-proximity-label {
+    font-weight: 600;
+  }
+
+  // A hovered or focused item's dot grows a ring in its own color.
+  .pcac-proximity-item.is-active .pcac-proximity-dot {
+    stroke: currentColor;
+    stroke-width: 2px;
+  }
+
+  .pcac-proximity-item.is-active .pcac-proximity-image {
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.35));
+  }
+}
+
+// `heightFull` support (see PcacChartConfig.heightFull), as on the other charts.
+pcac-proximity-chart.pcac-height-full {
+  display: block;
+  height: 100%;
+
+  .pcac-proximity-chart {
+    height: 100%;
+  }
+}

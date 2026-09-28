@@ -278,6 +278,18 @@ export class PcacData {
    * Optional for the same reason as `image`.
    */
   range?: PcacDataRange
+
+  /**
+   * A third number for this point, shown as how full a ring around its mark is - on a scatter of
+   * two measures, say, a third one per point. Out of the chart config's `pointGauge.max`: at `max`
+   * or above the ring is full, at `0` or below it's empty. Currently honored by the line/area/plot
+   * charts only, on the innermost (point-level) `PcacData`, and only drawn when the chart config
+   * turns `pointGauge` on (see `PcacPointGaugeConfig`). A point without one gets no ring at all,
+   * which can itself say something ("doesn't apply").
+   *
+   * Optional for the same reason as `image`.
+   */
+  gauge?: number
 }
 
 /**

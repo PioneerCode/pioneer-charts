@@ -1,0 +1,19 @@
+{
+  "height": 420,
+  "center": { "key": "Portland", "value": null, "hide": false, "data": [] },
+  "closeValue": 1,
+  "farValue": 0.5,
+  "rings": [0.9, 0.8, 0.7, 0.6],
+  "format": "percentage",
+  "data": [
+    { "key": "Seattle", "value": 0.96, "hide": false, "data": [] },
+    { "key": "Vancouver", "value": 0.94, "hide": false, "data": [] },
+    { "key": "Eugene", "value": 0.91, "hide": false, "data": [] },
+    { "key": "Olympia", "value": 0.9, "hide": false, "data": [] },
+    { "key": "Victoria", "value": 0.86, "hide": false, "data": [] },
+    { "key": "Boise", "value": 0.72, "hide": false, "data": [] },
+    { "key": "San Francisco", "value": 0.7, "hide": false, "data": [] },
+    { "key": "Spokane", "value": 0.68, "hide": false, "data": [] },
+    { "key": "Sacramento", "value": 0.61, "hide": false, "data": [] }
+  ]
+}

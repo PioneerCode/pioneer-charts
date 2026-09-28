@@ -11,7 +11,7 @@ const REPOSITORY_URL = 'https://github.com/PioneerCode/pioneer-charts';
 const DOCS_PATH = '/docs/guides/introduction';
 const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
 /** The home page's description (and index.html's), for any route without its own. */
-const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie and donut charts built on D3'
+const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie, donut, dot plot and proximity charts built on D3'
   + ' - responsive, themeable and simple to configure.';
 
 /**

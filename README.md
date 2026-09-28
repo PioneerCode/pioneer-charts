@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@pioneer-code/pioneer-charts)](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Pioneer Charts is an Angular library for building beautiful, customizable, and responsive data visualizations. It leverages [D3.js](https://d3js.org/) for rendering and provides bar, line/area, plot, pie and donut charts, plus a legend component.
+Pioneer Charts is an Angular library for building beautiful, customizable, and responsive data visualizations. It leverages [D3.js](https://d3js.org/) for rendering and provides bar, line/area, plot, pie, donut, dot plot and proximity charts, plus a legend component.
 
 ## Documentation
 
@@ -14,7 +14,7 @@ Guides, the API reference, live examples, and theming instructions all live on t
 
 ## Features
 
-- Bar (vertical and horizontal), line, area, plot, pie and donut charts, plus a legend.
+- Bar (vertical and horizontal), line, area, plot, pie, donut, dot plot and proximity charts, plus a legend.
 - Beautiful default theme, customizable via CSS or by overriding the source Sass variables.
 - Strongly typed configuration contracts.
 - Outputs for user interaction (bar, slice, dot, and legend clicks).

@@ -1,3 +1,18 @@
+<a name="unreleased"></a>
+# [Unreleased]
+
+### Added
+  - Reference lines and corner labels on the line, area and plot charts:
+    - `referenceLines`: dashed lines at chosen values on either axis - a target, a threshold, a
+      median - each with an optional label and color. They sit over the grid and under the
+      series, and move with zoom.
+    - `cornerLabels`: text in the plot's four corners, naming the regions it divides into (the
+      quadrants two reference lines make, say). Pinned to the frame, so zoom leaves them alone.
+
+    Both take their colors through CSS custom properties like the axis colors
+    (`--pcac-reference-line-color`, `--pcac-corner-label-color`), and both are hidden from screen
+    readers like the grid, so a chart whose lines carry meaning should say so in its `ariaLabel`.
+
 <a name="22.2.18"></a>
 # [v22.2.18]
 

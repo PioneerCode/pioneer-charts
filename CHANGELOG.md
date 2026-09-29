@@ -1,3 +1,31 @@
+<a name="22.2.21"></a>
+# [v22.2.21]
+
+### Added
+  - `labelsOnTop` on the line, area and plot charts: draws the corner labels and reference-line
+    labels over the series instead of under it, each outlined in a halo so it stays readable on a
+    point it crosses. The halo's color is `--pcac-label-halo-color` (the theme's `$white` by
+    default) - set it to the chart's background, a dark one say. The lines stay under the series.
+  - `PcacReferenceLine.labelPosition`: `'end'` (the default, as before) or `'start'`, which puts a
+    horizontal line's label above its left end and a vertical line's beside its bottom - for when
+    the far end is crowded, by a corner label say.
+  - Docs: the Plot Chart page's reference-line demo shows both.
+
+### Changed
+  - Reference-line labels are drawn in a `.reference-line-labels` group of their own, beside
+    `.reference-lines`, rather than inside each line's `.reference-line` group, so they can be
+    raised over the series without the lines. Each label carries its line's
+    `--pcac-reference-line-color`. A stylesheet that reached a label through its line's group
+    (`.reference-line .reference-line-label`) should target `.reference-line-label` directly.
+  - Corner labels and reference-line labels no longer take the pointer (`pointer-events: none`),
+    so a point under one can still be hovered and clicked.
+
+### Fixed
+  - The tooltip closes when a touch or pen comes down anywhere on the page. On a touch screen a
+    tap showed it and nothing hid it again - there's no pointer to leave the mark - so it stayed up
+    over whatever the tap opened, and floated off its mark when the page scrolled. A tap on another
+    mark still shows that mark's tooltip. Mouse behavior is unchanged.
+
 <a name="22.2.20"></a>
 # [v22.2.20]
 

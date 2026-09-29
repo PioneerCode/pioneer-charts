@@ -22,16 +22,34 @@ export class PcacTooltipBuilder implements OnDestroy {
    * Created on first use rather than with the service, which every chart builder injects: that
    * way nothing touches the DOM until a chart actually shows a tooltip, so building a chart
    * where there's no browser `document` (server-side rendering) doesn't throw. Removed again in
-   * `ngOnDestroy()`, when the app that owns this root service is destroyed.
+   * `ngOnDestroy()`, when the app that owns this root service is destroyed. The touch listener
+   * (see `onPointerDown`) is added and removed with it.
    */
   get tooltip(): Selection<HTMLDivElement, unknown, null, undefined> {
-    this.shell ??= select(this.document.body)
-      .append('div')
-      .attr('class', 'pcac-d3-tooltip')
-      .attr('id', PcacTooltipBuilder.ID)
-      .attr('role', 'tooltip');
+    if (!this.shell) {
+      this.shell = select(this.document.body)
+        .append('div')
+        .attr('class', 'pcac-d3-tooltip')
+        .attr('id', PcacTooltipBuilder.ID)
+        .attr('role', 'tooltip');
+      this.document.addEventListener('pointerdown', this.onPointerDown, { capture: true, passive: true });
+    }
     return this.shell;
   }
+
+  /**
+   * A touch (or pen) coming down anywhere closes the tooltip. A tap shows it by way of the mouse
+   * events the browser makes up for the tap, but nothing then moves off the mark to hide it again:
+   * without this it stayed up after a tap until the next one happened to land on another mark,
+   * scrolled away with the page, and covered whatever opened in response. A tap on another mark
+   * still shows its tooltip - this runs first, on the way down, and the made-up mouse events that
+   * show the new one come after. A mouse is left alone; it hides the tooltip by leaving the mark.
+   */
+  private readonly onPointerDown = (event: PointerEvent): void => {
+    if (event.pointerType !== 'mouse') {
+      this.hideTooltip();
+    }
+  };
 
   /**
    * The consumer template currently rendered into the shell, if any. Created on the first show
@@ -108,6 +126,9 @@ export class PcacTooltipBuilder implements OnDestroy {
 
   ngOnDestroy(): void {
     this.destroyView();
+    if (this.shell) {
+      this.document.removeEventListener('pointerdown', this.onPointerDown, { capture: true });
+    }
     this.shell?.remove();
     this.shell = null;
   }

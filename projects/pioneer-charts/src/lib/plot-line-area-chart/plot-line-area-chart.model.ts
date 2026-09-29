@@ -114,10 +114,17 @@ export class PcacReferenceLine {
   value: number | string = 0
 
   /**
-   * A few words drawn at the line's far end, inside the plot: above the right end of a horizontal
-   * line, beside the top of a vertical one. Styled by the theme's `.reference-line-label` rule.
+   * A few words drawn at one end of the line, inside the plot (see `labelPosition`). Styled by the
+   * theme's `.reference-line-label` rule.
    */
   label?: string
+
+  /**
+   * Which end of the line `label` sits at. `'end'`, the default, is above the right end of a
+   * horizontal line and beside the top of a vertical one; `'start'` is above its left end and beside
+   * its bottom - for when the far end is crowded, say by a corner label.
+   */
+  labelPosition: 'start' | 'end' = 'end'
 
   /**
    * Any CSS color for the line and its label. Theme default `$gray-500`. Applied as
@@ -131,8 +138,8 @@ export class PcacReferenceLine {
  * Text pinned to the plot area's corners (see `PcacLineAreaChartConfig.cornerLabels`) - names for
  * the regions the plot divides into, such as the quadrants between two reference lines. Pinned to
  * the plot's frame rather than to data, so they stay put when the chart is zoomed. Drawn under the
- * series, so a point in the corner covers its label rather than the other way round. Any corner
- * left unset is left empty.
+ * series, so a point in the corner covers its label rather than the other way round, unless the
+ * chart sets `labelsOnTop`. Any corner left unset is left empty.
  */
 export class PcacCornerLabels {
   topLeft?: string
@@ -207,4 +214,14 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
    * screen readers like the grid, so when they carry meaning, say so in the chart's `ariaLabel`.
    */
   cornerLabels?: PcacCornerLabels
+
+  /**
+   * Draw the corner labels and reference-line labels over the series instead of under it, each
+   * outlined in a halo so it stays readable on whatever it crosses - for a chart whose points crowd
+   * the corners or the lines' ends, where they'd otherwise hide the labels. Default false. The halo
+   * is `--pcac-label-halo-color`, the theme's `$white` by default: set it to the chart's background
+   * (a dark one, say) on the chart or any ancestor. The labels never take the pointer, so a point
+   * under one can still be hovered and clicked. The reference lines themselves stay under the series.
+   */
+  labelsOnTop?: boolean
 }

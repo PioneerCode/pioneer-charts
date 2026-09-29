@@ -84,7 +84,10 @@
     target, a threshold, a median &mdash; and <code>cornerLabels</code> to name the plot's corners, such as the
     quadrants two lines make. Lines follow zoom like the data; corner labels are pinned to the frame and stay put.
     Both work the same on the plot, line and area charts, and both are hidden from screen readers like the grid, so
-    say what they mean in the chart's <code>ariaLabel</code>. Scroll to zoom the x axis here.</p>
+    say what they mean in the chart's <code>ariaLabel</code>. Where points crowd the corners or a line's end, set
+    <code>labelsOnTop</code> to draw the labels over the points in a halo, and a line's <code>labelPosition</code>
+    to move its label to the other end &mdash; as here, where Noon's sits at the bottom. Scroll to zoom the x axis
+    here.</p>
   <pc-chart-card heading="Readings by quadrant" class="mb-3">
     <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
       <pcac-plot-chart [config]="referenceConfig()" (dotClicked)="pcService.onClicked($event)" />
@@ -217,8 +220,10 @@
           <li><b>value</b> &mdash; where it sits, in the axis's own terms: a number on the y axis; on the x axis,
             whatever a point's <b>key</b> would be under <code>xAxis.format</code> (a number for Decimal, a date for
             DateTime, a series index otherwise). A value that doesn't place isn't drawn.</li>
-          <li><b>label</b> &mdash; a few words at the line's far end: above the right end of a horizontal line,
-            beside the top of a vertical one.</li>
+          <li><b>label</b> &mdash; a few words at one end of the line (see <b>labelPosition</b>).</li>
+          <li><b>labelPosition</b> &mdash; <code>'end'</code> (the default) puts the label above the right end of a
+            horizontal line and beside the top of a vertical one; <code>'start'</code> above its left end and
+            beside its bottom.</li>
           <li><b>color</b> &mdash; any CSS color for the line and its label, in place of the theme's
             <code>$gray-500</code>. Applied as <code>--pcac-reference-line-color</code> on the line's group.</li>
         </ul>
@@ -228,8 +233,18 @@
       <td>cornerLabels</td>
       <td>Text in the plot area's corners &mdash; <b>topLeft</b>, <b>topRight</b>, <b>bottomLeft</b>,
         <b>bottomRight</b>, each optional &mdash; naming the regions the plot divides into. Pinned to the frame, so
-        zoom leaves them alone, and drawn under the series so a point in the corner covers its label. <b>color</b>
-        sets all four in place of the theme's <code>$gray-600</code>, as <code>--pcac-corner-label-color</code>.
+        zoom leaves them alone, and drawn under the series so a point in the corner covers its label (unless
+        <code>labelsOnTop</code> is set). <b>color</b> sets all four in place of the theme's <code>$gray-600</code>,
+        as <code>--pcac-corner-label-color</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>labelsOnTop</td>
+      <td>Draw the corner labels and reference-line labels over the series instead of under it, each outlined in
+        a halo so it stays readable on a point it crosses. Default <code>false</code>. The lines themselves stay
+        under the series, and the labels never take the pointer, so a point under one can still be hovered and
+        clicked. The halo is <code>--pcac-label-halo-color</code>, the theme's <code>$white</code> by default: set
+        it to the chart's background, on the chart or any ancestor &mdash; this site's dark theme does.
       </td>
     </tr>
     <tr>

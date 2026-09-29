@@ -62,12 +62,14 @@ export class PlotChartComponent {
   /**
    * The reference-line demo: the fan-out mock, split at noon and at 50 into four named quadrants.
    * Its x axis zooms, so the vertical line can be seen moving with the data while the corner
-   * labels stay put.
+   * labels stay put. The labels are drawn over the points (`labelsOnTop`), and the noon line's sits
+   * at its bottom (`labelPosition: 'start'`), clear of the top-left corner's.
    */
   protected readonly referenceConfig = computed(() => ({
     ...this.pcService.plotFanOutConfig.value(),
+    labelsOnTop: true,
     referenceLines: [
-      { axis: 'x' as const, value: 12, label: 'Noon' },
+      { axis: 'x' as const, value: 12, label: 'Noon', labelPosition: 'start' as const },
       { axis: 'y' as const, value: 50, label: '50' },
     ],
     cornerLabels: {

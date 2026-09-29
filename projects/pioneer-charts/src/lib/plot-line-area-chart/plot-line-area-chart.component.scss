@@ -25,7 +25,8 @@
 
   // `referenceLines` (see PcacReferenceLine) and `cornerLabels` (PcacCornerLabels): guides, drawn
   // as quietly as the fan-out anchors. `color` overrides them through `--pcac-reference-line-color`
-  // (on each line's group) and `--pcac-corner-label-color` (on the labels' group), as above.
+  // (on each line's group and its label) and `--pcac-corner-label-color` (on the labels' group), as
+  // above.
   .reference-line-stroke {
     stroke: var(--pcac-reference-line-color, #{imports.$gray-500});
     stroke-width: 1px;
@@ -54,6 +55,23 @@
     font-size: 12px;
     font-weight: 500;
     fill: var(--pcac-corner-label-color, #{imports.$gray-600});
+  }
+
+  // Labels are decoration: a point under one still takes the hover and the click.
+  .corner-labels,
+  .reference-line-labels {
+    pointer-events: none;
+  }
+
+  // `labelsOnTop`: the labels are raised over the series, so each is outlined in a halo that keeps
+  // it readable on a point it crosses - stroked behind the fill, like the proximity chart's names.
+  // `--pcac-label-halo-color` should match the chart's background.
+  .pcac-labels-on-top .corner-label,
+  .pcac-labels-on-top .reference-line-label {
+    paint-order: stroke;
+    stroke: var(--pcac-label-halo-color, #{imports.$white});
+    stroke-width: 3px;
+    stroke-linejoin: round;
   }
 
   // `pointRange` (see PcacPointRangeConfig): each point's `range`, drawn by the builder into a

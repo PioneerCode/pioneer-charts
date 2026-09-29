@@ -386,6 +386,46 @@ describe('PcacTooltipBuilder', () => {
     });
   });
 
+  describe('touch', () => {
+    /** A press as the page sees it; built from a plain Event, as jsdom's PointerEvent may be missing. */
+    function press(pointerType: string, target: EventTarget = document.body): void {
+      const event = new Event('pointerdown', { bubbles: true });
+      Object.defineProperty(event, 'pointerType', { value: pointerType });
+      target.dispatchEvent(event);
+    }
+
+    it('closes when a touch or pen comes down anywhere, since nothing moves off the mark to close it', () => {
+      for (const pointerType of ['touch', 'pen']) {
+        builder.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+        press(pointerType);
+        expect(shell.style.display).toBe('none');
+      }
+    });
+
+    it('closes on a press inside a chart too, before that tap shows its own', () => {
+      const chart = document.body.appendChild(document.createElement('div'));
+      builder.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+      press('touch', chart);
+      expect(shell.style.display).toBe('none');
+      chart.remove();
+    });
+
+    it('leaves a mouse alone, which closes it by leaving the mark', () => {
+      builder.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+      press('mouse');
+      expect(shell.style.display).toBe('inline-block');
+    });
+
+    it('stops listening once torn down', () => {
+      const fresh = TestBed.runInInjectionContext(() => new PcacTooltipBuilder());
+      fresh.showTooltip(mouse(), undefined, context(datum('Jan', 1)));
+      const hide = vi.spyOn(fresh, 'hideTooltip');
+      fresh.ngOnDestroy();
+      press('touch');
+      expect(hide).not.toHaveBeenCalled();
+    });
+  });
+
   describe('shell lifecycle', () => {
     it('touches the page only once a tooltip is first shown', () => {
       const count = () => document.querySelectorAll('.pcac-d3-tooltip').length;

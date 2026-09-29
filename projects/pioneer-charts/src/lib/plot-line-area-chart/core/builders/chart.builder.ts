@@ -26,7 +26,7 @@ import { buildZoomBehavior } from './zoom-behavior.builder';
 import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
 import { GAUGE_DOT_RADIUS, drawPointGauges, gaugeExtent, hasGauge } from './point-gauge.builder';
-import { drawCornerLabels, drawReferenceLines, positionReferenceLines } from './reference-lines.builder';
+import { drawCornerLabels, drawReferenceLines, positionReferenceLines, raiseLabels } from './reference-lines.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
@@ -261,6 +261,9 @@ export class PlaChartBuilder extends PcacChart {
         this.svg.selectAll('.point-ranges').raise();
         this.svg.selectAll('.fan-outs').raise();
         this.svg.selectAll('.dots').raise();
+        if (this.config.labelsOnTop) {
+          raiseLabels(this.svg);
+        }
       });
       this.zoomBehavior = behavior;
     } else {
@@ -309,6 +312,10 @@ export class PlaChartBuilder extends PcacChart {
     this.drawPointRanges();
     this.drawFanOuts();
     this.drawDots(config);
+    // Labels asked to stay readable go over all of it (see `labelsOnTop`).
+    if (config.labelsOnTop) {
+      raiseLabels(this.svg);
+    }
     this.restoreTabStop(chartElm);
   }
 

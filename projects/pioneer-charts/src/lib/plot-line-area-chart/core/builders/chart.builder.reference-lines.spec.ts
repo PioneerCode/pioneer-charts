@@ -105,15 +105,46 @@ describe('PlaChartBuilder reference lines and corner labels', () => {
     expect(strokes(svg)[0].x1).toBe(plotSize(builder).width / 2);
   });
 
-  it('labels a line at its far end, and hides a line whose value does not place', () => {
+  it('labels a line at its far end, and hides a line whose value does not place, label and all', () => {
     const { svg } = build(config({
-      referenceLines: [{ axis: 'y', value: 50, label: 'Median' }, { axis: 'x', value: 'not a number' }],
+      referenceLines: [{ axis: 'y', value: 50, label: 'Median' }, { axis: 'x', value: 'not a number', label: 'Nowhere' }],
     }));
     const lines = svg.querySelectorAll('.reference-line');
-    expect(lines[0].querySelector('.reference-line-label')!.textContent).toBe('Median');
-    expect(lines[0].querySelector('.reference-line-label')!.getAttribute('text-anchor')).toBe('end');
-    expect(lines[1].querySelector('.reference-line-label')).toBeNull();
+    const [placed, unplaced] = Array.from(svg.querySelectorAll('.reference-line-label'));
+    expect(placed.textContent).toBe('Median');
+    expect(placed.getAttribute('text-anchor')).toBe('end');
     expect(lines[1].getAttribute('display')).toBe('none');
+    expect(unplaced.getAttribute('display')).toBe('none');
+  });
+
+  it('keeps the labels in a group of their own, clipped and colored like their lines', () => {
+    const { svg } = build(config({
+      referenceLines: [{ value: 50, label: 'Target', color: 'tomato' }, { value: 60 }],
+    }));
+    const group = svg.querySelector<SVGGElement>('.reference-line-labels')!;
+    expect(group.getAttribute('clip-path')).toMatch(/^url\(#pcac-clip-plot-\d+\)$/);
+    expect(group.getAttribute('aria-hidden')).toBe('true');
+    // Only the labelled line has one.
+    const labels = Array.from(group.querySelectorAll<SVGTextElement>('.reference-line-label'));
+    expect(labels.map((label) => label.textContent)).toEqual(['Target']);
+    expect(labels[0].style.getPropertyValue('--pcac-reference-line-color')).toBe('tomato');
+    expect(svg.querySelector('.reference-line .reference-line-label')).toBeNull();
+  });
+
+  it("puts a label at the line's start when asked: beside a vertical line's bottom, above a horizontal one's left end", () => {
+    const { builder, svg } = build(config({
+      referenceLines: [
+        { axis: 'x', value: 50, label: 'Bottom', labelPosition: 'start' },
+        { axis: 'y', value: 50, label: 'Left', labelPosition: 'start' },
+        { axis: 'x', value: 50, label: 'Top' },
+      ],
+    }));
+    const { width, height } = plotSize(builder);
+    const place = (label: Element) => ['x', 'y', 'text-anchor', 'dominant-baseline'].map((name) => label.getAttribute(name));
+    const [bottom, left, top] = Array.from(svg.querySelectorAll('.reference-line-label'));
+    expect(place(bottom)).toEqual([`${width / 2 + 4}`, `${height - 4}`, 'start', 'auto']);
+    expect(place(left)).toEqual(['4', `${height / 2 - 4}`, 'start', 'auto']);
+    expect(place(top)).toEqual([`${width / 2 + 4}`, '4', 'start', 'hanging']);
   });
 
   it('clips the lines to the plot, colors each from its config, and hides them from screen readers', () => {
@@ -161,5 +192,46 @@ describe('PlaChartBuilder reference lines and corner labels', () => {
     // Earlier in the document than the points, so a point in the corner covers its label.
     const dots = svg.querySelector('.dots')!;
     expect(group.compareDocumentPosition(dots) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  describe('labelsOnTop', () => {
+    /** Whether `a` comes after `b` in the document, and so is painted over it. */
+    const paintedOver = (a: Element, b: Element) => !!(b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_FOLLOWING);
+
+    it('leaves the labels under the series, without a halo, by default', () => {
+      const { svg } = build(config({ referenceLines: [{ value: 50, label: 'Median' }], cornerLabels: { topLeft: 'Early' } }));
+      const dots = svg.querySelector('.dots')!;
+      for (const group of Array.from(svg.querySelectorAll('.corner-labels, .reference-line-labels'))) {
+        expect(paintedOver(group, dots)).toBe(false);
+        expect(group.classList).not.toContain('pcac-labels-on-top');
+      }
+    });
+
+    it('raises the labels over the series and marks them for the halo, leaving the lines under it', () => {
+      const { svg } = build(config({
+        labelsOnTop: true,
+        referenceLines: [{ value: 50, label: 'Median' }],
+        cornerLabels: { topLeft: 'Early' },
+      }));
+      const dots = svg.querySelector('.dots')!;
+      for (const group of Array.from(svg.querySelectorAll('.corner-labels, .reference-line-labels'))) {
+        expect(paintedOver(group, dots)).toBe(true);
+        expect(group.classList).toContain('pcac-labels-on-top');
+      }
+      expect(paintedOver(svg.querySelector('.reference-lines')!, dots)).toBe(false);
+    });
+
+    it('keeps them over the series through a zoom, which re-raises the series', () => {
+      const { builder, svg } = build(config({
+        labelsOnTop: true,
+        enableZoomX: true,
+        referenceLines: [{ axis: 'x', value: 50, label: 'Median' }],
+        cornerLabels: { topLeft: 'Early' },
+      }));
+      zoomTo(builder, zoomIdentity.scale(2));
+      const dots = svg.querySelector('.dots')!;
+      expect(paintedOver(svg.querySelector('.corner-labels')!, dots)).toBe(true);
+      expect(paintedOver(svg.querySelector('.reference-line-labels')!, dots)).toBe(true);
+    });
   });
 });

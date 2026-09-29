@@ -28,9 +28,10 @@ export function referenceLinePosition(
 
 /**
  * Draws `lines` into one `.reference-lines` group, clipped to the plot (`clipPathId`) so a line
- * zoomed past an edge disappears there. Each line is a `.reference-line` group holding the dashed
- * `<line>` and, when it has one, its `.reference-line-label`. Hidden from screen readers, as the
- * grid is.
+ * zoomed past an edge disappears there, each a `.reference-line` group holding the dashed `<line>`.
+ * Their labels go in a `.reference-line-labels` group of their own, clipped the same way, so they
+ * can be raised over the series (`raiseLabels`) without the lines. Both hidden from screen readers,
+ * as the grid is.
  */
 export function drawReferenceLines(
   svg: Selection<SVGGElement, unknown, BaseType, unknown>,
@@ -55,17 +56,26 @@ export function drawReferenceLines(
     .attr('class', (line: PlaReferenceLine) => `reference-line reference-line-${line.axis}`)
     .style('--pcac-reference-line-color', (line: PlaReferenceLine) => line.color ?? null);
   groups.append('line').attr('class', 'reference-line-stroke');
-  groups.filter((line: PlaReferenceLine) => !!line.label)
-    .append('text')
-    .attr('class', 'reference-line-label')
-    .text((line: PlaReferenceLine) => line.label!);
+  const labelled = resolved.filter((line) => !!line.label);
+  if (labelled.length) {
+    svg.append('g')
+      .attr('class', 'reference-line-labels')
+      .attr('clip-path', `url(#${clipPathId})`)
+      .attr('aria-hidden', 'true')
+      .selectAll('.reference-line-label')
+      .data(labelled)
+      .enter().append('text')
+      .attr('class', (line: PlaReferenceLine) => `reference-line-label reference-line-label-${line.axis}`)
+      .style('--pcac-reference-line-color', (line: PlaReferenceLine) => line.color ?? null)
+      .text((line: PlaReferenceLine) => line.label!);
+  }
   positionReferenceLines(svg, scales, xFormat, width, height);
 }
 
 /**
  * Places the chart's reference lines, and their labels, against `scales` - on the first draw and
- * again on every zoom. A horizontal line's label sits above its right end; a vertical line's beside
- * its top.
+ * again on every zoom. A horizontal line's label sits above its right end, or its left with
+ * `labelPosition: 'start'`; a vertical line's beside its top, or its bottom.
  */
 export function positionReferenceLines(
   svg: Selection<SVGGElement, unknown, BaseType, unknown>,
@@ -74,19 +84,25 @@ export function positionReferenceLines(
   width: number,
   height: number,
 ): void {
-  const groups = svg.selectAll<SVGGElement, PlaReferenceLine>('.reference-line')
-    .attr('display', (line: PlaReferenceLine) => referenceLinePosition(line, scales, xFormat) === null ? 'none' : null);
+  const hidden = (line: PlaReferenceLine) => referenceLinePosition(line, scales, xFormat) === null ? 'none' : null;
+  const groups = svg.selectAll<SVGGElement, PlaReferenceLine>('.reference-line').attr('display', hidden);
   const at = (line: PlaReferenceLine) => referenceLinePosition(line, scales, xFormat) ?? 0;
+  const atStart = (line: PlaReferenceLine) => line.labelPosition === 'start';
   groups.select('.reference-line-stroke')
     .attr('x1', (line: PlaReferenceLine) => line.axis === 'x' ? at(line) : 0)
     .attr('x2', (line: PlaReferenceLine) => line.axis === 'x' ? at(line) : width)
     .attr('y1', (line: PlaReferenceLine) => line.axis === 'x' ? 0 : at(line))
     .attr('y2', (line: PlaReferenceLine) => line.axis === 'x' ? height : at(line));
-  groups.select('.reference-line-label')
-    .attr('x', (line: PlaReferenceLine) => line.axis === 'x' ? at(line) + LABEL_INSET : width - LABEL_INSET)
-    .attr('y', (line: PlaReferenceLine) => line.axis === 'x' ? LABEL_INSET : at(line) - LABEL_INSET)
-    .attr('text-anchor', (line: PlaReferenceLine) => line.axis === 'x' ? 'start' : 'end')
-    .attr('dominant-baseline', (line: PlaReferenceLine) => line.axis === 'x' ? 'hanging' : 'auto');
+  svg.selectAll<SVGTextElement, PlaReferenceLine>('.reference-line-label')
+    .attr('display', hidden)
+    .attr('x', (line: PlaReferenceLine) => line.axis === 'x'
+      ? at(line) + LABEL_INSET
+      : atStart(line) ? LABEL_INSET : width - LABEL_INSET)
+    .attr('y', (line: PlaReferenceLine) => line.axis === 'x'
+      ? atStart(line) ? height - LABEL_INSET : LABEL_INSET
+      : at(line) - LABEL_INSET)
+    .attr('text-anchor', (line: PlaReferenceLine) => line.axis === 'y' && !atStart(line) ? 'end' : 'start')
+    .attr('dominant-baseline', (line: PlaReferenceLine) => line.axis === 'x' && !atStart(line) ? 'hanging' : 'auto');
 }
 
 /**
@@ -125,4 +141,15 @@ export function drawCornerLabels(
     .attr('text-anchor', (corner) => corner.anchor)
     .attr('dominant-baseline', (corner) => corner.baseline)
     .text((corner) => corner.text!);
+}
+
+/**
+ * With `labelsOnTop`, moves the corner labels and reference-line labels above everything drawn
+ * so far - the series included - and marks them for the theme's halo. Called after each draw and
+ * each zoom, which re-raises the series over the axes it redraws.
+ */
+export function raiseLabels(svg: Selection<SVGGElement, unknown, BaseType, unknown>): void {
+  svg.selectAll('.corner-labels, .reference-line-labels')
+    .classed('pcac-labels-on-top', true)
+    .raise();
 }

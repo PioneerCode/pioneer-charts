@@ -27,10 +27,21 @@
   }
 }
 
-// The content and "On this page", beside the fixed sidebar on a desktop.
+// The content and "On this page", beside the fixed sidebar on a desktop. From 1280px, where "On
+// this page" shows (jump-nav.scss), a grid with a fixed column for it rather than a flex row: the
+// column comes after the content in the HTML, and on a long page the browser drew the content
+// full width before the column had arrived, then narrowed it - the whole page reflowing (a layout
+// shift). A grid track holds the column's 300px from the first paint.
 .pc-docs-main {
+  display: flex;
+
   @media (min-width: 960px) {
     margin-left: 280px;
+  }
+
+  @media (min-width: 1280px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
   }
 }
 

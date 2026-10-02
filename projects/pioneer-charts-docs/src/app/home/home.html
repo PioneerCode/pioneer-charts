@@ -76,9 +76,39 @@
       </p>
     </div>
   </div>
+  <section class="container mx-auto px-4 pb-10" aria-labelledby="built-with-heading">
+    <h2 id="built-with-heading" class="pc-h4">Built with Pioneer Charts</h2>
+    <mat-card class="showcase-card p-4" appearance="outlined">
+      <div class="flex flex-wrap items-start gap-4 mb-5">
+        <div class="flex-1 min-w-64">
+          <h3 class="pc-h3 mt-0">Down Lane Motion</h3>
+          <p class="m-0">A bowling ball catalog that plots each ball's reaction, ranks a whole arsenal from light
+            oil to heavy, finds look-alikes and compares balls side by side. Its plot, dot plot, proximity, bar
+            and donut charts are all Pioneer Charts, in both its light and dark themes.</p>
+        </div>
+        <a matButton="filled" href="https://downlanemotion.com" target="_blank" rel="noopener">
+          Visit downlanemotion.com
+        </a>
+      </div>
+      <!-- Each shot links to its page on the site; the caption names the link. -->
+      <ul class="showcase-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (shot of showcase; track shot.image) {
+          <li>
+            <a class="showcase-shot" [href]="shot.url" target="_blank" rel="noopener">
+              <img class="showcase-image" [src]="shot.image" width="1200" height="750" loading="lazy" alt="" />
+              <span class="showcase-caption">
+                <span class="showcase-page">{{ shot.page }}</span>
+                {{ shot.charts }} · {{ shot.theme }} theme
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </mat-card>
+  </section>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="text-center">
-      <a routerLink="/docs/guides/introduction" matButton="filled" class="me-2">Get
+      <a routerLink="/docs/guides/introduction" matButton="filled"  class="me-2">Get
         Started</a>
       <a class="ms-2" routerLink="/charts" matButton="filled">
         Charts</a>

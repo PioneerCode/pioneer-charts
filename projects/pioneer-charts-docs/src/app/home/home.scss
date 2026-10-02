@@ -24,3 +24,44 @@ $icon-size-phone: 88px;
     width: $icon-size-phone;
   }
 }
+// Matches the example chart cards: white on the light theme, a step up from the page on the dark.
+.showcase-card {
+  --mat-card-elevated-container-color: light-dark(#fff, var(--mat-sys-surface-container));
+}
+
+.showcase-gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.showcase-shot {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover .showcase-page {
+    text-decoration: underline;
+  }
+}
+
+.showcase-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.showcase-caption {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.showcase-page {
+  display: block;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}

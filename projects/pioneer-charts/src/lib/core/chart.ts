@@ -165,7 +165,8 @@ export class PcacChart implements OnDestroy {
    * In order:
    *
    * 1. `resetMargin()`.
-   * 2. Tick marks: room for a non-default `tickSize` is reserved on each axis that will actually
+   * 2. Tick marks: an axis with `autoTickSize` takes its `tickSize` from `autoTickSize` (see below).
+   *    Then room for a non-default `tickSize` is reserved on each axis that will actually
    *    be drawn (`reserveTickSizeMargins`).
    * 3. Labels: `AXIS_LABEL_SPACE` is added to `bottom` / `left` for an axis with a `label`, and
    *    `AXIS_SUB_LABEL_SPACE` for one with any `subLabels` (see `axisLabelSpace`), again only if
@@ -180,10 +181,22 @@ export class PcacChart implements OnDestroy {
    * (`PcacAxisConfig.showGrid`): `'y'` for horizontal lines, `'x'` for vertical.
    * @param hiddenAxisMargin what a hidden axis's sides shrink to, rather than 0. The
    * line/area/plot charts keep 8px so a dot on the edge of the plot isn't clipped by the SVG.
+   * @param autoTickSize for the charts that draw points: half their largest mark toward each axis
+   * (`x`: its vertical half, `y`: its horizontal half), which an axis with `autoTickSize` takes,
+   * rounded up, as its `tickSize` - in place of any `tickSize` the consumer gave. Left out, as by
+   * the charts without points, `autoTickSize` does nothing.
    */
-  initializeAxisState(config: PcacAxisChartConfig, defaultGrid: 'x' | 'y', hiddenAxisMargin = 0): void {
+  initializeAxisState(
+    config: PcacAxisChartConfig, defaultGrid: 'x' | 'y', hiddenAxisMargin = 0, autoTickSize?: { x: number; y: number }
+  ): void {
     this.xAxis = resolveAxisConfig(config.xAxis, defaultGrid === 'x');
     this.yAxis = resolveAxisConfig(config.yAxis, defaultGrid === 'y');
+    if (autoTickSize && this.xAxis.autoTickSize) {
+      this.xAxis.tickSize = Math.ceil(autoTickSize.x);
+    }
+    if (autoTickSize && this.yAxis.autoTickSize) {
+      this.yAxis.tickSize = Math.ceil(autoTickSize.y);
+    }
     this.resetMargin();
     this.reserveTickSizeMargins(
       this.xAxis.hide ? undefined : this.xAxis.tickSize,

@@ -15,6 +15,7 @@ import { ChartContract } from '../../layout/chart-contract/chart-contract';
 interface DotPlotSettings {
   binWidth: number;
   images: boolean;
+  autoTickSize: boolean;
 }
 
 @Component({
@@ -44,14 +45,15 @@ export class DotPlotChartComponent {
   ]);
 
   protected readonly binWidths = [0, 1, 2, 5];
-  protected readonly settings = signal<DotPlotSettings>({ binWidth: 2, images: true });
+  protected readonly settings = signal<DotPlotSettings>({ binWidth: 2, images: true, autoTickSize: false });
 
   /** Same pattern as the Axis Styling page: a fresh config object so the chart rebuilds. */
   protected readonly config = computed<PcacDotPlotChartConfig>(() => {
-    const { binWidth, images } = this.settings();
+    const { binWidth, images, autoTickSize } = this.settings();
     const mock = this.pcService.dotPlotChartConfig.value();
     return {
       ...mock,
+      xAxis: { ...mock.xAxis, autoTickSize },
       binWidth: binWidth || undefined,
       // Without images, each point falls back to a dot in its series' color.
       data: images ? mock.data : mock.data.map(series => ({
@@ -68,7 +70,7 @@ export class DotPlotChartComponent {
 
   /** The demo's own config, as code - so the sample always matches the chart above it. */
   protected readonly configCode = computed(() => {
-    const { binWidth, images } = this.settings();
+    const { binWidth, images, autoTickSize } = this.settings();
     return `const config: PcacDotPlotChartConfig = {
   // Series, each holding its points: value = position on the axis, key = its name.
   data: [
@@ -78,7 +80,7 @@ export class DotPlotChartComponent {
     ] },
     ...
   ],
-  xAxis: { domainMin: 50, domainMax: 90, label: 'Daily high (°F)', showGrid: true },${binWidth ? `\n  binWidth: ${binWidth},` : ''}${images ? `\n  pointImage: { maxWidth: 22, maxHeight: 22 },` : ''}
+  xAxis: { domainMin: 50, domainMax: 90, label: 'Daily high (°F)', showGrid: true${autoTickSize ? ', autoTickSize: true' : ''} },${binWidth ? `\n  binWidth: ${binWidth},` : ''}${images ? `\n  pointImage: { maxWidth: 22, maxHeight: 22 },` : ''}
 };`;
   });
 

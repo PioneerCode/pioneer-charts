@@ -43,11 +43,9 @@ export class DotPlotChartBuilder extends PcacChart {
     }
     this.hideTooltip();
 
-    // A column's height is a count of marks, not a value, so there's no y axis to draw. Shallow
-    // copies: initializeAxisState() rewrites `height`, which mustn't reach the consumer's object.
+    // A column's height is a count of marks, not a value, so there's no y axis to draw.
     const rawXAxis = config.xAxis;
     config = { ...config, yAxis: { ...config.yAxis, hide: true } };
-    this.initializeAxisState(config, 'x', 0);
 
     const defaults = new PcacDotPlotChartConfig();
     const dotRadius = config.dotRadius ?? defaults.dotRadius!;
@@ -56,28 +54,58 @@ export class DotPlotChartBuilder extends PcacChart {
     const origin = rawXAxis?.domainMin !== undefined ? Number(rawXAxis.domainMin) : 0;
     this.placements = stackDots(config.data, config.binWidth, origin);
     const hasImages = this.placements.some((p) => !!p.data.image);
+    const hasDots = this.placements.some((p) => !p.data.image);
     const fullSize = hasImages
       ? Math.max(this.pointImage.maxWidth, this.pointImage.maxHeight)
       : 2 * (dotRadius + DOT_HOVER_GROWTH);
-    // A mark at the domain's edge is centered on it, so half of it hangs past the plot area.
-    const half = Math.ceil(fullSize / 2);
-    this.reserveEdgeSpace({ left: half, right: half });
+    const tallest = tallestColumn(this.placements);
+    // `autoTickSize`: half the tallest mark at a given fit - a hovered dot (its growth isn't
+    // scaled) or an image's box - toward the x axis.
+    const markHalf = (fit: number) => Math.max(
+      hasDots ? dotRadius * fit + DOT_HOVER_GROWTH : 0,
+      hasImages ? this.pointImage.maxHeight * fit / 2 : 0,
+    );
 
-    if (!this.initializeChartState(chartElm, config)) {
-      return;
+    // The fit shrinks marks to the plot's height, which an auto tick takes its length out of, so
+    // with `autoTickSize` the layout is settled in up to three passes: at full size; at the size
+    // that fit, if smaller; and - should the height that handed back have grown the marks past
+    // that, rounding up a pixel - at the length they now need, which is still no longer than the
+    // first, so the marks can only shrink again and never outgrow the tick.
+    let tick = markHalf(1);
+    for (let pass = 0; ; pass++) {
+      if (!this.layout(chartElm, config, tick, fullSize)) {
+        return;
+      }
+      const fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + gap))) : 1;
+      this.markSize = fullSize * fit;
+      this.markGap = gap * fit;
+      this.dotRadius = dotRadius * fit;
+      const needed = Math.ceil(markHalf(fit));
+      if (!this.xAxis.autoTickSize || this.xAxis.hide || needed === this.xAxis.tickSize || pass === 2) {
+        break;
+      }
+      tick = needed;
     }
     this.ensureColorCount(config.data.length);
     this.applyColorOverride(config.colorOverride);
 
-    // Shrink every mark evenly when the tallest column wouldn't fit the plot's height.
-    const tallest = tallestColumn(this.placements);
-    const fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + gap))) : 1;
-    this.markSize = fullSize * fit;
-    this.markGap = gap * fit;
-    this.dotRadius = dotRadius * fit;
-
     this.xScale = this.buildXScale(rawXAxis?.domainMin, rawXAxis?.domainMax);
     this.drawChart(chartElm);
+  }
+
+  /**
+   * Sets the axes and margins up and measures the plot area, with `tick` as the x axis's length
+   * under `autoTickSize`. Returns `initializeChartState`'s result. On a copy of the config each
+   * time: initializeAxisState() rewrites `height`, which mustn't reach the consumer's object or
+   * build up over passes.
+   */
+  private layout(chartElm: ElementRef, config: PcacDotPlotChartConfig, tick: number, fullSize: number): boolean {
+    config = { ...config };
+    this.initializeAxisState(config, 'x', 0, { x: tick, y: 0 });
+    // A mark at the domain's edge is centered on it, so half of it hangs past the plot area.
+    const half = Math.ceil(fullSize / 2);
+    this.reserveEdgeSpace({ left: half, right: half });
+    return this.initializeChartState(chartElm, config);
   }
 
   /**

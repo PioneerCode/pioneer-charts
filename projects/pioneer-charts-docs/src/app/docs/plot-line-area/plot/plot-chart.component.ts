@@ -106,6 +106,22 @@ export class PlotChartComponent {
   });
 
   /**
+   * The auto tick size demo: the gauge demo, with `autoTickSize` on both axes while the toggle is
+   * on - the ringed images are the largest marks, so they set the length. A `tickSize` is given
+   * too, to show that `autoTickSize` overrides it.
+   */
+  protected readonly autoTickSize = signal(true);
+  protected readonly autoTickConfig = computed(() => {
+    const mock = this.gaugeConfig();
+    const auto = this.autoTickSize();
+    return {
+      ...mock,
+      xAxis: { ...mock.xAxis, tickSize: 6, autoTickSize: auto },
+      yAxis: { ...mock.yAxis, tickSize: 6, autoTickSize: auto },
+    };
+  });
+
+  /**
    * The point-range demo: one data set, drawn as whichever chart type is picked, with an editable
    * `pointRange`. Starts as `{}` - every default - to match the mock.
    */

@@ -92,7 +92,9 @@
               height for the x axis, its width for the y), and a gauge ring around either, after any shrinking to
               fit. <strong>This overrides <b>tickSize</b></strong>: with it on, any <b>tickSize</b> on the same axis is
               ignored. It turns the marks on, as a <b>tickSize</b> does, and the margins make room the same way.
-              Honored by the line, area, plot and dot plot charts; the other charts ignore it. Default false.
+              Honored by the line, area, plot and dot plot charts; the other charts ignore it. On the dot plot the
+              marks never reach the axis (the bottom row sits a <code>gap</code> above it), so there it only spaces
+              the labels to the marks' size. Default false.
             </li>
             <li>
               <b>tickColor</b> &mdash; any CSS color for the tick marks. Only shows once <b>tickSize</b> has turned

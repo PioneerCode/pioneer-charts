@@ -130,6 +130,19 @@ describe('PlaChartBuilder point gauges', () => {
     expect(dot.margin.top).toBeGreaterThanOrEqual(11);
   });
 
+  // Regression: the edge space was the box's own side plus the ring, but the ring is drawn around
+  // the box's larger side - a 40x20 image's ring reaches 25px above its point, and the SVG cut the
+  // top 10px of it off.
+  it('makes room for a ring around a wide image on every side, not just the box\'s own height', () => {
+    const { builder, svg } = build(config([point(50, 100, { gauge: 0.5, image: 'ball.png' })], { gap: 3, width: 2 }, {
+      pointImage: { maxWidth: 40, maxHeight: 20 },
+    }));
+    const ringReach = Number(svg.querySelector('.point-gauge-track')!.getAttribute('r')) + 1;
+    expect(ringReach).toBe(25);
+    expect(builder.margin.top).toBeGreaterThanOrEqual(ringReach);
+    expect(builder.margin.bottom).toBeGreaterThanOrEqual(ringReach);
+  });
+
   it('spaces fanned-out points far enough apart for their rings', () => {
     const shared = [1, 2].map((i) => point(50, 50, { gauge: 0.5, image: `${i}.png` }));
     const spread = (pointGauge?: Partial<PcacPointGaugeConfig>) => {

@@ -108,7 +108,9 @@ export class PcacAxisConfig {
    * way a `tickSize` does. The largest mark is measured as drawn: a hovered dot, an image's box
    * (its height for the x axis, its width for the y axis), and a gauge ring around either,
    * after any shrinking to fit (dot plot). Honored by the charts that draw points - line, area,
-   * plot and dot plot; ignored elsewhere. Default false.
+   * plot and dot plot; ignored elsewhere. On the dot plot the marks never reach the axis (its
+   * bottom row sits a `gap` above it), so there it only spaces the labels to the marks' size.
+   * Default false.
    */
   autoTickSize?: boolean = false
 

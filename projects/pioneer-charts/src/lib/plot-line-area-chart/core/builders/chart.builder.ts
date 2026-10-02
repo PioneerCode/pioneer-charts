@@ -356,7 +356,8 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   /**
-   * Half the largest mark on the chart toward each axis, for `autoTickSize`: `x` its vertical
+   * Half the largest mark on the chart toward each axis, for `autoTickSize` and the edge space
+   * (`reservePointSpace`): `x` its vertical
    * half (what reaches down to the x axis), `y` its horizontal half. Measured as drawn - a hovered
    * dot (`GAUGE_DOT_RADIUS`), an image's box, and a gauge ring around either (circular, so the
    * same both ways). Points in a hidden series count, so toggling one in a legend doesn't move the
@@ -384,26 +385,23 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   /**
-   * When any point has an `image`, makes room for it at the edge of the domain: the clip-path
-   * buffer grows to half the box so the `.dots` group lets it through, and the margins grow to at
-   * least that same amount so the `<svg>` doesn't cut off what the clip-path let through (an image
-   * box is centered on its point, so at the top of the y domain half of it sits above the plot
-   * area - in `margin.top`, which is only 8px by default). Half the box is all a fan-out needs
-   * too: a fanned-out ring is shifted back inside the plot area (`fanOutShift`), so no member's
-   * center ever sits past the edge either. Must run after `resolvePointLayout()` and between
-   * `initializeAxisState()` and `initializeChartState()`, see `reserveEdgeSpace`.
+   * Makes room for the points at the edge of the domain: the clip-path buffer grows to half the
+   * largest mark (`largestMarkHalf()` - an image box, a ring, or a hovered dot) so the `.dots`
+   * group lets it through, and the margins grow to at least that same amount so the `<svg>`
+   * doesn't cut off what the clip-path let through (a mark is centered on its point, so at the top
+   * of the y domain half of it sits above the plot area - in `margin.top`, which is only 8px by
+   * default). A ring is measured around the image box's larger side, as `drawDots` draws it, on
+   * both axes; measured against the box's own side, a ringed wide image at the top of the domain
+   * had the top of its ring cut off by the SVG. Half a mark is all a fan-out needs too: a
+   * fanned-out ring is shifted back inside the plot area (`fanOutShift`), so no member's center
+   * ever sits past the edge either. A plain dot fits the default 10px buffer and every margin
+   * already. Must run after `resolvePointLayout()` and between `initializeAxisState()` and
+   * `initializeChartState()`, see `reserveEdgeSpace`.
    */
   private reservePointSpace(): void {
-    const points = this.config.data.flatMap((series) => series.data);
-    const hasImages = points.some((point) => !!point.image);
-    // A gauge ring reaches past its mark on every side, so it needs the same room the mark does.
-    const ring = this.pointGauge && points.some(hasGauge) ? Math.ceil(gaugeExtent(this.pointGauge)) : 0;
-    if (!hasImages && !ring) {
-      this.clipBuffer = 10;
-      return;
-    }
-    const halfWidth = (hasImages ? Math.ceil(this.pointImage.maxWidth / 2) : GAUGE_DOT_RADIUS) + ring;
-    const halfHeight = (hasImages ? Math.ceil(this.pointImage.maxHeight / 2) : GAUGE_DOT_RADIUS) + ring;
+    const half = this.largestMarkHalf();
+    const halfWidth = Math.ceil(half.y);
+    const halfHeight = Math.ceil(half.x);
     this.clipBuffer = Math.max(10, halfWidth, halfHeight);
     this.reserveEdgeSpace({ top: halfHeight, bottom: halfHeight, left: halfWidth, right: halfWidth });
   }

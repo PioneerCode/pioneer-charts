@@ -172,6 +172,7 @@ describe('DotPlotChartBuilder autoTickSize', () => {
     // Unshrunk this would be 20.
     expect(half).toBeLessThan(10);
     expect(xTick(builder)).toBeGreaterThanOrEqual(half);
-    expect(xTick(builder)! - half).toBeLessThan(1);
+    // Rounded up from the size the marks needed a pass earlier, which the last pass can only shrink.
+    expect(xTick(builder)! - half).toBeLessThan(1.5);
   });
 });

@@ -26,7 +26,7 @@
 
       <label for="pc-dot-auto-tick">autoTickSize</label>
       <input id="pc-dot-auto-tick" type="checkbox" [checked]="s.autoTickSize" (change)="set('autoTickSize', $any($event.target).checked)" />
-      <span class="pc-muted">{{ s.autoTickSize ? 'x ticks half the largest mark, as drawn' : 'no tick marks' }}</span>
+      <span class="pc-muted">{{ s.autoTickSize ? 'x ticks half the largest mark, spacing the labels to it' : 'no tick marks' }}</span>
     </div>
     <pc-chart-card heading="Daily highs in June" caption="Change the settings above and it redraws." class="mb-3">
       <app-layout-resource-state [resource]="pcService.dotPlotChartConfig">

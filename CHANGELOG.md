@@ -1,3 +1,18 @@
+<a name="22.2.22"></a>
+# [v22.2.22]
+
+### Added
+  - `PcacAxisConfig.autoTickSize`: sizes an axis's tick marks from the chart's points instead of
+    `tickSize` - half the largest mark toward that axis (a hovered dot; an image's `pointImage`
+    box, its height for the x axis and its width for the y; and a gauge ring around either, after
+    any shrinking to fit), so a point sitting on the axis ends where its tick does and never covers
+    a tick label. D3's 3px tick padding is the gap left between them. **It overrides `tickSize`**:
+    with it on, any `tickSize` on that axis is ignored. Turns the marks on and grows the margins the
+    same way a `tickSize` does. Honored by the line, area, plot and dot plot charts; ignored by the
+    others. Default false.
+  - Docs: a "Tick marks sized to the points" demo on the Plot Chart page, an `autoTickSize`
+    toggle in the Dot Plot Chart page's "Try it", and the field in every chart's axis configuration.
+
 <a name="22.2.21"></a>
 # [v22.2.21]
 

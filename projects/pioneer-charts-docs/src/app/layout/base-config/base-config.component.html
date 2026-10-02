@@ -82,7 +82,17 @@
               off but pulls the labels in to the axis. Labels follow the marks and the chart's margins grow or shrink
               by the same amount, so the plot area shrinks to make room rather than pushing labels off the edge.
               Stroked with the theme's <code>$gray-900</code> via <code>.pcac-axis-tick-marks .tick line</code>,
-              unless <b>tickColor</b> is set.
+              unless <b>tickColor</b> is set. Ignored while <b>autoTickSize</b> is on.
+            </li>
+            <li>
+              <b>autoTickSize</b> &mdash; if true, size the tick marks from the chart's points instead of
+              <b>tickSize</b>: half the largest mark toward this axis, so a point sitting on the axis ends where its
+              tick does and never covers a tick label (D3's 3px tick padding is the gap left between them). The
+              largest mark is measured as drawn &mdash; a hovered dot, an image's <code>pointImage</code> box (its
+              height for the x axis, its width for the y), and a gauge ring around either, after any shrinking to
+              fit. <strong>This overrides <b>tickSize</b></strong>: with it on, any <b>tickSize</b> on the same axis is
+              ignored. It turns the marks on, as a <b>tickSize</b> does, and the margins make room the same way.
+              Honored by the line, area, plot and dot plot charts; the other charts ignore it. Default false.
             </li>
             <li>
               <b>tickColor</b> &mdash; any CSS color for the tick marks. Only shows once <b>tickSize</b> has turned

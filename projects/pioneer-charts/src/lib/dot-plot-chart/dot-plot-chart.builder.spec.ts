@@ -131,3 +131,47 @@ describe('DotPlotChartBuilder', () => {
     expect(a.y - b.y).toBe(18);
   });
 });
+
+describe('DotPlotChartBuilder autoTickSize', () => {
+  beforeEach(() => {
+    vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    document.body.innerHTML = '';
+  });
+
+  const xTick = (builder: DotPlotChartBuilder) => builder.xAxis.tickSize;
+
+  it('leaves tickSize alone while autoTickSize is off', () => {
+    const { builder } = build(config([[point('a', 5)]], { xAxis: { domainMin: 0, domainMax: 10, tickSize: 20 } }));
+    expect(xTick(builder)).toBe(20);
+  });
+
+  it('sizes the x ticks to half a hovered dot, overriding any tickSize given', () => {
+    const { builder, svg } = build(config([[point('a', 5)]], { xAxis: { domainMin: 0, domainMax: 10, autoTickSize: true, tickSize: 20 } }));
+    // Radius 6 + 2 hover growth.
+    expect(xTick(builder)).toBe(8);
+    expect(Math.abs(Number(svg.querySelector('.pcac-x-axis .tick line')!.getAttribute('y2')))).toBe(8);
+  });
+
+  it('uses half an image box\'s height when that is the larger mark', () => {
+    const { builder } = build(config([[point('dot', 2), point('pic', 4, { image: 'ball.png' })]], {
+      xAxis: { domainMin: 0, domainMax: 10, autoTickSize: true }, pointImage: { maxWidth: 30, maxHeight: 21 },
+    }));
+    expect(xTick(builder)).toBe(11);
+  });
+
+  it('measures the marks after shrinking them to fit, never shorter than they reach', () => {
+    const column = Array.from({ length: 20 }, (_, i) => point(`p${i}`, 5, { image: 'ball.png' }));
+    const { builder, svg } = build(config([column], {
+      xAxis: { domainMin: 0, domainMax: 10, autoTickSize: true }, pointImage: { maxWidth: 40, maxHeight: 40 },
+    }));
+    const half = Number(svg.querySelector('image.pcac-dot-image')!.getAttribute('height')) / 2;
+    // Unshrunk this would be 20.
+    expect(half).toBeLessThan(10);
+    expect(xTick(builder)).toBeGreaterThanOrEqual(half);
+    expect(xTick(builder)! - half).toBeLessThan(1);
+  });
+});

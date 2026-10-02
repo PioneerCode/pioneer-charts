@@ -96,9 +96,21 @@ export class PcacAxisConfig {
    * margins grow or shrink by the same amount so the plot area makes room for them - a longer
    * tick means a slightly smaller plot, never labels pushed off the edge. Only the per-tick marks
    * change; the axis line's two end-caps keep their default length. Colored by `tickColor`, the
-   * theme's `$gray-900` (like the axis line) by default.
+   * theme's `$gray-900` (like the axis line) by default. Ignored while `autoTickSize` is on.
    */
   tickSize?: number
+
+  /**
+   * Size the tick marks from the chart's points instead of `tickSize`: half the largest mark
+   * toward this axis, so a point sitting on the axis ends where its tick does and never covers a
+   * tick label (D3's 3px tick padding is the gap left between them). This **overrides**
+   * `tickSize` - with it on, any `tickSize` given is ignored - and turns the marks on the same
+   * way a `tickSize` does. The largest mark is measured as drawn: a hovered dot, an image's box
+   * (its height for the x axis, its width for the y axis), and a gauge ring around either,
+   * after any shrinking to fit (dot plot). Honored by the charts that draw points - line, area,
+   * plot and dot plot; ignored elsewhere. Default false.
+   */
+  autoTickSize?: boolean = false
 
   /**
    * Tick mark color (`--pcac-axis-tick-color`), shown once `tickSize` has turned the marks on.
@@ -230,6 +242,7 @@ export function resolveAxisConfig(axis?: PcacAxisConfig, showGridDefault = false
     showGrid: axis?.showGrid ?? showGridDefault,
     ticks: axis?.ticks ?? defaults.ticks!,
     showLine: axis?.showLine ?? defaults.showLine!,
+    autoTickSize: axis?.autoTickSize ?? defaults.autoTickSize!,
     format: axis?.format ?? defaults.format!,
     domainMin: axis?.domainMin ?? defaults.domainMin!,
     domainMax: axis?.domainMax ?? defaults.domainMax!,

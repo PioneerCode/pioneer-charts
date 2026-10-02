@@ -104,6 +104,24 @@
       <pcac-plot-chart [config]="gaugeConfig()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </pc-chart-card>
+  <h2 class="pc-h4 mt-6 mb-2">Tick marks sized to the points</h2>
+  <p class="mb-3">Set <code>autoTickSize</code> on an axis to size its tick marks from the points instead of
+    <code>tickSize</code>: half the largest mark toward that axis &mdash; a hovered dot, an image's box (its height
+    for the x axis, its width for the y), and a gauge ring around either &mdash; so a point sitting on the axis ends
+    where its tick does and never covers a tick label. <strong>It overrides <code>tickSize</code></strong>: with it
+    on, any <code>tickSize</code> on that axis is ignored. Here both axes set <code>tickSize: 6</code> as well;
+    toggle <code>autoTickSize</code> to compare. Works the same on the plot, line, area and
+    <a routerLink="/docs/components/charts/dot-plot-chart">dot plot</a> charts.</p>
+  <div class="pc-controls mb-3">
+    <label for="pc-auto-tick-size">autoTickSize</label>
+    <input id="pc-auto-tick-size" type="checkbox" [checked]="autoTickSize()" (change)="autoTickSize.set($any($event.target).checked)" />
+    <span class="pc-muted">{{ autoTickSize() ? 'ticks sized to the largest mark, tickSize ignored' : 'tickSize: 6' }}</span>
+  </div>
+  <pc-chart-card heading="Readings with ticks sized to the marks" class="mb-3">
+    <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
+      <pcac-plot-chart [config]="autoTickConfig()" (dotClicked)="pcService.onClicked($event)" />
+    </app-layout-resource-state>
+  </pc-chart-card>
   <h2 class="pc-h4 mt-6 mb-2">Point ranges</h2>
   <p class="mb-3">When a point stands for the middle of a range, give it a <code>range</code> with an
     <code>x</code> and / or <code>y</code> <code>{{ '{ min, max }' }}</code>, and set <code>pointRange</code> on the

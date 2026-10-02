@@ -158,11 +158,13 @@ export class PlaChartBuilder extends PcacChart {
       data: []
     }));
 
-    // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
-    this.initializeAxisState(this.config, 'y', 8);
-    this.chartTypeLabel = CHART_TYPE_LABELS[type];
-    // Before the layout: a ring widens what fan-out and the edge space have to make room for.
+    // Before the axes and the layout: the marks' size feeds `autoTickSize`, and a ring widens what
+    // fan-out and the edge space have to make room for.
+    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
     this.pointGauge = this.config.pointGauge ? { ...new PcacPointGaugeConfig(), ...this.config.pointGauge } : null;
+    // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
+    this.initializeAxisState(this.config, 'y', 8, this.largestMarkHalf());
+    this.chartTypeLabel = CHART_TYPE_LABELS[type];
     this.resolvePointLayout(type);
     this.reservePointSpace();
     this.pointRange = this.config.pointRange ? { ...new PcacPointRangeConfig(), ...this.config.pointRange } : null;
@@ -320,13 +322,12 @@ export class PlaChartBuilder extends PcacChart {
   }
 
   /**
-   * Resolves `pointImage`, finds the points that share a coordinate and, on a plot chart with
+   * Finds the points that share a coordinate and, on a plot chart with
    * `pointFanOut`, works out where to draw each of them instead. Coincidence is found from the
    * data (see `findCoincidentGroups`) so this can run before the scales exist. Line and area
    * charts still get the groups, for the tooltip's `coincident` list, but never an offset.
    */
   private resolvePointLayout(type: PcacLineAreaPlotChartConfigType): void {
-    this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
     this.coincidentGroups = findCoincidentGroups(this.config.data, this.xAxis.format);
     this.coincidentOf = new Map(
       this.coincidentGroups.flatMap((group) => group.members.map((member) => [member.data, group] as const))
@@ -352,6 +353,34 @@ export class PlaChartBuilder extends PcacChart {
     const radius = (group: PlaCoincidentGroup) =>
       this.fanOut!.radius ?? fanOutRadius(group.members.length, markSize(group), this.fanOut!.gap);
     this.fanOutOffsets = fanOutOffsets(this.coincidentGroups, radius);
+  }
+
+  /**
+   * Half the largest mark on the chart toward each axis, for `autoTickSize`: `x` its vertical
+   * half (what reaches down to the x axis), `y` its horizontal half. Measured as drawn - a hovered
+   * dot (`GAUGE_DOT_RADIUS`), an image's box, and a gauge ring around either (circular, so the
+   * same both ways). Points in a hidden series count, so toggling one in a legend doesn't move the
+   * axes; a gap (no value) draws nothing and doesn't. Needs `pointImage` and `pointGauge` resolved.
+   */
+  private largestMarkHalf(): { x: number; y: number } {
+    const { maxWidth, maxHeight } = this.pointImage;
+    const half = { x: 0, y: 0 };
+    for (const point of this.config.data.flatMap((series) => series.data ?? [])) {
+      if (!hasValue(point)) {
+        continue;
+      }
+      let x = point.image ? maxHeight / 2 : GAUGE_DOT_RADIUS;
+      let y = point.image ? maxWidth / 2 : GAUGE_DOT_RADIUS;
+      if (this.pointGauge && hasGauge(point)) {
+        // The ring surrounds the mark's larger side - see `markRadius` in `drawDots`.
+        const ring = (point.image ? Math.max(maxWidth, maxHeight) / 2 : GAUGE_DOT_RADIUS) + gaugeExtent(this.pointGauge);
+        x = Math.max(x, ring);
+        y = Math.max(y, ring);
+      }
+      half.x = Math.max(half.x, x);
+      half.y = Math.max(half.y, y);
+    }
+    return half;
   }
 
   /**

@@ -476,6 +476,7 @@ export class PcacChart implements OnDestroy {
       // size it was drawn at, or a container that comes back at that same width (a hidden tab
       // shown again) would read as unchanged to `containerSizeChanged()` and never be redrawn.
       this.lastContainerWidth = null;
+      this.reserveSvgHeight(chartElm, config);
       return false;
     }
     this.width = measuredWidth;
@@ -491,6 +492,24 @@ export class PcacChart implements OnDestroy {
     this.lastContainerHeight = container.clientHeight;
     this.lastHeightFull = config.heightFull === true;
     return true;
+  }
+
+  /**
+   * Gives a chart that can't draw yet the height it will draw at, so the page doesn't jump when it
+   * does. On the server (pre-rendering, SSR) no chart can draw - there's no layout to measure - and
+   * an empty `<svg>` is drawn 150px tall by the browser; everything below it moved once the app
+   * started and the chart grew to its real height, which is what search engines measure as layout
+   * shift (CLS). The height is exactly what `buildContainer()` will set without `heightFull`: room
+   * the builder made in the vertical margins comes back out of the plot height (`reservedHeight`),
+   * so the total is the configured height plus the margins as the builder has set them by now.
+   * With `heightFull` it's that floor, the container's own CSS deciding the rest. Width is left
+   * alone: it's the container's, and the chart takes it once it can measure it.
+   */
+  private reserveSvgHeight(chartElm: ElementRef, config: PcacChartConfig): void {
+    const height = Math.max(0, config.height - this.reservedHeight) + this.margin.top + this.margin.bottom;
+    if (height > 0) {
+      select(chartElm.nativeElement).attr('height', height);
+    }
   }
 
   /**

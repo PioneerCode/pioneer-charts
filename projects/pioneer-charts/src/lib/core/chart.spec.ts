@@ -56,6 +56,32 @@ describe('PcacChart', () => {
       expect(chart.initializeChartState(elm, config())).toBe(false);
     });
 
+    // Regression test: a pre-rendered chart was an empty `<svg>`, drawn at the browser's default
+    // 150px, and the page below it jumped once the app drew the chart at its real height (CLS).
+    it('reserves the height the chart will draw at when it can\'t draw yet, leaving the width alone', () => {
+      const elm = chartElm(0);
+      Object.defineProperty(elm.nativeElement.parentNode, 'clientWidth', { value: undefined, configurable: true });
+
+      chart.initializeChartState(elm, config(200));
+
+      expect(elm.nativeElement.getAttribute('height')).toBe(String(200 + 8 + 20));
+      expect(elm.nativeElement.hasAttribute('width')).toBe(false);
+    });
+
+    it('reserves exactly the height buildContainer then draws, margins the builder grew included', () => {
+      const elm = chartElm(0);
+      chart.resetMargin();
+      chart.reserveTickSizeMargins(16, undefined);
+      chart.initializeChartState(elm, config(200));
+      const reserved = elm.nativeElement.getAttribute('height');
+
+      Object.defineProperty(elm.nativeElement.parentNode, 'clientWidth', { value: 800, configurable: true });
+      chart.initializeChartState(elm, config(200));
+      chart.buildContainer(elm);
+
+      expect(elm.nativeElement.getAttribute('height')).toBe(reserved);
+    });
+
     it('returns false when clientWidth is smaller than the margins alone', () => {
       // margin.left(40) + margin.right(16) = 56; a 40px container computes a negative width.
       const result = chart.initializeChartState(chartElm(40), config());

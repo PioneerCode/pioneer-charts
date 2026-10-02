@@ -1,3 +1,20 @@
+<a name="22.2.25"></a>
+# [v22.2.25]
+
+### Fixed
+  - Charts reserve the height they'll draw at before they can draw (server rendering,
+    pre-rendering, a container not laid out yet), so a pre-rendered page no longer jumps when its
+    charts appear. Previously the empty `<svg>` was drawn at the browser's default 150px.
+  - Docs: no more layout shift as a docs page loads - the header's room for the phone Menu row is
+    in each page's inlined critical CSS, and the page clears the fixed header with padding rather
+    than a margin that collapsed through `<body>`. The Bar Chart page's CLS goes from 0.113 to 0.
+
+### Added
+  - Docs: search and sharing improvements - links from the home page to every chart's page,
+    a link-preview image for each page with its title, descriptive alt text on the showcase
+    screenshots, a `<main>` landmark, and SVG and Apple touch icons. The README links each chart's
+    docs page.
+
 <a name="22.2.24"></a>
 # [v22.2.24]
 

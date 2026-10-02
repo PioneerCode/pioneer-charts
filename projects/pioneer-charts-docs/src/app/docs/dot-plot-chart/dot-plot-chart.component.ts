@@ -16,6 +16,8 @@ interface DotPlotSettings {
   binWidth: number;
   images: boolean;
   autoTickSize: boolean;
+  /** `pointImage`'s box, both sides. */
+  imageSize: number;
 }
 
 @Component({
@@ -38,6 +40,7 @@ export class DotPlotChartComponent {
   jumpNav = signal<IJumpNav[]>([
     { key: 'Dot Plot Chart', value: 'dot-plot-chart' },
     { key: 'Try it', value: 'try-it' },
+    { key: 'Showing the drawn size', value: 'drawn-size' },
     { key: 'Markup', value: 'markup' },
     { key: 'API', value: 'api' },
     { key: 'Configuration', value: 'configuration' },
@@ -45,16 +48,21 @@ export class DotPlotChartComponent {
   ]);
 
   protected readonly binWidths = [0, 1, 2, 5];
-  protected readonly settings = signal<DotPlotSettings>({ binWidth: 2, images: true, autoTickSize: false });
+  protected readonly settings = signal<DotPlotSettings>({ binWidth: 2, images: true, autoTickSize: false, imageSize: 22 });
+
+  /** The chart's last `markFit`: 1 while the marks fit at full size. */
+  protected readonly fit = signal(1);
+  protected readonly drawnSize = computed(() => Math.floor(this.settings().imageSize * this.fit()));
 
   /** Same pattern as the Axis Styling page: a fresh config object so the chart rebuilds. */
   protected readonly config = computed<PcacDotPlotChartConfig>(() => {
-    const { binWidth, images, autoTickSize } = this.settings();
+    const { binWidth, images, autoTickSize, imageSize } = this.settings();
     const mock = this.pcService.dotPlotChartConfig.value();
     return {
       ...mock,
       xAxis: { ...mock.xAxis, autoTickSize },
       binWidth: binWidth || undefined,
+      pointImage: { maxWidth: imageSize, maxHeight: imageSize },
       // Without images, each point falls back to a dot in its series' color.
       data: images ? mock.data : mock.data.map(series => ({
         ...series,
@@ -70,7 +78,7 @@ export class DotPlotChartComponent {
 
   /** The demo's own config, as code - so the sample always matches the chart above it. */
   protected readonly configCode = computed(() => {
-    const { binWidth, images, autoTickSize } = this.settings();
+    const { binWidth, images, autoTickSize, imageSize } = this.settings();
     return `const config: PcacDotPlotChartConfig = {
   // Series, each holding its points: value = position on the axis, key = its name.
   data: [
@@ -80,9 +88,29 @@ export class DotPlotChartComponent {
     ] },
     ...
   ],
-  xAxis: { domainMin: 50, domainMax: 90, label: 'Daily high (°F)', showGrid: true${autoTickSize ? ', autoTickSize: true' : ''} },${binWidth ? `\n  binWidth: ${binWidth},` : ''}${images ? `\n  pointImage: { maxWidth: 22, maxHeight: 22 },` : ''}
+  xAxis: { domainMin: 50, domainMax: 90, label: 'Daily high (°F)', showGrid: true${autoTickSize ? ', autoTickSize: true' : ''} },${binWidth ? `\n  binWidth: ${binWidth},` : ''}${images ? `\n  pointImage: { maxWidth: ${imageSize}, maxHeight: ${imageSize} },` : ''}
 };`;
   });
+
+  drawnSizeCode = `// The size the user picked drives the chart; the slider shows what was drawn.
+readonly pickedSize = signal(40);
+readonly shownSize = signal(40);
+
+readonly config = computed<PcacDotPlotChartConfig>(() => ({
+  ...base,
+  pointImage: { maxWidth: this.pickedSize(), maxHeight: this.pickedSize() },
+}));
+
+// <input type="range" [value]="shownSize()" (input)="pick($any($event.target).valueAsNumber)" />
+pick(size: number): void {
+  this.pickedSize.set(size);
+  this.shownSize.set(size); // markFit only emits on a change, so assume it fits until told otherwise
+}
+
+// <pcac-dot-plot-chart [config]="config()" (markFit)="onMarkFit($event)" />
+onMarkFit(fit: number): void {
+  this.shownSize.set(Math.floor(this.pickedSize() * fit));
+}`;
 
   markupCode = `<pcac-dot-plot-chart [config]="config" (dotClicked)="onClicked($event)" />`;
   importCode = `import { PcacDotPlotChart, PcacDotPlotChartConfig } from '@pioneer-code/pioneer-charts';`;

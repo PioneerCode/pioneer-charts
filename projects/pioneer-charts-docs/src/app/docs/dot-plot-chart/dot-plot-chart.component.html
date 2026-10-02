@@ -24,16 +24,35 @@
       <input id="pc-dot-images" type="checkbox" [checked]="s.images" (change)="set('images', $any($event.target).checked)" />
       <span class="pc-muted">{{ s.images ? 'each day drawn as its weather' : 'dots in each series\' color' }}</span>
 
+      <label for="pc-dot-image-size">pointImage</label>
+      <input id="pc-dot-image-size" type="range" min="16" max="48" step="2" [value]="s.imageSize" [disabled]="!s.images"
+        (input)="set('imageSize', $any($event.target).valueAsNumber)" />
+      <span class="pc-readout">{{ s.imageSize }}px{{ s.images && fit() < 1 ? ', drawn at ' + drawnSize() + 'px to fit' : '' }}</span>
+
       <label for="pc-dot-auto-tick">autoTickSize</label>
       <input id="pc-dot-auto-tick" type="checkbox" [checked]="s.autoTickSize" (change)="set('autoTickSize', $any($event.target).checked)" />
       <span class="pc-muted">{{ s.autoTickSize ? 'x ticks half the largest mark, spacing the labels to it' : 'no tick marks' }}</span>
     </div>
     <pc-chart-card heading="Daily highs in June" caption="Change the settings above and it redraws." class="mb-3">
       <app-layout-resource-state [resource]="pcService.dotPlotChartConfig">
-        <pcac-dot-plot-chart [config]="config()" (dotClicked)="pcService.onClicked($event)" />
+        <pcac-dot-plot-chart [config]="config()" (dotClicked)="pcService.onClicked($event)"
+          (markFit)="fit.set($event)" />
       </app-layout-resource-state>
     </pc-chart-card>
     <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="drawn-size">Showing the drawn size</h2>
+    <p>A column too tall for the chart's <b>height</b> shrinks every mark evenly until it fits, so the marks can be
+      drawn smaller than <b>pointImage</b> (or <b>dotRadius</b>) asks for &mdash; in the demo above, raise
+      <b>pointImage</b> with a <b>binWidth</b> of 5. The <b>markFit</b> output says by how much: 1 at full size,
+      below 1 once they shrank, so an image is drawn at <code>maxWidth * fit</code> by <code>maxHeight * fit</code>.</p>
+    <p>Use it to keep a size control honest. Keep the size the user picked apart from the size the control shows,
+      and drive the chart from the pick: the marks then grow back toward it when the columns shorten &mdash; other
+      data, a taller chart &mdash; and a pick the chart can't fit settles back to what it drew.
+      <b>markFit</b> only emits when the fit changes, so set the shown size to the pick as the user moves the
+      control and let the next fit correct it.</p>
+    <app-layout-code language="typescript" [code]="drawnSizeCode"></app-layout-code>
   </section>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="markup">Markup</h2>
@@ -69,7 +88,8 @@
           <td>pointImage</td>
           <td>Bounding box (<b>maxWidth</b> / <b>maxHeight</b>) for points with an <b>image</b>, drawn in place of their
             dot, as on the plot chart. When the tallest column wouldn't fit the chart's <b>height</b>, every mark
-            shrinks evenly until it does, so nothing is cut off.</td>
+            shrinks evenly until it does, so nothing is cut off; <b>markFit</b> reports by how much (see
+            <a routerLink="." fragment="drawn-size">Showing the drawn size</a>).</td>
         </tr>
         <tr>
           <td>colorOverride</td>
@@ -95,6 +115,14 @@
             <td>(dotClicked)="onClicked($event)"</td>
             <td>Emitted when a dot or image is clicked, or activated with Enter or Space. It emits a copy of the item; set its <b>id</b> to trace it back to your record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
             <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
+          </tr>
+          <tr>
+            <td>(markFit)="onMarkFit($event)"</td>
+            <td>Emitted after a draw that changed how much the marks were scaled to fit the chart's height: 1 at full
+              size, below 1 once a column too tall for the chart shrank every mark evenly. Marks are drawn at
+              <code>pointImage.maxWidth * fit</code> by <code>maxHeight * fit</code>, or a radius of
+              <code>dotRadius * fit</code> (see <a routerLink="." fragment="drawn-size">Showing the drawn size</a>).</td>
+            <td>number</td>
           </tr>
         </tbody>
       </table>

@@ -17,7 +17,7 @@ Guides, the API reference, live examples, and theming instructions all live on t
 - Bar (vertical and horizontal), line, area, plot, pie, donut, dot plot and proximity charts, plus a legend.
 - Beautiful default theme, customizable via CSS or by overriding the source Sass variables.
 - Strongly typed configuration contracts.
-- Outputs for user interaction (bar, slice, dot, and legend clicks).
+- Outputs for user interaction (bar, slice, dot, and legend clicks), plus the size a dot plot fitted its marks to.
 - Custom tooltips via a projected template.
 - Standalone components — no `NgModule`s required.
 - Charts automatically re-render when their container resizes.

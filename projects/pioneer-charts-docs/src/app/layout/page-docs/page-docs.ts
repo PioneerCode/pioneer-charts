@@ -44,8 +44,19 @@ export class LayoutPageDocs {
     };
     sync();
     this.nav.available.set(true);
+    // For styles.scss's header height on a docs page (the Menu row adds 48px below 960px). A class
+    // rather than `:root:has(app-layout-page-docs)`, which that used to be: the critical CSS inlined
+    // into each pre-rendered page drops `:has()` rules, so a phone's first paint left room for the
+    // toolbar alone and the whole page jumped 48px once the full stylesheet arrived (layout shift).
+    // Set on the server too, so it's in the pre-rendered <html>.
+    const document = inject(DOCUMENT);
+    const root = document.documentElement;
+    root.classList.add('pc-docs-page');
     const destroyRef = inject(DestroyRef);
-    destroyRef.onDestroy(() => this.nav.available.set(false));
+    destroyRef.onDestroy(() => {
+      this.nav.available.set(false);
+      root.classList.remove('pc-docs-page');
+    });
 
     // Only in the browser: when the page is pre-rendered at build time there is no viewport, and
     // the CDK's stand-in media query has no event listeners. The pre-rendered page gets the
@@ -53,7 +64,7 @@ export class LayoutPageDocs {
     if (isPlatformBrowser(inject(PLATFORM_ID))) {
       drawerQuery.addEventListener('change', sync);
       destroyRef.onDestroy(() => drawerQuery.removeEventListener('change', sync));
-      this.keepSidebarAboveFooter(inject(DOCUMENT), destroyRef);
+      this.keepSidebarAboveFooter(document, destroyRef);
     }
   }
 

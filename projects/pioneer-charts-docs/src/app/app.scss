@@ -11,7 +11,11 @@
 
 
 // Starts below the fixed header. --app-header-height is right from the first paint (media queries
-// in styles.scss) and LayoutHeader refines it once measured.
+// in styles.scss) and LayoutHeader refines it once measured. Padding, not margin: as the first
+// in-flow child of <body>, a margin collapsed through it onto the body, so while a slow connection
+// was still delivering the page the body sat at the top until <main> arrived and then jumped down
+// by the header's height (a layout shift).
 .pc-app-main {
-  margin-top: var(--app-header-height, 64px);
+  display: block;
+  padding-top: var(--app-header-height, 64px);
 }

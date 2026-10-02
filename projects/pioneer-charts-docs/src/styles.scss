@@ -294,7 +294,9 @@ html {
   }
 }
 
-:root:has(app-layout-page-docs) {
+// The class is the docs layout's (page-docs.ts) - not `:has(app-layout-page-docs)`, which the
+// pre-rendered pages' inlined critical CSS drops.
+:root.pc-docs-page {
   @media (max-width: 959.98px) {
     --app-header-height: 112px;
   }

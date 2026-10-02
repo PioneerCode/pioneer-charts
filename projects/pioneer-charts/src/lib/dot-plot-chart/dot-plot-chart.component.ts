@@ -21,6 +21,13 @@ export class PcacDotPlotChart {
   readonly config = input.required<PcacDotPlotChartConfig>();
   private readonly chartElm = viewChild.required<ElementRef>('chart');
   readonly dotClicked = outputFromObservable(this.chartBuilder.dotClicked$);
+  /**
+   * How much the marks were scaled to fit the chart's height, after a draw that changed it: 1 at
+   * full size, below 1 once a column too tall for the chart shrank every mark evenly (see
+   * `pointImage`). An image is drawn `pointImage.maxWidth * fit` by `maxHeight * fit`, a dot at
+   * `dotRadius * fit` - so a size control can show what was actually drawn.
+   */
+  readonly markFit = outputFromObservable(this.chartBuilder.markFit$);
 
   /** Optional consumer `<ng-template pcacTooltip>`, replacing the default tooltip (see PcacTooltipDirective). */
   readonly tooltipTemplate = contentChild(PcacTooltipDirective);

@@ -83,6 +83,23 @@ describe('DotPlotChartBuilder', () => {
     expect(r).toBeLessThan(6);
   });
 
+  it('emits the fit it drew at, only when it changes', () => {
+    const builder = TestBed.runInInjectionContext(() => new DotPlotChartBuilder());
+    const fits: number[] = [];
+    builder.markFit$.subscribe((fit) => fits.push(fit));
+    const elm = chartElm();
+    const tall = config([Array.from({ length: 30 }, (_, i) => point(`p${i}`, 5))], { height: 180 });
+    builder.buildChart(elm, config([[point('a', 5)]]));
+    builder.buildChart(elm, config([[point('a', 5)]]));
+    builder.buildChart(elm, tall);
+    expect(fits.length).toBe(2);
+    expect(fits[0]).toBe(1);
+    // The drawn dot is the full radius scaled by the fit that was emitted.
+    const r = Number(elm.nativeElement.querySelector('circle.pcac-dot')!.getAttribute('r'));
+    expect(fits[1]).toBeLessThan(1);
+    expect(r).toBeCloseTo(6 * fits[1]);
+  });
+
   it('spans the data, rounded out, when the axis has no domain of its own', () => {
     const { builder, svg } = build(config([[point('a', 2.3), point('b', 7.8)]], { xAxis: {} }));
     const [a, b] = centers(svg);

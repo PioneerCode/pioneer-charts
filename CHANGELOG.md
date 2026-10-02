@@ -1,3 +1,15 @@
+<a name="22.2.24"></a>
+# [v22.2.24]
+
+### Added
+  - Dot plot: a `markFit` output, emitting how much the marks were scaled to fit the chart's
+    height after any draw that changed it - 1 at full size, below 1 once a column too tall for the
+    chart shrank every mark evenly. An image is drawn at `pointImage.maxWidth * fit` by
+    `maxHeight * fit`, so a size control can show the size actually drawn.
+  - Docs: the Dot Plot Chart page's "Try it" gains a `pointImage` size slider that reports the size
+    the marks were drawn at, a "Showing the drawn size" section on keeping a size control in step
+    with `markFit`, and the output in its Events table.
+
 <a name="22.2.22"></a>
 # [v22.2.22]
 

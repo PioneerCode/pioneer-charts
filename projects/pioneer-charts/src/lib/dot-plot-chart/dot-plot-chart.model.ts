@@ -39,7 +39,8 @@ export class PcacDotPlotChartConfig extends PcacAxisChartConfig {
    * plot chart. Each field falls back to its `PcacPointImageConfig` default.
    *
    * A column too tall for the chart's height shrinks every mark on the chart evenly until it fits,
-   * so no point is ever cut off; give the chart more `height` to keep marks at full size.
+   * so no point is ever cut off; give the chart more `height` to keep marks at full size. The
+   * chart's `markFit` output reports how far they were shrunk.
    */
   pointImage?: Partial<PcacPointImageConfig>
 

@@ -86,6 +86,25 @@ describe('PageSeoStrategy', () => {
     expect(structured().itemListElement.at(-1).name).toBe('Bar Chart');
   });
 
+  describe('link-preview image', () => {
+    it('gives a page its own image, named after its path, with its title in the alt text', async () => {
+      await harness.navigateByUrl('/docs/components/charts/bar-chart');
+
+      expect(meta('property="og:image"')).toBe('https://pioneercharts.com/og/bar-chart.png');
+      expect(meta('property="og:image:alt"')).toMatch(/^Angular Bar Chart - Pioneer Charts: /);
+    });
+
+    it('gives the home page, and a URL that isn\'t a page, the site\'s image', async () => {
+      await harness.navigateByUrl('/docs/guides/theme');
+      await harness.navigateByUrl('/');
+      expect(meta('property="og:image"')).toBe('https://pioneercharts.com/og-image.png');
+
+      await harness.navigateByUrl('/no/such/page');
+      expect(meta('property="og:image"')).toBe('https://pioneercharts.com/og-image.png');
+      expect(meta('property="og:image:alt"')).toMatch(/^Pioneer Charts: /);
+    });
+  });
+
   describe('structured data', () => {
     const scripts = () => document.head.querySelectorAll('script[type="application/ld+json"]');
 

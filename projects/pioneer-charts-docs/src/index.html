@@ -41,7 +41,12 @@
       document.documentElement.style.setProperty('--pc-theme-icon-sun', dark ? 'inline-block' : 'none');
     })();
   </script>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- The .ico for browsers without SVG favicons; icon.svg (the logo on the header's color) for the
+       rest, and a full-bleed PNG for iOS home screens, which round the corners themselves. -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#24282e">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>

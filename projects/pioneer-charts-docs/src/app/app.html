@@ -1,6 +1,7 @@
 <app-layout-header class="fixed top-0 left-0 right-0 z-50"/>
-<!-- Clears the fixed header, whose height varies: see --app-header-height (styles.scss). -->
-<div class="pc-app-main">
+<!-- Clears the fixed header, whose height varies: see --app-header-height (styles.scss). The page's
+     main landmark, between the header's banner and the footer's contentinfo. -->
+<main class="pc-app-main">
   <router-outlet />
-</div>
+</main>
 <app-layout-footer />

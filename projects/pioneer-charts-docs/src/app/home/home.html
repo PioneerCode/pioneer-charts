@@ -12,7 +12,7 @@
   </div>
   <div class=" z-1 relative">
     <h1>Pioneer Charts</h1>
-    <p class="mb-16">Data Visualizations in Angular, beautiful & simple.</p>
+    <p class="mb-16">Angular charts built on D3 - beautiful &amp; simple.</p>
     <a routerLink="/docs/guides/introduction" matButton="elevated" color="accent" class="mb-5">Get
       Started</a>
   </div>
@@ -22,15 +22,14 @@
     <div class="text-center">
       <mat-icon class="large-icon">bar_chart</mat-icon>
       <h2 class="pc-h3">Beautiful Charts</h2>
-      <p>Data Visualizations don't need to be ugly! Pioneer Charts comes with a beautiful default theme of which
-        is customizable
-        to suit your needs.</p>
+      <p>Data visualizations don't need to be ugly! Pioneer Charts comes with a beautiful default theme, which
+        you can customize to suit your needs.</p>
     </div>
     <div class="text-center">
       <mat-icon class="large-icon">code</mat-icon>
       <h2 class="pc-h3">Open Source</h2>
-      <p>Pioneer Charts is developed and maintained in the
-        <a href="https://github.com/PioneerCode/pioneer-charts" title="Pioneer Charts Github">open</a>. Have a
+      <p>Pioneer Charts is developed and maintained
+        <a href="https://github.com/PioneerCode/pioneer-charts">in the open on GitHub</a>. Have a
         feature request or found a bug? Contributions are welcome!
       </p>
     </div>
@@ -38,17 +37,18 @@
       <mat-icon class="large-icon">checklist</mat-icon>
       <h2 class="pc-h3">Battle Tested Code</h2>
       <p>Pioneer Charts is built on top of
-        <a href="https://angular.io" title="Angular">Angular</a> and backed by
-        <a href="https://d3js.org/" title="D3">D3</a>. Of which produces performant and consistent rendering
-        across modern browser.
+        <a href="https://angular.dev" title="Angular">Angular</a> and backed by
+        <a href="https://d3js.org/" title="D3">D3</a>, which renders charts quickly and consistently
+        across modern browsers.
       </p>
     </div>
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div>
       <h2 class="mt-5">Charts made simple</h2>
-      <p>Pioneer Charts allows you to create beautiful, consistent and responsive charts with minimal
-        effort. </p>
+      <p>Pioneer Charts is an open-source Angular chart library built on D3. Add a bar, line, area,
+        scatter plot, pie, donut, dot plot or proximity chart to your Angular app as a standalone component,
+        hand it your data, and get a responsive, themeable and accessible chart with minimal effort.</p>
     </div>
   </div>
   <div class="container mx-auto px-4 grid grid-cols-1">
@@ -61,24 +61,67 @@
       </pc-chart-card>
     </div>
   </div>
+  <section class="container mx-auto px-4 pt-5" aria-labelledby="chart-types-heading">
+    <h2 id="chart-types-heading" class="pc-h4">Angular chart types</h2>
+    <ul class="chart-links grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (chart of charts; track chart.path) {
+        <li>
+          <a class="chart-link" [routerLink]="'/docs/components/charts/' + chart.path">
+            <span class="chart-link-name">{{ chart.name }}</span>
+            {{ chart.summary }}
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="col pt-5 pb-5">
       <h2 class="pc-h4">Standing on the shoulders of giants</h2>
       <p>Pioneer Charts utilizes
-        <a href="https://angular.io" title="Angular">Angular</a> as its delivery method. Meaning, if you are familiar with
-        <a href="https://angular.io" title="Angular">Angular</a> then you are familiar with how the charts inside of
+        <a href="https://angular.dev" title="Angular">Angular</a> as its delivery method: if you are familiar with
+        <a href="https://angular.dev" title="Angular">Angular</a> then you are familiar with how the charts inside of
         Pioneer Charts are added to your project!
       </p>
       <p>Charts are built with the popular data-driven document manipulation library,
-        <a href="https://d3js.org/" title="D3">D3</a>. This allows us to provide rich data-visualizations that are
-        powerful,
-        web-standard compliant, and easy to maintain.
+        <a href="https://d3js.org/" title="D3">D3</a>. This allows us to provide rich data visualizations that are
+        powerful, web-standard compliant, and easy to maintain.
       </p>
     </div>
   </div>
+  <section class="container mx-auto px-4 pb-10" aria-labelledby="built-with-heading">
+    <h2 id="built-with-heading" class="pc-h4">Built with Pioneer Charts</h2>
+    <mat-card class="showcase-card p-4" appearance="outlined">
+      <div class="flex flex-wrap items-start gap-4 mb-5">
+        <div class="flex-1 min-w-64">
+          <h3 class="pc-h3 mt-0">Down Lane Motion</h3>
+          <p class="m-0">A bowling ball catalog that plots each ball's reaction, ranks a whole arsenal from light
+            oil to heavy, finds look-alikes and compares balls side by side. Its plot, dot plot, proximity, bar
+            and donut charts are all Pioneer Charts, in both its light and dark themes.</p>
+        </div>
+        <a matButton="filled" href="https://downlanemotion.com" target="_blank" rel="noopener">
+          Visit downlanemotion.com
+        </a>
+      </div>
+      <!-- Each shot links to its page on the site. The caption names the link; the alt text describes
+           the screenshot. -->
+      <ul class="showcase-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (shot of showcase; track shot.image) {
+          <li>
+            <a class="showcase-shot" [href]="shot.url" target="_blank" rel="noopener">
+              <img class="showcase-image" [src]="shot.image" width="1200" height="750" loading="lazy" [alt]="shot.alt" />
+              <span class="showcase-caption">
+                <span class="showcase-page">{{ shot.page }}</span>
+                {{ shot.charts }} · {{ shot.theme }} theme
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </mat-card>
+  </section>
   <div class="container mx-auto px-4 grid grid-cols-1">
     <div class="text-center">
-      <a routerLink="/docs/guides/introduction" matButton="filled" class="me-2">Get
+      <a routerLink="/docs/guides/introduction" matButton="filled"  class="me-2">Get
         Started</a>
       <a class="ms-2" routerLink="/charts" matButton="filled">
         Charts</a>

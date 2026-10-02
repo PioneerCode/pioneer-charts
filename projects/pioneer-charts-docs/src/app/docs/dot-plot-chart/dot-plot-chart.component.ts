@@ -92,22 +92,23 @@ export class DotPlotChartComponent {
 };`;
   });
 
-  drawnSizeCode = `// The size the user picked drives the chart; the slider shows what was drawn.
+  drawnSizeCode = `// The pick drives the chart; the slider shows what was drawn.
 readonly pickedSize = signal(40);
 readonly shownSize = signal(40);
 
-readonly config = computed<PcacDotPlotChartConfig>(() => ({
-  ...base,
-  pointImage: { maxWidth: this.pickedSize(), maxHeight: this.pickedSize() },
-}));
+readonly config = computed<PcacDotPlotChartConfig>(() => {
+  const size = this.pickedSize();
+  return { ...base, pointImage: { maxWidth: size, maxHeight: size } };
+});
 
-// <input type="range" [value]="shownSize()" (input)="pick($any($event.target).valueAsNumber)" />
+// The slider: [value]="shownSize()" (input)="pick(...)"
 pick(size: number): void {
   this.pickedSize.set(size);
-  this.shownSize.set(size); // markFit only emits on a change, so assume it fits until told otherwise
+  // markFit only emits on a change: assume it fits until told.
+  this.shownSize.set(size);
 }
 
-// <pcac-dot-plot-chart [config]="config()" (markFit)="onMarkFit($event)" />
+// The chart: (markFit)="onMarkFit($event)"
 onMarkFit(fit: number): void {
   this.shownSize.set(Math.floor(this.pickedSize() * fit));
 }`;

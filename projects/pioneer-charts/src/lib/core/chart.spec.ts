@@ -327,8 +327,8 @@ describe('PcacChart', () => {
 
     it('resolves missing axes to defaults, so an object-literal config needs neither', () => {
       chart.initializeAxisState(axisConfig(), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
-      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 5, tickSize: undefined, autoTickSize: false, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+      expect(chart.yAxis).toEqual({ hide: false, showGrid: true, ticks: 5, tickSize: undefined, autoTickSize: false, showLine: false, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
       expect(chart.margin).toEqual({ top: 8, right: 16, bottom: 20, left: 40 });
     });
 
@@ -344,7 +344,19 @@ describe('PcacChart', () => {
 
     it('fills in only what an axis leaves out', () => {
       chart.initializeAxisState(axisConfig({ xAxis: { ticks: 3, showLine: true } }), 'y');
-      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, showLine: true, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+      expect(chart.xAxis).toEqual({ hide: false, showGrid: false, ticks: 3, tickSize: undefined, autoTickSize: false, showLine: true, format: PcacFormatEnum.None, domainMin: 0, domainMax: 100 });
+    });
+
+    it('replaces an autoTickSize axis\'s tickSize with the given mark size, rounded up, and reserves it', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { autoTickSize: true, tickSize: 20 }, yAxis: { tickSize: 20 } }), 'y', 0, { x: 9.2, y: 4 });
+      expect(chart.xAxis.tickSize).toBe(10);
+      expect(chart.yAxis.tickSize).toBe(20);
+      expect(chart.margin.bottom).toBe(20 + 10 - PcacChart.DEFAULT_TICK_SIZE);
+    });
+
+    it('ignores autoTickSize on a chart that passes no mark size (one without points)', () => {
+      chart.initializeAxisState(axisConfig({ xAxis: { autoTickSize: true, tickSize: 12 } }), 'y');
+      expect(chart.xAxis.tickSize).toBe(12);
     });
 
     it('keeps a given format and domain, including a 0 and a DateTime string', () => {

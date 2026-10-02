@@ -4,7 +4,7 @@ import { extent } from 'd3-array';
 import { scaleLinear, ScaleLinear } from 'd3-scale';
 // Imported for its side effect only: adds .transition() to d3-selection's Selection.
 import 'd3-transition';
-import { Subject } from 'rxjs';
+import { Subject, distinctUntilChanged } from 'rxjs';
 
 import { PcacChart, PcacTooltipOptions } from '../core/chart';
 import { PcacData } from '../core/chart.model';
@@ -24,6 +24,9 @@ const DOT_HOVER_GROWTH = 2;
 export class DotPlotChartBuilder extends PcacChart {
   private dotClickedSource = new Subject<PcacData>();
   dotClicked$ = this.dotClickedSource.asObservable();
+  /** The fit each draw settled on (see PcacDotPlotChart's `markFit`), only when it changes. */
+  private markFitSource = new Subject<number>();
+  markFit$ = this.markFitSource.pipe(distinctUntilChanged());
 
   protected override chartTypeLabel = 'Dot plot';
 
@@ -72,11 +75,12 @@ export class DotPlotChartBuilder extends PcacChart {
     // that, rounding up a pixel - at the length they now need, which is still no longer than the
     // first, so the marks can only shrink again and never outgrow the tick.
     let tick = markHalf(1);
+    let fit = 1;
     for (let pass = 0; ; pass++) {
       if (!this.layout(chartElm, config, tick, fullSize)) {
         return;
       }
-      const fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + gap))) : 1;
+      fit = tallest ? Math.min(1, this.height / (tallest * (fullSize + gap))) : 1;
       this.markSize = fullSize * fit;
       this.markGap = gap * fit;
       this.dotRadius = dotRadius * fit;
@@ -91,6 +95,7 @@ export class DotPlotChartBuilder extends PcacChart {
 
     this.xScale = this.buildXScale(rawXAxis?.domainMin, rawXAxis?.domainMax);
     this.drawChart(chartElm);
+    this.markFitSource.next(fit);
   }
 
   /**

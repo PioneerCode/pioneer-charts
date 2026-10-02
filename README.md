@@ -28,6 +28,10 @@ Each chart has its own page with live examples, markup and its full configuratio
 
 Or see them all together on the [chart examples](https://pioneercharts.com/charts) page.
 
+## Built with Pioneer Charts
+
+- [Down Lane Motion](https://downlanemotion.com) - a bowling ball catalog whose reaction, tech specs, look-alike, arsenal ladder and stats pages are all Pioneer Charts plot, proximity, dot plot, bar and donut charts.
+
 ## Features
 
 - Bar (vertical and horizontal), line, area, plot, pie, donut, dot plot and proximity charts, plus a legend.

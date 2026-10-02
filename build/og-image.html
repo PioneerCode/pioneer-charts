@@ -5,6 +5,10 @@
 
   To change it: edit this page, open it in Chrome, and capture a 1200x630 screenshot of it (DevTools
   > device toolbar at 1200 x 630, then "Capture screenshot"), saved over that file.
+
+  With ?title=..., it's a docs page's image instead: the page's title as the headline, the brand
+  above it, the same charts beside it. build/og-images.js renders one per page that way, into
+  public/og/ (see seo.ts).
   Colors are the site's own: the header's #24282e and the charts' default palette (PcacColorService).
 -->
 <html lang="en">
@@ -87,6 +91,39 @@
       gap: 10px;
     }
 
+    /* A docs page's image (?title=...): the brand steps down to a label above the page's title. */
+    body.page .brand {
+      margin-bottom: 22px;
+    }
+
+    body.page .brand svg {
+      width: 52px;
+      height: 40px;
+    }
+
+    body.page .brand-name {
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+    body.page h1.page-title {
+      margin-bottom: 26px;
+      font-size: 54px;
+    }
+
+    body.page .tagline {
+      font-size: 26px;
+    }
+
+    .page-only,
+    body.page .home-only {
+      display: none;
+    }
+
+    body.page .page-only {
+      display: block;
+    }
+
     .types span {
       padding: 7px 14px;
       border-radius: 999px;
@@ -135,10 +172,12 @@
         <polygon
           points="122.2,7.6 122.5,7.6 200.3,161.2 207.6,161.2 125.9,0.3 118.8,0.3 82.7,71.5 67.8,42.2 60.8,42.2 0.4,161.2 7.7,161.2 64.1,49.5 64.5,49.5 79.2,78.5 37.2,161.2 44.5,161.2 82.7,85.6 98.7,117.2 76.3,161.2 83.6,161.2 102.3,124.3 120.9,161.2 128.2,161.2 105.8,117.2 122.3,84.6 122.7,84.6 161.4,161.2 168.6,161.2 126,77.3 118.9,77.3 102.3,110.2 86.3,78.6" />
       </svg>
-      <h1>Pioneer<br>Charts</h1>
+      <h1 class="home-only">Pioneer<br>Charts</h1>
+      <div class="brand-name page-only">Pioneer Charts</div>
     </div>
+    <h1 class="page-title page-only"></h1>
     <p class="tagline"><b>Angular</b> charts built on <b>D3</b>: responsive, accessible and simple to configure.</p>
-    <div class="types">
+    <div class="types home-only">
       <span>Bar</span><span>Line</span><span>Area</span><span>Plot</span><span>Pie</span><span>Donut</span>
     </div>
   </div>
@@ -217,6 +256,13 @@
       <text x="105" y="160" text-anchor="middle" font-family="Roboto, sans-serif" font-size="13" fill="#6c757d">total</text>
     </svg>
   </div>
+  <script>
+    var title = new URLSearchParams(location.search).get('title');
+    if (title) {
+      document.body.classList.add('page');
+      document.querySelector('.page-title').textContent = title;
+    }
+  </script>
 </body>
 
 </html>

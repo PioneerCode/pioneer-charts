@@ -65,3 +65,35 @@ $icon-size-phone: 88px;
   font-weight: 500;
   color: var(--mat-sys-on-surface);
 }
+
+.chart-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// The whole card is the link: the name reads as its title, the summary as its caption.
+.chart-link {
+  display: block;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 8px;
+  color: var(--mat-sys-on-surface-variant);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--mat-sys-outline);
+
+    .chart-link-name {
+      text-decoration: underline;
+    }
+  }
+}
+
+.chart-link-name {
+  display: block;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}

@@ -11,13 +11,17 @@ const REPOSITORY_URL = 'https://github.com/PioneerCode/pioneer-charts';
 const DOCS_PATH = '/docs/guides/introduction';
 const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
 /** The home page's description (and index.html's), for any route without its own. */
+/** The site's link-preview image (index.html's), for the home page and any URL that isn't a page. */
+const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
+const IMAGE_ALT = 'Angular charts built on D3, with an area, a bar and a donut chart.';
 const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie, donut, dot plot and proximity charts built on D3'
   + ' - responsive, themeable and simple to configure.';
 
 /**
  * Keeps each page's search and link-preview metadata in step with the route, from the route's
  * `title`, `data.searchTitle` and `data.description` (see app.routes.ts): the document title,
- * `<meta name=description>`, the Open Graph tags, `<link rel=canonical>`, and structured data (see
+ * `<meta name=description>`, the Open Graph tags (each page's own preview image included: see
+ * `ogImage`), `<link rel=canonical>`, and structured data (see
  * `structuredData`). A route marked `data.notFound` (the catch-all) gets `noindex`, since it shows
  * the home page at a URL that isn't one, and no structured data.
  *
@@ -45,6 +49,9 @@ export class PageSeoStrategy extends TitleStrategy {
     this.meta.updateTag({ property: 'og:title', content: title });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:url', content: url });
+    const image = ogImage(url, searchTitle);
+    this.meta.updateTag({ property: 'og:image', content: image.url });
+    this.meta.updateTag({ property: 'og:image:alt', content: image.alt });
     if (notFound) {
       this.meta.updateTag({ name: 'robots', content: 'noindex' });
     } else {
@@ -121,6 +128,19 @@ export function structuredData(url: string, pageTitle: string | null, descriptio
     '@type': 'BreadcrumbList',
     itemListElement: trail.map((step, i) => ({ '@type': 'ListItem', position: i + 1, name: step.name, item: step.url })),
   };
+}
+
+/**
+ * A page's link-preview image: its own, with its title on it, rendered by build/og-images.js into
+ * public/og/ and named after the last segment of its path (`ogImageSlug` there must agree). The home
+ * page - and a URL that isn't a page, which canonicalizes to it - has the site's.
+ */
+export function ogImage(url: string, searchTitle: string | undefined): { url: string; alt: string } {
+  const path = url.slice(SITE_URL.length);
+  if (path === '/' || !searchTitle) {
+    return { url: DEFAULT_IMAGE, alt: `${SITE_NAME}: ${IMAGE_ALT}` };
+  }
+  return { url: `${SITE_URL}/og/${path.split('/').pop()}.png`, alt: `${searchTitle} - ${SITE_NAME}: ${IMAGE_ALT}` };
 }
 
 function deepestChild(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {

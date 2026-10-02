@@ -18,7 +18,8 @@
   - Line, area and plot charts: a gauge ring around a point image whose box isn't square was cut
     off by the edge of the SVG at the top or bottom of the y domain (or the ends of the x). The
     margins made room for the box's own side plus the ring, but the ring is drawn around the box's
-    larger side; a 40x20 image's ring reaches 25px from its point, and only 15 were kept.
+    larger side; a 40x20 image's ring reaches 25px above and below its point, and only 15 were
+    kept. A tall image (20x40, say) lost the same way at the ends of the x axis.
 
 <a name="22.2.21"></a>
 # [v22.2.21]

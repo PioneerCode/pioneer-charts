@@ -104,12 +104,12 @@ export class PlaChartBuilder extends PcacChart {
   /**
    * How far the points' clip-path rect extends past the drawable [0, width] x [0, height] area on
    * every side, so a point sitting exactly on the domain's edge isn't cut in half. 10px
-   * comfortably clears a dot (r = 4, or 6 on hover); a point image can be much bigger than that,
-   * so buildChart() widens this to half the largest image dimension whenever any point has one
-   * (and grows the margins to match - see `reservePointSpace()` - since the clip-path only
-   * matters up to the edge of the SVG). The buffer is only there for points whose center is
-   * inside the plot; one whose center zoom has carried past an edge is hidden outright (see
-   * `pointVisible`), rather than left showing up to a whole half-mark beyond the axis.
+   * comfortably clears a dot (r = 4, or 6 on hover); a point image or a gauge ring can be much
+   * bigger than that, so `reservePointSpace()` widens this to half the largest mark on the chart
+   * (and grows the margins to match, since the clip-path only matters up to the edge of the SVG).
+   * The buffer is only there for points whose center is inside the plot; one whose center zoom
+   * has carried past an edge is hidden outright (see `pointVisible`), rather than left showing up
+   * to a whole half-mark beyond the axis.
    */
   private clipBuffer = 10;
   private pointImage!: PcacPointImageConfig;
@@ -357,11 +357,11 @@ export class PlaChartBuilder extends PcacChart {
 
   /**
    * Half the largest mark on the chart toward each axis, for `autoTickSize` and the edge space
-   * (`reservePointSpace`): `x` its vertical
-   * half (what reaches down to the x axis), `y` its horizontal half. Measured as drawn - a hovered
-   * dot (`GAUGE_DOT_RADIUS`), an image's box, and a gauge ring around either (circular, so the
-   * same both ways). Points in a hidden series count, so toggling one in a legend doesn't move the
-   * axes; a gap (no value) draws nothing and doesn't. Needs `pointImage` and `pointGauge` resolved.
+   * (`reservePointSpace`): `x` its vertical half (what reaches down to the x axis), `y` its
+   * horizontal half. Measured as drawn - a hovered dot (`GAUGE_DOT_RADIUS`), an image's box, and
+   * a gauge ring around either (circular, so the same both ways). Points in a hidden series
+   * count, so toggling one in a legend doesn't move the axes; a gap (no value) draws nothing and
+   * doesn't. Needs `pointImage` and `pointGauge` resolved.
    */
   private largestMarkHalf(): { x: number; y: number } {
     const { maxWidth, maxHeight } = this.pointImage;

@@ -75,7 +75,7 @@ export class DotPlotChartBuilder extends PcacChart {
     // that, rounding up a pixel - at the length they now need, which is still no longer than the
     // first, so the marks can only shrink again and never outgrow the tick.
     let tick = markHalf(1);
-    let fit = 1;
+    let fit: number;
     for (let pass = 0; ; pass++) {
       if (!this.layout(chartElm, config, tick, fullSize)) {
         return;

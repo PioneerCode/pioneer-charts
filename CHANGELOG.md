@@ -1,3 +1,23 @@
+<a name="22.2.26"></a>
+# [v22.2.26]
+
+### Fixed
+  - Axis `subLabels` stay with the values they name on a zoomed line/area/plot chart. They were
+    placed by position - start, middle, end - so once zoomed, `mid` sat at the middle of whatever
+    was in view rather than at the middle value. Now each moves with its value, and one zoomed
+    out of view is pinned, dimmed and with an arrow (`◂ Mid`, `High ▸`), to the end of the axis
+    nearest it - the nearest one on each side, unless it would cover a label in view. A label in
+    view near an end is kept from spilling past it. Unzoomed charts draw them exactly as before.
+    The pinned label's class is `pcac-axis-sub-label-out-of-view` (theme: `opacity: 0.6`).
+
+### Added
+  - Line/area/plot: `cornerLabels.split` - `{ x?, y? }`, the values the corners' regions divide at,
+    in each axis's own terms like a reference line's `value`. With it, a corner label is shown only
+    while its region still fills that corner of the view with room for it, so zooming into one
+    quadrant leaves just that quadrant's name instead of all four naming points that aren't
+    theirs. Without it the labels are always shown, as before. The Plot Chart page's quadrant demo
+    and the home page's use it.
+
 <a name="22.2.25"></a>
 # [v22.2.25]
 

@@ -62,11 +62,15 @@ export class PlotChartComponent {
   /**
    * The reference-line demo: the fan-out mock, split at noon and at 50 into four named quadrants.
    * Its x axis zooms, so the vertical line can be seen moving with the data while the corner
-   * labels stay put. The labels are drawn over the points (`labelsOnTop`), and the noon line's sits
-   * at its bottom (`labelPosition: 'start'`), clear of the top-left corner's.
+   * labels stay put - split at the same values, so a side zoomed out of its corners loses its
+   * names. The labels are drawn over the points (`labelsOnTop`), and the noon line's sits
+   * at its bottom (`labelPosition: 'start'`), clear of the top-left corner's. The x axis's sub
+   * labels follow the zoom too: zoomed in, 'Midday' stays at noon and one out of view is pinned to
+   * the nearer end with an arrow.
    */
   protected readonly referenceConfig = computed(() => ({
     ...this.pcService.plotFanOutConfig.value(),
+    xAxis: { ...this.pcService.plotFanOutConfig.value()?.xAxis, subLabels: { min: 'Early', mid: 'Midday', max: 'Late' } },
     labelsOnTop: true,
     referenceLines: [
       { axis: 'x' as const, value: 12, label: 'Noon', labelPosition: 'start' as const },
@@ -77,6 +81,7 @@ export class PlotChartComponent {
       topRight: 'Afternoon, high',
       bottomLeft: 'Morning, low',
       bottomRight: 'Afternoon, low',
+      split: { x: 12, y: 50 },
     },
     ariaLabel: 'Readings by hour, split at noon and at 50 into four quadrants',
   }));

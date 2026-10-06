@@ -101,6 +101,11 @@
     font-size: 11px;
     fill: var(--pcac-axis-sub-label-color, #{imports.$gray-600});
   }
+
+  // A sub label zoomed out of view, pinned to the end of the axis nearest its value.
+  .pcac-axis-sub-label-out-of-view {
+    opacity: 0.6;
+  }
 }
 
 // Tick labels. d3-axis fills them `currentColor` by attribute; any stylesheet rule outranks

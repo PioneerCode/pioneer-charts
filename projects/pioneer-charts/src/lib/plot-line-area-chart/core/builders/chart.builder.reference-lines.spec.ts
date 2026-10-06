@@ -174,6 +174,50 @@ describe('PlaChartBuilder reference lines and corner labels', () => {
     expect(label.getAttribute('x')).toBe(before);
   });
 
+  describe('with a split', () => {
+    const quadrants = { topLeft: 'TL', topRight: 'TR', bottomLeft: 'BL', bottomRight: 'BR' };
+    const shown = (svg: SVGSVGElement) => Array.from(svg.querySelectorAll('.corner-label'))
+      .filter((label) => label.getAttribute('display') !== 'none')
+      .map((label) => label.textContent);
+
+    it('shows every corner while each quadrant is in its corner', () => {
+      const { svg } = build(config({ cornerLabels: { ...quadrants, split: { x: 50, y: 50 } } }));
+      expect(shown(svg)).toEqual(['TL', 'TR', 'BL', 'BR']);
+    });
+
+    it('leaves only the quadrant zoomed into', () => {
+      const { builder, svg } = build(config({
+        enableZoomX: true,
+        enableZoomY: true,
+        cornerLabels: { ...quadrants, split: { x: 50, y: 50 } },
+      }));
+      // 2x from the top-left corner: x 0 - 50 and y 50 - 100 in view, the top-left quadrant exactly
+      zoomTo(builder, zoomIdentity.scale(2));
+      expect(shown(svg)).toEqual(['TL']);
+
+      zoomTo(builder, zoomIdentity);
+      expect(shown(svg)).toEqual(['TL', 'TR', 'BL', 'BR']);
+    });
+
+    it('splits only the axes it is given', () => {
+      const { builder, svg } = build(config({ enableZoomX: true, cornerLabels: { ...quadrants, split: { x: 50 } } }));
+      zoomTo(builder, zoomIdentity.scale(2));
+      expect(shown(svg)).toEqual(['TL', 'BL']);
+    });
+
+    it('hides a label its quadrant has no room for', () => {
+      // 40 x 12 a label: the left quadrants, 2% of the plot wide, can't hold one with its insets
+      const proto = SVGElement.prototype as unknown as { getBBox?: () => DOMRect };
+      proto.getBBox = () => ({ x: 0, y: 0, width: 40, height: 12 }) as DOMRect;
+      try {
+        const { svg } = build(config({ cornerLabels: { ...quadrants, split: { x: 2, y: 50 } } }));
+        expect(shown(svg)).toEqual(['TR', 'BR']);
+      } finally {
+        delete proto.getBBox;
+      }
+    });
+  });
+
   it('draws only the corners it is given, inset from each, under the series', () => {
     const { builder, svg } = build(config({
       cornerLabels: { topLeft: 'Early, strong', bottomRight: 'Late, controlled', color: 'teal' },

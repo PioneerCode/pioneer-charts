@@ -175,7 +175,7 @@ export class ChartsComponent {
       { axis: 'x' as const, value: 12, label: 'Noon' },
       { axis: 'y' as const, value: 50, label: '50' },
     ],
-    cornerLabels: { topLeft: 'Morning, high', topRight: 'Afternoon, high', bottomLeft: 'Morning, low', bottomRight: 'Afternoon, low' },
+    cornerLabels: { topLeft: 'Morning, high', topRight: 'Afternoon, high', bottomLeft: 'Morning, low', bottomRight: 'Afternoon, low', split: { x: 12, y: 50 } },
   }));
 
   /**

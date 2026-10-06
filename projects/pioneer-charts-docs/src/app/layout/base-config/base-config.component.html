@@ -130,7 +130,9 @@
               if there is one). <b>min</b> is aligned to the axis's start, <b>mid</b> centered, <b>max</b> to its end,
               so they never spill past the axis; on the y axis they read bottom-to-top with <b>min</b> at the
               bottom. The margin grows by 16px when any is set. Not drawn on a hidden axis. Styled by the theme's
-              <code>.pcac-axis-sub-label</code> rule.
+              <code>.pcac-axis-sub-label</code> rule. On a zoomable axis each one stays with the value at its spot
+              on the unzoomed axis; zoomed out of view, the nearest on each side is pinned to that end, dimmed, with
+              an arrow toward its value (<code>.pcac-axis-sub-label-out-of-view</code>).
             </li>
             <li>
               <b>subLabelColor</b> &mdash; any CSS color for all of the <b>subLabels</b>, in place of the theme's

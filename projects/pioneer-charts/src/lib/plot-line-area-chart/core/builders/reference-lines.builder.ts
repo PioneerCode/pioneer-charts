@@ -20,9 +20,19 @@ export function referenceLinePosition(
   scales: PlaChartScales,
   xFormat: PcacFormatEnum | undefined,
 ): number | null {
-  const position = line.axis === 'x'
-    ? scales.x(xFormat === PcacFormatEnum.DateTime ? new Date(line.value) : Number(line.value))
-    : scales.y(Number(line.value));
+  return valuePosition(line.axis, line.value, scales, xFormat);
+}
+
+/** Where `value` sits on `axis`, in plot pixels, or `null` when it doesn't place. */
+function valuePosition(
+  axis: 'x' | 'y',
+  value: number | string,
+  scales: PlaChartScales,
+  xFormat: PcacFormatEnum | undefined,
+): number | null {
+  const position = axis === 'x'
+    ? scales.x(xFormat === PcacFormatEnum.DateTime ? new Date(value) : Number(value))
+    : scales.y(Number(value));
   return Number.isFinite(position) ? position : null;
 }
 
@@ -105,14 +115,28 @@ export function positionReferenceLines(
     .attr('dominant-baseline', (line: PlaReferenceLine) => line.axis === 'x' && !atStart(line) ? 'hanging' : 'auto');
 }
 
+/** One corner's label: which corner, so which region of a `split`, and where it's drawn. */
+interface PlaCornerLabel {
+  text: string;
+  name: string;
+  left: boolean;
+  top: boolean;
+  x: number;
+  y: number;
+  anchor: string;
+  baseline: string;
+}
+
 /**
  * Draws `labels` into a `.corner-labels` group, each a `.corner-label` inset from its corner of
- * the plot area. Pinned to the frame, so zoom leaves them alone. Hidden from screen readers, as
- * the grid is.
+ * the plot area, then shows or hides them for the current view (`positionCornerLabels`). Hidden
+ * from screen readers, as the grid is.
  */
 export function drawCornerLabels(
   svg: Selection<SVGGElement, unknown, BaseType, unknown>,
   labels: PcacCornerLabels | undefined,
+  scales: PlaChartScales,
+  xFormat: PcacFormatEnum | undefined,
   width: number,
   height: number,
 ): void {
@@ -120,11 +144,11 @@ export function drawCornerLabels(
     return;
   }
   const corners = [
-    { text: labels.topLeft, x: CORNER_INSET, y: CORNER_INSET, anchor: 'start', baseline: 'hanging', name: 'top-left' },
-    { text: labels.topRight, x: width - CORNER_INSET, y: CORNER_INSET, anchor: 'end', baseline: 'hanging', name: 'top-right' },
-    { text: labels.bottomLeft, x: CORNER_INSET, y: height - CORNER_INSET, anchor: 'start', baseline: 'auto', name: 'bottom-left' },
-    { text: labels.bottomRight, x: width - CORNER_INSET, y: height - CORNER_INSET, anchor: 'end', baseline: 'auto', name: 'bottom-right' },
-  ].filter((corner) => !!corner.text);
+    { text: labels.topLeft, left: true, top: true, x: CORNER_INSET, y: CORNER_INSET, anchor: 'start', baseline: 'hanging', name: 'top-left' },
+    { text: labels.topRight, left: false, top: true, x: width - CORNER_INSET, y: CORNER_INSET, anchor: 'end', baseline: 'hanging', name: 'top-right' },
+    { text: labels.bottomLeft, left: true, top: false, x: CORNER_INSET, y: height - CORNER_INSET, anchor: 'start', baseline: 'auto', name: 'bottom-left' },
+    { text: labels.bottomRight, left: false, top: false, x: width - CORNER_INSET, y: height - CORNER_INSET, anchor: 'end', baseline: 'auto', name: 'bottom-right' },
+  ].filter((corner): corner is PlaCornerLabel => !!corner.text);
   if (corners.length === 0) {
     return;
   }
@@ -140,7 +164,59 @@ export function drawCornerLabels(
     .attr('y', (corner) => corner.y)
     .attr('text-anchor', (corner) => corner.anchor)
     .attr('dominant-baseline', (corner) => corner.baseline)
-    .text((corner) => corner.text!);
+    .text((corner) => corner.text);
+  positionCornerLabels(svg, labels, scales, xFormat, width, height);
+}
+
+/**
+ * Shows each corner label only while its region of `labels.split` fills its corner of the view
+ * with room for the label and its inset - on the first draw and again on every zoom. The labels
+ * themselves never move: a region still in view always reaches its own corner of the plot, so
+ * there's nowhere else to put one, only whether it's still true there. Without a `split` every
+ * label is shown, as it always was.
+ */
+export function positionCornerLabels(
+  svg: Selection<SVGGElement, unknown, BaseType, unknown>,
+  labels: PcacCornerLabels | undefined,
+  scales: PlaChartScales,
+  xFormat: PcacFormatEnum | undefined,
+  width: number,
+  height: number,
+): void {
+  const split = labels?.split;
+  if (!split) {
+    return;
+  }
+  // The split in plot pixels, clamped to the plot; an axis without one (or one that won't place)
+  // isn't split.
+  const at = (axis: 'x' | 'y', length: number) => {
+    const value = split[axis];
+    const position = value === undefined ? null : valuePosition(axis, value, scales, xFormat);
+    return position === null ? null : Math.min(Math.max(position, 0), length);
+  };
+  const sx = at('x', width);
+  const sy = at('y', height);
+  svg.selectAll<SVGTextElement, PlaCornerLabel>('.corner-label')
+    .attr('display', function (corner: PlaCornerLabel) {
+      // y pixels run top-down, so the top region is the one above the split.
+      const w = sx === null ? width : corner.left ? sx : width - sx;
+      const h = sy === null ? height : corner.top ? sy : height - sy;
+      const size = labelSize(this);
+      return w > 0 && h > 0 && w >= size.width + 2 * CORNER_INSET && h >= size.height + 2 * CORNER_INSET ? null : 'none';
+    });
+}
+
+/** A drawn label's size in px; 0 by 0 where it can't be measured (jsdom has no SVG layout). */
+function labelSize(label: SVGTextElement): { width: number; height: number } {
+  if (typeof label.getBBox !== 'function') {
+    return { width: 0, height: 0 };
+  }
+  // A hidden label measures 0 by 0, so it's shown for the measurement.
+  const display = label.getAttribute('display');
+  label.removeAttribute('display');
+  const { width, height } = label.getBBox();
+  if (display !== null) label.setAttribute('display', display);
+  return { width, height };
 }
 
 /**

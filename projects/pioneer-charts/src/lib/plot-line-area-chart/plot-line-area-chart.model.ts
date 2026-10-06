@@ -136,16 +136,26 @@ export class PcacReferenceLine {
 
 /**
  * Text pinned to the plot area's corners (see `PcacLineAreaChartConfig.cornerLabels`) - names for
- * the regions the plot divides into, such as the quadrants between two reference lines. Pinned to
- * the plot's frame rather than to data, so they stay put when the chart is zoomed. Drawn under the
- * series, so a point in the corner covers its label rather than the other way round, unless the
- * chart sets `labelsOnTop`. Any corner left unset is left empty.
+ * the regions the plot divides into, such as the quadrants between two reference lines. Drawn in
+ * the corners of the plot's frame, so they stay put when the chart is zoomed - give `split` to have
+ * each one shown only while its region is still in its corner. Drawn under the series, so a point in
+ * the corner covers its label rather than the other way round, unless the chart sets `labelsOnTop`.
+ * Any corner left unset is left empty.
  */
 export class PcacCornerLabels {
   topLeft?: string
   topRight?: string
   bottomLeft?: string
   bottomRight?: string
+
+  /**
+   * Where the regions divide, in each axis's own terms (as `PcacReferenceLine.value`): `x` splits
+   * left from right, `y` bottom from top; leave one out for halves. With it, a label is shown only
+   * while its region fills its corner of the view with room for it - zoomed into one quadrant, only
+   * that quadrant's name is left, rather than all four naming points that aren't theirs. Without
+   * it the labels are always shown.
+   */
+  split?: { x?: number | string; y?: number | string }
 
   /**
    * Any CSS color for all four. Theme default `$gray-600`. Applied as `--pcac-corner-label-color`

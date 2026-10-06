@@ -26,7 +26,7 @@ import { buildZoomBehavior } from './zoom-behavior.builder';
 import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
 import { GAUGE_DOT_RADIUS, drawPointGauges, gaugeExtent, hasGauge } from './point-gauge.builder';
-import { drawCornerLabels, drawReferenceLines, positionReferenceLines, raiseLabels } from './reference-lines.builder';
+import { drawCornerLabels, drawReferenceLines, positionCornerLabels, positionReferenceLines, raiseLabels } from './reference-lines.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
 /** Half the theme's 2px line stroke: how far the lines/areas/fan-outs clip-path reaches past the plot. */
@@ -246,8 +246,9 @@ export class PlaChartBuilder extends PcacChart {
           .attr('y2', (member: PlaCoincidentPoint) => this.spokeEnd(member, zoomedScales).dy);
 
         // Reference lines sit at data values, so they move with it; corner labels are pinned to the
-        // frame and stay put.
+        // frame and stay put, but one whose region of `split` has left its corner is hidden.
         positionReferenceLines(this.svg, zoomedScales, this.xAxis.format, this.width, this.height);
+        positionCornerLabels(this.svg, this.config.cornerLabels, zoomedScales, this.xAxis.format, this.width, this.height);
 
         // The hover crosshair positions and labels against the scales, so it takes the zoomed ones.
         if (this.effectsEnabled) {
@@ -285,7 +286,7 @@ export class PlaChartBuilder extends PcacChart {
     this.drawGrids(this.scales.x, this.scales.y);
 
     // Over the grid, under the series: guides, not data.
-    drawCornerLabels(this.svg, config.cornerLabels, this.width, this.height);
+    drawCornerLabels(this.svg, config.cornerLabels, this.scales, this.xAxis.format, this.width, this.height);
     drawReferenceLines(this.svg, config.referenceLines, this.scales, this.xAxis.format, this.width, this.height, this.plotClipPathId);
 
     this.drawLineArea(config, type);

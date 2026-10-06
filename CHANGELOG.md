@@ -10,6 +10,14 @@
     view near an end is kept from spilling past it. Unzoomed charts draw them exactly as before.
     The pinned label's class is `pcac-axis-sub-label-out-of-view` (theme: `opacity: 0.6`).
 
+### Added
+  - Line/area/plot: `cornerLabels.split` - `{ x?, y? }`, the values the corners' regions divide at,
+    in each axis's own terms like a reference line's `value`. With it, a corner label is shown only
+    while its region still fills that corner of the view with room for it, so zooming into one
+    quadrant leaves just that quadrant's name instead of all four naming points that aren't
+    theirs. Without it the labels are always shown, as before. The Plot Chart page's quadrant demo
+    and the home page's use it.
+
 <a name="22.2.25"></a>
 # [v22.2.25]
 

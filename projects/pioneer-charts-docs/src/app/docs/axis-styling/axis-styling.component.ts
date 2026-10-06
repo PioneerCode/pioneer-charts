@@ -188,7 +188,7 @@ export class AxisStylingComponent {
   yAxis: {
     domainMax: 1000,  // the value axis runs 0..domainMax (format: a PcacFormatEnum, e.g. Percentage)
     label: 'Units sold',
-    subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // by position along the axis
+    subLabels: { min: 'Low', mid: 'Medium', max: 'High' }, // at the axis's start, middle and end
     ticks: 4,         // requested tick (and grid line) count
     showGrid: false   // no horizontal grid lines
   }

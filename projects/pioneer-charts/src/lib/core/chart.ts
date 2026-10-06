@@ -225,12 +225,16 @@ export class PcacChart implements OnDestroy {
   /**
    * The `PcacAxisBuilder` config for this chart's current state - everything but the scales is
    * already on the instance. Builders pass the result to `drawAxis()` (or `drawXAxis()` with a
-   * rescaled x, on zoom).
+   * rescaled x, on zoom). A chart that zooms also passes its unzoomed scales as `subLabelScales`,
+   * so the axes' `subLabels` stay with the values they name.
    */
   axisBuilderConfig<XDomain extends AxisDomain, YDomain extends AxisDomain>(
-    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>
+    xScale: AxisScale<XDomain>, yScale: AxisScale<YDomain>,
+    subLabelScales?: { x: AxisScale<XDomain>; y: AxisScale<YDomain> }
   ): IPcacAxisBuilderConfig<XDomain, YDomain> {
     return {
+      xSubLabelScale: subLabelScales?.x,
+      ySubLabelScale: subLabelScales?.y,
       svg: this.svg,
       width: this.width,
       height: this.height,

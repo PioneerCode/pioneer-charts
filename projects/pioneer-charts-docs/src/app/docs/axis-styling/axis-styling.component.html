@@ -198,9 +198,10 @@
         room back.
       </li>
       <li>
-        <b>Sub labels go by position, not value.</b> <b>min</b> sits at the axis's start, <b>mid</b> at its center
-        and <b>max</b> at its end, in their own row between the tick labels and the label, anchored so they stay
-        within the axis. Give any one, two or all three. The margin grows by 16px while any is set.
+        <b>Sub labels name the start, middle and end of the axis.</b> <b>min</b> sits at the axis's start,
+        <b>mid</b> at its center and <b>max</b> at its end, in their own row between the tick labels and the label,
+        anchored so they stay within the axis. Give any one, two or all three. The margin grows by 16px while any
+        is set.
       </li>
       <li>
         <b>Axis lines are separate from tick marks.</b> <b>showLine</b> draws the line along the axis with or without
@@ -208,7 +209,10 @@
       </li>
       <li>
         <b>Zoom keeps it all.</b> On line, area and plot charts a zoomable axis (<code>enableZoomX</code> for x,
-        <code>enableZoomY</code> for y) is redrawn as you zoom and pan, with the same settings.
+        <code>enableZoomY</code> for y) is redrawn as you zoom and pan, with the same settings. Its sub labels
+        stay with the values they name: each moves with the value at its spot on the unzoomed axis. Once zoomed
+        out of view, the nearest one on each side is pinned to that end, dimmed, with an arrow toward its value
+        (<code>&#9666; Medium</code>, <code>High &#9656;</code>), unless it would cover a sub label still in view.
       </li>
       <li>
         <b>Colors are per part, per axis.</b> See <a routerLink="." fragment="colors">Colors</a> above. The defaults are the theme's

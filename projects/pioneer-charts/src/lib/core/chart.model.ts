@@ -157,6 +157,10 @@ export class PcacAxisConfig {
    * y axis they run bottom-to-top like the label, `min` at the bottom. The margin grows by
    * `PcacChart.AXIS_SUB_LABEL_SPACE` when any is set, shrinking the plot area. Not drawn on a
    * hidden axis. Styled by the theme's `.pcac-axis-sub-label` rule.
+   *
+   * On a zoomable line/area/plot axis each stands for the value at its spot on the unzoomed axis
+   * and moves with it. Zoomed out of view, the nearest on each side is pinned to that end with an
+   * arrow toward its value (`.pcac-axis-sub-label-out-of-view`, dimmed by the theme).
    */
   subLabels?: PcacAxisSubLabels
 

@@ -204,12 +204,12 @@ export class PlaChartBuilder extends PcacChart {
         // is redrawn against the rescaled scale and dropped back underneath everything (append
         // puts it on top).
         if (this.config.enableZoomX) {
-          this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, newY));
+          this.axisBuilder.drawXAxis(this.axisBuilderConfig(newX, newY, this.baseScales));
           this.svg.selectAll('.pcac-grid-vertical').remove();
           this.drawGrids(newX, newY, 'x');
         }
         if (this.config.enableZoomY) {
-          this.axisBuilder.drawYAxis(this.axisBuilderConfig(newX, newY));
+          this.axisBuilder.drawYAxis(this.axisBuilderConfig(newX, newY, this.baseScales));
           this.svg.selectAll('.pcac-grid-horizontal').remove();
           this.drawGrids(newX, newY, 'y');
         }
@@ -280,7 +280,7 @@ export class PlaChartBuilder extends PcacChart {
     this.attachZoomBehavior();
     this.createReusableClipPath(); 
 
-    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y));
+    this.axisBuilder.drawAxis(this.axisBuilderConfig(this.scales.x, this.scales.y, this.baseScales));
 
     this.drawGrids(this.scales.x, this.scales.y);
 

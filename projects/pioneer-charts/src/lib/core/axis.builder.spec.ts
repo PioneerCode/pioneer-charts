@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { scaleLinear } from 'd3-scale';
 import { BaseType, select, Selection } from 'd3-selection';
-import { IPcacAxisBuilderConfig, PcacAxisBuilder } from './axis.builder';
+import { IPcacAxisBuilderConfig, PCAC_SUB_LABEL_AFTER, PCAC_SUB_LABEL_BEFORE, PcacAxisBuilder } from './axis.builder';
 import { PcacAxisConfig, PcacFormatEnum, resolveAxisConfig } from './chart.model';
 
 /**
@@ -267,6 +267,79 @@ describe('PcacAxisBuilder tick size', () => {
     const config = axisConfig({ hide: true, label: 'Day', subLabels: { min: 'Low' } });
     builder.drawAxis(config);
     expect(config.svg.selectAll('.pcac-axis-label, .pcac-axis-sub-label').size()).toBe(0);
+  });
+
+  /** Each sub label drawn on an axis: text, x, anchor and whether it's pinned out of view. */
+  function subLabels(g: AxisSvg, axisClass: string): [string | null, number, string | null, boolean][] {
+    return g.selectAll<SVGTextElement, unknown>(`.${axisClass} .pcac-axis-sub-label`).nodes()
+      .map(n => [n.textContent, Number(n.getAttribute('x')), n.getAttribute('text-anchor'),
+        n.classList.contains('pcac-axis-sub-label-out-of-view')]);
+  }
+
+  it('keeps sub labels with their values on a zoomed axis, pinning the nearest out of view', () => {
+    // zoomed into the top fifth of y: 'Hot' (100) is still at the top, 'Warm' (50) and 'Cold' (0)
+    // are below the view, and only the nearer, 'Warm', is pinned to the bottom
+    const config = axisConfig({}, { subLabels: { min: 'Cold', mid: 'Warm', max: 'Hot' } });
+    config.ySubLabelScale = config.yScale;
+    config.yScale = scaleLinear().domain([80, 100]).range([100, 0]);
+    builder.drawAxis(config);
+
+    expect(subLabels(config.svg, 'pcac-y-axis')).toEqual([
+      ['Hot', 0, 'end', false],
+      [PCAC_SUB_LABEL_BEFORE + 'Warm', -100, 'start', true],
+    ]);
+  });
+
+  it('pins sub labels on both sides when zoomed into the middle', () => {
+    const config = axisConfig({ subLabels: { min: 'Low', mid: 'Med', max: 'High' } });
+    config.xSubLabelScale = config.xScale;
+    config.xScale = scaleLinear().domain([40, 60]).range([0, 200]);
+    builder.drawAxis(config);
+
+    expect(subLabels(config.svg, 'pcac-x-axis')).toEqual([
+      ['Med', 100, 'middle', false],
+      [PCAC_SUB_LABEL_BEFORE + 'Low', 0, 'start', true],
+      ['High' + PCAC_SUB_LABEL_AFTER, 200, 'end', true],
+    ]);
+  });
+
+  it('moves sub labels in view along with a pan', () => {
+    const config = axisConfig({ subLabels: { min: 'Low', mid: 'Med', max: 'High' } });
+    config.xSubLabelScale = config.xScale;
+    config.xScale = scaleLinear().domain([25, 125]).range([0, 200]);
+    builder.drawAxis(config);
+
+    expect(subLabels(config.svg, 'pcac-x-axis')).toEqual([
+      ['Med', 50, 'middle', false],
+      ['High', 150, 'middle', false],
+      [PCAC_SUB_LABEL_BEFORE + 'Low', 0, 'start', true],
+    ]);
+  });
+
+  describe('with measured text', () => {
+    beforeEach(() => {
+      // 6px a character; jsdom lays out no SVG text
+      (SVGElement.prototype as any).getComputedTextLength = function (this: SVGElement) {
+        return (this.textContent ?? '').length * 6;
+      };
+    });
+    afterEach(() => {
+      delete (SVGElement.prototype as any).getComputedTextLength;
+    });
+
+    it('keeps a centered sub label from spilling past the axis, and drops a pinned one it would cover', () => {
+      // 'Med' (50) lands 4px in; 18px wide, it's kept 9px in. '◂ Low' (30px) at the start would
+      // cover it, so it isn't drawn
+      const config = axisConfig({ subLabels: { min: 'Low', mid: 'Med', max: 'High' } });
+      config.xSubLabelScale = config.xScale;
+      config.xScale = scaleLinear().domain([48, 148]).range([0, 200]);
+      builder.drawAxis(config);
+
+      expect(subLabels(config.svg, 'pcac-x-axis')).toEqual([
+        ['Med', 9, 'middle', false],
+        ['High', 104, 'middle', false],
+      ]);
+    });
   });
 
   it('raiseAxes moves both axes after content drawn later, without taking mouse events', () => {

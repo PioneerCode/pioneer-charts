@@ -89,7 +89,8 @@
     say what they mean in the chart's <code>ariaLabel</code>. Where points crowd the corners or a line's end, set
     <code>labelsOnTop</code> to draw the labels over the points in a halo, and a line's <code>labelPosition</code>
     to move its label to the other end &mdash; as here, where Noon's sits at the bottom. Scroll to zoom the x axis
-    here.</p>
+    here. Its <a routerLink="/docs/guides/axis-styling">sub labels</a> follow the zoom too: Midday stays at noon,
+    and one zoomed out of view is pinned to the nearer end with an arrow toward it.</p>
   <pc-chart-card heading="Readings by quadrant" class="mb-3">
     <app-layout-resource-state [resource]="pcService.plotFanOutConfig">
       <pcac-plot-chart [config]="referenceConfig()" (dotClicked)="pcService.onClicked($event)" />

@@ -32,7 +32,10 @@ export class PieChartComponent {
   jumpNav = signal<IJumpNav[]>([
     { key: 'Pie Chart', value: 'pie-chart' },
     { key: 'When To Use', value: 'when-to-use' },
+    { key: 'How Slices Are Drawn', value: 'slices' },
     { key: 'With A Legend', value: 'with-a-legend' },
+    { key: 'Handling Clicks', value: 'handling-clicks' },
+    { key: 'Pie Or Donut?', value: 'pie-or-donut' },
     { key: 'Markup', value: 'markup' },
     { key: 'API', value: 'api' },
     { key: 'Configuration', value: 'configuration' },
@@ -96,6 +99,46 @@ export class SnacksComponent {
 
   onItemClicked(items: PcacLegendConfigItem[]): void {
     this.hidden.set(new Set(items.filter((item) => !item.checked).map((item) => item.label)));
+  }
+}`;
+
+  dataCode = `import { PcacData, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
+
+const slice = (key: string, value: number, hide = false): PcacData => ({ key, value, hide, data: [] });
+
+const config: PcacPieChartConfig = {
+  height: 200,
+  data: [
+    slice('Brownie', 898),        // first: starts at twelve o'clock
+    slice('Peanuts', 787),
+    slice('Candy', 600),
+    slice('Chocolate Chip', 300),
+    slice('Chips', 123, true),    // hidden: counts as zero until shown
+  ],
+};`;
+
+  clickCode = `import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { PcacData, PcacPieChart, PcacPieChartConfig } from '@pioneer-code/pioneer-charts';
+
+@Component({
+  imports: [PcacPieChart],
+  template: \`<pcac-pie-chart [config]="config()" (sliceClicked)="open($event)" />\`,
+})
+export class SalesByRegionComponent {
+  private readonly router = inject(Router);
+
+  readonly config = signal<PcacPieChartConfig>({
+    height: 240,
+    data: [
+      { id: 'na', key: 'North America', value: 412, hide: false, data: [] },
+      { id: 'eu', key: 'Europe', value: 305, hide: false, data: [] },
+      { id: 'apac', key: 'Asia Pacific', value: 188, hide: false, data: [] },
+    ],
+  });
+
+  open(slice: PcacData): void {
+    this.router.navigate(['/sales/regions', slice.id]);
   }
 }`;
 

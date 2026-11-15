@@ -56,7 +56,7 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/area-chart', title: 'Area Chart',
         loadComponent: () => import('./docs/plot-line-area/area/area-chart.component').then(m => m.AreaChartComponent),
-        data: { searchTitle: 'Angular Area Chart', description: 'An Angular area chart from Pioneer Charts, with zoom, hover effects, point images and ranges.' },
+        data: { searchTitle: 'Angular Area Chart', description: 'An Angular area chart built on D3 for volumes and totals over time: overlapping filled series, stacking, zoom, a hover crosshair and point ranges.' },
     },
     {
         path: 'docs/components/charts/line-chart', title: 'Line Chart',
@@ -71,12 +71,12 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/pie-chart', title: 'Pie Chart',
         loadComponent: () => import('./docs/pie-chart/pie-chart.component').then(m => m.PieChartComponent),
-        data: { searchTitle: 'Angular Pie Chart', description: 'An Angular pie chart from Pioneer Charts, with animated transitions and click events for each slice.' },
+        data: { searchTitle: 'Angular Pie Chart', description: 'An Angular pie chart built on D3: show how a whole splits into a few parts, with a legend to hide slices, keyboard access and drill-down clicks.' },
     },
     {
         path: 'docs/components/charts/donut-chart', title: 'Donut Chart',
         loadComponent: () => import('./docs/donut-chart/donut-chart.component').then(m => m.DonutChartComponent),
-        data: { searchTitle: 'Angular Donut Chart', description: 'An Angular donut chart from Pioneer Charts, with a total or other label in its center and animated transitions.' },
+        data: { searchTitle: 'Angular Donut Chart', description: 'An Angular donut chart built on D3: slices as a ring with a total or any label in the center, progress rings, adjustable thickness and click events.' },
     },
     {
         path: 'docs/components/charts/dot-plot-chart', title: 'Dot Plot Chart',

@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IJumpNav } from '../../../layout/page-docs/jump-nav/jump-nav';
 import { LayoutBaseConfig } from '../../../layout/base-config/base-config.component';
@@ -21,26 +21,15 @@ export class PlotLineAreaBaseComponent {
   readonly markup = input.required<string>();
   readonly importCode = input.required<string>();
 
-  jumpNav = signal<IJumpNav[]>([
-    {
-      key: 'Chart',
-      value: 'chart',
-    },
-    {
-      key: 'Markup',
-      value: 'markup',
-    },
-    {
-      key: 'API',
-      value: 'api',
-    },
-    {
-      key: 'Configuration',
-      value: 'configuration',
-    },
-    {
-      key: 'Events',
-      value: 'events',
-    }
-  ])
+  /** The page's own sections, between the chart and Markup, for its jump nav. */
+  readonly sections = input<IJumpNav[]>([]);
+
+  readonly jumpNav = computed<IJumpNav[]>(() => [
+    { key: 'Chart', value: 'chart' },
+    ...this.sections(),
+    { key: 'Markup', value: 'markup' },
+    { key: 'API', value: 'api' },
+    { key: 'Configuration', value: 'configuration' },
+    { key: 'Events', value: 'events' },
+  ]);
 }

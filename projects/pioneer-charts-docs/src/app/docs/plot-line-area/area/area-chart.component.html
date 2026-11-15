@@ -1,4 +1,5 @@
-<app-plot-line-area-base [title]="'Area Chart'" [lead]="'Configurable to display an area or line chart.'" [markup]="markupCode" [importCode]="importCode">
+<app-plot-line-area-base [title]="'Area Chart'" [lead]="lead" [sections]="sections" [markup]="markupCode"
+  [importCode]="importCode">
   <div class="grid grid-cols-1 @xl:grid-cols-2 gap-4 mb-6">
     <pc-chart-card heading="Three series" [level]="2">
       <app-layout-resource-state [resource]="pcService.lineChartConfig">
@@ -24,4 +25,56 @@
       <pcac-area-chart [config]="pcService.areaChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </pc-chart-card>
+
+  <h2 class="pc-h4 mt-8 mb-2" id="when-to-use">When To Use An Area Chart</h2>
+  <p class="mb-3">An area chart is a line chart with the space beneath each line filled in. The fill turns the
+    line into an amount: the reader sees not just where a series is but how much of it there is, so an area chart
+    suits values that are volumes or totals over time &mdash; requests served, energy used, revenue earned, people
+    in a building. Reach for one when:</p>
+  <ul class="mb-3">
+    <li>the size of each series matters as much as its trend, and its values start from a meaningful zero;</li>
+    <li>there are only a few series, two or three, so the overlapping fills stay readable;</li>
+    <li>one series is mostly larger than the others, or the series rarely cross, so each fill keeps its own
+      band.</li>
+  </ul>
+  <p class="mb-3">Use the <a routerLink="/docs/components/charts/line-chart">line chart</a> instead when the
+    series cross often, when there are more than three or four of them, or when the y axis doesn't start at zero
+    &mdash; there, the fills would stack up into a muddy block, or claim an amount that isn't there. To compare
+    totals at a single moment rather than over time, a <a routerLink="/docs/components/charts/bar-chart">bar
+    chart</a> is easier to read; and for how a single total splits into parts, see the
+    <a routerLink="/docs/components/charts/pie-chart">pie</a> and
+    <a routerLink="/docs/components/charts/donut-chart">donut</a> charts.</p>
+
+  <h2 class="pc-h4 mt-8 mb-2" id="how-areas-are-drawn">How The Areas Are Drawn</h2>
+  <p class="mb-3">Each series in <code>data</code> becomes one filled shape, running from its points down to the
+    bottom of the plot &mdash; the y axis' <code>domainMin</code>, 0 by default. The series are overlaid rather
+    than stacked: every area starts from that same floor, at half opacity, in the order they appear in
+    <code>data</code>, so a later series is painted over an earlier one and the overlap shows as a blend of the
+    two colors. The area itself has no outline; its points carry the dots, the tooltips and
+    <code>(dotClicked)</code>, exactly as on the line chart.</p>
+  <ul class="mb-3">
+    <li><b>Order matters.</b> Put the series that is usually largest first, so the smaller ones are drawn over
+      it rather than hidden behind it.</li>
+    <li><b>Mind the floor.</b> Because the fill runs down to <code>yAxis.domainMin</code>, raising it to zoom in
+      on a narrow band crops every area at the same line. That's fine for a line chart; on an area chart it
+      exaggerates the differences between series, so keep the floor at zero when the size of the area is the
+      point.</li>
+    <li><b>Gaps stay gaps.</b> A point with no numeric <code>value</code> breaks the area there instead of
+      dropping it to zero, so missing data isn't drawn as a dip.</li>
+    <li><b>Hidden series keep their color.</b> A series with <code>hide: true</code> isn't drawn, but keeps its
+      place in the palette, so a <a routerLink="/docs/components/charts/legend">legend</a> that toggles series
+      never reshuffles the colors of the rest.</li>
+  </ul>
+
+  <h2 class="pc-h4 mt-8 mb-2" id="stacked-areas">Stacked Areas</h2>
+  <p class="mb-3">The chart doesn't stack series for you, but a stacked area chart &mdash; each series sitting on
+    top of the ones before it, so the top edge is the total &mdash; is a few lines of data preparation away: give
+    each series the running total up to and including it, then reverse the order so the tallest band (the total)
+    is drawn first and every smaller one over it.</p>
+  <app-layout-code language="typescript" [code]="stackCode" />
+  <p class="mt-3 mb-3">Two things change with stacked data: a point's tooltip and the hover crosshair show the
+    running total rather than the series' own value (a <a routerLink="/docs/guides/tooltip">custom
+    tooltip</a> can show the original, from a field you keep on the point), and the series are now in reverse
+    order, so pass a reversed <code>colorOverride</code>, or list a legend's items in the same reversed order, if
+    the colors need to match something else.</p>
 </app-plot-line-area-base>

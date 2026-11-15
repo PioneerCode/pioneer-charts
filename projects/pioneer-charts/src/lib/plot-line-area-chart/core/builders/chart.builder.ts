@@ -40,6 +40,13 @@ const PLOT_CLIP_ALLOWANCE = 1;
  * the size-in explicitly instead, since both tween `r`.
  */
 const DOT_GROW_TRANSITION = 'pcac-dot-grow';
+/** A dot's resting radius when the config has no `pointRadius`. */
+const DEFAULT_DOT_RADIUS = 4;
+/**
+ * The smallest a hovered dot gets, and the radius of the transparent hover target a smaller dot
+ * (down to none at all, `pointRadius: 0`) is given so the pointer can still find it.
+ */
+const MIN_ACTIVE_DOT_RADIUS = 4;
 const DOT_HOVER_TRANSITION = 'pcac-dot-hover';
 /** See `revealAfterEntry`. */
 const REVEAL_TRANSITION = 'pcac-reveal';
@@ -80,6 +87,13 @@ export class PlaChartBuilder extends PcacChart {
   private restoringZoom = false;
   private lineGenerator!: Line<PcacData>;
   private areaGenerator!: Area<PcacData>;
+  /** A dot's resting radius: the config's `pointRadius`, or `DEFAULT_DOT_RADIUS`. */
+  private dotRadius = DEFAULT_DOT_RADIUS;
+  /**
+   * A hovered (or focused) dot's radius - 1.5x the resting one, at least `MIN_ACTIVE_DOT_RADIUS`.
+   * The largest a dot gets, so it's what fan-out, gauge rings and the edge space make room for.
+   */
+  private hoverDotRadius = GAUGE_DOT_RADIUS;
   /** This build's zoom behavior; `null` while zoom is off. */
   private zoomBehavior: ZoomBehavior<Element, unknown> | null = null;
   private dotClickedSource = new Subject<PcacData>();
@@ -162,6 +176,10 @@ export class PlaChartBuilder extends PcacChart {
     // fan-out and the edge space have to make room for.
     this.pointImage = { ...new PcacPointImageConfig(), ...this.config.pointImage };
     this.pointGauge = this.config.pointGauge ? { ...new PcacPointGaugeConfig(), ...this.config.pointGauge } : null;
+    const pointRadius = this.config.pointRadius;
+    this.dotRadius = typeof pointRadius === 'number' && Number.isFinite(pointRadius) && pointRadius >= 0
+      ? pointRadius : DEFAULT_DOT_RADIUS;
+    this.hoverDotRadius = Math.max(this.dotRadius * 1.5, MIN_ACTIVE_DOT_RADIUS);
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8, this.largestMarkHalf());
     this.chartTypeLabel = CHART_TYPE_LABELS[type];
@@ -344,13 +362,13 @@ export class PlaChartBuilder extends PcacChart {
     }
     this.fanOut = { ...new PcacPointFanOutConfig(), ...fanOut };
     // A group's members are kept apart by the size of what's drawn for them: the image box when
-    // any member has an image, else a hovered dot (r = 6) - plus a gauge ring on both sides when
+    // any member has an image, else a hovered dot (`hoverDotRadius`) - plus a gauge ring on both sides when
     // any member has one.
     const { maxWidth, maxHeight } = this.pointImage;
     const ring = (group: PlaCoincidentGroup) =>
       this.pointGauge && group.members.some((member) => hasGauge(member.data)) ? 2 * gaugeExtent(this.pointGauge) : 0;
     const markSize = (group: PlaCoincidentGroup) =>
-      (group.members.some((member) => !!member.data.image) ? Math.max(maxWidth, maxHeight) : 2 * GAUGE_DOT_RADIUS) + ring(group);
+      (group.members.some((member) => !!member.data.image) ? Math.max(maxWidth, maxHeight) : 2 * this.hoverDotRadius) + ring(group);
     const radius = (group: PlaCoincidentGroup) =>
       this.fanOut!.radius ?? fanOutRadius(group.members.length, markSize(group), this.fanOut!.gap);
     this.fanOutOffsets = fanOutOffsets(this.coincidentGroups, radius);
@@ -359,7 +377,7 @@ export class PlaChartBuilder extends PcacChart {
   /**
    * Half the largest mark on the chart toward each axis, for `autoTickSize` and the edge space
    * (`reservePointSpace`): `x` its vertical half (what reaches down to the x axis), `y` its
-   * horizontal half. Measured as drawn - a hovered dot (`GAUGE_DOT_RADIUS`), an image's box, and
+   * horizontal half. Measured as drawn - a hovered dot (`hoverDotRadius`), an image's box, and
    * a gauge ring around either (circular, so the same both ways). Points in a hidden series
    * count, so toggling one in a legend doesn't move the axes; a gap (no value) draws nothing and
    * doesn't. Needs `pointImage` and `pointGauge` resolved.
@@ -371,11 +389,11 @@ export class PlaChartBuilder extends PcacChart {
       if (!hasValue(point)) {
         continue;
       }
-      let x = point.image ? maxHeight / 2 : GAUGE_DOT_RADIUS;
-      let y = point.image ? maxWidth / 2 : GAUGE_DOT_RADIUS;
+      let x = point.image ? maxHeight / 2 : this.hoverDotRadius;
+      let y = point.image ? maxWidth / 2 : this.hoverDotRadius;
       if (this.pointGauge && hasGauge(point)) {
         // The ring surrounds the mark's larger side - see `markRadius` in `drawDots`.
-        const ring = (point.image ? Math.max(maxWidth, maxHeight) / 2 : GAUGE_DOT_RADIUS) + gaugeExtent(this.pointGauge);
+        const ring = (point.image ? Math.max(maxWidth, maxHeight) / 2 : this.hoverDotRadius) + gaugeExtent(this.pointGauge);
         x = Math.max(x, ring);
         y = Math.max(y, ring);
       }
@@ -757,6 +775,18 @@ export class PlaChartBuilder extends PcacChart {
         },
       });
 
+      // A dot too small to point at (or not drawn at all, `pointRadius: 0`) gets a transparent
+      // target of the smallest hovered size underneath it, so the pointer can still find the point.
+      if (this.dotRadius < MIN_ACTIVE_DOT_RADIUS) {
+        points.filter((d: PcacData) => !d.image)
+          .append('circle')
+          .attr('class', 'dot-hit')
+          .attr('cx', (d: PcacData) => this.offsetOf(d).dx)
+          .attr('cy', (d: PcacData) => this.offsetOf(d).dy)
+          .attr('r', MIN_ACTIVE_DOT_RADIUS)
+          .attr('fill', 'transparent');
+      }
+
       points.filter((d: PcacData) => !d.image)
         .append('circle')
         .attr('class', 'dot')
@@ -769,7 +799,7 @@ export class PlaChartBuilder extends PcacChart {
           .attr('cy', (d: PcacData) => this.offsetOf(d).dy))
         .transition(DOT_GROW_TRANSITION)
         .duration(duration)
-        .attr('r', 4);
+        .attr('r', this.dotRadius);
 
       // `preserveAspectRatio="xMidYMid meet"` is what does the "resize to fit" - the image is
       // scaled uniformly to fit inside the maxWidth x maxHeight box and centered within it, so
@@ -791,7 +821,7 @@ export class PlaChartBuilder extends PcacChart {
 
       // Gauge rings around the image box or the dot, rising in with the mark they surround.
       if (this.pointGauge) {
-        const markRadius = (d: PcacData) => d.image ? Math.max(maxWidth, maxHeight) / 2 : GAUGE_DOT_RADIUS;
+        const markRadius = (d: PcacData) => d.image ? Math.max(maxWidth, maxHeight) / 2 : this.hoverDotRadius;
         drawPointGauges(points, this.pointGauge, markRadius)
           .style('--pcac-point-gauge-series-color', () => this.colors[index])
           .attr('transform', (d: PcacData) => `translate(${this.offsetOf(d).dx}, ${rise(d)})`)
@@ -842,7 +872,7 @@ export class PlaChartBuilder extends PcacChart {
       .interrupt(DOT_GROW_TRANSITION)
       .transition(DOT_HOVER_TRANSITION)
       .duration(duration / 3)
-      .attr('r', 6)
+      .attr('r', this.hoverDotRadius)
       .attr('fill', this.colors[index]);
   }
 
@@ -863,7 +893,7 @@ export class PlaChartBuilder extends PcacChart {
       .interrupt(DOT_GROW_TRANSITION)
       .transition(DOT_HOVER_TRANSITION)
       .duration(this.transitionService.getTransitionDuration() / 3)
-      .attr('r', 4)
+      .attr('r', this.dotRadius)
       .attr('fill', '#fff');
   }
 

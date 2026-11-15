@@ -25,6 +25,10 @@ export class IntroductionComponent {
       value: 'introduction',
     },
     {
+      key: 'Requirements',
+      value: 'requirements',
+    },
+    {
       key: 'Quick Start',
       value: 'quick-start',
     },

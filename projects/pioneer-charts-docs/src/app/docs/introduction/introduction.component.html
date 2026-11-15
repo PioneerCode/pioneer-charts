@@ -6,7 +6,7 @@
   </section>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="introduction">Introduction</h2>
-    <p>Lets face it, creating rich data visualizations is hard! A lot of work needs to be put in up front to produce
+    <p>Let's face it, creating rich data visualizations is hard! A lot of work needs to be put in up front to produce
       clean
       and compliant markup that reacts to data in meaningful way. Pioneer Charts sets out to solve these problems in
       a simple and intuitive way through:</p>
@@ -23,6 +23,22 @@
       <li>Supplying a means to add styling overrides to an already beautiful default
         <a routerLink="/docs/guides/theme">theme</a>.
       </li>
+    </ul>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="requirements">Requirements</h2>
+    <p>Pioneer Charts needs <b>Angular 22.1 or later</b> and RxJS 7.4 or later; the D3 modules it draws with are
+      installed with it. It's written for the way Angular apps are built today:</p>
+    <ul>
+      <li><b>Standalone components.</b> Each chart is a standalone component you import where you use it, with no
+        NgModule to register.</li>
+      <li><b>Signals.</b> A chart's <code>config</code> is a signal input, and the chart redraws whenever it
+        changes &mdash; bind a <code>computed()</code> and the chart follows your state. Give it a new object to
+        redraw; changing the old one in place isn't seen.</li>
+      <li><b>Zoneless or not.</b> Charts and their click outputs work the same in a zoneless app, with no
+        <code>zone.js</code> loaded, and in one that still uses it.</li>
+      <li><b>Server rendering.</b> Pages with charts can be server-rendered or pre-rendered; the charts draw once
+        the page is running in the browser.</li>
     </ul>
   </section>
   <section class="pc-doc-section">

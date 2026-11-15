@@ -113,6 +113,13 @@
             series when using it. Omitted or empty, the theme palette is used.</td>
         </tr>
         <tr>
+          <td>pointRadius</td>
+          <td>Radius of each point's dot at rest, in px. Default 4. A hovered or focused dot grows to 1.5&times; that,
+            and never to less than 4px. <code>0</code> draws no dots at rest &mdash; for a
+            <a routerLink="/docs/guides/sparkline">sparkline</a> or a dense series &mdash; while each point can still
+            be hovered, focused and clicked, and still shows its tooltip. Doesn't affect point images.</td>
+        </tr>
+        <tr>
           <td>pointImage</td>
           <td>Bounding box for point images: <code>{{ '{' }} maxWidth: number, maxHeight: number {{ '}' }}</code>,
             both defaulting to 16. A data point with an <code>image</code> (a URL or data URI) is drawn as that

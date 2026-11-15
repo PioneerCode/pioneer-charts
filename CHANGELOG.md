@@ -1,3 +1,14 @@
+<a name="22.2.28"></a>
+# [v22.2.28]
+
+### Added
+  - Line/area/plot: `pointRadius` - each point's dot radius at rest, in px (default 4, as before).
+    A hovered or focused dot grows to 1.5x that, never to less than 4px. `0` draws no dots at rest,
+    for sparklines and dense series: the points can still be hovered, focused and clicked, and
+    still show their tooltips - a dot smaller than 4px gets a transparent 4px hover target
+    (`.dot-hit`). Fan-out spacing, gauge rings and the edge space follow the hovered size. Point
+    images are unaffected. New docs guide: Sparklines.
+
 <a name="22.2.26"></a>
 # [v22.2.26]
 

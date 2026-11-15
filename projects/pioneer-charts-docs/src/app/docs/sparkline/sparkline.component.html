@@ -1,0 +1,95 @@
+<app-layout-page-docs pageTitle="Sparklines" [jumpNav]="jumpNav()">
+  <p class="lead" id="sparklines">A sparkline is a small chart with no axes, labels or grid &mdash; just the
+    shape of the data, sized to sit beside a number in a table row, a dashboard tile or a sentence. In Angular,
+    any Pioneer Charts <a routerLink="/docs/components/charts/line-chart">line</a> or
+    <a routerLink="/docs/components/charts/area-chart">area chart</a> becomes one with a few config settings.</p>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="in-a-table">In A Table</h2>
+    <p>The classic use: one row per metric, the sparkline showing the trend and the number beside it showing where
+      it stands now. Hover or focus a point for its week and value.</p>
+    <pc-chart-card heading="Last 12 weeks" class="mb-3">
+      <div class="pc-table-scroll">
+        <table class="pc-table pc-sparkline-table">
+          <thead>
+            <tr>
+              <th scope="col">Metric</th>
+              <th scope="col">Trend</th>
+              <th scope="col">This week</th>
+              <th scope="col">Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (metric of metrics; track metric.name) {
+              <tr>
+                <th scope="row">{{ metric.name }}</th>
+                <td><div class="pc-sparkline"><pcac-line-chart [config]="metric.config" /></div></td>
+                <td>{{ metric.format(last(metric.values)) }}</td>
+                <td>{{ change(metric.values) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </pc-chart-card>
+    <app-layout-code language="markup" [code]="tableCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="the-config">The Config</h2>
+    <p>Five settings turn a line chart into a sparkline:</p>
+    <ul>
+      <li><b>Hide both axes:</b> setting <code>xAxis.hide</code> and <code>yAxis.hide</code> drops the ticks and labels and
+        hand their margins back to the plot, keeping 8px on each side so a point at the edge isn't cut off.</li>
+      <li><b>Turn off the grid:</b> setting <code>yAxis.showGrid: false</code> removes the horizontal lines the line chart
+        draws by default.</li>
+      <li><b>Drop the dots:</b> setting <code>pointRadius: 0</code> leaves just the line. Each point is still
+        there: hovering or focusing it shows its dot and tooltip, and it can still be clicked.</li>
+      <li><b>Fit the y domain to the data.</b> The y axis runs from 0 to 100 unless told otherwise, which would
+        flatten a series of thousands against the top or one of fractions along the bottom. Set
+        <code>domainMin</code> and <code>domainMax</code> to the series' own lowest and highest values, so the line
+        uses all of its height. Leave <code>domainMin</code> at 0 instead when the distance from zero matters.</li>
+      <li><b>Set the height for the hidden axes.</b> With both axes hidden the chart keeps the height their margins
+        took, so it draws <code>height</code> + 28px tall: <code>height: 12</code> makes a 40px sparkline.</li>
+    </ul>
+    <p>Turning off <code>enableEffects</code> drops the hover crosshair, which has little room to work in at this
+      size; each point still shows its tooltip on hover and focus. The chart's width needs nothing at all: it fills
+      its container and redraws when that resizes &mdash; in a table, give it a box of fixed width rather than
+      relying on the cell's, since an auto-sized cell takes its width from its content.</p>
+    <app-layout-code language="typescript" [code]="sparklineCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="in-a-stat-tile">In A Stat Tile</h2>
+    <p>The same config on an <a routerLink="/docs/components/charts/area-chart">area chart</a>, a little taller,
+      fills in under the line &mdash; a good fit under a dashboard's headline number, where the fill gives the
+      tile some weight.</p>
+    <div class="pc-sparkline-tile mb-3">
+      <div class="pc-sparkline-tile-label">Visitors</div>
+      <div class="pc-sparkline-tile-value">{{ metrics[0].format(last(metrics[0].values)) }}
+        <span class="pc-sparkline-tile-change">{{ change(metrics[0].values) }}</span>
+      </div>
+      <pcac-area-chart [config]="tile" />
+    </div>
+    <app-layout-code language="markup" [code]="tileCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="tips">Tips</h2>
+    <ul>
+      <li><b>Mind the length.</b> Every point is a stop for the keyboard and a target for the pointer; a few dozen
+        points read and navigate well at sparkline size, where a few hundred would be hard to pick apart.</li>
+      <li><b>Put the number next to it.</b> A sparkline shows the shape, not the value; pair it with the current
+        figure, as in the table above, so the row can be read at a glance.</li>
+      <li><b>Compare like with like.</b> Each sparkline above is scaled to its own range, which shows each trend
+        clearly but means two lines of the same height don't have the same values. To compare rows directly, give
+        every sparkline the same <code>domainMin</code> and <code>domainMax</code>.</li>
+      <li><b>Accessible by default.</b> Each point is named by its key and value for screen readers and can be
+        reached with the arrow keys, like any chart's marks (see
+        <a routerLink="/docs/guides/introduction" fragment="accessibility">Accessibility</a>). The row's label
+        and number give the summary.</li>
+      <li><b>Colors.</b> A single series takes the theme palette's first color; set
+        <code>colorOverride</code> to pick another, say green for a rising metric and red for a falling one.</li>
+    </ul>
+  </section>
+</app-layout-page-docs>

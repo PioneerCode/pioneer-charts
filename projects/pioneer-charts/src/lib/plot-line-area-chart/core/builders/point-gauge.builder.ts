@@ -3,9 +3,6 @@ import { arc } from 'd3-shape';
 import { PcacData } from '../../../core/chart.model';
 import { PcacPointGaugeConfig } from '../../plot-line-area-chart.model';
 
-/** A hovered dot's radius - the largest a dot gets, so a ring around it never touches it. */
-export const GAUGE_DOT_RADIUS = 6;
-
 /** Whether a point has a gauge value to draw. */
 export function hasGauge(d: PcacData): boolean {
   return typeof d.gauge === 'number' && Number.isFinite(d.gauge);

@@ -1,5 +1,7 @@
 # Pioneer Charts
 
+[![Pioneer Charts: Angular charts built on D3 - bar, line, area, plot, pie, donut, dot plot and proximity charts](https://raw.githubusercontent.com/PioneerCode/pioneer-charts/main/.github/assets/readme-hero.png)](https://pioneercharts.com)
+
 [![CI](https://github.com/PioneerCode/pioneer-charts/actions/workflows/ci.yml/badge.svg)](https://github.com/PioneerCode/pioneer-charts/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@pioneer-code/pioneer-charts)](https://www.npmjs.com/package/@pioneer-code/pioneer-charts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)

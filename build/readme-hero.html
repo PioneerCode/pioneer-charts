@@ -1,0 +1,300 @@
+<!doctype html>
+<!--
+  Source of the README's hero image, .github/assets/readme-hero.png: the link-preview image's design
+  (og-image.html), widened to a 1280x600 banner with more of the chart types. Captured at 2x so it
+  stays sharp on high-density screens; GitHub and npm scale it to the README's width.
+
+  To change it: edit this page, then from the repo root run
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --hide-scrollbars \
+      --window-size=1280,600 --force-device-scale-factor=2 --virtual-time-budget=5000 \
+      --screenshot=.github/assets/readme-hero.png "file://$PWD/build/readme-hero.html"
+
+  The README links the image by its raw.githubusercontent.com URL on main, not a relative path, so
+  it shows on npm as well as GitHub; a new image appears there once it's merged.
+  Colors are the site's own: the header's #24282e and the charts' default palette (PcacColorService).
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Pioneer Charts - README hero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=block"
+    rel="stylesheet">
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 1280px;
+      height: 600px;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+      font-family: Roboto, sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(163, 161, 251, 0.18), transparent 45%),
+        radial-gradient(circle at 60% 100%, rgba(94, 226, 160, 0.12), transparent 40%),
+        #24282e;
+    }
+
+    .copy {
+      position: absolute;
+      left: 64px;
+      top: 0;
+      bottom: 0;
+      width: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .brand svg {
+      width: 78px;
+      height: 60px;
+    }
+
+    .brand svg polygon {
+      fill: #fff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 58px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+    }
+
+    .tagline {
+      margin: 0 0 30px;
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 1.3;
+      color: #d8dae0;
+    }
+
+    .tagline b {
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .types span {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-size: 17px;
+      font-weight: 500;
+      color: #e6e7eb;
+    }
+
+    .url {
+      position: absolute;
+      left: 64px;
+      bottom: 40px;
+      font-size: 20px;
+      font-weight: 500;
+      color: #5ee2a0;
+      letter-spacing: 0.3px;
+    }
+
+    .card {
+      position: absolute;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .card svg {
+      display: block;
+    }
+
+    .card-label {
+      position: absolute;
+      left: 20px;
+      top: 14px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #2b2f36;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="copy">
+    <div class="brand">
+      <svg viewBox="0 0 208.7 161.3" aria-hidden="true">
+        <polygon
+          points="122.2,7.6 122.5,7.6 200.3,161.2 207.6,161.2 125.9,0.3 118.8,0.3 82.7,71.5 67.8,42.2 60.8,42.2 0.4,161.2 7.7,161.2 64.1,49.5 64.5,49.5 79.2,78.5 37.2,161.2 44.5,161.2 82.7,85.6 98.7,117.2 76.3,161.2 83.6,161.2 102.3,124.3 120.9,161.2 128.2,161.2 105.8,117.2 122.3,84.6 122.7,84.6 161.4,161.2 168.6,161.2 126,77.3 118.9,77.3 102.3,110.2 86.3,78.6" />
+      </svg>
+      <h1>Pioneer<br>Charts</h1>
+    </div>
+    <p class="tagline"><b>Angular</b> charts built on <b>D3</b>: responsive, accessible and simple to configure.</p>
+    <div class="types">
+      <span>Bar</span><span>Line</span><span>Area</span><span>Plot</span><span>Pie</span><span>Donut</span><span>Dot
+        plot</span><span>Proximity</span>
+    </div>
+  </div>
+  <div class="url">pioneercharts.com</div>
+
+  <!-- Area card: og-image.html's two series, narrowed to 410px (x scaled by 0.773). -->
+  <div class="card" style="left: 560px; top: 48px; width: 410px; height: 260px;">
+    <div class="card-label">Weekly visits</div>
+    <svg width="410" height="260" viewBox="0 0 410 260">
+      <g stroke="#e9ecef" stroke-width="1">
+        <line x1="19" x2="391" y1="80" y2="80" />
+        <line x1="19" x2="391" y1="125" y2="125" />
+        <line x1="19" x2="391" y1="170" y2="170" />
+        <line x1="19" x2="391" y1="215" y2="215" />
+      </g>
+      <g transform="translate(0 10) scale(0.773 1)">
+        <path d="M24,160 C84,150 104,110 164,112 C224,114 244,80 304,86 C364,92 384,58 444,62 C474,64 490,70 506,66 L506,220 L24,220 Z"
+          fill="#a3a1fb" fill-opacity="0.45" />
+        <path d="M24,160 C84,150 104,110 164,112 C224,114 244,80 304,86 C364,92 384,58 444,62 C474,64 490,70 506,66"
+          fill="none" stroke="#a3a1fb" stroke-width="3" vector-effect="non-scaling-stroke" />
+        <path d="M24,196 C84,190 104,170 164,176 C224,182 244,150 304,146 C364,142 384,160 444,132 C474,120 490,124 506,118 L506,220 L24,220 Z"
+          fill="#5ee2a0" fill-opacity="0.45" />
+        <path d="M24,196 C84,190 104,170 164,176 C224,182 244,150 304,146 C364,142 384,160 444,132 C474,120 490,124 506,118"
+          fill="none" stroke="#5ee2a0" stroke-width="3" vector-effect="non-scaling-stroke" />
+      </g>
+      <g fill="#fff" stroke-width="3">
+        <circle cx="126.8" cy="122" r="5" stroke="#a3a1fb" />
+        <circle cx="235" cy="96" r="5" stroke="#a3a1fb" />
+        <circle cx="343.2" cy="72" r="5" stroke="#a3a1fb" />
+        <circle cx="126.8" cy="186" r="5" stroke="#5ee2a0" />
+        <circle cx="235" cy="156" r="5" stroke="#5ee2a0" />
+        <circle cx="343.2" cy="142" r="5" stroke="#5ee2a0" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- Scatter (plot) card: three series of points. -->
+  <div class="card" style="left: 990px; top: 48px; width: 230px; height: 260px;">
+    <div class="card-label">Response time</div>
+    <svg width="230" height="260" viewBox="0 0 230 260">
+      <g stroke="#e9ecef" stroke-width="1">
+        <line x1="20" x2="210" y1="80" y2="80" />
+        <line x1="20" x2="210" y1="125" y2="125" />
+        <line x1="20" x2="210" y1="170" y2="170" />
+      </g>
+      <line x1="20" x2="210" y1="225" y2="225" stroke="#c9ccd1" stroke-width="1.5" />
+      <g fill="#a3a1fb" fill-opacity="0.85">
+        <circle cx="38" cy="190" r="6" />
+        <circle cx="62" cy="172" r="6" />
+        <circle cx="90" cy="178" r="6" />
+        <circle cx="118" cy="150" r="6" />
+        <circle cx="150" cy="138" r="6" />
+        <circle cx="182" cy="112" r="6" />
+      </g>
+      <g fill="#5ee2a0" fill-opacity="0.85">
+        <circle cx="46" cy="140" r="6" />
+        <circle cx="76" cy="122" r="6" />
+        <circle cx="104" cy="104" r="6" />
+        <circle cx="134" cy="96" r="6" />
+        <circle cx="166" cy="78" r="6" />
+        <circle cx="196" cy="70" r="6" />
+      </g>
+      <g fill="#ff6565" fill-opacity="0.85">
+        <circle cx="56" cy="206" r="6" />
+        <circle cx="96" cy="200" r="6" />
+        <circle cx="128" cy="186" r="6" />
+        <circle cx="160" cy="194" r="6" />
+        <circle cx="192" cy="168" r="6" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- Grouped bar card, with a threshold across it (og-image.html's, in a 260x240 card). -->
+  <div class="card" style="left: 560px; top: 328px; width: 260px; height: 224px;">
+    <div class="card-label">Sales by product</div>
+    <svg width="260" height="224" viewBox="0 0 300 240" preserveAspectRatio="none">
+      <g stroke="#e9ecef" stroke-width="1">
+        <line x1="20" x2="280" y1="80" y2="80" />
+        <line x1="20" x2="280" y1="130" y2="130" />
+        <line x1="20" x2="280" y1="180" y2="180" />
+      </g>
+      <g>
+        <rect x="30" y="112" width="18" height="98" fill="#a3a1fb" />
+        <rect x="50" y="150" width="18" height="60" fill="#5ee2a0" />
+        <rect x="70" y="176" width="18" height="34" fill="#ff6565" />
+
+        <rect x="112" y="150" width="18" height="60" fill="#a3a1fb" />
+        <rect x="132" y="168" width="18" height="42" fill="#5ee2a0" />
+        <rect x="152" y="192" width="18" height="18" fill="#ff6565" />
+
+        <rect x="194" y="64" width="18" height="146" fill="#a3a1fb" />
+        <rect x="214" y="104" width="18" height="106" fill="#5ee2a0" />
+        <rect x="234" y="120" width="18" height="90" fill="#ff6565" />
+      </g>
+      <line x1="20" x2="280" y1="96" y2="96" stroke="#ff2d2d" stroke-width="4" />
+      <line x1="20" x2="280" y1="210" y2="210" stroke="#c9ccd1" stroke-width="1.5" />
+    </svg>
+  </div>
+
+  <!-- Donut card, with its total in the center. -->
+  <div class="card" style="left: 840px; top: 328px; width: 180px; height: 224px;">
+    <div class="card-label">Share</div>
+    <svg width="180" height="224" viewBox="0 0 180 224">
+      <g transform="translate(90 128)" fill="none" stroke-width="26">
+        <!-- r = 54; circumference ~ 339.3, split 34 / 22 / 18 / 15 / 11 per cent. -->
+        <circle r="54" stroke="#a3a1fb" stroke-dasharray="115.4 339.3" transform="rotate(-90)" />
+        <circle r="54" stroke="#5ee2a0" stroke-dasharray="74.6 339.3" stroke-dashoffset="-115.4" transform="rotate(-90)" />
+        <circle r="54" stroke="#ff6565" stroke-dasharray="61.1 339.3" stroke-dashoffset="-190" transform="rotate(-90)" />
+        <circle r="54" stroke="#fec163" stroke-dasharray="50.9 339.3" stroke-dashoffset="-251.1" transform="rotate(-90)" />
+        <circle r="54" stroke="#ffa177" stroke-dasharray="37.3 339.3" stroke-dashoffset="-302" transform="rotate(-90)" />
+      </g>
+      <text x="90" y="132" text-anchor="middle" font-family="Roboto, sans-serif" font-size="26" font-weight="700"
+        fill="#2b2f36">2,708</text>
+      <text x="90" y="150" text-anchor="middle" font-family="Roboto, sans-serif" font-size="12" fill="#6c757d">total</text>
+    </svg>
+  </div>
+
+  <!-- Dot plot card: values stacked into columns along one axis. -->
+  <div class="card" style="left: 1040px; top: 328px; width: 180px; height: 224px;">
+    <div class="card-label">Ratings</div>
+    <svg width="180" height="224" viewBox="0 0 180 224">
+      <line x1="16" x2="164" y1="196" y2="196" stroke="#c9ccd1" stroke-width="1.5" />
+      <g fill="#a3a1fb">
+        <circle cx="34" cy="184" r="8" />
+
+        <circle cx="62" cy="184" r="8" />
+        <circle cx="62" cy="164" r="8" />
+
+        <circle cx="90" cy="184" r="8" />
+        <circle cx="90" cy="164" r="8" />
+        <circle cx="90" cy="144" r="8" />
+        <circle cx="90" cy="124" r="8" />
+        <circle cx="90" cy="104" r="8" />
+
+        <circle cx="118" cy="184" r="8" />
+        <circle cx="118" cy="164" r="8" />
+        <circle cx="118" cy="144" r="8" />
+        <circle cx="118" cy="124" r="8" />
+        <circle cx="118" cy="104" r="8" />
+        <circle cx="118" cy="84" r="8" />
+        <circle cx="118" cy="64" r="8" />
+
+        <circle cx="146" cy="184" r="8" />
+        <circle cx="146" cy="164" r="8" />
+        <circle cx="146" cy="144" r="8" />
+      </g>
+    </svg>
+  </div>
+</body>
+
+</html>

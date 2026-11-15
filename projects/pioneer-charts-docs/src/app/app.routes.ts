@@ -44,7 +44,7 @@ export const routes: Routes = [
         data: { searchTitle: 'Chart Data Contract', description: 'The PcacData shape every Pioneer Charts chart takes - key, value, hide and nested data - and the base configuration all the charts share.' },
     },
     {
-        path: 'docs/guides/sparkline', title: 'Sparklines',
+        path: 'docs/components/charts/sparkline', title: 'Sparklines',
         loadComponent: () => import('./docs/sparkline/sparkline.component').then(m => m.SparklineComponent),
         data: { searchTitle: 'Angular Sparkline Charts', description: 'Small, axis-free Angular sparkline charts for tables and dashboard tiles, built from a Pioneer Charts line or area chart with a few config settings.' },
     },

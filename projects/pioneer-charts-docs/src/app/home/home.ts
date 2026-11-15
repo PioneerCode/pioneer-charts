@@ -40,7 +40,7 @@ export class Home {
     { name: 'Donut Chart', path: 'donut-chart', summary: 'A ring with a total or any label in its center.' },
     { name: 'Dot Plot Chart', path: 'dot-plot-chart', summary: 'Values stacked into columns along one axis.' },
     { name: 'Proximity Chart', path: 'proximity-chart', summary: 'One item in the middle, its closest matches around it.' },
-    { name: 'Legend', path: 'legend', summary: 'Show a chart\'s series and react to clicks.' },
+    { name: 'Sparklines', path: 'sparkline', summary: 'Small, axis-free trend lines for tables and dashboard tiles.' },
   ];
 
   /** Down Lane Motion pages for the "Built with Pioneer Charts" gallery, alternating light and dark. */

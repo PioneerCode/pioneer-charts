@@ -22,7 +22,8 @@ export interface IPlaChartEffectsBuilderConfig {
   yTicks?: number;
   /**
    * Radius of the crosshair's ring on each line: a pixel outside a hovered dot, so it circles the
-   * dot rather than sitting inside it. Default 7, around the default 6px hovered dot.
+   * dot rather than sitting inside it. Default 7, around the default 6px hovered dot. The value
+   * label starts 3px past it.
    */
   circleRadius?: number;
 }
@@ -84,15 +85,17 @@ export class PlaChartEffectsBuilder {
       .attr('class', 'effect-group')
       .attr('style', ({ data }) => data.hide ? 'display: none' : null);
 
+    const circleRadius = this.config.circleRadius ?? 7;
     mousePerLine.append('circle')
-      .attr('r', this.config.circleRadius ?? 7)
+      .attr('r', circleRadius)
       .attr('class', 'effect-circle')
       .style('stroke', ({ index }) => this.config.colors[index]);
 
     mousePerLine.append('text')
       .attr('class', 'effect-text')
       .attr('y', 1.5)
-      .attr('transform', 'translate(10,3)');
+      // Clear of the ring: 10px at the default 7px ring, as it always was.
+      .attr('transform', `translate(${circleRadius + 3},3)`);
   }
 
   private buildCanvas(): void {

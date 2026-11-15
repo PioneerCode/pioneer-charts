@@ -145,6 +145,46 @@ describe('PlaChartBuilder pointRadius', () => {
     expect(ring(config({ pointRadius: 0 }))).toBe(5);
   });
 
+  it("keeps one hover going as the pointer crosses from the hover target onto the dot that grows over it", () => {
+    const svg = build(config({ pointRadius: 0 }));
+    const point = svg.querySelector('.point')!;
+    const hit = point.querySelector('.dot-hit')!;
+    const dot = point.querySelector('.dot')!;
+    const showTooltip = vi.mocked(PlaChartBuilder.prototype.showTooltip);
+    const hideTooltip = vi.mocked(PlaChartBuilder.prototype.hideTooltip);
+    showTooltip.mockClear();
+    hideTooltip.mockClear();
+    const move = (type: string, target: Element, relatedTarget: Element) =>
+      target.dispatchEvent(new MouseEvent(type, { bubbles: true, relatedTarget }));
+
+    move('mouseover', hit, svg);    // in from outside the point
+    move('mouseout', hit, dot);     // across onto its own dot...
+    move('mouseover', dot, hit);    // ...which is still the same point
+    expect(showTooltip).toHaveBeenCalledTimes(1);
+    expect(hideTooltip).not.toHaveBeenCalled();
+
+    move('mouseout', dot, svg);     // out of the point altogether
+    expect(hideTooltip).toHaveBeenCalledTimes(1);
+  });
+
+  it("makes room at the edges for a large hovered dot's outline as well as its radius", () => {
+    const clip = (cfg: PcacLineChartConfig) =>
+      Number(build(cfg).querySelector('[id^="pcac-clip-"]:not([id*="plot"]) rect')!.getAttribute('x'));
+    // Hovered radius 12 + half the 2px outline.
+    expect(clip(config({ pointRadius: 8 }))).toBe(-13);
+    document.body.innerHTML = '';
+    // The default dot still fits the 10px minimum.
+    expect(clip(config())).toBe(-10);
+  });
+
+  it("starts the crosshair's value label just past its ring", () => {
+    const label = (cfg: PcacLineChartConfig) =>
+      build({ ...cfg, enableEffects: true }).querySelector('.effect-text')!.getAttribute('transform');
+    expect(label(config())).toBe('translate(10,3)');
+    document.body.innerHTML = '';
+    expect(label(config({ pointRadius: 8 }))).toBe('translate(16,3)');
+  });
+
   it('leaves point images alone', () => {
     const svg = build(config({
       pointRadius: 0,

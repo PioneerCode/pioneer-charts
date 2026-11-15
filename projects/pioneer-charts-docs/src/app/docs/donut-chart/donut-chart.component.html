@@ -34,6 +34,60 @@
     <app-layout-code language="javascript" [code]="configCode()"></app-layout-code>
   </section>
   <section class="pc-doc-section">
+    <h2 class="pc-h3" id="when-to-use">When To Use A Donut Chart</h2>
+    <p>A donut chart shows how a whole splits into parts, like a
+      <a routerLink="/docs/components/charts/pie-chart">pie chart</a>, and adds one thing: a place for the number
+      the parts add up to. Use it when that number is what readers should see first and the split is the detail
+      &mdash; tickets by status around the count of open tickets, a budget by department around the total spend,
+      a storage quota around the space left. It's also the natural shape for a single value out of a whole, like
+      a completion rate, drawn as a ring.</p>
+    <p>The usual pie chart advice holds: keep it to about five slices or fewer, and switch to a
+      <a routerLink="/docs/components/charts/bar-chart">bar chart</a> when the parts are close in size or there
+      are many of them. And if there's nothing worth putting in the middle, the pie chart gives the same slices
+      more room.</p>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="one-value">One Value As A Ring</h2>
+    <p>Two slices &mdash; the part and the rest &mdash; with a thin ring and the percentage in the center make a
+      progress or completion ring. Give the remainder a quiet color with <b>colorOverride</b> so the part stands
+      out; the remainder is still a slice, with its own tooltip and click.</p>
+    <pc-chart-card heading="Orders shipped on time" class="mb-3">
+      <pcac-donut-chart [config]="progress" (sliceClicked)="pcService.onClicked($event)" />
+    </pc-chart-card>
+    <app-layout-code language="typescript" [code]="progressCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="center-label">The Center Label</h2>
+    <p>The hole holds up to two lines: <b>label</b>, large, and <b>subLabel</b>, smaller, under it. Each is sized
+      from the hole &mdash; the label up to 40px, the sub label up to 16px &mdash; and shrunk until it fits across
+      it, so the same config reads well on a small dashboard tile and a full-width page. A line that would have to
+      shrink below 8px to fit is left out rather than drawn illegibly, so keep them short: a number for the label,
+      a word or two for the sub label.</p>
+    <p>The chart doesn't add up the slices for you, which leaves the label free to be anything &mdash; a total, a
+      percentage, a currency amount, a status. To show the total, sum the values when you build the config and
+      format it the way the rest of your page does:</p>
+    <app-layout-code language="typescript" [code]="totalCode"></app-layout-code>
+    <p class="mt-3">Remember to recompute the label when slices are hidden from a
+      <a routerLink="/docs/components/charts/legend">legend</a>, if it should only count the slices still shown;
+      the <a routerLink="/docs/components/charts/pie-chart" fragment="with-a-legend">pie chart's legend
+      example</a> works the same way for the donut.</p>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="ring-thickness">Ring Thickness</h2>
+    <p><b>innerRadius</b> sets the size of the hole as a fraction of the chart's radius, and with it how thick
+      the ring is. The default, 0.6, balances the two: room for a large label, and slices thick enough to compare.
+      Around 0.75 to 0.85 makes a thin ring that suits a single value or a row of small dashboard charts, where the
+      label is the point. Below about 0.4 the hole gets too small for a label to fit at a readable size, and at 0
+      there's no hole at all &mdash; the chart draws a plain pie.</p>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="label-colors">Label Colors</h2>
+    <p>The center lines use the theme's grays unless <b>labelColor</b> and <b>subLabelColor</b> are set. To
+      recolor every donut in one part of a page &mdash; on a dark card, say &mdash; set their custom properties
+      in a stylesheet instead; a color in a chart's own config still wins:</p>
+    <app-layout-code language="css" [code]="labelCss"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
     <h2 class="pc-h3" id="markup">Markup</h2>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
   </section>

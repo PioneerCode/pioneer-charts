@@ -36,6 +36,27 @@
         fragment="accessibility">Accessibility</a>).</p>
   </section>
   <section class="pc-doc-section">
+    <h2 class="pc-h3" id="slices">How The Slices Are Drawn</h2>
+    <p>Each item in <code>data</code> is one slice, with its <code>key</code> as the name and its
+      <code>value</code> as the size. The chart adds up the values and gives each slice its share of the circle,
+      so you pass raw numbers &mdash; counts, amounts, minutes &mdash; and never need to work out percentages
+      first.</p>
+    <ul>
+      <li><b>Data order is drawing order.</b> Slices aren't sorted: the first item starts at twelve o'clock and
+        the rest follow clockwise. Sort your data largest first when you want the biggest slice at the top and the
+        smallest tucked in beside it, or keep a fixed order (say, the same categories every month) so the colors
+        and positions stay put from one chart to the next.</li>
+      <li><b>Colors follow position.</b> The first slice takes the theme palette's first color, the second the
+        second, and so on &mdash; or the colors you list in <b>colorOverride</b>, in the same order.</li>
+      <li><b>Hiding a slice closes it up.</b> An item with <code>hide: true</code> counts as zero, so the other
+        slices grow to fill the circle, while it keeps its place and its color for when it's shown again.</li>
+      <li><b>Hover and focus.</b> Pointing at a slice, or moving to it with the arrow keys, pulls it out a little,
+        darkens it and shows a tooltip with its key and value; a
+        <a routerLink="/docs/guides/tooltip">custom tooltip</a> can show anything else you keep on the item.</li>
+    </ul>
+    <app-layout-code language="typescript" [code]="dataCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
     <h2 class="pc-h3" id="with-a-legend">With A Legend</h2>
     <p>A <a routerLink="/docs/components/charts/legend">legend</a> names the slices, and lets readers switch
       them off to compare the rest. Click an item below to hide or show its slice.</p>
@@ -51,6 +72,23 @@
       Hiding a slice sets its <b>hide</b> rather than removing it, so it keeps its place &mdash; and its color
       &mdash; and the swatches keep matching.</p>
     <app-layout-code language="typescript" [code]="legendCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="handling-clicks">Handling Clicks</h2>
+    <p>A pie chart often sits at the top of a drill-down: click a slice to see the records behind it.
+      <code>(sliceClicked)</code> emits a copy of the clicked item &mdash; from the mouse, or from Enter or Space
+      on a focused slice &mdash; so give each item an <code>id</code> that leads back to your own data, rather than
+      matching on its display name.</p>
+    <app-layout-code language="typescript" [code]="clickCode"></app-layout-code>
+  </section>
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="pie-or-donut">Pie Or Donut?</h2>
+    <p>Both charts take the same data and draw the same slices; the
+      <a routerLink="/docs/components/charts/donut-chart">donut chart</a> cuts a hole in the middle and can put a
+      label in it. Choose the pie when the slices are the whole story and space is tight &mdash; a full circle
+      gives each slice the most area for its size. Choose the donut when there's one number readers should see
+      first, like the total or the share of a single slice, or when the chart sits in a dashboard beside other
+      figures and the label saves a separate heading.</p>
   </section>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="markup">Markup</h2>

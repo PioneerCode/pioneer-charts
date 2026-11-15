@@ -38,6 +38,11 @@ export class DonutChartComponent {
   jumpNav = signal<IJumpNav[]>([
     { key: 'Donut Chart', value: 'donut-chart' },
     { key: 'Try it', value: 'try-it' },
+    { key: 'When To Use', value: 'when-to-use' },
+    { key: 'One Value As A Ring', value: 'one-value' },
+    { key: 'The Center Label', value: 'center-label' },
+    { key: 'Ring Thickness', value: 'ring-thickness' },
+    { key: 'Label Colors', value: 'label-colors' },
     { key: 'Markup', value: 'markup' },
     { key: 'API', value: 'api' },
     { key: 'Configuration', value: 'configuration' },
@@ -76,6 +81,45 @@ export class DonutChartComponent {
   subLabel: '${subLabel}',
 };`;
   });
+
+  /** The "One Value As A Ring" example - exactly the config `progressCode` shows. */
+  protected readonly progress: PcacDonutChartConfig = {
+    height: 200,
+    innerRadius: 0.8,
+    label: '72%',
+    subLabel: 'on time',
+    colorOverride: ['#5ee2a0', 'light-dark(#e5e7eb, #3f3f46)'],
+    data: [
+      { key: 'On time', value: 72, hide: false, data: [] },
+      { key: 'Late', value: 28, hide: false, data: [] },
+    ],
+  };
+
+  progressCode = `const config: PcacDonutChartConfig = {
+  height: 200,
+  innerRadius: 0.8,
+  label: '72%',
+  subLabel: 'on time',
+  colorOverride: ['#5ee2a0', 'light-dark(#e5e7eb, #3f3f46)'], // the part, then a quiet remainder
+  data: [
+    { key: 'On time', value: 72, hide: false, data: [] },
+    { key: 'Late', value: 28, hide: false, data: [] },
+  ],
+};`;
+
+  totalCode = `const data: PcacData[] = [ ... ];
+const total = data.filter((d) => !d.hide).reduce((sum, d) => sum + Number(d.value ?? 0), 0);
+
+const config: PcacDonutChartConfig = {
+  data,
+  label: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(total),
+  subLabel: 'total spend',
+};`;
+
+  labelCss = `.dark-card {
+  --pcac-donut-center-label-color: #f4f4f5;
+  --pcac-donut-center-sub-label-color: #a1a1aa;
+}`;
 
   markupCode = `<pcac-donut-chart [config]="config" (sliceClicked)="onClicked($event)" />`;
   importCode = `import { PcacDonutChart, PcacDonutChartConfig } from '@pioneer-code/pioneer-charts';`;

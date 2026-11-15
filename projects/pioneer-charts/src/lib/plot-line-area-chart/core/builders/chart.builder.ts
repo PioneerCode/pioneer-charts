@@ -25,7 +25,7 @@ import { buildAreaGenerator } from './area-generator.builder';
 import { buildZoomBehavior } from './zoom-behavior.builder';
 import { hasValue } from './has-value';
 import { drawRange, rangeExtent } from './point-range.builder';
-import { GAUGE_DOT_RADIUS, drawPointGauges, gaugeExtent, hasGauge } from './point-gauge.builder';
+import { drawPointGauges, gaugeExtent, hasGauge } from './point-gauge.builder';
 import { drawCornerLabels, drawReferenceLines, positionCornerLabels, positionReferenceLines, raiseLabels } from './reference-lines.builder';
 import { PlaCoincidentGroup, PlaCoincidentPoint, PlaPoint, PlaPointOffset, fanOutOffsets, fanOutRadius, fanOutShift, findCoincidentGroups } from './fan-out.builder';
 
@@ -47,6 +47,8 @@ const DEFAULT_DOT_RADIUS = 4;
  * (down to none at all, `pointRadius: 0`) is given so the pointer can still find it.
  */
 const MIN_ACTIVE_DOT_RADIUS = 4;
+/** A hovered dot's radius for a resting `radius`: 1.5x, at least `MIN_ACTIVE_DOT_RADIUS`. */
+const hoveredDotRadius = (radius: number) => Math.max(radius * 1.5, MIN_ACTIVE_DOT_RADIUS);
 const DOT_HOVER_TRANSITION = 'pcac-dot-hover';
 /** See `revealAfterEntry`. */
 const REVEAL_TRANSITION = 'pcac-reveal';
@@ -93,7 +95,7 @@ export class PlaChartBuilder extends PcacChart {
    * A hovered (or focused) dot's radius - 1.5x the resting one, at least `MIN_ACTIVE_DOT_RADIUS`.
    * The largest a dot gets, so it's what fan-out, gauge rings and the edge space make room for.
    */
-  private hoverDotRadius = GAUGE_DOT_RADIUS;
+  private hoverDotRadius = hoveredDotRadius(DEFAULT_DOT_RADIUS);
   /** This build's zoom behavior; `null` while zoom is off. */
   private zoomBehavior: ZoomBehavior<Element, unknown> | null = null;
   private dotClickedSource = new Subject<PcacData>();
@@ -179,7 +181,7 @@ export class PlaChartBuilder extends PcacChart {
     const pointRadius = this.config.pointRadius;
     this.dotRadius = typeof pointRadius === 'number' && Number.isFinite(pointRadius) && pointRadius >= 0
       ? pointRadius : DEFAULT_DOT_RADIUS;
-    this.hoverDotRadius = Math.max(this.dotRadius * 1.5, MIN_ACTIVE_DOT_RADIUS);
+    this.hoverDotRadius = hoveredDotRadius(this.dotRadius);
     // A hidden axis keeps 8px rather than 0 so a dot on the edge of the plot isn't clipped
     this.initializeAxisState(this.config, 'y', 8, this.largestMarkHalf());
     this.chartTypeLabel = CHART_TYPE_LABELS[type];
@@ -322,6 +324,7 @@ export class PlaChartBuilder extends PcacChart {
         xFormat: this.xAxis.format,
         yFormat: this.yAxis.format,
         yTicks: this.yAxis.ticks,
+        circleRadius: this.hoverDotRadius + 1,
       });
     }
 
@@ -862,8 +865,10 @@ export class PlaChartBuilder extends PcacChart {
       coincident: this.coincidentWith(d),
       valueFormat: this.yAxis.format,
       keyFormat: this.xAxis.format,
-      // The dot or image itself rather than the group, so the tooltip clears what's drawn.
-      anchor: select(point).select('.dot, .dot-image').node() as Element | null ?? point,
+      // The mark itself rather than the group, so the tooltip clears what's drawn - the hover
+      // target where there is one (it comes first): a dot smaller than it, or `pointRadius: 0`'s
+      // undrawn one, would place the tooltip from an empty box.
+      anchor: select(point).select('.dot-hit, .dot, .dot-image').node() as Element | null ?? point,
     });
     // No-op for an image point (no circle inside to grow). Its own transition name, so it
     // runs alongside the enter rise rather than cancelling it (see DOT_HOVER_TRANSITION);

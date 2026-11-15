@@ -118,7 +118,7 @@ function sparkline(name: string, values: number[]): PcacLineChartConfig {
     <tr>
       <th scope="row">{{ metric.name }}</th>
       <td><div class="spark"><pcac-line-chart [config]="metric.config" /></div></td>
-      <td>{{ metric.current }}</td>
+      <td>{{ metric.values.at(-1) }}</td>
     </tr>
   }
 </table>

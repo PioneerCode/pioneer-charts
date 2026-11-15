@@ -35,7 +35,12 @@ function config(extra: Partial<PcacLineChartConfig> = {}): PcacLineChartConfig {
 }
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const duration = 30;
+/**
+ * Transitions run at zero length, so each one only needs d3's next timer frame (~17ms) to land on
+ * its end value; `settle` waits several times that, so a slow CI machine still reads end values
+ * rather than a radius mid-tween.
+ */
+const settle = () => wait(120);
 
 function build(cfg: PcacLineChartConfig): SVGSVGElement {
   const builder = TestBed.runInInjectionContext(() => new PlaChartBuilder());
@@ -50,7 +55,7 @@ describe('PlaChartBuilder pointRadius', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [PlaChartEffectsBuilder] });
     vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
-    vi.spyOn(TestBed.inject(PcacTransitionService), 'getTransitionDuration').mockReturnValue(duration);
+    vi.spyOn(TestBed.inject(PcacTransitionService), 'getTransitionDuration').mockReturnValue(0);
     vi.spyOn(PlaChartBuilder.prototype, 'showTooltip').mockImplementation(() => undefined);
     vi.spyOn(PlaChartBuilder.prototype, 'hideTooltip').mockImplementation(() => undefined);
   });
@@ -64,13 +69,13 @@ describe('PlaChartBuilder pointRadius', () => {
   async function hoverRadii(svg: SVGSVGElement): Promise<{ rest: number; hovered: number; after: number }> {
     const point = svg.querySelector('.point')!;
     const dot = point.querySelector('.dot');
-    await wait(duration * 3);
+    await settle();
     const rest = radius(dot);
     point.dispatchEvent(new MouseEvent('mouseover'));
-    await wait(duration * 2);
+    await settle();
     const hovered = radius(dot);
     point.dispatchEvent(new MouseEvent('mouseout'));
-    await wait(duration * 2);
+    await settle();
     return { rest, hovered, after: radius(dot) };
   }
 
@@ -117,6 +122,27 @@ describe('PlaChartBuilder pointRadius', () => {
     }));
     // Hovered radius 12 + gap 3 + half the 2px width.
     expect(radius(svg.querySelector('.point-gauge-track'))).toBe(16);
+  });
+
+  it('places the tooltip beside the hover target when there is one, else beside the dot', () => {
+    const anchorOf = (svg: SVGSVGElement) => {
+      const showTooltip = vi.mocked(PlaChartBuilder.prototype.showTooltip);
+      showTooltip.mockClear();
+      svg.querySelector('.point')!.dispatchEvent(new MouseEvent('mouseover'));
+      return (showTooltip.mock.calls[0][2] as { anchor: Element }).anchor;
+    };
+    expect(anchorOf(build(config({ pointRadius: 0 }))).getAttribute('class')).toBe('dot-hit');
+    document.body.innerHTML = '';
+    expect(anchorOf(build(config())).getAttribute('class')).toBe('dot');
+  });
+
+  it("sizes the hover crosshair's rings a pixel outside the hovered dot", () => {
+    const ring = (cfg: PcacLineChartConfig) => radius(build({ ...cfg, enableEffects: true }).querySelector('.effect-circle'));
+    expect(ring(config())).toBe(7);
+    document.body.innerHTML = '';
+    expect(ring(config({ pointRadius: 8 }))).toBe(13);
+    document.body.innerHTML = '';
+    expect(ring(config({ pointRadius: 0 }))).toBe(5);
   });
 
   it('leaves point images alone', () => {

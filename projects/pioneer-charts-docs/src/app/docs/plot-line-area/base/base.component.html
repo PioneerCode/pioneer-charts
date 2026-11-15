@@ -117,7 +117,8 @@
           <td>Radius of each point's dot at rest, in px. Default 4. A hovered or focused dot grows to 1.5&times; that,
             and never to less than 4px. <code>0</code> draws no dots at rest &mdash; for a
             <a routerLink="/docs/components/charts/sparkline">sparkline</a> or a dense series &mdash; while each point can still
-            be hovered, focused and clicked, and still shows its tooltip. Doesn't affect point images.</td>
+            be hovered, focused and clicked, and still shows its tooltip. Meant for line and area charts: a plot chart has
+            no line, so it would show nothing until hovered. Doesn't affect point images.</td>
         </tr>
         <tr>
           <td>pointImage</td>

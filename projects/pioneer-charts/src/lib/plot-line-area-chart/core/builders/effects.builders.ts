@@ -20,6 +20,11 @@ export interface IPlaChartEffectsBuilderConfig {
   /** The y axis's format and tick count, so the crosshair's value reads like the axis labels. */
   yFormat?: PcacFormatEnum;
   yTicks?: number;
+  /**
+   * Radius of the crosshair's ring on each line: a pixel outside a hovered dot, so it circles the
+   * dot rather than sitting inside it. Default 7, around the default 6px hovered dot.
+   */
+  circleRadius?: number;
 }
 
 /**
@@ -80,7 +85,7 @@ export class PlaChartEffectsBuilder {
       .attr('style', ({ data }) => data.hide ? 'display: none' : null);
 
     mousePerLine.append('circle')
-      .attr('r', 7)
+      .attr('r', this.config.circleRadius ?? 7)
       .attr('class', 'effect-circle')
       .style('stroke', ({ index }) => this.config.colors[index]);
 

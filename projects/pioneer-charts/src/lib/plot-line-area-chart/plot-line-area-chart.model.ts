@@ -195,9 +195,10 @@ export class PcacLineAreaChartConfig extends PcacAxisChartConfig {
   /**
    * Radius of each point's dot at rest, in px. Default 4. A hovered or focused dot grows to 1.5x
    * that, and never to less than 4px, so the point being read always shows. 0 draws no dots at
-   * rest - for a sparkline, say: each point can still be hovered, focused and clicked (a dot
-   * smaller than 4px gets a transparent 4px target), and still shows its tooltip. Point images
-   * are unaffected; they're sized by `pointImage`.
+   * rest, for a line or area chart where the line carries the data - a sparkline, say: each point
+   * can still be hovered, focused and clicked (a dot smaller than 4px gets a transparent 4px
+   * target), and still shows its tooltip. Not for a plot chart, which then draws nothing until
+   * hovered. Point images are unaffected; they're sized by `pointImage`.
    */
   pointRadius?: number
 

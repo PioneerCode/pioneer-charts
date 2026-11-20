@@ -269,6 +269,25 @@
       </pc-chart-card>
     </div>
   </section>
+  <section id="state-timelines" class="pc-charts-section" tabindex="-1">
+    <h2>State timelines</h2>
+    <p class="pc-charts-lead mb-0">A row of days or hours for each thing watched, each colored by the worst state it was
+      in, deeper the more of it that state took, and striped where part of it is unknown. </p>
+    <p><span class="pc-charts-docs">Docs: <a [routerLink]="'/docs/components/charts/state-timeline'">State
+          Timeline</a></span></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <pc-chart-card heading="Status history" caption="Four services over 30 days, each row labeled.">
+        <pcac-state-timeline [config]="stateHistoryConfig | chartLabel: 'Four services over 30 days, state timeline'"
+          (periodClicked)="service.onClicked($event)" />
+      </pc-chart-card>
+      <pc-chart-card heading="One row" caption="One service, no label, 14px tall: a status card's strip.">
+        <div class="pc-charts-centered">
+          <pcac-state-timeline [config]="stateStripConfig | chartLabel: 'One service over 30 days, state timeline'"
+            (periodClicked)="service.onClicked($event)" />
+        </div>
+      </pc-chart-card>
+    </div>
+  </section>
   <section id="legend" class="pc-charts-section" tabindex="-1">
     <h2>Legend</h2>
     <p class="pc-charts-lead mb-0">A legend is its own component, so it can sit anywhere and drive any chart. Here

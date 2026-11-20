@@ -23,12 +23,14 @@ import {
   PcacPlotChartConfig,
   PcacProximityChart,
   PcacProximityChartConfig,
+  PcacStateTimeline,
 } from '@pioneer-code/pioneer-charts';
 import { AppService } from '../app.service';
 import { LayoutResourceState } from '../layout/resource-state/resource-state';
 import { ChartCard } from '../layout/chart-card/chart-card';
 import { ChartLabelPipe } from './chart-label.pipe';
 import { ChartContract } from '../layout/chart-contract/chart-contract';
+import { statusHistory, strip } from '../docs/state-timeline/state-timeline-demo';
 
 /** The page's sections, in order, for the jump links at the top. */
 const SECTIONS = [
@@ -38,6 +40,7 @@ const SECTIONS = [
   { id: 'pie-donut-charts', label: 'Pie & Donut' },
   { id: 'dot-plot-charts', label: 'Dot Plot' },
   { id: 'proximity-charts', label: 'Proximity' },
+  { id: 'state-timelines', label: 'State Timeline' },
   { id: 'legend', label: 'Legend' },
 ];
 
@@ -118,6 +121,7 @@ const LONG_CATEGORIES: Record<string, string> = {
     PcacDonutChart,
     PcacDotPlotChart,
     PcacProximityChart,
+    PcacStateTimeline,
     PcacLegend,
   ]
 })
@@ -242,6 +246,10 @@ export class ChartsComponent {
       data: (config.data ?? []).map((group) => ({ ...group, key: LONG_CATEGORIES[String(group.key)] ?? group.key })),
     };
   });
+
+  /** The State Timeline page's four services, and one of them as a status card's strip. */
+  readonly stateHistoryConfig = statusHistory();
+  readonly stateStripConfig = strip();
 
   /** The line chart shrunk to a sparkline: no axes, no grid, no hover effects. */
   readonly sparklineConfig = computed<PcacLineChartConfig>(() => {

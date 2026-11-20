@@ -9,6 +9,23 @@ import { LayoutResourceState } from '../layout/resource-state/resource-state';
 import { ChartCard } from '../layout/chart-card/chart-card';
 import { ChartContract } from '../layout/chart-contract/chart-contract';
 
+/**
+ * Every chart's docs page, linked from the home page so each is one click from the site's
+ * strongest page (and found by crawlers from it) rather than only from the docs sidebar.
+ */
+export const CHARTS: ChartLink[] = [
+  { name: 'Bar Chart', path: 'bar-chart', summary: 'Vertical and horizontal - single, grouped and stacked, with thresholds.' },
+  { name: 'Line Chart', path: 'line-chart', summary: 'Series over time or any scale, with zoom and hover effects.' },
+  { name: 'Area Chart', path: 'area-chart', summary: 'Filled series with zoom, point images and ranges.' },
+  { name: 'Plot Chart', path: 'plot-chart', summary: 'A scatter plot that fans out overlapping points.' },
+  { name: 'Pie Chart', path: 'pie-chart', summary: 'Animated slices, each one clickable.' },
+  { name: 'Donut Chart', path: 'donut-chart', summary: 'A ring with a total or any label in its center.' },
+  { name: 'Dot Plot Chart', path: 'dot-plot-chart', summary: 'Values stacked into columns along one axis.' },
+  { name: 'Proximity Chart', path: 'proximity-chart', summary: 'One item in the middle, its closest matches around it.' },
+  { name: 'State Timeline', path: 'state-timeline', summary: 'A row of days or hours for each thing watched, colored by its worst state.' },
+  { name: 'Sparklines', path: 'sparkline', summary: 'Small, axis-free trend lines for tables and dashboard tiles.' },
+];
+
 @Component({
   selector: 'pc-home',
   templateUrl: './home.html',
@@ -27,21 +44,7 @@ import { ChartContract } from '../layout/chart-contract/chart-contract';
 export class Home {
   readonly appService = inject(AppService);
 
-  /**
-   * Every chart's docs page, linked from the home page so each is one click from the site's
-   * strongest page (and found by crawlers from it) rather than only from the docs sidebar.
-   */
-  readonly charts: ChartLink[] = [
-    { name: 'Bar Chart', path: 'bar-chart', summary: 'Vertical and horizontal - single, grouped and stacked, with thresholds.' },
-    { name: 'Line Chart', path: 'line-chart', summary: 'Series over time or any scale, with zoom and hover effects.' },
-    { name: 'Area Chart', path: 'area-chart', summary: 'Filled series with zoom, point images and ranges.' },
-    { name: 'Plot Chart', path: 'plot-chart', summary: 'A scatter plot that fans out overlapping points.' },
-    { name: 'Pie Chart', path: 'pie-chart', summary: 'Animated slices, each one clickable.' },
-    { name: 'Donut Chart', path: 'donut-chart', summary: 'A ring with a total or any label in its center.' },
-    { name: 'Dot Plot Chart', path: 'dot-plot-chart', summary: 'Values stacked into columns along one axis.' },
-    { name: 'Proximity Chart', path: 'proximity-chart', summary: 'One item in the middle, its closest matches around it.' },
-    { name: 'Sparklines', path: 'sparkline', summary: 'Small, axis-free trend lines for tables and dashboard tiles.' },
-  ];
+  readonly charts = CHARTS;
 
   /** Down Lane Motion pages for the "Built with Pioneer Charts" gallery, alternating light and dark. */
   readonly showcase: ShowcaseShot[] = [

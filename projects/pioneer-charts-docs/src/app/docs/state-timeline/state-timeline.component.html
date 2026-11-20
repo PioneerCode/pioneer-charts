@@ -1,0 +1,130 @@
+<app-layout-page-docs pageTitle="State Timeline" [jumpNav]="jumpNav()">
+  <p class="lead" id="state-timeline">State timeline component: one row for each thing watched, each a run of periods
+    &mdash; days, hours &mdash; side by side, colored by the worst state it was in during that period. It answers
+    "when did this go wrong, and how much?" at a glance: an hour of Error in a day otherwise OK still shows, deeper the
+    more of the day it took.</p>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="status-history">Status History</h2>
+    <p>Four services over the last 30 days, made up: an outage, a slow spell, a device switched off for a day and a
+      half, and a backup that failed two days running. Hover or focus a day for what it was in.</p>
+    <pc-chart-card heading="Last 30 days" class="mb-3">
+      <pcac-state-timeline [config]="history" />
+    </pc-chart-card>
+    <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="the-data">The Data</h2>
+    <p><code>data</code> holds the rows, each a <a routerLink="/docs/guides/data-contract">PcacData</a> whose
+      <code>key</code> is its name and whose <code>data</code> is its periods, oldest first. Each period has:</p>
+    <ul>
+      <li><b>key:</b> its name, which the tooltip and screen readers say &mdash; <code>'Fri, Nov 20'</code>,
+        <code>'2 PM'</code>.</li>
+      <li><b>value:</b> its length, in any unit: hours, minutes, milliseconds.</li>
+      <li><b>data:</b> the time it spent in each state, in the same unit, keyed by the state's <code>key</code>.</li>
+    </ul>
+    <p>Time the states don't cover is unknown &mdash; the device was off, the log hadn't begun. A period with some of
+      it unknown is striped, and one with all of it unknown is plain gray, so a gap never reads as OK. Leave
+      <code>value</code> out and the period's length is the time in its states: all of it known.</p>
+    <p>A period is drawn in the color of the worst state it was in, by the order of <code>states</code> (least severe
+      first), from 75% of that color to all of it, the more of what's known of the period it took. Every period of a
+      row is drawn the same width, whatever its length.</p>
+    <app-layout-code language="typescript" [code]="dataCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="one-row">One Row, Its Own Tooltip</h2>
+    <p>One service, as a status card holds it: <code>rowLabels: false</code> and 14px tall, with the totals written
+      beneath it and a <a routerLink="/docs/guides/tooltip">tooltip template</a> giving each day's hours. The
+      template's <code>$implicit</code> is the period itself, <code>parent</code> its row.</p>
+    <pc-chart-card heading="API" class="mb-3">
+      <div class="pc-state-strip">
+        <pcac-state-timeline [config]="strip">
+          <ng-template pcacTooltip let-day>
+            <div class="pc-state-tip"><b>{{ day.key }}</b><br />{{ hours(day) }}</div>
+          </ng-template>
+        </pcac-state-timeline>
+        <p class="pc-state-totals">Last 30 days: {{ stripTotals.errors }} with errors, {{ stripTotals.warnings }}
+          with warnings</p>
+      </div>
+    </pc-chart-card>
+    <app-layout-code language="markup" [code]="stripCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="long-windows">Long Windows</h2>
+    <p>The 2px between periods drops to 1px once it would take more than a quarter of each period's room, and to none
+      when even that would leave a period under a pixel wide. Here, 90 days in a narrow card.</p>
+    <div class="pc-state-narrow mb-3">
+      <pc-chart-card heading="Last 90 days">
+        <pcac-state-timeline [config]="longStrip" />
+      </pc-chart-card>
+    </div>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="colors">Colors</h2>
+    <p>The first state is drawn a pale green, the last a strong red, and any between amber: OK quiet, problems loud.
+      They differ in lightness as well as hue, so a reader who can't tell red from green still tells them apart
+      &mdash; and the tooltip and each period's name for screen readers say the state in words.</p>
+    <p>Give a state its own <code>color</code> in <code>states</code> to change it for one chart, keeping to colors
+      that differ in lightness. To restyle every chart under an element &mdash; for a dark page, say &mdash; set the
+      custom properties; this site's dark theme sets its own.</p>
+    <app-layout-code language="css" [code]="colorsCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="api">API</h2>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config>
+      <tbody>
+        <tr>
+          <td>states</td>
+          <td>The states a period can be in, least severe first: each a <b>key</b> (as the periods' <b>data</b> name
+            it), a <b>label</b> (what the tooltip and screen readers call it; its key when unset) and a <b>color</b>
+            (any CSS color; the theme's when unset). A period shows the last of them it was in.</td>
+        </tr>
+        <tr>
+          <td>gap</td>
+          <td>Space between periods, in px. Default 2; it narrows to 1px, then none, as the periods do.</td>
+        </tr>
+        <tr>
+          <td>rowLabels</td>
+          <td>Write each row's <b>key</b> to its left. Default true; the labels take up to 40% of the width.</td>
+        </tr>
+      </tbody>
+    </app-layout-base-config>
+    <p class="mt-3">The <b>height</b> is shared between the rows, 4px apart. Each period is one stop for the arrow keys,
+      named for screen readers with its row, its name and what it was in &mdash; <code>"Database, Fri, Nov 6: Error 50%,
+      OK 50%"</code> (see <a routerLink="/docs/guides/introduction" fragment="accessibility">Accessibility</a>).</p>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>(periodClicked)="onClicked($event)"</td>
+            <td>Emitted when a period is clicked, or activated with Enter or Space. It emits the period, from its row's
+              <b>data</b>; set its <b>id</b> to trace it back to your record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
+            <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</app-layout-page-docs>

@@ -44,6 +44,11 @@ export const routes: Routes = [
         data: { searchTitle: 'Chart Data Contract', description: 'The PcacData shape every Pioneer Charts chart takes - key, value, hide and nested data - and the base configuration all the charts share.' },
     },
     {
+        path: 'docs/components/charts/state-timeline', title: 'State Timeline',
+        loadComponent: () => import('./docs/state-timeline/state-timeline.component').then(m => m.StateTimelineComponent),
+        data: { searchTitle: 'Angular State Timeline Chart', description: 'An Angular state timeline for status history: a row of days or hours for each thing watched, each colored by the worst state it was in, from Pioneer Charts.' },
+    },
+    {
         path: 'docs/components/charts/sparkline', title: 'Sparklines',
         loadComponent: () => import('./docs/sparkline/sparkline.component').then(m => m.SparklineComponent),
         data: { searchTitle: 'Angular Sparkline Charts', description: 'Small, axis-free Angular sparkline charts for tables and dashboard tiles, built from a Pioneer Charts line or area chart with a few config settings.' },

@@ -32,7 +32,8 @@
       you leave out <code>value</code>, the period's length is the total of its states, and none of it is unknown.</p>
     <p>Each period takes the color of its worst state. "Worst" follows the order of <code>states</code>, which you
       list from least to most severe. The color is lighter when that state lasted a short time and full strength when
-      it lasted the whole period. Every period in a row is the same width, even if their lengths differ.</p>
+      it lasted all of the period's known time. Every period in a row is the same width, even if their lengths
+      differ.</p>
     <app-layout-code language="typescript" [code]="dataCode"></app-layout-code>
   </section>
 

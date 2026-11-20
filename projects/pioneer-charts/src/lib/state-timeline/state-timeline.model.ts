@@ -29,8 +29,8 @@ export class PcacStateTimelineState {
  *
  * Any time not covered by a state is unknown: a partly unknown period is striped, and an entirely
  * unknown one is plain gray. The color is lighter when the worst state lasted a short time and
- * full strength when it lasted the whole period. Every period in a row is the same width. A row
- * or period with `hide` set is left out.
+ * full strength when it lasted all of the period's known time. Every period in a row is the same
+ * width. A row or period with `hide` set is left out.
  */
 export class PcacStateTimelineConfig extends PcacChartConfig {
   /**

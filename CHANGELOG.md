@@ -1,3 +1,25 @@
+<a name="22.2.29"></a>
+# [v22.2.29]
+
+### Added
+  - State timeline chart: `<pcac-state-timeline>` (`PcacStateTimeline`, `PcacStateTimelineConfig`,
+    `PcacStateTimelineState`). Shows how a status changed over time: one row per service or
+    device, split into periods (days, hours), each colored by its worst state.
+    - A state that lasted longer is drawn darker. Time with no data is striped, or plain gray
+      if the whole period has none.
+    - `states` lists the states from least to most severe; each can set its own `label` and `color`.
+    - `height` defaults to 24px (one row) and is split between rows. `rowLabels` shows each row's
+      name (default true). `gap` (default 2px) shrinks as periods get narrow.
+    - Keyboard and screen reader support, like the other charts: one Tab stop, arrow keys between
+      periods, each announced as "Database, Fri, Nov 6: Error 50%, OK 50%" (percentages always
+      add up to 100).
+    - Tooltips: the default shows the period and its states; a `pcacTooltip` template gets the
+      period and its row. `periodClicked` emits the clicked period.
+    - Colors: OK is pale green, Warning amber and Error strong red, chosen to stay distinguishable
+      for color-blind readers. Override them with `--pcac-state-timeline-ok-color`,
+      `-warning-color`, `-error-color`, `-unknown-color`, `-background-color` and `-row-label-color`.
+    - New docs page: State Timeline, plus a section on the Charts examples page.
+
 <a name="22.2.28"></a>
 # [v22.2.28]
 

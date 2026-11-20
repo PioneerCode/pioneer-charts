@@ -1,0 +1,20 @@
+// The totals beneath the one-row example, as a status card writes them.
+.pc-state-totals {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// The one-row example's own tooltip.
+.pc-state-tip {
+  padding: 6px 8px;
+  font-size: 0.8125rem;
+  border-radius: 4px;
+  color: var(--mat-sys-inverse-on-surface);
+  background: var(--mat-sys-inverse-surface);
+}
+
+// A card as narrow as a status card's column, so 90 days have to squeeze.
+.pc-state-narrow {
+  max-width: 300px;
+}

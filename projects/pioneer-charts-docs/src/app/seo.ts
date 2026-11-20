@@ -14,7 +14,7 @@ const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
 /** The site's link-preview image (index.html's), for the home page and any URL that isn't a page. */
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
 const IMAGE_ALT = 'Angular charts built on D3, with an area, a bar and a donut chart.';
-const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie, donut, dot plot and proximity charts built on D3'
+const DEFAULT_DESCRIPTION = 'Pioneer Charts is an Angular library of bar, line, area, plot, pie, donut, dot plot, proximity and state timeline charts built on D3'
   + ' - responsive, themeable and simple to configure.';
 
 /**

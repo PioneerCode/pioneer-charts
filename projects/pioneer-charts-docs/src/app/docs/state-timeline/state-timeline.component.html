@@ -1,0 +1,136 @@
+<app-layout-page-docs pageTitle="State Timeline" [jumpNav]="jumpNav()">
+  <p class="lead" id="state-timeline">The state timeline shows how something's status changed over time.
+    Each row is one thing you're tracking, like a service or a device. Each row is split into periods, such as days or
+    hours, and each period is colored by the worst state it reached. One hour of Error in an otherwise good day still
+    shows up, and the longer it lasted, the darker the color.</p>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="status-history">Status History</h2>
+    <p>This example shows four made-up services over 30 days. You can see an outage, a slowdown, a device that was off
+      for a day and a half, and a backup that failed two days in a row. Hover over a day, or tab to it, to see its
+      details.</p>
+    <pc-chart-card heading="Last 30 days" class="mb-3">
+      <pcac-state-timeline [config]="history" />
+    </pc-chart-card>
+    <app-layout-code language="typescript" [code]="configCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="the-data">The Data</h2>
+    <p><code>data</code> is a list of rows. Each row is a <a routerLink="/docs/guides/data-contract">PcacData</a>: its
+      <code>key</code> is the row's name, and its <code>data</code> is the row's periods, oldest first. Each period
+      has:</p>
+    <ul>
+      <li><b>key:</b> the period's name, shown in the tooltip and read by screen readers, like
+        <code>'Fri, Nov 20'</code> or <code>'2 PM'</code>.</li>
+      <li><b>value:</b> how long the period is, in any unit (hours, minutes, milliseconds).</li>
+      <li><b>data:</b> how much time the period spent in each state, in the same unit. Each entry's <code>key</code>
+        matches a state's <code>key</code>.</li>
+    </ul>
+    <p>Any time not covered by a state is unknown, for example because the device was off. A period that's partly
+      unknown is striped, and a period that's entirely unknown is plain gray, so missing data never looks like OK. If
+      you leave out <code>value</code>, the period's length is the total of its states, and none of it is unknown.</p>
+    <p>Each period takes the color of its worst state. "Worst" follows the order of <code>states</code>, which you
+      list from least to most severe. The color is lighter when that state lasted a short time and full strength when
+      it lasted all of the period's known time. Every period in a row is the same width, even if their lengths
+      differ.</p>
+    <app-layout-code language="typescript" [code]="dataCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="one-row">One Row With a Custom Tooltip</h2>
+    <p>A single service, sized to fit in a status card: <code>rowLabels: false</code> and 14px tall, with totals
+      written underneath. It also uses a <a routerLink="/docs/guides/tooltip">tooltip template</a> to show each day's
+      hours. In the template, <code>$implicit</code> is the period and <code>parent</code> is its row.</p>
+    <pc-chart-card heading="API" class="mb-3">
+      <div class="pc-state-strip">
+        <pcac-state-timeline [config]="strip">
+          <ng-template pcacTooltip let-day>
+            <div class="pc-state-tip"><b>{{ day.key }}</b><br />{{ hours(day) }}</div>
+          </ng-template>
+        </pcac-state-timeline>
+        <p class="pc-state-totals">Last 30 days: {{ stripTotals.errors }} with errors, {{ stripTotals.warnings }}
+          with warnings</p>
+      </div>
+    </pc-chart-card>
+    <app-layout-code language="markup" [code]="stripCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="long-windows">Long Windows</h2>
+    <p>When periods get narrow, the gap between them shrinks automatically: from 2px to 1px, and then to none if a
+      period would otherwise be less than a pixel wide. This example fits 90 days into a narrow card.</p>
+    <div class="pc-state-narrow mb-3">
+      <pc-chart-card heading="Last 90 days">
+        <pcac-state-timeline [config]="longStrip" />
+      </pc-chart-card>
+    </div>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="colors">Colors</h2>
+    <p>By default, the first state is pale green, the last is a strong red, and any states in between are amber. Good
+      periods stay in the background, and problems stand out. The colors differ in lightness as well as hue, so people
+      with red-green color blindness can still tell them apart. The tooltip and screen reader text also name each
+      state in words.</p>
+    <p>To change a color for one chart, set <code>color</code> on that state. Pick colors that differ in lightness,
+      too. To restyle every chart inside an element, for example on a dark page, set the CSS custom properties below.
+      This site's dark theme does exactly that.</p>
+    <app-layout-code language="css" [code]="colorsCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="markup">Markup</h2>
+    <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 class="pc-h3" id="api">API</h2>
+    <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
+    <app-layout-base-config [defaultHeight]="24">
+      <tbody>
+        <tr>
+          <td>states</td>
+          <td>The states a period can be in, listed from least to most severe. Each has a <b>key</b> (matching the keys
+            in the periods' <b>data</b>), an optional <b>label</b> for the tooltip and screen readers (defaults to the
+            key), and an optional <b>color</b> (defaults to the theme's).</td>
+        </tr>
+        <tr>
+          <td>gap</td>
+          <td>Space between periods, in px. Default 2. It shrinks automatically when periods get narrow.</td>
+        </tr>
+        <tr>
+          <td>rowLabels</td>
+          <td>Show each row's <b>key</b> to its left. Default true. Labels use at most 40% of the width.</td>
+        </tr>
+      </tbody>
+    </app-layout-base-config>
+    <p class="mt-3">The rows split the <b>height</b> evenly, with 4px between them. The default height fits one row,
+      so set a larger one for more rows. Keyboard users can move between periods with the arrow keys. Screen readers
+      announce each period's row, name and states, for example <code>"Database, Fri, Nov 6: Error 50%, OK 50%"</code>
+      (see <a routerLink="/docs/guides/introduction" fragment="accessibility">Accessibility</a>).</p>
+  </section>
+
+  <section class="pc-doc-section">
+    <h2 id="events" class="pc-h3 mb-0">Events</h2>
+    <div class="pc-table-scroll">
+      <table class="pc-table">
+        <thead>
+          <tr>
+            <th>Binding</th>
+            <th>Description</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>(periodClicked)="onClicked($event)"</td>
+            <td>Emitted when a period is clicked, or when Enter or Space is pressed on it. It emits the period. Give the
+              period an <b>id</b> to match it to your own data (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
+            <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</app-layout-page-docs>

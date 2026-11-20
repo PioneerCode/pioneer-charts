@@ -1,5 +1,5 @@
 import { PcacData } from '../core/chart.model';
-import { periodGap, periodLabel, periodState, placePeriods, PcacStatePeriod } from './state-timeline-layout';
+import { periodGap, periodLabel, periodState, periodSummary, placePeriods, PcacStatePeriod } from './state-timeline-layout';
 import { PcacStateTimelineState } from './state-timeline.model';
 
 const STATES: PcacStateTimelineState[] = [
@@ -103,6 +103,11 @@ describe('periodLabel', () => {
 
   it('says a period nothing is known of is unknown', () => {
     expect(periodLabel(at(period('Nov 20', 24, {})), STATES)).toBe('Nov 20: unknown');
+  });
+
+  it('is the period\'s name and its summary, which the default tooltip shows on its own line', () => {
+    expect(periodSummary(at(period('Nov 20', 24, { ok: 18, error: 6 })), STATES)).toBe('Error 25%, OK 75%');
+    expect(periodSummary(at(period('Nov 20', 24, {})), STATES)).toBe('unknown');
   });
 
   it('names a state by its key when it has no label', () => {

@@ -1,0 +1,69 @@
+@use "../core/theme/imports";
+
+.pcac-state-timeline {
+  svg {
+    width: 100%;
+    display: block;
+  }
+
+  .pcac-state-period {
+    cursor: pointer;
+  }
+
+  // A period in the worst state it was in, deeper the more of what's known of it that state took
+  // (`--pcac-state-share`, set by the builder): from 40% of the state's color mixed into the
+  // background to all of it. A state's color is its config `color` (`--pcac-state-color`, set on
+  // the period) or, without one, the theme's for its place among the states: the first is OK, the
+  // last Error, any between Warning. Each is a custom property, so a stylesheet can restyle them.
+  .pcac-state-ok {
+    --pcac-state-theme-color: var(--pcac-state-timeline-ok-color, #198754);
+  }
+
+  .pcac-state-warning {
+    --pcac-state-theme-color: var(--pcac-state-timeline-warning-color, #e0a800);
+  }
+
+  .pcac-state-error {
+    --pcac-state-theme-color: var(--pcac-state-timeline-error-color, #dc3545);
+  }
+
+  .pcac-state-fill {
+    fill: color-mix(
+      in srgb,
+      var(--pcac-state-color, var(--pcac-state-theme-color))
+        calc(40% + var(--pcac-state-share, 1) * 60%),
+      var(--pcac-state-timeline-background-color, #{imports.$white})
+    );
+  }
+
+  // Nothing known of it: gray. Part of it unknown: the same gray striped over its color.
+  .pcac-state-unknown .pcac-state-fill {
+    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-400});
+  }
+
+  .pcac-state-stripe {
+    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-400});
+    fill-opacity: 0.85;
+  }
+
+  // A hovered or focused period is outlined in the text color.
+  .pcac-state-period.is-active .pcac-state-fill {
+    stroke: currentColor;
+    stroke-width: 1.5px;
+  }
+
+  .pcac-state-row-label {
+    font-size: 11px;
+    fill: var(--pcac-state-timeline-row-label-color, #{imports.$gray-700});
+  }
+}
+
+// `heightFull` support (see PcacChartConfig.heightFull), as on the other charts.
+pcac-state-timeline.pcac-height-full {
+  display: block;
+  height: 100%;
+
+  .pcac-state-timeline {
+    height: 100%;
+  }
+}

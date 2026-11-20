@@ -81,12 +81,12 @@ export function periodGap(width: number, count: number, gap: number): number {
 }
 
 /**
- * What a period was in, in words, for its tooltip and screen readers: `'Nov 20: Error 25%, OK 75%'`,
- * each state it was in worst first with its share of the period, then the share unknown.
+ * What a period was in, in words: `'Error 25%, OK 75%'`, each state it was in worst first with its
+ * share of the period, then the share unknown; `'unknown'` when nothing is known of it.
  */
-export function periodLabel(period: PcacStatePeriod, states: PcacStateTimelineState[]): string {
+export function periodSummary(period: PcacStatePeriod, states: PcacStateTimelineState[]): string {
   if (period.state === null) {
-    return `${period.data.key}: unknown`;
+    return 'unknown';
   }
   const times = stateTimes(period.data, states);
   const length = Math.max(time(period.data.value), times.reduce((sum, t) => sum + t, 0));
@@ -98,7 +98,12 @@ export function periodLabel(period: PcacStatePeriod, states: PcacStateTimelineSt
   if (period.unknownShare > 0) {
     parts.push(`unknown ${percent(period.unknownShare)}`);
   }
-  return `${period.data.key}: ${parts.join(', ')}`;
+  return parts.join(', ');
+}
+
+/** The period's name and what it was in, for screen readers: `'Nov 20: Error 25%, OK 75%'`. */
+export function periodLabel(period: PcacStatePeriod, states: PcacStateTimelineState[]): string {
+  return `${period.data.key}: ${periodSummary(period, states)}`;
 }
 
 function percent(share: number): string {

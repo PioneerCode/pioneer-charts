@@ -10,4 +10,5 @@ export * from './lib/legend/public-api';
 export * from './lib/plot-line-area-chart/public-api';
 export * from './lib/proximity-chart/public-api';
 export * from './lib/pie-donut-chart/public-api';
+export * from './lib/state-timeline/public-api';
 

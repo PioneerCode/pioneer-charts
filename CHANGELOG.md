@@ -1,5 +1,5 @@
-<a name="22.3.0"></a>
-# [v22.3.0]
+<a name="22.2.29"></a>
+# [v22.2.29]
 
 ### Added
   - State timeline chart: `<pcac-state-timeline>` (`PcacStateTimeline`, `PcacStateTimelineConfig`,

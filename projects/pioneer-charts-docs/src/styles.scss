@@ -85,6 +85,14 @@ html {
     --pcac-proximity-ring-label-color: #adb5bd;
     --pcac-proximity-ring-color: #3a3f46;
     --pcac-proximity-spoke-color: #495057;
+    // The state timeline's states: OK dark and quiet, Warning and Error bright, still apart in
+    // lightness on a dark page (checked with the dataviz palette validator against #1a1a19)
+    --pcac-state-timeline-ok-color: #183f2c;
+    --pcac-state-timeline-warning-color: #ffc107;
+    --pcac-state-timeline-error-color: #e5535f;
+    --pcac-state-timeline-unknown-color: #868e96;
+    --pcac-state-timeline-background-color: var(--mat-sys-surface-container-low);
+    --pcac-state-timeline-row-label-color: #dee2e6;
   }
 }
 

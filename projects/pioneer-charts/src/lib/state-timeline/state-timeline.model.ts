@@ -9,8 +9,9 @@ export class PcacStateTimelineState {
   label?: string
 
   /**
-   * Any CSS color. Unset, the theme's: green for the first state, then amber and red for those
-   * after it, as `ok`, `warning`, `error` usually are.
+   * Any CSS color. Unset, the theme's: a pale green for the first state, a strong red for the last
+   * and amber for any between, as `ok`, `warning`, `error` usually are. Pick colors that differ in
+   * lightness as well as hue, as those do, so a color-blind reader can tell them apart.
    */
   color?: string
 }
@@ -30,8 +31,8 @@ export class PcacStateTimelineState {
  * with `hide` is left out.
  *
  * A period is drawn in the color of the worst state it was in, by the order of `states`, deeper
- * the more of what's known of it that state took. Striped when part of it is unknown, and plain
- * gray when all of it is.
+ * the more of what's known of it that state took (from 75% of the color to all of it). Striped
+ * when part of it is unknown, and plain gray when all of it is.
  */
 export class PcacStateTimelineConfig extends PcacChartConfig {
   /** The states, least severe first: a period shows the last of them it was in. */

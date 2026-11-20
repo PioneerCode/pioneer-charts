@@ -93,6 +93,32 @@ describe('PcacStateTimeline', () => {
     expect(shell.style.display).toBe('none');
   });
 
+  describe('its colors', () => {
+    /** The rule the component's stylesheet gives a selector, as the page has it. */
+    const rule = async (selector: string) => {
+      const fixture = TestBed.createComponent(TestHostComponent);
+      await fixture.whenStable();
+      const css = Array.from(document.querySelectorAll('style')).map((s) => s.textContent).join('\n').replace(/\s+/g, ' ');
+      const found = new RegExp(`${selector.replace(/[.]/g, '\\.')} ?\\{([^}]*)\\}`).exec(css);
+      expect(found, selector).not.toBeNull();
+      return found![1];
+    };
+
+    // Told apart by lightness as well as hue, so a red-green color-blind reader can (dataviz's palette check):
+    // OK pale and quiet, Warning and Error strong
+    it('draws OK pale, and Warning and Error strong, unless a stylesheet says otherwise', async () => {
+      expect(await rule('.pcac-state-ok')).toContain('var(--pcac-state-timeline-ok-color, #98c9b2)');
+      expect(await rule('.pcac-state-warning')).toContain('var(--pcac-state-timeline-warning-color, #d97706)');
+      expect(await rule('.pcac-state-error')).toContain('var(--pcac-state-timeline-error-color, #bb2d3b)');
+      expect(await rule('.pcac-state-unknown .pcac-state-fill')).toContain('var(--pcac-state-timeline-unknown-color, #e9ecef)');
+    });
+
+    // At 40%, a period with a little Error was a pale pink beside OK's pale green: hard to tell apart for anyone
+    it('draws a state from 75% of its color, all of it the more of the period it took', async () => {
+      expect(await rule('.pcac-state-fill')).toContain('calc(75% + var(--pcac-state-share, 1) * 25%)');
+    });
+  });
+
   it('has its own builder, so two timelines on a page don\'t share one', async () => {
     const first = TestBed.createComponent(TestHostComponent);
     const second = TestBed.createComponent(TestHostComponent);

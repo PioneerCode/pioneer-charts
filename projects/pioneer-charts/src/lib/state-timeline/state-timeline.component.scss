@@ -11,38 +11,45 @@
   }
 
   // A period in the worst state it was in, deeper the more of what's known of it that state took
-  // (`--pcac-state-share`, set by the builder): from 40% of the state's color mixed into the
-  // background to all of it. A state's color is its config `color` (`--pcac-state-color`, set on
-  // the period) or, without one, the theme's for its place among the states: the first is OK, the
-  // last Error, any between Warning. Each is a custom property, so a stylesheet can restyle them.
+  // (`--pcac-state-share`, set by the builder): from 75% of the state's color mixed into the
+  // background to all of it, so a period with a little Error is still plainly red. A state's color
+  // is its config `color` (`--pcac-state-color`, set on the period) or, without one, the theme's for
+  // its place among the states: the first is OK, the last Error, any between Warning. Each is a
+  // custom property, so a stylesheet can restyle them; a dark page sets its own (the docs site's
+  // dark theme has a set).
+  //
+  // OK is pale and Warning and Error strong, so they differ in lightness as well as hue: a red-green
+  // color-blind reader tells them apart by that (checked with the dataviz palette validator, every
+  // pair, at full strength and at 75%, against a white page). Most periods are OK, and stay quiet.
   .pcac-state-ok {
-    --pcac-state-theme-color: var(--pcac-state-timeline-ok-color, #198754);
+    --pcac-state-theme-color: var(--pcac-state-timeline-ok-color, #98c9b2);
   }
 
   .pcac-state-warning {
-    --pcac-state-theme-color: var(--pcac-state-timeline-warning-color, #e0a800);
+    --pcac-state-theme-color: var(--pcac-state-timeline-warning-color, #d97706);
   }
 
   .pcac-state-error {
-    --pcac-state-theme-color: var(--pcac-state-timeline-error-color, #dc3545);
+    --pcac-state-theme-color: var(--pcac-state-timeline-error-color, #bb2d3b);
   }
 
   .pcac-state-fill {
     fill: color-mix(
       in srgb,
       var(--pcac-state-color, var(--pcac-state-theme-color))
-        calc(40% + var(--pcac-state-share, 1) * 60%),
+        calc(75% + var(--pcac-state-share, 1) * 25%),
       var(--pcac-state-timeline-background-color, #{imports.$white})
     );
   }
 
-  // Nothing known of it: gray. Part of it unknown: the same gray striped over its color.
+  // Nothing known of it: gray, lighter than OK's green. Part of it unknown: the same gray striped over
+  // its color.
   .pcac-state-unknown .pcac-state-fill {
-    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-400});
+    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-200});
   }
 
   .pcac-state-stripe {
-    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-400});
+    fill: var(--pcac-state-timeline-unknown-color, #{imports.$gray-200});
     fill-opacity: 0.85;
   }
 

@@ -30,7 +30,7 @@ export class StateTimelineComponent {
     { key: 'State Timeline', value: 'state-timeline' },
     { key: 'Status History', value: 'status-history' },
     { key: 'The Data', value: 'the-data' },
-    { key: 'One Row, Its Own Tooltip', value: 'one-row' },
+    { key: 'One Row With a Custom Tooltip', value: 'one-row' },
     { key: 'Long Windows', value: 'long-windows' },
     { key: 'Colors', value: 'colors' },
     { key: 'Markup', value: 'markup' },
@@ -60,7 +60,7 @@ export class StateTimelineComponent {
 const config: PcacStateTimelineConfig = {
   ...new PcacStateTimelineConfig(),
   height: 112,
-  // Least severe first: each day shows the worst it was in
+  // Least to most severe: each day shows its worst state
   states: [
     { key: 'ok', label: 'OK' },
     { key: 'warning', label: 'Warning' },
@@ -81,12 +81,12 @@ const config: PcacStateTimelineConfig = {
         // ...a period for each day, oldest first
       ],
     },
-    // ...a row for each thing watched
+    // ...a row for each service or device
   ],
 };`;
 
-  dataCode = `// 24 hours, of which 15 known: 12 OK, 3 in Error.
-// Drawn red (its worst), 3/15 of what's known in Error, striped for the 9 unknown hours.
+  dataCode = `// A 24-hour day with data for 15 hours: 12 OK and 3 in Error.
+// It's drawn red (its worst state) and striped for the 9 unknown hours.
 {
   key: 'Thu, Nov 12', value: 24, hide: false,
   data: [
@@ -111,7 +111,7 @@ const config: PcacStateTimelineConfig = {
   --pcac-state-timeline-warning-color: #d97706;
   --pcac-state-timeline-error-color: #bb2d3b;
   --pcac-state-timeline-unknown-color: #e9ecef;
-  /* What a state's color is mixed into for its depth: the page's background */
+  /* Lighter shades are mixed with this color: use your page's background */
   --pcac-state-timeline-background-color: #fff;
   --pcac-state-timeline-row-label-color: #495057;
 }`;

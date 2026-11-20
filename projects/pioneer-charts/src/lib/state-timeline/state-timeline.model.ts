@@ -1,56 +1,53 @@
 import { PcacChartConfig } from '../core/chart.model';
 
-/** One state a period can be in: its `key` in the data, and what it's called and colored. */
+/** One state a period can be in, such as OK or Error: its key, its name and its color. */
 export class PcacStateTimelineState {
-  /** The state's key, as a period's `data` names it. */
+  /** The state's key, matching the keys in a period's `data`. */
   key = ''
 
-  /** What it's called in the tooltip and to screen readers; its `key` when unset. */
+  /** The state's name in the tooltip and for screen readers. Defaults to its `key`. */
   label?: string
 
   /**
-   * Any CSS color. Unset, the theme's: a pale green for the first state, a strong red for the last
-   * and amber for any between, as `ok`, `warning`, `error` usually are. Pick colors that differ in
-   * lightness as well as hue, as those do, so a color-blind reader can tell them apart.
+   * Any CSS color. Defaults to the theme: pale green for the first state, strong red for the last,
+   * and amber for any in between. Choose colors that differ in lightness so people with color
+   * blindness can tell them apart.
    */
   color?: string
 }
 
 /**
- * A state timeline: one row per thing watched, each a run of periods (days, hours) side by side,
- * colored by the worst state the thing was in during that period - so an hour of Error in a day
- * otherwise OK still shows. It suits a status history, where what matters is when something went
- * wrong and how much, not a value.
+ * A state timeline shows how something's status changed over time. Each row is one thing you're
+ * tracking, like a service or a device, split into periods such as days or hours. Each period is
+ * colored by the worst state it reached, so one hour of Error in an otherwise good day still shows.
  *
- * `data` is the rows, each holding its periods in order, oldest first. A row's `key` is its name,
- * shown to the left of it unless `rowLabels` is off. A period's `key` names it in the tooltip and
- * to screen readers (`'Fri, Nov 20'`), its `value` is its length in any unit, and its `data` the
- * time it spent in each state, in the same unit, keyed by the state's `key`. Time the states don't
- * cover is unknown; with no `value`, the period's length is the time in its states, so all of it
- * is known. Every period of a row is drawn the same width, whatever its length. A row or period
- * with `hide` is left out.
+ * `data` is a list of rows. A row's `key` is its name, shown to its left unless `rowLabels` is
+ * false, and its `data` is its periods, oldest first. Each period has:
+ * - `key`: its name, shown in the tooltip and read by screen readers (`'Fri, Nov 20'`).
+ * - `value`: how long it is, in any unit. Leave it out and the length is the total of its states.
+ * - `data`: how much time it spent in each state, in the same unit, keyed by the state's `key`.
  *
- * A period is drawn in the color of the worst state it was in, by the order of `states`, deeper
- * the more of what's known of it that state took (from 75% of the color to all of it). Striped
- * when part of it is unknown, and plain gray when all of it is.
+ * Any time not covered by a state is unknown: a partly unknown period is striped, and an entirely
+ * unknown one is plain gray. The color is lighter when the worst state lasted a short time and
+ * full strength when it lasted the whole period. Every period in a row is the same width. A row
+ * or period with `hide` set is left out.
  */
 export class PcacStateTimelineConfig extends PcacChartConfig {
   /**
-   * Height in pixels, shared between the rows, 4px apart; default 24, for one row (the base 200
-   * would be a wall). Give more for more rows.
+   * Height in pixels, split evenly between the rows with 4px between them. Default 24, which fits
+   * one row; set a larger height for more rows.
    */
   override height: number = 24
 
-  /** The states, least severe first: a period shows the last of them it was in. */
+  /** The states a period can be in, from least to most severe. Each period shows its worst. */
   states: PcacStateTimelineState[] = []
 
   /**
-   * Space between periods, in px; default 2. It drops to 1px when it would take more than a
-   * quarter of each period's room (90 days in a narrow column), and to none when even that would
-   * leave a period under a pixel wide. Optional, so an object literal needn't spell it out.
+   * Space between periods, in px. Default 2. It shrinks to 1px, then to none, when periods get
+   * too narrow.
    */
   gap?: number = 2
 
-  /** Show each row's name to the left of it; default true. Optional, likewise. */
+  /** Show each row's name to its left. Default true. */
   rowLabels?: boolean = true
 }

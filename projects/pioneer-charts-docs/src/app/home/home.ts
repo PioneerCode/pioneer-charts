@@ -22,7 +22,7 @@ export const CHARTS: ChartLink[] = [
   { name: 'Donut Chart', path: 'donut-chart', summary: 'A ring with a total or any label in its center.' },
   { name: 'Dot Plot Chart', path: 'dot-plot-chart', summary: 'Values stacked into columns along one axis.' },
   { name: 'Proximity Chart', path: 'proximity-chart', summary: 'One item in the middle, its closest matches around it.' },
-  { name: 'State Timeline', path: 'state-timeline', summary: 'A row of days or hours for each thing watched, colored by its worst state.' },
+  { name: 'State Timeline', path: 'state-timeline', summary: 'A row of days or hours for each service or device, colored by its worst state.' },
   { name: 'Sparklines', path: 'sparkline', summary: 'Small, axis-free trend lines for tables and dashboard tiles.' },
 ];
 

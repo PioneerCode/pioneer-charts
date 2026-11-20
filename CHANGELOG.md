@@ -3,21 +3,22 @@
 
 ### Added
   - State timeline chart: `<pcac-state-timeline>` (`PcacStateTimeline`, `PcacStateTimelineConfig`,
-    `PcacStateTimelineState`). One row for each thing watched, each a run of periods (days, hours)
-    side by side, colored by the worst state it was in by the order of `states` (least severe
-    first), from 75% of that state's color to all of it the more of what's known of the period it
-    took. A period's `value` is its length and its `data` the time in each state; time they don't
-    cover is unknown, striped over the color when part of the period is and plain gray when all of
-    it is. Rows share the `height` (default 24px, for one row), 4px apart, labeled to their left
-    (`rowLabels`, default true). The 2px `gap` between periods narrows to 1px, then none, as they
-    do. One Tab stop, the arrow keys moving between periods, each named with its row, its name and
-    what it was in ("Database, Fri, Nov 6: Error 50%, OK 50%", its shares whole percents adding up
-    to 100); the default tooltip says the same, and a `pcacTooltip` template gets the period, its
-    row and their places. `periodClicked` emits the period. OK is a pale green, Warning amber and
-    Error a strong red, apart in lightness as well as hue for color-blind readers; each is a custom
-    property (`--pcac-state-timeline-ok-color`, `-warning-color`, `-error-color`, `-unknown-color`,
-    `-background-color`, `-row-label-color`). New docs page: State Timeline, and a section on the
-    chart examples page.
+    `PcacStateTimelineState`). Shows how a status changed over time: one row per service or
+    device, split into periods (days, hours), each colored by its worst state.
+    - A state that lasted longer is drawn darker. Time with no data is striped, or plain gray
+      if the whole period has none.
+    - `states` lists the states from least to most severe; each can set its own `label` and `color`.
+    - `height` defaults to 24px (one row) and is split between rows. `rowLabels` shows each row's
+      name (default true). `gap` (default 2px) shrinks as periods get narrow.
+    - Keyboard and screen reader support, like the other charts: one Tab stop, arrow keys between
+      periods, each announced as "Database, Fri, Nov 6: Error 50%, OK 50%" (percentages always
+      add up to 100).
+    - Tooltips: the default shows the period and its states; a `pcacTooltip` template gets the
+      period and its row. `periodClicked` emits the clicked period.
+    - Colors: OK is pale green, Warning amber and Error strong red, chosen to stay distinguishable
+      for color-blind readers. Override them with `--pcac-state-timeline-ok-color`,
+      `-warning-color`, `-error-color`, `-unknown-color`, `-background-color` and `-row-label-color`.
+    - New docs page: State Timeline, plus a section on the Charts examples page.
 
 <a name="22.2.28"></a>
 # [v22.2.28]

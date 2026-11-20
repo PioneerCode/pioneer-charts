@@ -26,7 +26,7 @@ Each chart has its own page with live examples, markup and its full configuratio
 - [Angular Donut Chart](https://pioneercharts.com/docs/components/charts/donut-chart) - with a total or any label in its center
 - [Angular Dot Plot Chart](https://pioneercharts.com/docs/components/charts/dot-plot-chart) - values stacked into columns along one axis
 - [Angular Proximity Chart](https://pioneercharts.com/docs/components/charts/proximity-chart) - one item in the middle, its closest matches around it
-- [Angular State Timeline Chart](https://pioneercharts.com/docs/components/charts/state-timeline) - a row of days or hours for each thing watched, colored by the worst state it was in
+- [Angular State Timeline Chart](https://pioneercharts.com/docs/components/charts/state-timeline) - a row of days or hours for each service or device, colored by its worst state
 - [Angular Sparklines](https://pioneercharts.com/docs/components/charts/sparkline) - small, axis-free trend lines for tables and dashboard tiles
 - [Legend](https://pioneercharts.com/docs/components/charts/legend) - a chart's series, with click events
 

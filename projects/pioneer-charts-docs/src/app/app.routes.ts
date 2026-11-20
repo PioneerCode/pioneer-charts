@@ -46,7 +46,7 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/state-timeline', title: 'State Timeline',
         loadComponent: () => import('./docs/state-timeline/state-timeline.component').then(m => m.StateTimelineComponent),
-        data: { searchTitle: 'Angular State Timeline Chart', description: 'An Angular state timeline for status history: a row of days or hours for each thing watched, each colored by the worst state it was in, from Pioneer Charts.' },
+        data: { searchTitle: 'Angular State Timeline Chart', description: 'An Angular state timeline for status history: a row of days or hours for each service or device, colored by its worst state, from Pioneer Charts.' },
     },
     {
         path: 'docs/components/charts/sparkline', title: 'Sparklines',

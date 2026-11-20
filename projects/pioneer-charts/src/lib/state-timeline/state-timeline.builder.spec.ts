@@ -60,6 +60,12 @@ describe('StateTimelineBuilder', () => {
     expect(rects.map((r) => num(r, 'height'))).toEqual([20, 20, 20, 20]);
   });
 
+  // The base default, 200px, is a wall for one row of periods
+  it('draws a row 24px tall unless given a height', () => {
+    const { svg } = build({ ...new PcacStateTimelineConfig(), states: STATES, rowLabels: false, data: [row('Disk', [period('Mon', 24, { ok: 24 })])] });
+    expect(num(base(periods(svg)[0]), 'height')).toBe(24);
+  });
+
   it('narrows the gap as the periods narrow: 1px for 90 days in a card\'s column', () => {
     const days = Array.from({ length: 90 }, (_, i) => period(`Day ${i}`, 24, { ok: 24 }));
     const rects = periods(build(config([row('Disk', days)]), 265).svg).map(base);

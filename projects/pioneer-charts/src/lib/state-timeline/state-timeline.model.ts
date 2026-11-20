@@ -35,6 +35,12 @@ export class PcacStateTimelineState {
  * when part of it is unknown, and plain gray when all of it is.
  */
 export class PcacStateTimelineConfig extends PcacChartConfig {
+  /**
+   * Height in pixels, shared between the rows, 4px apart; default 24, for one row (the base 200
+   * would be a wall). Give more for more rows.
+   */
+  override height: number = 24
+
   /** The states, least severe first: a period shows the last of them it was in. */
   states: PcacStateTimelineState[] = []
 

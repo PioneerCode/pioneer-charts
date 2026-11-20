@@ -93,20 +93,31 @@ export function periodSummary(period: PcacStatePeriod, states: PcacStateTimeline
   const parts = states
     .map((state, i) => ({ name: state.label ?? state.key, share: times[i] / length }))
     .filter((part) => part.share > 0)
-    .reverse()
-    .map((part) => `${part.name} ${percent(part.share)}`);
+    .reverse();
   if (period.unknownShare > 0) {
-    parts.push(`unknown ${percent(period.unknownShare)}`);
+    parts.push({ name: 'unknown', share: period.unknownShare });
   }
-  return parts.join(', ');
+  const percents = wholePercents(parts.map((part) => part.share));
+  return parts.map((part, i) => `${part.name} ${percents[i] === 0 ? '<1' : percents[i]}%`).join(', ');
+}
+
+/**
+ * Shares that add up to 1 as whole percents that add up to 100: each rounded down, then the
+ * percents left over given one each to the shares nearest their next percent (on a tie, the
+ * earlier: the worse state). Rounded each on its own, 12.5% and 87.5% would read 13% and 88%.
+ */
+function wholePercents(shares: number[]): number[] {
+  const percents = shares.map((share) => Math.floor(share * 100));
+  const left = 100 - percents.reduce((sum, p) => sum + p, 0);
+  shares
+    .map((share, i) => ({ i, remainder: share * 100 - percents[i] }))
+    .sort((a, b) => b.remainder - a.remainder || a.i - b.i)
+    .slice(0, left)
+    .forEach(({ i }) => percents[i]++);
+  return percents;
 }
 
 /** The period's name and what it was in, for screen readers: `'Nov 20: Error 25%, OK 75%'`. */
 export function periodLabel(period: PcacStatePeriod, states: PcacStateTimelineState[]): string {
   return `${period.data.key}: ${periodSummary(period, states)}`;
-}
-
-function percent(share: number): string {
-  const rounded = Math.round(share * 100);
-  return rounded === 0 ? '<1%' : `${rounded}%`;
 }

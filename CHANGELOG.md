@@ -8,15 +8,16 @@
     first), from 75% of that state's color to all of it the more of what's known of the period it
     took. A period's `value` is its length and its `data` the time in each state; time they don't
     cover is unknown, striped over the color when part of the period is and plain gray when all of
-    it is. Rows share the `height`, 4px apart, labeled to their left (`rowLabels`, default true).
-    The 2px `gap` between periods narrows to 1px, then none, as they do. One Tab stop, the arrow
-    keys moving between periods, each named with its row, its name and what it was in ("Database,
-    Fri, Nov 6: Error 50%, OK 50%"); the default tooltip says the same, and a `pcacTooltip` template
-    gets the period, its row and their places. `periodClicked` emits the period. OK is a pale
-    green, Warning amber and Error a strong red, apart in lightness as well as hue for color-blind
-    readers; each is a custom property (`--pcac-state-timeline-ok-color`, `-warning-color`,
-    `-error-color`, `-unknown-color`, `-background-color`, `-row-label-color`). New docs page:
-    State Timeline, and a section on the chart examples page.
+    it is. Rows share the `height` (default 24px, for one row), 4px apart, labeled to their left
+    (`rowLabels`, default true). The 2px `gap` between periods narrows to 1px, then none, as they
+    do. One Tab stop, the arrow keys moving between periods, each named with its row, its name and
+    what it was in ("Database, Fri, Nov 6: Error 50%, OK 50%", its shares whole percents adding up
+    to 100); the default tooltip says the same, and a `pcacTooltip` template gets the period, its
+    row and their places. `periodClicked` emits the period. OK is a pale green, Warning amber and
+    Error a strong red, apart in lightness as well as hue for color-blind readers; each is a custom
+    property (`--pcac-state-timeline-ok-color`, `-warning-color`, `-error-color`, `-unknown-color`,
+    `-background-color`, `-row-label-color`). New docs page: State Timeline, and a section on the
+    chart examples page.
 
 <a name="22.2.28"></a>
 # [v22.2.28]

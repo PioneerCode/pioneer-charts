@@ -82,7 +82,7 @@
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="api">API</h2>
     <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
-    <app-layout-base-config>
+    <app-layout-base-config [defaultHeight]="24">
       <tbody>
         <tr>
           <td>states</td>
@@ -100,7 +100,8 @@
         </tr>
       </tbody>
     </app-layout-base-config>
-    <p class="mt-3">The <b>height</b> is shared between the rows, 4px apart. Each period is one stop for the arrow keys,
+    <p class="mt-3">The <b>height</b> is shared between the rows, 4px apart: its default suits one row, so give more
+      for more. Each period is one stop for the arrow keys,
       named for screen readers with its row, its name and what it was in &mdash; <code>"Database, Fri, Nov 6: Error 50%,
       OK 50%"</code> (see <a routerLink="/docs/guides/introduction" fragment="accessibility">Accessibility</a>).</p>
   </section>

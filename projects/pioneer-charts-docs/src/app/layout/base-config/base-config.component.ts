@@ -12,4 +12,6 @@ export class LayoutBaseConfig {
   readonly includeHeightFull = input(true);
   // Only the charts that have axes (everything but pie) show the xAxis / yAxis row.
   readonly includeAxes = input(false);
+  // A chart whose config class sets a height of its own (the state timeline's one row) says so.
+  readonly defaultHeight = input(200);
 }

@@ -29,6 +29,15 @@ describe('StateTimelineComponent', () => {
     }
   });
 
+  it('gives its own default height in its API table, not the base 200px', async () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(StateTimelineComponent);
+    await fixture.whenStable();
+    const height = Array.from(fixture.nativeElement.querySelectorAll('tr') as NodeListOf<HTMLTableRowElement>)
+      .find((tr) => tr.cells[0]?.textContent?.trim() === 'height')!;
+    expect(height.cells[1].textContent).toContain('Default is 24px');
+  });
+
   it('tells the same story on every build, so the pre-rendered page matches what the browser draws', () => {
     expect(statusHistory()).toEqual(statusHistory());
   });

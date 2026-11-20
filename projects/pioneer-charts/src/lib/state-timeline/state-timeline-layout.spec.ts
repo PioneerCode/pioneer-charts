@@ -97,6 +97,13 @@ describe('periodLabel', () => {
     expect(periodLabel(at(period('Nov 20', 24, { ok: 18, error: 6 })), STATES)).toBe('Nov 20: Error 25%, OK 75%');
   });
 
+  // Rounded each on its own, 3 hours of Error in 24 read "Error 13%, OK 88%": 101%
+  it('rounds the shares so they add up to 100%, the remainder going to those nearest the next percent', () => {
+    expect(periodLabel(at(period('Nov 20', 24, { ok: 21, error: 3 })), STATES)).toBe('Nov 20: Error 13%, OK 87%');
+    expect(periodLabel(at(period('Nov 20', 3, { ok: 1, warning: 1, error: 1 })), STATES)).toBe('Nov 20: Error 34%, Warning 33%, OK 33%');
+    expect(periodLabel(at(period('Nov 20', 24, { ok: 17, error: 3 })), STATES)).toBe('Nov 20: Error 12%, OK 71%, unknown 17%');
+  });
+
   it('says how much was unknown, and a share under 1% as such', () => {
     expect(periodLabel(at(period('Nov 20', 1000, { ok: 897, error: 3 })), STATES)).toBe('Nov 20: Error <1%, OK 90%, unknown 10%');
   });

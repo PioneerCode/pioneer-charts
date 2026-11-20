@@ -75,11 +75,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Test
-        run: npm run test
-
+      # Before the tests: the docs' specs import the library from ./dist, as the docs app does
       - name: Build library
         run: npm run build:lib
+
+      - name: Test
+        run: npm run test
 
       - name: Resolve version
         id: version

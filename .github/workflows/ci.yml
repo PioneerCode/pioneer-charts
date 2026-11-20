@@ -34,15 +34,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Both projects' specs (see the `test` script). The docs specs don't import the library, so
-      # they don't need it built first.
-      - name: Test
-        run: npm run test
-
-      # The docs app resolves '@pioneer-code/pioneer-charts' through tsconfig paths to
-      # ./dist/pioneer-charts, so the library has to be built first.
+      # The docs app, its specs included, resolves '@pioneer-code/pioneer-charts' through tsconfig
+      # paths to ./dist/pioneer-charts, so the library has to be built before either.
       - name: Build library
         run: npm run build:lib
+
+      # Both projects' specs (see the `test` script)
+      - name: Test
+        run: npm run test
 
       - name: Build docs
         run: npm run build:docs

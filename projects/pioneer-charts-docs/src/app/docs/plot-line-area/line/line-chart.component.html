@@ -25,7 +25,7 @@
       <pcac-line-chart [config]="pcService.lineChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </pc-chart-card>
-  <h2 class="pc-h4 mt-6 mb-2">Point colors</h2>
+  <h2 class="pc-h4 mt-6 mb-2" id="point-colors">Point colors</h2>
   <p class="mb-3">Set <code>color</code> on a data point to draw its dot in that color in place of its series' &mdash;
     to flag the readings below a threshold, say. Its ring shows the color, and so does its fill while it's hovered
     or focused; the line keeps the series' color. Color alone can't be seen by every reader, so say why in words too:

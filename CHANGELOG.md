@@ -5,7 +5,7 @@
   - Line/area/plot: `color` on a data point - its dot in that color in place of its series', to
     flag it among the rest (a reading below a threshold, say). Its ring at rest and its fill while
     hovered or focused; the line or area and the crosshair keep the series' color. Points without
-    one are unchanged. New section on the Line Chart page: Point colors.
+    one are unchanged. New Point colors sections on the Line, Area and Plot Chart pages.
 
 <a name="22.2.29"></a>
 # [v22.2.29]

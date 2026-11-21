@@ -820,7 +820,8 @@ export class PlaChartBuilder extends PcacChart {
       points.filter((d: PcacData) => !d.image)
         .append('circle')
         .attr('class', 'dot')
-        .attr('stroke', this.colors[index])
+        // A point's own color, flagging it among the rest, or its series'
+        .attr('stroke', (d: PcacData) => d.color ?? this.colors[index])
         .attr('cx', (d: PcacData) => this.offsetOf(d).dx)
         .attr('cy', rise)
         .attr('fill', '#fff')
@@ -905,7 +906,7 @@ export class PlaChartBuilder extends PcacChart {
       .transition(DOT_HOVER_TRANSITION)
       .duration(duration / 3)
       .attr('r', this.hoverDotRadius)
-      .attr('fill', this.colors[index]);
+      .attr('fill', d.color ?? this.colors[index]);
   }
 
   /**

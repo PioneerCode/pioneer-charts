@@ -58,6 +58,11 @@ export class DataContractComponent {
    */
   image?: string;
   /**
+   * Line/area/plot charts only, on a point: a CSS color for its dot in
+   * place of its series', to flag it (a reading below a threshold, say).
+   */
+  color?: string;
+  /**
    * Your own identifier for the item, e.g. a record's primary key. Never
    * drawn; carried through so a click output can be traced back to its record.
    */

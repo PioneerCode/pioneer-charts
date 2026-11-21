@@ -1,15 +1,16 @@
 <app-layout-page-docs pageTitle="Dot Plot Chart" [jumpNav]="jumpNav()">
-  <p class="lead" id="dot-plot-chart">Dot plot component: every point placed along one value axis, with points that
-    share a value &mdash; or fall in the same <code>binWidth</code> bin &mdash; stacked into a column above it. It
-    shows how values are spread out while keeping each item visible, hoverable and clickable, and a point can be drawn
-    as its own <code>image</code>. Takes the same series-of-points data as the
-    <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a>: a point's <code>value</code> is its position on
-    the axis, its <code>key</code> its name, and its series its color. Points without a numeric <code>value</code>, and
-    hidden series and points, are left out.</p>
+  <p class="lead" id="dot-plot-chart">The dot plot places each point along a single value axis. Points with the
+    same value, or that fall in the same <code>binWidth</code> bin, stack into a column. This shows how the values are
+    spread out while keeping every item visible, so each one can still be hovered and clicked. A point can also be
+    drawn as an <code>image</code> instead of a dot. The dot plot uses the same data as the
+    <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a>: a list of series, each holding its points. A
+    point's <code>value</code> sets its position on the axis, its <code>key</code> is its name, and its series sets
+    its color. Points without a numeric <code>value</code> are skipped, and so are hidden series and hidden
+    points.</p>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="try-it">Try it</h2>
-    <p class="mb-3">A month of daily highs, one mark per day, grouped by sky. The controls edit the chart's config
-      live; each field is described in the Configuration table.</p>
+    <p class="mb-3">A month of daily high temperatures, one mark per day, grouped by the weather. The controls
+      below change the chart's config as you use them. The Configuration table explains each setting.</p>
     @let s = settings();
     <div class="pc-controls max-w-md mb-3">
       <label for="pc-dot-bin-width">binWidth</label>
@@ -18,11 +19,11 @@
           <option [value]="'' + w">{{ w === 0 ? 'none' : w + '°' }}</option>
         }
       </select>
-      <span class="pc-muted">{{ s.binWidth ? 'values within ' + s.binWidth + '° stack' : 'only equal values stack' }}</span>
+      <span class="pc-muted">{{ s.binWidth ? 'values within ' + s.binWidth + '° stack together' : 'only equal values stack' }}</span>
 
       <label for="pc-dot-images">images</label>
       <input id="pc-dot-images" type="checkbox" [checked]="s.images" (change)="set('images', $any($event.target).checked)" />
-      <span class="pc-muted">{{ s.images ? 'each day drawn as its weather' : 'dots in each series\' color' }}</span>
+      <span class="pc-muted">{{ s.images ? 'each day shows its weather' : 'dots in each series\' color' }}</span>
 
       <label for="pc-dot-image-size">pointImage</label>
       <input id="pc-dot-image-size" type="range" min="16" max="48" step="2" [value]="s.imageSize" [disabled]="!s.images"
@@ -31,7 +32,7 @@
 
       <label for="pc-dot-auto-tick">autoTickSize</label>
       <input id="pc-dot-auto-tick" type="checkbox" [checked]="s.autoTickSize" (change)="set('autoTickSize', $any($event.target).checked)" />
-      <span class="pc-muted">{{ s.autoTickSize ? 'x ticks half the largest mark, spacing the labels to it' : 'no tick marks' }}</span>
+      <span class="pc-muted">{{ s.autoTickSize ? 'tick marks half the size of the largest mark, so the labels clear it' : 'no tick marks' }}</span>
     </div>
     <pc-chart-card heading="Daily highs in June" caption="Change the settings above and it redraws." class="mb-3">
       <app-layout-resource-state [resource]="pcService.dotPlotChartConfig">
@@ -43,15 +44,17 @@
   </section>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="drawn-size">Showing the drawn size</h2>
-    <p>A column too tall for the chart's <b>height</b> shrinks every mark evenly until it fits, so the marks can be
-      drawn smaller than <b>pointImage</b> (or <b>dotRadius</b>) asks for &mdash; in the demo above, raise
-      <b>pointImage</b> with a <b>binWidth</b> of 5. The <b>markFit</b> output says by how much: 1 at full size,
-      below 1 once they shrank, so an image is drawn at <code>maxWidth * fit</code> by <code>maxHeight * fit</code>.</p>
-    <p>Use it to keep a size control honest. Keep the size the user picked apart from the size the control shows,
-      and drive the chart from the pick: the marks then grow back toward it when the columns shorten &mdash; other
-      data, a taller chart &mdash; and a pick the chart can't fit settles back to what it drew.
-      <b>markFit</b> only emits when the fit changes, so set the shown size to the pick as the user moves the
-      control and let the next fit correct it.</p>
+    <p>When a column is too tall for the chart's <b>height</b>, every mark shrinks by the same amount until the
+      column fits. This means marks can end up smaller than the size set by <b>pointImage</b> (or <b>dotRadius</b>).
+      To see it in the demo above, set <b>binWidth</b> to 5 and raise <b>pointImage</b>. The <b>markFit</b> output
+      tells you how much the marks shrank: 1 means full size, and anything below 1 means they were scaled down. An
+      image is drawn at <code>maxWidth * fit</code> by <code>maxHeight * fit</code>.</p>
+    <p>Use <b>markFit</b> to keep a size control accurate. Track two values: the size the user picked and the size
+      the control shows. Build the chart's config from the picked size. That way, the marks grow back toward the
+      picked size when the columns get shorter (with different data or a taller chart, for example), and if the
+      chart can't fit the picked size, the control settles on the size that was actually drawn. <b>markFit</b> only
+      emits when the fit changes, so whenever the user moves the control, set the shown size to the picked size and
+      let the next <b>markFit</b> correct it.</p>
     <app-layout-code language="typescript" [code]="drawnSizeCode"></app-layout-code>
   </section>
   <section class="pc-doc-section">
@@ -65,36 +68,39 @@
       <tbody>
         <tr>
           <td>value axis</td>
-          <td>On a dot plot <code>xAxis</code> is the value axis. <b>domainMin</b> / <b>domainMax</b> fix its span; without them it spans the data,
-            rounded out to nice ticks. <b>format</b> formats its ticks and the tooltip's value, and every label, sub
-            label, tick and grid setting applies. There is no y axis &mdash; a column's height is a count of marks,
-            not a value &mdash; so <b>yAxis</b> is ignored.</td>
+          <td>On a dot plot, <code>xAxis</code> is the value axis. Set <b>domainMin</b> and <b>domainMax</b> to fix its
+            range. Without them, the axis covers the data, rounded out to even tick values. <b>format</b> controls how
+            its ticks and the tooltip's value are shown, and every label, sub label, tick, and grid setting works as
+            usual. There is no y axis, because a column's height is a count of marks, not a value. <b>yAxis</b> is
+            ignored.</td>
         </tr>
         <tr>
           <td>binWidth</td>
-          <td>Group values into bins this wide, in the axis's units, and stack each bin at its center. Bins start at
-            <code>xAxis.domainMin</code>, or 0 without one. Unset, only equal values stack.</td>
+          <td>Groups values into bins of this width, in the axis's units, and stacks each bin at its center. Bins start
+            at <code>xAxis.domainMin</code>, or at 0 if that isn't set. When <b>binWidth</b> isn't set, only equal
+            values stack.</td>
         </tr>
         <tr>
           <td>dotRadius</td>
-          <td>Radius of a point's dot in pixels. Default 6. A hovered dot grows by 2 and fills with its series'
+          <td>The radius of each dot, in pixels. Default 6. A hovered dot grows by 2 pixels and fills with its series'
             color.</td>
         </tr>
         <tr>
           <td>gap</td>
-          <td>Space between stacked marks in pixels. Default 2.</td>
+          <td>The space between stacked marks, in pixels. Default 2.</td>
         </tr>
         <tr>
           <td>pointImage</td>
-          <td>Bounding box (<b>maxWidth</b> / <b>maxHeight</b>) for points with an <b>image</b>, drawn in place of their
-            dot, as on the plot chart. When the tallest column wouldn't fit the chart's <b>height</b>, every mark
-            shrinks evenly until it does, so nothing is cut off; <b>markFit</b> reports by how much (see
+          <td>The largest size (<b>maxWidth</b> / <b>maxHeight</b>) for points that have an <b>image</b>. The image is
+            drawn in place of the dot, the same as on the plot chart. If the tallest column won't fit in the chart's
+            <b>height</b>, every mark shrinks by the same amount until it does, so nothing gets cut off.
+            <b>markFit</b> reports how much they shrank (see
             <a routerLink="." fragment="drawn-size">Showing the drawn size</a>).</td>
         </tr>
         <tr>
           <td>colorOverride</td>
-          <td>Series colors, any CSS color, in place of the theme palette, one per series in order. Repeated when there
-            are more series than colors.</td>
+          <td>Colors to use for the series, in order, in place of the theme palette. Any CSS color works. If there are
+            more series than colors, the colors repeat.</td>
         </tr>
       </tbody>
     </app-layout-base-config>
@@ -113,14 +119,14 @@
         <tbody>
           <tr>
             <td>(dotClicked)="onClicked($event)"</td>
-            <td>Emitted when a dot or image is clicked, or activated with Enter or Space. It emits a copy of the item; set its <b>id</b> to trace it back to your record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
+            <td>Emitted when a dot or image is clicked, or when it has focus and the user presses Enter or Space. It sends a copy of the item. Give the item an <b>id</b> so you can match it back to your own record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
             <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
           </tr>
           <tr>
             <td>(markFit)="onMarkFit($event)"</td>
-            <td>Emitted after a draw that changed how much the marks were scaled to fit the chart's height: 1 at full
-              size, below 1 once a column too tall for the chart shrank every mark evenly. Marks are drawn at
-              <code>pointImage.maxWidth * fit</code> by <code>maxHeight * fit</code>, or a radius of
+            <td>Emitted after a redraw changes how much the marks were scaled to fit the chart's height. 1 means full
+              size. Below 1 means a column was too tall, so every mark was shrunk to fit. Marks are drawn at
+              <code>pointImage.maxWidth * fit</code> by <code>maxHeight * fit</code>, or with a radius of
               <code>dotRadius * fit</code> (see <a routerLink="." fragment="drawn-size">Showing the drawn size</a>).</td>
             <td>number</td>
           </tr>

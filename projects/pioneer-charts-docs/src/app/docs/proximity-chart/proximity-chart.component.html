@@ -1,12 +1,13 @@
 <app-layout-page-docs pageTitle="Proximity Chart" [jumpNav]="jumpNav()">
-  <p class="lead" id="proximity-chart">Proximity chart component: one item in the middle and others around it, each
-    closer in or further out by its <code>value</code> &mdash; how similar it is to the center, or how far from it. It
-    answers "what's nearest to this?" at a glance, and any item, the center included, can be drawn as its own
-    <code>image</code>.</p>
+  <p class="lead" id="proximity-chart">The proximity chart puts one item in the middle and arranges the others
+    around it. Each item's <code>value</code> sets how close to the center it sits. That value can measure how similar
+    an item is to the center, or how far away it is. The chart answers "what's closest to this?" at a glance. Any item,
+    including the center, can be drawn as an <code>image</code>.</p>
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="try-it">Try it</h2>
-    <p class="mb-3">Cities by how similar their climate is to Portland's, made-up scores from 0 to 1. The controls edit
-      the chart's config live; each field is described in the Configuration table.</p>
+    <p class="mb-3">Cities ranked by how similar their climate is to Portland's, using made-up scores from 0 to 1.
+      The controls below change the chart's config as you use them. The Configuration table explains each
+      setting.</p>
     @let s = settings();
     <div class="pc-controls max-w-md mb-3">
       <label for="pc-prox-labels">showLabels</label>
@@ -15,7 +16,7 @@
 
       <label for="pc-prox-rings">rings</label>
       <input id="pc-prox-rings" type="checkbox" [checked]="s.rings" (change)="set('rings', $any($event.target).checked)" />
-      <span class="pc-muted">{{ s.rings ? 'at 90%, 80%, 70% and 60%' : 'none' }}</span>
+      <span class="pc-muted">{{ s.rings ? 'at 90%, 80%, 70%, and 60%' : 'none' }}</span>
 
       <label for="pc-prox-spokes">showSpokes</label>
       <input id="pc-prox-spokes" type="checkbox" [checked]="s.showSpokes" (change)="set('showSpokes', $any($event.target).checked)" />
@@ -44,47 +45,51 @@
       <tbody>
         <tr>
           <td>center</td>
-          <td>The item the others are measured against, drawn in the middle: a <b>key</b> (its name) and optionally an
+          <td>The item the others are compared to, drawn in the middle. It needs a <b>key</b> (its name) and can have an
             <b>image</b>. Its <b>value</b> isn't used.</td>
         </tr>
         <tr>
           <td>closeValue / farValue</td>
-          <td>The <b>value</b> that sits right up against the center, and the one on the outer rim; values in between
-            are placed proportionally, and anything beyond either is held at it. Defaults 1 and 0, for a similarity
-            from 0 to 1. For a distance, swap them: <code>closeValue: 0, farValue: &lt;largest distance&gt;</code>.</td>
+          <td><b>closeValue</b> is the value that puts an item right next to the center, and <b>farValue</b> puts it on
+            the outer edge. Values in between are spaced proportionally, and values past either end stay at that end.
+            The defaults are 1 and 0, which fit a similarity score from 0 to 1. For a distance, flip them:
+            <code>closeValue: 0, farValue: &lt;largest distance&gt;</code>.</td>
         </tr>
         <tr>
           <td>rings</td>
-          <td>Values to draw a faint dashed guide ring at, each labelled in <b>format</b>. None when omitted.</td>
+          <td>Values at which to draw a faint dashed guide ring. Each ring is labeled using <b>format</b>. No rings are
+            drawn if this is left out.</td>
         </tr>
         <tr>
           <td>format</td>
-          <td>How values read on the ring labels, in the tooltip and to screen readers, as on an axis &mdash; e.g.
-            <code>Percentage</code>.</td>
+          <td>How values are shown on the ring labels, in the tooltip, and to screen readers, the same as on an axis. For
+            example, <code>Percentage</code>.</td>
         </tr>
         <tr>
           <td>showLabels</td>
-          <td>Write each item's <b>key</b> under it, and the center's under the center. Default false: names are in
-            the tooltip either way. Keep it off for long names or a crowded ring.</td>
+          <td>Shows each item's <b>key</b> below it, including the center's. Default false. The names appear in the
+            tooltip either way. Leave it off when the names are long or the ring is crowded.</td>
         </tr>
         <tr>
           <td>showSpokes</td>
-          <td>Draw a faint line from the center to each item. Default true.</td>
+          <td>Draws a faint line from the center to each item. Default true.</td>
         </tr>
         <tr>
           <td>startAngle</td>
-          <td>Where the first item sits, in degrees clockwise from 12 o'clock. Default 0. Items go around clockwise in
-            data order, evenly spaced, so put the closest first to have it at the top.</td>
+          <td>Where the first item sits, in degrees clockwise from 12 o'clock. Default 0. Items are spaced evenly and go
+            clockwise in data order, so list the closest item first to put it at the top.</td>
         </tr>
         <tr>
           <td>centerSize / itemSize</td>
-          <td>Size in pixels of the center's image (or twice its dot's radius) and of each item's. Defaults 64 and
-            40. Best with a handful to a dozen or so items; past that they crowd one another around the ring.</td>
+          <td>The size, in pixels, of the center's image (or its dot's diameter) and of each item's. The defaults are 64
+            and 40. The chart works best with a few items up to about a dozen. With more than that, they start to
+            crowd each other around the ring.</td>
         </tr>
         <tr>
           <td>colorOverride</td>
-          <td>Dot colors, any CSS color, for items without an <b>image</b>: the center takes the first, then the items
-            in data order. Repeated when there are more items than colors.</td>
+          <td>Dot colors for items that don't have an <b>image</b>, used in place of the theme palette. Any CSS color
+            works. The center gets the first color, then the items get the rest in data order. If there are more items
+            than colors, the colors repeat.</td>
         </tr>
       </tbody>
     </app-layout-base-config>
@@ -103,7 +108,7 @@
         <tbody>
           <tr>
             <td>(itemClicked)="onClicked($event)"</td>
-            <td>Emitted when an item or the center is clicked, or activated with Enter or Space. It emits a copy of the item; set its <b>id</b> to trace it back to your record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
+            <td>Emitted when an item or the center is clicked, or when it has focus and the user presses Enter or Space. It sends a copy of the item. Give the item an <b>id</b> so you can match it back to your own record (see <a routerLink="/docs/guides/data-contract" fragment="item-ids">Data Contract</a>).</td>
             <td><a routerLink="/docs/guides/data-contract">PcacData</a></td>
           </tr>
         </tbody>

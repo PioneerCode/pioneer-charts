@@ -101,32 +101,32 @@ export class TooltipComponent {
 })`;
 
   contextCode = `interface PcacTooltipContext {
-  // The hovered datum: a bar, a line/area/plot point, a pie slice, or a threshold.
+  // The hovered data point: a bar, a line/area/plot point, a pie slice, or a threshold.
   $implicit: PcacData;
 
-  // What it sits inside: the group a bar belongs to, the series a point belongs to, or for a
-  // threshold the data group it's drawn against. null when there is no enclosing level
-  // (pie slices, a chart-wide threshold).
+  // What the point belongs to: a bar's group, a point's series, or for a threshold, the data
+  // group it's drawn against. null when there's no parent level (pie slices, a chart-wide
+  // threshold).
   parent: PcacData | null;
 
-  // True when a bar chart threshold marker is hovered rather than a data point.
+  // true when the hovered item is a bar chart threshold marker instead of a data point.
   isThreshold: boolean;
 
-  // Position of the hovered datum in parent.data (or in the top-level data when there is no
-  // parent, e.g. a pie slice). For a threshold, its position in thresholds.
+  // The hovered point's position in parent.data (or in the top-level data when there's no
+  // parent, such as a pie slice). For a threshold, its position in thresholds.
   index: number;
 
-  // Position of parent in the top-level data; null whenever parent is.
+  // parent's position in the top-level data. null whenever parent is null.
   parentIndex: number | null;
 
-  // Every *other* datum drawn at exactly the same coordinate as the hovered one, in data order,
-  // each located the same way ({ data, parent, index, parentIndex }). Set by the line, area and
-  // plot charts - whether or not the plot chart's pointFanOut has spread them apart - and empty
-  // on the other charts and whenever nothing shares the point.
+  // Every *other* point drawn at exactly the same coordinate as the hovered one, in data order,
+  // each described the same way ({ data, parent, index, parentIndex }). Filled in by the line,
+  // area, and plot charts, whether or not the plot chart's pointFanOut has spread them apart.
+  // Empty on the other charts, and when no other point shares the spot.
   coincident: PcacTooltipCoincident[];
 }`;
 
-  ownDataTsCode = `// Your source collection, grouped the same way the chart is: one entry per group,
+  ownDataTsCode = `// Your source collection, grouped the same way as the chart: one entry per group and
 // one item per bar. Build the chart's data from it without reordering or filtering.
 regions: Region[] = [
   { name: 'North', orders: [{ customer: 'Acme', total: 1200 }, { customer: 'Globex', total: 800 }] },
@@ -141,7 +141,7 @@ config: PcacBarVerticalChartConfig = {
   })),
 };`;
 
-  ownDataMarkupCode = `<!-- parentIndex picks the region, index picks the order within it. -->
+  ownDataMarkupCode = `<!-- parentIndex picks the region, and index picks the order within it. -->
 <pcac-bar-vertical-chart [config]="config">
   <ng-template pcacTooltip let-point let-i="index" let-g="parentIndex">
     @let order = regions[g!].orders[i];
@@ -152,7 +152,7 @@ config: PcacBarVerticalChartConfig = {
   </ng-template>
 </pcac-bar-vertical-chart>`;
 
-  styleCode = `/* The template owns the whole box; give it whatever look you want. */
+  styleCode = `/* Your template controls the whole look, so style it however you like. */
 .my-tooltip {
   padding: 0.5rem 0.75rem;
   border-radius: 6px;

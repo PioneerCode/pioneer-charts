@@ -71,14 +71,14 @@ export class ProximityChartComponent {
     const { showLabels, rings, showSpokes, itemSize } = this.settings();
     return `const config: PcacProximityChartConfig = {
   center: { key: 'Portland', value: null, hide: false, data: [] },
-  // Closest first: the first item sits at 12 o'clock, the rest clockwise.
+  // Closest first: the first item sits at 12 o'clock, and the rest go clockwise.
   data: [
     { key: 'Seattle', value: 0.96, hide: false, data: [] },
     { key: 'Vancouver', value: 0.94, hide: false, data: [] },
     ...
   ],
-  closeValue: 1,   // identical: right up against the center
-  farValue: 0.5,   // on the outer rim
+  closeValue: 1,   // identical: right next to the center
+  farValue: 0.5,   // on the outer edge
   format: PcacFormatEnum.Percentage,${showLabels ? `\n  showLabels: true,` : ''}${rings ? `\n  rings: [0.9, 0.8, 0.7, 0.6],` : ''}${showSpokes ? '' : `\n  showSpokes: false,`}
   itemSize: ${itemSize},
   centerSize: 44,

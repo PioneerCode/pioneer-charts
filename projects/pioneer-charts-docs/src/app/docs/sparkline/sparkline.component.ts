@@ -95,14 +95,14 @@ export class SparklineComponent {
 function sparkline(name: string, values: number[]): PcacLineChartConfig {
   return {
     ...new PcacLineChartConfig(),
-    height: 12,             // + 28px with both axes hidden: a 40px chart
-    pointRadius: 0,         // just the line; a point's dot shows while it's hovered
+    height: 12,             // plus 28px with both axes hidden: a 40px chart
+    pointRadius: 0,         // just the line; a point's dot shows on hover
     enableEffects: false,   // no crosshair; each point still has its tooltip
     xAxis: { hide: true },
     yAxis: {
       hide: true,
       showGrid: false,
-      // Fit the line to its own range - the default domain is 0 to 100.
+      // Fit the line to its own range. The default is 0 to 100.
       domainMin: Math.min(...values),
       domainMax: Math.max(...values),
     },
@@ -124,8 +124,9 @@ function sparkline(name: string, values: number[]): PcacLineChartConfig {
 </table>
 
 /*
- * A fixed-width box for the chart, not just a width on the cell: an auto-layout table sizes a
- * cell to its content, and the chart sizes itself to its container, so they'd chase each other.
+ * Put the chart in a fixed-width box rather than just setting a width on the cell. An auto-layout
+ * table sizes each cell to its content, and the chart sizes itself to its container, so the two
+ * would keep resizing each other.
  */
 .spark { width: 160px; }`;
 

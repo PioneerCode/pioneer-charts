@@ -1,15 +1,15 @@
 <app-layout-page-docs pageTitle="Custom Tooltip" [jumpNav]="jumpNav()">
-  <p class="lead" id="custom-tooltip">Every chart shows a tooltip when a data point is hovered. By default it is the
-    point's <b>key</b> and <b>value</b>. Project an <b>&lt;ng-template pcacTooltip&gt;</b> into a chart and that
-    template is rendered instead &mdash; a real Angular template with the hovered data bound into it, so pipes,
-    control flow, your own components and styles all work as they would anywhere else.
+  <p class="lead" id="custom-tooltip">Every chart shows a tooltip when you hover over a data point. By default, it
+    shows the point's <b>key</b> and <b>value</b>. To show your own content instead, put an
+    <b>&lt;ng-template pcacTooltip&gt;</b> inside the chart. It's a regular Angular template with the hovered data
+    passed in, so pipes, control flow, your own components, and styles all work as usual.
   </p>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="try-it">Try It</h2>
-    <p>Hover the charts below. Each one has its own template; the bar and line tooltips use <b>parent</b> to
-      show the point's share of its group / series, and the bar chart's thresholds are flagged via
-      <b>isThreshold</b>.</p>
+    <p>Hover over the charts below. Each one has its own template. The bar and line tooltips use <b>parent</b> to
+      show the point's share of its group or series, and the bar chart's tooltip uses <b>isThreshold</b> to label
+      thresholds.</p>
 
     <div class="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-3 gap-4 mb-2">
       <div>
@@ -78,71 +78,73 @@
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="markup">Markup</h2>
-    <p>Import <b>PcacTooltipDirective</b> alongside the chart component, then put an
-      <b>&lt;ng-template pcacTooltip&gt;</b> inside the chart element. The hovered datum is the template's implicit
-      value (<b>let-point</b>, or whatever name you like); the rest of the context is picked up by name.</p>
+    <p>Import <b>PcacTooltipDirective</b> along with the chart component, then put an
+      <b>&lt;ng-template pcacTooltip&gt;</b> inside the chart element. The hovered data point is the template's
+      implicit value (<b>let-point</b>, or any name you like). The rest of the context is picked up by name, as in
+      <b>let-group="parent"</b>.</p>
     <app-layout-code language="javascript" [code]="importCode"></app-layout-code>
     <app-layout-code language="markup" [code]="markupCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="context">Template Context</h2>
-    <p>The template is type-checked against <b>PcacTooltipContext</b> under <code>strictTemplates</code>, so
-      <code>point.value</code> and friends are checked as <b>PcacData</b>.</p>
+    <p>With <code>strictTemplates</code> on, the template is type-checked against <b>PcacTooltipContext</b>, so
+      <code>point.value</code> and the other fields are checked as <b>PcacData</b>.</p>
     <app-layout-code language="typescript" [code]="contextCode"></app-layout-code>
   </section>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="your-own-data">Your Own Data</h2>
-    <p>A <b>PcacData</b> only carries a key and a value, but the tooltip often wants more &mdash; the customer
-      behind an order, the unit a reading was taken in. The context's <b>index</b> and <b>parentIndex</b> give
-      the hovered datum's position in <code>data</code>, and charts never reorder <code>data</code>, so if the
-      collection you built it from is parallel (same order, nothing filtered out) those two indexes reach
-      straight back into it:</p>
+    <p>A <b>PcacData</b> only has a key and a value, but a tooltip often needs more, like the customer who placed
+      an order or the unit a reading was taken in. The context's <b>index</b> and <b>parentIndex</b> give the
+      hovered point's position in <code>data</code>. Charts never reorder <code>data</code>, so if you built it from
+      a collection in the same order, with nothing filtered out, you can use those two indexes to look up the
+      original item:</p>
     <app-layout-code language="typescript" [code]="ownDataTsCode"></app-layout-code>
     <app-layout-code language="markup" [code]="ownDataMarkupCode"></app-layout-code>
-    <p class="text-sm"><b>parentIndex</b> is <code>null</code> when there is no enclosing level (a pie slice, or a
-      chart-wide threshold), so for a pie use <code>items[index]</code> directly. For a threshold, <b>index</b> is its
-      position in <code>thresholds</code> (or in <code>thresholds[parentIndex].data</code> for a per-bar
-      threshold). If your collection <i>isn't</i> parallel to <code>data</code> &mdash; you filter, sort or
-      group on the way in &mdash; look the item up by key instead, or keep a map from key to item; a positional
-      link would silently point at the wrong row.</p>
+    <p class="text-sm"><b>parentIndex</b> is <code>null</code> when there's no parent level, such as for a pie slice
+      or a chart-wide threshold. For a pie, use <code>items[index]</code> directly. For a threshold, <b>index</b> is
+      its position in <code>thresholds</code> (or in <code>thresholds[parentIndex].data</code> for a per-bar
+      threshold). If your collection <i>doesn't</i> line up with <code>data</code> because you filtered, sorted, or
+      grouped it along the way, look items up by key instead, or keep a map from key to item. Otherwise, the index
+      could quietly point to the wrong row.</p>
   </section>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="styling">Styling</h2>
-    <p>With a template present the library applies <i>none</i> of its own tooltip styling &mdash; no background,
-      padding, font or color. It only positions the rendered template (centered above the cursor) and keeps it
-      from intercepting the mouse. The template owns the whole box.</p>
+    <p>When you provide a template, the library applies <i>none</i> of its own tooltip styling: no background,
+      padding, font, or color. It only positions the template (centered above the cursor) and keeps it from blocking
+      the mouse. Your template controls the entire look.</p>
     <app-layout-code language="css" [code]="styleCode"></app-layout-code>
-    <p class="text-sm">The tooltip is rendered into <code>&lt;body&gt;</code> so it can float over anything, but
-      its nodes are still stamped with your component's style scope, so component styles like the one above reach
-      it without <code>::ng-deep</code> or global CSS.</p>
+    <p class="text-sm">The tooltip is added to <code>&lt;body&gt;</code> so it can float above everything else, but
+      it still carries your component's style scope. That means component styles like the one above apply to it,
+      without <code>::ng-deep</code> or global CSS.</p>
   </section>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="notes">Notes</h2>
     <ul>
       <li>
-        <b>Every chart supports it.</b> Bar (vertical and horizontal, including thresholds), line, area, plot,
-        pie, donut, dot plot, proximity and state timeline. Leave the template out and the default key/value tooltip is used, formatted per the chart's
-        <code>xAxis.format</code> / <code>yAxis.format</code> as before; those formats are not applied to a
-        custom template, which gets the raw <b>PcacData</b>.
+        <b>Every chart supports it.</b> That includes bar (vertical and horizontal, including thresholds), line,
+        area, plot, pie, donut, dot plot, proximity, and state timeline. Without a template, the chart shows the
+        default key/value tooltip, formatted with the chart's <code>xAxis.format</code> /
+        <code>yAxis.format</code>. Those formats aren't applied to a custom template, which gets the raw
+        <b>PcacData</b>.
       </li>
       <li>
-        <b>It's a live view.</b> The template is created when a hover starts, updated in place as the mouse
-        moves, and destroyed when the hover ends. While shown it takes part in change detection like any other
-        view, so a signal read inside it keeps updating.
+        <b>It updates live.</b> The template is created when a hover starts, updated as the mouse moves, and removed
+        when the hover ends. While it's showing, it takes part in change detection like any other view, so a signal
+        read inside it keeps updating.
       </li>
       <li>
         <b>One template per chart.</b> Only the first <code>pcacTooltip</code> template inside a chart element is
         used.
       </li>
       <li>
-        <b>Points that share a coordinate.</b> On the line, area and plot charts the context's <b>coincident</b>
-        lists every other point at the hovered one's coordinate, so a template can say who else is there &mdash;
-        the <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a> page's last demo does this alongside
-        <b>pointFanOut</b>, which spreads such points apart so each can be hovered in the first place.
+        <b>Points in the same spot.</b> On the line, area, and plot charts, the context's <b>coincident</b> field
+        lists every other point at the same coordinate as the hovered one, so your template can show what else is
+        there. The last demo on the <a routerLink="/docs/components/charts/plot-chart">Plot Chart</a> page does this,
+        along with <b>pointFanOut</b>, which spreads those points apart so each one can be hovered.
       </li>
     </ul>
   </section>

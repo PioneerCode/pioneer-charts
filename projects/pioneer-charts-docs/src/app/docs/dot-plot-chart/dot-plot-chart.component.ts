@@ -80,7 +80,7 @@ export class DotPlotChartComponent {
   protected readonly configCode = computed(() => {
     const { binWidth, images, autoTickSize, imageSize } = this.settings();
     return `const config: PcacDotPlotChartConfig = {
-  // Series, each holding its points: value = position on the axis, key = its name.
+  // Each series holds its points. value = position on the axis, key = the point's name.
   data: [
     { key: 'Sunny', value: null, hide: false, data: [
       { key: 'June 1', value: 81, hide: false, data: []${images ? `, image: 'sun.svg'` : ''} },
@@ -92,7 +92,7 @@ export class DotPlotChartComponent {
 };`;
   });
 
-  drawnSizeCode = `// The pick drives the chart; the slider shows what was drawn.
+  drawnSizeCode = `// The picked size drives the chart; the slider shows the size that was drawn.
 readonly pickedSize = signal(40);
 readonly shownSize = signal(40);
 
@@ -104,7 +104,7 @@ readonly config = computed<PcacDotPlotChartConfig>(() => {
 // The slider: [value]="shownSize()" (input)="pick(...)"
 pick(size: number): void {
   this.pickedSize.set(size);
-  // markFit only emits on a change: assume it fits until told.
+  // markFit only emits when the fit changes, so assume the size fits until it says otherwise.
   this.shownSize.set(size);
 }
 

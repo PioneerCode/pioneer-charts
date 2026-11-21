@@ -82,7 +82,7 @@ export class HeightFullComponent {
     }
   ]);
 
-  markupCode = `<!-- The wrapper owns the height; the chart fills it. -->
+  markupCode = `<!-- The wrapper sets the height, and the chart fills it. -->
 <div style="height: 360px">
   <pcac-bar-vertical-chart [config]="config" />
 </div>`;
@@ -90,14 +90,14 @@ export class HeightFullComponent {
   configCode = `const config = {
   data: [ ... ],
 
-  // Minimum height. Used as-is whenever the container is shorter than this.
+  // Minimum height. Used as-is when the container is shorter than this.
   height: 200,
 
-  // Grow past 'height' to fill the container whenever it is taller.
+  // Grow past 'height' to fill the container when it's taller.
   heightFull: true
 } as PcacBarVerticalChartConfig;`;
 
-  flexCode = `<!-- A dashboard tile: the header takes what it needs, the chart takes the rest. -->
+  flexCode = `<!-- A dashboard card: the header takes the space it needs, and the chart fills the rest. -->
 <mat-card class="flex flex-col" style="height: 360px">
   <h5>Requests per minute</h5>
   <p>Last 24 hours</p>

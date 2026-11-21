@@ -1,14 +1,13 @@
 <app-layout-page-docs pageTitle="Full Height" [jumpNav]="jumpNav()">
-  <p class="lead" id="height-full">Every chart except the pie chart accepts <b>heightFull</b>. Turn it on and
-    <b>height</b> stops being a fixed size and becomes a <i>minimum height value</i>: the chart grows to fill its
-    container
-    whenever that container is taller, and keeps filling it as the container resizes.
+  <p class="lead" id="height-full">Every chart except the pie and donut charts supports <b>heightFull</b>. When
+    it's on, <b>height</b> is no longer a fixed size. It becomes a <i>minimum</i>: the chart grows to fill its
+    container whenever the container is taller, and keeps filling it as the container is resized.
   </p>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="try-it">Try It</h2>
-    <p>Both charts below use the same config &mdash; <b>height: 200</b> &mdash; and the same container. The only
-      difference is <b>heightFull</b>. Drag the slider to resize the containers.</p>
+    <p>Both charts below use the same config (<b>height: 200</b>) and the same container. The only difference is
+      <b>heightFull</b>. Drag the slider to change the height of the containers.</p>
 
     <div class="pc-height-full-controls mb-4">
       <label for="pc-height-full-range">Container height</label>
@@ -33,17 +32,17 @@
         </pc-chart-card>
       </div>
     </div>
-    <p class="text-sm">Drag below 200px and the two panels converge: there is nothing left to fill, so
-      <b>heightFull</b> falls back to the <b>height</b> minimum. Both charts stay 200px tall and get clipped by the
-      container rather than squashing into it.
+    <p class="text-sm">Below 200px, the two charts look the same. There's no extra space to fill, so
+      <b>heightFull</b> falls back to the <b>height</b> minimum. Both charts stay 200px tall, and the container clips
+      them instead of squeezing them.
     </p>
   </section>
 
   <section class="pc-doc-section">
     <h2 class="pc-h3" id="flex-layout">Fill A Flex Layout</h2>
-    <p>The container does not have to carry an explicit height &mdash; any definite height works, including one
-      handed down by a flex or grid track. That covers the common case: a tile with a header on top and a chart
-      taking whatever is left.</p>
+    <p>The container doesn't need an explicit height. Any definite height works, including one set by a flex or
+      grid layout. That covers the most common case: a card with a header on top and a chart that fills the rest of
+      the space.</p>
 
     <pc-chart-card heading="Requests Per Minute" caption="Last 24 hours" class="pc-height-full-container mb-4"
       [style.height.px]="containerHeight()">
@@ -65,21 +64,22 @@
     <h2 class="pc-h3" id="notes">Notes</h2>
     <ul>
       <li>
-        <b>Give the wrapper a definite height.</b> An explicit height, or a flex/grid track that resolves to one. If
-        the wrapper is auto-height there is nothing to fill, and the chart falls back to <b>height</b>.
+        <b>Give the wrapper a definite height.</b> Either set its height directly, or use a flex or grid layout that
+        gives it one. If the wrapper's height is auto, there's nothing to fill, and the chart uses <b>height</b>.
       </li>
       <li>
-        <b>height is a floor, not a target.</b> A container shorter than <b>height</b> leaves the chart at
-        <b>height</b>; it is never drawn smaller than you asked for.
+        <b>height is a minimum, not a target.</b> If the container is shorter than <b>height</b>, the chart stays at
+        <b>height</b>. It's never drawn smaller than the height you set.
       </li>
       <li>
-        <b>Resizing keeps working.</b> Charts already rebuild when their container's width changes; with
-        <b>heightFull</b> on they watch its height too, so collapsing sidebars, tab switches and window resizes all
-        stay filled.
+        <b>Resizing keeps working.</b> Charts already redraw when their container's width changes. With
+        <b>heightFull</b> on, they also watch its height, so the chart stays filled when a sidebar collapses, a tab
+        changes, or the window is resized.
       </li>
       <li>
-        <b>The pie chart does not support it.</b> There, <b>height</b> feeds the radius rather than a drawing area,
-        so filling a tall container would silently resize the pie itself. The option is ignored.
+        <b>The pie and donut charts don't support it.</b> On those charts, <b>height</b> sets the radius rather than
+        the drawing area, so filling a tall container would quietly change the size of the pie itself. The option is
+        ignored.
       </li>
     </ul>
   </section>

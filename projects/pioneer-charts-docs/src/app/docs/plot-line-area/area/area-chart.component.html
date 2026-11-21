@@ -25,6 +25,12 @@
       <pcac-area-chart [config]="pcService.areaChartImagesConfig.value()" (dotClicked)="pcService.onClicked($event)" />
     </app-layout-resource-state>
   </pc-chart-card>
+  <h2 class="pc-h4 mt-6 mb-2" id="point-colors">Point colors</h2>
+  <p class="mb-3">Set <code>color</code> on a data point to draw its dot in that color in place of its series' &mdash;
+    to flag a reading below a threshold, say. Its ring and its hover fill take the color; the area keeps the
+    series'. Say why in words too, in the tooltip or the chart's <code>ariaLabel</code>, for readers who can't tell
+    the colors apart. See the <a routerLink="/docs/components/charts/line-chart" fragment="point-colors">Line Chart's
+    demo</a>.</p>
 
   <h2 class="pc-h4 mt-8 mb-2" id="when-to-use">When To Use An Area Chart</h2>
   <p class="mb-3">An area chart is a line chart with the space beneath each line filled in. The fill turns the

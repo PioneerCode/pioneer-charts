@@ -10,7 +10,7 @@
     "rootDir": "./src"
   },
   "include": [
-    "src/**/*.ts"
+    "**/*.ts"
   ],
   "angularCompilerOptions": {
     "extendedDiagnostics": {

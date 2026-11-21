@@ -6,20 +6,27 @@
     "@pioneer-code/pioneer-charts": {
       "projectType": "library",
       "root": "projects/pioneer-charts",
-      "sourceRoot": "projects/pioneer-charts/src",
+      "sourceRoot": "projects/pioneer-charts",
       "prefix": "pcac",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular/build:library",
           "configurations": {
             "production": {
               "tsConfig": "projects/pioneer-charts/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/pioneer-charts/tsconfig.lib.json"
+              "compilationMode": "full"
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "production",
+          "options": {
+            "tsConfig": "projects/pioneer-charts/tsconfig.lib.json",
+            "outputPath": "dist/pioneer-charts",
+            "allowedNonPeerDependencies": [
+              "d3-"
+            ]
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test",

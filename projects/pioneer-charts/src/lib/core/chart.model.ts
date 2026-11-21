@@ -311,6 +311,17 @@ export class PcacData {
   gauge?: number
 
   /**
+   * A color for this point's dot, any CSS color, in place of its series' - to flag a reading, say
+   * one below a threshold, among the rest. Its ring at rest, and its fill while hovered or
+   * focused; the line or area through it, and the crosshair, keep the series' color. Currently
+   * honored by the line/area/plot charts only, on the innermost (point-level) `PcacData`. Say why
+   * in words too (a tooltip, a label), for a reader who can't tell the colors apart.
+   *
+   * Optional for the same reason as `image`.
+   */
+  color?: string
+
+  /**
    * The consumer's own identifier for this item - a record's primary key, say. Nothing draws or
    * labels it; it's carried through untouched so a click output (`dotClicked`, `barClicked`,
    * `sliceClicked`, `itemClicked`) can be traced back to the record it came from. Click outputs

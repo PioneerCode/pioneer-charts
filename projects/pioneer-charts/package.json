@@ -5,6 +5,9 @@
   "bugs": {
     "url": "https://github.com/PioneerCode/pioneer-charts/issues"
   },
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
   "author": {
     "name": "Chad Ramos",
     "email": "hello@pioneercode.com",
@@ -30,7 +33,7 @@
     "type": "git",
     "url": "git+https://github.com/PioneerCode/pioneer-charts.git"
   },
-  "version": "22.2.29",
+  "version": "22.2.30",
   "license": "MIT",
   "peerDependencies": {
     "@angular/core": "^22.1.0",
@@ -46,8 +49,7 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.0.0",
     "d3-transition": "^3.0.0",
-    "d3-zoom": "^3.0.0",
-    "tslib": "^2.3.0"
+    "d3-zoom": "^3.0.0"
   },
   "sideEffects": [
     "*.css",

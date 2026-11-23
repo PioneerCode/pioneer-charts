@@ -10,7 +10,7 @@
  *   node build/og-images.js
  */
 import { execFileSync } from 'child_process';
-import { mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { pathToFileURL } from 'url';
 
@@ -30,7 +30,15 @@ const decode = (text) => text.replace(/&amp;/g, '&').replace(/&quot;/g, '"').rep
 
 mkdirSync(outDir, { recursive: true });
 for (const route of routes) {
+  // A redirect (`redirectTo` route) isn't a page: build/docs-pages.js leaves one that's a folder of
+  // pages as <folder>/index.html, and any other is a meta-refresh page. Neither needs an image.
+  if (!existsSync(`${browser}${route}.html`)) {
+    continue;
+  }
   const html = readFileSync(`${browser}${route}.html`, 'utf-8');
+  if (html.includes('http-equiv="refresh"')) {
+    continue;
+  }
   const ogTitle = html.match(/<meta property="og:title" content="([^"]*)"/)?.[1];
   if (!ogTitle) {
     throw new Error(`build/og-images.js: ${route} has no og:title`);

@@ -27,6 +27,11 @@
     "scatter plot",
     "pie chart",
     "donut chart",
+    "doughnut chart",
+    "sparkline",
+    "dot plot",
+    "proximity chart",
+    "state timeline",
     "legend"
   ],
   "repository": {

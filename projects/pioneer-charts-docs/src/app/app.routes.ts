@@ -103,6 +103,14 @@ export const routes: Routes = [
         loadComponent: () => import('./charts/charts.component').then(m => m.ChartsComponent),
         data: { searchTitle: 'Angular Chart Examples', description: 'Live examples of every Pioneer Charts chart for Angular - bar, line, area, plot, pie, donut, dot plot and proximity - with legends, zoom, thresholds and custom colors.' },
     },
+    // The docs URLs' parent folders aren't pages, but people trim a URL back to one: send them to
+    // the nearest page. Pre-rendered as meta-refresh pages, which build/docs-pages.js leaves at
+    // <folder>/index.html (where GitHub Pages serves them, since the folder holds pages too) and
+    // keeps out of the sitemap.
+    { path: 'docs', redirectTo: 'docs/guides/introduction', pathMatch: 'full' },
+    { path: 'docs/guides', redirectTo: 'docs/guides/introduction', pathMatch: 'full' },
+    { path: 'docs/components', redirectTo: 'charts', pathMatch: 'full' },
+    { path: 'docs/components/charts', redirectTo: 'charts', pathMatch: 'full' },
     // Any other URL shows the home page, but isn't a page of its own: PageSeoStrategy marks it
     // `noindex` so a mistyped link can't be indexed as a copy of the home page.
     { path: '**', loadComponent: () => import('./home/home').then(m => m.Home), data: { notFound: true } },

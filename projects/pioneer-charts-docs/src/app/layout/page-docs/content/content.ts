@@ -1,5 +1,5 @@
 import { Component, ElementRef, afterNextRender, inject, input, viewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /**
  * A docs page's content: its title and whatever the page projects. Scrolling to a section (a link
@@ -13,6 +13,13 @@ import { Router } from '@angular/router';
 })
 export class LayoutPageDocsContent {
   pageTitle = input.required<string>()
+
+  /**
+   * The h1: the route's `data.searchTitle` ("Angular Bar Chart", see app.routes.ts) - the words
+   * people search for, as in the page's <title> - else the page's short name ("Bar Chart"), which
+   * stays the breadcrumb and the navigation's label.
+   */
+  protected readonly searchTitle = inject(ActivatedRoute).snapshot.data['searchTitle'] as string | undefined;
 
   private readonly heading = viewChild.required<ElementRef<HTMLElement>>('heading');
 

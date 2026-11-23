@@ -16,7 +16,7 @@ export const routes: Routes = [
     {
         path: 'docs/guides/introduction', title: 'Getting Started',
         loadComponent: () => import('./docs/introduction/introduction.component').then(m => m.IntroductionComponent),
-        data: { searchTitle: 'Getting Started with Angular Charts', description: 'Install Pioneer Charts, import a chart component and its theme, and render your first Angular chart in a few steps.' },
+        data: { searchTitle: 'Install and Get Started', description: 'Install Pioneer Charts, import a chart component and its theme, and render your first Angular chart in a few steps.' },
     },
     {
         path: 'docs/guides/theme', title: 'Theme',
@@ -86,7 +86,7 @@ export const routes: Routes = [
     {
         path: 'docs/components/charts/donut-chart', title: 'Donut Chart',
         loadComponent: () => import('./docs/donut-chart/donut-chart.component').then(m => m.DonutChartComponent),
-        data: { searchTitle: 'Angular Donut Chart', description: 'An Angular donut chart built on D3: slices as a ring with a total or any label in the center, progress rings, adjustable thickness and click events.' },
+        data: { searchTitle: 'Angular Donut Chart', description: 'An Angular donut (doughnut) chart built on D3: slices as a ring with a total or any label in the center, progress rings, adjustable thickness and click events.' },
     },
     {
         path: 'docs/components/charts/dot-plot-chart', title: 'Dot Plot Chart',

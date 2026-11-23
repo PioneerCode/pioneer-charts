@@ -9,7 +9,7 @@ const SITE_NAME = 'Pioneer Charts';
 const REPOSITORY_URL = 'https://github.com/PioneerCode/pioneer-charts';
 /** The docs' own start page: the "Documentation" step in a docs page's breadcrumbs. */
 const DOCS_PATH = '/docs/guides/introduction';
-const DEFAULT_TITLE = 'Pioneer Charts - Angular charts built on D3';
+const DEFAULT_TITLE = 'Angular Chart Library Built on D3 · Pioneer Charts';
 /** The home page's description (and index.html's), for any route without its own. */
 /** The site's link-preview image (index.html's), for the home page and any URL that isn't a page. */
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;

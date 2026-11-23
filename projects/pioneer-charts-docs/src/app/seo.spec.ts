@@ -46,7 +46,7 @@ describe('PageSeoStrategy', () => {
   it('gives the home page the site\'s own title', async () => {
     await harness.navigateByUrl('/');
 
-    expect(TestBed.inject(Title).getTitle()).toBe('Pioneer Charts - Angular charts built on D3');
+    expect(TestBed.inject(Title).getTitle()).toBe('Angular Chart Library Built on D3 · Pioneer Charts');
   });
 
   it('describes a page from its route data', async () => {
